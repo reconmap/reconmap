@@ -1,4 +1,5 @@
 [![Gitter](https://badges.gitter.im/reconmap/community.svg)](https://gitter.im/reconmap/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![YouTube](https://img.shields.io/static/v1?label=YouTube&message=Subscribe&color=red&style=flat&logo=youtube)](https://www.youtube.com/reconmap)
 
 ![Reconmap logo](https://pasteall.org/media/4/7/4780c30723f90cfd56ec0d056555b7e6.png)
 
@@ -8,24 +9,18 @@ Reconmap is a vulnerability assessment and penetration testing (VAPT) platform. 
 
 ## Demo
 
-A running demo is available for you to try here: https://demo.reconmap.org
-
-|User|Password|
-|-|-|
-|admin|admin123|
+Details on how to connect to the live demo server can be found [here](https://reconmap.org/live-demo.html).
 
 ## Requirements
 
 - Docker
 - Docker compose
-- Make
 
 ## Documentation
 
-The API specs have been documented using the [OpenAPI](docs/openapi.yaml) specification. You can use the
-interactive [OpenAPI UI](https://api.reconmap.org/docs/) to play with it.
+Go to https://reconmap.org to find the user, admin and developer manuals.
 
-## How to run locally
+## How to run locally in 2 easy steps
 
 1. First you need to start your docker containers:
 
@@ -37,14 +32,22 @@ $ docker-compose up -d
 
 ## How to contribute
 
-**We are glad you are thinking about contributing to this project.** All help is hugely appreciated.
+We are glad you are thinking about contributing to this project. All help is hugely appreciated.
 
-Before you jump to make any changes make sure you have read the [contributing guidelines](CONTRIBUTING.md). This would
-save us all time. Thanks!
+Here are some things you could to to help us out:
+
+- **★ Star this project on Github ★**
+- Read the documentation on https://reconmap.org and improve it by opening a pull request agains this repo.
+- Report any bugs to [issues section](https://github.com/reconmap/reconmap/issues)
+- Suggest new features or ideas to the [discussion board](https://github.com/reconmap/reconmap/discussions)
+- Improve the code of the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client) or [cli](https://github.com/reconmap/cli) components
+- Report security issues
+
+Before you jump to make any changes make sure you have read the [contributing guidelines](CONTRIBUTING.md). This would save us all time. Thanks!
 
 ## How to report bugs or feature requests
 
-If you have bugs or feature requests to report please use the [issues](https://github.com/reconmap/application/issues)
+If you have bugs or feature requests to report please use the [issues](https://github.com/reconmap/reconmap/issues)
 tab on Github.
 
 If you want to chat to somebody on the development team head to our [Gitter](https://gitter.im/reconmap/community)
