@@ -3,8 +3,6 @@
 
 ![Reconmap logo](https://pasteall.org/media/4/7/4780c30723f90cfd56ec0d056555b7e6.png)
 
-# Reconmap
-
 Reconmap is a vulnerability assessment and penetration testing (VAPT) platform. It helps software engineers and infosec pros collaborate on security projects, from planning, to implementation and documentation. The tool's aim is to go from recon to report in the least possible time.
 
 ## Demo
@@ -37,7 +35,7 @@ We are glad you are thinking about contributing to this project. All help is hug
 Here are some things you could to to help us out:
 
 - **★ Star this project on Github ★**
-- Read the documentation on https://reconmap.org and improve it by opening a pull request agains this repo.
+- Read the documentation on https://reconmap.org and improve it by opening a pull request agains [this repo](https://github.com/reconmap/website-org).
 - Report any bugs to [issues section](https://github.com/reconmap/reconmap/issues)
 - Suggest new features or ideas to the [discussion board](https://github.com/reconmap/reconmap/discussions)
 - Improve the code of the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client) or [cli](https://github.com/reconmap/cli) components
