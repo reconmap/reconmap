@@ -32,10 +32,10 @@ $ docker-compose up -d
 
 We are glad you are thinking about contributing to this project. All help is hugely appreciated.
 
-Here are some things you could to to help us out:
+Here are some things you could do to help us out:
 
 - **★ Star this project on Github ★**
-- Read the documentation on https://reconmap.org and improve it by opening a pull request agains [this repo](https://github.com/reconmap/website-org).
+- Read the documentation on https://reconmap.org and improve it by opening a pull request against [this repo](https://github.com/reconmap/website-org).
 - Report any bugs to [issues section](https://github.com/reconmap/reconmap/issues)
 - Suggest new features or ideas to the [discussion board](https://github.com/reconmap/reconmap/discussions)
 - Improve the code of the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client) or [cli](https://github.com/reconmap/cli) components
