@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.5]
+
+### Added
+- Add support for tags in vulnerabilities, commands and targets.
+- Add link to API spec docs in the sidebar
+- Add application logs to the web client
+- Add list of projects as a tab in the client pages
+- Add advanced search
+
+### Changed
+- Change some forms to show as popups instead of new pages
+
+### Fixed
+- Fixed logic that allowed to add existing members to projects.
+
 ## [0.9.0]
 
 ### Added
@@ -66,7 +81,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add basic functionality: clients, projects, tasks, vulnerabilities, ... 
 
-[Unreleased]: https://github.com/reconmap/rest-api/compare/0.9.0...master 
+[Unreleased]: https://github.com/reconmap/rest-api/compare/0.9.5...master 
+[0.9.5]: https://github.com/reconmap/rest-api/compare/0.9.0...0.9.5
 [0.9.0]: https://github.com/reconmap/rest-api/compare/0.8.5...0.9.0
 [0.8.5]: https://github.com/reconmap/rest-api/compare/0.8.0...0.8.5
 [0.8.0]: https://github.com/reconmap/rest-api/compare/0.7.5...0.8.0
