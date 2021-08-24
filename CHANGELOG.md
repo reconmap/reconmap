@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add health endpoint to API
+- Add new health widget and page to Web client
 
 ## [0.9.5]
 
