@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add ability to create and delete vulnerability categories
 - Add health endpoint to API
 - Add new health widget and page to Web client
+- Add ability to search for tasks from the CLI
+- Add new fields to vulnerabilities: remediation complexity, remediation priority, external ID, references
 
 ## [0.9.5]
 
