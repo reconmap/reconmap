@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Add ability to launch commands from the Web client and see them running on an embedded terminal
+- Add ability to set vulnerabilities as public or private. Private ones are not shown to the customer.
 - Add ability to create and delete vulnerability categories
 - Add health endpoint to API
 - Add new health widget and page to Web client
