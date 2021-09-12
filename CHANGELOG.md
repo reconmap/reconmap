@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add ability to search for tasks from the CLI
 - Add new fields to vulnerabilities: remediation complexity, remediation priority, external ID, references
 
+### Changed
+- Return error messages if imported file is corrupt or invalid
+
 ## [0.9.5]
 
 ### Added
