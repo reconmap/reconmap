@@ -46,13 +46,14 @@ services:
       REDIS_USER: default
       REDIS_PASSWORD: REconDIS
 
-  wss:
-    container_name: rmap-wss
-    image: quay.io/reconmap/ws-server:latest
+  agent:
+    container_name: rmap-agent
+    image: quay.io/reconmap/agent:latest
     ports:
-      - 8765:8765
+      - 4040:2020
     environment:
       VALID_ORIGINS: http://localhost:3001
-      REDIS_HOST: redis://redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
       REDIS_PASSWORD: REconDIS
 
