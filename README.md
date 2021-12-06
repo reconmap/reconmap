@@ -27,7 +27,7 @@ Go to https://reconmap.org to find the user, admin and developer manuals.
 $ docker-compose up -d
 ```
 
-2. After this, open your browser at http://localhost:3001
+2. After this, open your browser at http://localhost:5500
 
 ## How to contribute
 

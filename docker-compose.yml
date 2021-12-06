@@ -1,13 +1,6 @@
 version: "3.5"
 
 services:
-  web-client:
-    container_name: rmap-web-client
-    image: quay.io/reconmap/web-client:master
-    volumes:
-      - ./environment.js:/usr/share/nginx/html/environment.js
-    ports:
-      - 3001:80
 
   redis:
     container_name: rmap-redis
@@ -31,6 +24,14 @@ services:
       MYSQL_USER: reconmapper
       MYSQL_PASSWORD: reconmapped
 
+  web-client:
+    container_name: rmap-web-client
+    image: quay.io/reconmap/web-client:master
+    volumes:
+      - ./environment.js:/usr/share/nginx/html/environment.js
+    ports:
+      - 5500:5500
+
   api:
     container_name: rmap-api
     image: quay.io/reconmap/rest-api:latest
@@ -39,7 +40,7 @@ services:
       - "./logs:/var/www/webapp/logs/"
       - "./data:/var/www/webapp/data/"
     ports:
-      - 8080:80
+      - 5510:5510
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -50,10 +51,11 @@ services:
     container_name: rmap-agent
     image: quay.io/reconmap/agent:latest
     ports:
-      - 4040:2020
+      - 5520:5520
     environment:
-      VALID_ORIGINS: http://localhost:3001
+      VALID_ORIGINS: http://localhost:5500
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: REconDIS
+
 
