@@ -1,0 +1,480 @@
+{
+  "project_templates": [
+    {
+      "is_template": 1,
+      "name": "Bounty Hunter Methodology",
+      "description": "The Bug Bounty Hunter Methodology v3 by @jhaddix",
+      "tasks": [
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Map the application",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Analyse the application",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Test client-side controls",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Test access controls",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Test for logic flaws",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Test the authentication mechanism",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Test the session management mechanism",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Test of web serve vulnerabilities",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Test for input-based vulnerabilities",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Bounty Hunter Methodology",
+          "summary": "Perform other checks",
+          "description": "\n                        - Check for DOM-based attacks\n                        - Check for Frame injection\n                        - Check for local privacy vulnerabilities\n                        - Follow up any information leakage\n                        - Check for weak SSL ciphers\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        }
+      ]
+    },
+    {
+      "is_template": 1,
+      "name": "Sayaan Alam's bug hunting list",
+      "description": "Bug hunting - List of tasks created by Sayaan Alam (@ehsayaan). A very systematic way of bug\n                hunting. #bugbounty\n            ",
+      "tasks": [
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Find subdomains",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check CNAME records",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check CNAME records of those subdomains.",
+          "description": "Check for subdomain takeover. Use wayback URLs on them too.",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Do Port Scanning",
+          "description": "Use MassScan for port scanning",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check CORS misconfiguration",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for email header injection on reset password function",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for SMPT and HOST header injection",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for Iframe",
+          "description": "Check for Iframe (eg for clickjacking)",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for improper access control and parameter tampering",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check Burp history for finding endpoint",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Use arjun for finding hidden endpoints",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for CSRF",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for SSRF parameters",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for XSS and SSTI",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check Cryptography in reset password token",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for unicode injection in email parameter",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for bypassing rate limit",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Directory brute force",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for HTTP request smuggling",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for open redirect through wayback URLs",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for Social-Signon bypass",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for state parameter in social Sign-in",
+          "description": "Check whether it is possible to cause DoS using multiple cookies injection\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "File upload CSRF, XSS, SSRF, RCE, LFI, XXE",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Sayaan Alam's bug hunting list",
+          "summary": "Check for Buffer overflow",
+          "description": "",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        }
+      ]
+    },
+    {
+      "is_template": 1,
+      "name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+      "description": "",
+      "tasks": [
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Contact Form Testing",
+          "description": "\n                        The most preferred entry point for spammers is often a web application\u2019s contact form. Therefore\n                        the contact form you have in your web application should be able to identify and prevent such\n                        spam attacks. Including CAPTCHA is one of the easiest ways of preventing contact form spamming.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Proxy Server(s) Testing",
+          "description": "\n                        Proxy servers play a huge role in scrutinizing the traffic to your web application and pointing\n                        out any malicious activity. Therefore ensure the proxy servers within your network are\n                        functioning accurately and efficiently. Tools like Burp Proxy and OWSAP ZAP can go a long way in\n                        helping you accomplish this task.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Spam Email Filter Testing",
+          "description": "\n                        Ensure spam email filters are functioning properly. Verify if they are successfully filtering\n                        the incoming and outgoing traffic and blocking unsolicited emails. In other words, ensure that\n                        email security policies are being enforced properly. Because, as we all know, spam mails are the\n                        much-preferred mode of attack for hackers.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Network Firewall Testing",
+          "description": "\n                        Make sure your firewall is preventing undesirable traffic from entering into your web\n                        application. Also, ensure the security policies configured using the firewall are being\n                        implemented properly. A glitch in your firewall is like sending an invitation to hackers to come\n                        and hack your web application.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Security Vulnerability Testing",
+          "description": "\n                        Carry out a thorough security check on various aspects associated with your web application like\n                        servers and other such network devices and make a list of the security vulnerabilities they\n                        pose. Then find and implement ways to fix them.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Credential Encryption Testing",
+          "description": "\n                        Ensure all usernames and passwords are encrypted and transferred over secure \u201cHTTPS\u201d connection\n                        so that these credentials are not compromised by hackers through man-in-the-middle or other such\n                        attacks. Because just as your web application needs to be secure, so is the sensitive data being\n                        submitted by your clients.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Cookie Testing",
+          "description": "\n                        Cookies store data related to user sessions. Therefore this piece of sensitive information, if\n                        it is exposed to the hackers, can result in the security of many users who visit your website or\n                        web application being compromised. Therefore ensure your cookie data is not exposed. Or in other\n                        words, not available in readable format or as plain text.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Testing For Open Ports",
+          "description": "\n                        Open ports on the web server on which your web application has been hosted also present a good\n                        opportunity for hackers to exploit your web application\u2019s security. Therefore carry out this\n                        security check and ensure there are no open ports on your web server.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Application Login Page Testing",
+          "description": "\n                        Ensure your web application locks itself up after a specific number of unsuccessful login\n                        attempts. This is one of the most basic elements, which, when implemented correctly can go a\n                        long way in securing your web application from hackers.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Error Message Testing",
+          "description": "\n                        Ensures all your error messages are generic and do not reveal too much about the problem. If you\n                        do so, it\u2019s like announcing to the hacking community, \u201cwe have a problem here, you\u2019re welcome to\n                        exploit it!\u201d For example: \u201cInvalid Credentials\u201d is fine, but the message should not be specific\n                        as \u201cinvalid username or password.\u201d\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "HTTP Method(s) Testing",
+          "description": "\n                        Also review the HTTP methods used by your web application to interact with your clients. Ensure\n                        PUT and Delete methods are not enabled, as doing so will allow hackers to easily exploit your\n                        web application.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Username and Password Testing",
+          "description": "\n                        Test all the usernames\/passwords that are used on your web application. Passwords should be\n                        fairly complex and usernames should not be easily guessable. Separate such weak usernames and\n                        passwords and alert those users to change them.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "File Scanning",
+          "description": "\n                        Ensure all files you upload to your web application or server are scanned before they are\n                        uploaded.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "SQL Injection Testing",
+          "description": "\n                        SQL injection is one of the most popular methods employed by hackers when it comes to exploiting\n                        web applications and websites. Therefore ensure your web application is resistant to various\n                        forms of SQL injection.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "XSS Testing",
+          "description": "\n                        Also ensure your web application resists cross-site scripting or XSS attacks as well.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Access Permission Testing",
+          "description": "\n                        Check the access permissions of your users and in case your web application provides role-based\n                        access, then ensure users are getting access only to those parts of the web application to which\n                        they have the right. Nothing more or less.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "User Session Testing",
+          "description": "\n                        This is very important. Ensure that user sessions end upon log off. Because if they don\u2019t, that\n                        valid session can be easily hijacked by hackers \u2013 this process is known as session hijacking \u2013\n                        for carrying out malicious activity.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Brute Force Attack Testing",
+          "description": "\n                        Using appropriate testing tools, ensure your web application stays safe against brute force\n                        attacks.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "DoS (Denial of Service) Attack Testing",
+          "description": "\n                        Also ensure your web application stays safe against DoS (Denial of Service) attacks by using\n                        appropriate testing tools.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
+          "summary": "Directory Browsing",
+          "description": "\n                        Ensure directory browsing is disabled on the web server which hosts your web application.\n                        Because if you don\u2019t, you\u2019ll be giving hackers easy access to your restricted files.\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        }
+      ]
+    },
+    {
+      "is_template": 1,
+      "name": "WAHH methodology by @bugcrowd",
+      "description": "",
+      "tasks": [
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Map the application",
+          "description": "\n                        - Explore visible content\n                        - Consult public resources\n                        - Discover hidden content\n                        - Discover default content\n                        - Enumerate identifier-specified functions\n                        - Test for debug parameters\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Analyse the application",
+          "description": "\n                        - Identify functionality\n                        - Identify data entry points\n                        - Identify the technologies used\n                        - Map the attack surface\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Test client-side controls",
+          "description": "\n                        - Test transmission of data via the client\n                        - Test client-side control over user input\n                        - Test thick-client components\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Test access controls",
+          "description": "\n                        - Understand the access control requirements\n                        - Testing with multiple accounts\n                        - Testing with limited access\n                        - Test for insecure access control methods\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Test for logic flaws",
+          "description": "\n                        - Identify the key attack surface\n                        - Test multistage processes\n                        - Test handling of incomplete input\n                        - Test trust boundaries\n                        - Test transaction logic\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Test the authentication mechanism",
+          "description": "\n                        - Understand the mechanism\n                        - Test password quality\n                        - Test for username enumeration\n                        - Test resilience to password guessing\n                        - Test any account recovery function\n                        - Test any remember me function\n                        - Test any impersonation function\n                        - Test username uniqueness\n                        - Test predictability of auto-generated credentials\n                        - Check for unsafe transmission of credentials\n                        - Test for logic flaws\n                        - Exploit any vulnerabilities to gain unauthorized access\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Test the session management mechanism",
+          "description": "\n                        - Understand the mechanism\n                        - Test tokens for meaning\n                        - Test tokens for predictability\n                        - Check for insecure transmission of tokens\n                        - Check for disclosure of tokens in logs\n                        - Check mapping of tokens to sessions\n                        - Test session termination\n                        - Check for session fixation\n                        - Check for XSRF\n                        - Check cookie scope\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Test for web server vulnerabilities",
+          "description": "\n                        - Test for default credentials\n                        - Test for default content\n                        - Test for dangerous HTTP methods\n                        - Test for proxy functionality\n                        - Test for virtual hosting misconfiguration\n                        - Test for web server software bugs\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Test for input-based vulnerabilities",
+          "description": "\n                        - Fuzz all request parameters\n                        - Test for SQL injection\n                        - Test for XSS and other response injection\n                        - Test for OS command injection\n                        - Test for path traversal\n                        - Test for script injection\n                        - Test for file inclusion\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        },
+        {
+          "project_name": "WAHH methodology by @bugcrowd",
+          "summary": "Run misc checks",
+          "description": "\n                        - Check for DOM-based attacks\n                        - Check for frame injection\n                        - Check for local privacy vulnerabilities\n                        - Follow up any information leakage\n                        - Check for weak SSL ciphers\n                    ",
+          "assignee_uid": null,
+          "assignee_full_name": null
+        }
+      ]
+    }
+  ]
+}
