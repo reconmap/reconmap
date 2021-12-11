@@ -24,7 +24,7 @@ Go to https://reconmap.org to find the user, admin and developer manuals.
 1. First you need to start your docker containers:
 
 ```sh
-$ docker-compose up -d
+docker-compose up -d
 ```
 
 2. After this, open your browser at http://localhost:5500
