@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Return error messages if imported file is corrupt or invalid
 - Change default ports (api=5500, webclient=5510, agent=5520/5530)
+- Kubernetes definitions files were updated
 
 ## [0.9.5]
 
