@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Return error messages if imported file is corrupt or invalid
 - Change default ports (api=5500, webclient=5510, agent=5520/5530)
 - Kubernetes definitions files were updated
+- Change license to Apache 2.0
+- Allow targets to have sub-targets (eg parent host 127.0.0.1, children ports 80, 443, 22, 3306, ...)
 
 ## [0.9.5]
 
