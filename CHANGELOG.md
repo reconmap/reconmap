@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add option to sort vulnerability columns in the frontend
 - Add project weekly report
 - Add chart widgets to project page
+- Add priority field to tasks
 
 ### Changed
 - Return error messages if imported file is corrupt or invalid
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kubernetes definitions files were updated
 - Change license to Apache 2.0
 - Allow targets to have sub-targets (eg parent host 127.0.0.1, children ports 80, 443, 22, 3306, ...)
+- User preferences (web client theme, dashboard widgets) are stored and retrieved from the server
 
 ## [0.9.5]
 
