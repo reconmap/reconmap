@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+- Store user notifications on server (introduces ability to mark notifications as read/unread)
+
+### Fixed
+
+## [0.10.0]
+
+### Added
 - Add support for vulnerability sub-categories
 - Add support for Word/LibreOffice report templates.
 - Add ability to launch commands from the Web client and see them running on an embedded terminal
