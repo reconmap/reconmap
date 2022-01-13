@@ -6,6 +6,7 @@ services:
     container_name: rmap-redis
     image: redis:6.0
     command: redis-server --requirepass REconDIS
+    restart: unless-stopped
     ports:
       - 6379:6379
     volumes:
@@ -14,6 +15,7 @@ services:
   mysql:
     container_name: rmap-mysql
     image: quay.io/reconmap/rest-api-db:latest
+    restart: unless-stopped
     volumes:
       - ./data-mysql:/var/lib/mysql
     ports:
@@ -27,14 +29,16 @@ services:
   web-client:
     container_name: rmap-web-client
     image: quay.io/reconmap/web-client:master
+    restart: unless-stopped
     volumes:
-      - ./environment.js:/usr/share/nginx/html/environment.js
+      - ./environment.js:/usr/share/nginx/html/environment.js:ro
     ports:
       - 5500:5500
 
   api:
     container_name: rmap-api
     image: quay.io/reconmap/rest-api:latest
+    restart: unless-stopped
     volumes:
       - "./config.json:/var/www/webapp/config.json"
       - "./logs:/var/www/webapp/logs/"
@@ -50,6 +54,7 @@ services:
   agent:
     container_name: rmap-agent
     image: quay.io/reconmap/agent:latest
+    restart: unless-stopped
     ports:
       - 5520:5520
     environment:
