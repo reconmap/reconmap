@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added licenses page on the Web client
 
 ### Changed
 - Store user notifications on server (introduces ability to mark notifications as read/unread)
