@@ -1,7 +1,7 @@
 # Reconmap security policy
 [![huntr](https://cdn.huntr.dev/huntr_security_badge_mono.svg)](https://huntr.dev/bounties/disclose/?target=https%3A%2F%2Fgithub.com%2Freconmap%2Freconmap)
 
-Security is at the forefront of what we do. We make a significant effort to keep everything secure for our users, but if you happen to find parts of our code that are vulnerable please let us know through (huntr.dev)[https://huntr.dev/bounties/disclose/?target=https%3A%2F%2Fgithub.com%2Freconmap%2Freconmap] so that we can address it.
+Security is at the forefront of what we do. We make a significant effort to keep everything secure for our users, but if you happen to find parts of our code that are vulnerable please let us know through [huntr.dev](https://huntr.dev/bounties/disclose/?target=https%3A%2F%2Fgithub.com%2Freconmap%2Freconmap) so that we can address it.
 
 You can also get ahold of us is on our [Gitter community channel](https://gitter.im/reconmap/community).
 
