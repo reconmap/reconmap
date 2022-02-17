@@ -9,7 +9,7 @@ Reconmap is a vulnerability assessment and penetration testing platform that hel
 
 ## Demo
 
-Details on how to connect to the live demo server can be found [here](https://reconmap.org/live-demo.html).
+Details on how to connect to the live demo server can be found [here](https://docs.reconmap.com/live-demo.html).
 
 ## Documentation
 
