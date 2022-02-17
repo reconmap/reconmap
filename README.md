@@ -1,6 +1,7 @@
 [![Gitter](https://badges.gitter.im/reconmap/community.svg)](https://gitter.im/reconmap/community)
 [![Twitter](https://img.shields.io/twitter/follow/reconmap?style=social&logo=twitter&style=flat)](https://twitter.com/reconmap)
 [![YouTube](https://img.shields.io/static/v1?label=YouTube&message=Subscribe&color=red&style=flat&logo=youtube)](https://www.youtube.com/reconmap)
+[![huntr](https://cdn.huntr.dev/huntr_security_badge_mono.svg)](https://huntr.dev)
 
 ![Reconmap logo](https://pasteall.org/media/4/7/4780c30723f90cfd56ec0d056555b7e6.png)
 

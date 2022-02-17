@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added licenses page on the Web client
-- Added filters to the vulnerabilities page
+- Add licenses page on the Web client
+- Add filters to the vulnerabilities page
+- Add setting to allow * CORS origins
 
 ### Changed
 - Store user notifications on server (introduces ability to mark notifications as read/unread)
