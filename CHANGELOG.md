@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add licenses page on the Web client
 - Add filters to the vulnerabilities page
 - Add setting to allow * CORS origins
+- Add priority filter for tasks
 
 ### Changed
 - Store user notifications on server (introduces ability to mark notifications as read/unread)
