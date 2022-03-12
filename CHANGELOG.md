@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Web client: Add refresh button to system logs page
+- Web client: Allow to remove normal and small organisation logos
+
+### Changed
+- Correctly deal with entity dependencies in the db (delete on cascade for most tables)
+
+## [1.1.0]
+
+### Added
 - Add licenses page on the Web client
 - Add filters to the vulnerabilities page
 - Add setting to allow * CORS origins
