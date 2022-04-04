@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Web client: Add refresh button to system logs page
 - Web client: Allow to remove normal and small organisation logos
+- Reporting: Management summary and conclusion added to projects
 
 ### Changed
 - Correctly deal with entity dependencies in the db (delete on cascade for most tables)
 - Web client: Upgrade to React 18
+- Log warning when trying to export invalid entity type
 
 ## [1.1.0]
 
