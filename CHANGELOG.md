@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web client: Add refresh button to system logs page
 - Web client: Allow to remove normal and small organisation logos
 - Reporting: Management summary and conclusion added to projects
-- +900 commands from the Orange Cyberdefense arsenal tool (https://github.com/Orange-Cyberdefense/arsenal)
+- Database: Added +900 commands from the Orange Cyberdefense arsenal tool (https://github.com/Orange-Cyberdefense/arsenal)
+- Web client: Pagination to the command list
 
 ### Changed
 - Correctly deal with entity dependencies in the db (delete on cascade for most tables)
