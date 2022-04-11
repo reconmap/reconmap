@@ -12,11 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reporting: Management summary and conclusion added to projects
 - Database: Added +900 commands from the Orange Cyberdefense arsenal tool (https://github.com/Orange-Cyberdefense/arsenal)
 - Web client: Pagination to the command list
+- Web client: Added searchable command dropdown to tasks
 
 ### Changed
 - Correctly deal with entity dependencies in the db (delete on cascade for most tables)
 - Web client: Upgrade to React 18
 - Log warning when trying to export invalid entity type
+
+### Fixed
+- Fixed issue with project template tasks not showing
 
 ## [1.1.0]
 
