@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Database: Added +900 commands from the Orange Cyberdefense arsenal tool (https://github.com/Orange-Cyberdefense/arsenal)
 - Web client: Pagination to the command list
 - Web client: Added searchable command dropdown to tasks
+- Web client: Filter by assignee in task list page.
 
 ### Changed
 - Correctly deal with entity dependencies in the db (delete on cascade for most tables)
