@@ -21,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log warning when trying to export invalid entity type
 
 ### Fixed
-- Fixed issue with project template tasks not showing
+- Web client: Fixed issue with project template tasks not showing
+- Web client: Fixed issue on the project creation form creating successful toast on failure
 
 ## [1.1.0]
 
