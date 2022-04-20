@@ -14,11 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web client: Pagination to the command list
 - Web client: Added searchable command dropdown to tasks
 - Web client: Filter by assignee in task list page.
+- Pagination to project list
 
 ### Changed
 - Correctly deal with entity dependencies in the db (delete on cascade for most tables)
 - Web client: Upgrade to React 18
 - Log warning when trying to export invalid entity type
+- Web client: The pagination component now can jump to any page
 
 ### Fixed
 - Web client: Fixed issue with project template tasks not showing
