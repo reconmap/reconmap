@@ -20,5 +20,12 @@ These are the timeframes in which we aim to resolve any security issue, based on
 
 Anyone reporting a vulnerability will be added to our credits permanently. Bounty rewards are determined by industry-first equation from huntr.dev to understand the popularity, impact and value of repositories to the open source community.
 
+## Hall of fame
+
+Reconmap would like to thank the following people who have responsibly disclosed vulnerabilities to us:
+
+- Ioan Iuga (https://cyberlegion.io/)
+- Guilherme Rodrigues (https://twitter.com/guilhermesgi) and Brute Bee (https://twitter.com/BruteBee)
+
 Please find the [FAQ](https://www.huntr.dev/faq) and [Responsible disclosure policy](https://www.huntr.dev/policy/) from huntr.dev.
 
