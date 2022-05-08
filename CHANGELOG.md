@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+-
+
+### Changed
+-
+
+### Fixed
+-
+
+## [1.5.0]
+
+### Added
 - Configurable project categories
 - Web client: Add refresh button to system logs page
 - Web client: Allow to remove normal and small organisation logos
@@ -27,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web client: Fixed issue with project template tasks not showing
 - Web client: Fixed issue on the project creation form creating successful toast on failure
 
-## [1.1.0]
+## 1.1.0
 
 ### Added
 - Add licenses page on the Web client
@@ -42,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-## [0.10.0]
+## 0.10.0
 
 ### Added
 - Add support for vulnerability sub-categories
@@ -67,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow targets to have sub-targets (eg parent host 127.0.0.1, children ports 80, 443, 22, 3306, ...)
 - User preferences (web client theme, dashboard widgets) are stored and retrieved from the server
 
-## [0.9.5]
+## 0.9.5
 
 ### Added
 - Add support for tags in vulnerabilities, commands and targets.
@@ -82,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed logic that allowed to add existing members to projects.
 
-## [0.9.0]
+## 0.9.0
 
 ### Added
 - Add vulnerability statuses
@@ -99,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change import/export format to JSON
 - Change reports styling
 
-## [0.8.5]
+## 0.8.5
 
 ### Added
 - Introduce new commands views (CRUD)
@@ -113,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Return client and user information from various other entities
 - Use all space available for forms
 
-## [0.8.0]
+## 0.8.0
 
 ### Added
 - Add rules of engagement to projects
@@ -128,7 +139,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix problem with minimum number of pages in paginator
 - Fix link to import project templates
 
-## [0.7.5]
+## 0.7.5
 
 ### Added
 - Add support for notes at the project and vulnerability levels.
@@ -137,16 +148,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Change application to no longer fail with the log file is not writable.
 
-## [0.7.0]
+## 0.7.0
 
 ### Added
 - Add basic functionality: clients, projects, tasks, vulnerabilities, ... 
 
-[Unreleased]: https://github.com/reconmap/rest-api/compare/0.9.5...master 
-[0.9.5]: https://github.com/reconmap/rest-api/compare/0.9.0...0.9.5
-[0.9.0]: https://github.com/reconmap/rest-api/compare/0.8.5...0.9.0
-[0.8.5]: https://github.com/reconmap/rest-api/compare/0.8.0...0.8.5
-[0.8.0]: https://github.com/reconmap/rest-api/compare/0.7.5...0.8.0
-[0.7.5]: https://github.com/reconmap/rest-api/compare/0.7.0...0.7.5
-[0.7.0]: https://github.com/reconmap/rest-api/compare/0.0.1..0.7.0
+[Unreleased]: https://github.com/reconmap/reconmap/compare/1.5.0...master 
+[1.5.0]: https://github.com/reconmap/reconmap/compare/0.1.0...1.5.0
 
