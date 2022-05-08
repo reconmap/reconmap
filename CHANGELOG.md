@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Configurable project categories
 - Web client: Add refresh button to system logs page
 - Web client: Allow to remove normal and small organisation logos
 - Reporting: Management summary and conclusion added to projects
