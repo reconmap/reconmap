@@ -10,10 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -
 
 ### Changed
--
+- Web client: Upgraded to Chakra v2
+- Rest API: Upgraded to Monolog v3
 
 ### Fixed
--
+- 
 
 ## [1.5.0]
 
