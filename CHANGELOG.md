@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
--
+- [Keycloak](https://www.keycloak.org/) integration
 
 ### Changed
 - Web client: Upgraded to Chakra v2
