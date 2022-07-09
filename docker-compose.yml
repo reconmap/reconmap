@@ -6,7 +6,7 @@ services:
     command: redis-server --requirepass REconDIS
     restart: unless-stopped
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes:
       - ./data-redis:/data
 
@@ -17,12 +17,41 @@ services:
     volumes:
       - ./data-mysql:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: reconmuppet
       MYSQL_DATABASE: reconmap
       MYSQL_USER: reconmapper
       MYSQL_PASSWORD: reconmapped
+
+  keycloak:
+    image: quay.io/reconmap/keycloak-custom:latest
+    command:
+      - "start --auto-build --http-enabled=true --hostname=localhost --proxy=edge --hostname-strict-https=false --import-realm"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_WELCOME_THEME: "reconmap-theme"
+      KEYCLOAK_DEFAULT_THEME: "reconmap-theme"
+      JAVA_OPTS_APPEND: ""
+      KC_DB_VENDOR: MYSQL
+      KC_DB: mysql
+      KC_DB_URL: 'jdbc:mysql://rmap-mysql/keycloak'
+      KC_DB_DATABASE: keycloak
+      KC_DB_USERNAME: keycloaker
+      KC_DB_PASSWORD: keycloaked
+      KC_HTTP_ENABLED: false
+      KC_HTTPS_ENABLED: false
+      KC_PROXY: edge
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_LOG_LEVEL: INFO
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
 
   web-client:
     container_name: rmap-web-client
@@ -31,7 +60,7 @@ services:
     volumes:
       - ./environment.js:/usr/share/nginx/html/environment.js:ro
     ports:
-      - 5500:5500
+      - "5500:5500"
 
   api:
     container_name: rmap-api
@@ -42,7 +71,7 @@ services:
       - "./logs:/var/www/webapp/logs/"
       - "./data:/var/www/webapp/data/"
     ports:
-      - 5510:5510
+      - "5510:5510"
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -54,12 +83,11 @@ services:
     image: quay.io/reconmap/agent:latest
     restart: unless-stopped
     ports:
-      - 5520:5520
+      - "5520:5520"
     environment:
       JWT_SECRET: "One long key of your own"
       VALID_ORIGINS: http://localhost:5500
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: REconDIS
-
 

@@ -1,9 +1,13 @@
 {
-    "jwt": {
-        "issuer": "reconmap.org",
-        "audience": "reconmap.com",
-        "key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    },
+	"keycloak": {
+		"baseUri": "http://localhost:8080",
+		"clientSecret": "this is to be replaced!"
+	},
+	"jwt": {
+		"issuer": "http://localhost:8080/realms/reconmap",
+		"audience": "account",
+		"key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	},
     "cors": {
         "allowedOrigins": [
             "http://localhost:5500"
