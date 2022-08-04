@@ -11,5 +11,11 @@ window.env = {
     REACT_APP_AGENT_SERVICE_HOST_PORT: 'localhost:5520',
 
     // Web application context path e.g. / (for http://127.0.0.1:5500) or /reconmap (for http://127.0.0.1:5500/reconmap)
-    // REACT_APP_CONTEXT_PATH: '/reconmap'
+    // REACT_APP_CONTEXT_PATH: '/reconmap',
+
+    REACT_APP_KEYCLOAK_CONFIG: {
+        url: 'http://localhost:8080',
+        realm: 'reconmap',
+        clientId: 'web-client'
+    }
 };
