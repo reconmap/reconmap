@@ -1,7 +1,7 @@
 {
 	"keycloak": {
-		"baseUri": "http://localhost:8080",
-		"clientSecret": "this is to be replaced!"
+		"baseUri": "http://keycloak:8080",
+		"clientSecret": "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
 	},
 	"jwt": {
 		"issuer": "http://localhost:8080/realms/reconmap",

@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
 
   redis:
@@ -20,9 +22,6 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: reconmuppet
-      MYSQL_DATABASE: reconmap
-      MYSQL_USER: reconmapper
-      MYSQL_PASSWORD: reconmapped
 
   keycloak:
     image: quay.io/reconmap/keycloak-custom:latest
@@ -48,6 +47,7 @@ services:
       KC_HOSTNAME_STRICT: false
       KC_HOSTNAME_STRICT_HTTPS: false
       KC_LOG_LEVEL: INFO
+      ADMIN_CLI_SECRET: "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
     ports:
       - "8080:8080"
     depends_on:

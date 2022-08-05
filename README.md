@@ -18,7 +18,7 @@ Go to [https://docs.reconmap.com](https://docs.reconmap.com) to find the user, a
 ## Runtime requirements
 
 - Docker
-- Docker compose
+- [Docker compose](https://docs.docker.com/compose/install/) 2+
 
 ## How to run it locally with Docker compose 
 
