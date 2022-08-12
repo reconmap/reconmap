@@ -47,7 +47,8 @@ services:
       KC_HOSTNAME_STRICT: false
       KC_HOSTNAME_STRICT_HTTPS: false
       KC_LOG_LEVEL: INFO
-      ADMIN_CLI_SECRET: "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
+      VAR_ADMIN_CLI_SECRET: "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
+      VAR_WEB_CLIENT_URL: "http://localhost:5500"
     ports:
       - "8080:8080"
     depends_on:
