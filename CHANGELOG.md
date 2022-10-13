@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Clone task feature
+- Add user location (city, country) to audit log table
+
+### Changed
+-
+
+### Fixed
+- 
+
+## [2.0.0]
+
+### Added
 - [Keycloak](https://www.keycloak.org/) integration
 
 ### Changed
