@@ -27,5 +27,10 @@
         "fromEmail": "no-reply@reconmap.org",
         "fromName": "Reconmap"
     },
-    "integrations": {}
+    "integrations": {
+    	"maxmind": {
+      	  "enabled": false,
+      	  "dbPath": "/var/www/webapp/data/GeoLite2-City.mmdb"
+    	}
+    }
 }
