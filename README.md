@@ -30,10 +30,6 @@ docker-compose up -d
 
 2. After this, open your browser at http://localhost:5500
 
-## How to run on Kubernetes
-
-Please visit https://github.com/reconmap/k8s-deployment for instructions on how to run Reconmap on a Kubernetes cluster.
-
 ## How to contribute
 
 Here are some things you could do to become a contributor:
