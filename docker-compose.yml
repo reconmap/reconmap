@@ -39,13 +39,13 @@ services:
       KC_DB_DATABASE: keycloak
       KC_DB_USERNAME: keycloaker
       KC_DB_PASSWORD: keycloaked
-      KC_HTTP_ENABLED: false
-      KC_HTTPS_ENABLED: false
+      KC_HTTP_ENABLED: 'false'
+      KC_HTTPS_ENABLED: 'false'
       KC_PROXY: edge
       KC_HOSTNAME: localhost
       KC_HOSTNAME_PORT: 8080
-      KC_HOSTNAME_STRICT: false
-      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HOSTNAME_STRICT_HTTPS: 'false'
       KC_LOG_LEVEL: INFO
       VAR_ADMIN_CLI_SECRET: "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
       VAR_WEB_CLIENT_URL: "http://localhost:5500"
