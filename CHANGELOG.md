@@ -10,9 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clone task feature
 - Add user location (city, country) to audit log table
 - Add 'Onboarding' project to new instances to help with initial setup
+- Add logging level and handlers to config file
 
 ### Changed
--
+- Application logs page removed in favour or centralised log management solutions such as Graylog
 
 ### Fixed
 - 

@@ -37,7 +37,7 @@ Here are some things you could do to become a contributor:
 - **★ Star this project on Github ★**
 - Read the [documentation](https://docs.reconmap.com) and improve it by opening a pull request against [this repo](https://github.com/reconmap/documentation).
 - Suggest new features or ideas to the [discussion board](https://github.com/reconmap/reconmap/discussions)
-- Improve the code of the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client) or [cli](https://github.com/reconmap/cli) components
+- Improve the code of the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client) or [cli](https://github.com/reconmap/command-line-tools) components
 - Report security issues
 
 Before you jump to make any changes make sure you have read the [contributing guidelines](CONTRIBUTING.md). This would save us all time. Thanks!
