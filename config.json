@@ -27,6 +27,19 @@
         "fromEmail": "no-reply@reconmap.org",
         "fromName": "Reconmap"
     },
+  "logging": {
+    "file": {
+      "enabled": true,
+      "level": "debug",
+      "path": "/var/www/webapp/logs/application.log"
+    },
+    "gelf": {
+      "enabled": false,
+      "level": "debug",
+      "serverName": "api-graylog-1",
+      "serverPort": 12201
+    }
+  },
     "integrations": {
     	"maxmind": {
       	  "enabled": false,
