@@ -49,6 +49,7 @@ services:
       KC_LOG_LEVEL: INFO
       VAR_ADMIN_CLI_SECRET: "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
       VAR_WEB_CLIENT_URL: "http://localhost:5500"
+    restart: unless-stopped
     ports:
       - "8080:8080"
     depends_on:
