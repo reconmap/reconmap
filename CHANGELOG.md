@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add logging level and handlers to config file
 
 ### Changed
+- Updated Keycloak to version 20.0  (from 18.0)
 - Application logs page removed in favour or centralised log management solutions such as Graylog
 
 ### Fixed
