@@ -1,7 +1,9 @@
 {
 	"keycloak": {
-		"baseUri": "http://keycloak:8080",
-		"clientSecret": "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
+    	"baseUri": "http://keycloak:8080",
+    	"realmName": "reconmap",
+    	"clientId": "admin-cli",
+    	"clientSecret": "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
 	},
 	"jwt": {
 		"issuer": "http://localhost:8080/realms/reconmap",
