@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add user location (city, country) to audit log table
 - Add 'Onboarding' project to new instances to help with initial setup
 - Add logging level and handlers to config file
+- Add Chinese translation (Thanks, [Zhaoyonghua](https://github.com/scanner521)!)
 
 ### Changed
 - Application logs page removed in favour or centralised log management solutions such as Graylog
 - Keycloak upgraded to version 21.1 (from 18.0)
+- Upgraded to Yarn 3 (from 1)
 
 ### Fixed
 - 
