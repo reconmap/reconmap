@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Application logs page removed in favour or centralised log management solutions such as Graylog
 - Upgraded to Yarn 3 (from 1)
-- Upgrade to Keycloak 23 (from 18)
+- Upgrade to Keycloak 24
 
 ### Fixed
 - 
