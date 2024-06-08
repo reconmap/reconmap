@@ -24,8 +24,7 @@ services:
 
   keycloak:
     image: quay.io/reconmap/keycloak-custom:latest
-    command:
-      - "start --http-enabled=true --hostname=localhost --proxy=edge --hostname-strict-https=false --import-realm"
+    command: "start --http-enabled=true --hostname=localhost --proxy=edge --hostname-strict-https=false --import-realm"
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin

@@ -15,8 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Application logs page removed in favour or centralised log management solutions such as Graylog
-- Upgraded to Yarn 3 (from 1)
 - Upgrade to Keycloak 24
+- API upgraded to MySQL 8.4 (from 8.0)
+- API upgraded to PHP 8.3 (from 8.2)
+- Web client upgraded to Vite 5 (from 4)
+- Web client upgraded to Yarn 4 (from 1)
 
 ### Fixed
 - 
