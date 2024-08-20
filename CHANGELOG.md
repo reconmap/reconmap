@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API upgraded to PHP 8.3 (from 8.2)
 - Web client upgraded to Vite 5 (from 4)
 - Web client upgraded to Yarn 4 (from 1)
+- Notes (eg Project Notes) have been renamed to Comments
+- Comments (aka Notes) are now easier to add directly on the page instead of in a popup.
+- Comments page sections redesigned.
 
 ### Fixed
 - 
