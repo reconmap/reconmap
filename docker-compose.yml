@@ -3,7 +3,7 @@ services:
 
   redis:
     container_name: rmap-redis
-    image: redis:6.0
+    image: redis:7.4
     command: redis-server --requirepass REconDIS
     restart: unless-stopped
     ports:

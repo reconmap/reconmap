@@ -12,17 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add 'Onboarding' project to new instances to help with initial setup
 - Add logging level and handlers to config file
 - Add Chinese translation (Thanks, [Zhaoyonghua](https://github.com/scanner521)!)
+- Link to advanced search from sidebar, together with recent search history.
 
 ### Changed
 - Application logs page removed in favour or centralised log management solutions such as Graylog
 - Upgrade to Keycloak 24
 - API upgraded to MySQL 8.4 (from 8.0)
 - API upgraded to PHP 8.3 (from 8.2)
+- API ugpraded to Redis 7.4 (from 6.0)
 - Web client upgraded to Vite 5 (from 4)
-- Web client upgraded to Yarn 4 (from 1)
+- Web client upgraded to Yarn 4.4 (from 1)
 - Notes (eg Project Notes) have been renamed to Comments
 - Comments (aka Notes) are now easier to add directly on the page instead of in a popup.
 - Comments page sections redesigned.
+- Remove gravatar.com usage
 
 ### Fixed
 - 
