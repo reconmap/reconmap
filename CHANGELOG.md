@@ -13,8 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add logging level and handlers to config file
 - Add Chinese translation (Thanks, [Zhaoyonghua](https://github.com/scanner521)!)
 - Link to advanced search from sidebar, together with recent search history.
+- Add queue lengths to system usage
+- Add redis connection to system health page
 
 ### Changed
+- Menu re-design and polish
 - Application logs page removed in favour or centralised log management solutions such as Graylog
 - Upgrade to Keycloak 24
 - API upgraded to MySQL 8.4 (from 8.0)
