@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: mysql
+  name: mysql
+  namespace: nonprod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.network/reconmap-default: "true"
+        io.kompose.service: mysql
+    spec:
+      containers:
+        - env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: reconmuppet
+          image: quay.io/reconmap/rest-api-db:latest
+          name: rmap-mysql
+          ports:
+            - containerPort: 3306
+              hostPort: 3306
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-claim0
+      restartPolicy: Always
+      volumes:
+        - name: mysql-claim0
+          persistentVolumeClaim:
+            claimName: mysql-claim0

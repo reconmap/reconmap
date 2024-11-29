@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: keycloak
+  name: keycloak
+  namespace: nonprod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: keycloak
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/reconmap-default: "true"
+        io.kompose.service: keycloak
+    spec:
+      containers:
+        - args: ["start", "--hostname=http://localhost:8080", "--proxy-headers", "xforwarded", "--http-enabled", "true", "--import-realm"]
+          env:
+            - name: KC_DB
+              value: mysql
+            - name: KC_DB_DATABASE
+              value: keycloak
+            - name: KC_DB_PASSWORD
+              value: keycloaked
+            - name: KC_DB_URL
+              value: jdbc:mysql://mysql.nonprod.svc.cluster.local/keycloak
+            - name: KC_DB_USERNAME
+              value: keycloaker
+            - name: KC_DB_VENDOR
+              value: MYSQL
+            - name: KC_LOG_LEVEL
+              value: INFO
+            - name: KC_PROXY
+              value: edge
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: admin
+            - name: KEYCLOAK_DEFAULT_THEME
+              value: reconmap-theme
+            - name: KEYCLOAK_WELCOME_THEME
+              value: reconmap-theme
+            - name: VAR_ADMIN_CLI_SECRET
+              value: xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy
+            - name: VAR_WEB_CLIENT_URL
+              value: http://localhost:5500
+          image: quay.io/reconmap/keycloak-custom:latest
+          name: keycloak
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always

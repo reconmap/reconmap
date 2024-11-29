@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: api
+  name: api
+  namespace: nonprod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.network/reconmap-default: "true"
+        io.kompose.service: api
+    spec:
+      containers:
+        - env:
+            - name: REDIS_HOST
+              value: redis.nonprod.svc.cluster.local
+            - name: REDIS_PASSWORD
+              value: REconDIS
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_USER
+              value: default
+          image: quay.io/reconmap/rest-api:latest
+          name: rmap-api
+          ports:
+            - containerPort: 5510
+              hostPort: 5510
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/www/webapp/config.json
+              name: config-volume
+              subPath: config.json
+            - mountPath: /var/www/webapp/logs
+              name: api-claim1
+            - mountPath: /var/www/webapp/data
+              name: api-claim2
+      restartPolicy: Always
+      volumes:
+        - name: api-claim1
+          persistentVolumeClaim:
+            claimName: api-claim1
+        - name: api-claim2
+          persistentVolumeClaim:
+            claimName: api-claim2
+        - name: config-volume
+          configMap:
+            name: api-configmap

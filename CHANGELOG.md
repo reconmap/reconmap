@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comments (aka Notes) are now easier to add directly on the page instead of in a popup.
 - Comments page sections redesigned.
 - Remove gravatar.com usage
+- Moved k8s resources to main repo
 
 ### Fixed
 - 

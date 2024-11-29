@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: agent
+  name: agent
+  namespace: nonprod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: agent
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/reconmap-default: "true"
+        io.kompose.service: agent
+    spec:
+      containers:
+        - env:
+            - name: JWT_SECRET
+              value: One long key of your own
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PASSWORD
+              value: REconDIS
+            - name: REDIS_PORT
+              value: "6379"
+            - name: VALID_ORIGINS
+              value: http://localhost:5500
+          image: quay.io/reconmap/agent:latest
+          name: rmap-agent
+          ports:
+            - containerPort: 5520
+              hostPort: 5520
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+

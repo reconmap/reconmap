@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: api-configmap
+data:
+  config.json: |-
+    {
+      "keycloak": {
+        "baseUri": "http://keycloak.nonprod.svc.cluster.local:8080",
+        "realmName": "reconmap",
+        "clientId": "admin-cli",
+        "clientSecret": "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
+      },
+      "jwt": {
+        "issuer": "http://localhost:8080/realms/reconmap",
+        "audience": "account",
+        "key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "cors": {
+        "allowedOrigins": [
+          "http://localhost:5500"
+        ]
+      },
+      "database": {
+        "host": "mysql.nonprod.svc.cluster.local",
+        "username": "reconmapper",
+        "password": "reconmapped",
+        "name": "reconmap"
+      },
+      "smtp": {
+        "host": "",
+        "port": 587,
+        "username": "",
+        "password": "",
+        "fromEmail": "no-reply@reconmap.org",
+        "fromName": "Reconmap"
+      },
+      "logging": {
+        "file": {
+          "enabled": true,
+          "level": "debug",
+          "path": "/var/www/webapp/logs/application.log"
+        },
+        "gelf": {
+          "enabled": false,
+          "level": "debug",
+          "serverName": "api-graylog-1",
+          "serverPort": 12201
+        }
+      },
+      "integrations": {
+        "maxmind": {
+          "enabled": false,
+          "dbPath": "/var/www/webapp/data/GeoLite2-City.mmdb"
+        }
+      }
+    }
+
