@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Link to advanced search from sidebar, together with recent search history.
 - Add queue lengths to system usage
 - Add redis connection to system health page
+- Helm chart for web client
 
 ### Changed
 - Menu re-design and polish
