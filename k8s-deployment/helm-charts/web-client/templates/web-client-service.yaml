@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-client
+  namespace: nonprod
+  labels:
+    io.kompose.service: web-client
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    io.kompose.service: web-client
+  ports:
+    - name: "5500"
+      port: {{ .Values.service.port }}
+      targetPort: 5500
+

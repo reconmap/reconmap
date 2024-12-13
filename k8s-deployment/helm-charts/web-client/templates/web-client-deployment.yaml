@@ -19,7 +19,7 @@ spec:
         io.kompose.service: web-client
     spec:
       containers:
-        - image: quay.io/reconmap/web-client:master
+        - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           name: rmap-web-client
           ports:
             - containerPort: 5500

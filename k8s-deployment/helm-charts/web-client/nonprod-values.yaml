@@ -1,0 +1,10 @@
+image:
+  repository: quay.io/reconmap/web-client
+  tag: master
+
+ingress:
+  enabled: false
+
+service:
+  type: LoadBalancer
+  port: 5500
