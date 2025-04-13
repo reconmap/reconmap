@@ -20,5 +20,5 @@ clean:
 	done
 
 convert:
-	kompose convert -f ../reconmap/docker-compose.yml --namespace=nonprod --with-kompose-annotation=false -o resources
+	kompose convert -f ../reconmap/compose.yaml --namespace=nonprod --with-kompose-annotation=false -o resources
 

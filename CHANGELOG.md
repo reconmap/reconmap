@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comments page sections redesigned.
 - Remove gravatar.com usage
 - Moved k8s resources to main repo
+- Renamed docker-compose.yml to compose.yaml
 
 ### Fixed
 - 
