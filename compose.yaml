@@ -22,9 +22,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: reconmuppet
     healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        timeout: 20s
-        retries: 10
+      test: "mysql -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD mysql -e 'SELECT 1;'"
+      interval: 5s
+      timeout: 10s
+      retries: 3
 
   keycloak:
     image: quay.io/reconmap/keycloak-custom:latest
@@ -47,6 +48,11 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     depends_on:
         mysql:
             condition: service_healthy
@@ -59,6 +65,9 @@ services:
       - ./environment.js:/usr/share/nginx/html/environment.js:ro
     ports:
       - "5500:5500"
+    depends_on:
+      keycloak:
+        condition: service_healthy
 
   api:
     container_name: rmap-api
@@ -75,6 +84,9 @@ services:
       REDIS_PORT: 6379
       REDIS_USER: default
       REDIS_PASSWORD: REconDIS
+    depends_on:
+        mysql:
+            condition: service_healthy
 
   agent:
     container_name: rmap-agent
