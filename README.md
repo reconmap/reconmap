@@ -1,5 +1,4 @@
 [![Gitter](https://badges.gitter.im/reconmap/community.svg)](https://gitter.im/reconmap/community)
-[![Twitter](https://img.shields.io/twitter/follow/reconmap?style=social&logo=twitter&style=flat)](https://twitter.com/reconmap)
 [![YouTube](https://img.shields.io/static/v1?label=YouTube&message=Subscribe&color=red&style=flat&logo=youtube)](https://www.youtube.com/reconmap)
 
 # Reconmap
@@ -8,23 +7,23 @@ Reconmap is a vulnerability assessment and penetration testing platform that hel
 
 ## Demo
 
-Details on how to connect to the live demo server can be found [here](https://docs.reconmap.com/live-demo.html).
+Details on how to connect to the live demo server can be found [here](https://docs.netfoe.com/live-demo.html).
 
 ## Documentation
 
-Go to [https://docs.reconmap.com](https://docs.reconmap.com) to find the user, admin and developer manuals.
+Go to [https://docs.netfoe.com](https://docs.netfoe.com) to find the user, admin and developer manuals.
 
 ## Runtime requirements
 
 - Docker
-- [Docker compose](https://docs.docker.com/compose/install/) 2+
+- [Docker compose](https://docs.docker.com/compose/install/)
 
-## How to run it locally with Docker compose 
+## How to run it locally with Docker compose
 
 1. First you need to start your docker containers:
 
 ```sh
-docker-compose up -d
+docker compose up -d
 ```
 
 2. After this, open your browser at http://localhost:5500
@@ -34,7 +33,7 @@ docker-compose up -d
 Here are some things you could do to become a contributor:
 
 - **★ Star this project on Github ★**
-- Read the [documentation](https://docs.reconmap.com) and improve it by opening a pull request against [this repo](https://github.com/reconmap/documentation).
+- Read the [documentation](https://docs.netfoe.com) and improve it by opening a pull request against [this repo](https://github.com/reconmap/documentation).
 - Suggest new features or ideas to the [discussion board](https://github.com/reconmap/reconmap/discussions)
 - Improve the code of the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client) or [cli](https://github.com/reconmap/command-line-tools) components
 - Report security issues
