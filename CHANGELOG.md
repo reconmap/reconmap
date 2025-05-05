@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved k8s resources to main repo
 - Renamed docker-compose.yml to compose.yaml
 - Replace ufoscout/docker-compose-wait with docker compose healthchecks
+- Tidy up compose.yaml file
 
 ### Fixed
 - 

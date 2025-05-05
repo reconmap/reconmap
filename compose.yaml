@@ -4,7 +4,7 @@ services:
   redis:
     container_name: rmap-redis
     image: redis:7.4
-    command: redis-server --requirepass REconDIS
+    command: redis-server --requirepass $DOTENV_REDIS_PASSWORD 
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -25,24 +25,21 @@ services:
       test: "mysql -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD mysql -e 'SELECT 1;'"
       interval: 5s
       timeout: 10s
-      retries: 3
+      retries: 5
 
   keycloak:
+    container_name: rmap-keycloak
     image: quay.io/reconmap/keycloak-custom:latest
     command: "start --hostname=http://localhost:8080 --proxy-headers xforwarded --http-enabled true --import-realm"
+    # See https://www.keycloak.org/server/all-config
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KEYCLOAK_WELCOME_THEME: "reconmap-theme"
-      KEYCLOAK_DEFAULT_THEME: "reconmap-theme"
-      JAVA_OPTS_APPEND: ""
-      KC_DB_VENDOR: MYSQL
       KC_DB: mysql
-      KC_DB_URL: 'jdbc:mysql://rmap-mysql/keycloak'
+      KC_DB_URL_HOST: mysql 
       KC_DB_DATABASE: keycloak
       KC_DB_USERNAME: keycloaker
       KC_DB_PASSWORD: keycloaked
-      KC_LOG_LEVEL: INFO
       VAR_ADMIN_CLI_SECRET: "xxxxxxxxxxxxxxxxxxyyyyyyyyyyyyyy"
       VAR_WEB_CLIENT_URL: "http://localhost:5500"
     restart: unless-stopped
@@ -52,7 +49,7 @@ services:
       test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 10
     depends_on:
         mysql:
             condition: service_healthy
@@ -80,10 +77,10 @@ services:
     ports:
       - "5510:5510"
     environment:
-      REDIS_HOST: redis
+      REDIS_HOST: $DOTENV_REDIS_HOST
       REDIS_PORT: 6379
       REDIS_USER: default
-      REDIS_PASSWORD: REconDIS
+      REDIS_PASSWORD: $DOTENV_REDIS_PASSWORD
     depends_on:
         mysql:
             condition: service_healthy
@@ -97,7 +94,7 @@ services:
     environment:
       JWT_SECRET: "One long key of your own"
       VALID_ORIGINS: http://localhost:5500
-      REDIS_HOST: redis
+      REDIS_HOST: $DOTENV_REDIS_HOST
       REDIS_PORT: 6379
-      REDIS_PASSWORD: REconDIS
+      REDIS_PASSWORD: $DOTENV_REDIS_PASSWORD
 
