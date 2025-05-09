@@ -10,7 +10,7 @@ window.env = {
     // hostname:port for the Reconmap's agent service
     VITE_AGENT_SERVICE_HOST_PORT: 'localhost:5520',
 
-    VITE_LOGO_URL: 'logo-name.png',
+    VITE_LOGO_URL: '/logo-name.png',
 
     // Web application context path e.g. / (for http://localhost:5500) or /reconmap (for http://localhost:5500/reconmap)
     // VITE_CONTEXT_PATH: '/reconmap'

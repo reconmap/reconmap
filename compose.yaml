@@ -92,7 +92,7 @@ services:
     ports:
       - "5520:5520"
     environment:
-      JWT_SECRET: "One long key of your own"
+      RMAP_KEYCLOAK_HOSTNAME=http://localhost:8080
       VALID_ORIGINS: http://localhost:5500
       REDIS_HOST: $DOTENV_REDIS_HOST
       REDIS_PORT: 6379

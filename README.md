@@ -1,24 +1,44 @@
+<div style="text-align: center;">
+
+<h1>Reconmap</h1>
+
 [![Gitter](https://badges.gitter.im/reconmap/community.svg)](https://gitter.im/reconmap/community)
 [![YouTube](https://img.shields.io/static/v1?label=YouTube&message=Subscribe&color=red&style=flat&logo=youtube)](https://www.youtube.com/reconmap)
 
-# Reconmap
+<h3>Pentesting Management, Automation and Reporting Platform</h3>
+</div>
 
-Reconmap is a vulnerability assessment and penetration testing platform that helps pentesters and other infosec teams collaborate on security projects, from planning, to testing and reporting. The tool's aim is to go from recon to report in the least possible time.
+<p><strong>Reconmap</strong> is an open source vulnerability assessment and penetration testing platform designed to support security professionals throughout the entire engagement lifecycle. It enables penetration testers and InfoSec teams to efficiently plan, execute, and report on security assessments.</p>
 
-## Demo
+<p>By streamlining workflows and promoting collaboration, Reconmap helps reduce the time from initial reconnaissance to final reporting — delivering faster, more organised results without compromising quality.</p>
 
-Details on how to connect to the live demo server can be found [here](https://docs.netfoe.com/live-demo.html).
+![Reconmap's screenshot](images/screenshot.png)
 
-## Documentation
+## Capabilities
 
-Go to [https://docs.netfoe.com](https://docs.netfoe.com) to find the user, admin and developer manuals.
+- Execute security commands instantly or schedule them for later
+- Automatically capture and store command outputs while tracking identified vulnerabilities
+- Generate professional reports in formats like Word, Markdown, or LaTeX
+- And much more to streamline your security assessments!
 
-## Runtime requirements
+## Try it
+
+### Demo instance
+
+Details on how to connect to the live demo server can be found [here](https://reconmap.com/overview/live-demo/).
+
+### Hosted (SaaS)
+
+Allow our developers and architects to host Reconmap for you via our hosted offering https://www.netfoe.com, so that you can focus on delivering value to your customers.
+
+### Run it locally
+
+#### Runtime requirements
 
 - Docker
 - [Docker compose](https://docs.docker.com/compose/install/)
 
-## How to run it locally with Docker compose
+#### How to run it locally with Docker compose
 
 1. First you need to start your docker containers:
 
@@ -28,17 +48,21 @@ docker compose up -d
 
 2. After this, open your browser at http://localhost:5500
 
-## How to contribute
+## Documentation
 
-Here are some things you could do to become a contributor:
+Go to [https://docs.netfoe.com](https://docs.netfoe.com) to find the user, admin and developer manuals.
 
-- **★ Star this project on Github ★**
-- Read the [documentation](https://docs.netfoe.com) and improve it by opening a pull request against [this repo](https://github.com/reconmap/documentation).
-- Suggest new features or ideas to the [discussion board](https://github.com/reconmap/reconmap/discussions)
-- Improve the code of the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client) or [cli](https://github.com/reconmap/command-line-tools) components
-- Report security issues
+## How to Contribute
 
-Before you jump to make any changes make sure you have read the [contributing guidelines](CONTRIBUTING.md). This would save us all time. Thanks!
+We welcome contributions from the community! Here are some ways you can get involved:
+
+- **★ Star this project on GitHub ★** to show your support and help others discover it.
+- Review the [documentation](https://reconmap.com) and submit improvements via a pull request to the [documentation repository](https://github.com/reconmap/documentation).
+- Share your ideas or suggest new features on the [discussion board](https://github.com/reconmap/reconmap/discussions).
+- Contribute to the codebase by improving the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client), or [CLI tools](https://github.com/reconmap/command-line-tools).
+- Report security vulnerabilities or other issues to help us maintain a secure and reliable platform.
+
+Before contributing, please read our [Contributing Guidelines](CONTRIBUTING.md) to ensure a smooth collaboration process. Thank you for helping make Reconmap better!
 
 ## How to report bugs
 
