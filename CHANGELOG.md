@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed docker-compose.yml to compose.yaml
 - Replace ufoscout/docker-compose-wait with docker compose healthchecks
 - Tidy up compose.yaml file
+- Removed Docker dependency from the rmap command
 
 ### Fixed
 - 
