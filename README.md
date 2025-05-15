@@ -50,7 +50,7 @@ docker compose up -d
 
 ## Documentation
 
-Go to [https://docs.netfoe.com](https://docs.netfoe.com) to find the user, admin and developer manuals.
+Go to <https://reconmap.com/> to find the user, admin and developer manuals.
 
 ## How to Contribute
 
@@ -62,10 +62,11 @@ We welcome contributions from the community! Here are some ways you can get invo
 - Contribute to the codebase by improving the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client), or [CLI tools](https://github.com/reconmap/command-line-tools).
 - Report security vulnerabilities or other issues to help us maintain a secure and reliable platform.
 
-Before contributing, please read our [Contributing Guidelines](CONTRIBUTING.md) to ensure a smooth collaboration process. Thank you for helping make Reconmap better!
+Before contributing, please read our [Contributing Guidelines](https://github.com/reconmap/.github/blob/main/CONTRIBUTING.md) to ensure a smooth collaboration process. Thank you for helping make Reconmap better!
 
 ## How to report bugs
 
 If you have bugs to report please use the [issues](https://github.com/reconmap/reconmap/issues) tab on Github to submit the details.
 
 If you want to chat to somebody on the development team head to our [Gitter](https://gitter.im/reconmap/community) channel.
+
