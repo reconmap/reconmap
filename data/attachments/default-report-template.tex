@@ -1,0 +1,114 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\geometry{margin=1in}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\title{Penetration Test Report}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\noindent\textbf{Project:} {{ project.name }}\\
+\textbf{Prepared for:} {{ client.name }}\\
+\textbf{Prepared by:} {{ org.name }}\\
+\textbf{Date:} {{ date }}
+
+\section{Revisions}
+
+\begin{longtable}{@{}lll@{}}
+\toprule
+\textbf{Date} & \textbf{Version Name} & \textbf{Description} \\
+\midrule
+{% for version in reports %}
+{{ version.insert_ts }} & {{ version.version_name }} & {{ version.version_description }} \\
+{% endfor %}
+\bottomrule
+\end{longtable}
+
+\section{Contacts}
+
+\begin{itemize}[leftmargin=1.5em]
+{% for contact in contacts %}
+  \item \textbf{Name:} {{ contact.name }}\\
+        \textbf{Phone:} {{ contact.phone }}\\
+        \textbf{Email:} {{ contact.email }}\\
+        \textbf{Role:} {{ contact.role }}
+{% endfor %}
+\end{itemize}
+
+\section{Pentesting Team}
+
+\begin{itemize}[leftmargin=1.5em]
+{% for user in users %}
+\item \textbf{{{ user.full_name }}}\\
+        \textit{{{ user.short_bio }}}
+{% endfor %}
+\end{itemize}
+
+\section{Project Overview}
+
+{{ project.description }}
+
+\subsection*{Findings Overview}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Severity} & \textbf{Count} \\
+\midrule
+{% for finding in findingsOverview %}
+{{ finding.severity|capitalize }} & {{ finding.count }} \\
+{% endfor %}
+\bottomrule
+\end{tabular}
+
+\section{Targets}
+
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Target Name} & \textbf{Type} \\
+\midrule
+{% for target in targets %}
+{{ target.name }} & {{ target.kind }} \\
+{% endfor %}
+\bottomrule
+\end{tabular}
+
+\section{Vulnerabilities}
+
+{% for vulnerability in vulnerabilities %}
+\subsection*{{ vulnerability.summary }}
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Category:} {{ vulnerability.category_name }}
+  \item \textbf{Severity:} {{ vulnerability.risk|capitalize }}
+  \item \textbf{CVSS Score:} {{ vulnerability.cvss_score }}
+  \item \textbf{OWASP Vector:} {{ vulnerability.owasp_vector }}
+  \item \textbf{OWASP Overall Rating:} {{ vulnerability.owasp_overall }}
+\end{itemize}
+
+\paragraph{Description}  
+{{ vulnerability.description }}
+
+\paragraph{Proof of Concept}  
+{{ vulnerability.proof_of_concept }}
+
+\paragraph{Remediation}  
+{{ vulnerability.remediation }}
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+{% endfor %}
+
+\end{document}
+

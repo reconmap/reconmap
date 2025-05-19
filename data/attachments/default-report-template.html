@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Penetration Test Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+    }
+    th, td {
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    h1, h2, h3 {
+      margin-top: 1.5em;
+    }
+    hr {
+      margin: 2em 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Penetration Test Report</h1>
+
+  <p><strong>Project:</strong> {{ project.name }}<br>
+     <strong>Prepared for:</strong> {{ client.name }}<br>
+     <strong>Prepared by:</strong> {{ org.name }}<br>
+     <strong>Date:</strong> {{ date }}</p>
+
+  <hr>
+
+  <section>
+    <h2>Revisions</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for version in reports %}
+        <tr>
+          <td>{{ version.insert_ts }}</td>
+          <td>{{ version.version_name }}</td>
+          <td>{{ version.version_description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Contacts</h2>
+    <ul>
+      {% for contact in contacts %}
+        <li>
+          <strong>Name:</strong> {{ contact.name }}<br>
+          <strong>Phone:</strong> {{ contact.phone }}<br>
+          <strong>Email:</strong> {{ contact.email }}<br>
+          <strong>Role:</strong> {{ contact.role }}
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Pentesting Team</h2>
+    <ul>
+      {% for user in users %}
+        <li>
+          <strong>{{ user.full_name }}</strong><br>
+          <em>{{ user.short_bio }}</em>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>{{ project.description }}</p>
+
+    <h3>Findings Overview</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Severity</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for finding in findingsOverview %}
+        <tr>
+          <td>{{ finding.severity|capitalize }}</td>
+          <td>{{ finding.count }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Targets</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Target Name</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for target in targets %}
+        <tr>
+          <td>{{ target.name }}</td>
+          <td>{{ target.kind }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Vulnerabilities</h2>
+    {% for vulnerability in vulnerabilities %}
+      <article>
+        <h3>{{ vulnerability.summary }}</h3>
+        <ul>
+          <li><strong>Category:</strong> {{ vulnerability.category_name }}</li>
+          <li><strong>Severity:</strong> {{ vulnerability.risk|capitalize }}</li>
+          <li><strong>CVSS Score:</strong> {{ vulnerability.cvss_score }}</li>
+          <li><strong>OWASP Vector:</strong> {{ vulnerability.owasp_vector }}</li>
+          <li><strong>OWASP Overall Rating:</strong> {{ vulnerability.owasp_overall }}</li>
+        </ul>
+        <p><strong>Description:</strong><br>{{ vulnerability.description }}</p>
+        <p><strong>Proof of Concept:</strong><br>{{ vulnerability.proof_of_concept }}</p>
+        <p><strong>Remediation:</strong><br>{{ vulnerability.remediation }}</p>
+        <hr>
+      </article>
+    {% endfor %}
+  </section>
+
+</body>
+</html>
+

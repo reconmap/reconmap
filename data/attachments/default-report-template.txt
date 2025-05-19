@@ -1,0 +1,71 @@
+Penetration Test Report
+=======================
+
+Project: {{ project.name }}
+Prepared for: {{ client.name }}
+Prepared by: {{ org.name }}
+
+(created on {{ date }})
+
+Revisions
+=========
+{% for version in reports %}
+- {{ version.insert_ts }}
+  {{ version.version_name }} | {{ version.version_description }}
+{% endfor %}
+
+Contacts
+========
+
+{% for contact in contacts %}
+Name: {{ contact.name }}
+Phone: {{ contact.phone }}
+Email: {{ contact.email }}
+Role: {{ contact.role }}
+
+{% endfor %}
+
+Pentesting team
+===============
+
+{% for user in users %}
+- {{ user.full_name }}
+  {{ user.short_bio }}
+{% endfor %}
+
+Project
+=======
+
+{{ project.description }}
+
+{% for finding in findingsOverview %}
+{{ finding.severity|capitalize }}: {{ finding.count }}
+{% endfor %}
+
+Targets
+=======
+
+{% for target in targets %}
+- **{{ target.name }}** ({{ target.kind }})
+{% endfor %}
+
+Vulnerabilities
+===============
+
+{% for vulnerability in vulnerabilities %}
+{{ vulnerability.summary }}
+Category: {{ vulnerability.category_name }}
+Severity: {{ vulnerability.risk|capitalize }}
+CVSS score: {{ vulnerability.cvss_score }}
+OWASP vector: {{ vulnerability.owasp_vector }}
+OWASP overall rating: {{ vulnerability.owasp_overall }}
+
+Description
+{{ vulnerability.description }}
+Proof of concept
+{{ vulnerability.proof_of_concept }}
+Remediation
+{{ vulnerability.remediation }}
+
+{% endfor %}
+
