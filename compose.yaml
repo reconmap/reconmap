@@ -56,7 +56,7 @@ services:
 
   web-client:
     container_name: rmap-web-client
-    image: quay.io/reconmap/web-client:master
+    image: quay.io/reconmap/web-client:latest
     restart: unless-stopped
     volumes:
       - ./environment.js:/usr/share/nginx/html/environment.js:ro
