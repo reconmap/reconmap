@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add redis connection to system health page
 - Helm chart for web client
 - Ability to render reports in plain text formats (Markdown, HTML, LaTeX), in addition to Word.
+- 'Mark all notifications as read' button
 
 ### Changed
 - Menu re-design and polish
