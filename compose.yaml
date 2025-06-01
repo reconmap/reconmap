@@ -13,7 +13,7 @@ services:
 
   mysql:
     container_name: rmap-mysql
-    image: quay.io/reconmap/rest-api-db:latest
+    image: ghcr.io/reconmap/rest-api-db:latest
     restart: unless-stopped
     volumes:
       - ./data-mysql:/var/lib/mysql
@@ -29,7 +29,7 @@ services:
 
   keycloak:
     container_name: rmap-keycloak
-    image: quay.io/reconmap/keycloak-custom:latest
+    image: ghcr.io/reconmap/keycloak-custom:latest
     command: "start --hostname=http://localhost:8080 --proxy-headers xforwarded --http-enabled true --import-realm"
     # See https://www.keycloak.org/server/all-config
     environment:
@@ -56,7 +56,7 @@ services:
 
   web-client:
     container_name: rmap-web-client
-    image: quay.io/reconmap/web-client:latest
+    image: ghcr.io/reconmap/web-client:latest
     restart: unless-stopped
     volumes:
       - ./environment.js:/usr/share/nginx/html/environment.js:ro
@@ -68,7 +68,7 @@ services:
 
   api:
     container_name: rmap-api
-    image: quay.io/reconmap/rest-api:latest
+    image: ghcr.io/reconmap/rest-api:latest
     restart: unless-stopped
     volumes:
       - "./config.json:/var/www/webapp/config.json"
@@ -87,7 +87,7 @@ services:
 
   agent:
     container_name: rmap-agent
-    image: quay.io/reconmap/agent:latest
+    image: ghcr.io/reconmap/agent:latest
     restart: unless-stopped
     ports:
       - "5520:5520"

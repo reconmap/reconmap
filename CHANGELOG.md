@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace ufoscout/docker-compose-wait with docker compose healthchecks
 - Tidy up compose.yaml file
 - Removed Docker dependency from the rmap command
+- Replace quay.io with ghcr.io
 
 ### Fixed
 - 
