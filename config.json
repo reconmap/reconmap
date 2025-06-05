@@ -21,6 +21,12 @@
         "password": "reconmapped",
         "name": "reconmap"
     },
+    "redis": {
+        "host": "redis",
+        "port": 6379,
+        "username": "default",
+        "password": "REconDIS"
+    },
     "smtp": {
         "host": "",
         "port": 587,

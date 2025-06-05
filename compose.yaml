@@ -33,8 +33,8 @@ services:
     command: "start --hostname=http://localhost:8080 --proxy-headers xforwarded --http-enabled true --import-realm"
     # See https://www.keycloak.org/server/all-config
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_DB: mysql
       KC_DB_URL_HOST: mysql 
       KC_DB_DATABASE: keycloak
@@ -76,11 +76,6 @@ services:
       - "./data:/var/www/webapp/data/"
     ports:
       - "5510:5510"
-    environment:
-      REDIS_HOST: $DOTENV_REDIS_HOST
-      REDIS_PORT: 6379
-      REDIS_USER: default
-      REDIS_PASSWORD: $DOTENV_REDIS_PASSWORD
     depends_on:
         mysql:
             condition: service_healthy
