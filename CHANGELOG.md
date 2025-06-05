@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tidy up compose.yaml file
 - Removed Docker dependency from the rmap command
 - Replace quay.io with ghcr.io
+- Change vault cipher to aes-256-gcm
 
 ### Fixed
 - 
