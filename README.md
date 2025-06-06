@@ -2,6 +2,7 @@
 
 <h1>Reconmap</h1>
 
+[![Bluesky](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpublic.api.bsky.app%2Fxrpc%2Fapp.bsky.actor.getProfile%2F%3Factor%3Dreconmap.bsky.social&query=%24.followersCount&style=social&logo=bluesky&label=Follow%20us%20on%20BlueSky&style=flat)](https://bsky.app/profile/reconmap.bsky.social)
 [![Gitter](https://badges.gitter.im/reconmap/community.svg)](https://gitter.im/reconmap/community)
 [![YouTube](https://img.shields.io/static/v1?label=YouTube&message=Subscribe&color=red&style=flat&logo=youtube)](https://www.youtube.com/reconmap)
 
@@ -69,4 +70,3 @@ Before contributing, please read our [Contributing Guidelines](https://github.co
 If you have bugs to report please use the [issues](https://github.com/reconmap/reconmap/issues) tab on Github to submit the details.
 
 If you want to chat to somebody on the development team head to our [Gitter](https://gitter.im/reconmap/community) channel.
-
