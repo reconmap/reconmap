@@ -41,6 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed Docker dependency from the rmap command
 - Replace quay.io with ghcr.io
 - Change vault cipher to aes-256-gcm
+- Move CLI configs from ~/.reconmap to ~/.config/reconmap
+- Rename config files from config.json to config-api.json and environment.js to config-ui.js
 
 ### Fixed
 - 

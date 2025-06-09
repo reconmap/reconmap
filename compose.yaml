@@ -59,7 +59,7 @@ services:
     image: ghcr.io/reconmap/web-client:latest
     restart: unless-stopped
     volumes:
-      - ./environment.js:/usr/share/nginx/html/environment.js:ro
+      - ./config-ui.js:/usr/share/nginx/html/environment.js:ro
     ports:
       - "5500:5500"
     depends_on:
@@ -71,7 +71,7 @@ services:
     image: ghcr.io/reconmap/rest-api:latest
     restart: unless-stopped
     volumes:
-      - "./config.json:/var/www/webapp/config.json"
+      - "./config-api.json:/var/www/webapp/config.json"
       - "./logs:/var/www/webapp/logs/"
       - "./data:/var/www/webapp/data/"
     ports:
