@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change vault cipher to aes-256-gcm
 - Move CLI configs from ~/.reconmap to ~/.config/reconmap
 - Rename config files from config.json to config-api.json and environment.js to config-ui.js
+- Rename Targets to Assets, Vulnerabilities to Findings
+- Add project creator as member of project by default
+- Converted Web UI config file from JS (Javascript) to JSON.
 
 ### Fixed
 - 
