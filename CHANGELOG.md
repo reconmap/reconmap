@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to render reports in plain text formats (Markdown, HTML, LaTeX), in addition to Word.
 - 'Mark all notifications as read' button
 - Added "Duration estimate" to tasks
+- Added Password Generator tool to the UI
 
 ### Changed
 - Menu re-design and polish
