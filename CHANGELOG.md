@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 'Mark all notifications as read' button
 - Added "Duration estimate" to tasks
 - Added Password Generator tool to the UI
+- Add integration with Ollama
+- Add configuration option to set agent run directory
 
 ### Changed
 - Menu re-design and polish
