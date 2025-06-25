@@ -1,22 +1,25 @@
+volumes:
+  redis_data:
+  mysql_varlib: 
 
 services:
 
   redis:
     container_name: rmap-redis
     image: redis:7.4
-    command: redis-server --requirepass $DOTENV_REDIS_PASSWORD 
+    command: redis-server --requirepass $DOTENV_REDIS_PASSWORD --save 20 1 --loglevel warning
     restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
-      - ./data-redis:/data
+      - redis_data:/data
 
   mysql:
     container_name: rmap-mysql
     image: ghcr.io/reconmap/rest-api-db:latest
     restart: unless-stopped
     volumes:
-      - ./data-mysql:/var/lib/mysql
+      - mysql_varlib:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
@@ -92,4 +95,6 @@ services:
       REDIS_HOST: $DOTENV_REDIS_HOST
       REDIS_PORT: 6379
       REDIS_PASSWORD: $DOTENV_REDIS_PASSWORD
+
+  
 
