@@ -1,0 +1,18 @@
+{
+ "keycloak": {
+  "baseUri": "http://keycloak:8080",
+  "clientId": "reconmapd-client",
+  "clientSecret": "VH8HDKabxlTpnpPkEgLlTq2dEanedEGC"
+ },
+ "reconmapApi": {
+  "baseUri": "http://api:5510"
+ },
+ "redis": {
+  "host": "redis",
+  "port": 6379,
+  "username": "default",
+  "password": "REconDIS"
+ },
+ "validOrigins": "http://localhost:5500",
+ "agentDirectory": "/tmp"
+}

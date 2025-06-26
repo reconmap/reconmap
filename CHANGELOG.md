@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add project creator as member of project by default
 - Converted Web UI config file from JS (Javascript) to JSON.
 - Updated code of conduct
+- Simplify compose volumes
 
 ### Fixed
 - 
