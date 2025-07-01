@@ -1,0 +1,10 @@
+{
+    "$schema": "https://raw.githubusercontent.com/reconmap/command-line-tools/refs/heads/main/cli/config-schema.json",
+    "keycloak": {
+        "baseUri": "http://localhost:8080/realms/reconmap",
+        "clientId": "rmap-client"
+    },
+    "reconmapApi": {
+        "baseUri": "http://localhost:5510"
+    }
+}

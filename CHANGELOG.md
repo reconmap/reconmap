@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Password Generator tool to the UI
 - Add integration with Ollama
 - Add configuration option to set agent run directory
+- Add JSON schema for all config files
 
 ### Changed
 - Menu re-design and polish
@@ -51,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Converted Web UI config file from JS (Javascript) to JSON.
 - Updated code of conduct
 - Simplify compose volumes
+- Show Reconmap logo on keycloak account page
 
 ### Fixed
 - 

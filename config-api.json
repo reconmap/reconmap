@@ -1,39 +1,41 @@
 {
-	"keycloak": {
-    	"baseUri": "http://keycloak:8080",
-    	"realmName": "reconmap",
-    	"clientId": "api-client",
-    	"clientSecret": "I0jppD5zSIXuBAql31zrXfe5OAa0nvyE"
-	},
-	"jwt": {
-		"issuer": "http://localhost:8080/realms/reconmap",
-		"audience": "account"
-	},
-    "cors": {
-        "allowedOrigins": [
-            "http://localhost:5500"
-        ]
-    },
-    "database": {
-        "host": "rmap-mysql",
-        "username": "reconmapper",
-        "password": "reconmapped",
-        "name": "reconmap"
-    },
-    "redis": {
-        "host": "redis",
-        "port": 6379,
-        "username": "default",
-        "password": "REconDIS"
-    },
-    "smtp": {
-        "host": "",
-        "port": 587,
-        "username": "",
-        "password": "",
-        "fromEmail": "no-reply@reconmap.com",
-        "fromName": "Reconmap"
-    },
+  "$schema": "https://raw.githubusercontent.com/reconmap/rest-api/refs/heads/master/config-schema.json",
+  "keycloak": {
+    "baseUri": "http://keycloak:8080",
+    "realmName": "reconmap",
+    "clientId": "api-client",
+    "clientSecret": "I0jppD5zSIXuBAql31zrXfe5OAa0nvyE"
+  },
+  "jwt": {
+    "issuer": "http://localhost:8080/realms/reconmap",
+    "audience": "account"
+  },
+  "cors": {
+    "allowedOrigins": [
+      "http://localhost:5500"
+    ]
+  },
+  "database": {
+    "host": "rmap-mysql",
+    "username": "reconmapper",
+    "password": "reconmapped",
+    "name": "reconmap"
+  },
+  "redis": {
+    "host": "redis",
+    "port": 6379,
+    "username": "default",
+    "password": "REconDIS"
+  },
+  "smtp": {
+    "host": "",
+    "port": 587,
+    "username": "",
+    "password": "",
+    "fromEmail": "no-reply@reconmap.com",
+    "fromName": "Reconmap",
+    "verifyPeer": false
+  },
   "logging": {
     "file": {
       "enabled": true,
@@ -47,10 +49,10 @@
       "serverPort": 12201
     }
   },
-    "integrations": {
-    	"maxmind": {
-      	  "enabled": false,
-      	  "dbPath": "/var/www/webapp/data/GeoLite2-City.mmdb"
-    	}
+  "integrations": {
+    "maxmind": {
+      "enabled": false,
+      "dbPath": "/var/www/webapp/data/GeoLite2-City.mmdb"
     }
+  }
 }

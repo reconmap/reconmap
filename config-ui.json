@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/reconmap/web-client/refs/heads/main/config-schema.json",
     "contextPath": "",
     "logoUrl": "/logo-name.png",
     "reconmapApiUrl": "http://localhost:5510",
