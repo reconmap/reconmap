@@ -2,9 +2,9 @@
 
 <h1>Reconmap</h1>
 
-[![Bluesky](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpublic.api.bsky.app%2Fxrpc%2Fapp.bsky.actor.getProfile%2F%3Factor%3Dreconmap.bsky.social&query=%24.followersCount&style=social&logo=bluesky&label=Follow%20us%20on%20BlueSky&style=flat)](https://bsky.app/profile/reconmap.bsky.social)
+[![Bluesky](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpublic.api.bsky.app%2Fxrpc%2Fapp.bsky.actor.getProfile%2F%3Factor%3Dnetfoe.com&query=%24.followersCount&style=social&logo=bluesky&label=Follow%20us%20on%20BlueSky&style=flat)](https://bsky.app/profile/netfoe.com)
+[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCKJM12YKHqvvATHkdIKopeQ?style=flat&logo=youtube&label=Subscribe%20to%20our%20YouTube%20channel&link=https%3A%2F%2Fwww.youtube.com%2Freconmap)](https://www.youtube.com/reconmap)
 [![Gitter](https://badges.gitter.im/reconmap/community.svg)](https://gitter.im/reconmap/community)
-[![YouTube](https://img.shields.io/static/v1?label=YouTube&message=Subscribe&color=red&style=flat&logo=youtube)](https://www.youtube.com/reconmap)
 
 <h3>Pentesting Management, Automation and Reporting Platform</h3>
 </div>

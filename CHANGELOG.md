@@ -26,9 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add JSON schema for all config files
 
 ### Changed
+- Separate full name into first name and last name fields
+- Allow to use multiple languages/locales in Keycloak (Spanish, French, Portuguese, ...)
+- Move Keycloak healthcheck to the Dockerfile
+- Upgrade to Keycloak 26.3
 - Menu re-design and polish
 - Application logs page removed in favour or centralised log management solutions such as Graylog
-- Upgrade to Keycloak 24
 - API upgraded to MySQL 8.4 (from 8.0)
 - API upgraded to PHP 8.3 (from 8.2)
 - API ugpraded to Redis 7.4 (from 6.0)
@@ -54,8 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simplify compose volumes
 - Show Reconmap logo on keycloak account page
 
-### Fixed
-- 
+### Removed
+- Ability for admin to manually set passwords for new users
 
 ## [2.0.0]
 
