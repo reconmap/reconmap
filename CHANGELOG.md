@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add integration with Ollama
 - Add configuration option to set agent run directory
 - Add JSON schema for all config files
+- Add German translation by [Eren Kemer](https://github.com/eren-kemer). Thanks!
 
 ### Changed
 - Separate full name into first name and last name fields
@@ -56,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated code of conduct
 - Simplify compose volumes
 - Show Reconmap logo on keycloak account page
+- Resolved issued with mobile menu navigation
 
 ### Removed
 - Ability for admin to manually set passwords for new users
