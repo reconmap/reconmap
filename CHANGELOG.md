@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Ability for admin to manually set passwords for new users
+- Mobile client repository archived. This officially marks the sunsetting of this feature.
 
 ## [2.0.0]
 
