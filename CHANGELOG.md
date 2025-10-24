@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add German translation by [Eren Kemer](https://github.com/eren-kemer). Thanks!
 
 ### Changed
+- Refactored UI to use tanstack query and benefit from caching, retries and other niceties.
 - Separate full name into first name and last name fields
 - Allow to use multiple languages/locales in Keycloak (Spanish, French, Portuguese, ...)
 - Move Keycloak healthcheck to the Dockerfile
