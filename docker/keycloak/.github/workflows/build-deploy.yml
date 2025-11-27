@@ -1,0 +1,19 @@
+name: Build and Deploy
+on: [push]
+
+jobs:
+  default:
+    name: Build and Deploy
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to container registry
+        run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u "${{ secrets.CR_USERNAME }}" --password-stdin
+
+      - name: Build image
+        run: make image-build
+
+      - name: Push image
+        run: make image-push

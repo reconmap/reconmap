@@ -1,0 +1,11 @@
+{
+    "themes": [
+        {
+            "name": "reconmap-theme",
+            "types": [
+                "login",
+                "account"
+            ]
+        }
+    ]
+}
