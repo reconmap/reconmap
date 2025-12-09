@@ -1,6 +1,7 @@
 volumes:
   redis_data:
   mysql_varlib: 
+  dataprotection-keys:
 
 services:
   redis:
@@ -32,7 +33,7 @@ services:
   keycloak:
     container_name: rmap-keycloak
     image: ghcr.io/reconmap/keycloak-custom:latest
-    command: "start --hostname=http://localhost:8080 --proxy-headers xforwarded --http-enabled true --import-realm"
+    command: "start --hostname-strict=false --proxy-headers xforwarded --http-enabled true --import-realm"
     # See https://www.keycloak.org/server/all-config
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
@@ -83,6 +84,21 @@ services:
     depends_on:
         mysql:
             condition: service_healthy
+
+  ngapi:
+    container_name: rmap-ngapi
+    image: ghcr.io/reconmap/ng-api:latest
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    volumes:
+      - "./config-ngapi.json:/App/appsettings.json"
+      - dataprotection-keys:/root/.aspnet/DataProtection-Keys
+    ports:
+      - "5253:5253"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:5253
 
   agent:
     container_name: rmap-agent

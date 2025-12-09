@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Removed
+
+## [3.0.0-alpha]
+
+### Added
 - Add French language translations
 - Clone task feature
 - Add user location (city, country) to audit log table
