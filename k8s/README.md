@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Kubernetes 1.31 or greater
+- Kubernetes 1.34 or greater
 
 ## Local dev requirements
 

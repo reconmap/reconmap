@@ -2,8 +2,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    io.kompose.service: mysql-claim0
-  name: mysql-claim0
+    io.kompose.service: mysql-varlib
+  name: mysql-varlib
   namespace: nonprod
 spec:
   accessModes:

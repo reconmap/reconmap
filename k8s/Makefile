@@ -1,6 +1,6 @@
 SHELL:=bash
 deploy:
-	kubectl apply -f resources/namespaces.yaml
+	kubectl apply -f resources/nonprod-namespace.yaml
 	kubens nonprod
 	@for file in resources/*.yaml; do \
 		echo Applying $$file...; \
@@ -8,7 +8,7 @@ deploy:
 	done
 
 portforward:
-	@kubectl port-forward service/api 5510:5510 & \
+	@kubectl port-forward service/ngapi 5253:5253 & \
 	kubectl port-forward service/web-client 5500:5500 & \
 	kubectl port-forward service/keycloak 8080:8080 &
 
@@ -20,5 +20,5 @@ clean:
 	done
 
 convert:
-	kompose convert -f ../reconmap/compose.yaml --namespace=nonprod --with-kompose-annotation=false -o resources
+	kompose convert -f ../compose.yaml --namespace nonprod --with-kompose-annotation=false -o resources
 

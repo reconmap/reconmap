@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: ngapi
+  name: ngapi
+  namespace: nonprod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ngapi
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ngapi
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://0.0.0.0:5253
+          image: ghcr.io/reconmap/ng-api:latest
+          name: rmap-ngapi
+          ports:
+            - containerPort: 5253
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/appsettings.json
+              name: ngapi-cm0
+              subPath: appsettings.json
+            - mountPath: /root/.aspnet/DataProtection-Keys
+              name: dataprotection-keys
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: config-ngapi.json
+                path: appsettings.json
+            name: ngapi-cm0
+          name: ngapi-cm0
+        - name: dataprotection-keys
+          persistentVolumeClaim:
+            claimName: dataprotection-keys

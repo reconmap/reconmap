@@ -2,8 +2,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    io.kompose.service: api-claim1
-  name: api-claim1
+    io.kompose.service: dataprotection-keys
+  name: dataprotection-keys
   namespace: nonprod
 spec:
   accessModes:

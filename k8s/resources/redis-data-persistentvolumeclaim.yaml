@@ -2,8 +2,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    io.kompose.service: api-claim2
-  name: api-claim2
+    io.kompose.service: redis-data
+  name: redis-data
   namespace: nonprod
 spec:
   accessModes:

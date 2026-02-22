@@ -15,25 +15,29 @@ spec:
   template:
     metadata:
       labels:
-        io.kompose.network/reconmap-default: "true"
         io.kompose.service: mysql
     spec:
       containers:
         - env:
             - name: MYSQL_ROOT_PASSWORD
               value: reconmuppet
-          image: quay.io/reconmap/rest-api-db:latest
+          image: ghcr.io/reconmap/rest-api-db:latest
+          livenessProbe:
+            exec:
+              command:
+                - mysql -h 127.0.0.1 -u root --password=$MYSQL_ROOT_PASSWORD mysql -e 'SELECT 1;'
+            failureThreshold: 5
+            periodSeconds: 5
+            timeoutSeconds: 10
           name: rmap-mysql
           ports:
             - containerPort: 3306
-              hostPort: 3306
               protocol: TCP
-          resources: {}
           volumeMounts:
             - mountPath: /var/lib/mysql
-              name: mysql-claim0
+              name: mysql-varlib
       restartPolicy: Always
       volumes:
-        - name: mysql-claim0
+        - name: mysql-varlib
           persistentVolumeClaim:
-            claimName: mysql-claim0
+            claimName: mysql-varlib

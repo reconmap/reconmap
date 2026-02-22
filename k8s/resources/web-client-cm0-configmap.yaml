@@ -1,0 +1,24 @@
+apiVersion: v1
+data:
+  config-ui.json: |-
+    {
+        "$schema": "https://raw.githubusercontent.com/reconmap/web-client/refs/heads/main/config-schema.json",
+        "contextPath": "",
+        "logoUrl": "/logo-name.png",
+        "reconmapApiUrl": "http://localhost:5510",
+        "notificationsServiceUrl": "ws://localhost:5520",
+        "agentServiceUrl": "ws://localhost:5520",
+        "keycloak": {
+            "url": "http://localhost:8080",
+            "realm": "reconmap",
+            "clientId": "web-client"
+        }
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: web-client
+  name: web-client-cm0
+  namespace: nonprod

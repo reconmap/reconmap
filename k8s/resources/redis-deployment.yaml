@@ -15,7 +15,6 @@ spec:
   template:
     metadata:
       labels:
-        io.kompose.network/reconmap-default: "true"
         io.kompose.service: redis
     spec:
       containers:
@@ -23,18 +22,21 @@ spec:
             - redis-server
             - --requirepass
             - REconDIS
-          image: redis:6.0
+            - --save
+            - "20"
+            - "1"
+            - --loglevel
+            - warning
+          image: redis:7.4
           name: rmap-redis
           ports:
             - containerPort: 6379
-              hostPort: 6379
               protocol: TCP
-          resources: {}
           volumeMounts:
             - mountPath: /data
-              name: redis-claim0
+              name: redis-data
       restartPolicy: Always
       volumes:
-        - name: redis-claim0
+        - name: redis-data
           persistentVolumeClaim:
-            claimName: redis-claim0
+            claimName: redis-data

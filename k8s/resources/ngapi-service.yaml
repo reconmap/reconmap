@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: ngapi
+  name: ngapi
+  namespace: nonprod
+spec:
+  ports:
+    - name: "5253"
+      port: 5253
+      targetPort: 5253
+  selector:
+    io.kompose.service: ngapi
