@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:26.3
+FROM quay.io/keycloak/keycloak:26.5
 
 LABEL org.opencontainers.image.vendor="Netfoe" \
 	org.opencontainers.image.authors="Santiago Lizardo" \
@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.vendor="Netfoe" \
 	org.opencontainers.image.description="Custom Keycloak for Reconmap" \
 	org.opencontainers.image.licenses="Apache-2.0" \
 	org.opencontainers.image.url="https://github.com/reconmap/reconmap" \
-	org.opencontainers.image.source="https://github.com/reconmap/keycloak-custom" \
+	org.opencontainers.image.source="https://github.com/reconmap/reconmap/tree/master/docker/keycloak" \
 	org.opencontainers.image.documentation="https://github.com/reconmap/documentation"
 
 COPY reconmap-theme-keycloak.jar /opt/keycloak/providers/
