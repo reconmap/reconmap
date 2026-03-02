@@ -1,0 +1,49 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://reconmap.com/reconmap-cli.schema.json",
+    "title": "Reconmap CLI configuration schema",
+    "description": "Schema for the configuration of the Reconmap CLI",
+    "type": "object",
+    "required": [
+        "$schema",
+        "keycloak",
+        "reconmapApi"
+    ],
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "format": "string-uri"
+        },
+        "keycloak": {
+            "type": "object",
+            "required": [
+                "baseUri",
+                "clientId"
+            ],
+            "properties": {
+                "baseUri": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "clientId": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "reconmapApi": {
+            "type": "object",
+            "required": [
+                "baseUri"
+            ],
+            "properties": {
+                "baseUri": {
+                    "type": "string",
+                    "format": "uri"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

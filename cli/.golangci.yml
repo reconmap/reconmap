@@ -1,0 +1,77 @@
+version: "2"
+linters:
+  default: none
+  enable:
+    - bodyclose
+    - cyclop
+    - dupl
+    - errcheck
+    - errorlint
+    - exhaustive
+    - gocognit
+    - goconst
+    - gocritic
+    - godot
+    - gomoddirectives
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - govet
+    - importas
+    - ineffassign
+    - makezero
+    - misspell
+    - mnd
+    - nakedret
+    - nestif
+    - nolintlint
+    - predeclared
+    - revive
+    - staticcheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+  settings:
+    cyclop:
+      max-complexity: 15
+      package-average: 0
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    gocognit:
+      min-complexity: 15
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+    gocritic:
+      enabled-tags:
+        - performance
+        - diagnostic
+        - style
+        - experimental
+        - opinionated
+    govet:
+      enable-all: true
+    misspell:
+      locale: US
+    nestif:
+      min-complexity: 4
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

@@ -1,0 +1,76 @@
+version: 2
+project_name: rmap
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - id: "rmap"
+    main: ./cmd/rmap/main.go
+    binary: rmap
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.CommitDate}}
+      - -X main.builtBy=goreleaser
+      - -X github.com/reconmap/cli/internal/build.BuildVersion={{.Version}}
+      - -X github.com/reconmap/cli/internal/build.BuildTime={{.CommitDate}}
+      - -X github.com/reconmap/cli/internal/build.BuildCommit={{.Commit}}
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+    - -trimpath
+
+release:
+  extra_files:
+    - glob: rmap-sbom.spdx.json
+
+homebrew_casks:
+  - name: rmap
+    homepage: 'https://github.com/reconmap/command-line-tools/tree/main/cli'
+    description: 'Rmap: Command line interface for the Reconmap pentest automation and reporting tool.'
+    directory: Formula
+    license: "GPL-3.0"
+    commit_author:
+      name: Santiago Lizardo
+      email: santiagolizardo@users.noreply.github.com
+    repository:
+      owner: reconmap
+      name: homebrew-tap
+    hooks:
+      post:
+        install: |
+          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/rmap"]
+          end
+
+
+archives:
+  - name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
+    format_overrides:
+    - goos: windows
+      formats: [ 'zip' ]
+
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+
+snapshot:
+  version_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"

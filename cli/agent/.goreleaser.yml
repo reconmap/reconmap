@@ -1,0 +1,71 @@
+version: 2
+project_name: reconmapd
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - id: "reconmapd"
+    main: ./cmd/reconmapd/main.go
+    binary: reconmapd
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.CommitDate}}
+      - -X main.builtBy=goreleaser
+      - -X github.com/reconmap/reconmapd/internal/build.BuildVersion={{.Version}}
+      - -X github.com/reconmap/reconmapd/internal/build.BuildTime={{.CommitDate}}
+      - -X github.com/reconmap/reconmapd/internal/build.BuildCommit={{.Commit}}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -trimpath
+
+release:
+  extra_files:
+    - glob: reconmapd-sbom.spdx.json
+
+homebrew_casks:
+  - name: reconmapd
+    homepage: "https://github.com/reconmap/command-line-tools/tree/main/agent"
+    description: "Reconmapd: The Reconmap agent allows clients to launch commands remotely, open interactive browser terminals, and receive push notifications."
+    directory: Formula
+    license: "GPL-3.0"
+    commit_author:
+      name: Santiago Lizardo
+      email: santiagolizardo@users.noreply.github.com
+    repository:
+      owner: reconmap
+      name: homebrew-tap
+    hooks:
+      post:
+        install: |
+          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/reconmapd"]
+          end
+
+archives:
+  - name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
+
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+
+snapshot:
+  version_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"

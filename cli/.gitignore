@@ -1,0 +1,5 @@
+*.log
+*.out
+.idea
+*-sbom.spdx.json
+tags

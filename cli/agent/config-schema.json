@@ -1,0 +1,88 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://reconmap.com/reconmap-agent.schema.json",
+    "title": "Reconmap agent configuration schema",
+    "description": "Schema for the configuration of the Reconmap agent",
+    "type": "object",
+    "required": [
+        "$schema",
+        "keycloak",
+        "reconmapApi",
+        "redis",
+        "validOrigins",
+        "agentDirectory"
+    ],
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "format": "string-uri"
+        },
+        "keycloak": {
+            "type": "object",
+            "required": [
+                "baseUri",
+                "clientId",
+                "clientSecret"
+            ],
+            "properties": {
+                "baseUri": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "clientId": {
+                    "type": "string"
+                },
+                "clientSecret": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "reconmapApi": {
+            "type": "object",
+            "required": [
+                "baseUri"
+            ],
+            "properties": {
+                "baseUri": {
+                    "type": "string",
+                    "format": "uri"
+                }
+            },
+            "additionalProperties": false
+        },
+        "redis": {
+            "type": "object",
+            "required": [
+                "host",
+                "port",
+                "username",
+                "password"
+            ],
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "validOrigins": {
+            "type": "string"
+        },
+        "agentDirectory": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}

@@ -1,0 +1,58 @@
+name: Build and test workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-rmap:
+    name: Build rmap
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: cli
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v6
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v6
+        with:
+          go-version: ^1.25.3
+
+      - name: Get dependencies
+        run: make get-deps
+
+      - name: Build
+        run: make rmap
+
+      - name: Test
+        run: make tests
+
+  build-reconmapd:
+    name: Build reconmapd
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: agent
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v6
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v6
+        with:
+          go-version: ^1.25.3
+
+      - name: Get dependencies
+        run: make get-deps
+
+      - name: Build
+        run: make reconmapd
+
+      - name: Test
+        run: make tests
