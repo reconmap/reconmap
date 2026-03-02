@@ -4,15 +4,15 @@
 version: 2
 updates:
   - package-ecosystem: "gomod"
-    directory: "/shared-lib"
+    directory: "/cli/shared-lib"
     schedule:
       interval: "weekly"
   - package-ecosystem: "gomod"
-    directory: "/cli"
+    directory: "/cli/runner"
     schedule:
       interval: "weekly"
   - package-ecosystem: "gomod"
-    directory: "/agent"
+    directory: "/cli/agent"
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions"
