@@ -79,6 +79,7 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - "./config-ngapi.json:/app/appsettings.json"
+      - "./data:/data/"
       - dataprotection-keys:/root/.aspnet/DataProtection-Keys
     ports:
       - "5510:5510"
