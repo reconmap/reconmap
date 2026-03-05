@@ -1,114 +1,170 @@
 \documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{geometry}
+
+\usepackage[margin=1in]{geometry}
 \usepackage{longtable}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\usepackage{titlesec}
+\usepackage{array}
 \usepackage{hyperref}
+\usepackage{setspace}
 
-\geometry{margin=1in}
-\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
-\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
-
-\title{Penetration Test Report}
-\date{}
+\setstretch{1.2}
 
 \begin{document}
 
-\maketitle
+\begin{center}
+    {\LARGE \textbf{Penetration Test Report}}
+\end{center}
 
-\noindent\textbf{Project:} {{ project.name }}\\
-\textbf{Prepared for:} {{ client.name }}\\
-\textbf{Prepared by:} {{ org.name }}\\
-\textbf{Date:} {{ date }}
+\vspace{1em}
 
-\section{Revisions}
+\noindent
+\textbf{Project:} {{ project != null && project.name != null ? project.name : "" }} \\
+\textbf{Prepared for:} {{ client != null && client.name != null ? client.name : "" }} \\
+\textbf{Prepared by:} {{ serviceProvider != null && serviceProvider.name != null ? serviceProvider.name : "" }} \\
+\textbf{Date:} {{ date != null ? date : "" }}
 
-\begin{longtable}{@{}lll@{}}
-\toprule
-\textbf{Date} & \textbf{Version Name} & \textbf{Description} \\
-\midrule
-{% for version in reports %}
-{{ version.insert_ts }} & {{ version.version_name }} & {{ version.version_description }} \\
-{% endfor %}
-\bottomrule
+{{ if lastRevisionName != null }}
+\vspace{0.5em}
+
+\noindent
+\textbf{Last revision:} {{ lastRevisionName }}
+{{ end }}
+
+\hrule
+\vspace{1em}
+
+{{ if revisions != null && revisions.size > 0 }}
+\section*{Revisions}
+
+\begin{longtable}{|p{3cm}|p{4cm}|p{7cm}|}
+\hline
+\textbf{Date} & \textbf{Revision name} & \textbf{Description} \\
+\hline
+{{ for revision in revisions }}
+{{ revision.insert_ts != null ? revision.insert_ts : "" }} &
+{{ revision.version_name != null ? revision.version_name : "" }} &
+{{ revision.version_description != null ? revision.version_description : "" }} \\
+\hline
+{{ end }}
 \end{longtable}
+{{ end }}
 
-\section{Contacts}
+\hrule
+\vspace{1em}
 
-\begin{itemize}[leftmargin=1.5em]
-{% for contact in contacts %}
-  \item \textbf{Name:} {{ contact.name }}\\
-        \textbf{Phone:} {{ contact.phone }}\\
-        \textbf{Email:} {{ contact.email }}\\
-        \textbf{Role:} {{ contact.role }}
-{% endfor %}
+\section*{Client}
+
+\textbf{Name}\\
+{{ client != null && client.name != null ? client.name : "" }}
+
+\vspace{0.5em}
+
+\textbf{Address}\\
+{{ client != null && client.address != null ? client.address : "" }}
+
+\vspace{0.5em}
+
+\textbf{URL}\\
+{{ client != null && client.url != null ? client.url : "" }}
+
+\vspace{1em}
+
+\textbf{Contacts}
+\begin{itemize}
+{{ for c in (client != null && client.contacts != null ? client.contacts : empty_array) }}
+    \item
+    \textbf{Name:} {{ c.name != null ? c.name : "" }} \\
+    \textbf{Phone:} {{ c.phone != null ? c.phone : "" }} \\
+    \textbf{Email:} {{ c.email != null ? c.email : "" }} \\
+    \textbf{Role:} {{ c.role != null ? c.role : "" }}
+{{ end }}
 \end{itemize}
 
-\section{Pentesting Team}
+\hrule
+\vspace{1em}
 
-\begin{itemize}[leftmargin=1.5em]
-{% for user in users %}
-\item \textbf{{{ user.full_name }}}\\
-        \textit{{{ user.short_bio }}}
-{% endfor %}
+\section*{Pentesting Team}
+
+\begin{itemize}
+{{ for u in (users != null ? users : empty_array) }}
+    \item
+    \textbf{{ u.full_name != null ? u.full_name : "" }} \\
+    \emph{{ u.short_bio != null ? u.short_bio : "" }}
+{{ end }}
 \end{itemize}
 
-\section{Project Overview}
+\hrule
+\vspace{1em}
 
-{{ project.description }}
+\section*{Project Overview}
+
+{{ project != null && project.description != null ? project.description : "" }}
 
 \subsection*{Findings Overview}
-\begin{tabular}{@{}ll@{}}
-\toprule
+
+\begin{longtable}{|p{6cm}|p{3cm}|}
+\hline
 \textbf{Severity} & \textbf{Count} \\
-\midrule
-{% for finding in findingsOverview %}
-{{ finding.severity|capitalize }} & {{ finding.count }} \\
-{% endfor %}
-\bottomrule
-\end{tabular}
+\hline
+{{ for f in (findings != null && findings.stats != null ? findings.stats : empty_array) }}
+{{ f.severity != null ? string.capitalize f.severity : "" }} &
+{{ f.count != null ? f.count : "0" }} \\
+\hline
+{{ end }}
+\end{longtable}
 
-\section{Targets}
+\hrule
+\vspace{1em}
 
-\begin{tabular}{@{}ll@{}}
-\toprule
+\section*{Assets}
+
+\begin{longtable}{|p{7cm}|p{5cm}|}
+\hline
 \textbf{Target Name} & \textbf{Type} \\
-\midrule
-{% for target in targets %}
-{{ target.name }} & {{ target.kind }} \\
-{% endfor %}
-\bottomrule
-\end{tabular}
+\hline
+{{ for a in (assets != null ? assets : empty_array) }}
+{{ a.name != null ? a.name : "" }} &
+{{ a.kind != null ? a.kind : "" }} \\
+\hline
+{{ end }}
+\end{longtable}
 
-\section{Vulnerabilities}
+\hrule
+\vspace{1em}
 
-{% for vulnerability in vulnerabilities %}
-\subsection*{{ vulnerability.summary }}
+\section*{Findings}
 
-\begin{itemize}[leftmargin=1.5em]
-  \item \textbf{Category:} {{ vulnerability.category_name }}
-  \item \textbf{Severity:} {{ vulnerability.risk|capitalize }}
-  \item \textbf{CVSS Score:} {{ vulnerability.cvss_score }}
-  \item \textbf{OWASP Vector:} {{ vulnerability.owasp_vector }}
-  \item \textbf{OWASP Overall Rating:} {{ vulnerability.owasp_overall }}
-\end{itemize}
+{{ for v in (findings != null && findings.list != null ? findings.list : empty_array) }}
 
-\paragraph{Description}  
-{{ vulnerability.description }}
+\subsection*{{ v.summary != null ? v.summary : "" }}
 
-\paragraph{Proof of Concept}  
-{{ vulnerability.proof_of_concept }}
+\begin{description}
+    \item[Category:] {{ v.category_name != null ? v.category_name : "" }}
+    \item[Severity:] {{ v.risk != null ? string.capitalize v.risk : "" }}
+    \item[CVSS Score:] {{ v.cvss_score != null ? v.cvss_score : "" }}
+    \item[OWASP Vector:] {{ v.owasp_vector != null ? v.owasp_vector : "" }}
+    \item[OWASP Overall Rating:] {{ v.owasp_overall != null ? v.owasp_overall : "" }}
+\end{description}
 
-\paragraph{Remediation}  
-{{ vulnerability.remediation }}
+\textbf{Description}
+
+{{ v.description != null ? v.description : "" }}
+
+\vspace{0.5em}
+
+\textbf{Proof of Concept}
+
+{{ v.proof_of_concept != null ? v.proof_of_concept : "" }}
+
+\vspace{0.5em}
+
+\textbf{Remediation}
+
+{{ v.remediation != null ? v.remediation : "" }}
 
 \vspace{1em}
 \hrule
 \vspace{1em}
 
-{% endfor %}
+{{ end }}
 
 \end{document}
-

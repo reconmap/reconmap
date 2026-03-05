@@ -1,165 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Penetration Test Report</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1em 0;
-    }
-    th, td {
-      padding: 0.5em;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
-    h1, h2, h3 {
-      margin-top: 1.5em;
-    }
-    hr {
-      margin: 2em 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Penetration Test Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+        }
+
+        th, td {
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        h1, h2, h3 {
+            margin-top: 1.5em;
+        }
+
+        hr {
+            margin: 2em 0;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Penetration Test Report</h1>
+<h1>Penetration Test Report</h1>
 
-  <p><strong>Project:</strong> {{ project.name }}<br>
-     <strong>Prepared for:</strong> {{ client.name }}<br>
-     <strong>Prepared by:</strong> {{ org.name }}<br>
-     <strong>Date:</strong> {{ date }}</p>
+<p>
+    <strong>Project:</strong> {{ project != null && project.name != null ? project.name : "" }}<br>
+    <strong>Prepared for:</strong> {{ client != null && client.name != null ? client.name : "" }}<br>
+    <strong>Prepared by:</strong> {{ serviceProvider != null && serviceProvider.name != null ? serviceProvider.name : "" }}<br>
+    <strong>Date:</strong> {{ date != null ? date : "" }}
+</p>
 
-  <hr>
+{{ if lastRevisionName != null }}
+<p><strong>Last revision:</strong> {{ lastRevisionName }}</p>
+{{ end }}
 
-  <section>
+<hr>
+
+{{ if revisions != null && revisions.size > 0 }}
+<section>
     <h2>Revisions</h2>
     <table>
-      <thead>
+        <thead>
         <tr>
-          <th>Date</th>
-          <th>Version Name</th>
-          <th>Description</th>
+            <th>Date</th>
+            <th>Revision name</th>
+            <th>Description</th>
         </tr>
-      </thead>
-      <tbody>
-        {% for version in reports %}
+        </thead>
+        <tbody>
+        {{ for revision in revisions }}
         <tr>
-          <td>{{ version.insert_ts }}</td>
-          <td>{{ version.version_name }}</td>
-          <td>{{ version.version_description }}</td>
+            <td>{{ revision.insert_ts != null ? revision.insert_ts : "" }}</td>
+            <td>{{ revision.version_name != null ? revision.version_name : "" }}</td>
+            <td>{{ revision.version_description != null ? revision.version_description : "" }}</td>
         </tr>
-        {% endfor %}
-      </tbody>
+        {{ end }}
+        </tbody>
     </table>
-  </section>
+</section>
+{{ end }}
 
-  <hr>
+<hr>
 
-  <section>
-    <h2>Contacts</h2>
+<section>
+    <h2>Client</h2>
+
+    <dl>
+        <dt>Name</dt>
+        <dt>{{ client != null && client.name != null ? client.name : "" }}</dt>
+
+        <dt>Address</dt>
+        <dt>{{ client != null && client.address != null ? client.address : "" }}</dt>
+
+        <dt>URL</dt>
+        <dt>{{ client != null && client.url != null ? client.url : "" }}</dt>
+    </dl>
+
     <ul>
-      {% for contact in contacts %}
+        {{ for c in (client != null && client.contacts != null ? client.contacts : empty_array) }}
         <li>
-          <strong>Name:</strong> {{ contact.name }}<br>
-          <strong>Phone:</strong> {{ contact.phone }}<br>
-          <strong>Email:</strong> {{ contact.email }}<br>
-          <strong>Role:</strong> {{ contact.role }}
+            <strong>Name:</strong> {{ c.name != null ? c.name : "" }}<br>
+            <strong>Phone:</strong> {{ c.phone != null ? c.phone : "" }}<br>
+            <strong>Email:</strong> {{ c.email != null ? c.email : "" }}<br>
+            <strong>Role:</strong> {{ c.role != null ? c.role : "" }}
         </li>
-      {% endfor %}
+        {{ end }}
     </ul>
-  </section>
+</section>
 
-  <hr>
+<hr>
 
-  <section>
+<section>
     <h2>Pentesting Team</h2>
     <ul>
-      {% for user in users %}
+        {{ for u in (users != null ? users : empty_array) }}
         <li>
-          <strong>{{ user.full_name }}</strong><br>
-          <em>{{ user.short_bio }}</em>
+            <strong>{{ u.full_name != null ? u.full_name : "" }}</strong><br>
+            <em>{{ u.short_bio != null ? u.short_bio : "" }}</em>
         </li>
-      {% endfor %}
+        {{ end }}
     </ul>
-  </section>
+</section>
 
-  <hr>
+<hr>
 
-  <section>
+<section>
     <h2>Project Overview</h2>
-    <p>{{ project.description }}</p>
+    <p>{{ project != null && project.description != null ? project.description : "" }}</p>
 
     <h3>Findings Overview</h3>
     <table>
-      <thead>
+        <thead>
         <tr>
-          <th>Severity</th>
-          <th>Count</th>
+            <th>Severity</th>
+            <th>Count</th>
         </tr>
-      </thead>
-      <tbody>
-        {% for finding in findingsOverview %}
+        </thead>
+        <tbody>
+        {{ for f in (findings != null && findings.stats != null ? findings.stats : empty_array) }}
         <tr>
-          <td>{{ finding.severity|capitalize }}</td>
-          <td>{{ finding.count }}</td>
+            <td>{{ f.severity != null ? string.capitalize f.severity : "" }}</td>
+            <td>{{ f.count != null ? f.count : "0" }}</td>
         </tr>
-        {% endfor %}
-      </tbody>
+        {{ end }}
+        </tbody>
     </table>
-  </section>
+</section>
 
-  <hr>
+<hr>
 
-  <section>
-    <h2>Targets</h2>
+<section>
+    <h2>Assets</h2>
     <table>
-      <thead>
+        <thead>
         <tr>
-          <th>Target Name</th>
-          <th>Type</th>
+            <th>Target Name</th>
+            <th>Type</th>
         </tr>
-      </thead>
-      <tbody>
-        {% for target in targets %}
+        </thead>
+        <tbody>
+        {{ for a in (assets != null ? assets : empty_array) }}
         <tr>
-          <td>{{ target.name }}</td>
-          <td>{{ target.kind }}</td>
+            <td>{{ a.name != null ? a.name : "" }}</td>
+            <td>{{ a.kind != null ? a.kind : "" }}</td>
         </tr>
-        {% endfor %}
-      </tbody>
+        {{ end }}
+        </tbody>
     </table>
-  </section>
+</section>
 
-  <hr>
+<hr>
 
-  <section>
-    <h2>Vulnerabilities</h2>
-    {% for vulnerability in vulnerabilities %}
-      <article>
-        <h3>{{ vulnerability.summary }}</h3>
+<section>
+    <h2>Findings</h2>
+    {{ for v in (findings != null && findings.list != null ? findings.list : empty_array) }}
+    <article>
+        <h3>{{ v.summary != null ? v.summary : "" }}</h3>
+
         <ul>
-          <li><strong>Category:</strong> {{ vulnerability.category_name }}</li>
-          <li><strong>Severity:</strong> {{ vulnerability.risk|capitalize }}</li>
-          <li><strong>CVSS Score:</strong> {{ vulnerability.cvss_score }}</li>
-          <li><strong>OWASP Vector:</strong> {{ vulnerability.owasp_vector }}</li>
-          <li><strong>OWASP Overall Rating:</strong> {{ vulnerability.owasp_overall }}</li>
+            <li><strong>Category:</strong> {{ v.category_name != null ? v.category_name : "" }}</li>
+            <li><strong>Severity:</strong> {{ v.risk != null ? string.capitalize v.risk : "" }}</li>
+            <li><strong>CVSS Score:</strong> {{ v.cvss_score != null ? v.cvss_score : "" }}</li>
+            <li><strong>OWASP Vector:</strong> {{ v.owasp_vector != null ? v.owasp_vector : "" }}</li>
+            <li><strong>OWASP Overall Rating:</strong> {{ v.owasp_overall != null ? v.owasp_overall : "" }}</li>
         </ul>
-        <p><strong>Description:</strong><br>{{ vulnerability.description }}</p>
-        <p><strong>Proof of Concept:</strong><br>{{ vulnerability.proof_of_concept }}</p>
-        <p><strong>Remediation:</strong><br>{{ vulnerability.remediation }}</p>
+
+        <p><strong>Description:</strong><br>{{ v.description != null ? v.description : "" }}</p>
+        <p><strong>Proof of Concept:</strong><br>{{ v.proof_of_concept != null ? v.proof_of_concept : "" }}</p>
+        <p><strong>Remediation:</strong><br>{{ v.remediation != null ? v.remediation : "" }}</p>
+
         <hr>
-      </article>
-    {% endfor %}
-  </section>
+    </article>
+    {{ end }}
+</section>
 
 </body>
 </html>
