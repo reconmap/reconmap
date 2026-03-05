@@ -31,5 +31,22 @@
       "http://localhost:5500",
       "http://127.0.0.1:5500"
     ]
+  },
+  "AI": {
+    "Provider": "Ollama",
+    "MaxOutputTokens": 4000,
+    "Ollama": {
+      "BaseUrl": "http://172.17.0.1:11434/",
+      "Model": "llama3.2"
+    },
+    "AzureOpenAI": {
+      "Endpoint": "https://my-openai.openai.azure.com/",
+      "ApiKey": "AZURE_API_KEY",
+      "Deployment": "gpt-4o"
+    },
+    "OpenRouter": {
+      "ApiKey": "OPENROUTER_API_KEY",
+      "Model": "meta-llama/llama-3.1-70b-instruct"
+    }
   }
 }
