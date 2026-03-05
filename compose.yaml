@@ -81,10 +81,10 @@ services:
       - "./config-ngapi.json:/app/appsettings.json"
       - dataprotection-keys:/root/.aspnet/DataProtection-Keys
     ports:
-      - "5253:5253"
+      - "5510:5510"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:5253
+      - ASPNETCORE_URLS=http://0.0.0.0:5510
     depends_on:
         mysql:
             condition: service_healthy
