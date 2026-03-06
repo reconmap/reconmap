@@ -14,6 +14,6 @@ This is a component of many in the [Reconmap's architecture](https://reconmap.or
 ## How to run
 
 ```shell
-RMAP_KEYCLOAK_HOSTNAME=http://localhost:8080 RMAP_AGENT_CLIENT_ID=admin-cli RMAP_AGENT_CLIENT_SECRET=******************** RMAP_REST_API_URL=http://localhost:5510 VALID_ORIGINS=http://localhost:5500 REDIS_HOST=127.0.0.1 REDIS_PORT=6379 REDIS_PASSWORD=REconDIS ./reconmapd
+RMAP_KEYCLOAK_HOSTNAME=http://localhost:8080 RMAP_AGENT_CLIENT_ID=admin-cli RMAP_AGENT_CLIENT_SECRET=******************** RMAP_REST_API_URL=http://localhost:5510/api VALID_ORIGINS=http://localhost:5500 REDIS_HOST=127.0.0.1 REDIS_PORT=6379 REDIS_PASSWORD=REconDIS ./reconmapd
 ```
 

@@ -39,7 +39,7 @@ func NewConfig() Config {
 			ClientSecret: "REPLACE THIS WITH YOUR CLIENT SECRET",
 		},
 		ReconmapApiConfig: ReconmapApiConfig{
-			BaseUri: "http://localhost:5510",
+			BaseUri: "http://localhost:5510/api",
 		},
 		RedisConfig: RedisConfig{
 			Host:     "localhost",

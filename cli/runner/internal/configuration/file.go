@@ -23,7 +23,7 @@ func NewConfig() Config {
 			ClientID: "rmap-client",
 		},
 		ReconmapApiConfig: ReconmapApiConfig{
-			BaseUri: "http://localhost:5510",
+			BaseUri: "http://localhost:5510/api",
 		},
 	}
 }
