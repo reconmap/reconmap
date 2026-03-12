@@ -1,10 +1,21 @@
-name: Build and Deploy
-on: [push]
+name: Docker images build and push
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/docker/keycloak/**'
+      - '.github/workflows/docker-images-build-push.yml'
 
 jobs:
   default:
     name: Build and Deploy
     runs-on: ubuntu-24.04
+
+    defaults:
+      run:
+        working-directory: infra/docker/keycloak    
 
     steps:
       - uses: actions/checkout@v4
