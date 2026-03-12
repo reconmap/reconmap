@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'docs/**'
+      - '.github/workflows/documentation-build-deploy.yml'
 
 permissions:
   contents: write
@@ -13,6 +14,11 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: docs
+
     steps:
       - uses: actions/checkout@v4
         with:
