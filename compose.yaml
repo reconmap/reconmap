@@ -1,7 +1,8 @@
 volumes:
   redis_data:
-  mysql_varlib: 
+  mysql_varlib:
   dataprotection-keys:
+
 
 services:
   redis:
@@ -39,7 +40,7 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_DB: mysql
-      KC_DB_URL_HOST: mysql 
+      KC_DB_URL_HOST: mysql
       KC_DB_DATABASE: keycloak
       KC_DB_USERNAME: keycloaker
       KC_DB_PASSWORD: keycloaked
@@ -51,13 +52,25 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"]
+      test:
+        [
+          "CMD-SHELL",
+          "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r
+
+            host: http://localhost\r
+
+            Connection: close\r
+
+            \r
+
+            ' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"
+        ]
       interval: 30s
       timeout: 10s
       retries: 10
     depends_on:
-        mysql:
-            condition: service_healthy
+      mysql:
+        condition: service_healthy
 
   web-client:
     container_name: rmap-web-client
@@ -87,11 +100,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:5510
     depends_on:
-        mysql:
-            condition: service_healthy
+      mysql:
+        condition: service_healthy
 
   agent:
-    profiles: ['agent']
+    profiles: [ 'agent' ]
     container_name: rmap-agent
     image: ghcr.io/reconmap/agent:latest
     restart: unless-stopped
@@ -99,8 +112,7 @@ services:
       - "5520:5520"
     volumes:
       - "./config-agent.json:/root/.config/reconmap/config-reconmapd.json"
-    command: /app/reconmapd run 
+    command: /app/reconmapd run
     environment:
       RMAP_KEYCLOAK_DEBUG: false
       RMAP_KEYCLOAK_SKIP_TLS_VERIFY: true
-  

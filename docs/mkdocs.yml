@@ -1,0 +1,57 @@
+site_name: Reconmap docs
+
+site_url: https://reconmap.com
+repo_url: https://github.com/reconmap/reconmap
+edit_uri: https://github.com/reconmap/reconmap/edit/main/docs/docs
+
+docs_dir: pages
+
+theme:
+  name: material
+
+  logo: images/icon-512.png
+  favicon: images/favicon.ico
+
+  features:
+    - content.action.edit
+    - content.code.copy
+    - navigation.footer
+  palette:
+    - scheme: default
+      primary: red
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+    - scheme: slate
+      primary: red
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+  - tags
+  - git-revision-date-localized:
+      enable_creation_date: false
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/netfoe.com
+    - icon: fontawesome/brands/github
+      link: https://github.com/reconmap
+  analytics:
+    provider: google
+    property: G-J7M2RL7VD1
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - footnotes
