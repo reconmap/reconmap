@@ -76,54 +76,57 @@ func (app *App) Run(listenAddress string) error {
 	}
 
 	restApiUrl := config.ReconmapApiConfig.BaseUri
-	schedules, err := api.GetCommandsSchedules(restApiUrl, accessToken)
-	if err != nil {
-		app.Logger.Error("unable to get command schedules", zap.Error(err))
-	}
 
 	app.Logger.Info("creating cron jobs")
 	c := cron.New()
 
-	for _, commandSchedule := range *schedules {
-		c.AddFunc(commandSchedule.CronExpression, func() {
-			parts := strings.Split(commandSchedule.ArgumentValues, " ")
-			cmd := exec.Command(parts[0], parts[1:]...) // #nosec G204
-			cmd.Env = append(os.Environ(), "PS1=# ")
-			cmd.Env = append(cmd.Env, "TERM=xterm")
-			cmd.Env = append(cmd.Env, "RMAP_SESSION_TOKEN="+accessToken)
-			var stdout, stderr []byte
-			var errStdout, errStderr error
-			stdoutIn, _ := cmd.StdoutPipe()
-			stderrIn, _ := cmd.StderrPipe()
-			err := cmd.Start()
-			if err != nil {
-				app.Logger.Fatalf("cmd.Start() failed with '%s'\n", err)
-			}
-			var wg sync.WaitGroup
-			wg.Add(1)
-			go func() {
-				stdout, errStdout = sharedio.CopyAndCapture(os.Stdout, stdoutIn)
-				wg.Done()
-			}()
+	schedules, err := api.GetCommandsSchedules(restApiUrl, accessToken)
+	if err != nil {
+		app.Logger.Error("unable to get command schedules", zap.Error(err))
+	} else {
 
-			stderr, errStderr = sharedio.CopyAndCapture(os.Stderr, stderrIn)
-
-			wg.Wait()
-
-			err = cmd.Wait()
-			if err != nil {
-				if errStderr != nil {
-					print(errStderr)
+		for _, commandSchedule := range *schedules {
+			c.AddFunc(commandSchedule.CronExpression, func() {
+				parts := strings.Split(commandSchedule.ArgumentValues, " ")
+				cmd := exec.Command(parts[0], parts[1:]...) // #nosec G204
+				cmd.Env = append(os.Environ(), "PS1=# ")
+				cmd.Env = append(cmd.Env, "TERM=xterm")
+				cmd.Env = append(cmd.Env, "RMAP_SESSION_TOKEN="+accessToken)
+				var stdout, stderr []byte
+				var errStdout, errStderr error
+				stdoutIn, _ := cmd.StdoutPipe()
+				stderrIn, _ := cmd.StderrPipe()
+				err := cmd.Start()
+				if err != nil {
+					app.Logger.Fatalf("cmd.Start() failed with '%s'\n", err)
 				}
-				app.Logger.Fatalf("cmd.Run() failed with %s\n", err)
-			}
-			if errStdout != nil || errStderr != nil {
-				app.Logger.Fatal("failed to capture stdout or stderr\n")
-			}
-			outStr, errStr := string(stdout), string(stderr)
-			app.Logger.Debug(outStr)
-			app.Logger.Debug(errStr)
-		})
+				var wg sync.WaitGroup
+				wg.Add(1)
+				go func() {
+					stdout, errStdout = sharedio.CopyAndCapture(os.Stdout, stdoutIn)
+					wg.Done()
+				}()
+
+				stderr, errStderr = sharedio.CopyAndCapture(os.Stderr, stderrIn)
+
+				wg.Wait()
+
+				err = cmd.Wait()
+				if err != nil {
+					if errStderr != nil {
+						print(errStderr)
+					}
+					app.Logger.Fatalf("cmd.Run() failed with %s\n", err)
+				}
+				if errStdout != nil || errStderr != nil {
+					app.Logger.Fatal("failed to capture stdout or stderr\n")
+				}
+				outStr, errStr := string(stdout), string(stderr)
+				app.Logger.Debug(outStr)
+				app.Logger.Debug(errStr)
+			})
+		}
+
 	}
 	c.Start()
 
@@ -166,7 +169,7 @@ func (app *App) Run(listenAddress string) error {
 			ListenAddress: listenAddress,
 		}
 		app.Logger.Info("sending boot event to API")
-		_, err = api.AgentBoot(restApiUrl, accessToken, &systemInfo)
+		_, err = api.AgentBoot(restApiUrl, config.ClientID, accessToken, &systemInfo)
 		if err != nil {
 			app.Logger.Error("unable to send boot notification", zap.Error(err))
 		}
@@ -174,7 +177,7 @@ func (app *App) Run(listenAddress string) error {
 	go func() {
 		for range ticker.C {
 			app.Logger.Info("sending ping event to API")
-			_, err = api.AgentPing(restApiUrl, accessToken)
+			_, err = api.AgentPing(restApiUrl, config.ClientID, accessToken)
 			if err != nil {
 				app.Logger.Error("unable to send ping notification", zap.Error(err))
 			}

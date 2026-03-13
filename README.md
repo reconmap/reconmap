@@ -12,7 +12,7 @@
 
 <p>By streamlining workflows and promoting collaboration, Reconmap helps reduce the time from initial reconnaissance to final reporting — delivering faster, more organised results without compromising quality.</p>
 
-![Reconmap's screenshot](images/screenshot.png)
+![Reconmap's screenshot](docs/images/screenshot.png)
 
 ## Capabilities
 
