@@ -1,4 +1,4 @@
-name: Build and release workflow
+name: CLI binaries
 
 on:
   push:
