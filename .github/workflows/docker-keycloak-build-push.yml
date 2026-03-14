@@ -1,4 +1,4 @@
-name: Docker images build and push
+name: Docker Keycloak image build and push
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'infra/docker/keycloak/**'
-      - '.github/workflows/docker-images-build-push.yml'
+      - '.github/workflows/docker-keycloak-build-push.yml'
 
 jobs:
   default:
