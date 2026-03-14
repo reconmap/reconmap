@@ -4,6 +4,9 @@ on:
   push:
     tags:
       - "*" # triggers only if push new tag version, like `0.8.4` or else
+    paths:
+      - 'cli/**'
+      - '.github/workflows/cli-binaries-build-deploy.yml'      
 
 jobs:
   build-rmap:
@@ -12,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: cli
+        working-directory: cli/runner
 
     steps:
       - name: Check out code into the Go module directory
@@ -49,7 +52,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: agent
+        working-directory: cli/agent
 
     steps:
       - name: Check out code into the Go module directory
