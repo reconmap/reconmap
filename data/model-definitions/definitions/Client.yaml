@@ -1,0 +1,36 @@
+name: Client
+props:
+  - name: id
+    type: integer
+    nullable: true
+  - name: creator_uid
+    type: integer
+    nullable: true
+  - name: kind
+    type: string
+    nullable: false
+    enum: [service_provider, client]
+  - name: insert_ts
+    type: string
+    nullable: true
+  - name: update_ts
+    type: string
+    nullable: true
+  - name: name
+    type: string
+    nullable: true
+  - name: address
+    type: string
+    nullable: true
+  - name: url
+    type: string
+    nullable: true
+  - name: logo_attachment_id
+    type: integer
+    nullable: true
+    default: null
+  - name: small_logo_attachment_id
+    type: integer
+    nullable: true
+    default: null
+

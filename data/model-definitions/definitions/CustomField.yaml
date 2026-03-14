@@ -1,0 +1,21 @@
+name: CustomField
+props:
+  - name: id
+    type: integer
+    nullable: true
+  - name: parent_type
+    type: string
+    nullable: true
+  - name: name
+    type: string
+    nullable: true
+  - name: label
+    type: string
+    nullable: true
+  - name: kind
+    type: string
+    nullable: true
+  - name: config
+    type: string
+    nullable: true
+

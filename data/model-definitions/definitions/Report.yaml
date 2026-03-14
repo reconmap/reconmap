@@ -1,0 +1,31 @@
+name: Report
+props:
+  - name: id
+    type: integer
+    nullable: true
+    default: null
+  - name: projectId
+    type: integer
+    nullable: true
+    default: null
+  - name: generatedByUid
+    type: integer
+    nullable: true
+    default: null
+  - name: is_template
+    type: boolean
+    nullable: true
+    default: false
+  - name: insertTs
+    type: string
+    nullable: treu
+    default: null
+  - name: versionName
+    type: string
+    nullable: true
+    default: null
+  - name: versionDescription
+    type: string
+    nullable: true
+    default: null
+

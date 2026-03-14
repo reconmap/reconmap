@@ -1,0 +1,10 @@
+name: Notification
+props:
+  - name: toUserId
+    type: integer
+  - name: title
+    type: string
+    nullable: true
+  - name: content
+    type: string
+

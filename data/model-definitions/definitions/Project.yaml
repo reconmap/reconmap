@@ -1,0 +1,44 @@
+name: Project
+props:
+  - name: id
+    type: integer
+    nullable: true
+    default: null
+  - name: creator_uid
+    type: integer
+    nullable: true
+  - name: service_provider_id
+    type: integer
+    nullable: true
+  - name: client_id
+    type: integer
+    nullable: true
+  - name: name
+    type: string
+    nullable: true
+  - name: description
+    type: string
+    nullable: true
+  - name: visibility
+    type: string
+    nullable: true
+    default: "'public'"
+  - name: is_template
+    type: boolean
+    default: false
+  - name: category_id
+    type: integer
+    nullable: true
+  - name: engagement_start_date
+    type: string
+    nullable: true
+  - name: engagement_end_date
+    type: string
+    nullable: true
+  - name: external_id
+    type: string
+    nullable: true
+  - name: vulnerability_metrics
+    type: string
+    nullable: true
+

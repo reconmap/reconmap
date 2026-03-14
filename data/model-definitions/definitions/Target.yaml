@@ -1,0 +1,16 @@
+name: Target
+props:
+  - name: project_id
+    type: integer
+  - name: parent_id
+    type: integer
+    nullable: true
+    default: null
+  - name: name
+    type: string
+  - name: kind
+    type: string
+  - name: tags
+    type: string
+    nullable: true
+

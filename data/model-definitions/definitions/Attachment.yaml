@@ -1,0 +1,24 @@
+name: Attachment
+props:
+  - name: id
+    type: integer
+    nullable: true
+    default: null
+  - name: parent_type
+    type: string
+  - name: parent_id
+    type: integer
+  - name: submitter_uid
+    type: integer
+  - name: client_file_name
+    type: string
+  - name: file_name
+    type: string
+  - name: file_size
+    type: integer
+  - name: file_mimetype
+    type: string
+    nullable: true
+  - name: file_hash
+    type: string
+

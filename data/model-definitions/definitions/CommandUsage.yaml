@@ -1,0 +1,34 @@
+name: CommandUsage
+props:
+  - name: id
+    type: integer
+    nullable: true
+  - name: command_id
+    type: integer
+    nullable: true
+  - name: creator_uid
+    type: integer
+    nullable: true
+  - name: name
+    type: string
+    nullable: true
+  - name: description
+    type: string
+    nullable: true
+  - name: executable_path
+    type: string
+    nullable: true
+  - name: arguments
+    type: string
+    nullable: true
+  - name: output_capturing_mode
+    type: string
+    nullable: false
+    default: "'none'"
+  - name: output_filename
+    type: string
+    nullable: true
+  - name: output_parser
+    type: string
+    nullable: true
+

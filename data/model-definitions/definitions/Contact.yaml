@@ -1,0 +1,27 @@
+name: Contact
+props:
+  - name: id
+    type: integer
+    nullable: true
+    default: null
+  - name: kind
+    type: string
+    default: "'general'"
+    comment:  general, technical, billing
+  - name: name
+    type: string
+    nullable: true
+    default: null
+  - name: email
+    type: string
+    nullable: true
+    default: null
+  - name: phone
+    type: string
+    nullable: true
+    default: null
+  - name: role
+    type: string
+    nullable: true
+    default: null
+

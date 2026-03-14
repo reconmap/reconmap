@@ -1,0 +1,18 @@
+name: CommandSchedule
+props:
+  - name: id
+    type: integer
+    nullable: true
+  - name: creator_uid
+    type: integer
+    nullable: true
+  - name: command_id
+    type: integer
+    nullable: true
+  - name: argument_values
+    type: string
+    nullable: true
+  - name: cron_expression
+    type: string
+    nullable: true
+
