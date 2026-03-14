@@ -582,6 +582,7 @@
       ],
       "clientRoles": {
         "realm-management": [
+          "manage-clients",
           "manage-users"
         ]
       },
@@ -2699,7 +2700,7 @@
     "cibaInterval": "5",
     "realmReusableOtpCode": "false"
   },
-  "keycloakVersion": "26.3.0",
+  "keycloakVersion": "26.5.4",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "verifiableCredentialsEnabled": false,
