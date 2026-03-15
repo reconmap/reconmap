@@ -1,6 +1,6 @@
 # Reconmap model definitions
 
-This repository contains model definitions that are used to generate code in Golang, Typescript and PHP, needed in Reconmap CLI, frontend and backend tiers.
+This directory contains model definitions that are used to generate code in Golang, Typescript and C#, needed in Reconmap CLI, frontend and backend tiers.
 
 ## Requirements
 
@@ -8,10 +8,10 @@ This repository contains model definitions that are used to generate code in Gol
 
 ## Usage
 
-```
+```sh
 make
 # or
 make go-files
 make ts-files
-make php-files
+make cs-files
 ```

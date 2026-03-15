@@ -5,17 +5,20 @@ Welcome, AI Assistant! This repository is the central hub for **Reconmap**, an o
 ## Repository Purpose
 
 This is the main orchestration repository. It contains:
-1. **Deployment Configurations**: Docker Compose (`compose.yaml`) and Kubernetes resources (`infra/k8s/`).
-2. **Command Line Tools**: The `cli/` directory contains Go-based tools:
+1. **Core Applications**: The `apps/` directory contains the main software components:
+   - `api/`: The C# REST API (.NET 10).
+   - `dashboard/`: The React web frontend.
+2. **Deployment Configurations**: Docker Compose (`compose.yaml`) and Kubernetes resources (`infra/k8s/`).
+3. **Command Line Tools**: The `cli/` directory contains Go-based tools:
    - `agent/`: The Reconmap agent (`reconmapd`).
    - `runner/`: The Reconmap runner (`rmap`).
    - `shared-lib/`: Shared Go libraries for CLI tools.
-3. **Documentation**: MkDocs-based documentation in `docs/`.
-4. **Seed Data**: JSON templates for initial imports in `imports/`.
+4. **Documentation**: MkDocs-based documentation in `docs/`.
+5. **Data & Seed Data**: JSON templates for initial imports in `data/imports/`, model definitions in `data/model-definitions/`, and file attachments in `data/attachments/`.
 
 ## Key Architectural Concepts
 
-- **Multi-tier**: React Frontend (web-client), C# REST API (ngapi), and Go CLI tools.
+- **Multi-tier**: React Frontend (dashboard), C# REST API (api), and Go CLI tools.
 - **Authentication**: Keycloak (OIDC) is used for all auth.
 - **Data Persistence**: MySQL for relational data, Redis for caching.
 - **Integration**: The agent connects to the API to receive tasks and execute security tools.

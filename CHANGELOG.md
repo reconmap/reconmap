@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disable MySQL performance schema by default
 - Simplify and optimise docker images
 - Move CLI code from own repository to the main one.
+- Move Web client code to `apps/dashboard` and rename to Dashboard.
+- Rewrote API in C# (.NET 10) and moved to `apps/api`.
+- Reorganized data files into `data/` directory (imports, model definitions, attachments).
 - Upgrade to Vite 8
 
 ### Removed

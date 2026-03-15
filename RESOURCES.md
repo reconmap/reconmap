@@ -2,6 +2,11 @@
 
 A directory of important files and folders in the Reconmap repository.
 
+## Core Applications (`apps/`)
+
+- `apps/api/`: The C# REST API (.NET 10).
+- `apps/dashboard/`: The React web frontend.
+
 ## Core Deployment
 
 - `compose.yaml`: Docker Compose file for the full local stack.
@@ -14,8 +19,8 @@ A directory of important files and folders in the Reconmap repository.
 
 - `config-agent.json`: Template for the `reconmapd` agent.
 - `config-cli.json`: Template for the `rmap` runner.
-- `config-ngapi.json`: Template for the `ng-api` (C# REST API).
-- `config-ui.json`: Template for the React web client.
+- `config-ngapi.json`: Template for the `api` (C# REST API).
+- `config-ui.json`: Template for the `dashboard` (React web client).
 
 ## Command Line Tools (`cli/`)
 
@@ -24,11 +29,12 @@ A directory of important files and folders in the Reconmap repository.
 - `cli/shared-lib/`: Common Go libraries.
 - `cli/Makefile`: Build script for Go components.
 
-## Documentation & Data
+## Documentation & Data (`data/`, `docs/`)
 
 - `docs/`: Markdown files for user and developer manuals.
-- `imports/`: JSON seed data for initial setup (commands, project templates).
-- `data/`: Storage for attachments and cache.
+- `data/imports/`: JSON seed data for initial setup (commands, project templates).
+- `data/model-definitions/`: Database and model definitions.
+- `data/attachments/`: Default location for file attachments.
 
 ## Metadata & Guidelines
 

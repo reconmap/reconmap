@@ -4,19 +4,26 @@ Welcome! This guide helps you set up and contribute to the Reconmap ecosystem.
 
 ## Prerequisites
 
-- **Go 1.22+**: Required for building CLI tools.
+- **Go 1.25+**: Required for building CLI tools.
 - **Docker & Docker Compose**: For local stack orchestration.
-- **Node.js**: If you're working on the `web-client`.
-- **.NET 8**: If you're working on the `rest-api` (ng-api).
+- **Node.js 22+**: If you're working on the dashboard.
+- **.NET 10**: If you're working on the API.
 
 ## Project Structure
 
+- `apps/`: Core applications.
+    - `api/`: The C# REST API (.NET 10).
+    - `dashboard/`: The React web frontend.
 - `cli/`: Go CLI tools.
     - `agent/`: The `reconmapd` agent.
     - `runner/`: The `rmap` runner.
+    - `shared-lib/`: Common libraries for CLI tools.
+- `data/`: Data-related files and seed data.
+    - `imports/`: Seed data for fresh installations.
+    - `model-definitions/`: Database and model definitions.
+    - `attachments/`: Default location for file attachments.
 - `docs/`: Product documentation (MkDocs).
 - `infra/`: Infrastructure files (K8s, Docker).
-- `imports/`: Seed data for fresh installations.
 
 ## Local Stack Setup
 

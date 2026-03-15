@@ -1,12 +1,12 @@
-[![Build and deployment workflow](https://github.com/reconmap/rest-api/actions/workflows/build-deployment.yml/badge.svg)](https://github.com/reconmap/rest-api/actions/workflows/build-deployment.yml)
+[![Build and deployment workflow](https://github.com/reconmap/reconmap/actions/workflows/api-build-push.yml/badge.svg)](https://github.com/reconmap/reconmap/actions/workflows/api-build-push.yml)
 
-# Reconmap Rest API
+# Reconmap API
 
 The Reconmap API is a RESTful API that allows any of the clients (Web, CLI, Mobile) to manipulate any of the Reconmap's
 entities: projects, tasks, commands, reports, users, etc. With the API you can extend Reconmap in any way you can
 imagine.
 
-This is a component of many in the [Reconmap's architecture](https://reconmap.com/development/architecture.html).
+This is a component of many in the [Reconmap's architecture](https://reconmap.com/development/architecture/).
 
 ## Runtime requirements
 
@@ -17,7 +17,7 @@ This is a component of many in the [Reconmap's architecture](https://reconmap.co
 ## Documentation
 
 The API specs have been documented using the **OpenAPI** specification. You can use the
-interactive [OpenAPI UI](https://demo.api.netfoe.com/docs/) to play with it.
+interactive [OpenAPI UI](https://demo.api.reconmap.com/docs/) to play with it.
 
 ## Build instructions
 
@@ -50,5 +50,5 @@ save us all time. Thanks!
 
 ## How to report bugs or feature requests
 
-If you have bugs or feature requests to report please use the [issues](https://github.com/reconmap/application/issues)
+If you have bugs or feature requests to report please use the [issues](https://github.com/reconmap/reconmap/issues)
 tab on Github.

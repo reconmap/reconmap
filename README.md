@@ -59,7 +59,7 @@ We welcome contributions from the community! Here are some ways you can get invo
 - **★ Star this project on GitHub ★** to show your support and help others discover it.
 - Review the [documentation](https://reconmap.com) and submit improvements via a pull request to the [documentation repository](https://github.com/reconmap/documentation).
 - Share your ideas or suggest new features on the [discussion board](https://github.com/reconmap/reconmap/discussions).
-- Contribute to the codebase by improving the [backend](https://github.com/reconmap/rest-api), [frontend](https://github.com/reconmap/web-client), or [CLI tools](https://github.com/reconmap/command-line-tools).
+- Contribute to the codebase by improving the [backend](apps/api), [frontend](apps/dashboard), or [CLI tools](cli).
 - Report security vulnerabilities or other issues to help us maintain a secure and reliable platform.
 
 Before contributing, please read our [Contributing Guidelines](https://github.com/reconmap/.github/blob/main/CONTRIBUTING.md) to ensure a smooth collaboration process. Thank you for helping make Reconmap better!
