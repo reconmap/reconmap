@@ -9,7 +9,7 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SessionsController(AppDbContext dbContext, IConnectionMultiplexer redis) : AppController(dbContext)
+public class SessionsController(AppDbContext dbContext, IConnectionMultiplexer redis, IWebHostEnvironment env) : AppController(dbContext)
 {
     [HttpPost]
     public async Task<OkObjectResult> GetSessions()
@@ -22,7 +22,7 @@ public class SessionsController(AppDbContext dbContext, IConnectionMultiplexer r
         {
             Expires = DateTimeOffset.UtcNow.AddDays(1),
             Path = "/",
-            Secure = false,
+            Secure = !env.IsDevelopment(),
             HttpOnly = false
         };
 
