@@ -1,9 +1,12 @@
-name: Dashboard app
+name: Dashboard
 
 on:
     push:
         branches:
             - "**"
+        paths:
+            - 'apps/dashboard/**'
+            - '.github/workflows/dashboard-build-push.yml'      
 
 jobs:
     version-build-push:
