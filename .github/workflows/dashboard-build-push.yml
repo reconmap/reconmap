@@ -8,6 +8,11 @@ on:
 jobs:
     version-build-push:
         runs-on: ubuntu-latest
+        defaults:
+          run:
+            shell: bash
+            working-directory: apps/dashboard
+
         steps:
             - name: Fix folder permissions
               run: sudo chown -R $USER:$USER ${{ github.workspace }}
