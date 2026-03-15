@@ -32,6 +32,7 @@ services.AddTransient<IClaimsTransformation, RoleClaimsTransformation>();
 services.AddSingleton<WebSocketConnectionManager>();
 services.AddScoped<SystemUsageService>();
 services.AddScoped<AuditService>();
+services.AddScoped<ISecretsService, SecretsService>();
 services.Configure<AiOptions>(
     builder.Configuration.GetSection("AI"));
 
