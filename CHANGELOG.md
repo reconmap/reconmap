@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Ability to add and remove Reconmap agents from the Dashboard
 
 ### Changed
-- Upgrade to MySQL 9.4
+- Upgrade to MySQL 9.6
 - Disable MySQL performance schema by default
 - Simplify and optimise docker images
 - Move CLI code from own repository to the main one.
+- Upgrade to Vite 8
 
 ### Removed
 - Remove unused code in web client using knip

@@ -1,0 +1,9 @@
+{
+  "ignoreDependencies": [
+    "@fortawesome/fontawesome-free",
+    "bulma"
+  ],
+  "ignore": [
+    "src/models/**/*.ts"
+  ]
+}

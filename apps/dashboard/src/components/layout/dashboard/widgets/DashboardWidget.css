@@ -1,0 +1,4 @@
+.dashboard-widget {
+    padding: var(--padding);
+    border-left: var(--borderWidth) solid var(--text-color);
+}

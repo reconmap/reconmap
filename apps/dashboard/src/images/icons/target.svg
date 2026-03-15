@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<svg id="Icons" style="enable-background:new 0 0 32 32;" version="1.1" viewBox="0 0 32 32" xml:space="preserve"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <style type="text/css">
+	.st0{fill:none;stroke:#ff6961;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#ff6961;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+	.st2{fill:none;stroke:#ff6961;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:5.2066,0;}
+    </style>
+    <circle class="st0" cx="16" cy="16" r="4"/>
+    <circle class="st0" cx="16" cy="16" r="11"/>
+    <line class="st0" x1="16" x2="16" y1="2" y2="8"/>
+    <line class="st0" x1="2" x2="8" y1="16" y2="16"/>
+    <line class="st0" x1="16" x2="16" y1="30" y2="24"/>
+    <line class="st0" x1="30" x2="24" y1="16" y2="16"/>
+</svg>

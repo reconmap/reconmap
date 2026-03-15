@@ -1,0 +1,8 @@
+.user-link {
+	display: flex; 
+	align-items: center;
+	border-radius: 0.3rem;
+	font-weight: 700;
+	font-size: 0.85rem;
+	padding: 2px;
+}

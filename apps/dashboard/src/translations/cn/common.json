@@ -1,0 +1,7 @@
+{
+    "ui": {
+        "button.create": "创建",
+        "button.delete": "删除",
+        "button.edit": "编辑"
+    }
+}

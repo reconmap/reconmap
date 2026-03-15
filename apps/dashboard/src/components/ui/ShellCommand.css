@@ -1,0 +1,30 @@
+code {
+    display: block;
+    border-left: 3px solid var(--bulma-primary-color);
+    font-family: monospace;
+    white-space: pre-line;
+    margin: var(--margin) 0;
+    position: relative;
+
+    button {
+        position: absolute;
+        top: 0;
+        margin: auto;
+        bottom: 0;
+        height: min-content;
+        right: 5px;
+        opacity: .3;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        svg {
+            margin: 0;
+        }
+    }
+}
+
+code+code {
+    margin: calc(-1*var(--margin)) 0;
+}

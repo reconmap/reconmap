@@ -1,0 +1,11 @@
+{
+    "contextPath": "",
+    "logoUrl": "/logo-name.png",
+    "reconmapApiUrl": "http://localhost:5510/api",
+    "notificationsServiceUrl": "ws://localhost:5510/api",
+    "keycloak": {
+        "url": "http://localhost:8080",
+        "realm": "reconmap",
+        "clientId": "web-client"
+    }
+}

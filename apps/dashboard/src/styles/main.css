@@ -1,0 +1,52 @@
+@import "bulma/css/bulma.min.css";
+
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+:root {
+    /*spacing*/
+    --space: 0.9rem;
+
+    --margin: calc(var(--space) / 2);
+    --padding: var(--space);
+
+    --color-accent-1: #3b82f6; /* Blue */
+    --color-accent-2: #10b981; /* Emerald */
+    --color-accent-3: #f59e0b; /* Amber */
+    --color-accent-4: #ef4444; /* Red */
+    --color-accent-5: #8b5cf6; /* Violet */
+    --color-accent-6: #ec4899; /* Pink */
+    --color-accent-7: #14b8a6; /* Teal */
+    --color-accent-8: #f97316; /* Orange */
+}
+
+body {
+    padding: 1rem;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: calc(var(--padding) / 2);
+}
+
+fieldset {
+    legend {
+        font-size: large;
+        padding-top: 0.5rem;
+        margin-bottom: 2rem;
+        font-weight: bold;
+        border-bottom: 2px solid var(--bulma-info);
+        width: 100%;
+    }
+}
+
+details {
+    summary {
+        font-variant: small-caps;
+        font-weight: bold;
+        border-bottom: 1px solid var(--bulma-info);
+        margin-bottom: 1rem;
+    }
+    margin-bottom: 15px;
+}

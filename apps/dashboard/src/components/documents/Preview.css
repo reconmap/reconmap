@@ -1,0 +1,13 @@
+
+.document-preview {
+    margin: 0 auto;
+    margin-top: 40px;
+    width: 80%;
+    background-color: white;
+    padding: 3% 4%;
+    border-radius: 5px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    * {
+        color: black;
+    }
+}

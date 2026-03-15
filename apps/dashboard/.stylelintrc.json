@@ -1,0 +1,13 @@
+{
+  "extends": "stylelint-config-recommended",
+  "rules": {
+    "property-no-unknown": [
+        true,
+        {
+            "ignoreProperties": [
+                "composes"
+            ]
+        }
+    ]
+  }
+}

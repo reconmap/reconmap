@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "target": "ESNext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+        "moduleResolution": "node16",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "types": [
+            "vite/client",
+            "vite-plugin-svgr/client",
+            "vitest/globals"
+        ],
+        "jsx": "react-jsx",
+        "module": "Node16" /* Specify what module code is generated. */,
+        "baseUrl": "src" /* Specify the base directory to resolve non-relative module names. */,
+        "resolveJsonModule": true /* Enable importing .json files */,
+        "allowJs": true /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */,
+        "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
+        "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+        "strict": true /* Enable all strict type-checking options. */,
+        "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+        "paths": {}
+    },
+    "exclude": [
+        "node_modules",
+        "build"
+    ]
+}

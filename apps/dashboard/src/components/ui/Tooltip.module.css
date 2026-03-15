@@ -1,0 +1,94 @@
+
+[data-tooltip] {
+  position: relative;
+  display: inline-block;
+}
+
+[data-tooltip]::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px 6px 0 6px;
+  border-style: solid;
+  border-color: var(--bulma-info) transparent transparent transparent;
+  z-index: 99;
+  opacity: 0;
+}
+
+[data-tooltip-position='left']::before {
+  left: 0%;
+  top: 50%;
+  margin-left: -12px;
+  transform: translatey(-50%) rotate(-90deg)
+}
+
+[data-tooltip-position='top']::before {
+  left: 50%;
+}
+
+[data-tooltip-position='buttom']::before {
+  top: 100%;
+  margin-top: 8px;
+  transform: translateX(-50%) translatey(-100%) rotate(-180deg)
+}
+
+[data-tooltip-position='right']::before {
+  left: 100%;
+  top: 50%;
+  margin-left: 1px;
+  transform: translatey(-50%) rotate(90deg)
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%) translateY(-100%);
+  background: var(--bulma-info);
+  text-align: center;
+  color: var(--bulma-black);
+  font-size: 1rem;
+  min-width: 280px;
+  border-radius: 5px;
+  pointer-events: none;
+  padding: 4px 4px;
+  z-index: 99;
+  opacity: 0;
+}
+
+[data-tooltip-position='left']::after {
+  left: 0%;
+  top: 50%;
+  margin-left: -8px;
+  transform: translateX(-100%) translateY(-50%);
+}
+
+[data-tooltip-position='top']::after {
+  left: 50%;
+}
+
+[data-tooltip-position='buttom']::after {
+  top: 100%;
+  margin-top: 8px;
+  transform: translateX(-50%) translateY(0%);
+}
+
+[data-tooltip-position='right']::after {
+  left: 100%;
+  top: 50%;
+  margin-left: 8px;
+  transform: translateX(0%) translateY(-50%);
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:hover::before {
+  opacity: 1;
+  transition: all 0.5s;
+}
+
+.input {
+  margin-left: 135px
+}

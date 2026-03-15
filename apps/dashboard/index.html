@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-theme="dark" class="has-navbar-fixed-top">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Reconmap" />
+        <meta name="generator" content="Reconmap" />
+        <title>Loading Reconmap&hellip;</title>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/logo192.png" />
+        <script type="module">
+            window.addEventListener("DOMContentLoaded", () => {
+                fetch("/config.json")
+                    .then((response) => response.json())
+                    .then((config) => {
+                        window.env = config;
+                        import("/src/index.jsx");
+                    })
+                    .catch((error) => console.error("Error loading configuration:", error));
+            });
+        </script>
+    </head>
+
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+.html-dialog {
+    width: 60%;
+    background-color: var(--bulma-body-background-color);
+    border: 1px solid white;
+}
+
+.html-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+}

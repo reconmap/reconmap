@@ -1,0 +1,7 @@
+{
+    "ui": {
+        "button.create": "Erstellen",
+        "button.delete": "Löschen",
+        "button.edit": "Bearbeiten"
+    }
+}

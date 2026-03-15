@@ -1,0 +1,19 @@
+
+span.task-status-formatter {
+  text-transform: capitalize;
+  align-items: center;
+  display: flex;
+
+  background-repeat: no-repeat;
+  background-image: url("/images/icons/status-todo-doing.svg");
+  padding-left: 30px;
+
+  img {
+    width: 20px;
+    margin-right: 5px;
+  }
+}
+
+span.task-status-formatter-done {
+  background-image: url("/images/icons/status-done.svg");
+}

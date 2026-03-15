@@ -1,0 +1,5 @@
+Contact: https://github.com/reconmap/reconmap/discussions
+Encryption: https://keys.openpgp.org/vks/v1/by-fingerprint/C83F23CC5DAB8A9F18ABEBAD43FB2E7773EBC53C
+Preferred-Languages: en, es, ca
+Canonical: https://reconmap.com/.well-known/security.txt
+Policy: https://github.com/reconmap/reconmap/blob/master/SECURITY.md
