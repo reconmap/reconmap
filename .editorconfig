@@ -42,3 +42,19 @@ indent_size = 2
 [Dockerfile]
 indent_style = space
 indent_size = 4
+
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 4
+
+[*.{cs,csproj,slnx,config}]
+indent_style = space
+indent_size = 4
+
+[*.sql]
+indent_style = space
+indent_size = 4
+
+[*.http]
+indent_style = space
+indent_size = 4
