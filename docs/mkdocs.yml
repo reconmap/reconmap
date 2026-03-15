@@ -2,7 +2,7 @@ site_name: Reconmap docs
 
 site_url: https://reconmap.com
 repo_url: https://github.com/reconmap/reconmap
-edit_uri: https://github.com/reconmap/reconmap/edit/main/docs/docs
+edit_uri: https://github.com/reconmap/reconmap/edit/main/docs/pages
 
 docs_dir: pages
 
