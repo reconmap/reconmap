@@ -18,7 +18,7 @@ jobs:
         working-directory: infra/docker/mysql    
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Login to container registry
         run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u "${{ secrets.CR_USERNAME }}" --password-stdin
