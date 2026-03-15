@@ -1,0 +1,40 @@
+name: SBOM Generation and Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install Syft
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin v1.21.0
+
+      - name: Generate SBOM for Dashboard
+        run: syft dir:apps/dashboard -o spdx-json > dashboard-sbom.spdx.json
+
+      - name: Generate SBOM for API
+        run: syft dir:apps/api -o spdx-json > api-sbom.spdx.json
+
+      - name: Generate SBOM for CLI Agent
+        run: syft dir:cli/agent -o spdx-json > agent-sbom.spdx.json
+
+      - name: Generate SBOM for CLI Runner
+        run: syft dir:cli/runner -o spdx-json > runner-sbom.spdx.json
+
+      - name: Create Release and Upload SBOMs
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dashboard-sbom.spdx.json
+            api-sbom.spdx.json
+            agent-sbom.spdx.json
+            runner-sbom.spdx.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
