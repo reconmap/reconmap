@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Code/">
+    <Project Path="app/App.csproj" />
+    <Project Path="tests/Tests.csproj" />
+  </Folder>
+  <Folder Name="/Other files/">
+    <File Path="compose.yaml" />
+  </Folder>
+</Solution>

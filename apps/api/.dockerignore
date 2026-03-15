@@ -1,0 +1,7 @@
+.dockerignore
+**/.git
+config.json
+data
+docs/Makefile
+logs/**
+tests

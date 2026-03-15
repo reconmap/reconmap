@@ -1,0 +1,6 @@
+appsettings*.json
+.idea
+bin
+obj
+compose.yaml
+*.user

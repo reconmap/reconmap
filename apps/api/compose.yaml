@@ -1,0 +1,56 @@
+volumes:
+  redis_data:
+  mysql_varlib:
+
+services:
+  redis:
+    container_name: rmap-redis
+    image: redis:7.4
+    command: redis-server --requirepass REconDIS --save 20 1 --loglevel warning
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  mysql:
+    container_name: rmap-mysql
+    image: ghcr.io/reconmap/rest-api-db:latest
+    build:
+      context: ./
+      dockerfile: docker/mysql/Dockerfile
+    volumes:
+      - mysql_varlib:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: reconmuppet
+    healthcheck:
+      test: "mysql -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD mysql -e 'SELECT 1;'"
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  keycloak:
+    container_name: rmap-keycloak
+    image: ghcr.io/reconmap/keycloak-custom:latest
+    command: "start --hostname-strict false --proxy-headers xforwarded --http-enabled true --import-realm  --hostname-debug=true"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: mysql
+      KC_DB_URL_HOST: "rmap-mysql"
+      KC_DB_DATABASE: keycloak
+      KC_DB_USERNAME: keycloaker
+      KC_DB_PASSWORD: keycloaked
+      KC_LOG_LEVEL: warn
+      VAR_WEB_CLIENT_URL: "http://localhost:5500"
+      VAR_ADMIN_CLIENT_SECRET: "r2TO5uRy0RlpB5TRI6GvvXtBKxUCaaz0"
+      VAR_RECONMAPD_CLIENT_SECRET: "VH8HDKabxlTpnpPkEgLlTq2dEanedEGC"
+      VAR_API_CLIENT_SECRET: "I0jppD5zSIXuBAql31zrXfe5OAa0nvyE"
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    profiles:
+      - testing

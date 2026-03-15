@@ -1,0 +1,21 @@
+services:
+  ngapi:
+    container_name: rmap-ngapi
+    image: ghcr.io/reconmap/ng-api:latest
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    volumes:
+      - "./appsettings.Production.json:/App/appsettings.Production.json"
+      - "./appsettings.json:/App/appsettings.json"
+      - dataprotection-keys:/root/.aspnet/DataProtection-Keys
+    ports:
+      - "5510:5510"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:5510
+
+volumes:
+  dataprotection-keys:
+
+

@@ -26,4 +26,9 @@ updates:
     schedule:
       interval: "weekly"
 
+  - package-ecosystem: "dotnet-sdk"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
 
