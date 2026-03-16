@@ -8,9 +8,12 @@ using api_v2.Infrastructure.Http;
 using api_v2.Infrastructure.Persistence;
 using api_v2.Infrastructure.Redis;
 using api_v2.Infrastructure.WebSockets;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Serilog;
+using api_v2.Application.Services;
+using api_v2.Common;
+using api_v2.Extensions;
+using Amazon.S3;
+using Amazon.S3.Util;
+using Microsoft.Extensions.Options;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 var isDevelopment = environmentName == "Development";
@@ -27,7 +30,46 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 var services = builder.Services;
+services.Configure<StorageSettings>(builder.Configuration.GetSection("Storage"));
+
+services.AddSingleton<IAmazonS3>(sp =>
+{
+    var settings = sp.GetRequiredService<IOptions<StorageSettings>>().Value;
+    if (settings.Type == "s3")
+    {
+        var config = new AmazonS3Config
+        {
+            ServiceURL = settings.S3.Endpoint,
+            ForcePathStyle = true
+        };
+        return new AmazonS3Client(settings.S3.AccessKey, settings.S3.SecretKey, config);
+    }
+    return null!; // Fallback or handle differently if needed
+});
+
+services.AddScoped<IAttachmentStorage>(sp =>
+{
+    var settings = sp.GetRequiredService<IOptions<StorageSettings>>().Value;
+    if (settings.Type == "s3")
+    {
+        return sp.GetRequiredService<S3AttachmentStorage>();
+    }
+    return sp.GetRequiredService<LocalAttachmentStorage>();
+});
+
+services.AddScoped<LocalAttachmentStorage>();
+services.AddScoped<S3AttachmentStorage>();
+
+var processorType = typeof(IProcessor);
+var processorTypes = typeof(Program).Assembly.GetTypes()
+    .Where(t => processorType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
+foreach (var type in processorTypes)
+{
+    services.AddScoped(type);
+}
+
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 services.AddTransient<IClaimsTransformation, RoleClaimsTransformation>();
 services.AddSingleton<WebSocketConnectionManager>();
 services.AddScoped<SystemUsageService>();
