@@ -25,6 +25,7 @@ import TargetRoutes from "./components/target/Routes";
 import TasksRoutes from "./components/tasks/Routes";
 import UsersRoutes from "./components/users/Routes";
 import VulnerabilitiesRoutes from "./components/vulnerabilities/Routes";
+import WebhooksRoutes from "./components/webhooks/Routes";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient({
@@ -64,6 +65,7 @@ const App = () => {
                                 ...AgentRoutes,
                                 ...UsersRoutes,
                                 ...VulnerabilitiesRoutes,
+                                ...WebhooksRoutes,
                             ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
                             <Route path="*" element={<PageNotFound />} />
                         </Route>

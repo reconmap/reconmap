@@ -40,6 +40,7 @@ services.AddScoped<IAiService, AiService>();
 
 services.AddRedisServices(builder.Configuration);
 services.AddHostedService<CommandResultProcessor>();
+services.AddHostedService<WebhookProcessor>();
 services.AddJwtAuthentication(builder.Configuration);
 services.AddDatabase(builder.Configuration);
 services.AddSwaggerDocumentation();

@@ -46,6 +46,8 @@ const MenuLinks = [
             { name: t("Users"), url: "/users" },
             { name: t("Organisations"), url: OrganisationsUrls.List },
             null,
+            { name: t("Webhooks"), url: "/webhooks", permissions: "administrator" },
+            null,
             { name: t("Custom fields"), url: "/settings/custom-fields" },
             null,
             { name: t("Export data"), url: "/system/export-data" },

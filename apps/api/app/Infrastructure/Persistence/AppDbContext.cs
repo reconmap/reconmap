@@ -39,6 +39,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Asset> Assets { get; set; }
 
     public DbSet<Note> Notes { get; set; }
+    public DbSet<Webhook> Webhooks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

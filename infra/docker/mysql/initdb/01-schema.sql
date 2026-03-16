@@ -60,6 +60,22 @@ CREATE TABLE contact
     FOREIGN KEY (organisation_id) REFERENCES organisation (id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS webhook;
+
+CREATE TABLE webhook
+(
+    id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NULL ON UPDATE CURRENT_TIMESTAMP,
+    name       VARCHAR(200) NOT NULL,
+    url        VARCHAR(512) NOT NULL,
+    secret     VARCHAR(100) NULL,
+    is_enabled BOOLEAN      NOT NULL DEFAULT TRUE,
+    events     VARCHAR(512) NOT NULL,
+
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 DROP TABLE IF EXISTS organisation;
 
 CREATE TABLE organisation

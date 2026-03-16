@@ -28,6 +28,10 @@ public class ProjectsController(AppDbContext dbContext, IConnectionMultiplexer r
         dbContext.ProjectMembers.Add(projectUser);
         await dbContext.SaveChangesAsync();
 
+        var redisDb = redis.GetDatabase();
+        await redisDb.ListLeftPushAsync("webhooks:queue",
+            JsonSerializer.Serialize(new { @event = "project.created", payload = project }));
+
         return CreatedAtAction(nameof(GetOne), new { id = project.Id }, project);
     }
 
