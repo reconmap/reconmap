@@ -19,6 +19,7 @@ nav_order: 1
 - Client contacts (general, billing, technical)
 - Weekly email reports
 - Export/import data
+- Web hooks
 - Tagging
 - Browser terminal integration
 - Notes with markdown support
