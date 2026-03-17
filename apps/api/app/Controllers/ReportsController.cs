@@ -139,7 +139,7 @@ public class ReportRequestDto
 
 [Route("api/[controller]")]
 [ApiController]
-public class ReportsController(AppDbContext dbContext, ILogger<ReportsController> logger)
+public class ReportsController(AppDbContext dbContext, ILogger<ReportsController> logger, IAttachmentStorage attachmentStorage)
     : AppController(dbContext)
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
@@ -159,8 +159,7 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
             .FirstOrDefaultAsync();
 
         var templateExtension = Path.GetExtension(templateAttachment.FileName);
-        var templateFilePath = _attachmentFilePath.GenerateFilePath(templateAttachment.FileName);
-
+        
         var report = new Report
         {
             CreatedByUid = HttpContext.GetCurrentUser()!.Id,
@@ -170,15 +169,10 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
             IsTemplate = false
         };
         dbContext.Reports.Add(report);
-
         await dbContext.SaveChangesAsync();
 
-
         var clientFileName = $"reconmap-{project.Name}-v{report.VersionName}" + templateExtension;
-
         var reportFileName = _attachmentFilePath.GenerateFileName(templateExtension);
-        var reportFilePath = _attachmentFilePath.GenerateFilePath(reportFileName);
-
 
         var replacements = new Dictionary<string, string?>
         {
@@ -211,65 +205,68 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
             })
             .ToArray();
 
-        if (templateExtension == ".docx")
+        var tempFilePath = Path.GetTempFileName();
+        try
         {
-            System.IO.File.Copy(templateFilePath, reportFilePath, true);
-
-            using var document =
-                WordprocessingDocument.Open(reportFilePath, true);
-
-            var body = document.MainDocumentPart!.Document.Body;
-
-            WordTemplateReplacer.ReplaceContentControls(
-                body,
-                replacements);
-            WordTemplateReplacer.PopulateTableAtBookmark(body, "assetsTable", assets);
-            WordTemplateReplacer.PopulateRichTextList(body, "finding", findings);
-
-            document.MainDocumentPart.Document.Save();
-        }
-        else
-        {
-            var templateContent = await System.IO.File.ReadAllTextAsync(templateFilePath);
-
-            var template = Template.Parse(templateContent);
-            if (template.HasErrors)
+            await using (var templateStream = await attachmentStorage.GetFileStreamAsync(templateAttachment.FileName))
             {
-                foreach (var error in template.Messages)
-                    logger.LogWarning("{Message} {Start} {End}", error.Message, error.Span.Start, error.Span.End);
-
-                return BadRequest();
+                await using (var fileStream = System.IO.File.OpenWrite(tempFilePath))
+                {
+                    await templateStream.CopyToAsync(fileStream);
+                }
             }
 
-            var renderedTemplate = await template.RenderAsync(new { project });
-            await System.IO.File.WriteAllTextAsync(reportFilePath, renderedTemplate);
-        }
-
-        var attachment = new Attachment
-        {
-            ParentType = "report",
-            ParentId = report.Id,
-            CreatedByUid = report.CreatedByUid,
-            FileName = reportFileName,
-            FileMimeType = templateAttachment.FileMimeType,
-            ClientFileName = clientFileName
-        };
-
-        using (var md5 = MD5.Create())
-        {
-            await using (var stream2 = System.IO.File.OpenRead(reportFilePath))
+            if (templateExtension == ".docx")
             {
-                var hash = await md5.ComputeHashAsync(stream2);
-                attachment.FileHash = Convert.ToHexStringLower(hash);
+                using (var document = WordprocessingDocument.Open(tempFilePath, true))
+                {
+                    var body = document.MainDocumentPart!.Document.Body;
+                    WordTemplateReplacer.ReplaceContentControls(body, replacements);
+                    WordTemplateReplacer.PopulateTableAtBookmark(body, "assetsTable", assets);
+                    WordTemplateReplacer.PopulateRichTextList(body, "finding", findings);
+                    document.MainDocumentPart.Document.Save();
+                }
             }
+            else
+            {
+                var templateContent = await System.IO.File.ReadAllTextAsync(tempFilePath);
+                var template = Template.Parse(templateContent);
+                if (template.HasErrors)
+                {
+                    foreach (var error in template.Messages)
+                        logger.LogWarning("{Message} {Start} {End}", error.Message, error.Span.Start, error.Span.End);
+                    return BadRequest();
+                }
+                var renderedTemplate = await template.RenderAsync(new { project });
+                await System.IO.File.WriteAllTextAsync(tempFilePath, renderedTemplate);
+            }
+
+            await using (var resultStream = System.IO.File.OpenRead(tempFilePath))
+            {
+                await attachmentStorage.SaveFileAsync(reportFileName, resultStream);
+            }
+
+            var attachment = new Attachment
+            {
+                ParentType = "report",
+                ParentId = report.Id,
+                CreatedByUid = report.CreatedByUid,
+                FileName = reportFileName,
+                FileMimeType = templateAttachment.FileMimeType,
+                ClientFileName = clientFileName,
+                FileSize = (uint)new FileInfo(tempFilePath).Length,
+                FileHash = await attachmentStorage.GetFileHashAsync(reportFileName)
+            };
+
+            dbContext.Attachments.Add(attachment);
+            await dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetMany), new { id = report.Id }, report);
         }
-
-        attachment.FileSize = (uint)new FileInfo(reportFilePath).Length;
-
-        dbContext.Attachments.Add(attachment);
-        await dbContext.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetMany), new { id = report.Id }, report);
+        finally
+        {
+            if (System.IO.File.Exists(tempFilePath)) System.IO.File.Delete(tempFilePath);
+        }
     }
 
     [HttpGet]
@@ -290,10 +287,14 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
 
         var client = await dbContext.Organisations.FindAsync(existing.ClientId);
 
-        var attachmentFilePath = new AttachmentFilePath();
-
-        var fileName = attachmentFilePath.GenerateFilePath("default-report-template.html");
-        var data = await System.IO.File.ReadAllTextAsync(fileName);
+        string data;
+        await using (var templateStream = await attachmentStorage.GetFileStreamAsync("default-report-template.html"))
+        {
+            using (var reader = new StreamReader(templateStream))
+            {
+                data = await reader.ReadToEndAsync();
+            }
+        }
 
         var tpl = Template.Parse(data);
         var res = await tpl.RenderAsync(new { project = existing, client });

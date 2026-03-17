@@ -5,7 +5,7 @@ using api_v2.Domain.Entities;
 
 namespace api_v2.Application.CommandProcessors;
 
-public class NmapProcessor : IProcessor
+public class NmapProcessor(IAttachmentStorage attachmentStorage) : IProcessor
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
 
@@ -18,13 +18,11 @@ public class NmapProcessor : IProcessor
     {
         var result = new ProcessorResult();
 
-        var path = _attachmentFilePath.GenerateFilePath(job.FilePath);
-        if (!File.Exists(path)) return result;
-
+        using var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult();
         XDocument xml;
         try
         {
-            xml = XDocument.Load(path);
+            xml = XDocument.Load(stream);
         }
         catch
         {

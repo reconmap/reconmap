@@ -47,12 +47,8 @@ const SystemHealthPage = () => {
                                 <td>{convertReadyStateToText(wsContextData.connection)}</td>
                             </tr>
                             <tr>
-                                <td>Attachments directory exists</td>
-                                <td>{apiHealth.attachmentsDirectory.exists ? <GreenYes /> : <RedNo />}</td>
-                            </tr>
-                            <tr>
-                                <td>Attachments directory is writeable</td>
-                                <td>{apiHealth.attachmentsDirectory.writeable ? <GreenYes /> : <RedNo />}</td>
+                                <td>Attachments storage is writeable</td>
+                                <td>{apiHealth.attachmentsDirectory ? <GreenYes /> : <RedNo />}</td>
                             </tr>
                         </tbody>
                     </table>

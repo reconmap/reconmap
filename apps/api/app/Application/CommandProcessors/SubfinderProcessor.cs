@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.Json;
 using api_v2.Application.Services;
 using api_v2.Controllers;
@@ -6,7 +7,7 @@ using api_v2.Domain.Entities;
 namespace api_v2.Application.CommandProcessors;
 
 // docker run --rm -ti -v $PWD:/data --workdir /data ghcr.io/testssl/testssl.sh --jsonfile testssl-output.json https://localhost
-public class SubfinderProcessor : IProcessor
+public class SubfinderProcessor(IAttachmentStorage attachmentStorage) : IProcessor
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
 
@@ -19,32 +20,28 @@ public class SubfinderProcessor : IProcessor
     {
         var result = new ProcessorResult();
 
-        var path = _attachmentFilePath.GenerateFilePath(job.FilePath);
-        if (!File.Exists(path)) return result;
-
-        var lines = File.ReadAllLines(path);
-        foreach (var line in lines)
+        using (var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult())
         {
-            /*
-             {
-                {"host":"mail.rmap.org","source":"crtsh"}
-                {"host":"www.rmap.org","source":"crtsh"}
-             }
-            */
-
-            if (string.IsNullOrWhiteSpace(line))
-                continue;
-
-            using var json = JsonDocument.Parse(line);
-            var host = json.RootElement.GetProperty("host").GetString();
-
-            var hostAsset = new Asset
+            using (var reader = new StreamReader(stream))
             {
-                Kind = "hostname",
-                Name = host
-            };
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
 
-            result.AddAsset(hostAsset);
+                    using var json = JsonDocument.Parse(line);
+                    var host = json.RootElement.GetProperty("host").GetString();
+
+                    var hostAsset = new Asset
+                    {
+                        Kind = "hostname",
+                        Name = host
+                    };
+
+                    result.AddAsset(hostAsset);
+                }
+            }
         }
 
         return result;

@@ -26,9 +26,11 @@ public class CommandsController(
     AppDbContext dbContext,
     IConnectionMultiplexer conn,
     IConfiguration config,
-    ILogger<CommandsController> logger)
+    ILogger<CommandsController> logger,
+    IAttachmentStorage attachmentStorage)
     : ControllerBase
 {
+    private readonly AttachmentFilePath _attachmentFilePath = new();
     [HttpPost]
     public async Task<IActionResult> CreateOne([FromBody] Command command)
     {
@@ -110,7 +112,7 @@ public class CommandsController(
     [HttpGet("output-parsers")]
     public IActionResult GetOutputParsers()
     {
-        var result = ProcessorIntegrationDiscovery.Discover()
+        var result = ProcessorIntegrationDiscovery.Discover(HttpContext.RequestServices)
             .Select(i => new
             {
                 name = i.Name,
@@ -138,15 +140,12 @@ public class CommandsController(
         // User Id from request context
         var userId = (int)HttpContext.GetCurrentUser()!.Id;
 
-        var relativePath = config["AttachmentSettings:SavePath"];
-        var pathToSave = Path.Combine(relativePath, "data", "attachments");
-        if (!Directory.Exists(pathToSave))
-            Directory.CreateDirectory(pathToSave);
-
-        var uniqueName = Guid.NewGuid().ToString("N") + Path.GetExtension(resultFile.FileName);
-        var fullPath = Path.Combine(pathToSave, uniqueName);
-        await using FileStream stream = new(fullPath, FileMode.Create);
-        await resultFile.CopyToAsync(stream);
+        var uniqueName = _attachmentFilePath.GenerateFileName(Path.GetExtension(resultFile.FileName));
+        
+        await using (var stream = resultFile.OpenReadStream())
+        {
+            await attachmentStorage.SaveFileAsync(uniqueName, stream);
+        }
 
         var attachment = new Attachment
         {
@@ -154,18 +153,11 @@ public class CommandsController(
             ParentType = "command",
             ParentId = command.Id,
             ClientFileName = resultFile.FileName,
-            FileName = Path.GetFileName(fullPath),
+            FileName = uniqueName,
             FileSize = (uint)resultFile.Length,
-            FileMimeType = resultFile.ContentType
+            FileMimeType = resultFile.ContentType,
+            FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
         };
-        using (var md5 = MD5.Create())
-        {
-            await using (var stream2 = System.IO.File.OpenRead(fullPath))
-            {
-                var hash = await md5.ComputeHashAsync(stream2);
-                attachment.FileHash = Convert.ToHexStringLower(hash);
-            }
-        }
 
         await dbContext.Attachments.AddAsync(attachment);
         await dbContext.SaveChangesAsync();

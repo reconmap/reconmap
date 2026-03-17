@@ -116,3 +116,14 @@ services:
     environment:
       RMAP_KEYCLOAK_DEBUG: false
       RMAP_KEYCLOAK_SKIP_TLS_VERIFY: true
+
+  rustfs:
+    container_name: rmap-rustfs
+    image: rustfs/rustfs:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./data/rustfs:/data
+      - ./data/rustfs-logs:/logs

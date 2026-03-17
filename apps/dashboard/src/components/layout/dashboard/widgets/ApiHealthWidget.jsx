@@ -15,8 +15,8 @@ const ApiHealthWidget = () => {
                         <dt>Response</dt>
                         <dd style={{ color: "green" }}>Ok</dd>
 
-                        <dt>Attachments directory is writeable</dt>
-                        <dd>{apiHealth.attachmentsDirectory.writeable ? <GreenYes /> : <RedNo />}</dd>
+                        <dt>Attachments storage is writeable</dt>
+                        <dd>{apiHealth.attachmentsDirectory ? <GreenYes /> : <RedNo />}</dd>
                     </dl>
                 </>
             )}

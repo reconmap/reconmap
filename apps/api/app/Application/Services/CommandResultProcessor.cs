@@ -32,7 +32,7 @@ public class CommandResultProcessor(
                     }
                 );
                 var commandUsage = await db.CommandUsages.FindAsync(job.CommandUsageId);
-                var processor = ProcessorIntegrationDiscovery.Create(commandUsage.OutputParser);
+                var processor = ProcessorIntegrationDiscovery.Create(scope.ServiceProvider, commandUsage.OutputParser);
                 var result = processor.Process(job);
                 var numHosts = result.assets.Count;
                 if (numHosts > 0)

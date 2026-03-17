@@ -11,7 +11,7 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsController> logger)
+public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsController> logger, IAttachmentStorage attachmentStorage)
     : AppController(dbContext)
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
@@ -37,9 +37,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
         var attachment = await dbContext.Attachments.FindAsync(id);
         if (attachment == null) return NotFound();
 
-        var pathToSave = _attachmentFilePath.GenerateFilePath(attachment.FileName);
-
-        var stream = System.IO.File.OpenRead(pathToSave);
+        var stream = await attachmentStorage.GetFileStreamAsync(attachment.FileName);
 
         Response.Headers.AccessControlExposeHeaders = "Content-Disposition";
 
@@ -60,8 +58,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
         var attachment = await dbContext.Attachments.FindAsync(id);
         if (attachment == null) return NotFound();
 
-        var path = _attachmentFilePath.GenerateFilePath(attachment.FileName);
-        System.IO.File.Delete(path);
+        await attachmentStorage.DeleteFileAsync(attachment.FileName);
 
         dbContext.Attachments.Remove(attachment);
         await dbContext.SaveChangesAsync();
@@ -81,14 +78,12 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
 
         foreach (var file in Request.Form.Files)
         {
-            var pathToSave = _attachmentFilePath.GetDirectory();
-            if (!Directory.Exists(pathToSave))
-                Directory.CreateDirectory(pathToSave);
-
             var uniqueName = _attachmentFilePath.GenerateFileName(Path.GetExtension(file.FileName));
-            var fullPath = Path.Combine(pathToSave, uniqueName);
-            await using FileStream stream = new(fullPath, FileMode.Create);
-            await file.CopyToAsync(stream);
+            
+            await using (var stream = file.OpenReadStream())
+            {
+                await attachmentStorage.SaveFileAsync(uniqueName, stream);
+            }
 
             var attachment = new Attachment
             {
@@ -96,18 +91,11 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
                 ParentType = parentType,
                 ParentId = parentId,
                 ClientFileName = file.FileName,
-                FileName = Path.GetFileName(fullPath),
+                FileName = uniqueName,
                 FileSize = (uint)file.Length,
-                FileMimeType = file.ContentType
+                FileMimeType = file.ContentType,
+                FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
             };
-            using (var md5 = MD5.Create())
-            {
-                await using (var stream2 = System.IO.File.OpenRead(fullPath))
-                {
-                    var hash = await md5.ComputeHashAsync(stream2);
-                    attachment.FileHash = Convert.ToHexStringLower(hash);
-                }
-            }
 
             await dbContext.Attachments.AddAsync(attachment);
         }

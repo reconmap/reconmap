@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.Json;
 using api_v2.Application.Services;
 using api_v2.Controllers;
@@ -5,7 +6,7 @@ using api_v2.Domain.Entities;
 
 namespace api_v2.Application.CommandProcessors;
 
-public class ShcheckProcessor : IProcessor
+public class ShcheckProcessor(IAttachmentStorage attachmentStorage) : IProcessor
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
 
@@ -18,10 +19,14 @@ public class ShcheckProcessor : IProcessor
     {
         var result = new ProcessorResult();
 
-        var path = _attachmentFilePath.GenerateFilePath(job.FilePath);
-        if (!File.Exists(path)) return result;
-
-        var json = File.ReadAllText(path);
+        string json;
+        using (var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult())
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                json = reader.ReadToEnd();
+            }
+        }
 
         // Deserialise into a nested dictionary:
         // { url -> { "present" -> {...}, "missing" -> [...] } }

@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.Json;
 using api_v2.Application.Services;
 using api_v2.Controllers;
@@ -6,7 +7,7 @@ using api_v2.Domain.Entities;
 namespace api_v2.Application.CommandProcessors;
 
 // docker run --rm -ti -v $PWD:/data --workdir /data ghcr.io/testssl/testssl.sh --jsonfile testssl-output.json https://localhost
-public class TestsslProcessor : IProcessor
+public class TestsslProcessor(IAttachmentStorage attachmentStorage) : IProcessor
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
 
@@ -19,19 +20,23 @@ public class TestsslProcessor : IProcessor
     {
         var result = new ProcessorResult();
 
-        var path = _attachmentFilePath.GenerateFilePath(job.FilePath);
-        if (!File.Exists(path)) return result;
-
-        var fileContent = File.ReadAllText(path);
+        string fileContent;
+        using (var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult())
+        {
+            using (var reader = new StreamReader(stream))
+            {
+                fileContent = reader.ReadToEnd();
+            }
+        }
 
         JsonElement json;
         try
         {
             json = JsonSerializer.Deserialize<JsonElement>(fileContent);
         }
-        catch (JsonException)
+        catch (JsonException e)
         {
-            throw new Exception("Invalid JSON: " + path);
+            throw new Exception("Invalid JSON: " + e.GetBaseException().Message);
         }
 
         foreach (var rawVulnerability in json.EnumerateArray())

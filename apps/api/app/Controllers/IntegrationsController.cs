@@ -10,7 +10,7 @@ public class IntegrationsController : ControllerBase
     [HttpGet]
     public IActionResult GetMany()
     {
-        var result = ProcessorIntegrationDiscovery.Discover()
+        var result = ProcessorIntegrationDiscovery.Discover(HttpContext.RequestServices)
             .Select(i => new
             {
                 name = i.Name,

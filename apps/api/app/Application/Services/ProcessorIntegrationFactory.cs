@@ -6,14 +6,14 @@ public static class ProcessorIntegrationDiscovery
 {
     private static readonly Lazy<IReadOnlyDictionary<string, Type>> ProcessorMap = new(BuildProcessorMap, true);
 
-    public static IEnumerable<IProcessor> Discover()
+    public static IEnumerable<IProcessor> Discover(IServiceProvider sp)
     {
         return ProcessorMap.Value.Values
             .Distinct()
-            .Select(t => (IProcessor)Activator.CreateInstance(t)!);
+            .Select(t => (IProcessor)sp.GetRequiredService(t));
     }
 
-    public static IProcessor Create(string name)
+    public static IProcessor Create(IServiceProvider sp, string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Processor name must be provided.", nameof(name));
@@ -21,7 +21,7 @@ public static class ProcessorIntegrationDiscovery
         if (!ProcessorMap.Value.TryGetValue(name, out var type))
             throw new InvalidOperationException($"No processor found with name '{name}'.");
 
-        return (IProcessor)Activator.CreateInstance(type)!;
+        return (IProcessor)sp.GetRequiredService(type);
     }
 
     private static IReadOnlyDictionary<string, Type> BuildProcessorMap()

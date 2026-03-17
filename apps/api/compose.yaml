@@ -1,6 +1,9 @@
 volumes:
   redis_data:
   mysql_varlib:
+  rustfs_data:
+  rustfs_logs:
+
 
 services:
   redis:
@@ -54,3 +57,20 @@ services:
         condition: service_healthy
     profiles:
       - testing
+
+  rustfs:
+    container_name: rmap-rustfs
+    image: rustfs/rustfs:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - RUSTFS_ACCESS_KEY=rustfsadmin
+      - RUSTFS_SECRET_KEY=rustfsadmin
+      - RUSTFS_ADDRESS=0.0.0.0:9000
+      - RUSTFS_CONSOLE_ENABLE=true
+      - RUSTFS_CONSOLE_ADDRESS=0.0.0.0:9001
+    volumes:
+      - rustfs_data:/data
+      - rustfs_logs:/logs

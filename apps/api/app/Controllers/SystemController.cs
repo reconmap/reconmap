@@ -52,7 +52,8 @@ public class SystemController(
     AppDbContext db,
     IConnectionMultiplexer redis,
     ILogger<SystemController> logger,
-    SystemUsageService service)
+    SystemUsageService service,
+    IAttachmentStorage attachmentStorage)
     : ControllerBase
 {
     [HttpGet("custom-fields")]
@@ -95,9 +96,8 @@ public class SystemController(
     [HttpGet("health")]
     public async Task<IActionResult> GetStatus()
     {
-        var attachmentsPath = new AttachmentFilePath();
         // Check writing to attachments directory
-        var attachmentsWritable = CheckDirectoryWritable(attachmentsPath.GetDirectory());
+        var attachmentsWritable = await CheckStorageWritableAsync();
 
         // Check MySQL connection (Pomelo)
         var dbReachable = await CheckDatabaseAsync();
@@ -124,18 +124,22 @@ public class SystemController(
         return Ok(result);
     }
 
-    private bool CheckDirectoryWritable(string path)
+    private async Task<bool> CheckStorageWritableAsync()
     {
         try
         {
-            var testFile = Path.Combine(path, $"test_{Guid.NewGuid()}.tmp");
-            System.IO.File.WriteAllText(testFile, "test");
-            System.IO.File.Delete(testFile);
+            var fileName = $"test_{Guid.NewGuid()}.tmp";
+            using (var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes("test")))
+            {
+                await attachmentStorage.SaveFileAsync(fileName, stream);
+            }
+
+            await attachmentStorage.DeleteFileAsync(fileName);
             return true;
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Directory write check failed.");
+            logger.LogWarning(ex, "Storage write check failed.");
             return false;
         }
     }
