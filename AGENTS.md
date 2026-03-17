@@ -49,3 +49,20 @@ This is the main orchestration repository. It contains:
 - Follow Go idiomatic patterns in `cli/`.
 - Maintain semantic versioning in `CHANGELOG.md`.
 - Ensure all new features are documented in `docs/`.
+
+## Mandatory Feature Completion Gate
+
+For every new feature (across `apps/`, `cli/`, `docs/`, or infra-related code), AI agents must complete all of the following before considering the task done:
+
+1. **Run tests**
+   - Execute the relevant test suite(s) for the components touched.
+   - If no tests exist, add or update tests where appropriate and then run them.
+   - Report test results clearly in the final response.
+2. **Update documentation**
+   - Update user-facing and/or developer-facing docs under `docs/` (and component `README.md` files when relevant).
+   - Ensure behavior changes, new configuration, and usage examples are documented.
+3. **Update `CHANGELOG.md`**
+   - Add an entry for every user-visible feature addition.
+   - Keep changelog entries aligned with semantic versioning expectations.
+
+Do not mark a feature implementation as complete until all three items above are addressed (or explicitly blocked with a clear reason).

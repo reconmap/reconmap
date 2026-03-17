@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade to MySQL 9.6
 - Disable MySQL performance schema by default
 - Simplify and optimise docker images
+- Replace `pocoglot` with an OpenAPI Generator pipeline based on `data/model-definitions/definitions/*.yaml` for Golang and Typescript artifacts.
 - Move CLI code from own repository to the main one.
 - Move Web client code to `apps/dashboard` and rename to Dashboard.
 - Rewrote API in C# (.NET 10) and moved to `apps/api`.

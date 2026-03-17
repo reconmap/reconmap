@@ -1,10 +1,27 @@
-name: Notification
-props:
-  - name: toUserId
+type: object
+properties:
+  id:
     type: integer
-  - name: title
+    nullable: true
+  created_at:
+    type: string
+  updated_at:
     type: string
     nullable: true
-  - name: content
+  to_user_id:
+    type: integer
+  title:
     type: string
-
+    nullable: true
+  content:
+    type: string
+  status:
+    type: string
+    enum:
+    - unread
+    - read
+    default: unread
+required:
+- created_at
+- to_user_id
+- content

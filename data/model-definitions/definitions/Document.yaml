@@ -1,21 +1,37 @@
-name: Document
-props:
-  - name: user_id
+type: object
+properties:
+  id:
     type: integer
     nullable: true
-  - name: visibility
+  created_at:
     type: string
-    default: "'private'"
-  - name: parent_id
+  updated_at:
+    type: string
+    nullable: true
+  created_by_uid:
+    type: integer
+  parent_type:
+    type: string
+    enum:
+    - library
+    - project
+    - vulnerability
+  parent_id:
     type: integer
     nullable: true
-  - name: parent_type
+  visibility:
+    type: string
+    enum:
+    - private
+    - public
+    default: private
+  title:
     type: string
     nullable: true
-  - name: content
+  content:
     type: string
-    nullable: true
-  - name: title
-    type: string
-    nullable: true
-
+required:
+- created_at
+- created_by_uid
+- parent_type
+- content

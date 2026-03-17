@@ -1,0 +1,49 @@
+{{#models}}
+{{#model}}
+{{#tsImports}}
+import { {{classname}} } from '{{filename}}{{importFileExtension}}';
+{{/tsImports}}
+
+{{#description}}
+/**
+ * {{{.}}}
+ */
+{{/description}}
+{{^isEnum}}
+export class {{classname}} {{#parent}}extends {{{.}}} {{/parent}}{
+{{#vars}}
+{{#description}}
+    /**
+     * {{{.}}}
+     */
+{{/description}}
+    '{{name}}'{{^required}}?{{/required}}: {{#isEnum}}{{classname}}{{enumName}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}{{#isNullable}} | null{{/isNullable}};
+{{/vars}}
+}
+{{#hasEnums}}
+
+{{#vars}}
+{{#isEnum}}
+export enum {{classname}}{{enumName}} {
+{{#allowableValues}}
+{{#enumVars}}
+    {{name}} = {{{value}}}{{^-last}},{{/-last}}
+{{/enumVars}}
+{{/allowableValues}}
+}
+{{/isEnum}}
+{{/vars}}
+{{/hasEnums}}
+{{/isEnum}}
+{{#isEnum}}
+export enum {{classname}} {
+{{#allowableValues}}
+{{#enumVars}}
+    {{name}} = {{{value}}}{{^-last}},{{/-last}}
+{{/enumVars}}
+{{/allowableValues}}
+}
+{{/isEnum}}
+
+{{/model}}
+{{/models}}

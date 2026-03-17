@@ -3,45 +3,43 @@ properties:
   id:
     type: integer
     nullable: true
-  created_at:
-    type: string
-  updated_at:
-    type: string
-    nullable: true
-  owner_uid:
-    type: integer
-  project_id:
-    type: integer
-    nullable: true
-  type:
-    type: string
-    enum:
-    - password
-    - note
-    - token
-    - key
   name:
     type: string
-  value:
+  client_id:
     type: string
-  url:
-    type: string
-    nullable: true
-  expiration_date:
+  last_boot_at:
     type: string
     nullable: true
-  iv:
+  last_ping_at:
     type: string
-  tag:
+    nullable: true
+  active:
+    type: boolean
+    default: false
+  version:
     type: string
-  note:
+    nullable: true
+  hostname:
+    type: string
+    nullable: true
+  arch:
+    type: string
+    nullable: true
+  cpu:
+    type: string
+    nullable: true
+  memory:
+    type: string
+    nullable: true
+  os:
+    type: string
+    nullable: true
+  ip:
+    type: string
+    nullable: true
+  listen_addr:
     type: string
     nullable: true
 required:
-- created_at
-- owner_uid
-- type
 - name
-- value
-- iv
-- tag
+- client_id

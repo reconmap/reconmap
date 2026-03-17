@@ -3,19 +3,10 @@ properties:
   id:
     type: integer
     nullable: true
-  created_at:
-    type: string
-  updated_at:
-    type: string
-    nullable: true
-  parent_id:
-    type: integer
-    nullable: true
   name:
     type: string
   description:
     type: string
     nullable: true
 required:
-- created_at
 - name

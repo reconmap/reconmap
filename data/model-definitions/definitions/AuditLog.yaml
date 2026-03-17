@@ -3,22 +3,24 @@ properties:
   id:
     type: integer
     nullable: true
-  created_by_uid:
-    type: integer
   created_at:
     type: string
-  updated_at:
-    type: string
-    nullable: true
-  command_id:
+  created_by_uid:
     type: integer
     nullable: true
-  argument_values:
+  user_agent:
     type: string
     nullable: true
-  cron_expression:
+  client_ip:
     type: string
+  action:
+    type: string
+  object:
+    type: string
+  context:
+    nullable: true
 required:
-- created_by_uid
 - created_at
-- cron_expression
+- client_ip
+- action
+- object

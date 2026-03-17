@@ -1,27 +1,28 @@
-name: Contact
-props:
-  - name: id
+type: object
+properties:
+  id:
     type: integer
     nullable: true
-    default: null
-  - name: kind
+  organisation_id:
+    type: integer
+  kind:
     type: string
-    default: "'general'"
-    comment:  general, technical, billing
-  - name: name
+    enum:
+    - general
+    - technical
+    - billing
+    default: general
+  name:
     type: string
-    nullable: true
-    default: null
-  - name: email
+  email:
     type: string
-    nullable: true
-    default: null
-  - name: phone
-    type: string
-    nullable: true
-    default: null
-  - name: role
+  phone:
     type: string
     nullable: true
-    default: null
-
+  role:
+    type: string
+    nullable: true
+required:
+- organisation_id
+- name
+- email

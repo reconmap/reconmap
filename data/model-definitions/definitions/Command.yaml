@@ -1,21 +1,26 @@
-name: Command
-props:
-  - name: id
+type: object
+properties:
+  id:
     type: integer
     nullable: true
-  - name: creator_uid
+  created_by_uid:
     type: integer
-    nullable: true
-  - name: name
+  created_at:
+    type: string
+  updated_at:
     type: string
     nullable: true
-  - name: description
+  name:
+    type: string
+  description:
     type: string
     nullable: true
-  - name: more_info_url
+  more_info_url:
     type: string
     nullable: true
-  - name: tags
-    type: string
+  tags:
     nullable: true
-
+required:
+- created_by_uid
+- created_at
+- name

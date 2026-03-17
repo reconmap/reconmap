@@ -1,51 +1,49 @@
-name: Task
-props:
-  - name: id
+type: object
+properties:
+  id:
     type: integer
     nullable: true
-  - name: project_id
+  project_id:
+    type: integer
+  created_by_uid:
+    type: integer
+  assigned_to_uid:
     type: integer
     nullable: true
-  - name: creator_uid
+  created_at:
+    type: string
+  updated_at:
+    type: string
+    nullable: true
+  priority:
+    type: string
+    enum:
+    - highest
+    - high
+    - medium
+    - low
+    - lowest
+  summary:
+    type: string
+  description:
+    type: string
+    nullable: true
+  status:
+    type: string
+    enum:
+    - todo
+    - doing
+    - done
+    default: todo
+  duration_estimate:
     type: integer
     nullable: true
-  - name: assignee_uid
-    type: integer
-    nullable: true
-  - name: insert_ts
+  due_date:
     type: string
     nullable: true
-  - name: update_ts
-    type: string
-    nullable: true
-  - name: priority
-    type: string
-    default: "'medium'"
-  - name: summary
-    type: string
-    default: "''"
-  - name: description
-    default: "''"
-    type: string
-    nullable: true
-  - name: status
-    type: string
-    default: "'todo'"
-  - name: duration_estimate
-    type: integer
-    nullable: true
-    default: null
-  - name: due_date
-    type: string
-    nullable: true
-    default: null
-  - name: command_id
-    type: integer
-    nullable: true
-  - name: command
-    type: string
-    nullable: true
-  - name: command_parser
-    type: string
-    nullable: true
-
+required:
+- project_id
+- created_by_uid
+- created_at
+- priority
+- summary

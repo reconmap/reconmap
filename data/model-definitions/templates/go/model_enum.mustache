@@ -1,0 +1,10 @@
+// {{classname}} defines the allowed string values for {{classname}}.
+type {{classname}} {{^format}}{{dataType}}{{/format}}{{#format}}{{format}}{{/format}}
+
+const (
+{{#allowableValues}}
+{{#enumVars}}
+	{{{classname}}}{{name}} {{classname}} = {{{value}}}
+{{/enumVars}}
+{{/allowableValues}}
+)

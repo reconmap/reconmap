@@ -3,22 +3,25 @@ properties:
   id:
     type: integer
     nullable: true
-  created_by_uid:
-    type: integer
   created_at:
     type: string
   updated_at:
     type: string
     nullable: true
-  command_id:
-    type: integer
-    nullable: true
-  argument_values:
+  name:
+    type: string
+  url:
+    type: string
+  secret:
     type: string
     nullable: true
-  cron_expression:
+  is_enabled:
+    type: boolean
+    default: true
+  events:
     type: string
 required:
-- created_by_uid
 - created_at
-- cron_expression
+- name
+- url
+- events

@@ -1,0 +1,15 @@
+type: object
+properties:
+  id:
+    type: integer
+    nullable: true
+  created_at:
+    type: string
+  project_id:
+    type: integer
+  user_id:
+    type: integer
+required:
+- created_at
+- project_id
+- user_id

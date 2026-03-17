@@ -1,0 +1,30 @@
+// {{classname}} {{#description}}{{{.}}}{{/description}}{{^description}}contains the model fields for {{classname}}{{/description}}
+type {{classname}} struct {
+{{#vars}}
+{{#description}}
+	// {{{.}}}
+{{/description}}
+	{{name}} {{^required}}{{^isArray}}{{^isFreeFormObject}}*{{/isFreeFormObject}}{{/isArray}}{{/required}}{{#required}}{{#isNullable}}{{^isArray}}{{^isFreeFormObject}}*{{/isFreeFormObject}}{{/isArray}}{{/isNullable}}{{/required}}{{#isEnum}}{{classname}}{{enumName}}{{/isEnum}}{{^isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{{vendorExtensions.x-go-datatag}}}
+{{/vars}}
+{{#isAdditionalPropertiesTrue}}
+	AdditionalProperties map[string]interface{}
+{{/isAdditionalPropertiesTrue}}
+}
+
+{{#hasEnums}}
+{{#vars}}
+{{#isEnum}}
+
+// {{classname}}{{enumName}} defines the allowed values for {{name}}.
+type {{classname}}{{enumName}} string
+
+const (
+{{#allowableValues}}
+{{#enumVars}}
+	{{classname}}{{enumName}}{{name}} {{classname}}{{enumName}} = {{{value}}}
+{{/enumVars}}
+{{/allowableValues}}
+)
+{{/isEnum}}
+{{/vars}}
+{{/hasEnums}}
