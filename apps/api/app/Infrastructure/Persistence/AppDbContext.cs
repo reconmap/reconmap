@@ -41,6 +41,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Note> Notes { get; set; }
     public DbSet<Webhook> Webhooks { get; set; }
 
+    public DbSet<UserApiToken> UserApiTokens { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
@@ -68,9 +70,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 v => v.ToString().ToLower(), // C# enum → DB string
                 v => Enum.Parse<DocumentParentType>(v, ignoreCase: true)
             );
+
+        modelBuilder.Entity<UserApiToken>()
+            .Property(t => t.Scope)
+            .HasConversion(
+                v => v.ToString().ToLower().Replace("_", "-"),
+                v => Enum.Parse<ApiTokenScope>(v.Replace("-", "_"), ignoreCase: true)
+            );
     }
 
-    public async Task UpdateLastLoginAsync(uint userId)
+    public async Task UpdateLastLoginTs(uint userId)
     {
         await Users
             .Where(u => u.Id == userId)

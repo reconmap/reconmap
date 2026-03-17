@@ -13,7 +13,7 @@ public class KeycloakOptions
 
 public static class AuthenticationExtensions
 {
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddReconmapAuthentication(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<KeycloakOptions>(
             config.GetSection("Keycloak"));
@@ -37,7 +37,8 @@ public static class AuthenticationExtensions
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = false
                 };
-            });
+            })
+            .AddScheme<ApiTokenOptions, ApiTokenHandler>("ApiToken", _ => { });
 
         return services;
     }

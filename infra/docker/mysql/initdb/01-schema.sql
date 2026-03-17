@@ -559,5 +559,22 @@ CREATE TABLE agent
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS user_api_token;
+
+CREATE TABLE user_api_token
+(
+    id          INT UNSIGNED               NOT NULL AUTO_INCREMENT,
+    user_id     INT UNSIGNED               NOT NULL,
+    created_at  TIMESTAMP                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at  TIMESTAMP                  NOT NULL,
+    name        VARCHAR(100)               NOT NULL,
+    token       VARCHAR(128)               NOT NULL,
+    scope       ENUM ('full', 'read-only') NOT NULL DEFAULT 'full',
+
+    PRIMARY KEY (id),
+    UNIQUE KEY (token),
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 SET
     FOREIGN_KEY_CHECKS = 1;

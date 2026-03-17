@@ -28,7 +28,7 @@ public class SessionsController(AppDbContext dbContext, IConnectionMultiplexer r
 
         Response.Cookies.Append("reconmap-static", staticToken, cookieOptions);
 
-        await dbContext.UpdateLastLoginAsync(user.Id);
+        await dbContext.UpdateLastLoginTs(user.Id);
 
         AuditAction(UserAuditActions.LoggedIn, "User");
 

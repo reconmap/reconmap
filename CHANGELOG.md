@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- API token authentication feature for programmatic access without JWT.
+- Support for "Full" and "Read-only" token scopes.
+- Management UI for API tokens in System settings.
 - Ability to add and remove Reconmap agents from the Dashboard
 
 ### Changed

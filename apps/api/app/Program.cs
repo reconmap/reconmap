@@ -8,11 +8,7 @@ using api_v2.Infrastructure.Http;
 using api_v2.Infrastructure.Persistence;
 using api_v2.Infrastructure.Redis;
 using api_v2.Infrastructure.WebSockets;
-using api_v2.Application.Services;
-using api_v2.Common;
-using api_v2.Extensions;
 using Amazon.S3;
-using Amazon.S3.Util;
 using api_v2.Application.CommandProcessors;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -72,7 +68,7 @@ services.AddScoped<IAiService, AiService>();
 services.AddRedisServices(builder.Configuration);
 services.AddHostedService<CommandResultProcessor>();
 services.AddHostedService<WebhookProcessor>();
-services.AddJwtAuthentication(builder.Configuration);
+services.AddReconmapAuthentication(builder.Configuration);
 services.AddDatabase(builder.Configuration);
 services.AddSwaggerDocumentation();
 services.AddCorsPolicies(builder.Configuration);
@@ -95,6 +91,7 @@ services.AddControllers()
 
 services.AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes("ApiToken", "Bearer")
         .RequireAuthenticatedUser()
         .RequireRole("administrator")
         .Build())
@@ -121,6 +118,7 @@ else
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ReadOnlyScopeMiddleware>();
 app.UseMiddleware<DbUserResolverMiddleware>();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseCustomWebSockets();

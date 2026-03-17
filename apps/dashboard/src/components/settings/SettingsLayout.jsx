@@ -37,6 +37,11 @@ const SettingsLayout = ({ children }) => {
             name: "Import data",
             url: "/system/import-data",
         },
+        {
+            type: "menu",
+            name: "API tokens",
+            url: "/system/api-tokens",
+        },
     ];
 
     return (
