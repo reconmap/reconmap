@@ -20,5 +20,7 @@ LABEL org.opencontainers.image.vendor="Netfoe" \
     org.opencontainers.image.documentation="https://github.com/reconmap/documentation"
 
 WORKDIR /app
+RUN mkdir -p /seed/attachments
+COPY data/attachments /seeds/attachments
 COPY --from=build /build/publish .
 ENTRYPOINT ["/app/ReconmapNg"]

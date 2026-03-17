@@ -4,7 +4,6 @@ volumes:
   rustfs_data:
   rustfs_logs:
 
-
 services:
   redis:
     container_name: rmap-redis

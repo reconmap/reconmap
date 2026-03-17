@@ -8,6 +8,7 @@ services:
     volumes:
       - "./appsettings.Production.json:/App/appsettings.Production.json"
       - "./appsettings.json:/App/appsettings.json"
+      - "./data/attachments:/seed/attachments:ro"
       - dataprotection-keys:/root/.aspnet/DataProtection-Keys
     ports:
       - "5510:5510"

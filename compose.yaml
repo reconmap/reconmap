@@ -92,7 +92,7 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - "./config-ngapi.json:/app/appsettings.json"
-      - "./data:/data/"
+      - "./data/attachments:/seed/attachments:ro"
       - dataprotection-keys:/root/.aspnet/DataProtection-Keys
     ports:
       - "5510:5510"
@@ -102,6 +102,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      rustfs:
+        condition: service_started
 
   agent:
     profiles: [ 'agent' ]

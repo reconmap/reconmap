@@ -15,6 +15,36 @@ public class S3AttachmentStorage : IAttachmentStorage
     {
         _s3Client = s3Client;
         _storageSettings = storageSettings.Value;
+
+        // Ensure bucket exists on startup
+        EnsureBucketExistsAsync().GetAwaiter().GetResult();
+    }
+
+    private async Task EnsureBucketExistsAsync()
+    {
+        var bucketName = _storageSettings.S3.BucketName;
+        if (!await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName))
+        {
+            await _s3Client.PutBucketAsync(bucketName);
+
+            // Seed from local directory if present
+            var seedPaths = new[] { "/seed/attachments", "../data/attachments", "data/attachments", "../../data/attachments" };
+            foreach (var seedPath in seedPaths)
+            {
+                if (Directory.Exists(seedPath))
+                {
+                    foreach (var file in Directory.GetFiles(seedPath))
+                    {
+                        var fileName = Path.GetFileName(file);
+                        if (fileName.StartsWith('.')) continue;
+
+                        await using var stream = File.OpenRead(file);
+                        await SaveFileAsync(fileName, stream);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     public async Task<Stream> GetFileStreamAsync(string fileName)
