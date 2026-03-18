@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#docker-compose-and-swarm" class="md-skip">
+        <a href="#docker-compose" class="md-skip">
           Skip to content
         </a>
       
@@ -594,10 +594,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#docker-compose-and-swarm" class="md-nav__link">
+  <a href="#docker-compose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Docker compose and swarm
+        Docker Compose
       
     </span>
   </a>
@@ -616,10 +616,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#manually" class="md-nav__link">
+  <a href="#manual-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Manually
+        Manual installation
       
     </span>
   </a>
@@ -2567,10 +2567,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#docker-compose-and-swarm" class="md-nav__link">
+  <a href="#docker-compose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Docker compose and swarm
+        Docker Compose
       
     </span>
   </a>
@@ -2589,10 +2589,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#manually" class="md-nav__link">
+  <a href="#manual-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Manually
+        Manual installation
       
     </span>
   </a>
@@ -2637,17 +2637,61 @@
 
   <h1>Deployment options</h1>
 
-<p>Reconmap is made of many microservices and clients, and its deployment can be done in many different ways.</p>
-<h3 id="docker-compose-and-swarm">Docker compose and swarm</h3>
-<p>This is a great option if you don't want to install dependencies manually, and are familiar with Docker containers.</p>
+<p>Reconmap is composed of several microservices and client applications — including a REST API, a React dashboard, an agent, and supporting infrastructure such as MySQL, Redis, and Keycloak. Because of this architecture, there are multiple ways to deploy the platform depending on your team size, technical expertise, and infrastructure preferences.</p>
+<p>The sections below describe each deployment option, along with its trade-offs, to help you choose the best fit for your environment.</p>
+<hr />
+<h3 id="docker-compose">Docker Compose</h3>
+<p><strong>Best for:</strong> Local development, small teams, and quick evaluations.</p>
+<p>Docker Compose is the recommended starting point for most users. It bundles all required services into a single configuration file (<code>compose.yaml</code>) and brings everything up with one command, so there is no need to install .NET, MySQL, or any other dependency directly on your host.</p>
+<p><strong>Getting started:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+</span></code></pre></div>
+<p>Once all containers are healthy, the dashboard will be available on port <code>5500</code> and the API on port <code>3000</code> by default.</p>
+<p><strong>Considerations:</strong></p>
+<ul>
+<li>Requires Docker and Docker Compose installed on the host.</li>
+<li>Not designed for high-availability or horizontal scaling out of the box.</li>
+<li>Docker Swarm can be used to extend this setup with basic multi-node orchestration if needed.</li>
+</ul>
+<hr />
 <h3 id="kubernetes">Kubernetes</h3>
-<p>Ideal if you want to scale Reconmap to large teams or to public communities accessible by anyone on the internet.</p>
-<p>More information on how to deploy Reconmap to K8s can be found on this <a href="https://github.com/reconmap/k8s-deployment">Github repository</a>.</p>
-<h3 id="manually">Manually</h3>
-<p>Manually refers to the option of installing all dependencies (eg .NET, MySQL, Nginx, ...) and the application on an operating system and server of your choice.</p>
-<p>This option gives you complete flexibility but also adds a lot of maintenance overhead.</p>
+<p><strong>Best for:</strong> Production deployments, large teams, and publicly accessible instances.</p>
+<p>Kubernetes provides the scalability and resilience needed for running Reconmap in production. Helm charts and raw Kubernetes resource manifests are provided in the <code>infra/k8s/</code> directory of this repository.</p>
+<p>This option is ideal when you need:</p>
+<ul>
+<li>Horizontal scaling of individual services.</li>
+<li>Rolling updates with zero downtime.</li>
+<li>Integration with cloud-native tooling (ingress controllers, secrets managers, monitoring stacks, etc.).</li>
+</ul>
+<p>More information on how to deploy Reconmap to Kubernetes, including Helm chart values and configuration examples, can be found in the <a href="https://github.com/reconmap/reconmap/tree/main/infra/k8s">infra/k8s directory on GitHub</a>.</p>
+<p><strong>Considerations:</strong></p>
+<ul>
+<li>Requires a working Kubernetes cluster (self-hosted or cloud-managed).</li>
+<li>More operational complexity compared to Docker Compose.</li>
+<li>Recommended for teams already familiar with Kubernetes or running other workloads on a cluster.</li>
+</ul>
+<hr />
+<h3 id="manual-installation">Manual installation</h3>
+<p><strong>Best for:</strong> Advanced users who need full control over the runtime environment.</p>
+<p>A manual installation means setting up each component — the .NET runtime, MySQL, Redis, Keycloak, Nginx, and the Reconmap services themselves — directly on an operating system of your choice. This approach is framework-agnostic and works on any Linux server or VM.</p>
+<p><strong>High-level steps:</strong></p>
+<ol>
+<li>Install runtime dependencies (.NET 10, MySQL 8, Redis, Keycloak).</li>
+<li>Configure Nginx (or another reverse proxy) to route traffic to the API and dashboard.</li>
+<li>Clone the repository and build the API and dashboard.</li>
+<li>Apply the database migrations and seed data from <code>data/</code>.</li>
+<li>Configure each component using the provided <code>config-*.json</code> template files.</li>
+</ol>
+<p><strong>Considerations:</strong></p>
+<ul>
+<li>Provides maximum flexibility in how services are configured and deployed.</li>
+<li>All dependency management, upgrades, and security patching are your responsibility.</li>
+<li>Not recommended unless you have a specific reason to avoid containerisation.</li>
+</ul>
+<hr />
 <h3 id="saas">SaaS</h3>
-<p>If you prefer to use a Software-as-a-Service solution, <a href="https://reconmap.com">Reconmap.com</a> is the place for you. Hosted Reconmap from the lead developers of the project.</p>
+<p><strong>Best for:</strong> Teams that want a fully managed Reconmap experience with no infrastructure to maintain.</p>
+<p>If you would rather focus on pentesting than on platform operations, <a href="https://netfoe.com">Netfoe</a> offers a hosted Reconmap service maintained by the lead developers of the project. Updates, backups, and infrastructure management are all handled for you.</p>
 
 
 
@@ -2668,7 +2712,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 12, 2026 21:45:58 UTC">March 12, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 18, 2026 23:56:33 UTC">March 18, 2026</span>
   </span>
 
     
