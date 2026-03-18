@@ -1,6 +1,7 @@
 using System.Text.Json;
 using api_v2.Common;
 using api_v2.Common.Extensions;
+using api_v2.Common.Messaging;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
@@ -15,6 +16,7 @@ namespace api_v2.Controllers;
 public class VulnerabilitiesController(
     AppDbContext dbContext,
     ILogger<VulnerabilitiesController> logger,
+    IMessageQueue messageQueue,
     IConnectionMultiplexer redisConnections)
     : AppController(dbContext)
 {
@@ -26,6 +28,11 @@ public class VulnerabilitiesController(
 
         AuditAction(AuditActions.Created, "Vulnerability", new { id = vulnerability.Id });
         await dbContext.SaveChangesAsync();
+
+        await messageQueue.PublishAsync("findings",
+            new { @event = "finding.created", payload = vulnerability });
+        await messageQueue.PublishAsync("webhooks",
+            new { @event = "finding.created", payload = vulnerability });
 
         return CreatedAtAction(nameof(GetOne), new { id = vulnerability.Id }, vulnerability);
     }
@@ -132,9 +139,7 @@ public class VulnerabilitiesController(
         dbContext.Notifications.Add(notification);
         await dbContext.SaveChangesAsync();
 
-        var redis = redisConnections.GetDatabase();
-        await redis.ListLeftPushAsync("notifications:queue",
-            JsonSerializer.Serialize(new { type = "message" }));
+        await messageQueue.PublishAsync("notifications", new { type = "message" });
 
         return Ok();
     }

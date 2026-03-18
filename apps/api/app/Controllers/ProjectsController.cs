@@ -1,6 +1,6 @@
 using System.Text.Json;
 using api_v2.Common;
-using api_v2.Common.Extensions;
+using api_v2.Common.Messaging;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
@@ -12,7 +12,7 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProjectsController(AppDbContext dbContext, IConnectionMultiplexer redis) : ControllerBase
+public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQueue, IConnectionMultiplexer redis) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateOne([FromBody] Project project)
@@ -28,12 +28,12 @@ public class ProjectsController(AppDbContext dbContext, IConnectionMultiplexer r
         dbContext.ProjectMembers.Add(projectUser);
         await dbContext.SaveChangesAsync();
 
-        var redisDb = redis.GetDatabase();
-        await redisDb.ListLeftPushAsync("webhooks:queue",
-            JsonSerializer.Serialize(new { @event = "project.created", payload = project }));
+        await messageQueue.PublishAsync("webhooks",
+            new { @event = "project.created", payload = project });
 
         return CreatedAtAction(nameof(GetOne), new { id = project.Id }, project);
     }
+
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateOne(uint id, Project project)

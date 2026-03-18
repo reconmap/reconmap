@@ -27,8 +27,6 @@ public static class RedisExtensions
             return ConnectionMultiplexer.Connect(options);
         });
 
-        services.AddHostedService<RedisQueueListener>();
-
         return services;
     }
 }

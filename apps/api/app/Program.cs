@@ -7,6 +7,7 @@ using api_v2.Infrastructure.Authentication;
 using api_v2.Infrastructure.Http;
 using api_v2.Infrastructure.Persistence;
 using api_v2.Infrastructure.Redis;
+using api_v2.Infrastructure.Messaging;
 using api_v2.Infrastructure.WebSockets;
 using Amazon.S3;
 using api_v2.Application.CommandProcessors;
@@ -66,8 +67,11 @@ services.Configure<AiOptions>(
 services.AddScoped<IAiService, AiService>();
 
 services.AddRedisServices(builder.Configuration);
+services.AddRabbitMQServices(builder.Configuration);
 services.AddHostedService<CommandResultProcessor>();
 services.AddHostedService<WebhookProcessor>();
+services.AddHostedService<NotificationQueueListener>();
+services.AddHostedService<JiraProcessor>();
 services.AddReconmapAuthentication(builder.Configuration);
 services.AddDatabase(builder.Configuration);
 services.AddSwaggerDocumentation();

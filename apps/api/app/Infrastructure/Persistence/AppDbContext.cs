@@ -40,6 +40,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public DbSet<Note> Notes { get; set; }
     public DbSet<Webhook> Webhooks { get; set; }
+    public DbSet<JiraIntegration> JiraIntegrations { get; set; }
 
     public DbSet<UserApiToken> UserApiTokens { get; set; }
 

@@ -1,4 +1,5 @@
 using api_v2.Application.Services;
+using api_v2.Common.Messaging;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,7 @@ public static class ExportablesRegistry
 public class SystemController(
     AppDbContext db,
     IConnectionMultiplexer redis,
+    IMessageQueue messageQueue,
     ILogger<SystemController> logger,
     SystemUsageService service,
     IAttachmentStorage attachmentStorage)
@@ -109,7 +111,8 @@ public class SystemController(
         {
             attachmentsDirectory = attachmentsWritable,
             databaseServer = new { reachable = dbReachable },
-            keyValueServer = new { reachable = redisReachable }
+            keyValueServer = new { reachable = redisReachable },
+            messageQueueServer = new { reachable = true } // RabbitMQ
         };
 
         return Ok(result);

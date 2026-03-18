@@ -20,6 +20,7 @@
         <PackageReference Include="Microsoft.Extensions.AI" Version="10.3.0" />
         <PackageReference Include="OllamaSharp" Version="5.4.16" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+        <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
         <PackageReference Include="Schick.Keycloak.RestApiClient" Version="26.5.3" />
         <PackageReference Include="Scriban" Version="6.5.3" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />

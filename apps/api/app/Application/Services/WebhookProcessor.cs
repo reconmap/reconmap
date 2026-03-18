@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using api_v2.Common.Messaging;
 using api_v2.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 
 namespace api_v2.Application.Services;
 
@@ -16,44 +16,18 @@ public class WebhookJob
 public class WebhookProcessor(
     ILogger<WebhookProcessor> logger,
     IServiceScopeFactory scopeFactory,
-    IConnectionMultiplexer redisConnection) : BackgroundService
+    IMessageQueue messageQueue) : BackgroundService
 {
-    private readonly string _queueKey = "webhooks:queue";
     private readonly HttpClient _httpClient = new();
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Webhook processor started, watching '{QueueKey}'", _queueKey);
-        var redis = redisConnection.GetDatabase();
+        logger.LogInformation("Webhook processor started, watching 'webhooks' queue");
 
-        while (!stoppingToken.IsCancellationRequested)
+        await messageQueue.SubscribeAsync<WebhookJob>("webhooks", async job =>
         {
-            try
-            {
-                var item = await redis.ListRightPopAsync(_queueKey);
-                if (item.HasValue)
-                {
-                    var job = JsonSerializer.Deserialize<WebhookJob>(item.ToString(), new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    if (job != null)
-                    {
-                        await ProcessWebhookJob(job);
-                    }
-                }
-                else
-                {
-                    await Task.Delay(1000, stoppingToken);
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error processing webhook job");
-                await Task.Delay(5000, stoppingToken);
-            }
-        }
+            await ProcessWebhookJob(job);
+        }, stoppingToken);
     }
 
     private async Task ProcessWebhookJob(WebhookJob job)

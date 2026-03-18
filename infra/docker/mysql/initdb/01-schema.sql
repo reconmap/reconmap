@@ -76,6 +76,23 @@ CREATE TABLE webhook
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS jira_integration;
+
+CREATE TABLE jira_integration
+(
+    id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP    NULL ON UPDATE CURRENT_TIMESTAMP,
+    name        VARCHAR(200) NOT NULL,
+    url         VARCHAR(512) NOT NULL,
+    email       VARCHAR(200) NOT NULL,
+    api_token   VARCHAR(512) NOT NULL,
+    project_key VARCHAR(50)  NOT NULL,
+    is_enabled  BOOLEAN      NOT NULL DEFAULT TRUE,
+
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 DROP TABLE IF EXISTS organisation;
 
 CREATE TABLE organisation
