@@ -1,5 +1,5 @@
 import secureApiFetch from "services/api.js";
-import { CreateUserApiTokenRequest } from "../user-api-tokens";
+import { CreateUserApiTokenRequest } from "../user-api-tokens.js";
 
 const requestUserApiTokens = () => {
     return secureApiFetch("/user-api-tokens", { method: "GET" });
