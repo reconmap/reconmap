@@ -1,5 +1,6 @@
 using System.Text.Json;
 using api_v2.Common;
+using api_v2.Common.Extensions;
 using api_v2.Common.Messaging;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;

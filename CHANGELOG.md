@@ -7,12 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Jira integration for findings: push findings to Jira as issues.
+- Integrated Webhooks and Jira under a new "Integrations" management section.
 - API token authentication feature for programmatic access without JWT.
 - Support for "Full" and "Read-only" token scopes.
 - Management UI for API tokens in System settings.
 - Ability to add and remove Reconmap agents from the Dashboard
 
 ### Changed
+- Migrated message queue from Redis to RabbitMQ for improved reliability and scalability.
 - Upgrade to MySQL 9.6
 - Disable MySQL performance schema by default
 - Simplify and optimise docker images

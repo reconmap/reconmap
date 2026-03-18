@@ -1,5 +1,6 @@
 using System.Text.Json;
 using api_v2.Common.Messaging;
+using api_v2.Controllers;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

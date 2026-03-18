@@ -35,7 +35,8 @@ docker compose up -d
 
 This starts:
 - `mysql`: Database.
-- `redis`: Cache.
+- `redis`: Cache and key-value store.
+- `rabbitmq`: Message queue for integrations and async tasks.
 - `keycloak`: Identity Provider (8080).
 - `ngapi`: C# REST API (5510).
 - `web-client`: React Frontend (5500).

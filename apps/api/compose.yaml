@@ -14,6 +14,17 @@ services:
     volumes:
       - redis_data:/data
 
+  rabbitmq:
+    container_name: rmap-rabbitmq
+    image: rabbitmq:3.13-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
   mysql:
     container_name: rmap-mysql
     image: ghcr.io/reconmap/rest-api-db:latest
