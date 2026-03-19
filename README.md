@@ -18,7 +18,7 @@
 
 - Execute security commands instantly or schedule them for later
 - Automatically capture and store command outputs while tracking identified vulnerabilities
-- Generate professional reports in formats like Word, Markdown, or LaTeX
+- Generate professional reports in formats like Word, Markdown and HTML.
 - And much more to streamline your security assessments!
 
 ## Try it

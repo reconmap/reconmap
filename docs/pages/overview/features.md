@@ -25,7 +25,7 @@ nav_order: 1
 - Browser terminal integration
 - Notes with markdown support
 - Attachments (docs, screenshots) to projects, vulnerabilities and tasks
-- [Report generation](/user-manual/reports/pentest-report-configuration/) in rich (Word) and plain text formats (Markdown, HTML, LaTeX, ...)
+- [Report generation](/user-manual/reports/pentest-report-configuration/) in rich (Word) and plain text formats (Markdown, HTML, ...)
 - Custom (whitelabel) reporting
 - [Audit log](/user-manual/system/audit-log/)
 - Responsive web application for desktop and tablets

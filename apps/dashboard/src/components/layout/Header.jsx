@@ -73,7 +73,6 @@ const getMenuLinks = (t) => [
                 url: "/integrations",
                 permissions: "administrator",
             },
-            { name: t("Webhooks"), title: t("Manage webhooks"), url: "/webhooks" },
             null,
             { name: t("Export data"), title: t("Export system data"), url: "/system/export-data" },
             { name: t("Import data"), title: t("Import system data"), url: "/system/import-data" },

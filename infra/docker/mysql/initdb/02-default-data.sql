@@ -168,14 +168,6 @@ VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.txt
         'text/plain', '');
 
 INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
-VALUES (NULL, @admin_user_id, TRUE, 'Report template (TEX)', 'Default report template in LaTeX format');
-
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
-                        file_hash)
-VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.tex', 'default-report-template.tex', 0,
-        'application/x-tex', '');
-
-INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
 VALUES (NULL, @admin_user_id, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
 
 INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
