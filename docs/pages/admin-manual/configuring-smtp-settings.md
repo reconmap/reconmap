@@ -22,3 +22,5 @@ The same page also stores IMAP settings for future mail-processing workflows.
 The saved passwords are not returned back to the UI. When editing existing settings, leave a password field empty to keep the stored secret, or use the clear checkbox to remove it.
 
 The report email delivery flow uses the SMTP configuration from this page. If SMTP host, port or sender email are missing, report delivery requests are rejected before they are queued.
+
+When a user sends a report by email, Reconmap resolves the selected recipients, creates a background queue job in RabbitMQ, and performs the SMTP delivery asynchronously. The requesting user receives an in-app notification once the background job succeeds or fails.

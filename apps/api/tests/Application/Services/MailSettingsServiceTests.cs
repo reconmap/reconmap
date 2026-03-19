@@ -80,6 +80,39 @@ public class MailSettingsServiceTests
     }
 
     [Fact]
+    public async Task GetAsync_WithoutSavedSettings_ReturnsDefaultPortsAndNoStoredSecrets()
+    {
+        var db = CreateDbContext();
+        var service = CreateService(db);
+
+        var settings = await service.GetAsync();
+
+        Assert.Equal(587, settings.SmtpPort);
+        Assert.Equal(993, settings.ImapPort);
+        Assert.False(settings.HasSmtpPassword);
+        Assert.False(settings.HasImapPassword);
+        Assert.Null(settings.SmtpHost);
+        Assert.Null(settings.ImapHost);
+    }
+
+    [Fact]
+    public async Task GetSmtpSettingsAsync_WithIncompleteSettings_ThrowsHelpfulError()
+    {
+        var db = CreateDbContext();
+        var service = CreateService(db);
+
+        await service.UpdateAsync(new MailSettingsUpdateRequest
+        {
+            SmtpHost = "smtp.example.com",
+            SmtpUseSsl = true
+        });
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => service.GetSmtpSettingsAsync());
+
+        Assert.Contains("SMTP settings are incomplete", exception.Message);
+    }
+
+    [Fact]
     public async Task UpdateAsync_CanClearStoredPasswords()
     {
         var db = CreateDbContext();
@@ -109,5 +142,41 @@ public class MailSettingsServiceTests
         Assert.False(response.HasImapPassword);
         Assert.Null(settings.SmtpPassword);
         Assert.Null(settings.ImapPassword);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_WithoutNewPassword_PreservesStoredSecrets()
+    {
+        var db = CreateDbContext();
+        var service = CreateService(db);
+
+        await service.UpdateAsync(new MailSettingsUpdateRequest
+        {
+            SmtpHost = "smtp.example.com",
+            SmtpPort = 587,
+            SmtpUsername = "first-user",
+            SmtpPassword = "smtp-secret",
+            SmtpFromEmail = "sender@example.com",
+            ImapPassword = "imap-secret"
+        });
+
+        var firstStoredSettings = await db.MailSettings.AsNoTracking().SingleAsync();
+
+        await service.UpdateAsync(new MailSettingsUpdateRequest
+        {
+            SmtpHost = "smtp.example.com",
+            SmtpPort = 2525,
+            SmtpUsername = "second-user",
+            SmtpFromEmail = "sender@example.com"
+        });
+
+        var secondStoredSettings = await db.MailSettings.AsNoTracking().SingleAsync();
+        var smtpSettings = await service.GetSmtpSettingsAsync();
+
+        Assert.Equal(firstStoredSettings.SmtpPassword, secondStoredSettings.SmtpPassword);
+        Assert.Equal(firstStoredSettings.ImapPassword, secondStoredSettings.ImapPassword);
+        Assert.Equal("smtp-secret", smtpSettings.Password);
+        Assert.Equal(2525, smtpSettings.Port);
+        Assert.Equal("second-user", smtpSettings.Username);
     }
 }
