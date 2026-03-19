@@ -5,6 +5,7 @@ import NativeInput from "components/form/NativeInput";
 import NativeSelect from "components/form/NativeSelect";
 import NativeTextArea from "components/form/NativeTextArea";
 import Loading from "components/ui/Loading";
+import { actionCompletedToast, errorToast } from "components/ui/toast.jsx";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { requestEntityPost } from "utilities/requests.js";
@@ -38,11 +39,17 @@ const SendReport = () => {
         const formObject = Object.fromEntries(formData.entries());
 
         requestEntityPost(`/reports/${formObject.report_id}/send`, formObject)
-            .then(() => {
+            .then(async (response) => {
+                if (!response.ok) {
+                    const payload = await response.json().catch(() => null);
+                    throw new Error(payload?.message ?? "Unable to queue the report email.");
+                }
+
+                actionCompletedToast("Report email queued for background delivery");
                 navigate(`/projects/${project.id}/report`);
             })
             .catch((err) => {
-                console.error(err);
+                errorToast(err.message ?? "Unable to queue the report email.");
             });
     };
 

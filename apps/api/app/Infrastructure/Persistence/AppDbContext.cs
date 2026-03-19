@@ -29,6 +29,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Attachment> Attachments { get; set; }
 
     public DbSet<Secret> Secrets { get; set; }
+    
+    public DbSet<MailSettings> MailSettings { get; set; }
 
     public DbSet<CustomField> CustomFields { get; set; }
 

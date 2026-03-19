@@ -26,6 +26,11 @@ const SettingsLayout = ({ children }) => {
             name: t("Custom fields"),
             url: "/settings/custom-fields",
         },
+        {
+            type: "menu",
+            name: "Mail settings",
+            url: "/system/mail-settings",
+        },
         { type: "label", name: t("Data") },
         {
             type: "menu",

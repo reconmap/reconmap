@@ -55,6 +55,7 @@ public class SystemController(
     IMessageQueue messageQueue,
     ILogger<SystemController> logger,
     SystemUsageService service,
+    IMailSettingsService mailSettingsService,
     IAttachmentStorage attachmentStorage)
     : ControllerBase
 {
@@ -182,5 +183,19 @@ public class SystemController(
     {
         var data = await service.GetUsageAsync();
         return Ok(data);
+    }
+
+    [HttpGet("mail-settings")]
+    public async Task<IActionResult> GetMailSettings()
+    {
+        var settings = await mailSettingsService.GetAsync();
+        return Ok(settings);
+    }
+
+    [HttpPut("mail-settings")]
+    public async Task<IActionResult> UpdateMailSettings([FromBody] MailSettingsUpdateRequest request)
+    {
+        var settings = await mailSettingsService.UpdateAsync(request);
+        return Ok(settings);
     }
 }

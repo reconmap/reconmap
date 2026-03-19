@@ -1,6 +1,8 @@
 using System.Security.Cryptography;
+using System.Net.Mail;
 using api_v2.Application.Services;
 using api_v2.Common.Extensions;
+using api_v2.Common.Messaging;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
@@ -137,9 +139,22 @@ public class ReportRequestDto
     public string VersionDescription { get; set; }
 }
 
+public class ReportSendRequestDto
+{
+    public string? Recipients { get; set; }
+    public string? RecipientsGroup { get; set; }
+    public string? Subject { get; set; }
+    public string? Body { get; set; }
+}
+
 [Route("api/[controller]")]
 [ApiController]
-public class ReportsController(AppDbContext dbContext, ILogger<ReportsController> logger, IAttachmentStorage attachmentStorage)
+public class ReportsController(
+    AppDbContext dbContext,
+    ILogger<ReportsController> logger,
+    IAttachmentStorage attachmentStorage,
+    IMessageQueue messageQueue,
+    IMailSettingsService mailSettingsService)
     : AppController(dbContext)
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
@@ -246,7 +261,7 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
                 await attachmentStorage.SaveFileAsync(reportFileName, resultStream);
             }
 
-            var attachment = new Attachment
+            var attachment = new api_v2.Domain.Entities.Attachment
             {
                 ParentType = "report",
                 ParentId = report.Id,
@@ -270,9 +285,9 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMany([FromQuery] int? limit)
+    public async Task<IActionResult> GetMany([FromQuery] int? limit, [FromQuery] uint? projectId)
     {
-        var results = await GetReportsInternal(limit, false);
+        var results = await GetReportsInternal(limit, false, projectId);
         return Ok(results);
     }
 
@@ -317,7 +332,72 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
         return Ok(results);
     }
 
-    private async Task<List<object>> GetReportsInternal(int? limit, bool isTemplate)
+    [HttpPost("{id:int}/send")]
+    public async Task<IActionResult> Send(uint id, [FromBody] ReportSendRequestDto request)
+    {
+        var report = await dbContext.Reports
+            .AsNoTracking()
+            .SingleOrDefaultAsync(r => r.Id == id && !r.IsTemplate);
+        if (report == null) return NotFound();
+
+        if (!report.ProjectId.HasValue)
+            return BadRequest(new { message = "Only project reports can be sent by email." });
+
+        var attachment = await dbContext.Attachments
+            .AsNoTracking()
+            .SingleOrDefaultAsync(a => a.ParentType == "report" && a.ParentId == report.Id);
+        if (attachment == null)
+            return BadRequest(new { message = "The selected report does not have an attachment to send." });
+
+        var project = await dbContext.Projects
+            .AsNoTracking()
+            .SingleOrDefaultAsync(p => p.Id == report.ProjectId.Value);
+        if (project == null)
+            return BadRequest(new { message = "The report is not linked to a valid project." });
+
+        List<string> recipients;
+        try
+        {
+            recipients = await ResolveRecipientsAsync(project, request);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+
+        if (recipients.Count == 0)
+            return BadRequest(new { message = "No valid recipients were found for this report email." });
+
+        try
+        {
+            await mailSettingsService.GetSmtpSettingsAsync();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+
+        await messageQueue.PublishAsync("report-emails", new ReportEmailJob
+        {
+            ReportId = report.Id,
+            RequestedByUserId = HttpContext.GetCurrentUser()!.Id,
+            Recipients = recipients,
+            Subject = string.IsNullOrWhiteSpace(request.Subject)
+                ? "[CONFIDENTIAL] Security report attached"
+                : request.Subject.Trim(),
+            Body = request.Body?.Trim() ?? "Please review attachment containing a security report."
+        });
+
+        return Accepted(new
+        {
+            queued = true,
+            reportId = report.Id,
+            recipientsCount = recipients.Count,
+            attachment = attachment.ClientFileName
+        });
+    }
+
+    private async Task<List<object>> GetReportsInternal(int? limit, bool isTemplate, uint? projectId = null)
     {
         const int maxLimit = 500;
         var take = Math.Min(limit ?? 100, maxLimit);
@@ -349,9 +429,73 @@ public class ReportsController(AppDbContext dbContext, ILogger<ReportsController
                 a.FileMimeType
             };
 
+        if (!isTemplate && projectId.HasValue)
+            query = query.Where(r => r.ProjectId == projectId.Value);
+
         return await query
             .Take(take)
             .ToListAsync<object>();
+    }
+
+    private async Task<List<string>> ResolveRecipientsAsync(Project project, ReportSendRequestDto request)
+    {
+        var group = string.IsNullOrWhiteSpace(request.RecipientsGroup)
+            ? "all_contacts"
+            : request.RecipientsGroup.Trim();
+
+        if (group == "specific_emails")
+            return ParseRecipientList(request.Recipients);
+
+        if (!project.ClientId.HasValue)
+            throw new InvalidOperationException("The project does not have a client organisation configured.");
+
+        var contacts = dbContext.Contacts
+            .AsNoTracking()
+            .Where(c => c.OrganisationId == project.ClientId.Value);
+
+        contacts = group switch
+        {
+            "all_contacts" => contacts,
+            "all_general_contacts" => contacts.Where(c => c.Kind == ContactKind.general.ToString()),
+            "all_technical_contacts" => contacts.Where(c => c.Kind == ContactKind.technical.ToString()),
+            "all_billing_contacts" => contacts.Where(c => c.Kind == ContactKind.billing.ToString()),
+            _ => throw new InvalidOperationException("The selected recipients group is not supported.")
+        };
+
+        return (await contacts
+                .Select(c => c.Email)
+                .ToListAsync())
+            .Select(email => email.Trim())
+            .Where(IsValidEmail)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    private static List<string> ParseRecipientList(string? recipients)
+    {
+        var parsedRecipients = (recipients ?? string.Empty)
+            .Split([',', ';', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(IsValidEmail)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (parsedRecipients.Count == 0)
+            throw new InvalidOperationException("Add at least one valid recipient email address.");
+
+        return parsedRecipients;
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        try
+        {
+            _ = new System.Net.Mail.MailAddress(email);
+            return true;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
     }
 
     [HttpDelete("{id:int}")]

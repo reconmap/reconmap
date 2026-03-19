@@ -5,6 +5,8 @@ import {
     requestCustomFields,
     requestExportables,
     requestRecentSearches,
+    requestSystemMailSettings,
+    requestSystemMailSettingsPut,
     requestSystemHealth,
     requestSystemIntegrations,
     requestSystemUsage,
@@ -28,6 +30,13 @@ const useSystemUsageQuery = () => {
     return useQuery({
         queryKey: ["system-usage"],
         queryFn: () => requestSystemUsage().then((res) => res.json()),
+    });
+};
+
+const useSystemMailSettingsQuery = () => {
+    return useQuery({
+        queryKey: ["system-mail-settings"],
+        queryFn: () => requestSystemMailSettings().then((res) => res.json()),
     });
 };
 
@@ -72,6 +81,24 @@ const useSystemCustomFieldDeletionMutation = () => {
     });
 };
 
+const useSystemMailSettingsUpdateMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (settings: any) =>
+            requestSystemMailSettingsPut(settings).then(async (res) => {
+                const payload = await res.json().catch(() => null);
+                if (!res.ok) {
+                    throw new Error(payload?.message ?? "Unable to save mail settings.");
+                }
+
+                return payload;
+            }),
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["system-mail-settings"] });
+        },
+    });
+};
+
 export {
     useExportablesQuery,
     useRecentSearchesQuery,
@@ -80,5 +107,7 @@ export {
     useSystemCustomFieldsQuery,
     useSystemHealthQuery,
     useSystemIntegrationsQuery,
+    useSystemMailSettingsQuery,
+    useSystemMailSettingsUpdateMutation,
     useSystemUsageQuery,
 };

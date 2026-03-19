@@ -463,6 +463,29 @@ CREATE TABLE custom_field
     UNIQUE KEY (parent_type, name)
 ) ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS mail_settings;
+
+CREATE TABLE mail_settings
+(
+    id              INT UNSIGNED NOT NULL,
+    created_at      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP    NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    smtp_host       VARCHAR(255) NULL,
+    smtp_port       INT NULL,
+    smtp_username   VARCHAR(255) NULL,
+    smtp_password   TEXT NULL,
+    smtp_from_email VARCHAR(255) NULL,
+    smtp_from_name  VARCHAR(255) NULL,
+    smtp_use_ssl    BOOLEAN      NOT NULL DEFAULT TRUE,
+    imap_host       VARCHAR(255) NULL,
+    imap_port       INT NULL,
+    imap_username   VARCHAR(255) NULL,
+    imap_password   TEXT NULL,
+    imap_use_ssl    BOOLEAN      NOT NULL DEFAULT TRUE,
+
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 DROP TABLE IF EXISTS document;
 
 CREATE TABLE document

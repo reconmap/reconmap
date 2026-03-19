@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for "Full" and "Read-only" token scopes.
 - Management UI for API tokens in System settings.
 - Ability to add and remove Reconmap agents from the Dashboard
+- Mail settings UI for SMTP/IMAP configuration and background delivery of report emails with the selected report attached.
 
 ### Changed
 - Migrated message queue from Redis to RabbitMQ for improved reliability and scalability.
@@ -241,4 +242,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/reconmap/reconmap/compare/1.5.0...master 
 [1.5.0]: https://github.com/reconmap/reconmap/compare/0.1.0...1.5.0
-

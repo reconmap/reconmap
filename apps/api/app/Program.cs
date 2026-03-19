@@ -11,6 +11,7 @@ using api_v2.Infrastructure.Messaging;
 using api_v2.Infrastructure.WebSockets;
 using Amazon.S3;
 using api_v2.Application.CommandProcessors;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
@@ -61,8 +62,11 @@ services.AddSingleton<WebSocketConnectionManager>();
 services.AddScoped<SystemUsageService>();
 services.AddScoped<AuditService>();
 services.AddScoped<ISecretsService, SecretsService>();
+services.AddScoped<IMailSettingsService, MailSettingsService>();
 services.Configure<AiOptions>(
     builder.Configuration.GetSection("AI"));
+services.AddDataProtection()
+    .SetApplicationName("Reconmap");
 
 services.AddScoped<IAiService, AiService>();
 
@@ -72,6 +76,7 @@ services.AddHostedService<CommandResultProcessor>();
 services.AddHostedService<WebhookProcessor>();
 services.AddHostedService<NotificationQueueListener>();
 services.AddHostedService<JiraProcessor>();
+services.AddHostedService<ReportEmailProcessor>();
 services.AddReconmapAuthentication(builder.Configuration);
 services.AddDatabase(builder.Configuration);
 services.AddSwaggerDocumentation();
@@ -105,6 +110,7 @@ services.AddAuthorizationBuilder()
         policy.RequireRole("administrator", "user"));
 
 var app = builder.Build();
+await app.Services.EnsureAuxiliaryTablesAsync();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();

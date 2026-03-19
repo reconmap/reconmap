@@ -5,6 +5,7 @@ import SystemIndexPage from ".";
 import ExportPage from "./ExportPage";
 import ImportPage from "./ImportPage";
 import SystemIntegrationsPage from "./Integrations";
+import MailSettingsPage from "./MailSettingsPage";
 import ApiTokensPage from "./api-tokens/ApiTokensPage";
 import SystemHealthPage from "./SystemHealthPage";
 import SystemUsagePage from "./SystemUsagePage";
@@ -14,6 +15,7 @@ const SystemRoutes = [
     <Route path={`/system`} element={<SettingsLayout />}>
         <Route index element={<SystemIndexPage />} />,
         <Route path={`integrations`} element={<SystemIntegrationsPage />} />,
+        <Route path={`mail-settings`} element={<MailSettingsPage />} />,
         <Route path={`api-tokens`} element={<ApiTokensPage />} />,
         <Route path={`health`} element={<SystemHealthPage />} />,
         <Route path={`usage`} element={<SystemUsagePage />} />,
