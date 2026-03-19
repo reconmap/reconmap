@@ -76,6 +76,7 @@ services.AddHostedService<CommandResultProcessor>();
 services.AddHostedService<WebhookProcessor>();
 services.AddHostedService<NotificationQueueListener>();
 services.AddHostedService<JiraProcessor>();
+services.AddHostedService<AzureDevopsProcessor>();
 services.AddHostedService<ReportEmailProcessor>();
 services.AddReconmapAuthentication(builder.Configuration);
 services.AddDatabase(builder.Configuration);

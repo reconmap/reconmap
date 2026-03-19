@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Jira integration for findings: push findings to Jira as issues.
-- Integrated Webhooks and Jira under a new "Integrations" management section.
+- Azure DevOps integration for findings: push findings to Azure DevOps as work items.
+- Integrated Webhooks, Jira, and Azure DevOps under a new "Integrations" management section.
 - API token authentication feature for programmatic access without JWT.
 - Support for "Full" and "Read-only" token scopes.
 - Management UI for API tokens in System settings.

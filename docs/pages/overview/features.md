@@ -19,7 +19,7 @@ nav_order: 1
 - Client contacts (general, billing, technical)
 - Weekly email reports
 - Export/import data
-- [Jira and Webhooks integrations](/user-manual/system/integrations/)
+- [Jira, Azure DevOps, and Webhooks integrations](/user-manual/system/integrations/)
 - High-performance message queue based on [RabbitMQ](https://www.rabbitmq.com/)
 - Tagging
 - Browser terminal integration

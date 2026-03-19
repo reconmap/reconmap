@@ -93,6 +93,22 @@ CREATE TABLE jira_integration
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS azure_devops_integration;
+
+CREATE TABLE azure_devops_integration
+(
+    id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP    NULL ON UPDATE CURRENT_TIMESTAMP,
+    name        VARCHAR(200) NOT NULL,
+    url         VARCHAR(512) NOT NULL,
+    project_name       VARCHAR(200) NOT NULL,
+    personal_access_token   VARCHAR(512) NOT NULL,
+    is_enabled  BOOLEAN      NOT NULL DEFAULT TRUE,
+
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 DROP TABLE IF EXISTS organisation;
 
 CREATE TABLE organisation

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./MarkdownEditor.css";
 
 import MDEditor from "@uiw/react-md-editor";
@@ -19,55 +19,88 @@ const fileUpload = async (file) => {
     return Configuration.getDefaultApiUrl() + `/image/${attachmentId}`;
 };
 
-const insertToTextArea = (textarea, intsertString) => {
+const insertToTextArea = (textarea, insertString) => {
     let sentence = textarea.value;
     const len = sentence.length;
     const pos = textarea.selectionStart;
     const end = textarea.selectionEnd;
 
     const front = sentence.slice(0, pos);
-    const back = sentence.slice(pos, len);
+    const back = sentence.slice(end, len);
 
-    sentence = front + intsertString + back;
+    sentence = front + insertString + back;
 
     textarea.value = sentence;
-    textarea.selectionEnd = end + intsertString.length;
+    textarea.selectionEnd = pos + insertString.length;
 
     return sentence;
 };
 
-const onImagePasted = async (ev, setMarkdown) => {
+const onImagePasted = async (ev) => {
     const dataTransfer = ev.clipboardData;
     const files = [];
+
+    if (!dataTransfer?.items?.length) {
+        return null;
+    }
+
     for (let index = 0; index < dataTransfer.items.length; index += 1) {
-        const file = dataTransfer.files.item(index);
+        const item = dataTransfer.items[index];
+        if (item.kind !== "file" || !item.type.startsWith("image/")) {
+            continue;
+        }
+
+        const file = item.getAsFile();
 
         if (file) {
             files.push(file);
         }
     }
 
-    const a = await Promise.all(
-        files.map(async (file) => {
-            const url = await fileUpload(file);
-            const insertedMarkdown = insertToTextArea(ev.target, `![${file.name}](${url})`);
-            if (!insertedMarkdown) {
-                return;
-            }
-            setMarkdown(insertedMarkdown);
-            return insertedMarkdown;
-        }),
-    );
+    if (!files.length) {
+        return null;
+    }
 
-    return a.join("");
+    ev.preventDefault();
+
+    let insertedMarkdown = ev.target.value || "";
+    for (const file of files) {
+        const url = await fileUpload(file);
+        insertedMarkdown = insertToTextArea(ev.target, `![${file.name}](${url})`);
+    }
+
+    return insertedMarkdown;
 };
 
 const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...options }) => {
-    const [markdown, setMarkdown] = useState(value);
+    const [markdown, setMarkdown] = useState(value || "");
+
+    useEffect(() => {
+        setMarkdown(value || "");
+    }, [value]);
+
+    const emitFormChange = (nextValue) => {
+        if (typeof onFormChange !== "function") {
+            return;
+        }
+
+        onFormChange({
+            target: {
+                name: editorName,
+                value: nextValue,
+                type: "text",
+            },
+        });
+    };
 
     const onEditorPaste = async (ev) => {
-        const a = await onImagePasted(ev, setMarkdown);
-        onFormChange({ target: { name: editorName, value: a } });
+        const insertedMarkdown = await onImagePasted(ev);
+        if (insertedMarkdown === null) {
+            return;
+        }
+
+        setMarkdown(insertedMarkdown);
+        emitFormChange(insertedMarkdown);
     };
 
     return (
@@ -76,8 +109,9 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
             value={markdown}
             onPaste={onEditorPaste}
             onChange={(editorValue) => {
-                setMarkdown(editorValue);
-                onFormChange({ target: { name: editorName, value: editorValue } });
+                const nextValue = editorValue || "";
+                setMarkdown(nextValue);
+                emitFormChange(nextValue);
             }}
             {...options}
         />

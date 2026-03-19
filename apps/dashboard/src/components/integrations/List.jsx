@@ -1,11 +1,12 @@
+import { useAzureDevopsIntegrationsQuery, useDeleteAzureDevopsIntegrationMutation } from "api/azure-devops.ts";
 import { useDeleteJiraIntegrationMutation, useJiraIntegrationsQuery } from "api/jira.ts";
 import { useDeleteWebhookMutation, useWebhooksQuery } from "api/webhooks.js";
 import NativeButtonGroup from "components/form/NativeButtonGroup";
 import BooleanText from "components/ui/BooleanText";
+import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
-import Breadcrumb from "components/ui/Breadcrumb";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
 import Title from "components/ui/Title";
@@ -22,6 +23,9 @@ const IntegrationsList = () => {
     const { data: jiraIntegrations, isLoading: isJiraLoading } = useJiraIntegrationsQuery();
     const deleteJiraMutation = useDeleteJiraIntegrationMutation();
 
+    const { data: azureDevopsIntegrations, isLoading: isAzureDevopsLoading } = useAzureDevopsIntegrationsQuery();
+    const deleteAzureDevopsMutation = useDeleteAzureDevopsIntegrationMutation();
+
     const onDeleteWebhook = (id) => {
         if (window.confirm(t("Are you sure you want to delete this webhook?"))) {
             deleteWebhookMutation.mutate(id);
@@ -31,6 +35,12 @@ const IntegrationsList = () => {
     const onDeleteJira = (id) => {
         if (window.confirm(t("Are you sure you want to delete this Jira integration?"))) {
             deleteJiraMutation.mutate(id);
+        }
+    };
+
+    const onDeleteAzureDevops = (id) => {
+        if (window.confirm(t("Are you sure you want to delete this Azure DevOps integration?"))) {
+            deleteAzureDevopsMutation.mutate(id);
         }
     };
 
@@ -121,6 +131,51 @@ const IntegrationsList = () => {
                                         <td style={{ textAlign: "right" }}>
                                             <LinkButton href={`/integrations/jira/${integration.id}/edit`}>{t("Edit")}</LinkButton>
                                             <DeleteIconButton onClick={() => onDeleteJira(integration.id)} />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </>
+                        )}
+                    </tbody>
+                </table>
+            </section>
+
+            <section className="section">
+                <div className="level">
+                    <div className="level-left">
+                        <Title title={t("Azure DevOps Integrations")} />
+                    </div>
+                    <div className="level-right">
+                        <NativeButtonGroup>
+                            <CreateButton onClick={() => navigate("/integrations/azure-devops/create")}>{t("Add Azure DevOps integration")}</CreateButton>
+                        </NativeButtonGroup>
+                    </div>
+                </div>
+                <table className="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>{t("Name")}</th>
+                            <th>{t("URL")}</th>
+                            <th>{t("Project Name")}</th>
+                            <th>{t("Enabled?")}</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {isAzureDevopsLoading ? (
+                            <LoadingTableRow numColumns={5} />
+                        ) : (
+                            <>
+                                {(!azureDevopsIntegrations || azureDevopsIntegrations.length === 0) && <NoResultsTableRow numColumns={5} />}
+                                {azureDevopsIntegrations && azureDevopsIntegrations.map((integration) => (
+                                    <tr key={integration.id}>
+                                        <td>{integration.name}</td>
+                                        <td>{integration.url}</td>
+                                        <td>{integration.projectName}</td>
+                                        <td><BooleanText value={integration.isEnabled} /></td>
+                                        <td style={{ textAlign: "right" }}>
+                                            <LinkButton href={`/integrations/azure-devops/${integration.id}/edit`}>{t("Edit")}</LinkButton>
+                                            <DeleteIconButton onClick={() => onDeleteAzureDevops(integration.id)} />
                                         </td>
                                     </tr>
                                 ))}

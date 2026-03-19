@@ -35,3 +35,21 @@ The Jira integration allows you to automatically push new findings (vulnerabilit
 8. Click **Create**.
 
 Once configured and enabled, every time a new finding is created in Reconmap, it will be automatically sent to your Jira project.
+
+## Azure DevOps Integration
+
+The Azure DevOps integration allows you to automatically push new findings (vulnerabilities) to your Azure DevOps project as work items.
+
+### Configuring Azure DevOps
+
+1. Go to **Settings > Integrations**.
+2. Click on **Add Azure DevOps integration**.
+3. Provide a **Name** for the integration.
+4. Enter your Azure DevOps **Organization URL** (e.g., `https://dev.azure.com/your-organization`).
+5. Enter the **Project name** of the Azure DevOps project where work items should be created.
+6. Enter your Azure DevOps **Personal Access Token**.
+7. Click **Create**.
+
+Once configured and enabled, every time a new finding is created in Reconmap, it will be automatically sent to your Azure DevOps project.
+
+For the full setup guide, see the dedicated [Azure DevOps Integration](/user-manual/system/azure-devops/) page.
