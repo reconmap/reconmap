@@ -23,4 +23,4 @@ WORKDIR /app
 RUN mkdir -p /seed/attachments
 COPY data/attachments /seeds/attachments
 COPY --from=build /build/publish .
-ENTRYPOINT ["/app/ReconmapNg"]
+ENTRYPOINT ["/app/App"]

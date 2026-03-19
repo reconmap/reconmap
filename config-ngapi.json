@@ -14,6 +14,11 @@
     "User": "default",
     "Password": "REconDIS"
   },
+  "RabbitMQ": {
+    "HostName": "rmap-rabbitmq",
+    "UserName": "guest",
+    "Password": "guest"
+  },
   "Keycloak": {
     "MetadataAddress": "http://keycloak:8080/realms/reconmap/.well-known/openid-configuration",
     "ValidIssuer": "http://localhost:8080/realms/reconmap",
@@ -23,8 +28,14 @@
     "KeycloakUrl": "http://keycloak:8080",
     "Realm": "reconmap"
   },
-  "AttachmentSettings": {
-    "SavePath": "../"
+  "Storage": {
+    "S3": {
+      "Endpoint": "http://rmap-rustfs:9000",
+      "AccessKey": "rustfsadmin",
+      "SecretKey": "rustfsadmin",
+      "BucketName": "attachments",
+      "UseHttp": true
+    }
   },
   "Cors": {
     "AllowedOrigins": [

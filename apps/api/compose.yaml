@@ -4,10 +4,11 @@ volumes:
   rustfs_data:
   rustfs_logs:
 
+
 services:
   redis:
     container_name: rmap-redis
-    image: redis:7.4
+    image: redis:8.6-alpine
     command: redis-server --requirepass REconDIS --save 20 1 --loglevel warning
     ports:
       - "6379:6379"
@@ -16,7 +17,7 @@ services:
 
   rabbitmq:
     container_name: rmap-rabbitmq
-    image: rabbitmq:3.13-management-alpine
+    image: rabbitmq:4.2-management-alpine
     restart: unless-stopped
     ports:
       - "5672:5672"
