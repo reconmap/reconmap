@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Management UI for API tokens in System settings.
 - Ability to add and remove Reconmap agents from the Dashboard
 - Mail settings UI for SMTP/IMAP configuration, plus background delivery of report emails with the selected report revision attached.
+- Collapsible and expandable sidebar in Dashboard side-menu layouts, with browser-persisted state.
 
 ### Fixed
 - Complete the previously half-implemented report-by-email flow by queuing delivery through RabbitMQ and sending the generated report attachment to the selected recipients.

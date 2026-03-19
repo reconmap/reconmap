@@ -65,7 +65,6 @@ const getMenuLinks = (t) => [
         items: [
             { name: t("Users"), title: t("Manage users"), url: "/users" },
             { name: t("Organisations"), title: t("Manage organisations"), url: OrganisationsUrls.List },
-            { name: t("Custom fields"), title: t("Manage custom fields"), url: "/settings/custom-fields" },
             null,
             {
                 name: t("Integrations"),
@@ -74,6 +73,7 @@ const getMenuLinks = (t) => [
                 permissions: "administrator",
             },
             null,
+            { name: t("Custom fields"), title: t("Manage custom fields"), url: "/settings/custom-fields" },
             { name: t("Export data"), title: t("Export system data"), url: "/system/export-data" },
             { name: t("Import data"), title: t("Import system data"), url: "/system/import-data" },
         ],

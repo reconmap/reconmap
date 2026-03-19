@@ -9,14 +9,22 @@
     --margin: calc(var(--space) / 2);
     --padding: var(--space);
 
-    --color-accent-1: #3b82f6; /* Blue */
-    --color-accent-2: #10b981; /* Emerald */
-    --color-accent-3: #f59e0b; /* Amber */
-    --color-accent-4: #ef4444; /* Red */
-    --color-accent-5: #8b5cf6; /* Violet */
-    --color-accent-6: #ec4899; /* Pink */
-    --color-accent-7: #14b8a6; /* Teal */
-    --color-accent-8: #f97316; /* Orange */
+    --color-accent-1: #3b82f6;
+    /* Blue */
+    --color-accent-2: #10b981;
+    /* Emerald */
+    --color-accent-3: #f59e0b;
+    /* Amber */
+    --color-accent-4: #ef4444;
+    /* Red */
+    --color-accent-5: #8b5cf6;
+    /* Violet */
+    --color-accent-6: #ec4899;
+    /* Pink */
+    --color-accent-7: #14b8a6;
+    /* Teal */
+    --color-accent-8: #f97316;
+    /* Orange */
 }
 
 body {
@@ -48,5 +56,37 @@ details {
         border-bottom: 1px solid var(--bulma-info);
         margin-bottom: 1rem;
     }
+
     margin-bottom: 15px;
+}
+
+.sidemenu-layout {
+    align-items: flex-start;
+}
+
+.sidemenu-column {
+    transition: max-width 0.2s ease, flex-basis 0.2s ease;
+}
+
+.sidemenu-column.is-collapsed {
+    flex: 0 0 4rem;
+    max-width: 4rem;
+}
+
+.sidemenu-toggle {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    justify-content: flex-start;
+}
+
+.sidemenu-column.is-collapsed .sidemenu-toggle {
+    justify-content: center;
+}
+
+.sidemenu-column.is-collapsed .sidemenu-toggle-label {
+    display: none;
+}
+
+.sidemenu-content-column {
+    min-width: 0;
 }

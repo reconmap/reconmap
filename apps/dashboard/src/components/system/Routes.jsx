@@ -2,11 +2,11 @@ import AuditLogList from "components/auditlog/List";
 import SettingsLayout from "components/settings/SettingsLayout.jsx";
 import { Route } from "react-router-dom";
 import SystemIndexPage from ".";
+import ApiTokensPage from "./api-tokens/ApiTokensPage";
 import ExportPage from "./ExportPage";
 import ImportPage from "./ImportPage";
 import SystemIntegrationsPage from "./Integrations";
 import MailSettingsPage from "./MailSettingsPage";
-import ApiTokensPage from "./api-tokens/ApiTokensPage";
 import SystemHealthPage from "./SystemHealthPage";
 import SystemUsagePage from "./SystemUsagePage";
 

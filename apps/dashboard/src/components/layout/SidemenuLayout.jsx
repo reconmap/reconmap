@@ -1,7 +1,21 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+const SIDEMENU_COLLAPSED_STORAGE_KEY = "dashboard.sidemenu.collapsed";
 
 const SidemenuLayout = ({ children, links }) => {
     const { pathname, search } = useLocation();
+    const [isCollapsed, setIsCollapsed] = useState(() => {
+        if (typeof window === "undefined") {
+            return false;
+        }
+
+        return window.localStorage.getItem(SIDEMENU_COLLAPSED_STORAGE_KEY) === "true";
+    });
+
+    useEffect(() => {
+        window.localStorage.setItem(SIDEMENU_COLLAPSED_STORAGE_KEY, String(isCollapsed));
+    }, [isCollapsed]);
 
     const normalizePath = (path = "/") => {
         const normalized = path.replace(/\/+$/, "");
@@ -40,47 +54,66 @@ const SidemenuLayout = ({ children, links }) => {
     };
 
     return (
-        <div className="columns">
-            <div className="column is-2">
+        <div className="columns sidemenu-layout">
+            <div className={`column ${isCollapsed ? "is-narrow sidemenu-column is-collapsed" : "is-2 sidemenu-column"}`}>
                 <aside className="menu">
-                    {links.map((item) => {
-                        if (item.type === "label") {
-                            return (
-                                <p key={item.name} className="menu-label">
-                                    {item.name}
-                                </p>
-                            );
-                        }
+                    <button
+                        type="button"
+                        className="button is-small is-light sidemenu-toggle"
+                        onClick={() => setIsCollapsed((current) => !current)}
+                        aria-expanded={!isCollapsed}
+                        aria-controls="sidemenu-links"
+                        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                    >
+                        <span className="icon" aria-hidden="true">
+                            <i className={`fas ${isCollapsed ? "fa-angles-right" : "fa-angles-left"}`}></i>
+                        </span>
+                        <span className="sidemenu-toggle-label">{isCollapsed ? "Expand" : "Collapse"}</span>
+                    </button>
+                    {!isCollapsed && (
+                        <div id="sidemenu-links">
+                            {links.map((item) => {
+                                if (item.type === "label") {
+                                    return (
+                                        <p key={item.name} className="menu-label">
+                                            {item.name}
+                                        </p>
+                                    );
+                                }
 
-                        return (
-                            <ul key={item.name} className="menu-list">
-                                <li>
-                                    <Link className={isPathActive(item.url) ? "is-active" : ""} to={item.url}>
-                                        {item.name}
-                                    </Link>
-                                    {item.children && item.children.length > 0 && (
-                                        <ul>
-                                            {item.children.map((child) => {
-                                                return (
-                                                    <li key={`submenu_${child.name}`}>
-                                                        <Link
-                                                            className={isPathActive(child.url) ? "is-active" : ""}
-                                                            to={child.url}
-                                                        >
-                                                            {child.name}
-                                                        </Link>
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    )}
-                                </li>
-                            </ul>
-                        );
-                    })}
+                                return (
+                                    <ul key={item.name} className="menu-list">
+                                        <li>
+                                            <Link className={isPathActive(item.url) ? "is-active" : ""} to={item.url}>
+                                                {item.name}
+                                            </Link>
+                                            {item.children && item.children.length > 0 && (
+                                                <ul>
+                                                    {item.children.map((child) => {
+                                                        return (
+                                                            <li key={`submenu_${child.name}`}>
+                                                                <Link
+                                                                    className={
+                                                                        isPathActive(child.url) ? "is-active" : ""
+                                                                    }
+                                                                    to={child.url}
+                                                                >
+                                                                    {child.name}
+                                                                </Link>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            )}
+                                        </li>
+                                    </ul>
+                                );
+                            })}
+                        </div>
+                    )}
                 </aside>
             </div>
-            <div className="column">{children}</div>
+            <div className="column sidemenu-content-column">{children}</div>
         </div>
     );
 };
