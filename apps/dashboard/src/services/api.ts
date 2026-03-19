@@ -5,40 +5,27 @@ function resetSessionStorageAndRedirect() {
     window.location.assign(Configuration.getContextPath());
 }
 
-function secureApiFetch(
-    url: string,
-    init: Record<string, any> = {},
-    apiUrl: string | undefined = undefined,
-): Promise<Response> {
-    if ("undefined" === typeof init) {
-        init = {};
-    }
+async function secureApiFetch(url: string, init: RequestInit = {}): Promise<Response> {
     const user = KeyCloakService.getUserInfo();
 
-    const headers = user && user.access_token !== null ? { Authorization: "Bearer " + user.access_token } : {};
-    const initWithAuth = init;
-    if (Object.prototype.hasOwnProperty.call(initWithAuth, "headers")) {
-        Object.assign(initWithAuth.headers, headers);
-    } else {
-        initWithAuth.headers = headers;
+    const headers = new Headers(init.headers);
+    if (user?.access_token) {
+        headers.set("Authorization", `Bearer ${user.access_token}`);
     }
-    init.credentials = "include";
 
-    return fetch((apiUrl ?? Configuration.getDefaultApiUrl()) + url, init)
-        .then((resp) => {
-            if (resp.status === 401) {
-                resetSessionStorageAndRedirect();
-            }
+    const requestInit: RequestInit = {
+        ...init,
+        headers,
+        credentials: "include",
+    };
 
-            return resp;
-        })
-        .catch((err) => {
-            if (err.message.toLowerCase().indexOf("network") !== -1) {
-                console.error(err.message);
-                //errorToast("Network error. Please check connectivity with the API.");
-            }
-            return Promise.reject(err);
-        });
+    const resp = await fetch(Configuration.getDefaultApiUrl() + url, requestInit);
+
+    if (resp.status === 401) {
+        resetSessionStorageAndRedirect();
+    }
+
+    return resp;
 }
 
 const downloadFromApi = (url: string) => {

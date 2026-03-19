@@ -3,8 +3,6 @@ title: Configuring SMTP settings
 parent: Admin manual
 ---
 
-The SMTP settings can be found in the `config.json` file in the API backend directory. If the file does not exist, create one using [this file](https://github.com/Reconmap/api-backend/blob/master/config-template.json) as a template.
-
 Mail settings are now configured from the Dashboard instead of editing a backend config file by hand.
 
 Go to `System -> Mail settings` and populate the SMTP section with:
