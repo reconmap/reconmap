@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -2502,18 +2502,21 @@
   <h1>Configuring SMTP settings</h1>
 
 <p>The SMTP settings can be found in the <code>config.json</code> file in the API backend directory. If the file does not exist, create one using <a href="https://github.com/Reconmap/api-backend/blob/master/config-template.json">this file</a> as a template.</p>
-<p>Edit the content of the file to show (adjusting the values accordingly):</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;smtp&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;just.another.smtp.server&quot;</span><span class="p">,</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">587</span><span class="p">,</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;smtpuser&quot;</span><span class="p">,</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;smtpsecret&quot;</span><span class="p">,</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">&quot;fromEmail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;no-reply@reconmap.com&quot;</span><span class="p">,</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">&quot;fromName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Reconmap&quot;</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span>
-</span></code></pre></div>
+<p>Mail settings are now configured from the Dashboard instead of editing a backend config file by hand.</p>
+<p>Go to <code>System -&gt; Mail settings</code> and populate the SMTP section with:</p>
+<ul>
+<li>Host</li>
+<li>Port</li>
+<li>Username</li>
+<li>Password</li>
+<li>Sender email</li>
+<li>Sender name</li>
+<li>SSL/TLS toggle</li>
+</ul>
+<p>The same page also stores IMAP settings for future mail-processing workflows.</p>
+<p>The saved passwords are not returned back to the UI. When editing existing settings, leave a password field empty to keep the stored secret, or use the clear checkbox to remove it.</p>
+<p>The report email delivery flow uses the SMTP configuration from this page. If SMTP host, port or sender email are missing, report delivery requests are rejected before they are queued.</p>
+<p>When a user sends a report by email, Reconmap resolves the selected recipients, creates a background queue job in RabbitMQ, and performs the SMTP delivery asynchronously. The requesting user receives an in-app notification once the background job succeeds or fails.</p>
 
 
 
@@ -2534,7 +2537,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 12, 2026 21:45:58 UTC">March 12, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 19, 2026 19:48:13 UTC">March 19, 2026</span>
   </span>
 
     
