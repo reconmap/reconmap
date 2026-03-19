@@ -8,31 +8,31 @@
       
       
       
-        <link rel="canonical" href="https://reconmap.com/admin-manual/network-ports/">
+        <link rel="canonical" href="https://reconmap.com/user-manual/system/azure-devops/">
       
       
-        <link rel="prev" href="../hardware-requirements/">
+        <link rel="prev" href="../audit-log/">
       
       
-        <link rel="next" href="../securing-server/">
+        <link rel="next" href="../data-export/">
       
       
         
       
       
-      <link rel="icon" href="../../images/favicon.ico">
+      <link rel="icon" href="../../../images/favicon.ico">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Network ports - Reconmap docs</title>
+        <title>Azure DevOps Integration - Reconmap docs</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +51,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -85,6 +85,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#configuring-azure-devops" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -97,9 +102,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Reconmap docs" class="md-header__button md-logo" aria-label="Reconmap docs" data-md-component="logo">
+    <a href="../../.." title="Reconmap docs" class="md-header__button md-logo" aria-label="Reconmap docs" data-md-component="logo">
       
-  <img src="../../images/icon-512.png" alt="logo">
+  <img src="../../../images/icon-512.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -116,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Network ports
+              Azure DevOps Integration
             
           </span>
         </div>
@@ -232,9 +237,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Reconmap docs" class="md-nav__button md-logo" aria-label="Reconmap docs" data-md-component="logo">
+    <a href="../../.." title="Reconmap docs" class="md-nav__button md-logo" aria-label="Reconmap docs" data-md-component="logo">
       
-  <img src="../../images/icon-512.png" alt="logo">
+  <img src="../../../images/icon-512.png" alt="logo">
 
     </a>
     Reconmap docs
@@ -261,7 +266,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -285,20 +290,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -319,7 +322,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -337,7 +340,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../attachment-limits/" class="md-nav__link">
+      <a href="../../../admin-manual/attachment-limits/" class="md-nav__link">
         
   
   
@@ -365,7 +368,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuring-cors/" class="md-nav__link">
+      <a href="../../../admin-manual/configuring-cors/" class="md-nav__link">
         
   
   
@@ -393,7 +396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuring-database-settings/" class="md-nav__link">
+      <a href="../../../admin-manual/configuring-database-settings/" class="md-nav__link">
         
   
   
@@ -421,7 +424,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuring-logging-settings/" class="md-nav__link">
+      <a href="../../../admin-manual/configuring-logging-settings/" class="md-nav__link">
         
   
   
@@ -449,7 +452,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuring-smtp-settings/" class="md-nav__link">
+      <a href="../../../admin-manual/configuring-smtp-settings/" class="md-nav__link">
         
   
   
@@ -477,7 +480,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debian-nginx-letsencrypt/" class="md-nav__link">
+      <a href="../../../admin-manual/debian-nginx-letsencrypt/" class="md-nav__link">
         
   
   
@@ -505,7 +508,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../default-credentials/" class="md-nav__link">
+      <a href="../../../admin-manual/default-credentials/" class="md-nav__link">
         
   
   
@@ -533,7 +536,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../deployment-options/" class="md-nav__link">
+      <a href="../../../admin-manual/deployment-options/" class="md-nav__link">
         
   
   
@@ -561,7 +564,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../hardware-requirements/" class="md-nav__link">
+      <a href="../../../admin-manual/hardware-requirements/" class="md-nav__link">
         
   
   
@@ -586,17 +589,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../admin-manual/network-ports/" class="md-nav__link">
         
   
   
@@ -612,7 +608,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -625,7 +620,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../securing-server/" class="md-nav__link">
+      <a href="../../../admin-manual/securing-server/" class="md-nav__link">
         
   
   
@@ -653,7 +648,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../upgrading-instance/" class="md-nav__link">
+      <a href="../../../admin-manual/upgrading-instance/" class="md-nav__link">
         
   
   
@@ -735,7 +730,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../development/architecture/" class="md-nav__link">
+      <a href="../../../development/architecture/" class="md-nav__link">
         
   
   
@@ -763,7 +758,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../development/translations/" class="md-nav__link">
+      <a href="../../../development/translations/" class="md-nav__link">
         
   
   
@@ -845,7 +840,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../legal/license/" class="md-nav__link">
+      <a href="../../../legal/license/" class="md-nav__link">
         
   
   
@@ -873,7 +868,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../legal/privacy-policy/" class="md-nav__link">
+      <a href="../../../legal/privacy-policy/" class="md-nav__link">
         
   
   
@@ -901,7 +896,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../legal/terms-of-service/" class="md-nav__link">
+      <a href="../../../legal/terms-of-service/" class="md-nav__link">
         
   
   
@@ -983,7 +978,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../overview/community/" class="md-nav__link">
+      <a href="../../../overview/community/" class="md-nav__link">
         
   
   
@@ -1011,7 +1006,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../overview/features/" class="md-nav__link">
+      <a href="../../../overview/features/" class="md-nav__link">
         
   
   
@@ -1039,7 +1034,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../overview/integrations/" class="md-nav__link">
+      <a href="../../../overview/integrations/" class="md-nav__link">
         
   
   
@@ -1067,7 +1062,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../overview/live-demo/" class="md-nav__link">
+      <a href="../../../overview/live-demo/" class="md-nav__link">
         
   
   
@@ -1095,7 +1090,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../overview/screenshots/" class="md-nav__link">
+      <a href="../../../overview/screenshots/" class="md-nav__link">
         
   
   
@@ -1127,18 +1122,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1159,7 +1156,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1177,7 +1174,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/browser-requirements/" class="md-nav__link">
+      <a href="../../browser-requirements/" class="md-nav__link">
         
   
   
@@ -1205,7 +1202,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/cli-requirements/" class="md-nav__link">
+      <a href="../../cli-requirements/" class="md-nav__link">
         
   
   
@@ -1233,7 +1230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/cli/" class="md-nav__link">
+      <a href="../../cli/" class="md-nav__link">
         
   
   
@@ -1261,7 +1258,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/dashboard/" class="md-nav__link">
+      <a href="../../dashboard/" class="md-nav__link">
         
   
   
@@ -1289,7 +1286,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/documents/" class="md-nav__link">
+      <a href="../../documents/" class="md-nav__link">
         
   
   
@@ -1317,7 +1314,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/email-notifications/" class="md-nav__link">
+      <a href="../../email-notifications/" class="md-nav__link">
         
   
   
@@ -1345,7 +1342,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/keyboard-shortcuts/" class="md-nav__link">
+      <a href="../../keyboard-shortcuts/" class="md-nav__link">
         
   
   
@@ -1373,7 +1370,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/markdown/" class="md-nav__link">
+      <a href="../../markdown/" class="md-nav__link">
         
   
   
@@ -1401,7 +1398,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/notes/" class="md-nav__link">
+      <a href="../../notes/" class="md-nav__link">
         
   
   
@@ -1429,7 +1426,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/organisation/" class="md-nav__link">
+      <a href="../../organisation/" class="md-nav__link">
         
   
   
@@ -1457,7 +1454,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/search/" class="md-nav__link">
+      <a href="../../search/" class="md-nav__link">
         
   
   
@@ -1485,7 +1482,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/tasks/" class="md-nav__link">
+      <a href="../../tasks/" class="md-nav__link">
         
   
   
@@ -1560,7 +1557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/clients/" class="md-nav__link">
+      <a href="../../clients/" class="md-nav__link">
         
   
   
@@ -1643,7 +1640,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/commands/command-result-processing/" class="md-nav__link">
+      <a href="../../commands/command-result-processing/" class="md-nav__link">
         
   
   
@@ -1671,7 +1668,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/commands/list/" class="md-nav__link">
+      <a href="../../commands/list/" class="md-nav__link">
         
   
   
@@ -1754,7 +1751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/projects/project-membership/" class="md-nav__link">
+      <a href="../../projects/project-membership/" class="md-nav__link">
         
   
   
@@ -1782,7 +1779,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/projects/restricting-project-access/" class="md-nav__link">
+      <a href="../../projects/restricting-project-access/" class="md-nav__link">
         
   
   
@@ -1865,7 +1862,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/reports/pentest-report-configuration/" class="md-nav__link">
+      <a href="../../reports/pentest-report-configuration/" class="md-nav__link">
         
   
   
@@ -1893,7 +1890,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/reports/report-template-variables/" class="md-nav__link">
+      <a href="../../reports/report-template-variables/" class="md-nav__link">
         
   
   
@@ -1921,7 +1918,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/reports/saved-reports/" class="md-nav__link">
+      <a href="../../reports/saved-reports/" class="md-nav__link">
         
   
   
@@ -1954,18 +1951,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_17" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_17" checked>
         
           
           <label class="md-nav__link" for="__nav_6_17" id="__nav_6_17_label" tabindex="0">
@@ -1986,7 +1985,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_17_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_17_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6_17">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2004,7 +2003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/system/api-tokens/" class="md-nav__link">
+      <a href="../api-tokens/" class="md-nav__link">
         
   
   
@@ -2032,7 +2031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/system/application-logs/" class="md-nav__link">
+      <a href="../application-logs/" class="md-nav__link">
         
   
   
@@ -2060,7 +2059,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/system/audit-log/" class="md-nav__link">
+      <a href="../audit-log/" class="md-nav__link">
         
   
   
@@ -2085,10 +2084,35 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../user-manual/system/azure-devops/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azure DevOps Integration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2104,6 +2128,35 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-azure-devops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring Azure DevOps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2116,7 +2169,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/system/data-export/" class="md-nav__link">
+      <a href="../data-export/" class="md-nav__link">
         
   
   
@@ -2144,7 +2197,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/system/data-import/" class="md-nav__link">
+      <a href="../data-import/" class="md-nav__link">
         
   
   
@@ -2172,7 +2225,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/system/integrations/" class="md-nav__link">
+      <a href="../integrations/" class="md-nav__link">
         
   
   
@@ -2255,7 +2308,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/users/two-factor-auth/" class="md-nav__link">
+      <a href="../../users/two-factor-auth/" class="md-nav__link">
         
   
   
@@ -2283,7 +2336,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/users/user-notifications/" class="md-nav__link">
+      <a href="../../users/user-notifications/" class="md-nav__link">
         
   
   
@@ -2311,7 +2364,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/users/user-preferences/" class="md-nav__link">
+      <a href="../../users/user-preferences/" class="md-nav__link">
         
   
   
@@ -2339,7 +2392,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/users/user-roles/" class="md-nav__link">
+      <a href="../../users/user-roles/" class="md-nav__link">
         
   
   
@@ -2422,7 +2475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/vulnerabilities/categories/" class="md-nav__link">
+      <a href="../../vulnerabilities/categories/" class="md-nav__link">
         
   
   
@@ -2450,7 +2503,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user-manual/vulnerabilities/list/" class="md-nav__link">
+      <a href="../../vulnerabilities/list/" class="md-nav__link">
         
   
   
@@ -2504,6 +2557,25 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuring-azure-devops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuring Azure DevOps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2519,7 +2591,7 @@
 
 
   
-    <a href="https://github.com/reconmap/reconmap/edit/main/docs/pages/admin-manual/network-ports.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/reconmap/reconmap/edit/main/docs/pages/user-manual/system/azure-devops.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -2527,46 +2599,22 @@
   
 
 
-  <h1>Network ports</h1>
+  <h1>Azure DevOps Integration</h1>
 
-<p>The docker images provided by Reconmap use the ports described below by default. These are all above 1024 (non-privileged) to ensure they can be run as non-root.</p>
-<table>
-<thead>
-<tr>
-<th>Vendor</th>
-<th>Application</th>
-<th>Port</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Reconmap</td>
-<td>Web client</td>
-<td>5500</td>
-</tr>
-<tr>
-<td>Reconmap</td>
-<td>Rest API</td>
-<td>5510</td>
-</tr>
-<tr>
-<td>Reconmap</td>
-<td>Agent / Notifications service</td>
-<td>5520</td>
-</tr>
-<tr>
-<td>Redis</td>
-<td>Redis</td>
-<td>6379</td>
-</tr>
-<tr>
-<td>Oracle</td>
-<td>MySQL</td>
-<td>3306</td>
-</tr>
-</tbody>
-</table>
-<p>You might need to configure your firewall rules to open these ports to the internet depending on your network setup.</p>
+<p>The Azure DevOps integration allows you to automatically push new findings (vulnerabilities) to your Azure DevOps project as work items.</p>
+<p>You can manage Azure DevOps integrations from <strong>Settings &gt; Integrations</strong> in the dashboard.</p>
+<h3 id="configuring-azure-devops">Configuring Azure DevOps</h3>
+<ol>
+<li>Go to <strong>Settings &gt; Integrations</strong>.</li>
+<li>Click on <strong>Add Azure DevOps integration</strong>.</li>
+<li>Provide a <strong>Name</strong> for the integration.</li>
+<li>Enter your Azure DevOps <strong>Organization URL</strong> (e.g., <code>https://dev.azure.com/your-organization</code>).</li>
+<li>Enter the <strong>Project name</strong> of the Azure DevOps project where work items should be created.</li>
+<li>Enter your Azure DevOps <strong>Personal Access Token</strong>.</li>
+<li>Click <strong>Create</strong>.</li>
+</ol>
+<p>Once configured and enabled, every time a new finding is created in Reconmap, it will be automatically sent to your Azure DevOps project.</p>
+<p>See also the general <a href="/user-manual/system/integrations/">Integrations</a> page for the other supported integration types.</p>
 
 
 
@@ -2587,7 +2635,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 12, 2026 21:45:58 UTC">March 12, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 19, 2026 21:57:33 UTC">March 19, 2026</span>
   </span>
 
     
@@ -2619,7 +2667,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../hardware-requirements/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hardware requirements">
+          <a href="../audit-log/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Audit log">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2629,20 +2677,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Hardware requirements
+                Audit log
               </div>
             </div>
           </a>
         
         
           
-          <a href="../securing-server/" class="md-footer__link md-footer__link--next" aria-label="Next: Securing a Reconmap server">
+          <a href="../data-export/" class="md-footer__link md-footer__link--next" aria-label="Next: Data export">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Securing a Reconmap server
+                Data export
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -2701,10 +2749,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.copy", "navigation.footer"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.action.edit", "content.code.copy", "navigation.footer"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
