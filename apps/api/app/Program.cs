@@ -116,12 +116,10 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors(CorsExtensions.CustomCorsPolicy);
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi().AllowAnonymous();
-    app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/v1.json", "v1"); });
-}
-else
+app.MapOpenApi().AllowAnonymous();
+app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/v1.json", "v1"); });
+
+if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
