@@ -38,7 +38,7 @@ public sealed class AuditAttribute(string action, string entity) : ActionFilterA
         };
 
         var auditService = http.RequestServices
-            .GetRequiredService<AuditService>();
+            .GetRequiredService<IAuditService>();
         await auditService.RecordAsync(entry);
     }
 }

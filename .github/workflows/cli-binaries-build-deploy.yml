@@ -41,7 +41,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v7.0.0
         with:
           version: latest
-          workdir: cli
+          workdir: cli/runner
           args: release --config .goreleaser.yml --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GO_RELEASER_GITHUB_TOKEN }}
@@ -78,7 +78,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v7.0.0
         with:
           version: latest
-          workdir: agent
+          workdir: cli/agent
           args: release --config .goreleaser.yml --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GO_RELEASER_GITHUB_TOKEN }}

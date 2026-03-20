@@ -63,3 +63,26 @@ jobs:
 
       - name: Test
         run: make tests
+
+  build-shared-lib:
+    name: Build shared-lib
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: cli/shared-lib
+
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v6
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v6
+        with:
+          go-version: ^1.25.3
+
+      - name: Get dependencies
+        run: make get-deps
+
+      - name: Test
+        run: make tests
