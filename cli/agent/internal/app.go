@@ -3,12 +3,10 @@ package internal
 import (
 	"net/http"
 	"os"
-	"os/exec"
 	"reconmap/agent/internal/build"
 	"reconmap/agent/internal/configuration"
 	"runtime"
 	"strings"
-	"sync"
 	"time"
 
 	"fmt"
@@ -21,6 +19,7 @@ import (
 	sharedconfig "github.com/reconmap/shared-lib/pkg/configuration"
 	sharedio "github.com/reconmap/shared-lib/pkg/io"
 	"github.com/reconmap/shared-lib/pkg/logging"
+	"github.com/reconmap/shared-lib/pkg/models"
 	"github.com/robfig/cron"
 	"github.com/shirou/gopsutil/v4/cpu"
 	"github.com/shirou/gopsutil/v4/mem"
@@ -33,6 +32,7 @@ type App struct {
 	redisConn *redis.Client
 	muxRouter *mux.Router
 	Logger    *zap.SugaredLogger
+	Executor  sharedio.Executor
 }
 
 var logger = logging.GetLoggerInstance()
@@ -45,6 +45,7 @@ func NewApp() App {
 	return App{
 		muxRouter: muxRouter,
 		Logger:    logging.GetLoggerInstance(),
+		Executor:  &sharedio.DefaultExecutor{},
 	}
 }
 
@@ -58,6 +59,57 @@ func GetLocalIP() net.IP {
 	localAddress := conn.LocalAddr().(*net.UDPAddr)
 
 	return localAddress.IP
+}
+
+func (app *App) getSystemInfo(listenAddress string) api.SystemInfo {
+	hostname, err := os.Hostname()
+	if err != nil {
+		hostname = "unknown"
+	}
+	cpuInfo, err := cpu.Counts(true)
+	cpuStr := "unknown"
+
+	if err == nil {
+		cpuStr = fmt.Sprintf("%d cores", cpuInfo)
+	}
+
+	vmStat, err := mem.VirtualMemory()
+	memStr := "unknown"
+	if err == nil {
+		memStr = fmt.Sprintf("%.2fGB", float64(vmStat.Total)/(1024*1024*1024))
+	}
+
+	return api.SystemInfo{
+		Version:       build.BuildVersion,
+		Hostname:      hostname,
+		Arch:          runtime.GOARCH,
+		Os:            runtime.GOOS,
+		CPU:           cpuStr,
+		Memory:        memStr,
+		IpAddress:     GetLocalIP().String(),
+		ListenAddress: listenAddress,
+	}
+}
+
+func (app *App) setupSchedules(accessToken string, schedules *models.CommandSchedules) *cron.Cron {
+	app.Logger.Info("creating cron jobs")
+	c := cron.New()
+
+	for _, commandSchedule := range *schedules {
+		c.AddFunc(commandSchedule.CronExpression, func() {
+			parts := strings.Split(commandSchedule.ArgumentValues, " ")
+			stdout, stderr, err := app.Executor.Execute(parts[0], parts[1:]...)
+			if err != nil {
+				app.Logger.Errorf("command execution failed with '%s'", err)
+				return
+			}
+			outStr, errStr := string(stdout), string(stderr)
+			app.Logger.Debug(outStr)
+			app.Logger.Debug(errStr)
+		})
+	}
+	c.Start()
+	return c
 }
 
 // Run starts the agent.
@@ -77,58 +129,12 @@ func (app *App) Run(listenAddress string) error {
 
 	restApiUrl := config.ReconmapApiConfig.BaseUri
 
-	app.Logger.Info("creating cron jobs")
-	c := cron.New()
-
 	schedules, err := api.GetCommandsSchedules(restApiUrl, accessToken)
 	if err != nil {
 		app.Logger.Error("unable to get command schedules", zap.Error(err))
 	} else {
-
-		for _, commandSchedule := range *schedules {
-			c.AddFunc(commandSchedule.CronExpression, func() {
-				parts := strings.Split(commandSchedule.ArgumentValues, " ")
-				cmd := exec.Command(parts[0], parts[1:]...) // #nosec G204
-				cmd.Env = append(os.Environ(), "PS1=# ")
-				cmd.Env = append(cmd.Env, "TERM=xterm")
-				cmd.Env = append(cmd.Env, "RMAP_SESSION_TOKEN="+accessToken)
-				var stdout, stderr []byte
-				var errStdout, errStderr error
-				stdoutIn, _ := cmd.StdoutPipe()
-				stderrIn, _ := cmd.StderrPipe()
-				err := cmd.Start()
-				if err != nil {
-					app.Logger.Fatalf("cmd.Start() failed with '%s'\n", err)
-				}
-				var wg sync.WaitGroup
-				wg.Add(1)
-				go func() {
-					stdout, errStdout = sharedio.CopyAndCapture(os.Stdout, stdoutIn)
-					wg.Done()
-				}()
-
-				stderr, errStderr = sharedio.CopyAndCapture(os.Stderr, stderrIn)
-
-				wg.Wait()
-
-				err = cmd.Wait()
-				if err != nil {
-					if errStderr != nil {
-						print(errStderr)
-					}
-					app.Logger.Fatalf("cmd.Run() failed with %s\n", err)
-				}
-				if errStdout != nil || errStderr != nil {
-					app.Logger.Fatal("failed to capture stdout or stderr\n")
-				}
-				outStr, errStr := string(stdout), string(stderr)
-				app.Logger.Debug(outStr)
-				app.Logger.Debug(errStr)
-			})
-		}
-
+		app.setupSchedules(accessToken, schedules)
 	}
-	c.Start()
 
 	redisErr := app.connectRedis()
 	if redisErr != nil {
@@ -140,34 +146,7 @@ func (app *App) Run(listenAddress string) error {
 	defer ticker.Stop()
 
 	go func() {
-
-		hostname, err := os.Hostname()
-		if err != nil {
-			hostname = "unknown"
-		}
-		cpuInfo, err := cpu.Counts(true)
-		cpuStr := "unknown"
-
-		if err == nil {
-			cpuStr = fmt.Sprintf("%d cores", cpuInfo)
-		}
-
-		vmStat, err := mem.VirtualMemory()
-		memStr := "unknown"
-		if err == nil {
-			memStr = fmt.Sprintf("%.2fGB", float64(vmStat.Total)/(1024*1024*1024))
-		}
-
-		systemInfo := api.SystemInfo{
-			Version:       build.BuildVersion,
-			Hostname:      hostname,
-			Arch:          runtime.GOARCH,
-			Os:            runtime.GOOS,
-			CPU:           cpuStr,
-			Memory:        memStr,
-			IpAddress:     GetLocalIP().String(),
-			ListenAddress: listenAddress,
-		}
+		systemInfo := app.getSystemInfo(listenAddress)
 		app.Logger.Info("sending boot event to API")
 		_, err = api.AgentBoot(restApiUrl, config.ClientID, accessToken, &systemInfo)
 		if err != nil {

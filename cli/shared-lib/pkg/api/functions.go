@@ -15,7 +15,7 @@ func AgentBoot(apiBaseUri string, clientId string, accessToken string, systemInf
 	var apiUrl string = apiBaseUri + "/agents/" + clientId + "/boot"
 	marshalled, err := json.Marshal(systemInfo)
 
-	client2 := &http.Client{}
+	client := DefaultHTTPClient
 	req, err := http.NewRequest("PATCH", apiUrl, bytes.NewBuffer(marshalled))
 	if err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func AgentBoot(apiBaseUri string, clientId string, accessToken string, systemInf
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 	req.Header.Add("Content-Type", "application/json")
 
-	response, err := client2.Do(req)
+	response, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -41,14 +41,14 @@ func AgentBoot(apiBaseUri string, clientId string, accessToken string, systemInf
 func AgentPing(apiBaseUri string, clientId string, accessToken string) (*models.CommandSchedules, error) {
 	var apiUrl string = apiBaseUri + "/agents/" + clientId + "/ping"
 
-	client2 := &http.Client{}
+	client := DefaultHTTPClient
 	req, err := http.NewRequest("PATCH", apiUrl, nil)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 
-	response, err := client2.Do(req)
+	response, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -66,14 +66,14 @@ func AgentPing(apiBaseUri string, clientId string, accessToken string) (*models.
 func GetCommandsSchedules(apiBaseUri string, accessToken string) (*models.CommandSchedules, error) {
 	var apiUrl string = apiBaseUri + "/commands/schedules"
 
-	client2 := &http.Client{}
+	client := DefaultHTTPClient
 	req, err := http.NewRequest("GET", apiUrl, nil)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 
-	response, err := client2.Do(req)
+	response, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func GetCommandsSchedules(apiBaseUri string, accessToken string) (*models.Comman
 func GetCommandUsageById(apiBaseUri string, id int) (*models.CommandUsage, error) {
 	var apiUrl string = apiBaseUri + "/commands/0/usages/" + strconv.Itoa(id)
 
-	client := &http.Client{}
+	client := DefaultHTTPClient
 	req, err := NewRmapRequest("GET", apiUrl, nil)
 	if err != nil {
 		return nil, err
@@ -135,7 +135,7 @@ func GetCommandUsageById(apiBaseUri string, id int) (*models.CommandUsage, error
 func GetCommandsByKeywords(apiBaseUri string, keywords string) (*models.Commands, error) {
 	var apiUrl string = apiBaseUri + "/commands?keywords=" + keywords
 
-	client := &http.Client{}
+	client := DefaultHTTPClient
 	req, err := NewRmapRequest("GET", apiUrl, nil)
 	if err != nil {
 		return nil, err

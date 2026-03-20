@@ -14,6 +14,24 @@ type LoginResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+var DefaultHTTPClient HTTPClient = &http.Client{}
+
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
+type Client struct {
+	HTTPClient HTTPClient
+	BaseURL    string
+}
+
+func NewClient(apiBaseUri string) *Client {
+	return &Client{
+		HTTPClient: &http.Client{},
+		BaseURL:    apiBaseUri,
+	}
+}
+
 func NewRmapRequestWithUserAgent(method, url string, body io.Reader, userAgent string) (*http.Request, error) {
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {

@@ -2,54 +2,32 @@ package commands
 
 import (
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/reconmap/shared-lib/pkg/logging"
 	"github.com/reconmap/shared-lib/pkg/models"
 
 	"github.com/reconmap/cli/internal/terminal"
-	"github.com/reconmap/shared-lib/pkg/io"
+	sharedio "github.com/reconmap/shared-lib/pkg/io"
 )
+
+var CurrentExecutor sharedio.Executor = &sharedio.DefaultExecutor{}
 
 func RunCommand(projectId int, usage *models.CommandUsage, vars []string) error {
 	logger := logging.GetLoggerInstance()
 
-	var err error
 	argsRendered := terminal.ReplaceArgs(usage, vars)
 
 	logger.Infof("running command '%s' with arguments '%s'", usage.ExecutablePath, argsRendered)
 
-	cmd := exec.Command(usage.ExecutablePath, strings.Fields(argsRendered)...) // #nosec G204
-	var stdout, stderr []byte
-	var errStdout, errStderr error
-	stdoutIn, _ := cmd.StdoutPipe()
-	stderrIn, _ := cmd.StderrPipe()
-	err = cmd.Start()
+	stdout, stderr, err := CurrentExecutor.Execute(usage.ExecutablePath, strings.Fields(argsRendered)...)
 	if err != nil {
-		logger.Fatalf("command execution failed with '%s'", err)
+		logger.Errorf("command execution failed with '%s'", err)
+		return err
 	}
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		stdout, errStdout = io.CopyAndCapture(os.Stdout, stdoutIn)
-		wg.Done()
-	}()
 
-	stderr, errStderr = io.CopyAndCapture(os.Stderr, stderrIn)
-
-	wg.Wait()
-
-	err = cmd.Wait()
-	if err != nil {
-		logger.Fatalf("error waiting for command to finish: %s", err)
-	}
-	if errStdout != nil || errStderr != nil {
-		logger.Fatal("failed to capture stdout or stderr")
-	}
 	outStr, errStr := string(stdout), string(stderr)
 
 	stdoutFilename := filepath.Clean(strconv.Itoa(usage.ID) + ".out")
