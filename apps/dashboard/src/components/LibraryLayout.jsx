@@ -1,33 +1,14 @@
 import SidemenuLayout from "components/layout/SidemenuLayout";
 import { Outlet } from "react-router-dom";
-
-const links = [
-    { type: "label", name: "General", items: [] },
-    {
-        type: "menu",
-        name: "Commands",
-        url: "/commands",
-        children: [{ name: "Create", url: "/commands/add", permissions: "tasks.create" }],
-    },
-    {
-        type: "menu",
-        name: "Vulnerabilities",
-        url: "/vulnerabilities",
-        children: [
-            { name: "Create", url: "/vulnerabilities/create", permissions: "vulnerabilities.*" },
-            { name: "Categories", url: "/vulnerabilities/categories", permissions: "vulnerabilities.*" },
-            { name: "Templates", url: "/vulnerabilities/templates", permissions: "vulnerabilities.*" },
-        ],
-    },
-    {
-        type: "menu",
-        name: "Documents",
-        url: "/documents",
-        children: [{ name: "Create", url: "/documents/add", permissions: "tasks.create" }],
-    },
-];
+import { useTranslation } from "react-i18next";
+import { getNavigationStructure } from "components/layout/NavigationStructure";
 
 const LibraryLayout = () => {
+    const [t] = useTranslation();
+    const navigation = getNavigationStructure(t);
+    const librarySection = navigation.find(section => section.name === t("Library"));
+    const links = librarySection ? librarySection.items : [];
+
     return (
         <SidemenuLayout links={links}>
             <Outlet />

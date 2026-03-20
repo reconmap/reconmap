@@ -72,7 +72,10 @@ const SidemenuLayout = ({ children, links }) => {
                     </button>
                     {!isCollapsed && (
                         <div id="sidemenu-links">
-                            {links.map((item) => {
+                            {links.map((item, index) => {
+                                if (item.type === "divider") {
+                                    return <hr key={`divider_${index}`} className="dropdown-divider" />;
+                                }
                                 if (item.type === "label") {
                                     return (
                                         <p key={item.name} className="menu-label">
@@ -84,9 +87,15 @@ const SidemenuLayout = ({ children, links }) => {
                                 return (
                                     <ul key={item.name} className="menu-list">
                                         <li>
-                                            <Link className={isPathActive(item.url) ? "is-active" : ""} to={item.url}>
-                                                {item.name}
-                                            </Link>
+                                            {item.external ? (
+                                                <a className={isPathActive(item.url) ? "is-active" : ""} href={item.url} target="_blank" rel="noopener noreferrer">
+                                                    {item.name}
+                                                </a>
+                                            ) : (
+                                                <Link className={isPathActive(item.url) ? "is-active" : ""} to={item.url}>
+                                                    {item.name}
+                                                </Link>
+                                            )}
                                             {item.children && item.children.length > 0 && (
                                                 <ul>
                                                     {item.children.map((child) => {

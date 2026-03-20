@@ -1,5 +1,6 @@
 import AuditLogList from "components/auditlog/List";
 import HelpSupportLayout from "components/HelpSupportLayout.jsx";
+import SettingsLayout from "components/settings/SettingsLayout";
 import { Route } from "react-router-dom";
 import SystemIndexPage from ".";
 import AiSettingsPage from "./AiSettingsPage";
@@ -12,17 +13,21 @@ import SystemHealthPage from "./SystemHealthPage";
 import SystemUsagePage from "./SystemUsagePage";
 
 const SystemRoutes = [
-    <Route path="/auditlog" element={<AuditLogList />} />,
+    <Route element={<HelpSupportLayout />}>
+        <Route path="/auditlog" element={<AuditLogList />} />
+    </Route>,
+    <Route path={`/system`} element={<SettingsLayout />}>
+        <Route path={`mail-settings`} element={<MailSettingsPage />} />
+        <Route path={`ai-settings`} element={<AiSettingsPage />} />
+        <Route path={`api-tokens`} element={<ApiTokensPage />} />
+        <Route path={`export-data`} element={<ExportPage />} />
+        <Route path={`import-data`} element={<ImportPage />} />
+    </Route>,
     <Route path={`/system`} element={<HelpSupportLayout />}>
-        <Route index element={<SystemIndexPage />} />,
-        <Route path={`integrations`} element={<IntegrationsPage />} />,
-        <Route path={`mail-settings`} element={<MailSettingsPage />} />,
-        <Route path={`ai-settings`} element={<AiSettingsPage />} />,
-        <Route path={`api-tokens`} element={<ApiTokensPage />} />,
-        <Route path={`health`} element={<SystemHealthPage />} />,
-        <Route path={`usage`} element={<SystemUsagePage />} />,
-        <Route path={`export-data`} element={<ExportPage />} />,
-        <Route path={`import-data`} element={<ImportPage />} />,
+        <Route index element={<SystemIndexPage />} />
+        <Route path={`integrations`} element={<IntegrationsPage />} />
+        <Route path={`health`} element={<SystemHealthPage />} />
+        <Route path={`usage`} element={<SystemUsagePage />} />
     </Route>,
 ];
 

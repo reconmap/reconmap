@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getNavigationStructure } from "components/layout/NavigationStructure";
 
-const ProjectsLayout = ({ children }) => {
+const ToolsLayout = () => {
     const [t] = useTranslation();
     const navigation = getNavigationStructure(t);
-    const projectsSection = navigation.find(section => section.name === t("Projects"));
-    const links = projectsSection ? projectsSection.items : [];
+    const toolsSection = navigation.find(section => section.name === t("Tools"));
+    const links = toolsSection ? toolsSection.items : [];
 
     return (
         <SidemenuLayout links={links}>
@@ -16,4 +16,4 @@ const ProjectsLayout = ({ children }) => {
     );
 };
 
-export default ProjectsLayout;
+export default ToolsLayout;

@@ -1,58 +1,15 @@
 import SidemenuLayout from "components/layout/SidemenuLayout";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
+import { getNavigationStructure } from "components/layout/NavigationStructure";
 
 const SettingsLayout = ({ children }) => {
     const [t] = useTranslation();
     const location = useLocation();
 
-    const links = [
-        { type: "label", name: "General", items: [] },
-        {
-            type: "menu",
-            name: t("Users"),
-            url: "/users",
-            permissions: "settings.*",
-            children: [{ name: "Create", url: "/users/create", permissions: "settings.*" }],
-        },
-        {
-            type: "menu",
-            name: t("Organisations"),
-            url: "/organisations",
-        },
-        { type: "label", name: t("Configuration") },
-        {
-            type: "menu",
-            name: t("Custom fields"),
-            url: "/settings/custom-fields",
-        },
-        {
-            type: "menu",
-            name: "Mail settings",
-            url: "/system/mail-settings",
-        },
-        {
-            type: "menu",
-            name: "AI settings",
-            url: "/system/ai-settings",
-        },
-        { type: "label", name: t("Data") },
-        {
-            type: "menu",
-            name: "Export data",
-            url: "/system/export-data",
-        },
-        {
-            type: "menu",
-            name: "Import data",
-            url: "/system/import-data",
-        },
-        {
-            type: "menu",
-            name: "API tokens",
-            url: "/system/api-tokens",
-        },
-    ];
+    const navigation = getNavigationStructure(t);
+    const settingsSection = navigation.find(section => section.name === t("Settings"));
+    const links = settingsSection ? settingsSection.items : [];
 
     return (
         <SidemenuLayout links={links}>
