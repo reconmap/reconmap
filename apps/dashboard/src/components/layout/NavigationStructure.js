@@ -1,7 +1,7 @@
-import { AgentsUrls } from "components/agents/AgentsRoutes.jsx";
+import { AgentsUrls } from "components/agents/AgentsUrls";
 import OrganisationsUrls from "components/clients/OrganisationsUrls";
 import SearchUrls from "components/search/SearchUrls";
-import { ToolsUrls } from "components/tools/Routes.jsx";
+import { ToolsUrls } from "components/tools/ToolsUrls";
 import Configuration from "Configuration";
 import { ServerIssuesUrl, UserManualUrl } from "ServerUrls";
 
@@ -101,6 +101,7 @@ export const getNavigationStructure = (t) => [
             { type: "divider" },
             { type: "menu", name: t("Custom fields"), url: "/settings/custom-fields" },
             { type: "menu", name: t("Integrations"), url: "/integrations", permissions: "administrator" },
+            { type: "menu", name: t("Webhooks"), url: "/webhooks", permissions: "administrator" },
             { type: "divider" },
             { type: "menu", name: t("Mail settings"), url: "/system/mail-settings" },
             { type: "menu", name: t("AI settings"), url: "/system/ai-settings" },

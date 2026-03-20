@@ -50,7 +50,56 @@ const SidemenuLayout = ({ children, links }) => {
         const currentQuery = normalizeSearch(search);
         const { targetPath, targetQuery } = splitTargetUrl(targetUrl);
 
-        return currentPath === targetPath && currentQuery === targetQuery;
+        // Exact match (path + query) is the highest priority
+        if (currentPath === targetPath && currentQuery === targetQuery) {
+            return true;
+        }
+
+        // If target has a query but it doesn't match current search, it's not a match
+        if (targetQuery !== "" && targetQuery !== currentQuery) {
+            return false;
+        }
+
+        if (targetPath === "/") {
+            return currentPath === "/";
+        }
+
+        const isPrefixMatch = currentPath === targetPath || currentPath.startsWith(targetPath + "/");
+        if (isPrefixMatch) {
+            // Find all potential links in the current sidebar
+            const allLinks = [];
+            links.forEach(l => {
+                if (l.url) allLinks.push(l.url);
+                if (l.children) l.children.forEach(c => {
+                    if (c.url) allLinks.push(c.url);
+                });
+            });
+
+            // A "better match" exists if another link has:
+            // 1. Same path but also a matching query (while we have none)
+            // 2. A more specific (longer) path that also matches
+            const betterMatch = allLinks.some(linkUrl => {
+                if (linkUrl === targetUrl) return false;
+                const { targetPath: otherPath, targetQuery: otherQuery } = splitTargetUrl(linkUrl);
+                
+                // Case 1: Same path but other has a matching query and we don't
+                if (otherPath === targetPath && targetQuery === "" && otherQuery !== "") {
+                    if (otherQuery === currentQuery) return true;
+                }
+
+                // Case 2: More specific (longer) path matches
+                if (otherPath.length > targetPath.length && currentPath.startsWith(otherPath)) {
+                    if (otherQuery === "" || otherQuery === currentQuery) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            return !betterMatch;
+        }
+
+        return false;
     };
 
     return (

@@ -8,7 +8,6 @@ import ProjectsLayout from "./Layout.jsx";
 import ProjectMembership from "./Membership";
 import ProjectsListPage from "./ProjectsListPage";
 import ProjectReport from "./Report";
-import VaultItemEdit from "./vault/VaultItemEdit";
 
 const ProjectsRoutes = [
     <Route path="/projects" element={<ProjectsLayout />}>
@@ -21,7 +20,6 @@ const ProjectsRoutes = [
         <Route path={`:projectId/tasks/create`} element={<TaskCreationPage />} />,
         <Route path={`:projectId`} element={<ProjectDetails />} />,
     </Route>,
-    <Route path={`/vault/:vaultItemId/edit`} element={<VaultItemEdit />} />,
 ];
 
 export default ProjectsRoutes;
