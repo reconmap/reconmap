@@ -9,8 +9,7 @@ import ModalDialog from "components/ui/ModalDIalog";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import SecondaryButton from "components/ui/buttons/Secondary";
-import LoadingTableRow from "components/ui/tables/LoadingTableRow";
-import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
+import NativeTable from "components/ui/tables/NativeTable.jsx";
 import UserLink from "components/users/Link";
 import { useState } from "react";
 import { actionCompletedToast } from "../ui/toast";
@@ -54,6 +53,45 @@ const CommandOutputs = ({ command }) => {
 
     if (isLoading) return <Loading />;
 
+    const columns = [
+        {
+            header: "Filename",
+            cell: (commandOutput) => commandOutput.clientFileName,
+        },
+        {
+            header: "Mimetype",
+            cell: (commandOutput) => commandOutput.fileMimeType,
+        },
+        {
+            header: "File size",
+            cell: (commandOutput) => <FileSizeSpan fileSize={commandOutput.fileSize} />,
+        },
+        {
+            header: "Upload date",
+            cell: (commandOutput) => <RelativeDateFormatter date={commandOutput.createdAt} />,
+        },
+        {
+            header: "Uploaded by",
+            cell: (commandOutput) => (
+                <UserLink userId={commandOutput.createdByUid}>
+                    {commandOutput.createdBy?.fullName}
+                </UserLink>
+            ),
+        },
+        {
+            header: <>&nbsp;</>,
+            cell: (commandOutput) => (
+                <NativeButtonGroup>
+                    <SecondaryButton onClick={(ev) => onViewClick(ev, commandOutput.id)}>View</SecondaryButton>
+                    <SecondaryButton onClick={(ev) => onDownloadClick(ev, commandOutput.id)}>
+                        Download
+                    </SecondaryButton>
+                    <DeleteIconButton onClick={(ev) => onDeleteOutputClick(ev, commandOutput.id)} />
+                </NativeButtonGroup>
+            ),
+        },
+    ];
+
     return (
         <>
             <ModalDialog
@@ -71,52 +109,12 @@ const CommandOutputs = ({ command }) => {
 
             <h4>Command output list</h4>
 
-            <table className="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>Filename</th>
-                        <th>Mimetype</th>
-                        <th>File size</th>
-                        <th>Upload date</th>
-                        <th>Uploaded by</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {null === commandOutputs && <LoadingTableRow numColumns={6} />}
-                    {null !== commandOutputs && commandOutputs.length === 0 && <NoResultsTableRow numColumns={6} />}
-                    {null !== commandOutputs &&
-                        commandOutputs.length !== 0 &&
-                        commandOutputs.map((commandOutput, index) => (
-                            <tr key={index}>
-                                <td>{commandOutput.clientFileName}</td>
-                                <td>{commandOutput.fileMimeType}</td>
-                                <td>
-                                    <FileSizeSpan fileSize={commandOutput.fileSize} />
-                                </td>
-                                <td>
-                                    <RelativeDateFormatter date={commandOutput.createdAt} />
-                                </td>
-                                <td>
-                                    <UserLink userId={commandOutput.createdByUid}>
-                                        {commandOutput.createdBy?.fullName}
-                                    </UserLink>
-                                </td>
-                                <td>
-                                    <NativeButtonGroup>
-                                        <SecondaryButton onClick={(ev) => onViewClick(ev, commandOutput.id)}>
-                                            View
-                                        </SecondaryButton>
-                                        <SecondaryButton onClick={(ev) => onDownloadClick(ev, commandOutput.id)}>
-                                            Download
-                                        </SecondaryButton>
-                                        <DeleteIconButton onClick={(ev) => onDeleteOutputClick(ev, commandOutput.id)} />
-                                    </NativeButtonGroup>
-                                </td>
-                            </tr>
-                        ))}
-                </tbody>
-            </table>
+            <NativeTable
+                columns={columns}
+                rows={commandOutputs}
+                rowId={(commandOutput) => commandOutput.id}
+                emptyRowsMessage="No command outputs available."
+            ></NativeTable>
         </>
     );
 };

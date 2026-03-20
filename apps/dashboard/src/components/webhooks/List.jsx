@@ -2,8 +2,7 @@ import { useDeleteWebhookMutation, useWebhooksQuery } from "api/webhooks.js";
 import NativeButtonGroup from "components/form/NativeButtonGroup";
 import BooleanText from "components/ui/BooleanText";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
-import LoadingTableRow from "components/ui/tables/LoadingTableRow";
-import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
+import NativeTable from "components/ui/tables/NativeTable.jsx";
 import Title from "components/ui/Title";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +26,34 @@ const WebhooksList = () => {
         }
     };
 
+    const columns = [
+        {
+            header: t("Name"),
+            cell: (webhook) => webhook.name,
+        },
+        {
+            header: t("URL"),
+            cell: (webhook) => webhook.url,
+        },
+        {
+            header: t("Events"),
+            cell: (webhook) => webhook.events,
+        },
+        {
+            header: t("Enabled?"),
+            cell: (webhook) => <BooleanText value={webhook.isEnabled} />,
+        },
+        {
+            header: <>&nbsp;</>,
+            cell: (webhook) => (
+                <div style={{ textAlign: "right" }}>
+                    <LinkButton href={`/webhooks/${webhook.id}/edit`}>{t("Edit")}</LinkButton>
+                    <DeleteIconButton onClick={() => onDeleteClick(webhook.id)} />
+                </div>
+            ),
+        },
+    ];
+
     return (
         <>
             <div className="heading">
@@ -36,44 +63,13 @@ const WebhooksList = () => {
                 </NativeButtonGroup>
             </div>
             <Title title={t("Webhooks")} />
-            <table className="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>{t("Name")}</th>
-                        <th>{t("URL")}</th>
-                        <th>{t("Events")}</th>
-                        <th>{t("Enabled?")}</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {isLoading ? (
-                        <LoadingTableRow numColumns={5} />
-                    ) : (
-                        <>
-                            {null !== webhooks && 0 === webhooks.length && <NoResultsTableRow numColumns={5} />}
-                            {null !== webhooks &&
-                                0 !== webhooks.length &&
-                                webhooks.map((webhook, index) => (
-                                    <tr key={index}>
-                                        <td>{webhook.name}</td>
-                                        <td>{webhook.url}</td>
-                                        <td>{webhook.events}</td>
-                                        <td>
-                                            <BooleanText value={webhook.isEnabled} />
-                                        </td>
-                                        <td style={{ textAlign: "right" }}>
-                                            <LinkButton href={`/webhooks/${webhook.id}/edit`}>{t("Edit")}</LinkButton>
-                                            <DeleteIconButton
-                                                onClick={() => onDeleteClick(webhook.id)}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                        </>
-                    )}
-                </tbody>
-            </table>
+
+            <NativeTable
+                columns={columns}
+                rows={isLoading ? null : webhooks}
+                rowId={(webhook) => webhook.id}
+                emptyRowsMessage={t("No webhooks available.")}
+            ></NativeTable>
         </>
     );
 };

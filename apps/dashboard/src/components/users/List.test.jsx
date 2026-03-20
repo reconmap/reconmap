@@ -1,38 +1,31 @@
+vi.mock("react-i18next", () => ({
+    useTranslation: () => [(key) => key.toUpperCase()],
+}));
+
 import { render } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthContext } from "contexts/AuthContext";
-import { act } from "react";
-import ReactDOM from "react-dom/client";
 import { MemoryRouter } from "react-router-dom";
 import UsersList from "./List";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const createTestQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-    },
-  });
-
-beforeEach(() => {
-});
-
-afterEach(() => {
-});
+    new QueryClient({
+        defaultOptions: {
+            queries: { retry: false },
+        },
+    });
 
 it("renders with or without a name", async () => {
-	  const queryClient = createTestQueryClient();
-    vi.mock("react-i18next", () => ({
-        useTranslation: () => [(key) => key.toUpperCase()],
-    }));
+    const queryClient = createTestQueryClient();
 
-    const { container, findByText } =render(
-            <MemoryRouter>
-                  <QueryClientProvider client={queryClient}>
+    const { container } = render(
+        <MemoryRouter>
+            <QueryClientProvider client={queryClient}>
                 <AuthContext.Provider value={{ user: null }}>
                     <UsersList />
                 </AuthContext.Provider>
-                  </QueryClientProvider>
-            </MemoryRouter>,
-        );
+            </QueryClientProvider>
+        </MemoryRouter>,
+    );
     expect(container.innerHTML).toMatch(/Create user<\/button>/);
 });

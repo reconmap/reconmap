@@ -16,8 +16,10 @@ const NativeTable = ({ caption = undefined, columns = [], rows = [], rowId = () 
             {caption && <caption className="title is-6">{caption}</caption>}
             <thead>
                 <tr>
-                    {enabledColumns.map((column) => (
-                        <th className={column.className || ""}>{column.header}</th>
+                    {enabledColumns.map((column, index) => (
+                        <th key={column.property ?? `header-${index}`} className={column.className || ""}>
+                            {column.header}
+                        </th>
                     ))}
                 </tr>
             </thead>
@@ -31,8 +33,10 @@ const NativeTable = ({ caption = undefined, columns = [], rows = [], rowId = () 
                 {!rowsAreLoading &&
                     rows.map((row) => (
                         <tr key={rowId(row)}>
-                            {enabledColumns.map((column) => (
-                                <td>{column.cell ? column.cell(row) : defaultCellRenderer(column, row)}</td>
+                            {enabledColumns.map((column, index) => (
+                                <td key={column.property ?? `cell-${rowId(row)}-${index}`}>
+                                    {column.cell ? column.cell(row) : defaultCellRenderer(column, row)}
+                                </td>
                             ))}
                         </tr>
                     ))}

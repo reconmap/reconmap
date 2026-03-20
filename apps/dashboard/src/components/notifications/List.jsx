@@ -1,5 +1,5 @@
 import { useDeleteNotificationMutation, useNotificationsQuery } from "api/notifications.js";
-import { requestNotificationPut, requestNotificationsPatch, requestPartialNotificationUpdate } from "api/requests/notifications.js";
+import { requestNotificationsPatch, requestPartialNotificationUpdate } from "api/requests/notifications.js";
 import NativeButton from "components/form/NativeButton";
 import NativeButtonGroup from "components/form/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb.jsx";
@@ -7,8 +7,7 @@ import Loading from "components/ui/Loading.jsx";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import Title from "components/ui/Title";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
-import LoadingTableRow from "components/ui/tables/LoadingTableRow";
-import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
+import NativeTable from "components/ui/tables/NativeTable.jsx";
 import { actionCompletedToast } from "components/ui/toast.jsx";
 
 const isUnread = (notification) => notification.status === "unread";
@@ -35,6 +34,39 @@ const NotificationsList = () => {
 
     if (isLoading) return <Loading />;
 
+    const columns = [
+        {
+            header: <>&nbsp;</>,
+            cell: (notification) => (notification.status === "read" ? <>(read)</> : <>&nbsp;</>),
+        },
+        {
+            header: "Date/time",
+            cell: (notification) => <RelativeDateFormatter date={notification.createdAt} />,
+        },
+        {
+            header: "Content",
+            cell: (notification) => (
+                <>
+                    <strong>{notification.title}</strong>
+                    <div>{notification.content}</div>
+                </>
+            ),
+        },
+        {
+            header: <>&nbsp;</>,
+            cell: (notification) => (
+                <NativeButtonGroup>
+                    {notification.status === "unread" && (
+                        <NativeButton onClick={() => markNotificationAsRead(notification)}>
+                            Mark as read
+                        </NativeButton>
+                    )}
+                    <DeleteIconButton onClick={() => deleteNotificatioMutation.mutate(notification.id)} />
+                </NativeButtonGroup>
+            ),
+        },
+    ];
+
     return (
         <>
             <div className="heading">
@@ -50,46 +82,12 @@ const NotificationsList = () => {
             </div>
             <Title title="Notifications" />
 
-            <table className="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th w={50}>&nbsp;</th>
-                        <th w={200}>Date/time</th>
-                        <th>Content</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {null === notifications && <LoadingTableRow numColumns={3} />}
-                    {null !== notifications && notifications.length === 0 && <NoResultsTableRow numColumns={3} />}
-                    {null !== notifications &&
-                        notifications.length > 0 &&
-                        notifications.map((notification) => (
-                            <tr key={notification.id}>
-                                <th>{notification.status === "read" ? <>(read)</> : <>&nbsp;</>}</th>
-                                <td>
-                                    <RelativeDateFormatter date={notification.createdAt} />
-                                </td>
-                                <td>
-                                    <strong>{notification.title}</strong>
-                                    <div>{notification.content}</div>
-                                </td>
-                                <td>
-                                    <NativeButtonGroup>
-                                        {notification.status === "unread" && (
-                                            <NativeButton onClick={() => markNotificationAsRead(notification)}>
-                                                Mark as read
-                                            </NativeButton>
-                                        )}
-                                        <DeleteIconButton
-                                            onClick={() => deleteNotificatioMutation.mutate(notification.id)}
-                                        />
-                                    </NativeButtonGroup>
-                                </td>
-                            </tr>
-                        ))}
-                </tbody>
-            </table>
+            <NativeTable
+                columns={columns}
+                rows={notifications}
+                rowId={(notification) => notification.id}
+                emptyRowsMessage="No notifications available."
+            ></NativeTable>
         </>
     );
 };

@@ -6,8 +6,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import BooleanText from "components/ui/BooleanText";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import ExportMenuItem from "components/ui/menuitems/ExportMenuItem";
-import LoadingTableRow from "components/ui/tables/LoadingTableRow";
-import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
+import NativeTable from "components/ui/tables/NativeTable.jsx";
 import Title from "components/ui/Title";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
@@ -59,6 +58,60 @@ const UsersList = () => {
         queryClient.invalidateQueries({ queryKey: ["users"] });
     };
 
+    const columns = [
+        {
+            header: <>&nbsp;</>,
+            cell: (user) => (
+                <input
+                    type="checkbox"
+                    value={user.id}
+                    onChange={onTaskCheckboxChange}
+                    checked={selectedUsers.includes(user.id)}
+                />
+            ),
+        },
+        {
+            header: <>&nbsp;</>,
+            cell: (user) => <UserAvatar email={user.email} />,
+        },
+        {
+            header: "Full name",
+            cell: (user) => <Link to={`/users/${user.id}`}>{user.fullName}</Link>,
+        },
+        {
+            header: "Username",
+            cell: (user) => <UserLink userId={user.id}>{user.username}</UserLink>,
+        },
+        {
+            header: "Role",
+            cell: (user) => <UserRoleBadge role={user.role} />,
+        },
+        {
+            header: "Active?",
+            cell: (user) => <BooleanText value={user.active} />,
+        },
+        {
+            header: "Last login time",
+            cell: (user) => <LastLogin user={user} />,
+        },
+        {
+            header: "2FA enabled?",
+            cell: (user) => <BooleanText value={user.mfa_enabled} />,
+        },
+        {
+            header: <>&nbsp;</>,
+            cell: (user) => (
+                <div style={{ textAlign: "right" }}>
+                    <LinkButton href={`/users/${user.id}/edit`}>Edit</LinkButton>
+                    <DeleteIconButton
+                        onClick={() => onDeleteClick(user.id)}
+                        disabled={Number(user.id) === loggedInUser?.id}
+                    />
+                </div>
+            ),
+        },
+    ];
+
     return (
         <>
             <div className="heading">
@@ -77,73 +130,15 @@ const UsersList = () => {
                     </ul>
                 </NativeButtonGroup>
             </div>
+
             <Title title="Users" />
-            <table className="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th style={{ width: "32px" }}>&nbsp;</th>
-                        <th style={{ width: "64px" }}>&nbsp;</th>
-                        <th>Full name</th>
-                        <th>Username</th>
-                        <th>Role</th>
-                        <th>Active?</th>
-                        <th>Last login time</th>
-                        <th>2FA enabled?</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {isLoading ? (
-                        <LoadingTableRow numColumns={8} />
-                    ) : (
-                        <>
-                            {null !== users && 0 === users.length && <NoResultsTableRow numColumns={8} />}
-                            {null !== users &&
-                                0 !== users.length &&
-                                users.map((user, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                value={user.id}
-                                                onChange={onTaskCheckboxChange}
-                                                checked={selectedUsers.includes(user.id)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <UserAvatar email={user.email} />
-                                        </td>
-                                        <td>
-                                            <Link to={`/users/${user.id}`}>{user.fullName}</Link>
-                                        </td>
-                                        <td>
-                                            <UserLink userId={user.id}>{user.username}</UserLink>
-                                        </td>
-                                        <td>
-                                            <UserRoleBadge role={user.role} />
-                                        </td>
-                                        <td>
-                                            <BooleanText value={user.active} />
-                                        </td>
-                                        <td>
-                                            <LastLogin user={user} />{" "}
-                                        </td>
-                                        <td>
-                                            <BooleanText value={user.mfa_enabled} />
-                                        </td>
-                                        <td style={{ textAlign: "right" }}>
-                                            <LinkButton href={`/users/${user.id}/edit`}>Edit</LinkButton>
-                                            <DeleteIconButton
-                                                onClick={() => onDeleteClick(user.id)}
-                                                disabled={parseInt(user.id) === loggedInUser.id ? "disabled" : ""}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                        </>
-                    )}
-                </tbody>
-            </table>
+
+            <NativeTable
+                columns={columns}
+                rows={isLoading ? null : users}
+                rowId={(user) => user.id}
+                emptyRowsMessage="No users available."
+            ></NativeTable>
         </>
     );
 };
