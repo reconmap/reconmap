@@ -5,11 +5,16 @@ const links = [
     { type: "label", name: "General", items: [] },
     {
         type: "menu",
-        name: "Commands",
-        url: "/commands",
-        children: [{ name: "Create", url: "/commands/add", permissions: "tasks.create" }],
+        name: "System health",
+        url: "/system/health",
+        children: [{ name: "Overview", url: "/system-health/overview", permissions: "system.health" }],
     },
     {
+        type: "menu",
+        name: "System usage",
+        url: "/system/usage",
+        children: [{ name: "Overview", url: "/system-health/overview", permissions: "system.health" }],
+    }, {
         type: "menu",
         name: "Vulnerabilities",
         url: "/vulnerabilities",
@@ -27,7 +32,7 @@ const links = [
     },
 ];
 
-const LibraryLayout = () => {
+const HelpSupportLayout = () => {
     return (
         <SidemenuLayout links={links}>
             <Outlet />
@@ -35,4 +40,4 @@ const LibraryLayout = () => {
     );
 };
 
-export default LibraryLayout;
+export default HelpSupportLayout;

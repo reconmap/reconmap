@@ -26,6 +26,20 @@ const requestSystemMailSettingsPut = (data: any) => {
     });
 };
 
+const requestSystemAiSettings = () => {
+    return secureApiFetch("/system/ai-settings", { method: "GET" });
+};
+
+const requestSystemAiSettingsPut = (data: any) => {
+    return secureApiFetch("/system/ai-settings", {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+};
+
 const requestCustomFields = () => {
     return secureApiFetch("/system/custom-fields", { method: "GET" });
 };
@@ -60,6 +74,8 @@ export {
     requestRecentSearches,
     requestSystemMailSettings,
     requestSystemMailSettingsPut,
+    requestSystemAiSettings,
+    requestSystemAiSettingsPut,
     requestSystemHealth,
     requestSystemIntegrations,
     requestSystemUsage

@@ -1,14 +1,13 @@
 using System.Security.Cryptography;
-using System.Text.Json;
 using api_v2.Application.Services;
 using api_v2.Common;
 using api_v2.Common.Extensions;
+using api_v2.Common.Messaging;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 
 namespace api_v2.Controllers;
 
@@ -24,7 +23,7 @@ public class CommandProcessorJob
 [ApiController]
 public class CommandsController(
     AppDbContext dbContext,
-    IConnectionMultiplexer conn,
+    IMessageQueue messageQueue,
     IConfiguration config,
     ILogger<CommandsController> logger,
     IAttachmentStorage attachmentStorage)
@@ -141,7 +140,7 @@ public class CommandsController(
         var userId = (int)HttpContext.GetCurrentUser()!.Id;
 
         var uniqueName = _attachmentFilePath.GenerateFileName(Path.GetExtension(resultFile.FileName));
-        
+
         await using (var stream = resultFile.OpenReadStream())
         {
             await attachmentStorage.SaveFileAsync(uniqueName, stream);
@@ -170,20 +169,17 @@ public class CommandsController(
 
         if (projectId.HasValue)
         {
-            var payload = new
+            var job = new CommandProcessorJob
             {
-                commandUsageId,
-                projectId = projectId.Value,
-                userId,
-                filePath = uniqueName
+                CommandUsageId = commandUsageId,
+                ProjectId = (uint)projectId.Value,
+                UserId = (uint)userId,
+                FilePath = uniqueName
             };
 
-            var pushed = await conn.GetDatabase().ListLeftPushAsync(
-                "tasks:queue",
-                JsonSerializer.Serialize(payload)
-            );
+            await messageQueue.PublishAsync("tasks", job);
 
-            logger.LogInformation("pushed new job to {QueueName}", "tasks:queue");
+            logger.LogInformation("pushed new job to {QueueName}", "tasks");
         }
 
         return new JsonResult(new { success = true });

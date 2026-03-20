@@ -1,3 +1,4 @@
+using api_v2.Common;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
@@ -8,7 +9,7 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AssetsController(AppDbContext dbContext) : ControllerBase
+public class AssetsController(AppDbContext dbContext, IAiService aiService) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateOne(Asset asset)
@@ -39,6 +40,17 @@ public class AssetsController(AppDbContext dbContext) : ControllerBase
         if (asset == null) return NotFound();
 
         return Ok(asset);
+    }
+
+    [HttpPost("{id:int}/enrich")]
+    public async Task<IActionResult> Enrich(uint id)
+    {
+        var asset = await dbContext.Assets.FindAsync(id);
+        if (asset == null) return NotFound();
+
+        var recommendation = await aiService.EnrichAssetAsync(asset.Name, asset.Kind);
+
+        return Ok(new { recommendation });
     }
 
     [HttpDelete("{id:int}")]

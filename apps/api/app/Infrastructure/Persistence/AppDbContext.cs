@@ -32,6 +32,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     
     public DbSet<MailSettings> MailSettings { get; set; }
 
+    public DbSet<AiSettings> AiSettings { get; set; }
+
     public DbSet<CustomField> CustomFields { get; set; }
 
     public DbSet<ProjectCategory> ProjectCategories { get; set; }

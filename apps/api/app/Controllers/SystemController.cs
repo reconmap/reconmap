@@ -56,6 +56,7 @@ public class SystemController(
     ILogger<SystemController> logger,
     SystemUsageService service,
     IMailSettingsService mailSettingsService,
+    IAiSettingsService aiSettingsService,
     IAttachmentStorage attachmentStorage)
     : ControllerBase
 {
@@ -196,6 +197,20 @@ public class SystemController(
     public async Task<IActionResult> UpdateMailSettings([FromBody] MailSettingsUpdateRequest request)
     {
         var settings = await mailSettingsService.UpdateAsync(request);
+        return Ok(settings);
+    }
+
+    [HttpGet("ai-settings")]
+    public async Task<IActionResult> GetAiSettings()
+    {
+        var settings = await aiSettingsService.GetAsync();
+        return Ok(settings);
+    }
+
+    [HttpPut("ai-settings")]
+    public async Task<IActionResult> UpdateAiSettings([FromBody] AiSettingsUpdateRequest request)
+    {
+        var settings = await aiSettingsService.UpdateAsync(request);
         return Ok(settings);
     }
 }

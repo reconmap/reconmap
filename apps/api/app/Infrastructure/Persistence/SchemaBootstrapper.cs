@@ -31,5 +31,28 @@ public static class SchemaBootstrapper
                 PRIMARY KEY (id)
             ) ENGINE = InnoDB;
             """);
+
+        await db.Database.ExecuteSqlRawAsync(
+            """
+            CREATE TABLE IF NOT EXISTS ai_settings
+            (
+                id                     INT UNSIGNED NOT NULL,
+                created_at             TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at             TIMESTAMP    NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                provider               VARCHAR(50)  NOT NULL DEFAULT 'Ollama',
+                max_output_tokens      INT          NOT NULL DEFAULT 4000,
+                ollama_base_url        VARCHAR(255) NULL,
+                ollama_model           VARCHAR(255) NULL,
+                azure_openai_endpoint  VARCHAR(255) NULL,
+                azure_openai_api_key   TEXT         NULL,
+                azure_openai_deployment VARCHAR(255) NULL,
+                openrouter_api_key     TEXT         NULL,
+                openrouter_model       VARCHAR(255) NULL,
+                PRIMARY KEY (id)
+            ) ENGINE = InnoDB;
+            """);
+
+        await db.Database.ExecuteSqlRawAsync("INSERT IGNORE INTO mail_settings (id) VALUES (1);");
+        await db.Database.ExecuteSqlRawAsync("INSERT IGNORE INTO ai_settings (id, provider, max_output_tokens, ollama_base_url, ollama_model) VALUES (1, 'Ollama', 4000, 'http://localhost:11434/', 'llama3.2');");
     }
 }

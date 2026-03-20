@@ -1,4 +1,5 @@
 using System.Text.Json;
+using api_v2.Common;
 using api_v2.Common.Messaging;
 using api_v2.Controllers;
 using api_v2.Domain.Entities;
@@ -18,6 +19,7 @@ public class CommandResultProcessor(
         {
             using var scope = _scopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var aiService = scope.ServiceProvider.GetRequiredService<IAiService>();
 
             logger.LogInformation("Task queue popped");
             var commandUsage = await db.CommandUsages.FindAsync(job.CommandUsageId);
@@ -54,6 +56,7 @@ public class CommandResultProcessor(
                 await db.SaveChangesAsync(stoppingToken);
             }
 
+            var numFindingsAdded = 0;
             var numFindings = result.findings.Count;
             if (numFindings > 0)
             {
@@ -70,7 +73,26 @@ public class CommandResultProcessor(
                         finding.Asset = null;
                     }
 
+                    if (await IsDuplicateFinding(db, finding))
+                    {
+                        logger.LogInformation("Skipping duplicate finding: {Summary}", finding.Summary);
+                        continue;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(finding.Remediation))
+                    {
+                        try
+                        {
+                            finding.Remediation = await aiService.GenerateRemediationAsync(finding.Summary);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.LogWarning(ex, "Failed to generate remediation for {Summary}", finding.Summary);
+                        }
+                    }
+
                     db.Vulnerabilities.Add(finding);
+                    numFindingsAdded++;
                 }
 
                 try
@@ -83,21 +105,33 @@ public class CommandResultProcessor(
                     db.ChangeTracker.Clear();
                 }
 
-                var notification = new Notification
+                if (numFindingsAdded > 0)
                 {
-                    ToUserId = job.UserId,
-                    Title = "New findings found",
-                    Content =
-                        $"A total of '{numFindings}' new findings have been found by the '{commandUsage.OutputParser}' command",
-                    Status = "unread"
-                };
-                db.Notifications.Add(notification);
-                await db.SaveChangesAsync(stoppingToken);
+                    var notification = new Notification
+                    {
+                        ToUserId = job.UserId,
+                        Title = "New findings found",
+                        Content =
+                            $"A total of '{numFindingsAdded}' new findings have been found by the '{commandUsage.OutputParser}' command",
+                        Status = "unread"
+                    };
+                    db.Notifications.Add(notification);
+                    await db.SaveChangesAsync(stoppingToken);
+                }
             }
 
-            if (numHosts > 0 || numFindings > 0)
+            if (numHosts > 0 || numFindingsAdded > 0)
                 await messageQueue.PublishAsync("notifications", new { type = "message" });
         }, stoppingToken);
+    }
+
+    private async Task<bool> IsDuplicateFinding(AppDbContext db, Vulnerability finding)
+    {
+        return await db.Vulnerabilities.AnyAsync(v =>
+            v.ProjectId == finding.ProjectId &&
+            v.TargetId == finding.TargetId &&
+            v.Summary == finding.Summary &&
+            v.Status == "open");
     }
 
     private async Task<uint> GetAssetId(AppDbContext db, Asset asset)

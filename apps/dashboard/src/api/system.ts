@@ -7,6 +7,8 @@ import {
     requestRecentSearches,
     requestSystemMailSettings,
     requestSystemMailSettingsPut,
+    requestSystemAiSettings,
+    requestSystemAiSettingsPut,
     requestSystemHealth,
     requestSystemIntegrations,
     requestSystemUsage,
@@ -37,6 +39,13 @@ const useSystemMailSettingsQuery = () => {
     return useQuery({
         queryKey: ["system-mail-settings"],
         queryFn: () => requestSystemMailSettings().then((res) => res.json()),
+    });
+};
+
+const useSystemAiSettingsQuery = () => {
+    return useQuery({
+        queryKey: ["system-ai-settings"],
+        queryFn: () => requestSystemAiSettings().then((res) => res.json()),
     });
 };
 
@@ -99,6 +108,24 @@ const useSystemMailSettingsUpdateMutation = () => {
     });
 };
 
+const useSystemAiSettingsUpdateMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (settings: any) =>
+            requestSystemAiSettingsPut(settings).then(async (res) => {
+                const payload = await res.json().catch(() => null);
+                if (!res.ok) {
+                    throw new Error(payload?.message ?? "Unable to save AI settings.");
+                }
+
+                return payload;
+            }),
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["system-ai-settings"] });
+        },
+    });
+};
+
 export {
     useExportablesQuery,
     useRecentSearchesQuery,
@@ -109,5 +136,7 @@ export {
     useSystemIntegrationsQuery,
     useSystemMailSettingsQuery,
     useSystemMailSettingsUpdateMutation,
+    useSystemAiSettingsQuery,
+    useSystemAiSettingsUpdateMutation,
     useSystemUsageQuery,
 };

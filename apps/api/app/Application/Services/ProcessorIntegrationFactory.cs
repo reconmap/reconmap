@@ -47,7 +47,7 @@ public static class ProcessorIntegrationDiscovery
         return map;
     }
 
-    private static IEnumerable<string> InferNames(string className)
+    internal static IEnumerable<string> InferNames(string className)
     {
         // Full class name as alias
         yield return className;
@@ -60,12 +60,17 @@ public static class ProcessorIntegrationDiscovery
         else if (baseName.EndsWith("Integration", StringComparison.OrdinalIgnoreCase))
             baseName = baseName[..^"Integration".Length];
 
-        // First PascalCase segment (e.g. NmapScanProcessor -> Nmap)
+        // Full base name supports camelCase lookup via OrdinalIgnoreCase dictionary.
+        // e.g. GenericLlmProcessor -> GenericLlm, which matches "genericLlm"
+        yield return baseName;
+
+        // First PascalCase segment (e.g. NmapScanProcessor -> Nmap, GenericLlmProcessor -> Generic)
         var firstSegment = new string(
             baseName
                 .TakeWhile(c => !char.IsUpper(c) || c == baseName[0])
                 .ToArray());
 
-        yield return firstSegment;
+        if (firstSegment != baseName)
+            yield return firstSegment;
     }
 }

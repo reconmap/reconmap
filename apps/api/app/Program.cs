@@ -14,8 +14,12 @@ using api_v2.Application.CommandProcessors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 using Serilog;
+using StackExchange.Redis;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 var isDevelopment = environmentName == "Development";
@@ -60,11 +64,10 @@ services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddTransient<IClaimsTransformation, RoleClaimsTransformation>();
 services.AddSingleton<WebSocketConnectionManager>();
 services.AddScoped<SystemUsageService>();
-services.AddScoped<AuditService>();
+services.AddScoped<IAuditService, AuditService>();
 services.AddScoped<ISecretsService, SecretsService>();
 services.AddScoped<IMailSettingsService, MailSettingsService>();
-services.Configure<AiOptions>(
-    builder.Configuration.GetSection("AI"));
+services.AddScoped<IAiSettingsService, AiSettingsService>();
 services.AddDataProtection()
     .SetApplicationName("Reconmap");
 
@@ -80,6 +83,22 @@ services.AddHostedService<AzureDevopsProcessor>();
 services.AddHostedService<ReportEmailProcessor>();
 services.AddReconmapAuthentication(builder.Configuration);
 services.AddDatabase(builder.Configuration);
+
+services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>(name: "database")
+    .AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>(), name: "redis")
+    .AddRabbitMQ(async sp =>
+    {
+        var settings = sp.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
+        var factory = new ConnectionFactory
+        {
+            HostName = settings.HostName,
+            UserName = settings.UserName,
+            Password = settings.Password
+        };
+        return await factory.CreateConnectionAsync();
+    }, name: "rabbitmq");
+
 services.AddSwaggerDocumentation();
 services.AddCorsPolicies(builder.Configuration);
 services.AddRouting(options => options.LowercaseUrls = true);
@@ -118,6 +137,26 @@ app.UseRouting();
 app.UseCors(CorsExtensions.CustomCorsPolicy);
 
 app.MapOpenApi().AllowAnonymous();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var response = new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(e => new
+            {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                description = e.Value.Description
+            })
+        };
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+    }
+}).AllowAnonymous();
+
 app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/v1.json", "v1"); });
 
 if (!app.Environment.IsDevelopment())

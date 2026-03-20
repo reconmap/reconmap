@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **System of Intelligence** features:
+    - **Generic LLM Parser**: A new command output processor that uses LLMs to parse results from any security tool into structured assets and findings.
+    - **Automated Finding Remediation**: Automatically generates remediation instructions using AI for newly discovered findings.
+    - **Intelligent Finding Deduplication**: Prevents duplicate findings from being created in the same project/target.
+    - **Asset Scan Strategist**: New "Enrich" endpoint for assets that provides AI-generated scan recommendations and next steps.
 - Jira integration for findings: push findings to Jira as issues.
 - Azure DevOps integration for findings: push findings to Azure DevOps as work items.
 - Integrated Webhooks, Jira, and Azure DevOps under a new "Integrations" management section.

@@ -31,6 +31,11 @@ const SettingsLayout = ({ children }) => {
             name: "Mail settings",
             url: "/system/mail-settings",
         },
+        {
+            type: "menu",
+            name: "AI settings",
+            url: "/system/ai-settings",
+        },
         { type: "label", name: t("Data") },
         {
             type: "menu",
