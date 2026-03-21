@@ -6,6 +6,8 @@ grand_parent: User manual
 
 Reconmap has 4 different roles that give users restricted access to parts of the system. In a nutshell the level of access is:
 
+![Users list](/images/screenshots/users-list.png)
+
 | Role          | Capabilities/Permissions                              |
 | ------------- | ----------------------------------------------------- |
 | Client        | View information about projects the user is member of |

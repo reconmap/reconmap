@@ -5,6 +5,8 @@ parent: System
 
 Reconmap supports several ways to integrate with external tools and services. These integrations can be managed from the **Settings > Integrations** menu in the dashboard.
 
+![Integrations view](/images/screenshots/integrations.png)
+
 ## Webhooks
 
 Webhooks allow you to receive real-time notifications when certain events occur in Reconmap. When an event is triggered, Reconmap sends an HTTP POST request to the configured URL with a JSON payload.

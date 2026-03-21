@@ -2,6 +2,8 @@
 
 API tokens allow you to interact with the Reconmap API programmatically without needing a short-lived JWT (JSON Web Token). These are ideal for scripts, CI/CD integrations, and automation.
 
+![API tokens](/images/screenshots/api-tokens.png)
+
 ## Managing API Tokens
 
 You can manage your API tokens by navigating to **System > API tokens** in the dashboard.

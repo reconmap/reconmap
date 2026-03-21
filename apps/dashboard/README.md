@@ -2,9 +2,7 @@
 
 # Reconmap Dashboard
 
-The Reconmap Dashboard allows users to interact with the Reconmap API to create projects, tasks, commands, reports and much more. Other clients include the [CLI](../../cli) (command line interface) and the [mobile client](https://github.com/reconmap/mobile-client).
-
-This is a component of many in the [Reconmap's architecture](https://docs.reconmap.com/development/architecture.html).
+The Reconmap Dashboard allows users to interact with the Reconmap API to create projects, tasks, commands, reports and much more. Other clients include the [CLI](../../cli) (command line interface).
 
 ## Requirements
 

@@ -55,14 +55,29 @@ public class PaginationRequestHandlerTests
     }
 
     [Theory]
-    [InlineData(100, 20, 80)]
-    [InlineData(101, 20, 100)]
+    [InlineData(100, 20, 0)]
+    [InlineData(101, 20, 0)]
     [InlineData(19, 20, 0)]
-    public void CalculateOffset_ReturnsLastPageOffset(int totalCount, int limit, int expectedOffset)
+    public void CalculateOffset_ReturnsFirstPageOffsetByDefault(int totalCount, int limit, int expectedOffset)
     {
         var query = new QueryCollection(new Dictionary<string, StringValues>
         {
             { "limit", limit.ToString() }
+        });
+        var handler = new PaginationRequestHandler(query, totalCount);
+        Assert.Equal(expectedOffset, handler.CalculateOffset());
+    }
+
+    [Theory]
+    [InlineData(100, 20, 2, 20)]
+    [InlineData(101, 20, 6, 100)]
+    [InlineData(21, 20, 2, 20)]
+    public void CalculateOffset_ReturnsCorrectOffsetForPage(int totalCount, int limit, int page, int expectedOffset)
+    {
+        var query = new QueryCollection(new Dictionary<string, StringValues>
+        {
+            { "limit", limit.ToString() },
+            { "page", page.ToString() }
         });
         var handler = new PaginationRequestHandler(query, totalCount);
         Assert.Equal(expectedOffset, handler.CalculateOffset());

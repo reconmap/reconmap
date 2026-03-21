@@ -47,11 +47,11 @@ db-shell:
 
 .PHONY: db-reset
 db-reset:
-	cat docker/mysql/initdb/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -preconmuppet reconmap
+	cat ../../infra/docker/mysql/initdb/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -preconmuppet reconmap
 
 .PHONY: db-import
 db-import:
-	cat docker/mysql/initdb/{01,02,03}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -preconmuppet reconmap
+	cat ../../infra/docker/mysql/initdb/{01,02,03}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -preconmuppet reconmap
 
 .PHONY: redis-shell
 redis-shell:

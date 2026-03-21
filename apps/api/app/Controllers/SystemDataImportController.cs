@@ -11,7 +11,8 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
     };
 
     private readonly AppDbContext _db = db;
@@ -70,15 +71,21 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
         {
             "audit_log" => await ImportAsync(element, _db.AuditEntries, cancellationToken),
             "commands" => await ImportAsync(element, _db.Commands, cancellationToken),
+            "command_usages" => await ImportAsync(element, _db.CommandUsages, cancellationToken),
             "documents" => await ImportAsync(element, _db.Documents, cancellationToken),
             "projects" or "project_templates" => await ImportAsync(element, _db.Projects, cancellationToken),
             "tasks" => await ImportAsync(element, _db.Tasks, cancellationToken),
             "targets" => await ImportAsync(element, _db.Assets, cancellationToken),
             "organisations" => await ImportAsync(element, _db.Organisations, cancellationToken),
             "users" => await ImportAsync(element, _db.Users, cancellationToken),
+            "vault" => await ImportAsync(element, _db.Secrets, cancellationToken),
+            "custom_fields" => await ImportAsync(element, _db.CustomFields, cancellationToken),
+            "jira_integrations" => await ImportAsync(element, _db.JiraIntegrations, cancellationToken),
+            "azure_devops_integrations" => await ImportAsync(element, _db.AzureDevopsIntegrations, cancellationToken),
             "vulnerabilities" or "vulnerability_templates" => await ImportAsync(element, _db.Vulnerabilities,
                 cancellationToken),
             "vulnerability_categories" => await ImportAsync(element, _db.VulnerabilityCategories, cancellationToken),
+            "project_categories" => await ImportAsync(element, _db.ProjectCategories, cancellationToken),
             _ => throw new InvalidOperationException($"Unknown entity: {entityName}")
         };
         result.Name = entityName;

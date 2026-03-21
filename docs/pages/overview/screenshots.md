@@ -3,6 +3,10 @@ title: Screenshots
 nav_order: 1
 ---
 
+### Dashboard
+
+![Dashboard view](/images/screenshots/dashboard-stats.png)
+
 ### Vulnerabilities
 
 ![Vulnerabilities view](/images/screenshots/vulnerabilities.png)
@@ -25,6 +29,11 @@ nav_order: 1
 
 ### Integrations
 
-![Integrations](/images/screenshots/integrations.png)
+![Integrations view](/images/screenshots/integrations.png)
+
+### Users list
+
+![Users list](/images/screenshots/users-list.png)
 
 There are many more screenshots in the [user manual](/user-manual/).
+
