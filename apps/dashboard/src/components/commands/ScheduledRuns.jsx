@@ -1,15 +1,15 @@
-import { useCommandSchedulesQuery, useCommandUsagesQuery } from "api/commands.js";
+import { useSchedulesQuery } from "api/commands.js";
 import { requestCommandScheduleDelete } from "api/requests/commands.js";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable.jsx";
+import { actionCompletedToast } from "components/ui/toast";
 import { toString as CronExpressionToString } from "cronstrue";
 
-const ScheduledRuns = ({ command, task = null }) => {
-    const { data: commandUsages } = useCommandUsagesQuery(command?.id);
-    const { data: scheduledCommands } = useCommandSchedulesQuery(command?.id);
+const ScheduledRuns = () => {
+    const { data: scheduledCommands, refetch: fetchScheduledCommands } = useSchedulesQuery();
 
     const deleteScheduledCommand = (ev, commandSchedule) => {
-        requestCommandScheduleDelete(command?.id, commandSchedule.id)
+        requestCommandScheduleDelete(commandSchedule.commandId, commandSchedule.id)
             .then(() => {
                 fetchScheduledCommands();
                 actionCompletedToast("The scheduled command has been deleted.");
@@ -18,6 +18,14 @@ const ScheduledRuns = ({ command, task = null }) => {
     };
 
     const columns = [
+        {
+            header: "Command",
+            cell: (scheduledCommand) => scheduledCommand.command?.name || scheduledCommand.commandId
+        },
+        {
+            header: "Project",
+            cell: (scheduledCommand) => scheduledCommand.project?.name || scheduledCommand.projectId || "None"
+        },
         { header: "Cron Expression", property: "cronExpression" },
         {
             header: "Description",
@@ -26,7 +34,7 @@ const ScheduledRuns = ({ command, task = null }) => {
                     throwExceptionOnParseError: false,
                 }),
         },
-        { header: "Argument values", property: "argument_values" },
+        { header: "Argument values", property: "argumentValues" },
         { header: "", cell: (scheduledCommand) => <DeleteIconButton onClick={(ev) => deleteScheduledCommand(ev, scheduledCommand)} /> },
     ]
 

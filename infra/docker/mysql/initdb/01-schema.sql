@@ -432,14 +432,18 @@ CREATE TABLE command_schedule
 (
     id              INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     created_by_uid     INT UNSIGNED  NOT NULL,
+    project_id INT UNSIGNED DEFAULT NULL,
     created_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP     NULL ON UPDATE CURRENT_TIMESTAMP,
     command_id      INT UNSIGNED  NULL,
+    command_usage_id      INT UNSIGNED  NULL,
     argument_values VARCHAR(1000) NULL,
     cron_expression VARCHAR(60)   NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (command_id) REFERENCES command (id) ON DELETE CASCADE
+    FOREIGN KEY (command_id) REFERENCES command (id) ON DELETE CASCADE,
+    FOREIGN KEY (command_usage_id) REFERENCES command_usage (id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS report;

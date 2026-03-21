@@ -19,7 +19,7 @@ import parseArguments from "services/commands/arguments";
 
 const Bullet = () => <span style={{ color: "var(--bulma-primary" }}>▸</span>;
 
-const CommandInstructions = ({ command, projectId = null }) => {
+const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = null }) => {
     const { data: commandUsages } = useCommandUsagesQuery(command?.id);
 
     const [usage, setUsage] = useState(null);
@@ -51,29 +51,30 @@ const CommandInstructions = ({ command, projectId = null }) => {
             {usage !== null && (
                 <>
                     <h4 className="title is-4">Instructions for command "{command.name}"</h4>
-                    <UsageDetail projectId={projectId} command={command} usage={usage} />
+                    <UsageDetail projectId={projectId} command={command} usage={usage} forcedRunFrequency={forcedRunFrequency} />
                 </>
             )}
         </>
     );
 };
 
-const UsageDetail = ({ projectId: parentProjectId, command, usage }) => {
+const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFrequency = null }) => {
     const [commandArgsRendered, setCommandArgsRendered] = useState("");
     const [commandArgs, setCommandArgs] = useState(parseArguments(usage));
     const [findingsStorageAction, setFindingsStorageAction] = useState("discard");
     const [showTerminal, setShowTerminal] = useState(false);
-    const [runFrequency, setRunFrequency] = useState("once");
+    const [runFrequency, setRunFrequency] = useState(forcedRunFrequency || "once");
     const [projectId, setProjectId] = useState(null);
-    const [terminalEnvironment, setTerminalEnvironment] = useState("browser");
+    const [terminalEnvironment, setTerminalEnvironment] = useState("desktop");
     const [agent, setAgent] = useState(null);
     const { data: projects } = useProjectsQuery({ isTemplate: false, status: "active" });
     const { data: agents, isLoading: isAgentsLoading } = useAgentsQuery();
 
     useEffect(() => {
-        const commandArgsRendered = CommandService.renderArguments(projectId, usage, commandArgs);
-        setCommandArgsRendered(commandArgsRendered);
-    }, [commandArgs]);
+        if (forcedRunFrequency) {
+            setRunFrequency(forcedRunFrequency);
+        }
+    }, [forcedRunFrequency]);
 
     const [cronExpression, setCronExpression] = useState("");
     const [cronExpressionErrorMessage, setCronExpressionErrorMessage] = useState(null);
@@ -86,6 +87,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage }) => {
                 placeholder: ev.target.value,
             },
         });
+
     };
 
     const runOnTerminal = (ev) => {
@@ -105,6 +107,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage }) => {
     const saveScheduledCommand = (ev, command, usage, commandArgsRendered) => {
         const schedule = {
             commandId: command.id,
+            projectId: projectId,
             argumentValues: CommandService.generateEntryPoint(projectId, command, usage) + " " + commandArgsRendered,
             cronExpression: cronExpression,
         };
@@ -127,6 +130,10 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage }) => {
         if (isAgentsLoading || agents.length === 0) return;
         setAgent(agents[0]);
     }, [isAgentsLoading]);
+
+    useEffect(() => {
+        setCommandArgsRendered(CommandService.renderArguments(projectId, command, commandArgs));
+    }, [commandArgs, projectId, command]);
 
     return (
         <>
@@ -184,15 +191,17 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage }) => {
                 />
             )}
 
-            <HorizontalLabelledField
-                label="Run frequency"
-                control={
-                    <NativeSelect onChange={(ev) => setRunFrequency(ev.target.value)}>
-                        <option value="once">Once</option>
-                        <option value="on_schedule">On schedule</option>
-                    </NativeSelect>
-                }
-            />
+            {!forcedRunFrequency && (
+                <HorizontalLabelledField
+                    label="Run frequency"
+                    control={
+                        <NativeSelect onChange={(ev) => setRunFrequency(ev.target.value)} value={runFrequency}>
+                            <option value="once">Once</option>
+                            <option value="on_schedule">On schedule</option>
+                        </NativeSelect>
+                    }
+                />
+            )}
 
             {runFrequency === "on_schedule" && (
                 <>
@@ -240,8 +249,8 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage }) => {
                         label="Terminal environment"
                         control={
                             <NativeSelect onChange={(ev) => setTerminalEnvironment(ev.target.value)}>
-                                <option value="browser">Browser</option>
                                 <option value="desktop">Desktop</option>
+                                <option value="browser" disabled={isAgentsLoading || agents.length === 0} title={isAgentsLoading || agents.length === 0 ? "No available agents" : ""}>Browser</option>
                             </NativeSelect>
                         }
                     />

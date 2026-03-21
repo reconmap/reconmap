@@ -22,6 +22,10 @@ const requestCommandSchedules = (commandId: number) => {
     return secureApiFetch(`${API_BASE_URL}/${commandId}/schedules`, { method: "GET" });
 };
 
+const requestSchedules = () => {
+    return secureApiFetch(`${API_BASE_URL}/schedules`, { method: "GET" });
+};
+
 export const requestCommandSchedulePost = (commandId: number, schedule: Record<string, string>) =>
     requestEntityPost(`${API_BASE_URL}/${commandId}/schedules`, schedule);
 
@@ -44,6 +48,10 @@ const requestCommandUsageDelete = (commandId: number, usageId: number) => {
     return secureApiFetch(`${API_BASE_URL}/${commandId}/usages/${usageId}`, { method: "DELETE" });
 };
 
+const requestCommandOutputPost = (formData: FormData) => {
+    return secureApiFetch(`${API_BASE_URL}/outputs`, { method: "POST", body: formData });
+};
+
 export {
     requestCommand,
     requestCommandDelete,
@@ -51,8 +59,10 @@ export {
     requestCommands,
     requestCommandScheduleDelete,
     requestCommandSchedules,
+    requestSchedules,
     requestCommandsOutputParsers,
     requestCommandUsageDelete,
-    requestCommandUsages
+    requestCommandUsages,
+    requestCommandOutputPost
 };
 

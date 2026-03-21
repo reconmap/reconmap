@@ -21,7 +21,15 @@ const acceptStyle = {};
 
 const rejectStyle = {};
 
-const AttachmentsDropzone = ({ parentType, parentId, onUploadFinished = null }) => {
+const AttachmentsDropzone = ({
+    parentType,
+    parentId,
+    extraParams = {},
+    onUploadFinished = null,
+    uploadFn = requestAttachmentPost,
+    fileFieldName = "attachment[]",
+    disabled = false,
+}) => {
     const queryClient = useQueryClient();
 
     const onFileDrop = (newFiles) => {
@@ -36,13 +44,18 @@ const AttachmentsDropzone = ({ parentType, parentId, onUploadFinished = null }) 
 
     const onUploadButtonClick = (ev) => {
         const formData = new FormData();
-        formData.append("parentType", parentType);
-        formData.append("parentId", parentId);
+        if (parentType) formData.append("parentType", parentType);
+        if (parentId) formData.append("parentId", parentId);
+        Object.entries(extraParams).forEach(([key, value]) => {
+            if (value !== null && value !== undefined) {
+                formData.append(key, value);
+            }
+        });
         acceptedFiles.forEach((file) => {
-            formData.append("attachment[]", file);
+            formData.append(fileFieldName, file);
         });
 
-        requestAttachmentPost(formData)
+        uploadFn(formData)
             .then(() => {
                 setAcceptedFiles([]);
                 queryClient.invalidateQueries({ queryKey: ["attachments"] });
@@ -80,7 +93,7 @@ const AttachmentsDropzone = ({ parentType, parentId, onUploadFinished = null }) 
                 )}
             </aside>
             <hr />
-            <PrimaryButton onClick={onUploadButtonClick} disabled={acceptedFiles.length === 0}>
+            <PrimaryButton onClick={onUploadButtonClick} disabled={disabled || acceptedFiles.length === 0}>
                 Upload file(s)
             </PrimaryButton>
         </div>

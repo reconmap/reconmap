@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { requestDeleteDocument, requestDocument, requestDocuments, requestPostDocument } from "./requests/documents.js";
 
-const useDocuments = () => {
+const useDocuments = (params: Record<string, any>) => {
     return useQuery({
-        queryKey: ["documents"],
-        queryFn: () => requestDocuments().then((res) => res.json()),
+        queryKey: ["documents", params],
+        queryFn: () => requestDocuments(params).then((res) => res.json()),
     });
 };
 

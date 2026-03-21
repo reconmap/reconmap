@@ -18,9 +18,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Breadcrumb from "../ui/Breadcrumb.jsx";
 import Loading from "../ui/Loading.jsx";
 import DeleteButton from "../ui/buttons/Delete.jsx";
-import CommandInstructions from "./Instructions.jsx";
 import CommandOutputs from "./Outputs.jsx";
-import ScheduledRuns from "./ScheduledRuns.jsx";
 
 const CommandDetailsPage = () => {
     const [t] = useTranslation();
@@ -69,7 +67,7 @@ const CommandDetailsPage = () => {
                 </div>
 
                 <NativeTabs
-                    labels={[t("Details"), t("Usages"), "Run instructions", "Scheduled runs", "Command outputs"]}
+                    labels={[t("Details"), t("Usages"), "Command outputs"]}
                     tabIndex={tabIndex}
                     tabIndexSetter={tabIndexSetter}
                 />
@@ -157,18 +155,6 @@ const CommandDetailsPage = () => {
                             </div>
                         )}
                         {2 === tabIndex && (
-                            <div>
-                                {commandUsages !== null && (
-                                    <CommandInstructions command={command} usages={commandUsages} />
-                                )}
-                            </div>
-                        )}{" "}
-                        {3 === tabIndex && (
-                            <div>
-                                {commandUsages !== null && <ScheduledRuns command={command} usages={commandUsages} />}
-                            </div>
-                        )}
-                        {4 === tabIndex && (
                             <div>
                                 <CommandOutputs command={command} />
                             </div>

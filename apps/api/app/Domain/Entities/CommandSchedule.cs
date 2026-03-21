@@ -6,14 +6,27 @@ namespace api_v2.Domain.Entities;
 [Table("command_schedule")]
 public class CommandSchedule : TimestampedEntity
 {
-    [Key] [Column("id")] public uint Id { get; set; }
+    [Key][Column("id")] public uint Id { get; set; }
 
     [Column("created_by_uid")] public uint CreatedByUid { get; set; }
-    
+
     [ForeignKey(nameof(CreatedByUid))]
     public User? CreatedBy { get; set; }
 
     [Column("command_id")] public uint? CommandId { get; set; }
+
+    [Column("command_usage_id")] public uint? CommandUsageId { get; set; }
+
+    [ForeignKey(nameof(CommandId))]
+    public Command? Command { get; set; }
+
+    [ForeignKey(nameof(CommandUsageId))]
+    public CommandUsage? CommandUsage { get; set; }
+
+    [Column("project_id")] public uint? ProjectId { get; set; }
+
+    [ForeignKey(nameof(ProjectId))]
+    public Project? Project { get; set; }
 
     [Column("argument_values")]
     [MaxLength(1000)]

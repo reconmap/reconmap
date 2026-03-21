@@ -5,7 +5,7 @@ import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import DashboardWidget from "./Widget";
 
 const RecentDocumentsWidget = () => {
-    const { data: documents, isLoading } = useDocuments(5);
+    const { data: documents, isLoading } = useDocuments({ limit: 5 });
 
     if (isLoading) return <Loading />;
 

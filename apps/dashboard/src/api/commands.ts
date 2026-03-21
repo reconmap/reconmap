@@ -4,8 +4,10 @@ import {
     requestCommandDelete,
     requestCommands,
     requestCommandSchedules,
+    requestSchedules,
     requestCommandsOutputParsers,
     requestCommandUsages,
+    requestCommandOutputPost,
 } from "./requests/commands.js";
 
 const useCommandsQuery = (params: any) => {
@@ -33,12 +35,20 @@ const useCommandUsagesQuery = (commandId: number) => {
     return useQuery({
         queryKey: ["commands", commandId, "usages"],
         queryFn: () => requestCommandUsages(commandId).then((res) => res.json()),
+        enabled: !!commandId,
     });
 };
 const useCommandSchedulesQuery = (commandId: number) => {
     return useQuery({
         queryKey: ["commands", commandId, "schedules"],
         queryFn: () => requestCommandSchedules(commandId).then((res) => res.json()),
+    });
+};
+
+const useSchedulesQuery = () => {
+    return useQuery({
+        queryKey: ["commands", "schedules"],
+        queryFn: () => requestSchedules().then((res) => res.json()),
     });
 };
 
@@ -56,8 +66,10 @@ export {
     useCommandDeleteMutation,
     useCommandQuery,
     useCommandSchedulesQuery,
+    useSchedulesQuery,
     useCommandsOutputParsersQuery,
     useCommandsQuery,
-    useCommandUsagesQuery
+    useCommandUsagesQuery,
+    requestCommandOutputPost
 };
 

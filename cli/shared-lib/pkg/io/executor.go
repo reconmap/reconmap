@@ -14,6 +14,7 @@ type DefaultExecutor struct{}
 
 func (e *DefaultExecutor) Execute(name string, args ...string) ([]byte, []byte, error) {
 	cmd := exec.Command(name, args...)
+
 	var stdout, stderr []byte
 	var errStdout, errStderr error
 	stdoutIn, _ := cmd.StdoutPipe()

@@ -13,8 +13,23 @@
             "args": [
                 "run"
             ],
-            "env": {
-            }
+            "env": {}
+        },
+        {
+            "name": "Launch Runner",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/runner/cmd/rmap/main.go",
+            "args": [
+                "command",
+                "run",
+                "-pid",
+                "1",
+                "-cuid",
+                "2"
+            ],
+            "env": {}
         }
     ]
 }

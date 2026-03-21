@@ -25,9 +25,14 @@ public class DocumentsController(AppDbContext dbContext)
 
     [Authorize(Roles = "administrator")]
     [HttpGet]
-    public async Task<IActionResult> GetMany()
+    public async Task<IActionResult> GetMany([FromQuery] int? limit)
     {
-        return Ok(await dbContext.Documents.Include(d => d.CreatedBy).ToListAsync());
+        var documents = await dbContext.Documents
+            .Include(d => d.CreatedBy)
+            .Take(limit ?? int.MaxValue)
+            .ToListAsync();
+
+        return Ok(documents);
     }
 
     [HttpGet("{id:int}")]

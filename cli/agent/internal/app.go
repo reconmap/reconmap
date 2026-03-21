@@ -13,6 +13,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/go-co-op/gocron/v2"
 	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
 	"github.com/reconmap/shared-lib/pkg/api"
@@ -20,7 +21,6 @@ import (
 	sharedio "github.com/reconmap/shared-lib/pkg/io"
 	"github.com/reconmap/shared-lib/pkg/logging"
 	"github.com/reconmap/shared-lib/pkg/models"
-	"github.com/robfig/cron"
 	"github.com/shirou/gopsutil/v4/cpu"
 	"github.com/shirou/gopsutil/v4/mem"
 	"go.uber.org/zap"
@@ -91,14 +91,18 @@ func (app *App) getSystemInfo(listenAddress string) api.SystemInfo {
 	}
 }
 
-func (app *App) setupSchedules(accessToken string, schedules *models.CommandSchedules) *cron.Cron {
+func (app *App) setupSchedules(schedules *models.CommandSchedules) error {
 	app.Logger.Info("creating cron jobs")
-	c := cron.New()
+	s, err := gocron.NewScheduler()
+	if err != nil {
+		return fmt.Errorf("unable to create scheduler (%w)", err)
+	}
 
 	for _, commandSchedule := range *schedules {
-		c.AddFunc(commandSchedule.CronExpression, func() {
+		s.NewJob(gocron.CronJob(commandSchedule.CronExpression, false), gocron.NewTask(func() {
+			app.Logger.Infof("running command on schedule: %s (%s)", commandSchedule.CronExpression, commandSchedule.ArgumentValues)
 			parts := strings.Split(commandSchedule.ArgumentValues, " ")
-			stdout, stderr, err := app.Executor.Execute(parts[0], parts[1:]...)
+			stdout, stderr, err := app.Executor.Execute(parts[0], strings.Fields(strings.Join(parts[1:], " "))...)
 			if err != nil {
 				app.Logger.Errorf("command execution failed with '%s'", err)
 				return
@@ -106,10 +110,10 @@ func (app *App) setupSchedules(accessToken string, schedules *models.CommandSche
 			outStr, errStr := string(stdout), string(stderr)
 			app.Logger.Debug(outStr)
 			app.Logger.Debug(errStr)
-		})
+		}))
 	}
-	c.Start()
-	return c
+	s.Start()
+	return nil
 }
 
 // Run starts the agent.
@@ -133,7 +137,8 @@ func (app *App) Run(listenAddress string) error {
 	if err != nil {
 		app.Logger.Error("unable to get command schedules", zap.Error(err))
 	} else {
-		app.setupSchedules(accessToken, schedules)
+		os.Setenv("RMAP_SESSION_TOKEN", accessToken)
+		app.setupSchedules(schedules)
 	}
 
 	redisErr := app.connectRedis()

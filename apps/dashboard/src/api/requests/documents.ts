@@ -1,10 +1,10 @@
-import secureApiFetch from "services/api.js";
-import { requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests.js";
+import { requestEntities, requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests.js";
 
 const API_BASE_URL = "/documents";
 
-const requestDocuments = (limit: number = -1) => {
-    return secureApiFetch(`/documents?limit=${limit}`, { method: "GET" });
+const requestDocuments = async (params: Record<string, any>) => {
+    const queryParams = new URLSearchParams(params).toString();
+    return (await requestEntities(`${API_BASE_URL}?` + queryParams));
 };
 
 const requestDocument = (documentId: number) => requestEntity(`${API_BASE_URL}/${documentId}`);

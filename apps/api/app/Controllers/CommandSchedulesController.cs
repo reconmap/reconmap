@@ -17,6 +17,19 @@ public class CommandSchedulesController(
     ILogger<CommandSchedulesController> logger)
     : ControllerBase
 {
+    [HttpGet("schedules")]
+    public async Task<IActionResult> GetAll()
+    {
+        var q = dbContext.CommandSchedules
+            .Include(s => s.Command)
+            .Include(s => s.Project)
+            .AsNoTracking()
+            .OrderByDescending(a => a.CreatedAt);
+
+        var page = await q.ToListAsync();
+        return Ok(page);
+    }
+
     [HttpGet("{commandId:int}/schedules")]
     public async Task<IActionResult> GetMany(uint commandId)
     {
@@ -30,14 +43,14 @@ public class CommandSchedulesController(
     }
 
     [HttpPost("{commandId:int}/schedules")]
-    public async Task<IActionResult> CreateOne(uint commandId, [FromBody] CommandSchedule command)
+    public async Task<IActionResult> CreateOne(uint commandId, [FromBody] CommandSchedule commandSchedule)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        command.CommandId = commandId;
-        command.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
-        dbContext.CommandSchedules.Add(command);
+        commandSchedule.CommandId = commandId;
+        commandSchedule.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        dbContext.CommandSchedules.Add(commandSchedule);
         await dbContext.SaveChangesAsync();
 
         return Created();

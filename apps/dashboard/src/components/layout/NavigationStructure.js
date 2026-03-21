@@ -43,6 +43,37 @@ export const getNavigationStructure = (t) => [
         ]
     },
     {
+        name: t("Scans"),
+        title: t("Run commands and view outputs"),
+        url: "/scans",
+        items: [
+            {
+                type: "menu",
+                name: t("Run once"),
+                url: "/scans/run-once",
+                permissions: "commands.*",
+            },
+            {
+                type: "menu",
+                name: t("Run on schedule"),
+                url: "/scans/run-on-schedule",
+                permissions: "commands.*",
+            },
+            {
+                type: "menu",
+                name: t("View scheduled scans"),
+                url: "/scans/schedules",
+                permissions: "commands.*",
+            },
+            {
+                type: "menu",
+                name: t("Import scan"),
+                url: "/scans/import",
+                permissions: "commands.*",
+            }
+        ]
+    },
+    {
         name: t("Library"),
         title: t("Commands, vulnerabilities, documents, and search"),
         url: "/library",

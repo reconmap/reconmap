@@ -137,7 +137,15 @@ public class CommandsController(
         var command = await dbContext.Commands.FindAsync(usage.CommandId);
 
         // User Id from request context
-        var userId = (int)HttpContext.GetCurrentUser()!.Id;
+        var userId = 0;
+        try
+        {
+            userId = (int)HttpContext.GetCurrentUser()!.Id;
+        }
+        catch
+        {
+            logger.LogInformation("upload command: user not found");
+        }
 
         var uniqueName = _attachmentFilePath.GenerateFileName(Path.GetExtension(resultFile.FileName));
 
@@ -148,7 +156,7 @@ public class CommandsController(
 
         var attachment = new Attachment
         {
-            CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+            CreatedByUid = (uint)userId,
             ParentType = "command",
             ParentId = command.Id,
             ClientFileName = resultFile.FileName,

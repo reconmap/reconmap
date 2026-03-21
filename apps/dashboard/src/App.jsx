@@ -18,6 +18,7 @@ import ProjectsRoutes from "./components/projects/Routes";
 import ProjectTemplatesRoutes from "./components/projects/templates/Routes";
 import ReportsRoutes from "./components/reports/Routes";
 import ReportTemplatesRoutes from "./components/reports/templates/Routes";
+import ScansRoutes from "./components/scans/Routes";
 import SearchRoutes from "./components/search/Routes";
 import SupportRoutes from "./components/support/Routes";
 import SystemRoutes from "./components/system/Routes";
@@ -55,6 +56,7 @@ const App = () => {
                                 ...ProjectsRoutes,
                                 ...ReportTemplatesRoutes,
                                 ...ReportsRoutes,
+                                ...ScansRoutes,
                                 ...NotificationsRoutes,
                                 ...SearchRoutes,
                                 ...SettingsRoutes,
