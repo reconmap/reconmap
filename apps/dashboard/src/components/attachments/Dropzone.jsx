@@ -1,25 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { requestAttachmentPost } from "api/requests/attachments.js";
+import ButtonGroup from "components/ui/buttons/ButtonGroup.js";
 import PrimaryButton from "components/ui/buttons/Primary";
-import { useMemo, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import SecondaryButton from "components/ui/buttons/Secondary.jsx";
+import CssIcon from "components/ui/CssIcon.jsx";
+import { useRef, useState } from "react";
 
-const baseStyle = {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "20px",
-    borderStyle: "dashed",
-    outline: "none",
-    transition: "border .24s ease-in-out",
-};
-
-const activeStyle = {};
-
-const acceptStyle = {};
-
-const rejectStyle = {};
 
 const AttachmentsDropzone = ({
     parentType,
@@ -32,14 +18,7 @@ const AttachmentsDropzone = ({
 }) => {
     const queryClient = useQueryClient();
 
-    const onFileDrop = (newFiles) => {
-        setAcceptedFiles(newFiles);
-    };
-
-    const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
-        onDrop: onFileDrop,
-    });
-
+    const inputRef = useRef(null);
     const [acceptedFiles, setAcceptedFiles] = useState([]);
 
     const onUploadButtonClick = (ev) => {
@@ -64,38 +43,36 @@ const AttachmentsDropzone = ({
             .catch((err) => console.error(err));
     };
 
-    const style = useMemo(
-        () => ({
-            ...baseStyle,
-            ...(isDragActive ? activeStyle : {}),
-            ...(isDragAccept ? acceptStyle : {}),
-            ...(isDragReject ? rejectStyle : {}),
-        }),
-        [isDragActive, isDragAccept, isDragReject],
-    );
-
     return (
-        <div className="container">
-            <div {...getRootProps({ style })}>
-                <input {...getInputProps()} />
-                <p>Drag and drop some files here, or click to select files</p>
-            </div>
-            <aside>
-                {acceptedFiles.length === 0 && <div>(upload list empty)</div>}
-                {acceptedFiles.length > 0 && (
-                    <ul spacing={3}>
+        <div className="" style={{ border: "2px dashed #ccc", padding: "20px", textAlign: "center" }}>
+            <input ref={inputRef} type="file" multiple onChange={(e) => setAcceptedFiles(Array.from(e.target.files))} disabled={disabled} />
+            <aside className="mt-2">
+                {acceptedFiles.length > 0 ? (
+
+                    <div className="mt-4 flex flex-wrap gap-4">
                         {acceptedFiles.map((file) => (
-                            <li key={file.path}>
-                                {file.path} -{file.size} bytes
-                            </li>
+                            <div style={{ display: 'inline-block', maxWidth: '150px' }} key={file.name} className="p-2 border rounded">
+                                <CssIcon name="file" style={{ fontSize: "48px" }} />
+                                <p className="text-xs text-center text-gray-700 truncate w-full">
+                                    {file.name}
+                                </p>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
+                ) : (
+                    <div>(upload list empty)</div>
                 )}
             </aside>
             <hr />
-            <PrimaryButton onClick={onUploadButtonClick} disabled={disabled || acceptedFiles.length === 0}>
-                Upload file(s)
-            </PrimaryButton>
+
+            <ButtonGroup>
+                <PrimaryButton onClick={onUploadButtonClick} disabled={disabled || acceptedFiles.length === 0}>
+                    Upload file(s)
+                </PrimaryButton>
+                <SecondaryButton onClick={() => { inputRef.current.value = null; setAcceptedFiles([]); }} disabled={disabled || acceptedFiles.length === 0}>
+                    Clear file selection
+                </SecondaryButton>
+            </ButtonGroup>
         </div>
     );
 };
