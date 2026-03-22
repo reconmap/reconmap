@@ -5,7 +5,6 @@ import ToolsLayout from "components/tools/ToolsLayout.jsx";
 import { Route } from "react-router-dom";
 import SystemIndexPage from ".";
 import AiSettingsPage from "./AiSettingsPage";
-import ApiTokensPage from "./api-tokens/ApiTokensPage";
 import ExportPage from "./ExportPage";
 import ImportPage from "./ImportPage";
 import IntegrationsPage from "./Integrations";
@@ -17,11 +16,12 @@ const SystemRoutes = [
     <Route element={<HelpSupportLayout />}>
         <Route path="/auditlog" element={<AuditLogList />} />
     </Route>,
+    <Route path={`/data`} element={<ToolsLayout />}>
+    </Route>,
     <Route path={`/system`} element={<SettingsLayout />}>
         <Route path={`mail-settings`} element={<MailSettingsPage />} />
         <Route path={`ai-settings`} element={<AiSettingsPage />} />
         <Route path={`integrations`} element={<IntegrationsPage />} />
-        <Route path={`api-tokens`} element={<ApiTokensPage />} />
     </Route>,
     <Route path={`/system`} element={<ToolsLayout />}>
         <Route path={`export-data`} element={<ExportPage />} />

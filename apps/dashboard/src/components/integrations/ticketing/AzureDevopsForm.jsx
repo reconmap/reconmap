@@ -3,22 +3,22 @@ import LabelledField from "components/form/LabelledField";
 import NativeCheckbox from "components/form/NativeCheckbox";
 import NativeInput from "components/form/NativeInput";
 import { useTranslation } from "react-i18next";
-import PrimaryButton from "../ui/buttons/Primary";
+import PrimaryButton from "../../ui/buttons/Primary.jsx";
 
-const WebhookForm = ({ isEdit = false, webhook, webhookSetter: setWebhook, onFormSubmit }) => {
+const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIntegration, onFormSubmit }) => {
     const [t] = useTranslation();
 
     const onFormChange = (ev) => {
         const target = ev.target;
         const name = target.name;
         const value = target.type === "checkbox" ? target.checked : target.value;
-        setWebhook({ ...webhook, [name]: value });
+        setIntegration({ ...integration, [name]: value });
     };
 
     return (
         <form onSubmit={onFormSubmit}>
             <fieldset>
-                <legend>{t("Webhook information")}</legend>
+                <legend>{t("Azure DevOps integration information")}</legend>
 
                 <HorizontalLabelledField
                     label={t("Name")}
@@ -28,7 +28,7 @@ const WebhookForm = ({ isEdit = false, webhook, webhookSetter: setWebhook, onFor
                             id="name"
                             type="text"
                             name="name"
-                            value={webhook.name || ""}
+                            value={integration.name || ""}
                             onChange={onFormChange}
                             required
                             autoFocus
@@ -36,53 +36,53 @@ const WebhookForm = ({ isEdit = false, webhook, webhookSetter: setWebhook, onFor
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("URL")}
+                    label={t("Organization URL")}
                     htmlFor="url"
                     control={
                         <NativeInput
                             id="url"
                             type="url"
                             name="url"
-                            value={webhook.url || ""}
+                            value={integration.url || ""}
                             onChange={onFormChange}
                             required
-                            placeholder="https://example.com/webhook"
+                            placeholder="https://dev.azure.com/your-organization"
                         />
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("Secret")}
-                    htmlFor="secret"
+                    label={t("Project name")}
+                    htmlFor="projectName"
                     control={
                         <NativeInput
-                            id="secret"
+                            id="projectName"
                             type="text"
-                            name="secret"
-                            value={webhook.secret || ""}
+                            name="projectName"
+                            value={integration.projectName || ""}
                             onChange={onFormChange}
-                            placeholder={t("Optional secret for signature")}
+                            required
+                            placeholder="Your project name"
                         />
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("Events")}
-                    htmlFor="events"
+                    label={t("Personal Access Token")}
+                    htmlFor="personalAccessToken"
                     control={
                         <NativeInput
-                            id="events"
-                            type="text"
-                            name="events"
-                            value={webhook.events || ""}
+                            id="personalAccessToken"
+                            type="password"
+                            name="personalAccessToken"
+                            value={integration.personalAccessToken || ""}
                             onChange={onFormChange}
                             required
-                            placeholder="project.created, *"
                         />
                     }
                 />
                 <HorizontalLabelledField
                     label={t("Enabled?")}
                     control={
-                        <NativeCheckbox name="isEnabled" checked={webhook.isEnabled} onChange={onFormChange}>
+                        <NativeCheckbox name="isEnabled" checked={integration.isEnabled} onChange={onFormChange}>
                             {t("Is enabled")}
                         </NativeCheckbox>
                     }
@@ -101,4 +101,4 @@ const WebhookForm = ({ isEdit = false, webhook, webhookSetter: setWebhook, onFor
     );
 };
 
-export default WebhookForm;
+export default AzureDevopsForm;

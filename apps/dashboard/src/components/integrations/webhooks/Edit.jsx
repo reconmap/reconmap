@@ -5,8 +5,8 @@ import { actionCompletedToast } from "components/ui/toast";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import Breadcrumb from "../ui/Breadcrumb";
-import WebhookForm from "./Form";
+import Breadcrumb from "../../ui/Breadcrumb.jsx";
+import WebhookForm from "./Form.jsx";
 
 const WebhookEditPage = () => {
     const [t] = useTranslation();
@@ -27,7 +27,7 @@ const WebhookEditPage = () => {
         requestWebhookPut(parseInt(webhookId), webhook)
             .then(() => {
                 actionCompletedToast(t("The webhook was updated."));
-                navigate("/webhooks");
+                navigate("/integrations/webhooks");
             })
             .catch((err) => console.error(err));
     };

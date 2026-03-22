@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { ApiTokenScope } from "api/user-api-tokens";
 import { useUserApiTokenCreateMutation } from "api/user-api-tokens-hooks";
 import NativeInput from "components/form/NativeInput";
 import NativeSelect from "components/form/NativeSelect";
-import PrimaryButton from "../../ui/buttons/Primary";
-import SecondaryButton from "../../ui/buttons/Secondary";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import PrimaryButton from "../../ui/buttons/Primary.jsx";
+import SecondaryButton from "../../ui/buttons/Secondary.jsx";
 
 const ApiTokenForm = ({ onSuccess, onCancel }) => {
     const [t] = useTranslation();
@@ -28,21 +28,21 @@ const ApiTokenForm = ({ onSuccess, onCancel }) => {
             <h3>{t("Create API Token")}</h3>
             <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '5px' }}>{t("Token name")}</label>
-                <NativeInput 
-                    type="text" 
-                    value={name} 
-                    onChange={(ev) => setName(ev.target.value)} 
-                    placeholder={t("My development token")} 
+                <NativeInput
+                    type="text"
+                    value={name}
+                    onChange={(ev) => setName(ev.target.value)}
+                    placeholder={t("My development token")}
                     required
                 />
             </div>
             <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '5px' }}>{t("Expiration (days)")}</label>
-                <NativeInput 
-                    type="number" 
-                    value={expirationDays} 
-                    onChange={(ev) => setExpirationDays(parseInt(ev.target.value))} 
-                    min="1" 
+                <NativeInput
+                    type="number"
+                    value={expirationDays}
+                    onChange={(ev) => setExpirationDays(parseInt(ev.target.value))}
+                    min="1"
                     required
                 />
             </div>

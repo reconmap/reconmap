@@ -38,7 +38,7 @@ const path = require('path');
         await takeScreenshot('user-preferences', '/user/profile');
         await takeScreenshot('users-list', '/users');
         await takeScreenshot('vulnerabilities-categories', '/vulnerabilities/categories');
-        await takeScreenshot('api-tokens', '/system/api-tokens');
+        await takeScreenshot('api-tokens', '/integrations/api-tokens');
     } catch (error) {
         console.error('Error during screenshot generation:', error);
     } finally {

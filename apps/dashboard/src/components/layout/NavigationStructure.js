@@ -144,9 +144,9 @@ export const getNavigationStructure = (t) => [
                 url: "/integrations",
                 permissions: "documents.*",
                 children: [
-                    { type: "menu", name: t("Ticketing"), url: "/integrations", permissions: "administrator" },
-                    { type: "menu", name: t("Webhooks"), url: "/webhooks", permissions: "administrator" },
-                    { type: "menu", name: t("API tokens"), url: "/system/api-tokens" },
+                    { type: "menu", name: t("Ticketing"), url: "/integrations/ticketing", permissions: "administrator" },
+                    { type: "menu", name: t("Webhooks"), url: "/integrations/webhooks", permissions: "administrator" },
+                    { type: "menu", name: t("API tokens"), url: "/integrations/api-tokens" },
                 ]
             },
             { type: "divider" },

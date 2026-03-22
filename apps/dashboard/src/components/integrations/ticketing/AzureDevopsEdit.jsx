@@ -4,7 +4,7 @@ import Title from "components/ui/Title";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import AzureDevopsForm from "./AzureDevopsForm";
+import AzureDevopsForm from "./AzureDevopsForm.jsx";
 
 const AzureDevopsIntegrationEditPage = () => {
     const [t] = useTranslation();

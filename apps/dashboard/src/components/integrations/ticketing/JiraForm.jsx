@@ -3,9 +3,9 @@ import LabelledField from "components/form/LabelledField";
 import NativeCheckbox from "components/form/NativeCheckbox";
 import NativeInput from "components/form/NativeInput";
 import { useTranslation } from "react-i18next";
-import PrimaryButton from "../ui/buttons/Primary";
+import PrimaryButton from "../../ui/buttons/Primary.jsx";
 
-const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIntegration, onFormSubmit }) => {
+const JiraForm = ({ isEdit = false, integration, integrationSetter: setIntegration, onFormSubmit }) => {
     const [t] = useTranslation();
 
     const onFormChange = (ev) => {
@@ -18,7 +18,7 @@ const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIn
     return (
         <form onSubmit={onFormSubmit}>
             <fieldset>
-                <legend>{t("Azure DevOps integration information")}</legend>
+                <legend>{t("Jira integration information")}</legend>
 
                 <HorizontalLabelledField
                     label={t("Name")}
@@ -36,7 +36,7 @@ const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIn
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("Organization URL")}
+                    label={t("Jira URL")}
                     htmlFor="url"
                     control={
                         <NativeInput
@@ -46,36 +46,51 @@ const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIn
                             value={integration.url || ""}
                             onChange={onFormChange}
                             required
-                            placeholder="https://dev.azure.com/your-organization"
+                            placeholder="https://your-domain.atlassian.net"
                         />
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("Project name")}
-                    htmlFor="projectName"
+                    label={t("Email")}
+                    htmlFor="email"
                     control={
                         <NativeInput
-                            id="projectName"
-                            type="text"
-                            name="projectName"
-                            value={integration.projectName || ""}
+                            id="email"
+                            type="email"
+                            name="email"
+                            value={integration.email || ""}
                             onChange={onFormChange}
                             required
-                            placeholder="Your project name"
+                            placeholder="your-email@example.com"
                         />
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("Personal Access Token")}
-                    htmlFor="personalAccessToken"
+                    label={t("API Token")}
+                    htmlFor="apiToken"
                     control={
                         <NativeInput
-                            id="personalAccessToken"
+                            id="apiToken"
                             type="password"
-                            name="personalAccessToken"
-                            value={integration.personalAccessToken || ""}
+                            name="apiToken"
+                            value={integration.apiToken || ""}
                             onChange={onFormChange}
                             required
+                        />
+                    }
+                />
+                <HorizontalLabelledField
+                    label={t("Project Key")}
+                    htmlFor="projectKey"
+                    control={
+                        <NativeInput
+                            id="projectKey"
+                            type="text"
+                            name="projectKey"
+                            value={integration.projectKey || ""}
+                            onChange={onFormChange}
+                            required
+                            placeholder="PROJ"
                         />
                     }
                 />
@@ -101,4 +116,4 @@ const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIn
     );
 };
 
-export default AzureDevopsForm;
+export default JiraForm;

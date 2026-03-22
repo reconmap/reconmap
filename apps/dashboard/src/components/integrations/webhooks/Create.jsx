@@ -4,8 +4,8 @@ import { actionCompletedToast } from "components/ui/toast";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import Breadcrumb from "../ui/Breadcrumb";
-import WebhookForm from "./Form";
+import Breadcrumb from "../../ui/Breadcrumb.jsx";
+import WebhookForm from "./Form.jsx";
 
 const WebhookCreatePage = () => {
     const [t] = useTranslation();
@@ -18,7 +18,7 @@ const WebhookCreatePage = () => {
         requestWebhookPost(webhook)
             .then(() => {
                 actionCompletedToast(t("The webhook was created."));
-                navigate("/webhooks");
+                navigate("/integrations/webhooks");
             })
             .catch((err) => console.error(err));
     };

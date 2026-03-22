@@ -6,9 +6,9 @@ import NativeTable from "components/ui/tables/NativeTable.jsx";
 import Title from "components/ui/Title";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import CreateButton from "../../components/ui/buttons/Create";
-import Breadcrumb from "../ui/Breadcrumb";
-import LinkButton from "../ui/buttons/Link";
+import Breadcrumb from "../../ui/Breadcrumb.jsx";
+import CreateButton from "../../ui/buttons/Create.jsx";
+import LinkButton from "../../ui/buttons/Link.jsx";
 
 const WebhooksList = () => {
     const [t] = useTranslation();
@@ -17,7 +17,7 @@ const WebhooksList = () => {
     const deleteWebhookMutation = useDeleteWebhookMutation();
 
     const handleCreate = () => {
-        navigate("/webhooks/create");
+        navigate("/integrations/webhooks/create");
     };
 
     const onDeleteClick = (webhookId) => {
@@ -47,7 +47,7 @@ const WebhooksList = () => {
             header: <>&nbsp;</>,
             cell: (webhook) => (
                 <div style={{ textAlign: "right" }}>
-                    <LinkButton href={`/webhooks/${webhook.id}/edit`}>{t("Edit")}</LinkButton>
+                    <LinkButton href={`/integrations/webhooks/${webhook.id}/edit`}>{t("Edit")}</LinkButton>
                     <DeleteIconButton onClick={() => onDeleteClick(webhook.id)} />
                 </div>
             ),

@@ -3,22 +3,22 @@ import LabelledField from "components/form/LabelledField";
 import NativeCheckbox from "components/form/NativeCheckbox";
 import NativeInput from "components/form/NativeInput";
 import { useTranslation } from "react-i18next";
-import PrimaryButton from "../ui/buttons/Primary";
+import PrimaryButton from "../../ui/buttons/Primary.jsx";
 
-const JiraForm = ({ isEdit = false, integration, integrationSetter: setIntegration, onFormSubmit }) => {
+const WebhookForm = ({ isEdit = false, webhook, webhookSetter: setWebhook, onFormSubmit }) => {
     const [t] = useTranslation();
 
     const onFormChange = (ev) => {
         const target = ev.target;
         const name = target.name;
         const value = target.type === "checkbox" ? target.checked : target.value;
-        setIntegration({ ...integration, [name]: value });
+        setWebhook({ ...webhook, [name]: value });
     };
 
     return (
         <form onSubmit={onFormSubmit}>
             <fieldset>
-                <legend>{t("Jira integration information")}</legend>
+                <legend>{t("Webhook information")}</legend>
 
                 <HorizontalLabelledField
                     label={t("Name")}
@@ -28,7 +28,7 @@ const JiraForm = ({ isEdit = false, integration, integrationSetter: setIntegrati
                             id="name"
                             type="text"
                             name="name"
-                            value={integration.name || ""}
+                            value={webhook.name || ""}
                             onChange={onFormChange}
                             required
                             autoFocus
@@ -36,68 +36,53 @@ const JiraForm = ({ isEdit = false, integration, integrationSetter: setIntegrati
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("Jira URL")}
+                    label={t("URL")}
                     htmlFor="url"
                     control={
                         <NativeInput
                             id="url"
                             type="url"
                             name="url"
-                            value={integration.url || ""}
+                            value={webhook.url || ""}
                             onChange={onFormChange}
                             required
-                            placeholder="https://your-domain.atlassian.net"
+                            placeholder="https://example.com/webhook"
                         />
                     }
                 />
                 <HorizontalLabelledField
-                    label={t("Email")}
-                    htmlFor="email"
+                    label={t("Secret")}
+                    htmlFor="secret"
                     control={
                         <NativeInput
-                            id="email"
-                            type="email"
-                            name="email"
-                            value={integration.email || ""}
-                            onChange={onFormChange}
-                            required
-                            placeholder="your-email@example.com"
-                        />
-                    }
-                />
-                <HorizontalLabelledField
-                    label={t("API Token")}
-                    htmlFor="apiToken"
-                    control={
-                        <NativeInput
-                            id="apiToken"
-                            type="password"
-                            name="apiToken"
-                            value={integration.apiToken || ""}
-                            onChange={onFormChange}
-                            required
-                        />
-                    }
-                />
-                <HorizontalLabelledField
-                    label={t("Project Key")}
-                    htmlFor="projectKey"
-                    control={
-                        <NativeInput
-                            id="projectKey"
+                            id="secret"
                             type="text"
-                            name="projectKey"
-                            value={integration.projectKey || ""}
+                            name="secret"
+                            value={webhook.secret || ""}
+                            onChange={onFormChange}
+                            placeholder={t("Optional secret for signature")}
+                        />
+                    }
+                />
+                <HorizontalLabelledField
+                    label={t("Events")}
+                    htmlFor="events"
+                    control={
+                        <NativeInput
+                            id="events"
+                            type="text"
+                            name="events"
+                            value={webhook.events || ""}
                             onChange={onFormChange}
                             required
-                            placeholder="PROJ"
+                            placeholder="project.created, *"
                         />
                     }
                 />
                 <HorizontalLabelledField
                     label={t("Enabled?")}
                     control={
-                        <NativeCheckbox name="isEnabled" checked={integration.isEnabled} onChange={onFormChange}>
+                        <NativeCheckbox name="isEnabled" checked={webhook.isEnabled} onChange={onFormChange}>
                             {t("Is enabled")}
                         </NativeCheckbox>
                     }
@@ -116,4 +101,4 @@ const JiraForm = ({ isEdit = false, integration, integrationSetter: setIntegrati
     );
 };
 
-export default JiraForm;
+export default WebhookForm;
