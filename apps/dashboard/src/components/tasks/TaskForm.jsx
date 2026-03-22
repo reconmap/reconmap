@@ -1,7 +1,7 @@
 import { useProjectsQuery } from "api/projects.js";
-import HorizontalLabelledField from "components/form/HorizontalLabelledField";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import { useEffect } from "react";
 import { TaskPriorityList } from "../../models/TaskPriority.js";

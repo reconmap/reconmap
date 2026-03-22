@@ -1,5 +1,5 @@
 import { useDeleteVulnerabilityMutation } from "api/vulnerabilities.js";
-import NativeCheckbox from "components/form/NativeCheckbox";
+import NativeCheckbox from "components/forms/NativeCheckbox";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import ProjectBadge from "components/projects/ProjectBadge";
 import AscendingSortLink from "components/ui/AscendingSortLink";

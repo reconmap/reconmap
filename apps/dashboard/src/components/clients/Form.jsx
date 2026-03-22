@@ -1,7 +1,7 @@
 import { requestAttachment } from "api/requests/attachments.js";
-import LabelledField from "components/form/LabelledField";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import LabelledField from "components/forms/LabelledField";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import OrganisationTypes from "models/OrganisationTypes.js";
 import { useEffect, useState } from "react";

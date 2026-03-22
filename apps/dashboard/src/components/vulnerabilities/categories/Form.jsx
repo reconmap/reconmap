@@ -1,7 +1,7 @@
 import { useVulnerabilityCategoriesQuery } from "api/vulnerabilities.js";
-import LabelledField from "components/form/LabelledField";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import LabelledField from "components/forms/LabelledField";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 
 const VulnerabilityCategoryForm = ({ category, onFormSubmit, categorySetter: setCategory }) => {
     const { data: categories } = useVulnerabilityCategoriesQuery({ parentsOnly: true });

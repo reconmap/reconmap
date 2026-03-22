@@ -1,4 +1,4 @@
-import NativeSpinner from "components/NativeSpinner";
+import NativeSpinner from "components/ui/NativeSpinner";
 
 export default function Loading() {
     return (

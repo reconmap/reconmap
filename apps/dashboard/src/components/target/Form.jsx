@@ -1,6 +1,6 @@
-import HorizontalLabelledField from "components/form/HorizontalLabelledField";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import TargetKinds from "../../models/TargetKinds";
 
 const TargetForm = ({ newTarget, onFormSubmit, targetSetter: setTarget }) => {

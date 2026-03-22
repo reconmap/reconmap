@@ -1,5 +1,5 @@
 import { useProjectQuery } from "api/projects.js";
-import NativeTabs from "components/form/NativeTabs";
+import NativeTabs from "components/forms/NativeTabs";
 import ReportRevisions from "components/reports/Revisions";
 import Configuration from "Configuration";
 import { useState } from "react";

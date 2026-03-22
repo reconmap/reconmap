@@ -1,6 +1,6 @@
-import LabelledField from "components/form/LabelledField";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import LabelledField from "components/forms/LabelledField";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../ui/buttons/Primary";

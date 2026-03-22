@@ -1,6 +1,6 @@
-import LabelledField from "components/form/LabelledField";
-import NativeSelect from "components/form/NativeSelect";
-import NativeTextArea from "components/form/NativeTextArea";
+import LabelledField from "components/forms/LabelledField";
+import NativeSelect from "components/forms/NativeSelect";
+import NativeTextArea from "components/forms/NativeTextArea";
 
 const NotesForm = ({ id, note, onFormSubmit, noteSetter: setNote }) => {
     const onFormInputChange = (ev) => {

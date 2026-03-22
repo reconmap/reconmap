@@ -1,13 +1,13 @@
 import { useRecentSearchesQuery } from "api/system.js";
-import NativeButton from "components/form/NativeButton";
-import NativeCheckbox from "components/form/NativeCheckbox";
-import NativeInput from "components/form/NativeInput";
+import NativeButton from "components/forms/NativeButton";
+import NativeCheckbox from "components/forms/NativeCheckbox";
+import NativeInput from "components/forms/NativeInput";
 import Loading from "components/ui/Loading.jsx";
+import SearchUrls from "pages/search/Urls.js";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../ui/Breadcrumb";
 import Title from "../ui/Title";
-import SearchUrls from "./SearchUrls";
 
 const entityList = {
     commands: "Commands",

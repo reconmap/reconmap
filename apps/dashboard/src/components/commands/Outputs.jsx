@@ -1,7 +1,7 @@
 import { useAttachmentsQuery } from "api/attachments.js";
 import { requestAttachment, requestAttachmentDelete } from "api/requests/attachments.js";
 import AttachmentsDropzone from "components/attachments/Dropzone";
-import NativeButtonGroup from "components/form/NativeButtonGroup";
+import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import FileSizeSpan from "components/ui/FileSizeSpan";
 import Loading from "components/ui/Loading.jsx";

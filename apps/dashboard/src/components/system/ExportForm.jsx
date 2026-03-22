@@ -1,5 +1,5 @@
 import { useExportablesQuery } from "api/system.js";
-import NativeSelect from "components/form/NativeSelect";
+import NativeSelect from "components/forms/NativeSelect";
 import { useState } from "react";
 import { downloadFromApi } from "services/api.js";
 import PrimaryButton from "../ui/buttons/Primary";

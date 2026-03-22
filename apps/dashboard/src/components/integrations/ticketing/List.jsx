@@ -1,7 +1,7 @@
 import { useAzureDevopsIntegrationsQuery, useDeleteAzureDevopsIntegrationMutation } from "api/azure-devops.ts";
 import { useDeleteJiraIntegrationMutation, useJiraIntegrationsQuery } from "api/jira.ts";
 import { useDeleteWebhookMutation, useWebhooksQuery } from "api/webhooks.js";
-import NativeButtonGroup from "components/form/NativeButtonGroup";
+import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import BooleanText from "components/ui/BooleanText";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";

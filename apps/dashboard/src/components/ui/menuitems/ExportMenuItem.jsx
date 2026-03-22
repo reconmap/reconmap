@@ -1,4 +1,4 @@
-import NativeButton from "components/form/NativeButton.jsx";
+import NativeButton from "components/forms/NativeButton.jsx";
 import { downloadFromApi } from "services/api.js";
 
 const ExportMenuItem = ({ entity }) => {

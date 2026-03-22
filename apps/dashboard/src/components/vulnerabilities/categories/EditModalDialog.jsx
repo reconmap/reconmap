@@ -1,4 +1,4 @@
-import NativeButton from "components/form/NativeButton";
+import NativeButton from "components/forms/NativeButton";
 import PrimaryButton from "components/ui/buttons/Primary";
 import ModalDialog from "components/ui/ModalDIalog";
 import { actionCompletedToast } from "components/ui/toast";

@@ -1,6 +1,6 @@
 import { useProjectsQuery } from "api/projects.js";
 import { useUsersQuery } from "api/users.js";
-import NativeSelect from "components/form/NativeSelect";
+import NativeSelect from "components/forms/NativeSelect";
 import { useAuth } from "contexts/AuthContext";
 import { TaskPriorityList } from "models/TaskPriority";
 import TaskStatuses from "models/TaskStatuses";

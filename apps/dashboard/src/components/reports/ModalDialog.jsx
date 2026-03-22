@@ -1,9 +1,9 @@
 import { useReportsTemplatesQuery } from "api/reports.js";
 import { requestReportPost } from "api/requests/reports.js";
-import HorizontalLabelledField from "components/form/HorizontalLabelledField";
-import NativeButton from "components/form/NativeButton";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import NativeButton from "components/forms/NativeButton";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import PrimaryButton from "components/ui/buttons/Primary.jsx";
 import ModalDialog from "components/ui/ModalDIalog";
 import { actionCompletedToast, errorToast } from "components/ui/toast";

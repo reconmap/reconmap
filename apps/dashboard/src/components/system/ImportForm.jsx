@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import NativeInput from "components/form/NativeInput";
+import NativeInput from "components/forms/NativeInput";
 import ExternalLink from "components/ui/ExternalLink";
 import { useRef, useState } from "react";
 import { requestEntityPost } from "utilities/requests.js";

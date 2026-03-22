@@ -1,6 +1,6 @@
-import NativeButton from "components/form/NativeButton";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import NativeButton from "components/forms/NativeButton";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import Vault from "models/Vault";
 import { useState } from "react";

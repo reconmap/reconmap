@@ -1,7 +1,7 @@
-import HorizontalLabelledField from "components/form/HorizontalLabelledField.jsx";
-import LabelledField from "components/form/LabelledField";
-import NativeCheckbox from "components/form/NativeCheckbox";
-import NativeInput from "components/form/NativeInput";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField.jsx";
+import LabelledField from "components/forms/LabelledField";
+import NativeCheckbox from "components/forms/NativeCheckbox";
+import NativeInput from "components/forms/NativeInput";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../../ui/buttons/Primary.jsx";
 

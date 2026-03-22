@@ -1,4 +1,4 @@
-import NativeInput from "components/form/NativeInput";
+import NativeInput from "components/forms/NativeInput";
 import { useCallback, useEffect } from "react";
 import isInputElement from "../../utilities/domUtils";
 

@@ -1,12 +1,12 @@
 import ExternalLink from "components/ui/ExternalLink";
 import { AuthContext } from "contexts/AuthContext";
+import { DashboardUrls } from "pages/dashboard/Routes.jsx";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import NotificationsBadge from "../notifications/NotificationsBadge";
 import SearchBox from "../search/Box";
 import HeaderUserMenu from "../ui/HeaderUserMenu";
-import { DashboardUrls } from "./dashboard/Routes";
 import HeaderLogo from "./HeaderLogo";
 import { getNavigationStructure } from "./NavigationStructure";
 

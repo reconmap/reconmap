@@ -1,6 +1,6 @@
 import Configuration from "Configuration";
 import { ServerIssuesUrl } from "ServerUrls";
-import NativeTextArea from "components/form/NativeTextArea";
+import NativeTextArea from "components/forms/NativeTextArea";
 import ExternalLink from "components/ui/ExternalLink";
 import PrimaryButton from "components/ui/buttons/Primary";
 import { actionCompletedToast, errorToast } from "components/ui/toast.jsx";

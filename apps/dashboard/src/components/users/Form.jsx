@@ -1,8 +1,8 @@
-import HorizontalLabelledField from "components/form/HorizontalLabelledField.jsx";
-import LabelledField from "components/form/LabelledField";
-import NativeCheckbox from "components/form/NativeCheckbox";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField.jsx";
+import LabelledField from "components/forms/LabelledField";
+import NativeCheckbox from "components/forms/NativeCheckbox";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import { useState } from "react";
 import UserRoles from "../../models/UserRoles";
 import PrimaryButton from "../ui/buttons/Primary";

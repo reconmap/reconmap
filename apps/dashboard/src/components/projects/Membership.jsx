@@ -2,7 +2,7 @@ import { useProjectQuery, useProjectUsersQuery } from "api/projects.js";
 import { requestProjectMemberPost, requestProjectUserDelete } from "api/requests/projects.js";
 import { useUsersQuery } from "api/users.js";
 import UserRoleBadge from "components/badges/UserRoleBadge";
-import NativeSelect from "components/form/NativeSelect";
+import NativeSelect from "components/forms/NativeSelect";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import Loading from "components/ui/Loading.jsx";
 import NativeTable from "components/ui/tables/NativeTable.jsx";

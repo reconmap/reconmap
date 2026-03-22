@@ -1,13 +1,13 @@
 import { useProjectUsersQuery } from "api/projects.js";
 import UserAvatar from "components/badges/UserAvatar.jsx";
 import ClientLink from "components/clients/Link";
-import VulnerabilitiesByCategoryStatsWidget from "components/layout/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget";
-import VulnerabilitiesByRiskStatsWidget from "components/layout/dashboard/widgets/VulnerabilitiesByRiskStatsWidget";
 import EmptyField from "components/ui/EmptyField";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import TimestampsSection from "components/ui/TimestampsSection";
 import VisibilityLegend from "components/ui/VisibilityLegend";
 import UserLink from "components/users/Link";
+import VulnerabilitiesByCategoryStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget.jsx";
+import VulnerabilitiesByRiskStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByRiskStatsWidget.jsx";
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 import remarkGfm from "remark-gfm";

@@ -3,9 +3,9 @@ import {
     useSystemCustomFieldPostMutation,
     useSystemCustomFieldsQuery,
 } from "api/system.js";
-import HorizontalLabelledField from "components/form/HorizontalLabelledField";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import PrimaryButton from "components/ui/buttons/Primary";
 import NativeTable from "components/ui/tables/NativeTable.jsx";

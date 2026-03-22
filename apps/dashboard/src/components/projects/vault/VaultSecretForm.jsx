@@ -1,7 +1,7 @@
 import { invalidateVaultQueries } from "api/vault.js";
-import HorizontalLabelledField from "components/form/HorizontalLabelledField.jsx";
-import NativeInput from "components/form/NativeInput.jsx";
-import NativeSelect from "components/form/NativeSelect.jsx";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField.jsx";
+import NativeInput from "components/forms/NativeInput.jsx";
+import NativeSelect from "components/forms/NativeSelect.jsx";
 import PrimaryButton from "components/ui/buttons/Primary.jsx";
 import { actionCompletedToast } from "components/ui/toast.jsx";
 import Vault from "models/Vault.js";

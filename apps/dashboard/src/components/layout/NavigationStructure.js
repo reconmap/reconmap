@@ -1,7 +1,7 @@
-import { AgentsUrls } from "components/agents/AgentsUrls";
-import OrganisationsUrls from "components/clients/OrganisationsUrls";
-import SearchUrls from "components/search/SearchUrls";
-import { ToolsUrls } from "components/tools/ToolsUrls";
+import { AgentsUrls } from "pages/agents/Urls";
+import OrganisationsUrls from "pages/clients/Urls";
+import SearchUrls from "pages/search/Urls";
+import { ToolsUrls } from "pages/tools/Urls";
 import Configuration from "Configuration";
 import { ServerIssuesUrl, UserManualUrl } from "ServerUrls";
 

@@ -1,6 +1,6 @@
-import LabelledField from "components/form/LabelledField";
-import NativeButton from "components/form/NativeButton";
-import NativeInput from "components/form/NativeInput";
+import LabelledField from "components/forms/LabelledField";
+import NativeButton from "components/forms/NativeButton";
+import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/Primary";
 import ModalDialog from "components/ui/ModalDIalog";
 import { actionCompletedToast, errorToast } from "components/ui/toast";

@@ -1,7 +1,7 @@
 import { ApiTokenScope } from "api/user-api-tokens";
 import { useUserApiTokenCreateMutation } from "api/user-api-tokens-hooks";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../../ui/buttons/Primary.jsx";

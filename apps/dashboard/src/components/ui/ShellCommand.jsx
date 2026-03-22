@@ -1,4 +1,4 @@
-import NativeButton from "components/form/NativeButton";
+import NativeButton from "components/forms/NativeButton";
 import { useRef } from "react";
 import { actionCompletedToast } from "../../components/ui/toast";
 import "./ShellCommand.css";

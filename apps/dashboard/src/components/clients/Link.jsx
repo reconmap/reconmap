@@ -1,6 +1,6 @@
+import OrganisationsUrls from "pages/clients/Urls.js";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import OrganisationsUrls from "./OrganisationsUrls";
 
 const styles = {
     badge: {

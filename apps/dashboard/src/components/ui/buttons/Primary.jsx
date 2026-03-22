@@ -1,4 +1,4 @@
-import NativeButton from "components/form/NativeButton";
+import NativeButton from "components/forms/NativeButton";
 
 const PrimaryButton = ({ type, onClick, children, disabled = false, external = false, ...props }) => {
     return (

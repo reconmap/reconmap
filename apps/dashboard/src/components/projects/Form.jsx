@@ -1,9 +1,9 @@
 import { useOrganisationsQuery } from "api/clients.js";
 import { useProjectCategoriesQuery } from "api/projects.js";
-import HorizontalLabelledField from "components/form/HorizontalLabelledField";
-import NativeCheckbox from "components/form/NativeCheckbox";
-import NativeInput from "components/form/NativeInput";
-import NativeSelect from "components/form/NativeSelect";
+import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import NativeCheckbox from "components/forms/NativeCheckbox";
+import NativeInput from "components/forms/NativeInput";
+import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import ProjectVulnerabilityMetrics from "models/ProjectVulnerabilityMetrics";
 import Loading from "../ui/Loading";

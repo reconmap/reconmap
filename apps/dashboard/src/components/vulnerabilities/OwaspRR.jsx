@@ -1,4 +1,4 @@
-import NativeInput from "components/form/NativeInput";
+import NativeInput from "components/forms/NativeInput";
 import { useState } from "react";
 import Select from "react-select";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";

@@ -1,6 +1,6 @@
 import { useProjectsQuery } from "api/projects.js";
 import { useVulnerabilityCategoriesQuery } from "api/vulnerabilities.js";
-import NativeSelect from "components/form/NativeSelect";
+import NativeSelect from "components/forms/NativeSelect";
 import Risks from "models/Risks";
 
 const VulnerabilityFilters = ({ tableModel, tableModelSetter: setTableModel, showProjectFilter = true }) => {

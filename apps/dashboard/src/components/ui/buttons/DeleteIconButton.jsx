@@ -1,4 +1,4 @@
-import NativeButton from "components/form/NativeButton";
+import NativeButton from "components/forms/NativeButton";
 import CssIcon from "../CssIcon";
 
 const DeleteIconButton = (props) => (

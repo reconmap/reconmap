@@ -1,15 +1,15 @@
-import ActiveProjectsWidget from "components/layout/dashboard/widgets/ActiveProjectsWidget.jsx";
-import ApiHealthWidget from "components/layout/dashboard/widgets/ApiHealthWidget.jsx";
-import DiscussionsWidget from "components/layout/dashboard/widgets/DiscussionsWidget.jsx";
-import MyTasksWidget from "components/layout/dashboard/widgets/MyTasksWidget.jsx";
-import PopularCommandsWidget from "components/layout/dashboard/widgets/PopularCommandsWidget.jsx";
-import RecentActivityWidget from "components/layout/dashboard/widgets/RecentActivityWidget.jsx";
-import RecentDocumentsWidget from "components/layout/dashboard/widgets/RecentDocumentsWidget.jsx";
-import RecentVulnerabilitiesWidget from "components/layout/dashboard/widgets/RecentVulnerabilitiesWidget.jsx";
-import ReleasesWidget from "components/layout/dashboard/widgets/ReleasesWidget.jsx";
-import UserActivityStatsWidget from "components/layout/dashboard/widgets/UserActivityStatsWidget.jsx";
-import VulnerabilitiesByCategoryStatsWidget from "components/layout/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget.jsx";
-import VulnerabilitiesByRiskStatsWidget from "components/layout/dashboard/widgets/VulnerabilitiesByRiskStatsWidget.jsx";
+import ActiveProjectsWidget from "pages/dashboard/widgets/ActiveProjectsWidget.jsx";
+import ApiHealthWidget from "pages/dashboard/widgets/ApiHealthWidget.jsx";
+import DiscussionsWidget from "pages/dashboard/widgets/DiscussionsWidget.jsx";
+import MyTasksWidget from "pages/dashboard/widgets/MyTasksWidget.jsx";
+import PopularCommandsWidget from "pages/dashboard/widgets/PopularCommandsWidget.jsx";
+import RecentActivityWidget from "pages/dashboard/widgets/RecentActivityWidget.jsx";
+import RecentDocumentsWidget from "pages/dashboard/widgets/RecentDocumentsWidget.jsx";
+import RecentVulnerabilitiesWidget from "pages/dashboard/widgets/RecentVulnerabilitiesWidget.jsx";
+import ReleasesWidget from "pages/dashboard/widgets/ReleasesWidget.jsx";
+import UserActivityStatsWidget from "pages/dashboard/widgets/UserActivityStatsWidget.jsx";
+import VulnerabilitiesByCategoryStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget.jsx";
+import VulnerabilitiesByRiskStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByRiskStatsWidget.jsx";
 
 const Widgets = {
     "discussions": {
