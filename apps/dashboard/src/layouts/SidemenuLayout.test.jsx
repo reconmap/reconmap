@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import SidemenuLayout from "../components/layout/SidemenuLayout.jsx";
+import SidemenuLayout from "./SidemenuLayout.jsx";
 
 describe("SidemenuLayout", () => {
     const links = [
