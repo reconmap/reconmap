@@ -1,5 +1,5 @@
 export const ServerIssuesUrl: string = "https://github.com/reconmap/reconmap/issues";
 
-export const UserManualUrl: string = "https://reconmap.com/user-manual/";
+export const UserManualUrl: string = "https://reconmap.com/";
 
-export const CliDownloadUrl: string = "https://github.com/reconmap/command-line-tools/releases/latest";
+export const CliDownloadUrl: string = "https://github.com/reconmap/reconmap/releases/latest";

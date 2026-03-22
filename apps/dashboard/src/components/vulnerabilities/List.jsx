@@ -32,7 +32,7 @@ const VulnerabilitiesList = () => {
     const onPageChange = (pageNumber) => {
         const queryParams = new URLSearchParams();
         queryParams.set("isTemplate", "false");
-        queryParams.set("page", pageNumber);
+        queryParams.set("page", pageNumber + 1);
         queryParams.set("orderColumn", tableModel.sortBy.column);
         queryParams.set("orderDirection", tableModel.sortBy.order);
         Object.keys(tableModel.filters).forEach(

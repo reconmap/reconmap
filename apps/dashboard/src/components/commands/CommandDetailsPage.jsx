@@ -135,14 +135,14 @@ const CommandDetailsPage = () => {
                                         <table className="table is-fullwidth">
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
+                                                    <th>Description</th>
                                                     <th>Options</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {commandUsages.map((usage) => (
                                                     <tr key={usage.id}>
-                                                        <td>{usage.name}</td>
+                                                        <td>{usage.description}</td>
                                                         <td>
                                                             <DeleteButton onClick={(ev) => deleteUsage(usage)} />
                                                         </td>

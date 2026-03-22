@@ -43,7 +43,7 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
                 <option value="0">(select)</option>
                 {commandUsages.map((usage) => (
                     <option key={usage.id} value={usage.id}>
-                        {usage.name}
+                        {usage.description}
                     </option>
                 ))}
             </NativeSelect>

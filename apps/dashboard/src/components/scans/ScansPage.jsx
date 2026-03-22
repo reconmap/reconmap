@@ -99,7 +99,7 @@ const ScansPage = ({ mode }) => {
                                     <option value="">{t("(select usage)")}</option>
                                     {commandUsages?.map((usage) => (
                                         <option key={usage.id} value={usage.id}>
-                                            {usage.name}
+                                            {usage.description}
                                         </option>
                                     ))}
                                 </NativeSelect>

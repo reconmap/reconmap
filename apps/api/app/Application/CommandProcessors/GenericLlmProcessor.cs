@@ -16,7 +16,7 @@ public class GenericLlmProcessor(IAiService aiService, IAttachmentStorage attach
     public ProcessorResult Process(CommandProcessorJob job)
     {
         var result = new ProcessorResult();
-        
+
         var commandUsage = dbContext.CommandUsages.Find(job.CommandUsageId);
         var toolName = commandUsage?.Description ?? "Unknown Tool";
 
