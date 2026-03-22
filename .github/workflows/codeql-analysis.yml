@@ -21,6 +21,9 @@ jobs:
       csharp: ${{ steps.filter.outputs.csharp }}
       web: ${{ steps.filter.outputs.web }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+              
       - name: Detect path changes
         id: filter
         uses: dorny/paths-filter@v3
