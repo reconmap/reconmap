@@ -1,6 +1,6 @@
-import { Route } from "react-router-dom";
 import SupportForm from "components/support/Form";
-import HelpSupportLayout from "components/HelpSupportLayout.jsx";
+import HelpSupportLayout from "layouts/HelpSupportLayout.jsx";
+import { Route } from "react-router-dom";
 
 const SupportRoutes = [
     <Route element={<HelpSupportLayout />}>

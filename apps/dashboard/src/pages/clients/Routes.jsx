@@ -1,4 +1,4 @@
-import SettingsLayout from "components/settings/SettingsLayout";
+import SettingsLayout from "layouts/SettingsLayout.jsx";
 import ClientCreate from "pages/clients/Create";
 import ClientDetails from "pages/clients/Details";
 import EditClientPage from "pages/clients/Edit";

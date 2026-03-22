@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Compose from "components/Compose";
-import WebhooksRoutes from "components/integrations/webhooks/Routes";
+import Compose from "components/logic/Compose.jsx";
 import WebsocketProvider from "contexts/WebsocketContext";
+import DashboardLayout from "layouts/DashboardLayout.jsx";
 import PageNotFound from "pages/PageNotFound.jsx";
 import AgentRoutes from "pages/agents/Routes";
 import ClientsRoutes from "pages/clients/Routes";
@@ -26,7 +26,6 @@ import VulnerabilitiesRoutes from "pages/vulnerabilities/Routes";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Configuration from "./Configuration";
-import DashboardLayout from "./components/layout/DashboardLayout";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient({
@@ -66,7 +65,6 @@ const App = () => {
                                 ...AgentRoutes,
                                 ...UsersRoutes,
                                 ...VulnerabilitiesRoutes,
-                                ...WebhooksRoutes,
                                 ...IntegrationsRoutes,
                             ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
                             <Route path="*" element={<PageNotFound />} />

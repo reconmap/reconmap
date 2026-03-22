@@ -1,6 +1,6 @@
-import ProjectsLayout from "components/projects/Layout.jsx";
 import ProjectMembership from "components/projects/Membership";
 import ProjectReport from "components/projects/Report";
+import ProjectsLayout from "layouts/Layout.jsx";
 import ProjectCreateForm from "pages/projects/Create";
 import ProjectDetails from "pages/projects/Details";
 import ProjectEdit from "pages/projects/Edit";

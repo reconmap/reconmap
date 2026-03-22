@@ -1,19 +1,19 @@
-import { useJiraIntegrationQuery, useUpdateJiraIntegrationMutation } from "api/jira.ts";
+import { useAzureDevopsIntegrationQuery, useUpdateAzureDevopsIntegrationMutation } from "api/azure-devops.ts";
+import AzureDevopsForm from "components/integrations/ticketing/AzureDevopsForm.jsx";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import JiraForm from "./JiraForm";
 
-const JiraIntegrationEditPage = () => {
+const AzureDevopsIntegrationEditPage = () => {
     const [t] = useTranslation();
     const navigate = useNavigate();
     const { integrationId } = useParams();
     const [integration, setIntegration] = useState({});
 
-    const { data: dbIntegration, isLoading } = useJiraIntegrationQuery(parseInt(integrationId));
-    const updateMutation = useUpdateJiraIntegrationMutation();
+    const { data: dbIntegration, isLoading } = useAzureDevopsIntegrationQuery(parseInt(integrationId));
+    const updateMutation = useUpdateAzureDevopsIntegrationMutation();
 
     useEffect(() => {
         if (dbIntegration) {
@@ -38,18 +38,18 @@ const JiraIntegrationEditPage = () => {
             <div className="heading">
                 <Breadcrumb>
                     <div onClick={() => navigate("/integrations")}>{t("Integrations")}</div>
-                    <div>{t("Jira")}</div>
+                    <div>{t("Azure DevOps")}</div>
                 </Breadcrumb>
             </div>
-            <Title title={t("Edit Jira integration")} />
+            <Title title={t("Edit Azure DevOps integration")} />
 
             <div className="columns">
                 <div className="column is-two-thirds">
-                    <JiraForm isEdit={true} integration={integration} integrationSetter={setIntegration} onFormSubmit={onFormSubmit} />
+                    <AzureDevopsForm isEdit={true} integration={integration} integrationSetter={setIntegration} onFormSubmit={onFormSubmit} />
                 </div>
             </div>
         </div>
     );
 };
 
-export default JiraIntegrationEditPage;
+export default AzureDevopsIntegrationEditPage;

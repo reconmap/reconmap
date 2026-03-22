@@ -1,6 +1,6 @@
-import { Route } from "react-router-dom";
 import CustomFieldsPage from "components/settings/CustomFields/Form";
-import SettingsLayout from "components/settings/SettingsLayout";
+import SettingsLayout from "layouts/SettingsLayout.jsx";
+import { Route } from "react-router-dom";
 
 const SettingsRoutes = [
     <Route path="/settings" element={<SettingsLayout />}>

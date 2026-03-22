@@ -1,4 +1,4 @@
-import ProjectsLayout from "components/projects/Layout";
+import ProjectsLayout from "layouts/Layout.jsx";
 import TaskCreationPage from "pages/tasks/Create";
 import EditTaskPage from "pages/tasks/Edit";
 import { Route } from "react-router-dom";

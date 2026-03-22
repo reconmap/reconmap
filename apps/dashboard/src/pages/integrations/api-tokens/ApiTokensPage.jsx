@@ -4,9 +4,9 @@ import NativeTable from "components/ui/tables/NativeTable.jsx";
 import Title from "components/ui/Title";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Breadcrumb from "../../ui/Breadcrumb.jsx";
-import PrimaryButton from "../../ui/buttons/Primary.jsx";
-import ApiTokenForm from "./ApiTokenForm.jsx";
+import ApiTokenForm from "../../../components/integrations/api-tokens/ApiTokenForm.jsx";
+import Breadcrumb from "../../../components/ui/Breadcrumb.jsx";
+import PrimaryButton from "../../../components/ui/buttons/Primary.jsx";
 
 const ApiTokensPage = () => {
     const { data: tokens, isLoading } = useUserApiTokensQuery();

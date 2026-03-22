@@ -1,7 +1,7 @@
-import SidemenuLayout from "components/layout/SidemenuLayout";
+import { getNavigationStructure } from "components/layout/NavigationStructure";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
-import { getNavigationStructure } from "components/layout/NavigationStructure";
+import SidemenuLayout from "./SidemenuLayout.jsx";
 
 const SettingsLayout = ({ children }) => {
     const [t] = useTranslation();

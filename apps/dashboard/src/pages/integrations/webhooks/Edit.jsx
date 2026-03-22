@@ -1,12 +1,12 @@
 import { requestWebhookPut } from "api/requests/webhooks.ts";
 import { useWebhookQuery } from "api/webhooks.ts";
+import WebhookForm from "components/integrations/webhooks/Form.jsx";
+import Breadcrumb from "components/ui/Breadcrumb.jsx";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import Breadcrumb from "../../ui/Breadcrumb.jsx";
-import WebhookForm from "./Form.jsx";
 
 const WebhookEditPage = () => {
     const [t] = useTranslation();

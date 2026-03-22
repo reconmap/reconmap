@@ -1,7 +1,7 @@
-import ProjectsLayout from "components/projects/Layout.jsx";
-import { Route } from "react-router-dom";
 import TargetForm from "components/target/Form";
+import ProjectsLayout from "layouts/Layout.jsx";
 import TargetView from "pages/target/View";
+import { Route } from "react-router-dom";
 
 const TargetsRoutes = [
     <Route element={<ProjectsLayout />}>

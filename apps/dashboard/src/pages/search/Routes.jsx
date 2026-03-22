@@ -1,5 +1,5 @@
-import LibraryLayout from "components/LibraryLayout.jsx";
 import AdvancedSearch from "components/search/AdvancedSearch";
+import LibraryLayout from "layouts/LibraryLayout.jsx";
 import { Route } from "react-router-dom";
 import SearchResultsPage from "./Results.jsx";
 import SearchUrls from "./Urls.js";

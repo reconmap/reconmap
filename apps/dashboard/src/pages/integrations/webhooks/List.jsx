@@ -1,14 +1,14 @@
 import { useDeleteWebhookMutation, useWebhooksQuery } from "api/webhooks.js";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import BooleanText from "components/ui/BooleanText";
+import Breadcrumb from "components/ui/Breadcrumb.jsx";
+import CreateButton from "components/ui/buttons/Create.jsx";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import LinkButton from "components/ui/buttons/Link.jsx";
 import NativeTable from "components/ui/tables/NativeTable.jsx";
 import Title from "components/ui/Title";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import Breadcrumb from "../../ui/Breadcrumb.jsx";
-import CreateButton from "../../ui/buttons/Create.jsx";
-import LinkButton from "../../ui/buttons/Link.jsx";
 
 const WebhooksList = () => {
     const [t] = useTranslation();

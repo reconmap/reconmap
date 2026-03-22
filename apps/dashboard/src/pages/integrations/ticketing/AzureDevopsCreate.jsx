@@ -1,10 +1,10 @@
 import { useCreateAzureDevopsIntegrationMutation } from "api/azure-devops.ts";
+import AzureDevopsForm from "components/integrations/ticketing/AzureDevopsForm.jsx";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import AzureDevopsForm from "./AzureDevopsForm.jsx";
 
 const AzureDevopsIntegrationCreatePage = () => {
     const [t] = useTranslation();

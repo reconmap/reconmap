@@ -1,10 +1,10 @@
-import LibraryLayout from "components/LibraryLayout";
-import { Route } from "react-router-dom";
+import LibraryLayout from "layouts/LibraryLayout.jsx";
 import VulnerabilityCategoriesPage from "pages/vulnerabilities/categories/List";
 import VulnerabilityCreate from "pages/vulnerabilities/Create";
 import VulnerabilityDetails from "pages/vulnerabilities/Details";
 import VulnerabilityEdit from "pages/vulnerabilities/Edit";
 import VulnerabilitiesList from "pages/vulnerabilities/List";
+import { Route } from "react-router-dom";
 
 const VulnerabilitiesRoutes = [
     <Route path="/vulnerabilities" element={<LibraryLayout />}>

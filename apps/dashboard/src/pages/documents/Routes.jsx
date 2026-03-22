@@ -1,4 +1,4 @@
-import LibraryLayout from "components/LibraryLayout.jsx";
+import LibraryLayout from "layouts/LibraryLayout.jsx";
 import AddDocumentPage from "pages/documents/Add";
 import DocumentDetailsPage from "pages/documents/Details";
 import EditDocumentPage from "pages/documents/Edit";

@@ -1,4 +1,4 @@
-import ProjectsLayout from "components/projects/Layout";
+import ProjectsLayout from "layouts/Layout.jsx";
 import { Route } from "react-router-dom";
 import ReportTemplatesList from "./List";
 

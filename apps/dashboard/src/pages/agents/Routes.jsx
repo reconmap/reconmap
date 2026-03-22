@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 
-import SettingsLayout from "components/settings/SettingsLayout.jsx";
+import SettingsLayout from "layouts/SettingsLayout.jsx";
 import AgentDetailsPage from "./Details.jsx";
 import AgentsListPage from "./List.jsx";
 import { AgentsUrls } from "./Urls.js";

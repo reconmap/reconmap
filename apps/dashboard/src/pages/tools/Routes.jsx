@@ -1,5 +1,5 @@
 import VaultItemEdit from "components/projects/vault/VaultItemEdit";
-import ToolsLayout from "components/tools/ToolsLayout.jsx";
+import ToolsLayout from "layouts/ToolsLayout.jsx";
 import { Route } from "react-router-dom";
 
 import PasswordGeneratorPage from "./PasswordGenerator.jsx";

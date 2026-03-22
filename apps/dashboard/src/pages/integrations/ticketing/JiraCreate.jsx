@@ -1,10 +1,10 @@
 import { useCreateJiraIntegrationMutation } from "api/jira.ts";
+import JiraForm from "components/integrations/ticketing/JiraForm.jsx";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import JiraForm from "./JiraForm";
 
 const JiraIntegrationCreatePage = () => {
     const [t] = useTranslation();

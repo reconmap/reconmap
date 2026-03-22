@@ -2,8 +2,8 @@ vi.mock("react-i18next", () => ({
     useTranslation: () => [(key) => key.toUpperCase()],
 }));
 
-import { render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { render } from "@testing-library/react";
 import { AuthContext } from "contexts/AuthContext";
 import { MemoryRouter } from "react-router-dom";
 import UsersList from "./List";

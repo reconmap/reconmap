@@ -1,4 +1,4 @@
-import ScansLayout from "components/scans/ScansLayout";
+import ScansLayout from "layouts/ScansLayout.jsx";
 import { Navigate, Route } from "react-router-dom";
 import ScansPage from "./List.jsx";
 

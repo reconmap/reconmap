@@ -1,7 +1,7 @@
-import HelpSupportLayout from "components/HelpSupportLayout.jsx";
-import SettingsLayout from "components/settings/SettingsLayout";
 import IntegrationsPage from "components/system/Integrations";
-import ToolsLayout from "components/tools/ToolsLayout.jsx";
+import HelpSupportLayout from "layouts/HelpSupportLayout.jsx";
+import SettingsLayout from "layouts/SettingsLayout.jsx";
+import ToolsLayout from "layouts/ToolsLayout.jsx";
 import AuditLogList from "pages/auditlog/List";
 import { Route } from "react-router-dom";
 import AiSettingsPage from "./AiSettings.jsx";

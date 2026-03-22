@@ -1,4 +1,4 @@
-import LibraryLayout from "components/LibraryLayout";
+import LibraryLayout from "layouts/LibraryLayout.jsx";
 import AddCommandPage from "pages/commands/Add";
 import EditCommandPage from "pages/commands/Edit";
 import { Route } from "react-router-dom";
