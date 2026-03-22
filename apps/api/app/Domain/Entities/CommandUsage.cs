@@ -6,22 +6,18 @@ namespace api_v2.Domain.Entities;
 [Table("command_usage")]
 public class CommandUsage : TimestampedEntity
 {
-    [Key] [Column("id")] public uint Id { get; set; }
+    [Key][Column("id")] public uint Id { get; set; }
 
-    [Column("command_id")] [Required] public uint CommandId { get; set; }
+    [Column("command_id")][Required] public uint CommandId { get; set; }
 
     [Column("created_by_uid")] public uint CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))]
     public User? CreatedBy { get; set; }
 
-    [Column("name")] [MaxLength(2000)] public string? Name { get; set; }
-
     [Column("description")]
     [MaxLength(2000)]
     public string? Description { get; set; }
-
-    [Column("tags")] public string? Tags { get; set; }
 
     [Column("executable_path")]
     [MaxLength(255)]

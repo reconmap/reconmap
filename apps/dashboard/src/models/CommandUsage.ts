@@ -2,7 +2,6 @@ interface CommandUsageInterface {
     id?: number;
     commandId?: number;
     createdByUid?: number;
-    name?: string;
     description?: string;
     executablePath?: string;
     arguments?: string;

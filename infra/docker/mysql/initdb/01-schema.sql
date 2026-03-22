@@ -401,9 +401,7 @@ CREATE TABLE command_usage
     created_by_uid           INT UNSIGNED                    NOT NULL,
     created_at             TIMESTAMP                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at             TIMESTAMP                       NULL ON UPDATE CURRENT_TIMESTAMP,
-    name                  VARCHAR(2000)                   NULL,
     description           VARCHAR(2000)                   NULL,
-    tags                  JSON                            NULL,
     executable_path       VARCHAR(255)                    NULL,
     docker_image          VARCHAR(300)                    NULL,
     arguments             VARCHAR(2000)                   NULL,
@@ -420,9 +418,9 @@ INSERT INTO command(id, created_by_uid, name)
 VALUES (1, 1, 'nmap');
 
 TRUNCATE TABLE command_usage;
-INSERT INTO command_usage(id, created_by_uid, command_id, name, description, executable_path, arguments, output_capturing_mode,
+INSERT INTO command_usage(id, created_by_uid, command_id, description, executable_path, arguments, output_capturing_mode,
                           output_parser)
-VALUES (1, 1, 1, "Normal scan", "Scan all reserved TCP ports on the machine.",
+VALUES (1, 1, 1, "Scan all reserved TCP ports on the machine.",
         "nmap",
         "-oX - {{{Host|||localhost}}}", "stdout", "nmap");
 

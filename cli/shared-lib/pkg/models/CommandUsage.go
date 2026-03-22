@@ -4,7 +4,6 @@ type CommandUsage struct {
 	ID                  int    `json:"id"`
 	CommandId           int    `json:"commandId"`
 	CreatorUid          int    `json:"createdByUid"`
-	Name                string `json:"name"`
 	Description         string `json:"description"`
 	ExecutablePath      string `json:"executablePath"`
 	Arguments           string `json:"arguments"`

@@ -3,7 +3,7 @@ import HorizontalLabelledField from "components/form/HorizontalLabelledField.jsx
 import LabelledField from "components/form/LabelledField";
 import NativeInput from "components/form/NativeInput";
 import NativeSelect from "components/form/NativeSelect";
-import MarkdownEditor from "components/ui/forms/MarkdownEditor";
+import NativeTextArea from "components/form/NativeTextArea.jsx";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../ui/buttons/Primary";
 
@@ -28,41 +28,13 @@ const CommandUsageForm = ({ isEditForm = false, onFormSubmit, commandUsage, comm
             <fieldset>
                 <legend>Basic information</legend>
                 <label>
-                    Name
-                    <NativeInput
-                        type="text"
-                        name="name"
-                        onChange={onFormChange}
-                        value={commandUsage.name || ""}
-                        required
-                        autoFocus
-                    />
-                </label>
-                <label>
                     Description
-                    <MarkdownEditor
+                    <NativeTextArea
                         name="description"
                         onChange={onFormChange}
                         value={commandUsage.description || ""}
+                        rows={2}
                         required
-                    />
-                </label>
-                <label>
-                    Tags
-                    <NativeInput
-                        type="text"
-                        name="tags"
-                        onChange={onFormChange}
-                        value={commandUsage.tags ? JSON.parse(commandUsage.tags).join(",") : ""}
-                    />
-                </label>
-                <label>
-                    More information URL
-                    <NativeInput
-                        type="url"
-                        name="moreInfoUrl"
-                        onChange={onFormChange}
-                        value={commandUsage.moreInfoUrl || ""}
                     />
                 </label>
             </fieldset>

@@ -16,9 +16,9 @@ public class GenericLlmProcessor(IAiService aiService, IAttachmentStorage attach
     public ProcessorResult Process(CommandProcessorJob job)
     {
         var result = new ProcessorResult();
-
+        
         var commandUsage = dbContext.CommandUsages.Find(job.CommandUsageId);
-        var toolName = commandUsage?.Name ?? "Unknown Tool";
+        var toolName = commandUsage?.Description ?? "Unknown Tool";
 
         using var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult();
         using var reader = new StreamReader(stream);

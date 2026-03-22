@@ -18,7 +18,7 @@ const AuditLogsTable = ({ auditLog, hideUserColumns = false }) => {
             enabled: !hideUserColumns,
             cell: (entry) =>
                 entry.createdBy?.fullName ? (
-                    <UserLink userId={entry.userId}>{entry.createdBy?.fullName}</UserLink>
+                    <UserLink userId={entry.createdByUid}>{entry.createdBy?.fullName}</UserLink>
                 ) : (
                     "-"
                 ),

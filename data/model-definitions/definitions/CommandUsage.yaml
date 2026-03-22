@@ -12,9 +12,6 @@ properties:
   updated_at:
     type: string
     nullable: true
-  name:
-    type: string
-    nullable: true
   description:
     type: string
     nullable: true

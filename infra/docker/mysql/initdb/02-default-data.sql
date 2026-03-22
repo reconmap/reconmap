@@ -3,15 +3,18 @@ USE reconmap;
 SET @system_user_id = 0;
 SET @admin_user_id = 1;
 
+SET @@SESSION.sql_mode='NO_AUTO_VALUE_ON_ZERO';
 INSERT INTO user (id, subject_id, first_name, last_name, username, email, role)
 VALUES (@system_user_id, 'NULL', 'System', '-', 'system','system@localhost',
         'administrator');
+SET @@SESSION.sql_mode='';
+
 INSERT INTO user (id, subject_id, first_name, last_name, username, email, role)
 VALUES (@admin_user_id, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'Administrator', '-', 'admin','admin@localhost',
         'administrator');
 
 INSERT INTO audit_log (created_by_uid, client_ip, action, object)
-VALUES (NULL, INET6_ATON('127.0.0.1'), 'Initialised', 'System');
+VALUES (@system_user_id, INET6_ATON('127.0.0.1'), 'Initialised', 'System');
 
 INSERT INTO vulnerability_category (id, parent_id, name, description)
 VALUES (1, NULL, 'General', 'General categories.'),
@@ -191,11 +194,11 @@ VALUES ('Managed security monitoring',
        ('Security consultation',
         'for several domains including executing a detailed assessment of the network to identify potential and real-world vulnerabilities, finding security lacunae, and providing recommendations on how to fix them.'),
        ('Security program development',
-        'Includes policy development for helping to protect the organization’s infrastructure, systems, network, and devices.'),
+        'Includes policy development for helping to protect the organization\’s infrastructure, systems, network, and devices.'),
        ('Perimeter management',
         'Protects the defenses around the network from external attackers as well as from bad insiders.Relevant activities including establishing the controls and processes that limit access to sensitive data in the network and on the end point.'),
        ('Penetration testing',
-        'Also known as pentesting, which entails simulating a cyberattack against the organization’s information and technology assets to check for exploitable vulnerabilities. This service constitutes a form of ethical hacking that can be very effective at uncovering the vulnerabilities that may be successfully targeted by hackers ');
+        'Also known as pentesting, which entails simulating a cyberattack against the organization\’s information and technology assets to check for exploitable vulnerabilities. This service constitutes a form of ethical hacking that can be very effective at uncovering the vulnerabilities that may be successfully targeted by hackers ');
 
 INSERT INTO project (created_by_uid, name, description, engagement_end_date)
 VALUES (@admin_user_id, 'Onboarding to Reconmap',
