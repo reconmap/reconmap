@@ -24,12 +24,6 @@ export const getNavigationStructure = (t) => [
             },
             {
                 type: "menu",
-                name: t("Project templates"),
-                url: "/projects/templates",
-                children: [{ name: t("Create"), url: "/projects/create?isTemplate=true", permissions: "projects.templates" }]
-            },
-            {
-                type: "menu",
                 name: t("Tasks"),
                 url: "/tasks",
                 children: [{ name: t("Create"), url: "/tasks/create", permissions: "tasks.create" }]
@@ -93,7 +87,6 @@ export const getNavigationStructure = (t) => [
                 children: [
                     { name: t("Create"), url: "/vulnerabilities/create", permissions: "vulnerabilities.*" },
                     { name: t("Categories"), url: "/vulnerabilities/categories", permissions: "vulnerabilities.*" },
-                    { name: t("Vulnerability templates"), url: "/vulnerabilities/templates", permissions: "vulnerabilities.*" }
                 ]
             },
             {
@@ -119,7 +112,17 @@ export const getNavigationStructure = (t) => [
             { type: "menu", name: t("Vault"), url: ToolsUrls.Vault, permissions: "commands.*" },
             { type: "menu", name: t("Password generator"), url: ToolsUrls.PasswordGenerator, permissions: "commands.*" },
             { type: "divider" },
-            { type: "menu", name: t("Agents"), url: AgentsUrls.List }
+            {
+                type: "menu",
+                name: t("Data"),
+                url: "/data",
+                permissions: "documents.*",
+                children: [
+                    { type: "menu", name: t("Export data"), url: "/system/export-data" },
+                    { type: "menu", name: t("Import data"), url: "/system/import-data" },
+                ]
+            },
+
         ]
     },
     {
@@ -130,17 +133,25 @@ export const getNavigationStructure = (t) => [
             { type: "menu", name: t("Users"), url: "/users", children: [{ name: t("Create"), url: "/users/create" }] },
             { type: "menu", name: t("Organisations"), url: OrganisationsUrls.List },
             { type: "divider" },
+            { type: "menu", name: t("Scanners"), url: "/system/integrations" },
+            { type: "menu", name: t("Agents"), url: AgentsUrls.List },
+            { type: "divider" },
             { type: "menu", name: t("Custom fields"), url: "/settings/custom-fields" },
-            { type: "menu", name: t("Integrations"), url: "/integrations", permissions: "administrator" },
-            { type: "menu", name: t("Webhooks"), url: "/webhooks", permissions: "administrator" },
+            { type: "divider" },
+            {
+                type: "menu",
+                name: t("Integrations"),
+                url: "/integrations",
+                permissions: "documents.*",
+                children: [
+                    { type: "menu", name: t("Ticketing"), url: "/integrations", permissions: "administrator" },
+                    { type: "menu", name: t("Webhooks"), url: "/webhooks", permissions: "administrator" },
+                    { type: "menu", name: t("API tokens"), url: "/system/api-tokens" },
+                ]
+            },
             { type: "divider" },
             { type: "menu", name: t("Mail settings"), url: "/system/mail-settings" },
             { type: "menu", name: t("AI settings"), url: "/system/ai-settings" },
-            { type: "divider" },
-            { type: "menu", name: t("Export data"), url: "/system/export-data" },
-            { type: "menu", name: t("Import data"), url: "/system/import-data" },
-            { type: "divider" },
-            { type: "menu", name: t("API tokens"), url: "/system/api-tokens" }
         ]
     },
     {
@@ -153,9 +164,8 @@ export const getNavigationStructure = (t) => [
             { type: "divider" },
             { type: "menu", name: t("System health"), url: "/system/health" },
             { type: "menu", name: t("System usage"), url: "/system/usage" },
-            { type: "menu", name: t("System integrations"), url: "/system/integrations" },
-            { type: "menu", name: t("Audit log"), url: "/auditlog" },
             { type: "divider" },
+            { type: "menu", name: t("Audit log"), url: "/auditlog" },
             { type: "menu", name: t("Support"), url: "/support" },
             { type: "menu", name: t("Log issue"), url: ServerIssuesUrl, external: true }
         ]

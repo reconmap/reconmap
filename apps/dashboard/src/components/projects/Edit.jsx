@@ -23,11 +23,7 @@ const ProjectEdit = () => {
         queryClient.invalidateQueries({ queryKey: ["projects", projectId] });
         actionCompletedToast(`The project "${clientProject.name}" has been updated.`);
 
-        if (clientProject.is_template) {
-            navigate(`/projects/templates/${projectId}`);
-        } else {
-            navigate(`/projects/${projectId}`);
-        }
+        navigate(`/projects/${projectId}`);
     };
 
     useEffect(() => {

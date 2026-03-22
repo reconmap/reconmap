@@ -85,7 +85,7 @@ const ProjectForm = ({ isEdit = false, project, projectSetter: setProject, onFor
                     }
                 />
 
-                {!project.is_template && (
+                {!project.isTemplate && (
                     <>
                         <HorizontalLabelledField
                             label="Visibility"

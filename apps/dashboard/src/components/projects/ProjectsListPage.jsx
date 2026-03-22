@@ -20,7 +20,14 @@ const ProjectsListPage = () => {
     const apiPageNumber = pageNumber - 1;
 
     const [statusFilter, setStatusFilter] = useState("active");
-    const { data: projects, isLoading } = useProjectsQuery({ isTemplate: false, limit: 10, status: statusFilter, page: apiPageNumber });
+    const [isTemplateFilter, setIsTemplateFilter] = useState("false");
+
+    const projectsParams = { limit: 10, status: statusFilter, page: apiPageNumber };
+    if (isTemplateFilter !== "") {
+        projectsParams.isTemplate = isTemplateFilter === "true";
+    }
+
+    const { data: projects, isLoading } = useProjectsQuery(projectsParams);
 
     const handleCreateProject = () => {
         navigate("/projects/create");
@@ -28,6 +35,10 @@ const ProjectsListPage = () => {
 
     const onStatusFilterChange = (ev) => {
         setStatusFilter(ev.target.value);
+    };
+
+    const onIsTemplateFilterChange = (ev) => {
+        setIsTemplateFilter(ev.target.value);
     };
 
     const onPageChange = (pageNumber) => {
@@ -58,12 +69,22 @@ const ProjectsListPage = () => {
             <details>
                 <summary>Filters</summary>
 
-                <div className="control">
-                    <NativeSelect onChange={onStatusFilterChange} defaultValue="active">
-                        <option value="">Status = (any)</option>
-                        <option value="active">Status = Active</option>
-                        <option value="archived">Status = Archived</option>
-                    </NativeSelect>
+                <div className="field is-grouped">
+                    <div className="control">
+                        <NativeSelect onChange={onStatusFilterChange} defaultValue="active">
+                            <option value="">Status = (any)</option>
+                            <option value="active">Status = Active</option>
+                            <option value="archived">Status = Archived</option>
+                        </NativeSelect>
+                    </div>
+
+                    <div className="control">
+                        <NativeSelect onChange={onIsTemplateFilterChange} defaultValue="false">
+                            <option value="">Is template = (any)</option>
+                            <option value="true">Is template = Yes</option>
+                            <option value="false">Is template = No</option>
+                        </NativeSelect>
+                    </div>
                 </div>
             </details>
 

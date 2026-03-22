@@ -53,51 +53,6 @@ const IntegrationsList = () => {
             <section className="section">
                 <div className="level">
                     <div className="level-left">
-                        <Title title={t("Webhooks")} />
-                    </div>
-                    <div className="level-right">
-                        <NativeButtonGroup>
-                            <CreateButton onClick={() => navigate("/webhooks/create")}>{t("Create webhook")}</CreateButton>
-                        </NativeButtonGroup>
-                    </div>
-                </div>
-                <table className="table is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>{t("Name")}</th>
-                            <th>{t("URL")}</th>
-                            <th>{t("Events")}</th>
-                            <th>{t("Enabled?")}</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {isWebhooksLoading ? (
-                            <LoadingTableRow numColumns={5} />
-                        ) : (
-                            <>
-                                {(!webhooks || webhooks.length === 0) && <NoResultsTableRow numColumns={5} />}
-                                {webhooks && webhooks.map((webhook) => (
-                                    <tr key={webhook.id}>
-                                        <td>{webhook.name}</td>
-                                        <td>{webhook.url}</td>
-                                        <td>{webhook.events}</td>
-                                        <td><BooleanText value={webhook.isEnabled} /></td>
-                                        <td style={{ textAlign: "right" }}>
-                                            <LinkButton href={`/webhooks/${webhook.id}/edit`}>{t("Edit")}</LinkButton>
-                                            <DeleteIconButton onClick={() => onDeleteWebhook(webhook.id)} />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </>
-                        )}
-                    </tbody>
-                </table>
-            </section>
-
-            <section className="section">
-                <div className="level">
-                    <div className="level-left">
                         <Title title={t("Jira Integrations")} />
                     </div>
                     <div className="level-right">

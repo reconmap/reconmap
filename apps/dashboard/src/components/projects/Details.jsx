@@ -6,10 +6,11 @@ import NativeTabs from "components/form/NativeTabs";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import Breadcrumb from "components/ui/Breadcrumb.jsx";
 import DeleteButton from "components/ui/buttons/Delete.jsx";
+import PrimaryButton from "components/ui/buttons/Primary.jsx";
 import { actionCompletedToast } from "components/ui/toast";
 import { t } from "i18next";
 import { useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import LinkButton from "../ui/buttons/Link";
 import SecondaryButton from "../ui/buttons/Secondary";
 import Loading from "../ui/Loading";
@@ -31,6 +32,14 @@ const ProjectDetails = () => {
     const deleteProjectMutation = useDeleteProjectMutation();
 
     const [tabIndex, tabIndexSetter] = useState(0);
+
+    const cloneProject = (templateId) => {
+        requestEntityPost(`/projects/${templateId}/clone`)
+            .then((resp) => resp.json())
+            .then((data) => {
+                navigate(`/projects/${data.projectId}/edit`);
+            });
+    };
 
     const onDeleteClick = (id) => {
         deleteProjectMutation.mutate(id, {
@@ -63,10 +72,6 @@ const ProjectDetails = () => {
             .catch((err) => console.error(err));
     };
 
-    if (project && project.is_template) {
-        return <Navigate to={`/projects/templates/${project.id}`} />;
-    }
-
     return (
         <>
             <div className="heading">
@@ -86,6 +91,10 @@ const ProjectDetails = () => {
                                         <SecondaryButton onClick={handleManageTeam}>Membership</SecondaryButton>
                                     </>
                                 )}
+
+                                {project.isTemplate && <PrimaryButton onClick={() => cloneProject(project.id)}>
+                                    Create project from template
+                                </PrimaryButton>}
 
                                 <NativeButton onClick={() => onArchiveButtonClick(project)}>
                                     {project.archived ? "Unarchive" : "Archive"}

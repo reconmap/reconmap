@@ -12,7 +12,7 @@ import LinkButton from "components/ui/buttons/Link";
 import { t } from "i18next";
 import VulnerabilityStatuses from "models/VulnerabilityStatuses";
 import { useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Breadcrumb from "../ui/Breadcrumb";
 import Loading from "../ui/Loading";
 import Title from "../ui/Title";
@@ -33,6 +33,14 @@ const VulnerabilityDetails = () => {
     const { data: attachments } = useAttachmentsQuery({ parentType, parentId });
 
     const [tabIndex, tabIndexSetter] = useState(0);
+
+    const cloneVulnerability = async (templateId) => {
+        requestEntityPost(`/vulnerabilities/${templateId}/clone`)
+            .then((resp) => resp.json())
+            .then((data) => {
+                navigate(`/vulnerabilities/${data.vulnerabilityId}/edit`);
+            });
+    };
 
     const onDeleteClick = async () => {
         deleteVulnerabilityMutation.mutate(vulnerabilityId, {
@@ -58,10 +66,6 @@ const VulnerabilityDetails = () => {
 
     if (isLoading) return <Loading />;
 
-    if (vulnerability && vulnerability.is_template) {
-        return <Navigate to={`/vulnerabilities/templates/${vulnerability.id}`} />;
-    }
-
     return (
         <div>
             <div className="heading">
@@ -72,6 +76,12 @@ const VulnerabilityDetails = () => {
                 <div>
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                         <LinkButton href={`/vulnerabilities/${vulnerability.id}/edit`}>Edit</LinkButton>
+
+                        {vulnerability.isTemplate ? (
+                            <LinkButton onClick={() => cloneVulnerability(vulnerability.id)}>
+                                Create from template
+                            </LinkButton>
+                        ) : null}
 
                         <label>
                             <NativeSelect

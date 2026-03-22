@@ -5,8 +5,6 @@ import VulnerabilityCreate from "./Create";
 import VulnerabilityDetails from "./Details";
 import VulnerabilityEdit from "./Edit";
 import VulnerabilitiesList from "./List";
-import VulnerabilityTemplateDetails from "./templates/Details";
-import VulnerabilityTemplatesList from "./templates/List";
 
 const VulnerabilitiesRoutes = [
     <Route path="/vulnerabilities" element={<LibraryLayout />}>
@@ -15,8 +13,6 @@ const VulnerabilitiesRoutes = [
         <Route path={`:vulnerabilityId`} element={<VulnerabilityDetails />} />,
         <Route path={`:vulnerabilityId/edit`} element={<VulnerabilityEdit />} />
         <Route path={`categories`} element={<VulnerabilityCategoriesPage />} />,
-        <Route path={`templates`} element={<VulnerabilityTemplatesList />} />,
-        <Route path={`templates/:templateId`} element={<VulnerabilityTemplateDetails />} />
     </Route>,
 ];
 

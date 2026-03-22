@@ -14,7 +14,7 @@ const ProjectCreate = () => {
     const navigate = useNavigate();
     const query = useQuery();
     const isTemplate = "true" === query.get("isTemplate");
-    const [newProject, setNewProject] = useState({ ...Project, is_template: isTemplate });
+    const [newProject, setNewProject] = useState({ ...Project, isTemplate: isTemplate });
     const queryClient = useQueryClient();
 
     const handleCreate = async (ev) => {
@@ -29,11 +29,7 @@ const ProjectCreate = () => {
             queryClient.invalidateQueries({ queryKey: ["projects"] });
             actionCompletedToast(`The project '${newProject.name}' has been created`);
 
-            if (newProject.is_template) {
-                navigate("/projects/templates");
-            } else {
-                navigate("/projects");
-            }
+            navigate("/projects");
         });
     };
 

@@ -6,6 +6,7 @@ import AscendingSortLink from "components/ui/AscendingSortLink";
 import DescendingSortLink from "components/ui/DescendingSortLink";
 import Tags from "components/ui/Tags";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import PrimaryButton from "components/ui/buttons/Primary.jsx";
 import ReloadButton from "components/ui/buttons/Reload";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
@@ -31,6 +32,17 @@ const VulnerabilitiesTable = ({
             ...tableModel,
             sortBy: { column: column, order: order },
         });
+    };
+
+
+    const cloneVulnerability = (ev, templateId) => {
+        ev.stopPropagation();
+
+        requestEntityPost(`/vulnerabilities/${templateId}/clone`)
+            .then((resp) => resp.json())
+            .then((data) => {
+                navigate(`/vulnerabilities/${data.vulnerabilityId}/edit`);
+            });
     };
 
     const onSelectionChange = (ev) => {
@@ -175,6 +187,13 @@ const VulnerabilitiesTable = ({
                                 <td>
                                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                                         <LinkButton href={`/vulnerabilities/${vulnerability.id}/edit`}>Edit</LinkButton>
+                                        {vulnerability.isTemplate && <PrimaryButton
+                                            onClick={(ev) => cloneVulnerability(ev, vulnerability.id)}
+                                            key={vulnerability.id}
+                                            title="Clone"
+                                        >
+                                            Clone and edit
+                                        </PrimaryButton>}
                                         {reloadCallback && (
                                             <DeleteIconButton onClick={() => deleteVulnerability(vulnerability.id)} />
                                         )}

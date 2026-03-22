@@ -2,6 +2,7 @@ import { useDeleteProjectMutation } from "api/projects.js";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
+import PrimaryButton from "components/ui/buttons/Primary.jsx";
 import NativeTable from "components/ui/tables/NativeTable.jsx";
 import ClientLink from "../clients/Link";
 import ProjectBadge from "./ProjectBadge";
@@ -28,6 +29,7 @@ const ProjectsTable = ({ projects, showClientColumn = true }) => {
             ),
         },
         { header: "Description", className: "only-desktop", cell: (project) => project.description },
+        { header: "# Tasks", className: "only-desktop", cell: (project) => project.numTasks },
         {
             header: "Category",
             cell: (project) => (project.categoryId !== null ? project.category?.name : "(undefined)"),
@@ -43,6 +45,13 @@ const ProjectsTable = ({ projects, showClientColumn = true }) => {
                 <>
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                         <LinkButton href={`/projects/${project.id}/edit`}>Edit</LinkButton>
+                        {project.isTemplate && <PrimaryButton
+                            onClick={(ev) => cloneProject(ev, project.id)}
+                            key={project.id}
+                            title="Clone"
+                        >
+                            Clone and edit
+                        </PrimaryButton>}
                         <DeleteIconButton onClick={() => deleteProjectMutation.mutate(project.id)} />
                     </RestrictedComponent>
                 </>

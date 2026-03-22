@@ -232,7 +232,7 @@ const VulnerabilityForm = ({
                         />
                     }
                 />
-                {!vulnerability.is_template && (
+                {!vulnerability.isTemplate && (
                     <fieldset>
                         <legend>Relations</legend>
                         <HorizontalLabelledField

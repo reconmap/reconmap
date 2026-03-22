@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 
 const ProjectDetailsTab = ({ project }) => {
-    const isTemplate = project.is_template === 1;
+    const isTemplate = project.isTemplate === true;
     const { data: users } = useProjectUsersQuery(project.id);
 
     return (

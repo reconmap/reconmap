@@ -8,7 +8,7 @@ import CreateButton from "../ui/buttons/Create";
 
 const ProjectTasks = ({ project }) => {
     const navigate = useNavigate();
-    const isTemplate = project.is_template === 1;
+    const isTemplate = project.isTemplate === true;
 
     const [tableModel, setTableModel] = useState(new TaskTableModel(false, false));
 
@@ -39,7 +39,7 @@ const ProjectTasks = ({ project }) => {
 
     const onAddTaskClick = (ev) => {
         ev.preventDefault();
-        navigate(`/tasks/create?projectId=${project.id}&forTemplate=${project.is_template}`);
+        navigate(`/tasks/create?projectId=${project.id}&forTemplate=${project.isTemplate}`);
     };
 
     useEffect(() => {
