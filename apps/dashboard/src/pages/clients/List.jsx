@@ -11,7 +11,7 @@ import LinkButton from "components/ui/buttons/Link";
 import NativeTable from "components/ui/tables/NativeTable.jsx";
 import OrganisationTypes from "models/OrganisationTypes.js";
 import { useTranslation } from "react-i18next";
-import OrganisationsUrls from "./Urls.js";
+import { ClientsUrls } from "AppUrls";
 
 const ClientsList = () => {
     const [t] = useTranslation();
@@ -52,7 +52,7 @@ const ClientsList = () => {
             cell: (org) => (
                 <>
                     {" "}
-                    <LinkButton href={OrganisationsUrls.Edit.replace(":organisationId", org.id)}>
+                    <LinkButton href={ClientsUrls.Edit.replace(":organisationId", org.id)}>
                         {t("Edit")}
                     </LinkButton>
                     <DeleteIconButton onClick={() => deleteOrganisationMutation.mutate(org.id)} />
@@ -67,7 +67,7 @@ const ClientsList = () => {
                 <Breadcrumb />
 
                 <NativeButtonGroup>
-                    <LinkButton href={OrganisationsUrls.Create}>{t("Add organisation")}</LinkButton>
+                    <LinkButton href={ClientsUrls.Create}>{t("Add organisation")}</LinkButton>
                     <ExportButton
                         entity="organisations"
                         disabled={organisations === null || organisations?.length === 0}

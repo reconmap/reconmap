@@ -26,6 +26,10 @@ build:
 start:
 	$(DC) --profile testing up -d
 
+.PHONY:
+logs:
+	$(DC) logs -f
+
 .PHONY: stop
 stop:
 	$(DC) stop

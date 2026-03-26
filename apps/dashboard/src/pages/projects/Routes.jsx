@@ -7,10 +7,11 @@ import ProjectEdit from "pages/projects/Edit";
 import SendReport from "pages/reports/Send";
 import TaskCreationPage from "pages/tasks/Create";
 import { Route } from "react-router-dom";
+import { ProjectsUrls } from "AppUrls";
 import ProjectsListPage from "./List.jsx";
 
 const ProjectsRoutes = [
-    <Route path="/projects" element={<ProjectsLayout />}>
+    <Route path={ProjectsUrls.List} element={<ProjectsLayout />}>
         <Route index element={<ProjectsListPage />} />,
         <Route path={`create`} element={<ProjectCreateForm />} />,
         <Route path={`:projectId/edit`} element={<ProjectEdit />} />,

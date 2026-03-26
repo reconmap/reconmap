@@ -35,7 +35,7 @@ import OrganisationTypes from "models/OrganisationTypes.js";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import OrganisationsUrls from "./Urls.js";
+import { ClientsUrls } from "AppUrls";
 
 const ContactTypes = {
     general: "General",
@@ -89,7 +89,7 @@ const ClientDetails = () => {
 
     const handleDelete = async () => {
         const confirmed = await deleteOrganisationMutation.mutateAsync(clientId);
-        if (confirmed) navigate("/organisations");
+        if (confirmed) navigate(ClientsUrls.List);
     };
 
     const onFormSubmit = (ev) => {
@@ -150,12 +150,12 @@ const ClientDetails = () => {
         <div>
             <div className="heading">
                 <Breadcrumb>
-                    <Link to={OrganisationsUrls.List}>Organisations</Link>
+                    <Link to={ClientsUrls.List}>Organisations</Link>
                     <Link>{client.name}</Link>
                 </Breadcrumb>
                 <NativeButtonGroup>
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                        <LinkButton href={OrganisationsUrls.Edit.replace(":organisationId", client.id)}>
+                        <LinkButton href={ClientsUrls.Edit.replace(":organisationId", client.id)}>
                             {t("Edit")}
                         </LinkButton>
                         <DeleteButton onClick={handleDelete} />

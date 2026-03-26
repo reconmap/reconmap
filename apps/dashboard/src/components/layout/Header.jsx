@@ -1,6 +1,6 @@
+import { DashboardUrls } from "AppUrls.js";
 import ExternalLink from "components/ui/ExternalLink";
 import { AuthContext } from "contexts/AuthContext";
-import { DashboardUrls } from "pages/dashboard/Routes.jsx";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -41,7 +41,7 @@ const Header = () => {
 
             <div id="appMenu" className={`navbar-menu ${isActive ? "is-active" : ""}`}>
                 <div className="navbar-start">
-                    <Link className="navbar-item" to={DashboardUrls.DEFAULT}>
+                    <Link className="navbar-item" to={DashboardUrls.Default}>
                         {t("Dashboard")}
                     </Link>
                     {menuLinks.map((menuLink) => {

@@ -2,11 +2,12 @@ import ProjectsLayout from "layouts/Layout.jsx";
 import TaskCreationPage from "pages/tasks/Create";
 import EditTaskPage from "pages/tasks/Edit";
 import { Route } from "react-router-dom";
+import { TasksUrls } from "AppUrls";
 import TaskDetailsPage from "./Details.jsx";
 import TasksListPage from "./List.jsx";
 
 const TasksRoutes = [
-    <Route path="/tasks" element={<ProjectsLayout />}>
+    <Route path={TasksUrls.List} element={<ProjectsLayout />}>
         <Route index element={<TasksListPage />} />,
         <Route path={`create`} element={<TaskCreationPage />} />,
         <Route path={`:taskId`} element={<TaskDetailsPage />} />,

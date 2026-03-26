@@ -1,6 +1,7 @@
 import SettingsLayout from "layouts/SettingsLayout.jsx";
 import ApiTokensPage from "pages/integrations/api-tokens/ApiTokensPage.jsx";
 import { Route } from "react-router-dom";
+import { IntegrationsUrls } from "AppUrls";
 import AzureDevopsIntegrationCreatePage from "./ticketing/AzureDevopsCreate.jsx";
 import AzureDevopsIntegrationEditPage from "./ticketing/AzureDevopsEdit.jsx";
 import JiraIntegrationCreatePage from "./ticketing/JiraCreate.jsx";
@@ -11,7 +12,7 @@ import WebhookEditPage from "./webhooks/Edit.jsx";
 import WebhooksList from "./webhooks/List.jsx";
 
 const IntegrationsRoutes = [
-    <Route path="/integrations" key="integrations-layout" element={<SettingsLayout />}>,
+    <Route path={IntegrationsUrls.List} key="integrations-layout" element={<SettingsLayout />}>,
         <Route path="ticketing" key="integrations-list" element={<IntegrationsList />} />,
         <Route path="jira/create" key="integrations-jira-create" element={<JiraIntegrationCreatePage />} />,
         <Route path="jira/:integrationId/edit" key="integrations-jira-edit" element={<JiraIntegrationEditPage />} />,

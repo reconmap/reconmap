@@ -5,9 +5,10 @@ import UsersList from "pages/users/List";
 import UserPreferences from "pages/users/Preferences";
 import UserProfile from "pages/users/Profile";
 import { Route } from "react-router-dom";
+import { UsersUrls } from "AppUrls";
 
 const UsersRoutes = [
-    <Route path={`/users`} element={<SettingsLayout />}>
+    <Route path={UsersUrls.List} element={<SettingsLayout />}>
         <Route index element={<UsersList />} />,
         <Route path={`preferences`} element={<UserPreferences />} />,
         <Route path={`create`} element={<CreateUserPage />} />,

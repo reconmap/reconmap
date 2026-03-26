@@ -1,3 +1,4 @@
+import { VulnerabilitiesUrls } from "AppUrls";
 import LibraryLayout from "layouts/LibraryLayout.jsx";
 import VulnerabilityCategoriesPage from "pages/vulnerabilities/categories/List";
 import VulnerabilityCreate from "pages/vulnerabilities/Create";
@@ -7,7 +8,7 @@ import VulnerabilitiesList from "pages/vulnerabilities/List";
 import { Route } from "react-router-dom";
 
 const VulnerabilitiesRoutes = [
-    <Route path="/vulnerabilities" element={<LibraryLayout />}>
+    <Route path={VulnerabilitiesUrls.List} element={<LibraryLayout />}>
         <Route index element={<VulnerabilitiesList />} />,
         <Route path={`create`} element={<VulnerabilityCreate />} />,
         <Route path={`:vulnerabilityId`} element={<VulnerabilityDetails />} />,

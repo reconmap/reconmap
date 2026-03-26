@@ -9,7 +9,7 @@ import Client from "models/Client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import OrganisationsUrls from "./Urls.js";
+import { ClientsUrls } from "AppUrls";
 
 const ClientCreate = () => {
     const [t] = useTranslation();
@@ -28,7 +28,7 @@ const ClientCreate = () => {
             if (resp.status === StatusCodes.CREATED) {
                 queryClient.invalidateQueries({ queryKey: ["organisations"] });
                 actionCompletedToast(`The client "${newClient.name}" has been added.`);
-                navigate(OrganisationsUrls.List);
+                navigate(ClientsUrls.List);
             } else {
                 errorToast("The client could not be saved. Review the form data or check the application logs.");
             }
@@ -39,7 +39,7 @@ const ClientCreate = () => {
         <div>
             <div className="heading">
                 <Breadcrumb>
-                    <Link to={OrganisationsUrls.List}>{t("Organisations")}</Link>
+                    <Link to={ClientsUrls.List}>{t("Organisations")}</Link>
                 </Breadcrumb>
             </div>
 

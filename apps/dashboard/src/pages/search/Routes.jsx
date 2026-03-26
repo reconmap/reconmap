@@ -1,8 +1,8 @@
 import AdvancedSearch from "components/search/AdvancedSearch";
 import LibraryLayout from "layouts/LibraryLayout.jsx";
 import { Route } from "react-router-dom";
+import { SearchUrls } from "AppUrls";
 import SearchResultsPage from "./Results.jsx";
-import SearchUrls from "./Urls.js";
 
 const SearchRoutes = [
     <Route element={<LibraryLayout />}>

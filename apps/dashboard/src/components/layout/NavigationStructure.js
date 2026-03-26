@@ -1,68 +1,81 @@
-import { AgentsUrls } from "pages/agents/Urls";
-import OrganisationsUrls from "pages/clients/Urls";
-import SearchUrls from "pages/search/Urls";
-import { ToolsUrls } from "pages/tools/Urls";
+import {
+    AgentsUrls,
+    ClientsUrls,
+    CommandsUrls,
+    DashboardUrls,
+    DocumentsUrls,
+    IntegrationsUrls,
+    ProjectsUrls,
+    ReportsUrls,
+    ScansUrls,
+    SearchUrls,
+    SystemUrls,
+    TasksUrls,
+    ToolsUrls,
+    UsersUrls,
+    VulnerabilitiesUrls,
+} from "AppUrls";
 import Configuration from "Configuration";
 import { ServerIssuesUrl, UserManualUrl } from "ServerUrls";
 
 export const getNavigationStructure = (t) => [
     {
         name: t("Dashboard"),
-        url: "/",
+        url: DashboardUrls.Default,
         isRoot: true,
     },
     {
         name: t("Projects"),
         title: t("Projects, tasks, reports, and templates"),
-        url: "/projects",
+        url: ProjectsUrls.List,
         items: [
             {
                 type: "menu",
                 name: t("Projects"),
-                url: "/projects",
-                children: [{ name: t("Create"), url: "/projects/create", permissions: "projects.create" }]
+                url: ProjectsUrls.List,
+                children: [{ name: t("Create"), url: ProjectsUrls.Create, permissions: "projects.create" }]
             },
             {
                 type: "menu",
                 name: t("Tasks"),
-                url: "/tasks",
-                children: [{ name: t("Create"), url: "/tasks/create", permissions: "tasks.create" }]
+                url: TasksUrls.List,
+                children: [{ name: t("Create"), url: TasksUrls.Create, permissions: "tasks.create" }]
             },
             {
                 type: "menu",
                 name: t("Reports"),
-                url: "/reports",
-                children: [{ name: t("Report templates"), url: "/reports/templates" }]
+                url: ReportsUrls.List,
+                children: [{ name: t("Report templates"), url: ReportsUrls.Templates }]
             }
         ]
     },
     {
         name: t("Scans"),
         title: t("Run commands and view outputs"),
-        url: "/scans",
+        url: ScansUrls.List,
         items: [
             {
                 type: "menu",
                 name: t("Run once"),
-                url: "/scans/run-once",
+                url: ScansUrls.RunOnce,
                 permissions: "commands.*",
             },
             {
                 type: "menu",
                 name: t("Run on schedule"),
-                url: "/scans/run-on-schedule",
+                url: ScansUrls.RunOnSchedule,
                 permissions: "commands.*",
             },
             {
                 type: "menu",
                 name: t("View scheduled scans"),
-                url: "/scans/schedules",
+                url: ScansUrls.Schedules,
                 permissions: "commands.*",
             },
             {
                 type: "menu",
                 name: t("Import scan"),
-                url: "/scans/import",
+                url: ScansUrls.Import,
                 permissions: "commands.*",
             }
         ]
@@ -75,26 +88,26 @@ export const getNavigationStructure = (t) => [
             {
                 type: "menu",
                 name: t("Commands"),
-                url: "/commands",
+                url: CommandsUrls.List,
                 permissions: "commands.*",
-                children: [{ name: t("Create"), url: "/commands/add", permissions: "commands.create" }]
+                children: [{ name: t("Create"), url: CommandsUrls.Add, permissions: "commands.create" }]
             },
             {
                 type: "menu",
                 name: t("Vulnerabilities"),
-                url: "/vulnerabilities",
+                url: VulnerabilitiesUrls.List,
                 permissions: "vulnerabilities.*",
                 children: [
-                    { name: t("Create"), url: "/vulnerabilities/create", permissions: "vulnerabilities.*" },
-                    { name: t("Categories"), url: "/vulnerabilities/categories", permissions: "vulnerabilities.*" },
+                    { name: t("Create"), url: VulnerabilitiesUrls.Create, permissions: "vulnerabilities.*" },
+                    { name: t("Categories"), url: VulnerabilitiesUrls.Categories, permissions: "vulnerabilities.*" },
                 ]
             },
             {
                 type: "menu",
                 name: t("Documents"),
-                url: "/documents",
+                url: DocumentsUrls.List,
                 permissions: "documents.*",
-                children: [{ name: t("Create"), url: "/documents/add", permissions: "documents.*" }]
+                children: [{ name: t("Create"), url: DocumentsUrls.Add, permissions: "documents.*" }]
             },
             { type: "divider" },
             {
@@ -115,11 +128,11 @@ export const getNavigationStructure = (t) => [
             {
                 type: "menu",
                 name: t("Data"),
-                url: "/data",
+                url: SystemUrls.Data,
                 permissions: "documents.*",
                 children: [
-                    { type: "menu", name: t("Export data"), url: "/system/export-data" },
-                    { type: "menu", name: t("Import data"), url: "/system/import-data" },
+                    { type: "menu", name: t("Export data"), url: SystemUrls.ExportData },
+                    { type: "menu", name: t("Import data"), url: SystemUrls.ImportData },
                 ]
             },
 
@@ -130,10 +143,10 @@ export const getNavigationStructure = (t) => [
         title: t("Application settings and administration"),
         url: "/settings",
         items: [
-            { type: "menu", name: t("Users"), url: "/users", children: [{ name: t("Create"), url: "/users/create" }] },
-            { type: "menu", name: t("Organisations"), url: OrganisationsUrls.List },
+            { type: "menu", name: t("Users"), url: UsersUrls.List, children: [{ name: t("Create"), url: UsersUrls.Create }] },
+            { type: "menu", name: t("Organisations"), url: ClientsUrls.List },
             { type: "divider" },
-            { type: "menu", name: t("Scanners"), url: "/system/integrations" },
+            { type: "menu", name: t("Scanners"), url: SystemUrls.Integrations },
             { type: "menu", name: t("Agents"), url: AgentsUrls.List },
             { type: "divider" },
             { type: "menu", name: t("Custom fields"), url: "/settings/custom-fields" },
@@ -141,17 +154,17 @@ export const getNavigationStructure = (t) => [
             {
                 type: "menu",
                 name: t("Integrations"),
-                url: "/integrations",
+                url: IntegrationsUrls.List,
                 permissions: "documents.*",
                 children: [
-                    { type: "menu", name: t("Ticketing"), url: "/integrations/ticketing", permissions: "administrator" },
-                    { type: "menu", name: t("Webhooks"), url: "/integrations/webhooks", permissions: "administrator" },
-                    { type: "menu", name: t("API tokens"), url: "/integrations/api-tokens" },
+                    { type: "menu", name: t("Ticketing"), url: IntegrationsUrls.Ticketing, permissions: "administrator" },
+                    { type: "menu", name: t("Webhooks"), url: IntegrationsUrls.Webhooks, permissions: "administrator" },
+                    { type: "menu", name: t("API tokens"), url: IntegrationsUrls.ApiTokens },
                 ]
             },
             { type: "divider" },
-            { type: "menu", name: t("Mail settings"), url: "/system/mail-settings" },
-            { type: "menu", name: t("AI settings"), url: "/system/ai-settings" },
+            { type: "menu", name: t("Mail settings"), url: SystemUrls.MailSettings },
+            { type: "menu", name: t("AI settings"), url: SystemUrls.AiSettings },
         ]
     },
     {
@@ -162,12 +175,13 @@ export const getNavigationStructure = (t) => [
             { type: "menu", name: t("User manual"), url: UserManualUrl, external: true },
             { type: "menu", name: t("API docs"), url: `${Configuration.getDefaultApiUrl()}/../swagger/`, external: true },
             { type: "divider" },
-            { type: "menu", name: t("System health"), url: "/system/health" },
-            { type: "menu", name: t("System usage"), url: "/system/usage" },
+            { type: "menu", name: t("System health"), url: SystemUrls.Health },
+            { type: "menu", name: t("System usage"), url: SystemUrls.Usage },
             { type: "divider" },
-            { type: "menu", name: t("Audit log"), url: "/auditlog" },
+            { type: "menu", name: t("Audit log"), url: SystemUrls.AuditLog },
             { type: "menu", name: t("Support"), url: "/support" },
             { type: "menu", name: t("Log issue"), url: ServerIssuesUrl, external: true }
         ]
     }
 ];
+

@@ -1,4 +1,4 @@
-import OrganisationsUrls from "pages/clients/Urls.js";
+import { ClientsUrls } from "AppUrls";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const ClientLink = ({ clientId, children }) => {
     }
 
     return (
-        <Link style={styles.badge} to={OrganisationsUrls.Details.replace(":organisationId", clientId)}>
+        <Link style={styles.badge} to={ClientsUrls.Details.replace(":organisationId", clientId)}>
             {children}
         </Link>
     );
