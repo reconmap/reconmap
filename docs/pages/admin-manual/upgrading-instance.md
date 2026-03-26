@@ -22,6 +22,5 @@ docker-compose up -d # Build containers and start them
 ```shell
 docker-compose pull # Download latest version of the docker images
 docker-compose down -v # Stop and remove any containers and volumes
-rm -rf data-mysql # Remove MySQL data directory
 docker-compose up -d # Build containers and start them
 ```

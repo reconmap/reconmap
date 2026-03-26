@@ -31,9 +31,4 @@ nav_order: 1
 
 ![Integrations view](/images/screenshots/integrations.png)
 
-### Users list
-
-![Users list](/images/screenshots/users-list.png)
-
-There are many more screenshots in the [user manual](/user-manual/).
 

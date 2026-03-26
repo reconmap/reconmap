@@ -7,6 +7,8 @@ Mail settings are now configured from the Dashboard instead of editing a backend
 
 Go to `System -> Mail settings` and populate the SMTP section with:
 
+![Mail settings](/images/screenshots/mail-settings.png)
+
 - Host
 - Port
 - Username

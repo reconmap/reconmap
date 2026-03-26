@@ -1,3 +1,9 @@
+---
+title: API Tokens
+parent: System
+grand_parent: User manual
+---
+
 # API Tokens
 
 API tokens allow you to interact with the Reconmap API programmatically without needing a short-lived JWT (JSON Web Token). These are ideal for scripts, CI/CD integrations, and automation.

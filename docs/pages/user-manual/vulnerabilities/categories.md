@@ -23,4 +23,4 @@ In Reconmap all vulnerabilities are associated to one category. The default cate
 
 The user can add or remove any number of additional categories to the system using the **Vulnerability categories** page.
 
-![Vulnerability categories](/images/screenshots/vulnerabilities-categories.png)
+![Vulnerability categories](/images/screenshots/vulnerability-categories.png)

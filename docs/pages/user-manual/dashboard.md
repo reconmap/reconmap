@@ -5,7 +5,7 @@ parent: User manual
 
 The Reconmap dashboard is what welcomes the user after logging in. The dashboard is made of widgets that present at a glance key performance and insight information about projects, vulnerabilities, team contributions and more.
 
-![Dashboard view](/images/screenshots/dashboard-stats.png)
+![Dashboard view](/images/screenshots/dashboard.png)
 
 Each user has its own view of the dashboard as they can select which of all available widgets to show on load.
 

@@ -2,6 +2,8 @@ volumes:
   redis_data:
   mysql_varlib:
   dataprotection-keys:
+  rustfs_data:
+  rustfs_logs:
 
 
 services:
@@ -138,5 +140,5 @@ services:
       - "9000:9000"
       - "9001:9001"
     volumes:
-      - ./data/rustfs:/data
-      - ./data/rustfs-logs:/logs
+      - rustfs_data:/data
+      - rustfs_logs:/logs

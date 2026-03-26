@@ -6,7 +6,7 @@ grand_parent: User manual
 
 This **System data** page allows you to export data to use between multiple Reconmap instances or to be processed by external scripts and systems.
 
-![System data export screenshot](/images/screenshots/data-export.png)
+![Data export view](/images/screenshots/export-data.png)
 
 The export data functionality allows you to export Reconmap data to JSON. The exportable data are:
 
