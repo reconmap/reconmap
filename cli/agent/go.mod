@@ -4,20 +4,19 @@ go 1.25.3
 
 require (
 	github.com/creack/pty v1.1.24
+	github.com/go-co-op/gocron/v2 v2.19.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/reconmap/shared-lib v0.0.0-20220910165932-7d018d9111fc
-	github.com/robfig/cron v1.2.0
-	github.com/shirou/gopsutil/v4 v4.26.2
+	github.com/shirou/gopsutil/v4 v4.26.3
 	github.com/urfave/cli/v3 v3.7.0
 	go.uber.org/zap v1.27.1
 )
 
 require (
 	github.com/ebitengine/purego v0.10.0 // indirect
-	github.com/go-co-op/gocron/v2 v2.19.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
