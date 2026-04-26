@@ -38,7 +38,7 @@ jobs:
         shell: bash
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v7.0.0
+        uses: goreleaser/goreleaser-action@v7.2.1
         with:
           version: latest
           workdir: cli/runner
@@ -75,7 +75,7 @@ jobs:
         shell: bash
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v7.0.0
+        uses: goreleaser/goreleaser-action@v7.2.1
         with:
           version: latest
           workdir: cli/agent
