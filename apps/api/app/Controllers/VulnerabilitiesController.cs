@@ -20,14 +20,16 @@ public class VulnerabilitiesController(
     IConnectionMultiplexer redisConnections)
     : AppController(dbContext)
 {
+    private readonly AppDbContext _dbContext = dbContext;
+
     [HttpPost]
     public async Task<IActionResult> CreateOne(Vulnerability vulnerability)
     {
         vulnerability.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
-        dbContext.Vulnerabilities.Add(vulnerability);
+        _dbContext.Vulnerabilities.Add(vulnerability);
 
         AuditAction(AuditActions.Created, "Vulnerability", new { id = vulnerability.Id });
-        await dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
 
         await messageQueue.PublishAsync("findings",
             new { @event = "finding.created", payload = vulnerability });
@@ -40,26 +42,30 @@ public class VulnerabilitiesController(
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateOne(uint id, Vulnerability vulnerability)
     {
-        var dbModel = await dbContext.Vulnerabilities.FindAsync(id);
+        var dbModel = await _dbContext.Vulnerabilities.FindAsync(id);
         if (dbModel == null) return NotFound();
 
-        dbContext.Entry(dbModel).CurrentValues.SetValues(vulnerability);
-        dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
-        await dbContext.SaveChangesAsync();
+        _dbContext.Entry(dbModel).CurrentValues.SetValues(vulnerability);
+        _dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
+        await _dbContext.SaveChangesAsync();
         return Ok(dbModel);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMany([FromQuery] int? projectId,
+    public async Task<IActionResult> GetMany(
+        [FromQuery] int? projectId,
+        [FromQuery] int? targetId,
         [FromQuery] string? status,
         [FromQuery] string? risk)
     {
-        var q = dbContext.Vulnerabilities
+        var q = _dbContext.Vulnerabilities
             .Include(v => v.Project)
             .AsNoTracking()
             .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk);
         if (projectId.HasValue)
             q = q.Where(v => v.ProjectId == projectId);
+        if(targetId.HasValue)
+            q = q.Where(v => v.TargetId == targetId);
         if (!string.IsNullOrWhiteSpace(status))
             q = q.Where(v => v.Status == status);
         q = q.OrderByDescending(a => a.CreatedAt);
@@ -88,7 +94,7 @@ public class VulnerabilitiesController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetOne(uint id)
     {
-        var existing = await dbContext.Vulnerabilities
+        var existing = await _dbContext.Vulnerabilities
             .Include(v => v.Project)
             .Include(v => v.Category)
             .Include(v => v.CreatedBy)
@@ -104,7 +110,7 @@ public class VulnerabilitiesController(
     [Audit(AuditActions.Deleted, "Vulnerability")]
     public async Task<IActionResult> DeleteOne(int id)
     {
-        var deleteCount = await dbContext.Vulnerabilities
+        var deleteCount = await _dbContext.Vulnerabilities
             .Where(n => n.Id == id)
             .ExecuteDeleteAsync();
 
@@ -121,12 +127,12 @@ public class VulnerabilitiesController(
         uint id,
         [FromServices] IAiService aiService)
     {
-        var vulnerability = await dbContext.Vulnerabilities.FindAsync(id);
+        var vulnerability = await _dbContext.Vulnerabilities.FindAsync(id);
 
         vulnerability.Remediation =
             await aiService.GenerateRemediationAsync(vulnerability.Summary);
-        dbContext.Vulnerabilities.Update(vulnerability);
-        await dbContext.SaveChangesAsync();
+        _dbContext.Vulnerabilities.Update(vulnerability);
+        await _dbContext.SaveChangesAsync();
 
         var notification = new Notification
         {
@@ -136,8 +142,8 @@ public class VulnerabilitiesController(
                 "The vulnerability remediation instructions have now been generated",
             Status = "unread"
         };
-        dbContext.Notifications.Add(notification);
-        await dbContext.SaveChangesAsync();
+        _dbContext.Notifications.Add(notification);
+        await _dbContext.SaveChangesAsync();
 
         await messageQueue.PublishAsync("notifications", new { type = "message" });
 
