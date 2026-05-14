@@ -29,7 +29,7 @@ jobs:
         run: syft dir:cli/runner --source-name reconmap-runner --source-version ${{ github.ref_name }} -o spdx-json > runner-sbom.spdx.json
 
       - name: Create Release and Upload SBOMs
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             dashboard-sbom.spdx.json
