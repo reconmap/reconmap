@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix pagination logic in the API that incorrectly defaulted to the last page, causing incomplete results in projects, findings, and other lists.
 
 ### Changed
+- Upgrade React Dashboard third-party dependencies (including ESLint, Vite, TypeScript, i18next, and React)
 - Migrated message queue from Redis to RabbitMQ for improved reliability and scalability.
 - Upgrade to MySQL 9.6
 - Disable MySQL performance schema by default
