@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Collapsible and expandable sidebar in Dashboard side-menu layouts, with browser-persisted state.
 
 ### Fixed
+- Fix Docker Compose resource conflict error (`services.keycloak conflicts with imported resource`) in `apps/api/compose.yaml` by replacing the `include` directive with `extends` for compatibility across various Docker Compose versions.
 - Complete the previously half-implemented report-by-email flow by queuing delivery through RabbitMQ and sending the generated report attachment to the selected recipients.
 - Fix pagination logic in the API that incorrectly defaulted to the last page, causing incomplete results in projects, findings, and other lists.
 
