@@ -13,6 +13,7 @@ public class ProcessorIntegrationDiscoveryTests
     [InlineData("TestsslProcessor", "testssl")]
     [InlineData("SubfinderProcessor", "subfinder")]
     [InlineData("ShcheckProcessor", "shcheck")]
+    [InlineData("SarifProcessor", "sarif")]
     public void InferNames_CamelCaseNameMatchesViaOrdinalIgnoreCase(string className, string camelCaseName)
     {
         var names = ProcessorIntegrationDiscovery.InferNames(className);

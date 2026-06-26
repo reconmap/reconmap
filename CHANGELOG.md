@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Support for parsing SARIF results files in the API using the `Sarif.Sdk` library to import security findings.
 - **System of Intelligence** features:
     - **Generic LLM Parser**: A new command output processor that uses LLMs to parse results from any security tool into structured assets and findings.
     - **Automated Finding Remediation**: Automatically generates remediation instructions using AI for newly discovered findings.

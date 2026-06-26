@@ -10,6 +10,13 @@ Reconmap can parse the output of many security tools, and incorporate their resu
 
 The first step is making sure there is a command registered for the one we want to automate. If one is not already created, add it to the system making sure the output parser dropdown points to the parser for that command. The executor options determine how the command runs, while the output parser determines what the do with the output.
 
+Reconmap supports several built-in output parsers, including:
+* **Sarif**: Parses Static Analysis Results Interchange Format (SARIF) JSON files (e.g. produced by `gosec`, `semgrep`, `trivy`, or `gitleaks`). It extracts findings, maps severity levels to Reconmap risk levels, maps source code locations to proof of concepts, and copies rule details/descriptions.
+* **Nmap**: Parses Nmap XML files to extract target hosts and open ports as assets.
+* **Shcheck**: Parses security header analysis findings.
+* **Subfinder**: Parses subdomain discovery outputs.
+* **Testssl**: Parses SSL/TLS configuration test outputs.
+
 ![Create command](/images/screenshots/command-parser-executor.png)
 
 ### Step 2 - Creating a task and linking it to the command
