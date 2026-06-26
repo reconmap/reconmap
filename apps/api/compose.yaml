@@ -22,8 +22,6 @@ services:
     command: "start --hostname-strict false --proxy-headers xforwarded --http-enabled true --import-realm  --hostname-debug=true"
     environment:
       KC_LOG_LEVEL: debug
-    profiles:
-      - testing
 
   rustfs:
     ports:

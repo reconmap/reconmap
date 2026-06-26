@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:26.5
+FROM quay.io/keycloak/keycloak:26.6
 
 LABEL org.opencontainers.image.vendor="Netfoe" \
 	org.opencontainers.image.authors="Santiago Lizardo" \
