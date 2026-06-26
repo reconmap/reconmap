@@ -13,25 +13,25 @@
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="9.0.0" />
         <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
-        <PackageReference Include="AWSSDK.S3" Version="3.7.408.1" />
+        <PackageReference Include="AWSSDK.S3" Version="4.0.25.3" />
         <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
-        <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" GeneratePathProperty="true" />
-        <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.3.9" />
-        <PackageReference Include="Microsoft.Extensions.AI" Version="10.3.0" />
-        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.3.0" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.2" />
-        <PackageReference Include="OllamaSharp" Version="5.4.16" />
+        <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" GeneratePathProperty="true" />
+        <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.3.11" />
+        <PackageReference Include="Microsoft.Extensions.AI" Version="10.7.0" />
+        <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.7.0" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.9" />
+        <PackageReference Include="OllamaSharp" Version="5.4.25" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-        <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
-        <PackageReference Include="Schick.Keycloak.RestApiClient" Version="26.5.3" />
-        <PackageReference Include="Scriban" Version="7.2.0" />
+        <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
+        <PackageReference Include="Schick.Keycloak.RestApiClient" Version="26.5.7" />
+        <PackageReference Include="Scriban" Version="7.2.5" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-        <PackageReference Include="StackExchange.Redis" Version="2.11.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.4" />
+        <PackageReference Include="StackExchange.Redis" Version="3.0.7" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
     </ItemGroup>
 
   <ItemGroup>
