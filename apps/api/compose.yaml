@@ -41,5 +41,11 @@ services:
       - testing
 
   ngapi:
+    build:
+      context: ./src
+      dockerfile: docker/Dockerfile
+    volumes:
+      - "./src/appsettings.Production.json:/App/appsettings.Production.json"
+      - "./src/appsettings.json:/App/appsettings.json"
     profiles:
       - testing

@@ -1,5 +1,5 @@
 PROJECT := rest-api
-DC := docker compose -p $(PROJECT)
+DC := docker compose -f ../compose.yaml -p $(PROJECT)
 
 .PHONY: start
 start:
@@ -11,8 +11,8 @@ stop:
 
 .PHONY: build
 build:
-	$(DC) build
+	$(DC) build ngapi
 
 .PHONY: push
 push:
-	$(DC) push
+	$(DC) push ngapi

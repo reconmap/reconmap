@@ -46,13 +46,13 @@ This starts the production-grade baseline:
 To prevent configuration duplication, the sub-project compose files inherit from the root `compose.yaml` file using the Docker Compose `include` feature:
 
 - **Root `compose.yaml`**: The production-ready baseline. It uses clean, production-grade configurations, avoids local builds (uses prebuilt registry images), and exposes no development debugging or management features.
-- **`apps/api/compose.yaml`**: Used for local API development. It includes the root `compose.yaml` and applies development-specific overrides:
+- **`apps/api/compose.yaml`**: Used for local API development and testing. It includes the root `compose.yaml` and applies development-specific overrides:
   - Switches `rabbitmq` to `rabbitmq:4.2-management-alpine` and exposes the management port `15672`.
   - Configures a local `mysql` build context pointing to `infra/docker/mysql/Dockerfile`.
   - Configures `keycloak` in debug mode (running under the `testing` profile).
   - Enables the `rustfs` debug console on port `9001`.
   - Places `ngapi` and `web-client` under the `testing` profile to avoid host port conflicts while debugging the API on the host machine.
-- **`apps/api/src/compose.yaml`**: Used to build and test the API service itself locally. It includes the root `compose.yaml` and overlays the local build context and local configuration files (`appsettings.json`).
+  - Overlays the local build context and local configuration files (`appsettings.json`) for the `ngapi` service under the `testing` profile.
 
 ## CLI Development
 

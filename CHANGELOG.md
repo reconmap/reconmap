@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix pagination logic in the API that incorrectly defaulted to the last page, causing incomplete results in projects, findings, and other lists.
 
 ### Changed
+- Consolidated local API Docker Compose configurations by merging `apps/api/src/compose.yaml` into `apps/api/compose.yaml`, updating references in Makefiles and development guides.
 - Renamed repetitive API directory path from `apps/api/app` to `apps/api/src` to align with standard project layout conventions, and updated all project files, test project reference, GitHub workflow, compose setups, and development guides.
 - Upgrade React Dashboard third-party dependencies (including ESLint, Vite, TypeScript, i18next, and React)
 - Restructured Docker Compose configuration to utilize the `include` directive, making the top-level `compose.yaml` the production-grade source of truth while inheriting and applying development/local overrides in `apps/api` and `apps/api/src`, eliminating config duplication.
