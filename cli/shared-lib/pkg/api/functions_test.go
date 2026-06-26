@@ -25,8 +25,8 @@ func TestGetCommandUsageById(t *testing.T) {
 	t.Setenv("RMAP_SESSION_TOKEN", "mock-token")
 
 	mockCommand := &models.CommandUsage{
-		ID:   1,
-		Name: "test-command",
+		ID:          1,
+		Description: "test-command",
 	}
 	mockResponse, _ := json.Marshal(mockCommand)
 
@@ -46,7 +46,7 @@ func TestGetCommandUsageById(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	if command.ID != 1 || command.Name != "test-command" {
-		t.Errorf("Expected command ID 1 and Name test-command, got ID %v and Name %v", command.ID, command.Name)
+	if command.ID != 1 || command.Description != "test-command" {
+		t.Errorf("Expected command ID 1 and Description test-command, got ID %v and Description %v", command.ID, command.Description)
 	}
 }

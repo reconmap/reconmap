@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix Go agent docker build command path and context mismatch in `.github/workflows/cli-binaries-build-deploy.yml` and `cli/agent/Makefile` by referencing the correct build context (`cli`).
 - Fix agent scheduler signature discrepancy in `cli/agent/internal/app_test.go` to restore test compilation and success.
+- Fix compilation error in `cli/shared-lib/pkg/api/functions_test.go` by updating the `models.CommandUsage` mock and assertions to use `Description` instead of `Name`.
 - Fix Docker Compose resource conflict error (`services.keycloak conflicts with imported resource`) in `apps/api/compose.yaml` by replacing the `include` directive with `extends` for compatibility across various Docker Compose versions.
 - Complete the previously half-implemented report-by-email flow by queuing delivery through RabbitMQ and sending the generated report attachment to the selected recipients.
 - Fix pagination logic in the API that incorrectly defaulted to the last page, causing incomplete results in projects, findings, and other lists.
