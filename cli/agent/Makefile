@@ -26,7 +26,7 @@ clean:
 
 .PHONY: docker-build
 docker-build:
-	docker build -t $(CONTAINER_NAME) .
+	docker build -t $(CONTAINER_NAME) -f Dockerfile ..
 
 .PHONY: docker-push
 docker-push:

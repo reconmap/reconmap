@@ -4,10 +4,16 @@ This monorepo contains the Reconmap [runner](runner) and [agent](agent) command 
 
 Look at each subdirectory to learn more about each tool including building and running instructions.
 
+From the repository root:
+```shell
+docker build -t ghcr.io/reconmap/agent:latest -f cli/agent/Dockerfile cli
+```
+
+From the `cli` directory:
 ```shell
 docker build -t ghcr.io/reconmap/agent:latest -f agent/Dockerfile .
-docker push ghcr.io/reconmap/agent:latest
 ```
+
 
 ## Build requirements
 

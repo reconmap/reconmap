@@ -54,9 +54,9 @@ func TestSetupSchedules(t *testing.T) {
 		},
 	}
 
-	c := app.setupSchedules("token", schedules)
-	if c == nil {
-		t.Error("Expected cron to be returned")
+	err := app.setupSchedules(schedules)
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
 	}
-	c.Stop()
 }
+
