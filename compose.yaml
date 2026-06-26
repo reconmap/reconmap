@@ -23,7 +23,6 @@ services:
     restart: unless-stopped
     ports:
       - "5672:5672"
-      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -100,9 +99,6 @@ services:
   ngapi:
     container_name: rmap-ngapi
     image: ghcr.io/reconmap/ng-api:latest
-    build:
-      context: ./
-      dockerfile: docker/Dockerfile
     volumes:
       - "./config-ngapi.json:/app/appsettings.json"
       - "./data/attachments:/seed/attachments:ro"

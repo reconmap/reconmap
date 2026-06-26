@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Upgrade React Dashboard third-party dependencies (including ESLint, Vite, TypeScript, i18next, and React)
+- Restructured Docker Compose configuration to utilize the `include` directive, making the top-level `compose.yaml` the production-grade source of truth while inheriting and applying development/local overrides in `apps/api` and `apps/api/app`, eliminating config duplication.
 - Migrated message queue from Redis to RabbitMQ for improved reliability and scalability.
 - Upgrade to MySQL 9.6
 - Disable MySQL performance schema by default
