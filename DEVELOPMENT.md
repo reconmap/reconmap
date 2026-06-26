@@ -52,7 +52,7 @@ To prevent configuration duplication, the sub-project compose files inherit from
   - Configures `keycloak` in debug mode (running under the `testing` profile).
   - Enables the `rustfs` debug console on port `9001`.
   - Places `ngapi` and `web-client` under the `testing` profile to avoid host port conflicts while debugging the API on the host machine.
-- **`apps/api/app/compose.yaml`**: Used to build and test the API service itself locally. It includes the root `compose.yaml` and overlays the local build context and local configuration files (`appsettings.json`).
+- **`apps/api/src/compose.yaml`**: Used to build and test the API service itself locally. It includes the root `compose.yaml` and overlays the local build context and local configuration files (`appsettings.json`).
 
 ## CLI Development
 

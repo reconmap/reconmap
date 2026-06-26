@@ -44,5 +44,5 @@ jobs:
 
       - name: Push NGAPI image
         run: make build push
-        working-directory: apps/api/app
+        working-directory: apps/api/src
 
