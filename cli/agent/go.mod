@@ -1,6 +1,6 @@
 module reconmap/agent
 
-go 1.25.3
+go 1.26.4
 
 require (
 	github.com/creack/pty v1.1.24
@@ -21,7 +21,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jonboulle/clockwork v0.5.0 // indirect
-	github.com/lufia/plan9stats v0.0.0-20260330125221-c963978e514e // indirect
+	github.com/lufia/plan9stats v0.0.0-20260627054121-477a66015f15 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/tklauser/go-sysconf v0.4.0 // indirect

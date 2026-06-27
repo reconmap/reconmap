@@ -84,7 +84,7 @@ func CheckRequestToken(r *http.Request) error {
 			return err
 		}
 
-		token, err := jwt.Parse(tokenParam, func(jwtToken *jwt.Token) (interface{}, error) {
+		token, err := jwt.Parse(tokenParam, func(jwtToken *jwt.Token) (any, error) {
 			if _, ok := jwtToken.Method.(*jwt.SigningMethodRSA); !ok {
 				return nil, fmt.Errorf("unexpected method: %s", jwtToken.Header["alg"])
 			}
