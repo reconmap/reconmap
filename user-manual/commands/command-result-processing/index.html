@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#step-1-setting-up-the-command" class="md-skip">
+        <a href="#step-1-choose-a-command-usage-under-scans" class="md-skip">
           Skip to content
         </a>
       
@@ -1782,10 +1782,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#step-1-setting-up-the-command" class="md-nav__link">
+  <a href="#step-1-choose-a-command-usage-under-scans" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1 - Setting up the command
+        Step 1 - Choose a command usage under Scans
       
     </span>
   </a>
@@ -1793,10 +1793,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-creating-a-task-and-linking-it-to-the-command" class="md-nav__link">
+  <a href="#step-2-running-the-command-and-uploading-the-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2 - Creating a task and linking it to the command
+        Step 2 - Running the command and uploading the results
       
     </span>
   </a>
@@ -1804,21 +1804,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-running-the-command-and-uploading-the-results" class="md-nav__link">
+  <a href="#step-3-waiting-for-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3 - Running the command and uploading the results
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-waiting-for-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 4 - Waiting for results
+        Step 3 - Waiting for results
       
     </span>
   </a>
@@ -2877,10 +2866,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#step-1-setting-up-the-command" class="md-nav__link">
+  <a href="#step-1-choose-a-command-usage-under-scans" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1 - Setting up the command
+        Step 1 - Choose a command usage under Scans
       
     </span>
   </a>
@@ -2888,10 +2877,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-creating-a-task-and-linking-it-to-the-command" class="md-nav__link">
+  <a href="#step-2-running-the-command-and-uploading-the-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2 - Creating a task and linking it to the command
+        Step 2 - Running the command and uploading the results
       
     </span>
   </a>
@@ -2899,21 +2888,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-running-the-command-and-uploading-the-results" class="md-nav__link">
+  <a href="#step-3-waiting-for-results" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3 - Running the command and uploading the results
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-waiting-for-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 4 - Waiting for results
+        Step 3 - Waiting for results
       
     </span>
   </a>
@@ -2948,25 +2926,19 @@
   <h1>Command result processing</h1>
 
 <p>Reconmap can parse the output of many security tools, and incorporate their results in one of your projects. The instructions below show how to do so step by step.</p>
-<h3 id="step-1-setting-up-the-command">Step 1 - Setting up the command</h3>
-<p>The first step is making sure there is a command registered for the one we want to automate. If one is not already created, add it to the system making sure the output parser dropdown points to the parser for that command. The executor options determine how the command runs, while the output parser determines what the do with the output.</p>
+<h3 id="step-1-choose-a-command-usage-under-scans">Step 1 - Choose a command usage under Scans</h3>
+<p>Reconmap has built-in, code-defined commands and usages. You do not need to manually configure executable paths or associate output parsers.
+Go to the <strong>Scans</strong> page and select the command and its usage you want to run.</p>
 <p>Reconmap supports several built-in output parsers, including:
 * <strong>Sarif</strong>: Parses Static Analysis Results Interchange Format (SARIF) JSON files (e.g. produced by <code>gosec</code>, <code>semgrep</code>, <code>trivy</code>, or <code>gitleaks</code>). It extracts findings, maps severity levels to Reconmap risk levels, maps source code locations to proof of concepts, and copies rule details/descriptions.
 * <strong>Nmap</strong>: Parses Nmap XML files to extract target hosts and open ports as assets.
 * <strong>Shcheck</strong>: Parses security header analysis findings.
 * <strong>Subfinder</strong>: Parses subdomain discovery outputs.
 * <strong>Testssl</strong>: Parses SSL/TLS configuration test outputs.</p>
-<p><img alt="Create command" src="/images/screenshots/command-parser-executor.png" /></p>
-<h3 id="step-2-creating-a-task-and-linking-it-to-the-command">Step 2 - Creating a task and linking it to the command</h3>
-<p>Once the command is created, you need to create a task under an existing project and link it to the desired command as follows.</p>
-<p><img alt="Create task screenshot" src="/images/screenshots/link-task-command.png" /></p>
-<h3 id="step-3-running-the-command-and-uploading-the-results">Step 3 - Running the command and uploading the results</h3>
-<p>Lastly, copy the command to the native terminal or the integrated web terminal if it's available on your Reconmap instance. Reconmap will run the command, capture the output and upload the results to the server for processing.</p>
-<p><img alt="Run command" src="/images/screenshots/command-run-instructions.png" /></p>
-<p><img alt="Run command" src="/images/screenshots/run-command-native-terminal.png" /></p>
-<h3 id="step-4-waiting-for-results">Step 4 - Waiting for results</h3>
-<p>The file is now on the system and will be processed in the background within the next minute after upload. Vulnerabilities and target hosts found on the scan file are going to be created automatically on Reconmap.</p>
-<p><img alt="Create task screenshot" src="/images/tutorials/howto-process-burp-step4.png" /></p>
+<h3 id="step-2-running-the-command-and-uploading-the-results">Step 2 - Running the command and uploading the results</h3>
+<p>Copy the command from the Scans page to your terminal (running the <code>rmap</code> CLI) or the integrated web terminal. The <code>rmap</code> CLI will execute the command, capture the output, and automatically upload the results to the server for processing.</p>
+<h3 id="step-3-waiting-for-results">Step 3 - Waiting for results</h3>
+<p>The file is now on the system and will be processed in the background. Vulnerabilities and target hosts found in the scan output file are created automatically on the selected Reconmap project.</p>
 
 
 
@@ -2987,7 +2959,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 26, 2026 23:07:35 UTC">June 26, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 27, 2026 23:00:14 UTC">June 27, 2026</span>
   </span>
 
     
