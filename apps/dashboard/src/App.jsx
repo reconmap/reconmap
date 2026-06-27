@@ -27,6 +27,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Configuration from "./Configuration";
 import { AuthProvider } from "./contexts/AuthContext";
+import ErrorBoundary from "components/ui/ErrorBoundary.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -40,38 +41,40 @@ const queryClient = new QueryClient({
 const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter basename={Configuration.getContextPath()}>
-                {/* Order of provider components matters */}
-                <Compose components={[AuthProvider, WebsocketProvider]}>
-                    <Routes>
-                        <Route element={<DashboardLayout />}>
-                            {[
-                                ...DashboardRoutes,
-                                ...ClientsRoutes,
-                                ...CommandsRoutes,
-                                ...DocumentsRoutes,
-                                ...ProjectsRoutes,
-                                ...ReportTemplatesRoutes,
-                                ...ReportsRoutes,
-                                ...ScansRoutes,
-                                ...NotificationsRoutes,
-                                ...SearchRoutes,
-                                ...SettingsRoutes,
-                                ...SupportRoutes,
-                                ...SystemRoutes,
-                                ...TargetRoutes,
-                                ...TasksRoutes,
-                                ...ToolsRoutes,
-                                ...AgentRoutes,
-                                ...UsersRoutes,
-                                ...VulnerabilitiesRoutes,
-                                ...IntegrationsRoutes,
-                            ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
-                            <Route path="*" element={<PageNotFound />} />
-                        </Route>
-                    </Routes>
-                </Compose>
-            </BrowserRouter>
+            <ErrorBoundary>
+                <BrowserRouter basename={Configuration.getContextPath()}>
+                    {/* Order of provider components matters */}
+                    <Compose components={[AuthProvider, WebsocketProvider]}>
+                        <Routes>
+                            <Route element={<DashboardLayout />}>
+                                {[
+                                    ...DashboardRoutes,
+                                    ...ClientsRoutes,
+                                    ...CommandsRoutes,
+                                    ...DocumentsRoutes,
+                                    ...ProjectsRoutes,
+                                    ...ReportTemplatesRoutes,
+                                    ...ReportsRoutes,
+                                    ...ScansRoutes,
+                                    ...NotificationsRoutes,
+                                    ...SearchRoutes,
+                                    ...SettingsRoutes,
+                                    ...SupportRoutes,
+                                    ...SystemRoutes,
+                                    ...TargetRoutes,
+                                    ...TasksRoutes,
+                                    ...ToolsRoutes,
+                                    ...AgentRoutes,
+                                    ...UsersRoutes,
+                                    ...VulnerabilitiesRoutes,
+                                    ...IntegrationsRoutes,
+                                ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
+                                <Route path="*" element={<PageNotFound />} />
+                            </Route>
+                        </Routes>
+                    </Compose>
+                </BrowserRouter>
+            </ErrorBoundary>
         </QueryClientProvider>
     );
 };

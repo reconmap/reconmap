@@ -23,8 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to add and remove Reconmap agents from the Dashboard
 - Mail settings UI for SMTP/IMAP configuration, plus background delivery of report emails with the selected report revision attached.
 - Collapsible and expandable sidebar in Dashboard side-menu layouts, with browser-persisted state.
+- React Error Boundary support to protect dashboard layouts and subcomponents against unhandled runtime crashes, featuring diagnostic error details and retry options.
 
 ### Fixed
+- Fix dashboard audit page crash due to useLocation hook context mismatch by resolving the react-router/react-router-dom package inconsistency.
 - Fix Go agent docker build command path and context mismatch in `.github/workflows/cli-binaries-build-deploy.yml` and `cli/agent/Makefile` by referencing the correct build context (`cli`).
 - Fix agent scheduler signature discrepancy in `cli/agent/internal/app_test.go` to restore test compilation and success.
 - Fix compilation error in `cli/shared-lib/pkg/api/functions_test.go` by updating the `models.CommandUsage` mock and assertions to use `Description` instead of `Name`.
