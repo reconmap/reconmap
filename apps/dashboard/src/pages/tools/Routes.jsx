@@ -3,13 +3,11 @@ import ToolsLayout from "layouts/ToolsLayout.jsx";
 import { Route } from "react-router-dom";
 import { ToolsUrls } from "AppUrls";
 
-import PasswordGeneratorPage from "./PasswordGenerator.jsx";
 import VaultPage from "./Vault.jsx";
 
 const ToolsRoutes = [
     <Route element={<ToolsLayout />}>
         <Route path={ToolsUrls.Vault} element={<VaultPage />} />
-        <Route path={ToolsUrls.PasswordGenerator} element={<PasswordGeneratorPage />} />
         <Route path={ToolsUrls.VaultItemEdit} element={<VaultItemEdit />} />
     </Route>
 ];

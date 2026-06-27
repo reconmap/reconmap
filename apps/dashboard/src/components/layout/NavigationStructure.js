@@ -123,7 +123,6 @@ export const getNavigationStructure = (t) => [
         url: "/tools",
         items: [
             { type: "menu", name: t("Vault"), url: ToolsUrls.Vault, permissions: "commands.*" },
-            { type: "menu", name: t("Password generator"), url: ToolsUrls.PasswordGenerator, permissions: "commands.*" },
             { type: "divider" },
             {
                 type: "menu",

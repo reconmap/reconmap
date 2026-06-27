@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Unified secrets management using a central `.env` file, enabling runtime environment variable overrides for both the C# API (using ASP.NET Core environment mapping) and the Go CLI/agent (using dynamic reflection overrides), which removes the need to hardcode secrets inside application JSON configuration files.
+
+### Changed
+- Integrated the Password Generator directly into the Credential Vault creation and editing forms (`VaultSecretForm` and `VaultItemEdit`) as an interactive native HTML modal next to the secret value field, rather than keeping it as a standalone page.
+
+### Removed
+- Standalone "Password generator" page and route from the dashboard and navigation sidebar.
+
 - Support for parsing SARIF results files in the API using the `Sarif.Sdk` library to import security findings.
 - **System of Intelligence** features:
     - **Generic LLM Parser**: A new command output processor that uses LLMs to parse results from any security tool into structured assets and findings.

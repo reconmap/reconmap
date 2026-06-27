@@ -7,10 +7,13 @@ import { actionCompletedToast } from "components/ui/toast.jsx";
 import Vault from "models/Vault.js";
 import { useState } from "react";
 import { requestEntityPost } from "utilities/requests.js";
+import CssIcon from "components/ui/CssIcon.jsx";
+import PasswordGeneratorModal from "./PasswordGeneratorModal.jsx";
 
 const VaultSecretForm = ({ projectId = null, onSubmit = null }) => {
     const defaultSecret = { ...Vault, projectId: projectId };
     const [vaultItem, setVaultItem] = useState(defaultSecret);
+    const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
     const invalidateQueries = invalidateVaultQueries();
 
     const onVaultItemFormChange = (ev) => {
@@ -76,13 +79,27 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }) => {
                     label="Value"
                     htmlFor="value"
                     control={
-                        <NativeInput
-                            type="text"
-                            name="value"
-                            onChange={onVaultItemFormChange}
-                            value={vaultItem.value || ""}
-                            required
-                        />
+                        <div className="field has-addons" style={{ marginBottom: 0 }}>
+                            <div className="control is-expanded">
+                                <NativeInput
+                                    type="text"
+                                    name="value"
+                                    onChange={onVaultItemFormChange}
+                                    value={vaultItem.value || ""}
+                                    required
+                                />
+                            </div>
+                            <div className="control">
+                                <button
+                                    type="button"
+                                    className="button is-info"
+                                    onClick={() => setIsGeneratorOpen(true)}
+                                    title="Generate Password"
+                                >
+                                    <CssIcon name="key" />
+                                </button>
+                            </div>
+                        </div>
                     }
                 />
 
@@ -143,6 +160,13 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }) => {
 
                 <PrimaryButton type="submit">Add</PrimaryButton>
             </details>
+            <PasswordGeneratorModal
+                isOpen={isGeneratorOpen}
+                onClose={() => setIsGeneratorOpen(false)}
+                onSelectPassword={(pwd) => {
+                    setVaultItem({ ...vaultItem, value: pwd });
+                }}
+            />
         </form>
     );
 };

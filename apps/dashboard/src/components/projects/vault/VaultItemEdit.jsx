@@ -6,12 +6,15 @@ import Vault from "models/Vault";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { requestEntityPost, requestEntityPut } from "utilities/requests.js";
+import CssIcon from "components/ui/CssIcon.jsx";
+import PasswordGeneratorModal from "./PasswordGeneratorModal.jsx";
 
 const VaultItemEdit = () => {
     const { vaultItemId } = useParams();
 
     const [item, setVaultItem] = useState({ ...Vault });
     const [password, setPassword] = useState(null);
+    const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
 
     const onVaultItemFormChange = (ev) => {
         const value = ev.target.type === "checkbox" ? ev.target.checked : ev.target.value;
@@ -104,13 +107,27 @@ const VaultItemEdit = () => {
                                         />
                                     </td>
                                     <td>
-                                        <NativeInput
-                                            type="text"
-                                            name="value"
-                                            onChange={onVaultItemFormChange}
-                                            value={item.value || ""}
-                                            required
-                                        />
+                                        <div className="field has-addons" style={{ marginBottom: 0 }}>
+                                            <div className="control is-expanded">
+                                                <NativeInput
+                                                    type="text"
+                                                    name="value"
+                                                    onChange={onVaultItemFormChange}
+                                                    value={item.value || ""}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="control">
+                                                <button
+                                                    type="button"
+                                                    className="button is-info"
+                                                    onClick={() => setIsGeneratorOpen(true)}
+                                                    title="Generate Password"
+                                                >
+                                                    <CssIcon name="key" />
+                                                </button>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
                                         <NativeInput
@@ -127,6 +144,13 @@ const VaultItemEdit = () => {
                             </tbody>
                         </table>
                     </form>
+                    <PasswordGeneratorModal
+                        isOpen={isGeneratorOpen}
+                        onClose={() => setIsGeneratorOpen(false)}
+                        onSelectPassword={(pwd) => {
+                            setVaultItem({ ...item, value: pwd });
+                        }}
+                    />
                 </>
             )}
             {(item.name === "" || item.name === undefined) && (

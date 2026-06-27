@@ -21,8 +21,6 @@ From the vault you can:
 
 ## Password Generator
 
-The **password generator** helps you create strong, unique passwords with different configurations.
+The **password generator** helps you create strong, unique passwords with different configurations. 
 
-![Password generator](/images/screenshots/password-generator.png)
-
-You can customize the length and complexity of the generated passwords, including characters, numbers, and symbols.
+Rather than a standalone page, it is integrated directly into the **Vault** secret forms. When adding or editing a secret value, you can click the key generator icon next to the "Value" input. This opens a modal where you can customize the length and complexity of the generated passwords (including uppercase/lowercase characters, numbers, symbols, and avoiding ambiguous characters) and apply it directly to your secret value.
