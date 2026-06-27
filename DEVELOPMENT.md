@@ -33,6 +33,14 @@ Use Docker Compose to run the entire Reconmap stack:
 docker compose up -d
 ```
 
+### Secrets Management
+
+All environment variables and secrets are centralized in a single `.env` file at the root. Both C# API and Go agent applications, as well as database and infrastructure containers, automatically read these values dynamically at runtime:
+
+- **Modifying Secrets**:
+  Simply edit the `.env` file at the root and restart the docker stack to pick up new secrets.
+  *(Note: If you rotate database or Keycloak credentials, you must recreate the database volumes using `docker compose down -v` and `docker compose up -d` to re-initialize them).*
+
 This starts the production-grade baseline:
 - `mysql`: Database.
 - `redis`: Cache and key-value store.

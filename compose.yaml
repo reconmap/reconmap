@@ -9,7 +9,7 @@ services:
   redis:
     container_name: rmap-redis
     image: redis:8.6-alpine
-    command: redis-server --requirepass $DOTENV_REDIS_PASSWORD --save 20 1 --loglevel warning
+    command: redis-server --requirepass ${REDIS_PASSWORD} --save 20 1 --loglevel warning
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -23,8 +23,8 @@ services:
     ports:
       - "5672:5672"
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
 
   mysql:
     container_name: rmap-mysql
@@ -32,10 +32,15 @@ services:
     restart: unless-stopped
     volumes:
       - mysql_varlib:/var/lib/mysql
+      - ./infra/docker/mysql/initdb:/docker-entrypoint-initdb.d:ro
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: reconmuppet
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_RECONMAP_USER: ${MYSQL_RECONMAP_USER}
+      MYSQL_RECONMAP_PASSWORD: ${MYSQL_RECONMAP_PASSWORD}
+      MYSQL_KEYCLOAK_USER: ${MYSQL_KEYCLOAK_USER}
+      MYSQL_KEYCLOAK_PASSWORD: ${MYSQL_KEYCLOAK_PASSWORD}
     healthcheck:
       test: "mysql -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD mysql -e 'SELECT 1;'"
       interval: 5s
@@ -48,17 +53,17 @@ services:
     command: "start --hostname-strict=false --proxy-headers xforwarded --http-enabled true --import-realm"
     # See https://www.keycloak.org/server/all-config
     environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}
       KC_DB: mysql
       KC_DB_URL_HOST: mysql
       KC_DB_DATABASE: keycloak
-      KC_DB_USERNAME: keycloaker
-      KC_DB_PASSWORD: keycloaked
+      KC_DB_USERNAME: ${MYSQL_KEYCLOAK_USER}
+      KC_DB_PASSWORD: ${MYSQL_KEYCLOAK_PASSWORD}
       VAR_WEB_CLIENT_URL: "http://localhost:5500"
-      VAR_ADMIN_CLIENT_SECRET: "r2TO5uRy0RlpB5TRI6GvvXtBKxUCaaz0"
-      VAR_RECONMAPD_CLIENT_SECRET: "VH8HDKabxlTpnpPkEgLlTq2dEanedEGC"
-      VAR_API_CLIENT_SECRET: "I0jppD5zSIXuBAql31zrXfe5OAa0nvyE"
+      VAR_ADMIN_CLIENT_SECRET: "${KEYCLOAK_ADMIN_CLIENT_SECRET}"
+      VAR_RECONMAPD_CLIENT_SECRET: "${KEYCLOAK_RECONMAPD_CLIENT_SECRET}"
+      VAR_API_CLIENT_SECRET: "${KEYCLOAK_API_CLIENT_SECRET}"
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -107,6 +112,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:5510
+      - ConnectionStrings__MySqlConnection=server=rmap-mysql;port=3306;database=reconmap;user=${MYSQL_RECONMAP_USER};password=${MYSQL_RECONMAP_PASSWORD}
+      - Redis__Password=${REDIS_PASSWORD}
+      - Keycloak__ClientSecret=${KEYCLOAK_API_CLIENT_SECRET}
+      - Storage__S3__SecretKey=${RUSTFS_SECRET_KEY}
     depends_on:
       mysql:
         condition: service_healthy
@@ -124,8 +133,10 @@ services:
       - "./config-agent.json:/root/.config/reconmap/config-reconmapd.json"
     command: /app/reconmapd run
     environment:
-      RMAP_KEYCLOAK_DEBUG: false
-      RMAP_KEYCLOAK_SKIP_TLS_VERIFY: true
+      RMAP_KEYCLOAK_DEBUG: "false"
+      RMAP_KEYCLOAK_SKIP_TLS_VERIFY: "true"
+      RMAP_KEYCLOAK_CLIENT_SECRET: "${KEYCLOAK_RECONMAPD_CLIENT_SECRET}"
+      RMAP_REDIS_PASSWORD: "${REDIS_PASSWORD}"
 
   rustfs:
     container_name: rmap-rustfs

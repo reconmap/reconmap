@@ -10,7 +10,7 @@ services:
     extends:
       file: ../../compose.yaml
       service: redis
-    command: redis-server --requirepass REconDIS --save 20 1 --loglevel warning
+    command: redis-server --requirepass ${REDIS_PASSWORD} --save 20 1 --loglevel warning
 
   rabbitmq:
     extends:
@@ -47,8 +47,8 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      - RUSTFS_ACCESS_KEY=rustfsadmin
-      - RUSTFS_SECRET_KEY=rustfsadmin
+      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY}
+      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY}
       - RUSTFS_ADDRESS=0.0.0.0:9000
       - RUSTFS_CONSOLE_ENABLE=true
       - RUSTFS_CONSOLE_ADDRESS=0.0.0.0:9001

@@ -6,6 +6,9 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
+	"strconv"
+	"strings"
 )
 
 func GetReconmapConfigDirectory() (string, error) {
@@ -37,6 +40,72 @@ func SaveConfig[T any](config T, fileName string) (string, error) {
 	return filepath, err
 }
 
+func overrideFromEnv(v reflect.Value, prefix string) {
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	if v.Kind() != reflect.Struct {
+		return
+	}
+
+	t := v.Type()
+	for i := 0; i < v.NumField(); i++ {
+		fieldVal := v.Field(i)
+		fieldType := t.Field(i)
+
+		// Skip unexported fields
+		if !fieldVal.CanInterface() {
+			continue
+		}
+
+		name := fieldType.Name
+		jsonTag := fieldType.Tag.Get("json")
+		if jsonTag != "" && jsonTag != "-" {
+			parts := strings.Split(jsonTag, ",")
+			if parts[0] != "" {
+				name = parts[0]
+			}
+		}
+
+		var nextPrefix string
+		partName := toUpperSnakeCase(name)
+		if prefix == "" {
+			nextPrefix = "RMAP_" + partName
+		} else {
+			nextPrefix = prefix + "_" + partName
+		}
+
+		if fieldVal.Kind() == reflect.Struct {
+			overrideFromEnv(fieldVal, nextPrefix)
+		} else if fieldVal.CanSet() {
+			envVal, exists := os.LookupEnv(nextPrefix)
+			if exists {
+				switch fieldVal.Kind() {
+				case reflect.String:
+					fieldVal.SetString(envVal)
+				case reflect.Int:
+					if intVal, err := strconv.Atoi(envVal); err == nil {
+						fieldVal.SetInt(int64(intVal))
+					}
+				case reflect.Bool:
+					fieldVal.SetBool(envVal == "true" || envVal == "1")
+				}
+			}
+		}
+	}
+}
+
+func toUpperSnakeCase(s string) string {
+	var result strings.Builder
+	for i, r := range s {
+		if i > 0 && r >= 'A' && r <= 'Z' {
+			result.WriteRune('_')
+		}
+		result.WriteRune(r)
+	}
+	return strings.ToUpper(result.String())
+}
+
 func ReadConfig[T any](fileName string) (*T, error) {
 	var reconmapConfigDir, err = GetReconmapConfigDirectory()
 	if err != nil {
@@ -64,6 +133,11 @@ func ReadConfig[T any](fileName string) (*T, error) {
 
 	config := new(T)
 	err = json.Unmarshal(bytes, config)
+	if err != nil {
+		return nil, err
+	}
+
+	overrideFromEnv(reflect.ValueOf(config), "")
 
 	return config, nil
 }

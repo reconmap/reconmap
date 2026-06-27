@@ -7,6 +7,13 @@ SHELL := bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
+ifneq (,$(wildcard ../../.env))
+    include ../../.env
+    export
+endif
+
+MYSQL_ROOT_PASSWORD ?= reconmuppet
+
 PROJECT := rest-api
 DC := docker compose -p $(PROJECT)
 DB_CONTAINER=rmap-mysql
@@ -47,15 +54,15 @@ cache-clear:
 
 .PHONY: db-shell
 db-shell:
-	$(DC) exec mysql mysql --silent -uroot -preconmuppet reconmap
+	$(DC) exec mysql mysql --silent -uroot -p$(MYSQL_ROOT_PASSWORD) reconmap
 
 .PHONY: db-reset
 db-reset:
-	cat ../../infra/docker/mysql/initdb/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -preconmuppet reconmap
+	cat ../../infra/docker/mysql/initdb/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -p$(MYSQL_ROOT_PASSWORD) reconmap
 
 .PHONY: db-import
 db-import:
-	cat ../../infra/docker/mysql/initdb/{01,02,03}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -preconmuppet reconmap
+	cat ../../infra/docker/mysql/initdb/{01,02,03}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -p$(MYSQL_ROOT_PASSWORD) reconmap
 
 .PHONY: redis-shell
 redis-shell:
