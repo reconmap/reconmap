@@ -29,7 +29,9 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Run containers
-        run: docker compose -p rest-api up -d
+        run: |
+          cp ../../.env .env
+          docker compose -p rest-api up -d
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
