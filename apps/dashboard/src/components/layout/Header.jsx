@@ -63,6 +63,13 @@ const Header = () => {
                                 </a>
                                 <div className="navbar-dropdown is-boxed">
                                     {menuLink.items.map((item, index) => {
+                                        if (item.type === "label") {
+                                            return (
+                                                <div className="navbar-item" key={`label-${index}`} style={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.75rem", color: "#7a7a7a" }}>
+                                                    {item.name}
+                                                </div>
+                                            );
+                                        }
                                         return item.type === "divider" ? (
                                             <hr className="navbar-divider" key={`${menuLink.name}-divider-${index}`} />
                                         ) : item.hasOwnProperty("external") && item.external ? (

@@ -21,7 +21,6 @@ const SystemRoutes = [
     <Route path={SystemUrls.System} element={<SettingsLayout />}>
         <Route path={`mail-settings`} element={<MailSettingsPage />} />
         <Route path={`ai-settings`} element={<AiSettingsPage />} />
-        <Route path={`integrations`} element={<IntegrationsPage />} />
     </Route>,
     <Route path={SystemUrls.System} element={<ToolsLayout />}>
         <Route path={`export-data`} element={<ExportPage />} />
@@ -30,6 +29,7 @@ const SystemRoutes = [
     <Route path={SystemUrls.System} element={<HelpSupportLayout />}>
         <Route path={`health`} element={<SystemHealthPage />} />
         <Route path={`usage`} element={<SystemUsagePage />} />
+        <Route path={`integrations`} element={<IntegrationsPage />} />
     </Route>,
 ];
 

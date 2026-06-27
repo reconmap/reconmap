@@ -37,7 +37,7 @@ const SystemIntegrationsPage = () => {
                     <div>System</div>
                 </Breadcrumb>
             </div>
-            <Title title="Integrations" />
+            <Title title={t("Command output parsers")} />
 
             <NativeTable
                 columns={columns}

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Integrated the Password Generator directly into the Credential Vault creation and editing forms (`VaultSecretForm` and `VaultItemEdit`) as an interactive native HTML modal next to the secret value field, rather than keeping it as a standalone page.
+- Moved the "Scanners" settings page to the "Help & Support" layout under a new "System information" section label as "Command output parsers", grouping it alongside System Health and System Usage.
 
 ### Removed
 - Standalone "Password generator" page and route from the dashboard and navigation sidebar.
