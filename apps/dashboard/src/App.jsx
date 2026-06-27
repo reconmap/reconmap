@@ -5,7 +5,6 @@ import DashboardLayout from "layouts/DashboardLayout.jsx";
 import PageNotFound from "pages/PageNotFound.jsx";
 import AgentRoutes from "pages/agents/Routes";
 import ClientsRoutes from "pages/clients/Routes";
-import CommandsRoutes from "pages/commands/Routes";
 import DashboardRoutes from "pages/dashboard/Routes.jsx";
 import DocumentsRoutes from "pages/documents/Routes";
 import IntegrationsRoutes from "pages/integrations/Routes";
@@ -50,7 +49,6 @@ const App = () => {
                                 {[
                                     ...DashboardRoutes,
                                     ...ClientsRoutes,
-                                    ...CommandsRoutes,
                                     ...DocumentsRoutes,
                                     ...ProjectsRoutes,
                                     ...ReportTemplatesRoutes,

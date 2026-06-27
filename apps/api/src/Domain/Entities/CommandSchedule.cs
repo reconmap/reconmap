@@ -13,14 +13,14 @@ public class CommandSchedule : TimestampedEntity
     [ForeignKey(nameof(CreatedByUid))]
     public User? CreatedBy { get; set; }
 
-    [Column("command_id")] public uint? CommandId { get; set; }
+    [Column("command_id")] public string? CommandId { get; set; }
 
-    [Column("command_usage_id")] public uint? CommandUsageId { get; set; }
+    [Column("command_usage_id")] public string? CommandUsageId { get; set; }
 
-    [ForeignKey(nameof(CommandId))]
+    [NotMapped]
     public Command? Command { get; set; }
 
-    [ForeignKey(nameof(CommandUsageId))]
+    [NotMapped]
     public CommandUsage? CommandUsage { get; set; }
 
     [Column("project_id")] public uint? ProjectId { get; set; }

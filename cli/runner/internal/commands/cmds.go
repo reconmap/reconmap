@@ -3,7 +3,6 @@ package commands
 import (
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/reconmap/shared-lib/pkg/logging"
@@ -30,7 +29,7 @@ func RunCommand(projectId int, usage *models.CommandUsage, vars []string) error 
 
 	outStr, errStr := string(stdout), string(stderr)
 
-	stdoutFilename := filepath.Clean(strconv.Itoa(usage.ID) + ".out")
+	stdoutFilename := filepath.Clean(usage.ID + ".out")
 	f, err := os.Create(stdoutFilename)
 	if err != nil {
 		logger.Error(err)

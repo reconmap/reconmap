@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"strconv"
 
 	"github.com/reconmap/shared-lib/pkg/models"
 )
@@ -94,8 +93,8 @@ func GetCommandsSchedules(apiBaseUri string, accessToken string) (*models.Comman
 	return schedules, nil
 }
 
-func GetCommandUsageById(apiBaseUri string, id int) (*models.CommandUsage, error) {
-	var apiUrl string = apiBaseUri + "/commands/0/usages/" + strconv.Itoa(id)
+func GetCommandUsageById(apiBaseUri string, id string) (*models.CommandUsage, error) {
+	var apiUrl string = apiBaseUri + "/commands/0/usages/" + id
 
 	client := DefaultHTTPClient
 	req, err := NewRmapRequest("GET", apiUrl, nil)

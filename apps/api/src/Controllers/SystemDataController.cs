@@ -1,6 +1,8 @@
 using System.Net.Mime;
 using System.Text.Json;
+using api_v2.Application.Commands;
 using api_v2.Domain.AuditActions;
+using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +67,14 @@ public class SystemDataController(AppDbContext db) : AppController(db)
         return new Dictionary<string, Func<CancellationToken, Task<object>>>
         {
             ["audit_log"] = async ct => await _db.AuditEntries.AsNoTracking().ToListAsync(ct),
-            ["commands"] = async ct => await _db.Commands.AsNoTracking().ToListAsync(ct),
+            ["commands"] = ct => Task.FromResult<object>(CommandDiscovery.GetAll().Select(c => new Command
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Description = c.Description,
+                MoreInfoUrl = c.MoreInfoUrl,
+                Tags = string.Join(",", c.Tags)
+            }).ToList()),
             ["documents"] = async ct => await _db.Documents.AsNoTracking().ToListAsync(ct),
             ["projects"] = async ct => await _db.Projects.AsNoTracking().Where(p => !p.IsTemplate).ToListAsync(ct),
             ["project_templates"] = async ct =>

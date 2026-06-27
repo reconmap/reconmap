@@ -11,8 +11,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Contact> Contacts { get; set; }
 
     public DbSet<AuditEntry> AuditEntries { get; set; }
-    public DbSet<Command> Commands { get; set; }
-    public DbSet<CommandUsage> CommandUsages { get; set; }
     public DbSet<CommandSchedule> CommandSchedules { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectTask> Tasks { get; set; }

@@ -3,7 +3,7 @@ package models
 
 type Command struct {
 
-	ID int `json:"id"`
+	ID string `json:"id"`
 	CreatorUid int `json:"creator_uid"`
 	Name string `json:"name"`
 	Description string `json:"description"`

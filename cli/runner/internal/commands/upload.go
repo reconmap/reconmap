@@ -35,7 +35,7 @@ func UploadResults(projectId int, usage *models.CommandUsage) error {
 	return err
 }
 
-func Upload(client *http.Client, url string, outputFileName string, usageId int, projectId int) (err error) {
+func Upload(client *http.Client, url string, outputFileName string, usageId string, projectId int) (err error) {
 
 	if _, err := os.Stat(outputFileName); os.IsNotExist(err) {
 		return fmt.Errorf("output file '%s' could not be found", outputFileName)
@@ -53,7 +53,7 @@ func Upload(client *http.Client, url string, outputFileName string, usageId int,
 	part, err := writer.CreateFormFile("resultFile", filepath.Base(outputFileName))
 	_, err = io.Copy(part, file)
 
-	if err = writer.WriteField("commandUsageId", strconv.Itoa(usageId)); err != nil {
+	if err = writer.WriteField("commandUsageId", usageId); err != nil {
 		return
 	}
 	if projectId != 0 {

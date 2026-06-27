@@ -1,8 +1,8 @@
 package models
 
 type CommandUsage struct {
-	ID                  int    `json:"id"`
-	CommandId           int    `json:"commandId"`
+	ID                  string `json:"id"`
+	CommandId           string `json:"commandId"`
 	CreatorUid          int    `json:"createdByUid"`
 	Description         string `json:"description"`
 	ExecutablePath      string `json:"executablePath"`

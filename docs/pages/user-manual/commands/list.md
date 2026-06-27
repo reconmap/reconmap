@@ -4,8 +4,6 @@ parent: Commands
 grand_parent: User manual
 ---
 
-The commands page allows the pentester to save command line commands and their arguments for future use and automation. The user can save arbitrary commands as well as those based in Docker containers.
+Reconmap commands are fully defined in code, integrating both the runner definitions (executable path, flags, arguments) and the output parsers directly.
 
-![Commands view](/images/screenshots/commands.png)
-
-The commands saved through the Web interface can be invoked from the CLI to speed things up when working on the terminal.
+The "Commands Library" has been removed from the user interface, making the system simpler and more reliable. All available commands and their usages are directly accessible and configurable when running scans once or on a schedule under the **Scans** page.

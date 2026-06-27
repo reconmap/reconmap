@@ -6,9 +6,10 @@ grand_parent: User manual
 
 Reconmap can parse the output of many security tools, and incorporate their results in one of your projects. The instructions below show how to do so step by step.
 
-### Step 1 - Setting up the command
+### Step 1 - Choose a command usage under Scans
 
-The first step is making sure there is a command registered for the one we want to automate. If one is not already created, add it to the system making sure the output parser dropdown points to the parser for that command. The executor options determine how the command runs, while the output parser determines what the do with the output.
+Reconmap has built-in, code-defined commands and usages. You do not need to manually configure executable paths or associate output parsers.
+Go to the **Scans** page and select the command and its usage you want to run.
 
 Reconmap supports several built-in output parsers, including:
 * **Sarif**: Parses Static Analysis Results Interchange Format (SARIF) JSON files (e.g. produced by `gosec`, `semgrep`, `trivy`, or `gitleaks`). It extracts findings, maps severity levels to Reconmap risk levels, maps source code locations to proof of concepts, and copies rule details/descriptions.
@@ -17,24 +18,10 @@ Reconmap supports several built-in output parsers, including:
 * **Subfinder**: Parses subdomain discovery outputs.
 * **Testssl**: Parses SSL/TLS configuration test outputs.
 
-![Create command](/images/screenshots/command-parser-executor.png)
+### Step 2 - Running the command and uploading the results
 
-### Step 2 - Creating a task and linking it to the command
+Copy the command from the Scans page to your terminal (running the `rmap` CLI) or the integrated web terminal. The `rmap` CLI will execute the command, capture the output, and automatically upload the results to the server for processing.
 
-Once the command is created, you need to create a task under an existing project and link it to the desired command as follows.
+### Step 3 - Waiting for results
 
-![Create task screenshot](/images/screenshots/link-task-command.png)
-
-### Step 3 - Running the command and uploading the results
-
-Lastly, copy the command to the native terminal or the integrated web terminal if it's available on your Reconmap instance. Reconmap will run the command, capture the output and upload the results to the server for processing.
-
-![Run command](/images/screenshots/command-run-instructions.png)
-
-![Run command](/images/screenshots/run-command-native-terminal.png)
-
-### Step 4 - Waiting for results
-
-The file is now on the system and will be processed in the background within the next minute after upload. Vulnerabilities and target hosts found on the scan file are going to be created automatically on Reconmap.
-
-![Create task screenshot](/images/tutorials/howto-process-burp-step4.png)
+The file is now on the system and will be processed in the background. Vulnerabilities and target hosts found in the scan output file are created automatically on the selected Reconmap project.

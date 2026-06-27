@@ -1,66 +1,58 @@
-using api_v2.Common.Extensions;
-using api_v2.Domain.AuditActions;
+using api_v2.Application.Commands;
 using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace api_v2.Controllers;
 
-[Route("api/commands/{commandId:int}/usages")]
+[Route("api/commands/{commandId}/usages")]
 [ApiController]
-public class CommandUsagesController(AppDbContext dbContext) : ControllerBase
+public class CommandUsagesController : ControllerBase
 {
-    [HttpPost]
-    public async Task<IActionResult> Create(uint commandId, [FromBody] CommandUsage usage)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        usage.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
-        dbContext.CommandUsages.Add(usage);
-        await dbContext.SaveChangesAsync();
-
-        return Created();
-    }
-
     [HttpGet]
-    public async Task<IActionResult> GetMany(int commandId, [FromQuery] int? limit)
+    public IActionResult GetMany(string commandId)
     {
-        const int maxLimit = 500;
-        var take = Math.Min(limit ?? 100, maxLimit);
+        var cmdDef = CommandDiscovery.FindById(commandId);
+        if (cmdDef == null) return NotFound("Command not found");
 
-        var q = dbContext.CommandUsages.AsNoTracking()
-            .Where(u => u.CommandId == commandId)
-            .OrderByDescending(a => a.CreatedAt);
+        var usages = cmdDef.Usages.Select(u => new CommandUsage
+        {
+            Id = u.Id,
+            CommandId = cmdDef.Id,
+            Description = u.Description,
+            ExecutablePath = u.ExecutablePath,
+            DockerImage = u.DockerImage,
+            Arguments = u.Arguments,
+            OutputCapturingMode = u.OutputCapturingMode,
+            OutputFilename = u.OutputFilename,
+            OutputParser = u.OutputParser
+        }).ToList();
 
-        var page = await q.Take(take).ToListAsync();
-        return Ok(page);
+        return Ok(usages);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public IActionResult GetOne(string commandId, string id)
     {
-        var entity = await dbContext.CommandUsages.FindAsync(id);
-        if (entity == null) return NotFound();
+        var usageDef = CommandDiscovery.FindUsageById(id);
+        if (usageDef == null) return NotFound("Command usage not found");
 
-        return Ok(entity);
-    }
+        var usage = new CommandUsage
+        {
+            Id = usageDef.Id,
+            CommandId = usageDef.CommandId,
+            Description = usageDef.Description,
+            ExecutablePath = usageDef.ExecutablePath,
+            DockerImage = usageDef.DockerImage,
+            Arguments = usageDef.Arguments,
+            OutputCapturingMode = usageDef.OutputCapturingMode,
+            OutputFilename = usageDef.OutputFilename,
+            OutputParser = usageDef.OutputParser
+        };
 
-    [HttpDelete("{id:int}")]
-    [Audit(AuditActions.Deleted, "Command Usage")]
-    public async Task<IActionResult> DeleteOne(int commandId, int id)
-    {
-        var deleteCount = await dbContext.CommandUsages
-            .Where(n => n.CommandId == commandId && n.Id == id)
-            .ExecuteDeleteAsync();
-
-        if (deleteCount == 0) return NotFound();
-
-        HttpContext.Items["AuditData"] = new { id };
-
-        return NoContent();
+        return Ok(usage);
     }
 }

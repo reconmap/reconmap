@@ -1,22 +1,27 @@
-using System.Security.Cryptography;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using api_v2.Application.Commands;
 using api_v2.Application.Services;
 using api_v2.Common;
 using api_v2.Common.Extensions;
 using api_v2.Common.Messaging;
-using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace api_v2.Controllers;
 
 public class CommandProcessorJob
 {
-    public uint CommandUsageId { get; set; }
+    public string CommandUsageId { get; set; } = string.Empty;
     public uint ProjectId { get; set; }
     public uint UserId { get; set; }
-    public string FilePath { get; set; }
+    public string FilePath { get; set; } = string.Empty;
 }
 
 [Route("api/[controller]")]
@@ -24,58 +29,41 @@ public class CommandProcessorJob
 public class CommandsController(
     AppDbContext dbContext,
     IMessageQueue messageQueue,
-    IConfiguration config,
     ILogger<CommandsController> logger,
     IAttachmentStorage attachmentStorage)
     : ControllerBase
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
-    [HttpPost]
-    public async Task<IActionResult> CreateOne([FromBody] Command command)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        command.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
-        dbContext.Commands.Add(command);
-        await dbContext.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetOne), new { id = command.Id }, command);
-    }
-
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, Command command)
-    {
-        var dbModel = await dbContext.Commands.FindAsync(id);
-        if (dbModel == null) return NotFound();
-
-        dbContext.Entry(dbModel).CurrentValues.SetValues(command);
-        dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
-        await dbContext.SaveChangesAsync();
-        return Ok(dbModel);
-    }
 
     [HttpGet]
-    public async Task<IActionResult> GetMany()
+    public IActionResult GetMany()
     {
-        var q = dbContext.Commands.AsNoTracking()
-            .OrderByDescending(a => a.CreatedAt);
+        var query = HttpContext.Request.Query;
+        string? keywords = query["keywords"];
 
-        var totalCount = await q.CountAsync();
+        var allCommands = CommandDiscovery.GetAll();
 
-        var pagination = new PaginationRequestHandler(HttpContext.Request.Query, totalCount);
-        var resultsPerPage = pagination.GetResultsPerPage();
-        var pageCount = pagination.CalculatePageCount();
+        if (!string.IsNullOrWhiteSpace(keywords))
+        {
+            allCommands = allCommands.Where(c => 
+                c.Name.Contains(keywords, StringComparison.OrdinalIgnoreCase) || 
+                (c.Description != null && c.Description.Contains(keywords, StringComparison.OrdinalIgnoreCase))
+            );
+        }
 
-        var results = await q
-            .Skip(pagination.CalculateOffset())
-            .Take(resultsPerPage)
-            .ToListAsync();
+        var results = allCommands.Select(c => new Command
+        {
+            Id = c.Id,
+            Name = c.Name,
+            Description = c.Description,
+            MoreInfoUrl = c.MoreInfoUrl,
+            Tags = string.Join(",", c.Tags)
+        }).ToList();
 
         return Ok(new
         {
-            pageCount,
-            totalCount,
+            pageCount = 1,
+            totalCount = results.Count,
             data = results
         });
     }
@@ -83,29 +71,21 @@ public class CommandsController(
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public IActionResult GetOne(string id)
     {
-        var command = await dbContext.Commands
-            .Include(c => c.CreatedBy)
-            .FirstOrDefaultAsync(c => c.Id == id);
-        if (command == null) return NotFound();
+        var cmdDef = CommandDiscovery.FindById(id);
+        if (cmdDef == null) return NotFound();
+
+        var command = new Command
+        {
+            Id = cmdDef.Id,
+            Name = cmdDef.Name,
+            Description = cmdDef.Description,
+            MoreInfoUrl = cmdDef.MoreInfoUrl,
+            Tags = string.Join(",", cmdDef.Tags)
+        };
 
         return Ok(command);
-    }
-
-    [HttpDelete("{id:int}")]
-    [Audit(AuditActions.Deleted, "Command")]
-    public async Task<IActionResult> DeleteOne(uint id)
-    {
-        var deleteCount = await dbContext.Commands
-            .Where(n => n.Id == id)
-            .ExecuteDeleteAsync();
-
-        if (deleteCount == 0) return NotFound();
-
-        HttpContext.Items["AuditData"] = new { id };
-
-        return NoContent();
     }
 
     [HttpGet("output-parsers")]
@@ -121,23 +101,22 @@ public class CommandsController(
         return Ok(result);
     }
 
-
     [HttpPost("outputs")]
     public async Task<IActionResult> UploadOutput()
     {
-        // Parsed body
         var form = await Request.ReadFormAsync();
-        var commandUsageId = uint.Parse(form["commandUsageId"]);
+        var commandUsageId = form["commandUsageId"].ToString();
 
-        // Uploaded file
         var resultFile = form.Files["resultFile"];
+        if (resultFile == null) return BadRequest("Missing resultFile");
 
-        // Data lookups
-        var usage = await dbContext.CommandUsages.FindAsync(commandUsageId);
-        var command = await dbContext.Commands.FindAsync(usage.CommandId);
+        var usage = CommandDiscovery.FindUsageById(commandUsageId);
+        if (usage == null) return NotFound("Command usage not found");
 
-        // User Id from request context
-        var userId = 0;
+        var command = CommandDiscovery.FindById(usage.CommandId);
+        if (command == null) return NotFound("Command not found");
+
+        int userId = 0;
         try
         {
             userId = (int)HttpContext.GetCurrentUser()!.Id;
@@ -158,7 +137,7 @@ public class CommandsController(
         {
             CreatedByUid = (uint)userId,
             ParentType = "command",
-            ParentId = command.Id,
+            ParentId = 0,
             ClientFileName = resultFile.FileName,
             FileName = uniqueName,
             FileSize = (uint)resultFile.Length,
@@ -169,7 +148,6 @@ public class CommandsController(
         await dbContext.Attachments.AddAsync(attachment);
         await dbContext.SaveChangesAsync();
 
-        // Optional project ID
         int? projectId = null;
         if (form.TryGetValue("projectId", out var projectIdValue) &&
             int.TryParse(projectIdValue, out var parsedProjectId))
@@ -187,7 +165,7 @@ public class CommandsController(
 
             await messageQueue.PublishAsync("tasks", job);
 
-            logger.LogInformation("pushed new job to {QueueName}", "tasks");
+            logger.LogInformation("pushed new job to tasks");
         }
 
         return new JsonResult(new { success = true });

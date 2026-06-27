@@ -1,3 +1,4 @@
+using api_v2.Application.Commands;
 using api_v2.Application.Services;
 using api_v2.Common;
 using api_v2.Controllers;
@@ -17,7 +18,7 @@ public class GenericLlmProcessor(IAiService aiService, IAttachmentStorage attach
     {
         var result = new ProcessorResult();
 
-        var commandUsage = dbContext.CommandUsages.Find(job.CommandUsageId);
+        var commandUsage = CommandDiscovery.FindUsageById(job.CommandUsageId);
         var toolName = commandUsage?.Description ?? "Unknown Tool";
 
         using var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult();

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using api_v2.Application.Commands;
 using api_v2.Common;
 using api_v2.Common.Messaging;
 using api_v2.Controllers;
@@ -22,7 +23,12 @@ public class CommandResultProcessor(
             var aiService = scope.ServiceProvider.GetRequiredService<IAiService>();
 
             logger.LogInformation("Task queue popped");
-            var commandUsage = await db.CommandUsages.FindAsync(job.CommandUsageId);
+            var commandUsage = CommandDiscovery.FindUsageById(job.CommandUsageId);
+            if (commandUsage == null)
+            {
+                logger.LogError("Command usage with ID '{UsageId}' not found.", job.CommandUsageId);
+                return;
+            }
             var processor = ProcessorIntegrationDiscovery.Create(scope.ServiceProvider, commandUsage.OutputParser);
             var result = processor.Process(job);
             var numHosts = result.assets.Count;

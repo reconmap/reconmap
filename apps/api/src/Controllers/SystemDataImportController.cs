@@ -70,8 +70,8 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
         var result = entityName switch
         {
             "audit_log" => await ImportAsync(element, _db.AuditEntries, cancellationToken),
-            "commands" => await ImportAsync(element, _db.Commands, cancellationToken),
-            "command_usages" => await ImportAsync(element, _db.CommandUsages, cancellationToken),
+            "commands" => new ImportEntityResult { Name = "commands", Count = 0 },
+            "command_usages" => new ImportEntityResult { Name = "command_usages", Count = 0 },
             "documents" => await ImportAsync(element, _db.Documents, cancellationToken),
             "projects" or "project_templates" => await ImportAsync(element, _db.Projects, cancellationToken),
             "tasks" => await ImportAsync(element, _db.Tasks, cancellationToken),

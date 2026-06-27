@@ -375,55 +375,6 @@ CREATE TABLE task
     FOREIGN KEY (assigned_to_uid) REFERENCES user (id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS command;
-
-CREATE TABLE command
-(
-    id            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    created_by_uid   INT UNSIGNED  NOT NULL,
-    created_at     TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at     TIMESTAMP     NULL ON UPDATE CURRENT_TIMESTAMP,
-    name          VARCHAR(200)  NOT NULL,
-    description   VARCHAR(2000) NULL,
-    more_info_url VARCHAR(200)  NULL,
-    tags          JSON          NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (created_by_uid) REFERENCES user (id) ON DELETE NO ACTION
-) ENGINE = InnoDB;
-
-DROP TABLE IF EXISTS command_usage;
-
-CREATE TABLE command_usage
-(
-    id                    INT UNSIGNED                    NOT NULL AUTO_INCREMENT,
-    command_id            INT UNSIGNED                    NOT NULL,
-    created_by_uid           INT UNSIGNED                    NOT NULL,
-    created_at             TIMESTAMP                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at             TIMESTAMP                       NULL ON UPDATE CURRENT_TIMESTAMP,
-    description           VARCHAR(2000)                   NULL,
-    executable_path       VARCHAR(255)                    NULL,
-    docker_image          VARCHAR(300)                    NULL,
-    arguments             VARCHAR(2000)                   NULL,
-    output_capturing_mode ENUM ('none', 'stdout', 'file') NOT NULL DEFAULT 'none',
-    output_filename       VARCHAR(100)                    NULL,
-    output_parser         VARCHAR(100)                    NULL,
-
-    PRIMARY KEY (id),
-    FOREIGN KEY (created_by_uid) REFERENCES user (id) ON DELETE NO ACTION,
-    FOREIGN KEY (command_id) REFERENCES command (id) ON DELETE CASCADE
-) ENGINE = InnoDB;
-
-INSERT INTO command(id, created_by_uid, name)
-VALUES (1, 1, 'nmap');
-
-TRUNCATE TABLE command_usage;
-INSERT INTO command_usage(id, created_by_uid, command_id, description, executable_path, arguments, output_capturing_mode,
-                          output_parser)
-VALUES (1, 1, 1, "Scan all reserved TCP ports on the machine.",
-        "nmap",
-        "-oX - {{{Host|||localhost}}}", "stdout", "nmap");
-
 DROP TABLE IF EXISTS command_schedule;
 
 CREATE TABLE command_schedule
@@ -433,14 +384,12 @@ CREATE TABLE command_schedule
     project_id INT UNSIGNED DEFAULT NULL,
     created_at       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP     NULL ON UPDATE CURRENT_TIMESTAMP,
-    command_id      INT UNSIGNED  NULL,
-    command_usage_id      INT UNSIGNED  NULL,
+    command_id      VARCHAR(100)  NULL,
+    command_usage_id      VARCHAR(100)  NULL,
     argument_values VARCHAR(1000) NULL,
     cron_expression VARCHAR(60)   NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (command_id) REFERENCES command (id) ON DELETE CASCADE,
-    FOREIGN KEY (command_usage_id) REFERENCES command_usage (id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 

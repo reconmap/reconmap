@@ -21,7 +21,7 @@ func TestRunCommand(t *testing.T) {
 	defer func() { CurrentExecutor = originalExecutor }()
 
 	mockUsage := &models.CommandUsage{
-		ID:             1,
+		ID:             "1",
 		ExecutablePath: "echo",
 		Arguments:      "hello",
 	}

@@ -82,16 +82,9 @@ export const getNavigationStructure = (t) => [
     },
     {
         name: t("Library"),
-        title: t("Commands, vulnerabilities, documents, and search"),
+        title: t("Vulnerabilities, documents, and search"),
         url: "/library",
         items: [
-            {
-                type: "menu",
-                name: t("Commands"),
-                url: CommandsUrls.List,
-                permissions: "commands.*",
-                children: [{ name: t("Create"), url: CommandsUrls.Add, permissions: "commands.create" }]
-            },
             {
                 type: "menu",
                 name: t("Vulnerabilities"),

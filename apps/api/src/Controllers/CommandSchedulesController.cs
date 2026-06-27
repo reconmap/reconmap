@@ -1,3 +1,4 @@
+using api_v2.Application.Commands;
 using api_v2.Common.Extensions;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
@@ -5,6 +6,8 @@ using api_v2.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace api_v2.Controllers;
 
@@ -20,30 +23,105 @@ public class CommandSchedulesController(
     [HttpGet("schedules")]
     public async Task<IActionResult> GetAll()
     {
-        var q = dbContext.CommandSchedules
-            .Include(s => s.Command)
+        var page = await dbContext.CommandSchedules
             .Include(s => s.Project)
             .AsNoTracking()
-            .OrderByDescending(a => a.CreatedAt);
+            .OrderByDescending(a => a.CreatedAt)
+            .ToListAsync();
 
-        var page = await q.ToListAsync();
+        foreach (var schedule in page)
+        {
+            if (!string.IsNullOrEmpty(schedule.CommandId))
+            {
+                var cmdDef = CommandDiscovery.FindById(schedule.CommandId);
+                if (cmdDef != null)
+                {
+                    schedule.Command = new Command
+                    {
+                        Id = cmdDef.Id,
+                        Name = cmdDef.Name,
+                        Description = cmdDef.Description,
+                        MoreInfoUrl = cmdDef.MoreInfoUrl,
+                        Tags = string.Join(",", cmdDef.Tags)
+                    };
+                }
+            }
+            if (!string.IsNullOrEmpty(schedule.CommandUsageId))
+            {
+                var usageDef = CommandDiscovery.FindUsageById(schedule.CommandUsageId);
+                if (usageDef != null)
+                {
+                    schedule.CommandUsage = new CommandUsage
+                    {
+                        Id = usageDef.Id,
+                        CommandId = usageDef.CommandId,
+                        Description = usageDef.Description,
+                        ExecutablePath = usageDef.ExecutablePath,
+                        DockerImage = usageDef.DockerImage,
+                        Arguments = usageDef.Arguments,
+                        OutputCapturingMode = usageDef.OutputCapturingMode,
+                        OutputFilename = usageDef.OutputFilename,
+                        OutputParser = usageDef.OutputParser
+                    };
+                }
+            }
+        }
+
         return Ok(page);
     }
 
-    [HttpGet("{commandId:int}/schedules")]
-    public async Task<IActionResult> GetMany(uint commandId)
+    [HttpGet("{commandId}/schedules")]
+    public async Task<IActionResult> GetMany(string commandId)
     {
-        var q = dbContext.CommandSchedules
+        var page = await dbContext.CommandSchedules
             .Where(s => s.CommandId == commandId)
             .AsNoTracking()
-            .OrderByDescending(a => a.CreatedAt);
+            .OrderByDescending(a => a.CreatedAt)
+            .ToListAsync();
 
-        var page = await q.ToListAsync();
+        foreach (var schedule in page)
+        {
+            if (!string.IsNullOrEmpty(schedule.CommandId))
+            {
+                var cmdDef = CommandDiscovery.FindById(schedule.CommandId);
+                if (cmdDef != null)
+                {
+                    schedule.Command = new Command
+                    {
+                        Id = cmdDef.Id,
+                        Name = cmdDef.Name,
+                        Description = cmdDef.Description,
+                        MoreInfoUrl = cmdDef.MoreInfoUrl,
+                        Tags = string.Join(",", cmdDef.Tags)
+                    };
+                }
+            }
+            if (!string.IsNullOrEmpty(schedule.CommandUsageId))
+            {
+                var usageDef = CommandDiscovery.FindUsageById(schedule.CommandUsageId);
+                if (usageDef != null)
+                {
+                    schedule.CommandUsage = new CommandUsage
+                    {
+                        Id = usageDef.Id,
+                        CommandId = usageDef.CommandId,
+                        Description = usageDef.Description,
+                        ExecutablePath = usageDef.ExecutablePath,
+                        DockerImage = usageDef.DockerImage,
+                        Arguments = usageDef.Arguments,
+                        OutputCapturingMode = usageDef.OutputCapturingMode,
+                        OutputFilename = usageDef.OutputFilename,
+                        OutputParser = usageDef.OutputParser
+                    };
+                }
+            }
+        }
+
         return Ok(page);
     }
 
-    [HttpPost("{commandId:int}/schedules")]
-    public async Task<IActionResult> CreateOne(uint commandId, [FromBody] CommandSchedule commandSchedule)
+    [HttpPost("{commandId}/schedules")]
+    public async Task<IActionResult> CreateOne(string commandId, [FromBody] CommandSchedule commandSchedule)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -56,9 +134,9 @@ public class CommandSchedulesController(
         return Created();
     }
 
-    [HttpDelete("{commandId:int}/schedules/{id:int}")]
+    [HttpDelete("{commandId}/schedules/{id:int}")]
     [Audit(AuditActions.Deleted, "Command Schedule")]
-    public async Task<IActionResult> DeleteOne(uint commandId, int id)
+    public async Task<IActionResult> DeleteOne(string commandId, int id)
     {
         var deleteCount = await dbContext.CommandSchedules
             .Where(n => n.CommandId == commandId && n.Id == id)

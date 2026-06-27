@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 
 const CommandBadge = ({ command }) => {
     const styles = {
@@ -9,9 +8,9 @@ const CommandBadge = ({ command }) => {
     };
 
     return (
-        <Link to={"/commands/" + command.id} style={styles.badge}>
+        <span style={styles.badge}>
             {command.name}
-        </Link>
+        </span>
     );
 };
 

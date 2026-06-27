@@ -25,7 +25,7 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
     const [usage, setUsage] = useState(null);
 
     const onUsageChange = (ev) => {
-        const usage = commandUsages.find((usage) => usage.id === parseInt(ev.target.value));
+        const usage = commandUsages.find((usage) => usage.id === ev.target.value);
         setUsage(usage || null);
     };
 

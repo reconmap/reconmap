@@ -29,16 +29,16 @@ const ScansPage = ({ mode }) => {
     if (isCommandsLoading || isProjectsLoading) return <Loading />;
 
     const onCommandChange = (ev) => {
-        setSelectedCommandId(parseInt(ev.target.value));
+        setSelectedCommandId(ev.target.value || null);
         setSelectedCommandUsageId(null);
     };
 
     const onCommandUsageChange = (ev) => {
-        setSelectedCommandUsageId(parseInt(ev.target.value));
+        setSelectedCommandUsageId(ev.target.value || null);
     };
 
     const onProjectChange = (ev) => {
-        setSelectedProjectId(parseInt(ev.target.value));
+        setSelectedProjectId(parseInt(ev.target.value) || null);
     };
 
     const selectedCommand = commands?.data.find((c) => c.id === selectedCommandId);

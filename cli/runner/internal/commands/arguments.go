@@ -85,7 +85,7 @@ func SearchCommandsAction(ctx context.Context, c *cli.Command) error {
 
 func RunCommandAction(ctx context.Context, c *cli.Command) error {
 	projectId := c.Int("projectId")
-	commandUsageId := c.Int("cuid")
+	commandUsageId := c.String("cuid")
 
 	config, err := shareconfig.ReadConfig[configuration.Config](configuration.ConfigFileName)
 	if err != nil {
@@ -94,7 +94,7 @@ func RunCommandAction(ctx context.Context, c *cli.Command) error {
 
 	usage, err := api.GetCommandUsageById(config.ReconmapApiConfig.BaseUri, commandUsageId)
 	if err != nil {
-		return fmt.Errorf("unable to retrieve command usage with id=%d (%w)", commandUsageId, err)
+		return fmt.Errorf("unable to retrieve command usage with id=%s (%w)", commandUsageId, err)
 	}
 	err = RunCommand(projectId, usage, c.StringSlice("var"))
 	if err != nil {
@@ -142,7 +142,7 @@ var CommandList []*cli.Command = []*cli.Command{
 				Usage: "Run a command and upload its output to the server",
 				Flags: []cli.Flag{
 					&cli.IntFlag{Name: "projectId", Aliases: []string{"pid"}, Required: false},
-					&cli.IntFlag{Name: "commandUsageId", Aliases: []string{"cuid"}, Required: true},
+					&cli.StringFlag{Name: "commandUsageId", Aliases: []string{"cuid"}, Required: true},
 					&cli.StringSliceFlag{Name: "var", Required: false},
 				},
 				Action: RunCommandAction,
