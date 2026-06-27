@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - React Error Boundary support to protect dashboard layouts and subcomponents against unhandled runtime crashes, featuring diagnostic error details and retry options.
 
 ### Fixed
+- Fix `ReferenceError: SearchUrls is not defined` crash in dashboard Search Results page.
 - Fix dashboard audit page crash due to useLocation hook context mismatch by resolving the react-router/react-router-dom package inconsistency.
 - Fix Go agent docker build command path and context mismatch in `.github/workflows/cli-binaries-build-deploy.yml` and `cli/agent/Makefile` by referencing the correct build context (`cli`).
 - Fix agent scheduler signature discrepancy in `cli/agent/internal/app_test.go` to restore test compilation and success.

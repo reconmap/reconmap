@@ -11,6 +11,7 @@ import useQuery from "hooks/useQuery";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
+import { SearchUrls } from "AppUrls";
 
 const SearchResultsPage = React.memo(() => {
     const [t] = useTranslation();
