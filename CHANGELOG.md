@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Standalone "Password generator" page and route from the dashboard and navigation sidebar.
+- Standalone global "Vault" page and menu link, keeping only the project-level Vault interfaces.
 
 - Support for parsing SARIF results files in the API using the `Sarif.Sdk` library to import security findings.
 - **System of Intelligence** features:

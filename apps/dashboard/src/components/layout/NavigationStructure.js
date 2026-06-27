@@ -122,8 +122,6 @@ export const getNavigationStructure = (t) => [
         title: t("Security tools and agents"),
         url: "/tools",
         items: [
-            { type: "menu", name: t("Vault"), url: ToolsUrls.Vault, permissions: "commands.*" },
-            { type: "divider" },
             {
                 type: "menu",
                 name: t("Data"),

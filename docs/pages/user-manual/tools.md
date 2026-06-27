@@ -8,14 +8,13 @@ Reconmap includes a set of tools to help pentesters and security engineers in th
 
 ## Vault
 
-The **vault** allows you to securely store credentials (passwords, API keys, etc.) related to your projects.
+The **vault** allows you to securely store credentials (passwords, API keys, etc.) related to your projects. You can access it by navigating to a specific **Project** details page and opening the **Vault** tab.
 
 ![Vault](/images/screenshots/vault.png)
 
-From the vault you can:
+From the project vault you can:
 
-- Store new credentials.
-- Assign credentials to specific projects or users.
+- Store new credentials for the project.
 - Search for credentials.
 - Encrypt and decrypt secrets securely.
 
