@@ -41,8 +41,8 @@ logs:
 stop:
 	$(DC) stop
 
-.PHONY: clean
-clean: stop
+.PHONY: destroy
+destroy: stop
 	$(DC) down -v --remove-orphans
 	$(DC) rm
 
