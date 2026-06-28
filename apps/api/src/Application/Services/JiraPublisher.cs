@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api_v2.Application.Services;
 
-public class JiraProcessor(
-    ILogger<JiraProcessor> logger,
+public class JiraPublisher(
+    ILogger<JiraPublisher> logger,
     IServiceScopeFactory scopeFactory,
     IMessageQueue messageQueue) : BackgroundService
 {
@@ -17,7 +17,7 @@ public class JiraProcessor(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Jira processor started, watching 'findings' queue");
+        logger.LogInformation("Jira publisher started, watching 'findings' queue");
 
         await messageQueue.SubscribeAsync<VulnerabilityJob>("findings", async job =>
         {

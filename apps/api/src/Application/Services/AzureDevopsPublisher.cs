@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api_v2.Application.Services;
 
-public class AzureDevopsProcessor(
-    ILogger<AzureDevopsProcessor> logger,
+public class AzureDevopsPublisher(
+    ILogger<AzureDevopsPublisher> logger,
     IServiceScopeFactory scopeFactory,
     IMessageQueue messageQueue) : BackgroundService
 {
@@ -17,7 +17,7 @@ public class AzureDevopsProcessor(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Azure DevOps processor started, watching 'findings' queue");
+        logger.LogInformation("Azure DevOps publisher started, watching 'findings' queue");
 
         await messageQueue.SubscribeAsync<VulnerabilityJob>("findings", async job =>
         {

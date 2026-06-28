@@ -13,8 +13,8 @@ public class WebhookJob
     public object Payload { get; set; } = new { };
 }
 
-public class WebhookProcessor(
-    ILogger<WebhookProcessor> logger,
+public class WebhookPublisher(
+    ILogger<WebhookPublisher> logger,
     IServiceScopeFactory scopeFactory,
     IMessageQueue messageQueue) : BackgroundService
 {
@@ -22,7 +22,7 @@ public class WebhookProcessor(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Webhook processor started, watching 'webhooks' queue");
+        logger.LogInformation("Webhook publisher started, watching 'webhooks' queue");
 
         await messageQueue.SubscribeAsync<WebhookJob>("webhooks", async job =>
         {

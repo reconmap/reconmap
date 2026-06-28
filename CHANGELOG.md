@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unified secrets management using a central `.env` file, enabling runtime environment variable overrides for both the C# API (using ASP.NET Core environment mapping) and the Go CLI/agent (using dynamic reflection overrides), which removes the need to hardcode secrets inside application JSON configuration files.
 
 ### Changed
+- Renamed integrations that push data to third-party services (Jira, Azure DevOps, and Webhooks) from processors to publishers (e.g. `JiraPublisher`, `AzureDevopsPublisher`, `WebhookPublisher`).
 - Moved commands and usages definitions fully into C# code (using reflection and string-based keys) rather than database tables, keeping them closely aligned with their corresponding output parsers.
 - Updated Go CLI runner and agent to support string-based command and usage IDs.
 - Integrated the Password Generator directly into the Credential Vault creation and editing forms (`VaultSecretForm` and `VaultItemEdit`) as an interactive native HTML modal next to the secret value field, rather than keeping it as a standalone page.
