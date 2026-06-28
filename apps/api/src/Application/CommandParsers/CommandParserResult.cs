@@ -1,8 +1,8 @@
 using api_v2.Domain.Entities;
 
-namespace api_v2.Application.CommandProcessors;
+namespace api_v2.Application.CommandParsers;
 
-public class ProcessorResult
+public class CommandParserResult
 {
     public List<Asset> assets = new();
     public List<Vulnerability> findings = new();

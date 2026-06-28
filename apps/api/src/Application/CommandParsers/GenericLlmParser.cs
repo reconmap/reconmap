@@ -5,18 +5,18 @@ using api_v2.Controllers;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
 
-namespace api_v2.Application.CommandProcessors;
+namespace api_v2.Application.CommandParsers;
 
-public class GenericLlmProcessor(IAiService aiService, IAttachmentStorage attachmentStorage, AppDbContext dbContext) : IProcessor
+public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmentStorage, AppDbContext dbContext) : ICommandParser
 {
     public string Name => "Generic LLM";
     public string Description => "Parses any tool output using an LLM";
     public string ExternalUrl => string.Empty;
     public bool IsConfigured => true;
 
-    public ProcessorResult Process(CommandProcessorJob job)
+    public CommandParserResult Parse(CommandProcessorJob job)
     {
-        var result = new ProcessorResult();
+        var result = new CommandParserResult();
 
         var commandUsage = CommandDiscovery.FindUsageById(job.CommandUsageId);
         var toolName = commandUsage?.Description ?? "Unknown Tool";

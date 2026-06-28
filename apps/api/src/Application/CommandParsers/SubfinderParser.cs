@@ -4,10 +4,10 @@ using api_v2.Application.Services;
 using api_v2.Controllers;
 using api_v2.Domain.Entities;
 
-namespace api_v2.Application.CommandProcessors;
+namespace api_v2.Application.CommandParsers;
 
 // docker run --rm -ti -v $PWD:/data --workdir /data ghcr.io/testssl/testssl.sh --jsonfile testssl-output.json https://localhost
-public class SubfinderProcessor(IAttachmentStorage attachmentStorage) : IProcessor
+public class SubfinderParser(IAttachmentStorage attachmentStorage) : ICommandParser
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
 
@@ -16,9 +16,9 @@ public class SubfinderProcessor(IAttachmentStorage attachmentStorage) : IProcess
     public string ExternalUrl => "https://github.com/projectdiscovery/subfinder";
     public bool IsConfigured => true;
 
-    public ProcessorResult Process(CommandProcessorJob job)
+    public CommandParserResult Parse(CommandProcessorJob job)
     {
-        var result = new ProcessorResult();
+        var result = new CommandParserResult();
 
         using (var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult())
         {

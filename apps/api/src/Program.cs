@@ -10,7 +10,7 @@ using api_v2.Infrastructure.Redis;
 using api_v2.Infrastructure.Messaging;
 using api_v2.Infrastructure.WebSockets;
 using Amazon.S3;
-using api_v2.Application.CommandProcessors;
+using api_v2.Application.CommandParsers;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -51,10 +51,10 @@ services.AddSingleton<IAmazonS3>(sp =>
 
 services.AddScoped<IAttachmentStorage, S3AttachmentStorage>();
 
-var processorType = typeof(IProcessor);
-var processorTypes = typeof(Program).Assembly.GetTypes()
-    .Where(t => processorType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
-foreach (var type in processorTypes)
+var parserType = typeof(ICommandParser);
+var parserTypes = typeof(Program).Assembly.GetTypes()
+    .Where(t => parserType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
+foreach (var type in parserTypes)
 {
     services.AddScoped(type);
 }

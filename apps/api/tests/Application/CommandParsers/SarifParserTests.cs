@@ -1,14 +1,14 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using api_v2.Application.CommandProcessors;
+using api_v2.Application.CommandParsers;
 using api_v2.Application.Services;
 using api_v2.Controllers;
 using Xunit;
 
-namespace tests.Application.CommandProcessors;
+namespace tests.Application.CommandParsers;
 
-public class SarifProcessorTests
+public class SarifParserTests
 {
     private class FakeAttachmentStorage : IAttachmentStorage
     {
@@ -31,20 +31,20 @@ public class SarifProcessorTests
     }
 
     [Fact]
-    public void Process_InvalidJson_ReturnsEmptyResult()
+    public void Parse_InvalidJson_ReturnsEmptyResult()
     {
         var fakeStorage = new FakeAttachmentStorage("{ malformed json }");
-        var processor = new SarifProcessor(fakeStorage);
+        var parser = new SarifParser(fakeStorage);
         var job = new CommandProcessorJob { FilePath = "test.sarif" };
 
-        var result = processor.Process(job);
+        var result = parser.Parse(job);
 
         Assert.Empty(result.findings);
         Assert.Empty(result.assets);
     }
 
     [Fact]
-    public void Process_ValidSarifWithOneFinding_ParsesCorrectly()
+    public void Parse_ValidSarifWithOneFinding_ParsesCorrectly()
     {
         var sarifContent = @"{
           ""$schema"": ""https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json"",
@@ -96,10 +96,10 @@ public class SarifProcessorTests
         }";
 
         var fakeStorage = new FakeAttachmentStorage(sarifContent);
-        var processor = new SarifProcessor(fakeStorage);
+        var parser = new SarifParser(fakeStorage);
         var job = new CommandProcessorJob { FilePath = "test.sarif" };
 
-        var result = processor.Process(job);
+        var result = parser.Parse(job);
 
         Assert.Single(result.findings);
         var finding = result.findings.First();
@@ -111,7 +111,7 @@ public class SarifProcessorTests
     }
 
     [Fact]
-    public void Process_SarifLevelMapping_MapsCorrectly()
+    public void Parse_SarifLevelMapping_MapsCorrectly()
     {
         var sarifContent = @"{
           ""version"": ""2.1.0"",
@@ -144,10 +144,10 @@ public class SarifProcessorTests
         }";
 
         var fakeStorage = new FakeAttachmentStorage(sarifContent);
-        var processor = new SarifProcessor(fakeStorage);
+        var parser = new SarifParser(fakeStorage);
         var job = new CommandProcessorJob { FilePath = "test.sarif" };
 
-        var result = processor.Process(job);
+        var result = parser.Parse(job);
 
         Assert.Equal(3, result.findings.Count);
         

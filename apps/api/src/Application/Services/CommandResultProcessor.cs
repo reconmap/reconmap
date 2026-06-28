@@ -1,4 +1,5 @@
 using System.Text.Json;
+using api_v2.Application.CommandParsers;
 using api_v2.Application.Commands;
 using api_v2.Common;
 using api_v2.Common.Messaging;
@@ -29,8 +30,8 @@ public class CommandResultProcessor(
                 logger.LogError("Command usage with ID '{UsageId}' not found.", job.CommandUsageId);
                 return;
             }
-            var processor = ProcessorIntegrationDiscovery.Create(scope.ServiceProvider, commandUsage.OutputParser);
-            var result = processor.Process(job);
+            var parser = CommandParserDiscovery.Create(scope.ServiceProvider, commandUsage.OutputParser);
+            var result = parser.Parse(job);
             var numHosts = result.assets.Count;
             if (numHosts > 0)
             {

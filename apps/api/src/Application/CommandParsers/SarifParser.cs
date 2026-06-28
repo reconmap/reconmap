@@ -5,18 +5,18 @@ using api_v2.Domain.Entities;
 using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
 
-namespace api_v2.Application.CommandProcessors;
+namespace api_v2.Application.CommandParsers;
 
-public class SarifProcessor(IAttachmentStorage attachmentStorage) : IProcessor
+public class SarifParser(IAttachmentStorage attachmentStorage) : ICommandParser
 {
     public string Name => "Sarif";
     public string Description => "SARIF results parser";
     public string ExternalUrl => "https://sarifweb.azurewebsites.net/";
     public bool IsConfigured => true;
 
-    public ProcessorResult Process(CommandProcessorJob job)
+    public CommandParserResult Parse(CommandProcessorJob job)
     {
-        var result = new ProcessorResult();
+        var result = new CommandParserResult();
 
         using var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult();
         using var reader = new StreamReader(stream);

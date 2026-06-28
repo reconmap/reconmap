@@ -1,39 +1,39 @@
-using api_v2.Application.CommandProcessors;
+using api_v2.Application.CommandParsers;
 
 namespace api_v2.Application.Services;
 
-public static class ProcessorIntegrationDiscovery
+public static class CommandParserDiscovery
 {
-    private static readonly Lazy<IReadOnlyDictionary<string, Type>> ProcessorMap = new(BuildProcessorMap, true);
+    private static readonly Lazy<IReadOnlyDictionary<string, Type>> ParserMap = new(BuildParserMap, true);
 
-    public static IEnumerable<IProcessor> Discover(IServiceProvider sp)
+    public static IEnumerable<ICommandParser> Discover(IServiceProvider sp)
     {
-        return ProcessorMap.Value.Values
+        return ParserMap.Value.Values
             .Distinct()
-            .Select(t => (IProcessor)sp.GetRequiredService(t));
+            .Select(t => (ICommandParser)sp.GetRequiredService(t));
     }
 
-    public static IProcessor Create(IServiceProvider sp, string name)
+    public static ICommandParser Create(IServiceProvider sp, string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Processor name must be provided.", nameof(name));
+            throw new ArgumentException("Parser name must be provided.", nameof(name));
 
-        if (!ProcessorMap.Value.TryGetValue(name, out var type))
-            throw new InvalidOperationException($"No processor found with name '{name}'.");
+        if (!ParserMap.Value.TryGetValue(name, out var type))
+            throw new InvalidOperationException($"No parser found with name '{name}'.");
 
-        return (IProcessor)sp.GetRequiredService(type);
+        return (ICommandParser)sp.GetRequiredService(type);
     }
 
-    private static IReadOnlyDictionary<string, Type> BuildProcessorMap()
+    private static IReadOnlyDictionary<string, Type> BuildParserMap()
     {
-        var processorType = typeof(IProcessor);
+        var parserType = typeof(ICommandParser);
         var map = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
 
         var types = AppDomain.CurrentDomain
             .GetAssemblies()
             .SelectMany(a => a.GetTypes())
             .Where(t =>
-                processorType.IsAssignableFrom(t) &&
+                parserType.IsAssignableFrom(t) &&
                 !t.IsAbstract &&
                 !t.IsInterface);
 
@@ -55,16 +55,16 @@ public static class ProcessorIntegrationDiscovery
         // Remove common suffixes
         var baseName = className;
 
-        if (baseName.EndsWith("Processor", StringComparison.OrdinalIgnoreCase))
-            baseName = baseName[..^"Processor".Length];
+        if (baseName.EndsWith("Parser", StringComparison.OrdinalIgnoreCase))
+            baseName = baseName[..^"Parser".Length];
         else if (baseName.EndsWith("Integration", StringComparison.OrdinalIgnoreCase))
             baseName = baseName[..^"Integration".Length];
 
         // Full base name supports camelCase lookup via OrdinalIgnoreCase dictionary.
-        // e.g. GenericLlmProcessor -> GenericLlm, which matches "genericLlm"
+        // e.g. GenericLlmParser -> GenericLlm, which matches "genericLlm"
         yield return baseName;
 
-        // First PascalCase segment (e.g. NmapScanProcessor -> Nmap, GenericLlmProcessor -> Generic)
+        // First PascalCase segment (e.g. NmapScanParser -> Nmap, GenericLlmParser -> Generic)
         var firstSegment = new string(
             baseName
                 .TakeWhile(c => !char.IsUpper(c) || c == baseName[0])

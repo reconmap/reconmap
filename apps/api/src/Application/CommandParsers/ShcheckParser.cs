@@ -4,9 +4,9 @@ using api_v2.Application.Services;
 using api_v2.Controllers;
 using api_v2.Domain.Entities;
 
-namespace api_v2.Application.CommandProcessors;
+namespace api_v2.Application.CommandParsers;
 
-public class ShcheckProcessor(IAttachmentStorage attachmentStorage) : IProcessor
+public class ShcheckParser(IAttachmentStorage attachmentStorage) : ICommandParser
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
 
@@ -15,9 +15,9 @@ public class ShcheckProcessor(IAttachmentStorage attachmentStorage) : IProcessor
     public string ExternalUrl => "https://github.com/santoru/shcheck";
     public bool IsConfigured => true;
 
-    public ProcessorResult Process(CommandProcessorJob job)
+    public CommandParserResult Parse(CommandProcessorJob job)
     {
-        var result = new ProcessorResult();
+        var result = new CommandParserResult();
 
         string json;
         using (var stream = attachmentStorage.GetFileStreamAsync(job.FilePath).GetAwaiter().GetResult())

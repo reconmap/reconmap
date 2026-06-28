@@ -91,7 +91,7 @@ public class CommandsController(
     [HttpGet("output-parsers")]
     public IActionResult GetOutputParsers()
     {
-        var result = ProcessorIntegrationDiscovery.Discover(HttpContext.RequestServices)
+        var result = CommandParserDiscovery.Discover(HttpContext.RequestServices)
             .Select(i => new
             {
                 name = i.Name,

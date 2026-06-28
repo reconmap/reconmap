@@ -1,13 +1,13 @@
 using api_v2.Controllers;
 
-namespace api_v2.Application.CommandProcessors;
+namespace api_v2.Application.CommandParsers;
 
-public interface IProcessor
+public interface ICommandParser
 {
     string Name { get; }
     string Description { get; }
     string ExternalUrl { get; }
     bool IsConfigured { get; }
 
-    public ProcessorResult Process(CommandProcessorJob job);
+    public CommandParserResult Parse(CommandProcessorJob job);
 }
