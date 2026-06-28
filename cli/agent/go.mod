@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/reconmap/shared-lib v0.0.0-20220910165932-7d018d9111fc
 	github.com/shirou/gopsutil/v4 v4.26.5
-	github.com/urfave/cli/v3 v3.10.0
+	github.com/urfave/cli/v3 v3.10.1
 	go.uber.org/zap v1.28.0
 )
 
