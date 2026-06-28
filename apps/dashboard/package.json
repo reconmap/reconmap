@@ -57,7 +57,7 @@
     "knip": "^6.21.0",
     "lint-staged": "^17.0.8",
     "npm-check-updates": "^22.2.7",
-    "prettier": "^3.8.5",
+    "prettier": "^3.9.1",
     "stylelint": "^17.14.0",
     "stylelint-config-recommended": "^18.0.0",
     "stylelint-config-standard": "^40.0.0",
