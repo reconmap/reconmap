@@ -15,6 +15,7 @@ public class CommandDiscoveryTests
         Assert.Contains(commands, c => c.Id == "semgrep");
         Assert.Contains(commands, c => c.Id == "bandit");
         Assert.Contains(commands, c => c.Id == "snyk");
+        Assert.Contains(commands, c => c.Id == "syft");
     }
 
     [Fact]
@@ -35,5 +36,9 @@ public class CommandDiscoveryTests
         var snyk = CommandDiscovery.FindById("snyk");
         Assert.NotNull(snyk);
         Assert.All(snyk.Usages, usage => Assert.Equal("sarif", usage.OutputParser));
+
+        var syft = CommandDiscovery.FindById("syft");
+        Assert.NotNull(syft);
+        Assert.All(syft.Usages, usage => Assert.Equal("cyclonedx", usage.OutputParser));
     }
 }

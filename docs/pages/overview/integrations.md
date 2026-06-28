@@ -21,5 +21,6 @@ In addition, Reconmap ships with a built-in command and tooling catalog to suppo
 | Shcheck                     | https://github.com/santoru/shcheck                                |
 | Snyk                        | https://snyk.io/                                                  |
 | Subfinder                   | https://github.com/projectdiscovery/subfinder                     |
+| Syft                        | https://github.com/anchore/syft                                   |
 | Testssl.sh                  | https://github.com/testssl/testssl.sh                             |
 | Trivy                       | https://github.com/aquasecurity/trivy                             |

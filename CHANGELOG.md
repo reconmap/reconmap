@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Unified secrets management using a central `.env` file, enabling runtime environment variable overrides for both the C# API (using ASP.NET Core environment mapping) and the Go CLI/agent (using dynamic reflection overrides), which removes the need to hardcode secrets inside application JSON configuration files.
 - Added Trivy, Semgrep, Bandit, and Snyk security commands configured to output to SARIF and process results using the SARIF parser.
+- Added CycloneDX Software Bill of Materials (SBOM) JSON parser (`CycloneDxParser`) and the `Syft` tool command to extract dependency packages as assets and associate vulnerability scanning findings.
 
 ### Changed
 - Renamed integrations that push data to third-party services (Jira, Azure DevOps, and Webhooks) from processors to publishers (e.g. `JiraPublisher`, `AzureDevopsPublisher`, `WebhookPublisher`).
