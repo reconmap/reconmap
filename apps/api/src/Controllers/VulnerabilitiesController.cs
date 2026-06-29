@@ -60,6 +60,7 @@ public class VulnerabilitiesController(
     {
         var q = _dbContext.Vulnerabilities
             .Include(v => v.Project)
+            .Include(v => v.Asset)
             .AsNoTracking()
             .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk);
         if (projectId.HasValue)

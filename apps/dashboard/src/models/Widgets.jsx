@@ -2,7 +2,6 @@ import ActiveProjectsWidget from "pages/dashboard/widgets/ActiveProjectsWidget.j
 import ApiHealthWidget from "pages/dashboard/widgets/ApiHealthWidget.jsx";
 import DiscussionsWidget from "pages/dashboard/widgets/DiscussionsWidget.jsx";
 import MyTasksWidget from "pages/dashboard/widgets/MyTasksWidget.jsx";
-import PopularCommandsWidget from "pages/dashboard/widgets/PopularCommandsWidget.jsx";
 import RecentActivityWidget from "pages/dashboard/widgets/RecentActivityWidget.jsx";
 import RecentDocumentsWidget from "pages/dashboard/widgets/RecentDocumentsWidget.jsx";
 import RecentVulnerabilitiesWidget from "pages/dashboard/widgets/RecentVulnerabilitiesWidget.jsx";
@@ -10,6 +9,8 @@ import ReleasesWidget from "pages/dashboard/widgets/ReleasesWidget.jsx";
 import UserActivityStatsWidget from "pages/dashboard/widgets/UserActivityStatsWidget.jsx";
 import VulnerabilitiesByCategoryStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget.jsx";
 import VulnerabilitiesByRiskStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByRiskStatsWidget.jsx";
+import AgentsWidget from "pages/dashboard/widgets/AgentsWidget.jsx";
+import TopVulnerableAssetsWidget from "pages/dashboard/widgets/TopVulnerableAssetsWidget.jsx";
 
 const Widgets = {
     "discussions": {
@@ -40,12 +41,6 @@ const Widgets = {
         visible: true,
         component: <ActiveProjectsWidget />,
         description: "It shows a list of all non-archived projects.",
-    },
-    "popular-commands": {
-        title: "Popular commands",
-        visible: true,
-        component: <PopularCommandsWidget />,
-        permissions: "commands.",
     },
     "recent-documents": {
         title: "Recent documents",
@@ -83,6 +78,18 @@ const Widgets = {
         visible: true,
         component: <RecentVulnerabilitiesWidget />,
         description: "It shows the most recently reported vulnerabilities.",
+    },
+    "agents": {
+        title: "Agents",
+        visible: true,
+        component: <AgentsWidget />,
+        description: "It shows the status of security agents.",
+    },
+    "top-vulnerable-assets": {
+        title: "Top vulnerable assets",
+        visible: true,
+        component: <TopVulnerableAssetsWidget />,
+        description: "It shows assets with the highest count of active findings.",
     },
 };
 

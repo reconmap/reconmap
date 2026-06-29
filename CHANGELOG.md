@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added "Agents" dashboard widget to show status of registered security agents.
+- Added "Top vulnerable assets" dashboard widget to show assets with the highest count of active findings.
 - Added an interactive CVSS v4.0 calculator component (`CvssCalculator.jsx`) that opens in a native HTML `<dialog>` launched from a field addon button next to the vulnerability vector input.
 
 ### Changed
@@ -18,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed the "Popular commands" widget from the dashboard as commands are now static/hardcoded.
 - Removed command search capability from both the React dashboard search results and the Go `rmap` runner CLI tool, as commands are now static.
 - Removed the `@uiw/react-md-editor` dependency from the dashboard application.
 - Removed all support for OWASP Risk Rating metrics across the database schema, C# API entities, Go CLI models, and React dashboard components.
