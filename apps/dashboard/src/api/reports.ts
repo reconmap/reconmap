@@ -19,6 +19,9 @@ const useDeleteReportMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (reportId: number) => requestReportDelete(reportId),
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["reports"] });
+        },
     });
 };
 

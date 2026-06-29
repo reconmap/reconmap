@@ -44,9 +44,14 @@ public class ReportGenerationTests
 
     private class MockAttachmentStorage : IAttachmentStorage
     {
+        public List<string> DeletedFiles { get; } = new();
         public Task<Stream> GetFileStreamAsync(string fileName) => Task.FromResult<Stream>(new MemoryStream());
         public Task SaveFileAsync(string fileName, Stream stream) => Task.CompletedTask;
-        public Task DeleteFileAsync(string fileName) => Task.CompletedTask;
+        public Task DeleteFileAsync(string fileName)
+        {
+            DeletedFiles.Add(fileName);
+            return Task.CompletedTask;
+        }
         public Task<string> GetFileHashAsync(string fileName) => Task.FromResult("hash");
     }
 
@@ -124,5 +129,102 @@ public class ReportGenerationTests
         Assert.Equal(1u, jobPayload.ProjectId);
         Assert.Equal(10u, jobPayload.ReportTemplateId);
         Assert.Equal(42u, jobPayload.CreatedByUserId);
+    }
+
+    [Fact]
+    public async Task CreateTemplate_SavesTemplateAndAttachment_AndReturnsCreated()
+    {
+        // Arrange
+        var db = CreateDbContext();
+        var messageQueue = new MockMessageQueue();
+        var storage = new MockAttachmentStorage();
+        var mailService = new MockMailSettingsService();
+        var logger = NullLogger<ReportsController>.Instance;
+
+        var controller = new ReportsController(db, logger, storage, messageQueue, mailService);
+        var httpContext = new DefaultHttpContext();
+        httpContext.Items["DbUser"] = new User { Id = 42, Username = "admin" };
+        controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
+
+        var fileStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes("fake file content"));
+        var resultFile = new FormFile(fileStream, 0, fileStream.Length, "resultFile", "template.docx")
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        };
+
+        var templateDto = new ReportTemplateUploadDto
+        {
+            VersionName = "v2.0",
+            VersionDescription = "Clean template",
+            ResultFile = resultFile
+        };
+
+        // Act
+        var result = await controller.CreateTemplate(templateDto);
+
+        // Assert
+        var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+        var returnedReport = Assert.IsType<Report>(createdResult.Value);
+        Assert.Equal("v2.0", returnedReport.VersionName);
+        Assert.True(returnedReport.IsTemplate);
+
+        // Verify database records
+        var dbReport = await db.Reports.FirstOrDefaultAsync(r => r.Id == returnedReport.Id);
+        Assert.NotNull(dbReport);
+        Assert.Equal("v2.0", dbReport.VersionName);
+        Assert.True(dbReport.IsTemplate);
+
+        var dbAttachment = await db.Attachments.FirstOrDefaultAsync(a => a.ParentId == dbReport.Id && a.ParentType == "report");
+        Assert.NotNull(dbAttachment);
+        Assert.Equal("template.docx", dbAttachment.ClientFileName);
+    }
+
+    [Fact]
+    public async Task DeleteOne_RemovesReportAndAssociatedAttachments()
+    {
+        // Arrange
+        var db = CreateDbContext();
+        
+        var report = new Report { Id = 101, VersionName = "Template to Delete", IsTemplate = true };
+        db.Reports.Add(report);
+        
+        var attachment = new Attachment
+        {
+            Id = 500,
+            ParentId = 101,
+            ParentType = "report",
+            FileName = "secret_report.docx",
+            ClientFileName = "secret_report.docx",
+            FileHash = "hash"
+        };
+        db.Attachments.Add(attachment);
+        await db.SaveChangesAsync();
+
+        var messageQueue = new MockMessageQueue();
+        var storage = new MockAttachmentStorage();
+        var mailService = new MockMailSettingsService();
+        var logger = NullLogger<ReportsController>.Instance;
+
+        var controller = new ReportsController(db, logger, storage, messageQueue, mailService);
+        var httpContext = new DefaultHttpContext();
+        httpContext.Items["DbUser"] = new User { Id = 42, Username = "admin" };
+        controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
+
+        // Act
+        var result = await controller.DeleteOne(101);
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+
+        // Verify database
+        var dbReport = await db.Reports.FindAsync(101u);
+        Assert.Null(dbReport);
+
+        var dbAttachment = await db.Attachments.FindAsync(500u);
+        Assert.Null(dbAttachment);
+
+        // Verify storage
+        Assert.Contains("secret_report.docx", storage.DeletedFiles);
     }
 }

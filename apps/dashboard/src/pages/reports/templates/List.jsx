@@ -16,7 +16,7 @@ import useBoolean from "hooks/useBoolean";
 import { Link } from "react-router-dom";
 
 const ReportTemplatesList = () => {
-    const { data: templates, isLoading } = useReportsTemplatesQuery();
+    const { data: templates, isLoading, refetch: refetchTemplates } = useReportsTemplatesQuery();
     const deleteReportMutation = useDeleteReportMutation();
 
     const deleteTemplate = (ev, templateId) => {

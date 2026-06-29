@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix report templates deletion and creation by implementing the missing template upload `POST` endpoint in the API, cascade-deleting associated attachments on template deletion, and adding react-query invalidation and refetching on the frontend.
 - Fixed Entity Framework Core row-limiting operator warning in documents query by adding explicit order by.
 - Fixed missing push notifications after asynchronous report generation by ensuring Notification database records are persisted before broadcasting SSE ping via RabbitMQ.
 - Fixed false-positive CORS errors and immediately aborted connections in Firefox/Chrome caused by React 18 Strict Mode mounting/unmounting behavior with Server-Sent Events.

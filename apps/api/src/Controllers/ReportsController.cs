@@ -33,6 +33,13 @@ public class ReportSendRequestDto
     public string? Body { get; set; }
 }
 
+public class ReportTemplateUploadDto
+{
+    public string VersionName { get; set; } = string.Empty;
+    public string? VersionDescription { get; set; }
+    public IFormFile ResultFile { get; set; } = null!;
+}
+
 [Route("api/[controller]")]
 [ApiController]
 public class ReportsController(
@@ -97,6 +104,55 @@ public class ReportsController(
         var take = Math.Min(limit ?? 100, maxLimit);
         var results = await GetReportsInternal(limit, true);
         return Ok(results);
+    }
+
+    [HttpPost("templates")]
+    [Audit(AuditActions.Created, "ReportTemplate")]
+    public async Task<IActionResult> CreateTemplate([FromForm] ReportTemplateUploadDto templateDto)
+    {
+        if (string.IsNullOrWhiteSpace(templateDto.VersionName))
+        {
+            return BadRequest(new { message = "Version name is required." });
+        }
+        if (templateDto.ResultFile == null || templateDto.ResultFile.Length == 0)
+        {
+            return BadRequest(new { message = "A report template file is required." });
+        }
+
+        var report = new Report
+        {
+            CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+            ProjectId = null,
+            VersionName = templateDto.VersionName.Trim(),
+            VersionDescription = templateDto.VersionDescription?.Trim() ?? string.Empty,
+            IsTemplate = true
+        };
+        dbContext.Reports.Add(report);
+        await dbContext.SaveChangesAsync();
+
+        var uniqueName = _attachmentFilePath.GenerateFileName(System.IO.Path.GetExtension(templateDto.ResultFile.FileName));
+        
+        await using (var stream = templateDto.ResultFile.OpenReadStream())
+        {
+            await attachmentStorage.SaveFileAsync(uniqueName, stream);
+        }
+
+        var attachment = new api_v2.Domain.Entities.Attachment
+        {
+            CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+            ParentType = "report",
+            ParentId = report.Id,
+            ClientFileName = templateDto.ResultFile.FileName,
+            FileName = uniqueName,
+            FileSize = (uint)templateDto.ResultFile.Length,
+            FileMimeType = templateDto.ResultFile.ContentType,
+            FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
+        };
+
+        dbContext.Attachments.Add(attachment);
+        await dbContext.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetTemplates), new { id = report.Id }, report);
     }
 
     [HttpPost("{id:int}/send")]
@@ -270,11 +326,28 @@ public class ReportsController(
     [Audit(AuditActions.Deleted, "Report")]
     public async Task<IActionResult> DeleteOne(uint id)
     {
-        var deleted = await dbContext.Reports
-            .Where(n => n.Id == id)
-            .ExecuteDeleteAsync();
+        var report = await dbContext.Reports.FindAsync(id);
+        if (report == null) return NotFound();
 
-        if (deleted == 0) return NotFound();
+        var attachments = await dbContext.Attachments
+            .Where(a => a.ParentId == id && a.ParentType == "report")
+            .ToListAsync();
+
+        foreach (var attachment in attachments)
+        {
+            try
+            {
+                await attachmentStorage.DeleteFileAsync(attachment.FileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to delete attachment file {FileName} from storage", attachment.FileName);
+            }
+            dbContext.Attachments.Remove(attachment);
+        }
+
+        dbContext.Reports.Remove(report);
+        await dbContext.SaveChangesAsync();
 
         HttpContext.Items["AuditData"] = new { id };
 
