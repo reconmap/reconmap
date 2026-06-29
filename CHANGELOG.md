@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed the empty Project column on the global Reports list page by left-joining the Projects table in the backend API reports query.
+
 ### Removed
 
 - Removed obsolete references and configuration mounts for `data/attachments` (templates are now packaged inside the API container).

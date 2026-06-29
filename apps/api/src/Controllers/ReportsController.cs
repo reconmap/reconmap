@@ -231,6 +231,9 @@ public class ReportsController(
                 on new { r.Id, Type = "report" }
                 equals new { Id = a.ParentId, Type = a.ParentType } into attachments
             from a in attachments.DefaultIfEmpty()
+            join p in dbContext.Projects
+                on r.ProjectId equals p.Id into projects
+            from p in projects.DefaultIfEmpty()
             where r.IsTemplate == isTemplate
             orderby r.CreatedAt descending
             select new
@@ -243,6 +246,8 @@ public class ReportsController(
                 r.IsTemplate,
                 r.VersionName,
                 r.VersionDescription,
+
+                Project = p != null ? new { Id = (uint?)p.Id, Name = p.Name } : null,
 
                 // attachment fields
                 AttachmentId = (uint?)a.Id,

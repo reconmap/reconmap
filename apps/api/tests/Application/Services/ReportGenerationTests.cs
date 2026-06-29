@@ -227,4 +227,58 @@ public class ReportGenerationTests
         // Verify storage
         Assert.Contains("secret_report.docx", storage.DeletedFiles);
     }
+
+    [Fact]
+    public async Task GetMany_ReturnsReportsWithProjectDetails()
+    {
+        // Arrange
+        var db = CreateDbContext();
+
+        var project = new Project { Id = 1, Name = "Test Project", Visibility = "public" };
+        db.Projects.Add(project);
+
+        var report = new Report
+        {
+            Id = 10,
+            ProjectId = 1,
+            VersionName = "1.0",
+            VersionDescription = "Desc",
+            IsTemplate = false
+        };
+        db.Reports.Add(report);
+        await db.SaveChangesAsync();
+
+        var messageQueue = new MockMessageQueue();
+        var storage = new MockAttachmentStorage();
+        var mailService = new MockMailSettingsService();
+        var logger = NullLogger<ReportsController>.Instance;
+
+        var controller = new ReportsController(db, logger, storage, messageQueue, mailService);
+        var httpContext = new DefaultHttpContext();
+        httpContext.Items["DbUser"] = new User { Id = 42, Username = "admin" };
+        controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
+
+        // Act
+        var result = await controller.GetMany(limit: null, projectId: null);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var list = Assert.IsType<List<object>>(okResult.Value);
+        Assert.Single(list);
+
+        var returnedObj = list[0];
+        var projectProperty = returnedObj.GetType().GetProperty("Project");
+        Assert.NotNull(projectProperty);
+
+        var projectVal = projectProperty.GetValue(returnedObj);
+        Assert.NotNull(projectVal);
+
+        var nameProperty = projectVal.GetType().GetProperty("Name");
+        Assert.NotNull(nameProperty);
+        Assert.Equal("Test Project", nameProperty.GetValue(projectVal));
+
+        var idProperty = projectVal.GetType().GetProperty("Id");
+        Assert.NotNull(idProperty);
+        Assert.Equal(1u, idProperty.GetValue(projectVal));
+    }
 }
