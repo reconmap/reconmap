@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Compose from "components/logic/Compose.jsx";
-import WebsocketProvider from "contexts/WebsocketContext";
+import SseProvider from "contexts/SseContext";
 import DashboardLayout from "layouts/DashboardLayout.jsx";
 import PageNotFound from "pages/PageNotFound.jsx";
 import AgentRoutes from "pages/agents/Routes";
@@ -43,7 +43,7 @@ const App = () => {
             <ErrorBoundary>
                 <BrowserRouter basename={Configuration.getContextPath()}>
                     {/* Order of provider components matters */}
-                    <Compose components={[AuthProvider, WebsocketProvider]}>
+                    <Compose components={[AuthProvider, SseProvider]}>
                         <Routes>
                             <Route element={<DashboardLayout />}>
                                 {[

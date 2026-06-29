@@ -7,7 +7,7 @@ The Reconmap multi-tier architecture was designed to scale and serve anything fr
 
 A keycloak identity service (Open ID connect) is used to authenticate users and JWT tokens are also used for service to service communication.
 
-The last part of this architecture is Rabbitmq, a message queue and broker.
+The last part of this architecture is Rabbitmq, a message queue and broker. This queue handles heavy or asynchronous background tasks like sending report emails and generating reports asynchronously.
 
 ![Reconmap architecture](reconmap-high-level-architecture.png)
 

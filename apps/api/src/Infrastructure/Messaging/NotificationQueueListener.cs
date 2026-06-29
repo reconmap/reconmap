@@ -1,10 +1,10 @@
 using api_v2.Common.Messaging;
-using api_v2.Infrastructure.WebSockets;
+using api_v2.Infrastructure.Sse;
 
 namespace api_v2.Infrastructure.Messaging;
 
 public class NotificationQueueListener(ILogger<NotificationQueueListener> logger,
-    WebSocketConnectionManager socketManager,
+    SseConnectionManager sseManager,
     IMessageQueue messageQueue) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -14,9 +14,9 @@ public class NotificationQueueListener(ILogger<NotificationQueueListener> logger
         await messageQueue.SubscribeAsync<object>("notifications", async message =>
         {
             logger.LogInformation("New notification from queue");
-            // Broadcast to all WebSocket clients
+            // Broadcast to all SSE clients
             var json = System.Text.Json.JsonSerializer.Serialize(message);
-            await socketManager.BroadcastAsync(json);
+            await sseManager.BroadcastAsync(json);
         }, stoppingToken);
     }
 }

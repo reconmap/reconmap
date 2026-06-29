@@ -1,6 +1,6 @@
 import { useSystemHealthQuery } from "api/system.js";
 import Title from "components/ui/Title";
-import { WebsocketContext } from "contexts/WebsocketContext";
+import { SseContext } from "contexts/SseContext";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import convertReadyStateToText from "utilities/WebsocketState";
@@ -11,7 +11,7 @@ const RedNo = () => <span style={{ color: "red" }}>No</span>;
 
 const SystemHealthPage = () => {
     const [t] = useTranslation();
-    const wsContextData = useContext(WebsocketContext);
+    const sseContextData = useContext(SseContext);
     const { data: apiHealth, isLoading } = useSystemHealthQuery();
 
     return (
@@ -43,8 +43,8 @@ const SystemHealthPage = () => {
                                 <td>{apiHealth.keyValueServer.reachable ? <GreenYes label="Ok" /> : <RedNo />}</td>
                             </tr>
                             <tr>
-                                <td>WebSocket server</td>
-                                <td>{convertReadyStateToText(wsContextData.connection)}</td>
+                                <td>SSE notifications server</td>
+                                <td>{convertReadyStateToText(sseContextData.connection)}</td>
                             </tr>
                             <tr>
                                 <td>Attachments storage is writeable</td>

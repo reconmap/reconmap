@@ -15,121 +15,7 @@ using Scriban;
 
 namespace api_v2.Controllers;
 
-public static class WordTemplateReplacer
-{
-    public static void ReplaceContentControls(
-        Body body,
-        IReadOnlyDictionary<string, string> values)
-    {
-        foreach (var sdt in body.Descendants<SdtElement>())
-        {
-            var tag = sdt.SdtProperties?
-                .GetFirstChild<Tag>()?
-                .Val?.Value;
 
-            if (tag == null)
-                continue;
-
-            if (!values.TryGetValue(tag, out var replacement))
-                continue;
-
-            ReplaceSdtText(sdt, replacement);
-        }
-    }
-
-    public static void PopulateTableAtBookmark(
-        Body body,
-        string bookmarkName,
-        IEnumerable<IDictionary<string, string>> rows)
-    {
-        // 1. Find the bookmark
-        var bookmark = body.Descendants<BookmarkStart>()
-            .FirstOrDefault(b => b.Name == bookmarkName);
-
-        if (bookmark == null)
-            return;
-
-        // 2. Find the table
-        var table = bookmark.Ancestors<Table>().FirstOrDefault();
-        if (table == null)
-            return;
-
-        // 3. Get the template row (first row AFTER header)
-        var allRows = table.Elements<TableRow>().ToList();
-        if (allRows.Count < 2)
-            return;
-
-        var templateRow = allRows[1];
-        templateRow.Remove();
-
-        // 4. Populate
-        foreach (var rowData in rows)
-        {
-            var newRow = (TableRow)templateRow.CloneNode(true);
-
-            // Replace SDTs if present
-            foreach (var sdt in newRow.Descendants<SdtElement>())
-            {
-                var tag = sdt.SdtProperties?
-                    .GetFirstChild<Tag>()?
-                    .Val?.Value;
-
-                if (tag != null && rowData.TryGetValue(tag, out var value)) ReplaceSdtText(sdt, value);
-            }
-
-            table.AppendChild(newRow);
-        }
-    }
-
-    private static void ReplaceSdtText(SdtElement sdt, string value)
-    {
-        var textElements = sdt.Descendants<Text>().ToList();
-
-        if (!textElements.Any())
-            return;
-
-        // Replace first text node
-        textElements.First().Text = value;
-
-        // Clear remaining text nodes to avoid duplication
-        foreach (var text in textElements.Skip(1))
-            text.Text = string.Empty;
-    }
-
-    public static void PopulateRichTextList(
-        Body body,
-        string outerSdtTag,
-        IEnumerable<Dictionary<string, string>> items)
-    {
-        // Find template SDT
-        var templateSdt = body.Descendants<SdtElement>()
-            .FirstOrDefault(sdt =>
-                sdt.SdtProperties?
-                    .GetFirstChild<Tag>()?.Val == outerSdtTag);
-
-        if (templateSdt == null)
-            return;
-
-
-        foreach (var item in items)
-        {
-            var newSdt = (SdtElement)templateSdt.CloneNode(true);
-
-            foreach (var innerSdt in newSdt.Descendants<SdtElement>())
-            {
-                var tag = innerSdt.SdtProperties?
-                    .GetFirstChild<Tag>()?
-                    .Val?.Value;
-
-                if (tag != null && item.TryGetValue(tag, out var value)) ReplaceSdtText(innerSdt, value);
-            }
-
-            templateSdt.Parent.AppendChild(newSdt);
-        }
-
-        templateSdt.Remove(); // remove placeholder
-    }
-}
 
 public class ReportRequestDto
 {
@@ -164,17 +50,14 @@ public class ReportsController(
     public async Task<IActionResult> Create(ReportRequestDto reportRequest)
     {
         var project = await dbContext.Projects.AsNoTracking()
-            .Include(p => p.Client)
-            .Include(p => p.ServiceProvider)
             .FirstOrDefaultAsync(p => p.Id == reportRequest.ProjectId);
         if (project == null) return NotFound();
 
         var templateAttachment = await dbContext.Attachments
             .Where(a => a.ParentId == reportRequest.ReportTemplateId && a.ParentType == "report")
             .FirstOrDefaultAsync();
+        if (templateAttachment == null) return NotFound();
 
-        var templateExtension = Path.GetExtension(templateAttachment.FileName);
-        
         var report = new Report
         {
             CreatedByUid = HttpContext.GetCurrentUser()!.Id,
@@ -186,102 +69,15 @@ public class ReportsController(
         dbContext.Reports.Add(report);
         await dbContext.SaveChangesAsync();
 
-        var clientFileName = $"reconmap-{project.Name}-v{report.VersionName}" + templateExtension;
-        var reportFileName = _attachmentFilePath.GenerateFileName(templateExtension);
-
-        var replacements = new Dictionary<string, string?>
+        await messageQueue.PublishAsync("report-generation", new ReportGenerationJob
         {
-            ["project.name"] = project.Name,
-            ["client.name"] = project.Client?.Name,
-            ["serviceProvider.name"] = project.ServiceProvider?.Name,
-            ["report.date"] = DateTime.Today.ToString("dd/MM/yyyy")
-        };
+            ReportId = report.Id,
+            ProjectId = report.ProjectId.Value,
+            ReportTemplateId = reportRequest.ReportTemplateId,
+            CreatedByUserId = report.CreatedByUid
+        });
 
-        var assets = (await dbContext.Assets
-                .Where(a => a.ProjectId == project.Id)
-                .Select(a => new { a.Name, a.Kind })
-                .ToListAsync())
-            .Select(a => new Dictionary<string, string>
-            {
-                ["asset.name"] = a.Name,
-                ["asset.type"] = a.Kind ??  string.Empty,
-            })
-            .ToArray();
-
-        var findings = (await dbContext.Vulnerabilities
-                .Where(v => v.ProjectId == project.Id)
-                .Select(v => new { v.Summary, v.Category.Name, v.Risk })
-                .ToListAsync())
-            .Select(v => new Dictionary<string, string>()
-            {
-                ["finding.summary"] = v.Summary,
-                ["finding.category.name"] = v.Name,
-                ["finding.severity"] = v.Risk
-            })
-            .ToArray();
-
-        var tempFilePath = Path.GetTempFileName();
-        try
-        {
-            await using (var templateStream = await attachmentStorage.GetFileStreamAsync(templateAttachment.FileName))
-            {
-                await using (var fileStream = System.IO.File.OpenWrite(tempFilePath))
-                {
-                    await templateStream.CopyToAsync(fileStream);
-                }
-            }
-
-            if (templateExtension == ".docx")
-            {
-                using (var document = WordprocessingDocument.Open(tempFilePath, true))
-                {
-                    var body = document.MainDocumentPart!.Document.Body;
-                    WordTemplateReplacer.ReplaceContentControls(body, replacements);
-                    WordTemplateReplacer.PopulateTableAtBookmark(body, "assetsTable", assets);
-                    WordTemplateReplacer.PopulateRichTextList(body, "finding", findings);
-                    document.MainDocumentPart.Document.Save();
-                }
-            }
-            else
-            {
-                var templateContent = await System.IO.File.ReadAllTextAsync(tempFilePath);
-                var template = Template.Parse(templateContent);
-                if (template.HasErrors)
-                {
-                    foreach (var error in template.Messages)
-                        logger.LogWarning("{Message} {Start} {End}", error.Message, error.Span.Start, error.Span.End);
-                    return BadRequest();
-                }
-                var renderedTemplate = await template.RenderAsync(new { project });
-                await System.IO.File.WriteAllTextAsync(tempFilePath, renderedTemplate);
-            }
-
-            await using (var resultStream = System.IO.File.OpenRead(tempFilePath))
-            {
-                await attachmentStorage.SaveFileAsync(reportFileName, resultStream);
-            }
-
-            var attachment = new api_v2.Domain.Entities.Attachment
-            {
-                ParentType = "report",
-                ParentId = report.Id,
-                CreatedByUid = report.CreatedByUid,
-                FileName = reportFileName,
-                FileMimeType = templateAttachment.FileMimeType,
-                ClientFileName = clientFileName,
-                FileSize = (uint)new FileInfo(tempFilePath).Length,
-                FileHash = await attachmentStorage.GetFileHashAsync(reportFileName)
-            };
-
-            dbContext.Attachments.Add(attachment);
-            await dbContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMany), new { id = report.Id }, report);
-        }
-        finally
-        {
-            if (System.IO.File.Exists(tempFilePath)) System.IO.File.Delete(tempFilePath);
-        }
+        return AcceptedAtAction(nameof(GetMany), new { id = report.Id }, report);
     }
 
     [HttpGet]
@@ -406,7 +202,8 @@ public class ReportsController(
             from r in dbContext.Reports
             join a in dbContext.Attachments
                 on new { r.Id, Type = "report" }
-                equals new { Id = a.ParentId, Type = a.ParentType }
+                equals new { Id = a.ParentId, Type = a.ParentType } into attachments
+            from a in attachments.DefaultIfEmpty()
             where r.IsTemplate == isTemplate
             orderby r.CreatedAt descending
             select new
@@ -421,12 +218,12 @@ public class ReportsController(
                 r.VersionDescription,
 
                 // attachment fields
-                AttachmentId = a.Id,
-                AttachmentInsertTs = a.CreatedAt,
-                a.ClientFileName,
-                a.FileName,
-                a.FileSize,
-                a.FileMimeType
+                AttachmentId = (uint?)a.Id,
+                AttachmentInsertTs = (DateTime?)a.CreatedAt,
+                ClientFileName = a.ClientFileName,
+                FileName = a.FileName,
+                FileSize = (uint?)a.FileSize,
+                FileMimeType = a.FileMimeType
             };
 
         if (!isTemplate && projectId.HasValue)

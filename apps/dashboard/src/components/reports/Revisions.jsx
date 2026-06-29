@@ -1,6 +1,7 @@
 import { useReportsQuery } from "api/reports.js";
 import CreateButton from "components/ui/buttons/Create";
 import Loading from "components/ui/Loading";
+import { useSseMessage } from "contexts/SseContext";
 import useBoolean from "hooks/useBoolean";
 import ReportVersionModalDialog from "./ModalDialog";
 import ReportsTable from "./Table";
@@ -9,6 +10,10 @@ const ReportRevisions = ({ projectId }) => {
     const { data: reports, refetch: refetchReports } = useReportsQuery({ projectId });
 
     const { value: isAddDialogOpen, setTrue: openAddDialog, setFalse: closeAddDialog } = useBoolean();
+
+    useSseMessage(() => {
+        refetchReports();
+    });
 
     const onDialogOk = () => {
         refetchReports();

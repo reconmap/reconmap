@@ -53,4 +53,14 @@ const requestEntityDelete = (url: string) => {
     });
 };
 
-export { requestEntities, requestEntity, requestEntityDelete, requestEntityPatch, requestEntityPost, requestEntityPut };
+const requestEntitiesDelete = (url: string, data: any) => {
+    return secureApiFetch(url, {
+        method: "DELETE",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+};
+
+export { requestEntities, requestEntity, requestEntityDelete, requestEntitiesDelete, requestEntityPatch, requestEntityPost, requestEntityPut };

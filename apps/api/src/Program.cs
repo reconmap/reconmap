@@ -63,6 +63,7 @@ services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 services.AddTransient<IClaimsTransformation, RoleClaimsTransformation>();
 services.AddSingleton<WebSocketConnectionManager>();
+services.AddSingleton<api_v2.Infrastructure.Sse.SseConnectionManager>();
 services.AddScoped<SystemUsageService>();
 services.AddScoped<IAuditService, AuditService>();
 services.AddScoped<ISecretsService, SecretsService>();
@@ -81,6 +82,7 @@ services.AddHostedService<NotificationQueueListener>();
 services.AddHostedService<JiraPublisher>();
 services.AddHostedService<AzureDevopsPublisher>();
 services.AddHostedService<ReportEmailProcessor>();
+services.AddHostedService<ReportGenerationProcessor>();
 services.AddReconmapAuthentication(builder.Configuration);
 services.AddDatabase(builder.Configuration);
 

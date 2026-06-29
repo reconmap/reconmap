@@ -1,4 +1,5 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
@@ -7,11 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- Added ability to select multiple notifications and perform bulk actions (mark as read, mark as unread, delete).
+- `ReportGenerationProcessor` background service to generate report files asynchronously via RabbitMQ.
 - Unified secrets management using a central `.env` file, enabling runtime environment variable overrides for both the C# API (using ASP.NET Core environment mapping) and the Go CLI/agent (using dynamic reflection overrides), which removes the need to hardcode secrets inside application JSON configuration files.
 - Added Trivy, Semgrep, Bandit, and Snyk security commands configured to output to SARIF and process results using the SARIF parser.
 - Added CycloneDX Software Bill of Materials (SBOM) JSON parser (`CycloneDxParser`) and the `Syft` tool command to extract dependency packages as assets and associate vulnerability scanning findings.
 
 ### Changed
+
+- Migrated the real-time notification push mechanism from WebSockets to Server-Sent Events (SSE), utilizing standard ASP.NET Core JWT Bearer authentication via custom query parameter token extraction, and removed redundant Connection headers from SSE response streams to prevent connection aborts.
+- Refactored the dashboard reports list page to listen to SSE events and automatically trigger query cache invalidation for seamless, real-time page refreshes.
+- Refactored report creation in `ReportsController` to delegate generation to a background queue, returning a `202 Accepted` status immediately.
+- Updated reports retrieval query to return pending reports and disabled download/email options in the dashboard until report generation is complete.
 - Renamed integrations that push data to third-party services (Jira, Azure DevOps, and Webhooks) from processors to publishers (e.g. `JiraPublisher`, `AzureDevopsPublisher`, `WebhookPublisher`).
 - Renamed command output processors to Command Parsers (e.g. `NmapParser`, `SarifParser`, etc., implementing `ICommandParser`).
 - Moved commands and usages definitions fully into C# code (using reflection and string-based keys) rather than database tables, keeping them closely aligned with their corresponding output parsers.
@@ -20,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved the "Scanners" settings page to the "Help & Support" layout under a new "System information" section label as "Command output parsers", grouping it alongside System Health and System Usage.
 
 ### Removed
+
 - Database tables `command` and `command_usage`.
 - `Commands Library` navigation and views (CRUD pages) from the React dashboard UI.
 - Standalone "Password generator" page and route from the dashboard and navigation sidebar.
@@ -27,10 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for parsing SARIF results files in the API using the `Sarif.Sdk` library to import security findings.
 - **System of Intelligence** features:
-    - **Generic LLM Parser**: A new command output processor that uses LLMs to parse results from any security tool into structured assets and findings.
-    - **Automated Finding Remediation**: Automatically generates remediation instructions using AI for newly discovered findings.
-    - **Intelligent Finding Deduplication**: Prevents duplicate findings from being created in the same project/target.
-    - **Asset Scan Strategist**: New "Enrich" endpoint for assets that provides AI-generated scan recommendations and next steps.
+  - **Generic LLM Parser**: A new command output processor that uses LLMs to parse results from any security tool into structured assets and findings.
+  - **Automated Finding Remediation**: Automatically generates remediation instructions using AI for newly discovered findings.
+  - **Intelligent Finding Deduplication**: Prevents duplicate findings from being created in the same project/target.
+  - **Asset Scan Strategist**: New "Enrich" endpoint for assets that provides AI-generated scan recommendations and next steps.
 - Jira integration for findings: push findings to Jira as issues.
 - Azure DevOps integration for findings: push findings to Azure DevOps as work items.
 - Integrated Webhooks, Jira, and Azure DevOps under a new "Integrations" management section.
@@ -43,6 +53,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - React Error Boundary support to protect dashboard layouts and subcomponents against unhandled runtime crashes, featuring diagnostic error details and retry options.
 
 ### Fixed
+
+- Fixed Entity Framework Core row-limiting operator warning in documents query by adding explicit order by.
+- Fixed missing push notifications after asynchronous report generation by ensuring Notification database records are persisted before broadcasting SSE ping via RabbitMQ.
+- Fixed false-positive CORS errors and immediately aborted connections in Firefox/Chrome caused by React 18 Strict Mode mounting/unmounting behavior with Server-Sent Events.
 - Fix `ReferenceError: SearchUrls is not defined` crash in dashboard Search Results page.
 - Fix dashboard audit page crash due to useLocation hook context mismatch by resolving the react-router/react-router-dom package inconsistency.
 - Fix Go agent docker build command path and context mismatch in `.github/workflows/cli-binaries-build-deploy.yml` and `cli/agent/Makefile` by referencing the correct build context (`cli`).
@@ -53,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix pagination logic in the API that incorrectly defaulted to the last page, causing incomplete results in projects, findings, and other lists.
 
 ### Changed
+
 - Consolidated local API Docker Compose configurations by merging `apps/api/src/compose.yaml` into `apps/api/compose.yaml`, updating references in Makefiles and development guides.
 - Renamed repetitive API directory path from `apps/api/app` to `apps/api/src` to align with standard project layout conventions, and updated all project files, test project reference, GitHub workflow, compose setups, and development guides.
 - Upgrade React Dashboard third-party dependencies (including ESLint, Vite, TypeScript, i18next, and React)
@@ -69,11 +84,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade to Vite 8
 
 ### Removed
+
 - Remove unused code in web client using knip
 
 ## [3.0.0-alpha]
 
 ### Added
+
 - Add French language translations
 - Clone task feature
 - Add user location (city, country) to audit log table
@@ -94,6 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add German translation by [Eren Kemer](https://github.com/eren-kemer). Thanks!
 
 ### Changed
+
 - Refactored UI to use tanstack query and benefit from caching, retries and other niceties.
 - Separate full name into first name and last name fields
 - Allow to use multiple languages/locales in Keycloak (Spanish, French, Portuguese, ...)
@@ -128,24 +146,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Resolved issued with mobile menu navigation
 
 ### Removed
+
 - Ability for admin to manually set passwords for new users
 - Mobile client repository archived. This officially marks the sunsetting of this feature.
 
 ## [2.0.0]
 
 ### Added
+
 - [Keycloak](https://www.keycloak.org/) integration
 
 ### Changed
+
 - Web client: Upgraded to Chakra v2
 - Rest API: Upgraded to Monolog v3
 
 ### Fixed
-- 
+
+-
 
 ## [1.5.0]
 
 ### Added
+
 - Configurable project categories
 - Web client: Add refresh button to system logs page
 - Web client: Allow to remove normal and small organisation logos
@@ -157,26 +180,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pagination to project list
 
 ### Changed
+
 - Correctly deal with entity dependencies in the db (delete on cascade for most tables)
 - Web client: Upgrade to React 18
 - Log warning when trying to export invalid entity type
 - Web client: The pagination component now can jump to any page
 
 ### Fixed
+
 - Web client: Fixed issue with project template tasks not showing
 - Web client: Fixed issue on the project creation form creating successful toast on failure
 
 ## 1.1.0
 
 ### Added
+
 - Add licenses page on the Web client
 - Add filters to the vulnerabilities page
-- Add setting to allow * CORS origins
+- Add setting to allow \* CORS origins
 - Add priority filter for tasks
 - Add multiple contacts to client (general, billing, technical)
 - Add project credential vault (Thanks to Karel Rozhon)
 
 ### Changed
+
 - Store user notifications on server (introduces ability to mark notifications as read/unread)
 
 ### Fixed
@@ -184,6 +211,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.10.0
 
 ### Added
+
 - Add support for vulnerability sub-categories
 - Add support for Word/LibreOffice report templates.
 - Add ability to launch commands from the Web client and see them running on an embedded terminal
@@ -199,6 +227,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add priority field to tasks
 
 ### Changed
+
 - Return error messages if imported file is corrupt or invalid
 - Change default ports (api=5500, webclient=5510, agent=5520/5530)
 - Kubernetes definitions files were updated
@@ -209,6 +238,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.9.5
 
 ### Added
+
 - Add support for tags in vulnerabilities, commands and targets.
 - Add link to API spec docs in the sidebar
 - Add application logs to the web client
@@ -216,14 +246,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add advanced search
 
 ### Changed
+
 - Change some forms to show as popups instead of new pages
 
 ### Fixed
+
 - Fixed logic that allowed to add existing members to projects.
 
 ## 0.9.0
 
 ### Added
+
 - Add vulnerability statuses
 - Add documents section
 - Add archive project option
@@ -233,6 +266,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add new client role
 
 ### Changed
+
 - New upload limits
 - Rename existing user roles
 - Change import/export format to JSON
@@ -241,13 +275,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.8.5
 
 ### Added
+
 - Introduce new commands views (CRUD)
 - Introduce new task status (todo/doing/done) vs (open/closed)
 - Add audit to delete target action
 - Add full name and short bio fields to users
 
 ### Changed
-- Upgrade composer dependencies 
+
+- Upgrade composer dependencies
 - Stricter makefiles
 - Return client and user information from various other entities
 - Use all space available for forms
@@ -255,31 +291,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.8.0
 
 ### Added
+
 - Add rules of engagement to projects
 - Add delete button to user page
 - Add edit task page
 - Add collapsable sidebar navigation
 
 ### Changed
+
 - Record user agent in audit log
 
 ### Fixed
+
 - Fix problem with minimum number of pages in paginator
 - Fix link to import project templates
 
 ## 0.7.5
 
 ### Added
+
 - Add support for notes at the project and vulnerability levels.
 - Add makefile database migration target
 
 ### Changed
+
 - Change application to no longer fail with the log file is not writable.
 
 ## 0.7.0
 
 ### Added
-- Add basic functionality: clients, projects, tasks, vulnerabilities, ... 
 
-[Unreleased]: https://github.com/reconmap/reconmap/compare/1.5.0...master 
+- Add basic functionality: clients, projects, tasks, vulnerabilities, ...
+
+[Unreleased]: https://github.com/reconmap/reconmap/compare/1.5.0...master
 [1.5.0]: https://github.com/reconmap/reconmap/compare/0.1.0...1.5.0

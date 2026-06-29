@@ -3,7 +3,7 @@ import { requestNotificationPut } from "api/requests/notifications.js";
 import NativeButton from "components/forms/NativeButton";
 import CssIcon from "components/ui/CssIcon";
 import Tag from "components/ui/Tag.jsx";
-import { useWebsocketMessage } from "contexts/WebsocketContext";
+import { useSseMessage } from "contexts/SseContext";
 import useToggle from "hooks/useToggle";
 import { Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const NotificationsBadge = () => {
         refetch();
     };
 
-    useWebsocketMessage(onMessageHandler);
+    useSseMessage(onMessageHandler);
 
     const markAsRead = (notification) => {
         requestNotificationPut(notification.id, { status: "read" }).then(() => {

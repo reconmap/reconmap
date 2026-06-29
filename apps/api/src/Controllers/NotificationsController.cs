@@ -4,12 +4,38 @@ using api_v2.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+using api_v2.Infrastructure.Sse;
+
 namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class NotificationsController(AppDbContext dbContext) : ControllerBase
+public class NotificationsController(AppDbContext dbContext, SseConnectionManager sseConnectionManager) : ControllerBase
 {
+    [HttpGet("stream")]
+    public async Task GetStream(CancellationToken cancellationToken)
+    {
+        Response.ContentType = "text/event-stream";
+        Response.Headers["Cache-Control"] = "no-cache";
+
+        var id = sseConnectionManager.AddConnection(Response);
+
+        try
+        {
+            await Response.WriteAsync("data: {\"type\":\"handshake\"}\n\n", cancellationToken);
+            await Response.Body.FlushAsync(cancellationToken);
+
+            await Task.Delay(Timeout.Infinite, cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            // Client closed connection
+        }
+        finally
+        {
+            sseConnectionManager.RemoveConnection(id);
+        }
+    }
     [HttpGet]
     public async Task<IActionResult> GetMany([FromQuery] string? status)
     {
@@ -36,6 +62,23 @@ public class NotificationsController(AppDbContext dbContext) : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteMany([FromBody] JsonElement body)
+    {
+        var ids = body.GetProperty("ids")
+            .EnumerateArray()
+            .Select(e => e.GetUInt32())
+            .ToList();
+
+        var deleteCount = await dbContext.Notifications
+            .Where(n => ids.Contains(n.Id))
+            .ExecuteDeleteAsync();
+
+        return NoContent();
+    }
+
+
 
     [HttpPatch("{id:int}")]
     public async Task<IActionResult> PatchOne(uint id, [FromBody] JsonElement body)

@@ -8,4 +8,4 @@ Reconmap publishes user notifications to notify the user when a background task 
 
 ![User notifications](/images/screenshots/user-notifications.png)
 
-Notifications can be marked as read and the notification count will decrease accordingly. If one wishes to remove the notification permanently there is a button to do so on the notifications page. (`/notifications`).
+Notifications can be marked as read individually or in bulk. The notification count will decrease accordingly. From the notifications page (`/notifications`), you can select multiple notifications to mark them as read, mark them as unread, or delete them permanently.

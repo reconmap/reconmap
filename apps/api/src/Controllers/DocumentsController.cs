@@ -29,6 +29,7 @@ public class DocumentsController(AppDbContext dbContext)
     {
         var documents = await dbContext.Documents
             .Include(d => d.CreatedBy)
+            .OrderByDescending(d => d.CreatedAt)
             .Take(limit ?? int.MaxValue)
             .ToListAsync();
 

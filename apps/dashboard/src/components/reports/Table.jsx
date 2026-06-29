@@ -56,23 +56,34 @@ const ReportsTable = ({ reports, updateReports, includeProjectColumn = false }) 
         },
         {
             header: 'Downloads',
-            cell: (report) => (
-                <SecondaryButton onClick={() => handleDownload(report.attachmentId)}>
-                    {report.clientFileName?.split(".").pop().toUpperCase()}
-                </SecondaryButton>
-            ),
+            cell: (report) => {
+                const isGenerating = !report.attachmentId;
+                return isGenerating ? (
+                    <span className="text-secondary" style={{ fontStyle: 'italic' }}>Generating...</span>
+                ) : (
+                    <SecondaryButton onClick={() => handleDownload(report.attachmentId)}>
+                        {report.clientFileName?.split(".").pop().toUpperCase()}
+                    </SecondaryButton>
+                );
+            }
         },
         {
             header: '',
-            cell: (report) => (
-                <>
-                    <SecondaryButton onClick={() => handleSendByEmail(report.projectId)}>
-                        Send by email
-                    </SecondaryButton>
+            cell: (report) => {
+                const isGenerating = !report.attachmentId;
+                return (
+                    <>
+                        <SecondaryButton
+                            disabled={isGenerating}
+                            onClick={() => handleSendByEmail(report.projectId)}
+                        >
+                            Send by email
+                        </SecondaryButton>
 
-                    <DeleteIconButton onClick={() => onDeleteClick(report.id)} />
-                </>
-            ),
+                        <DeleteIconButton onClick={() => onDeleteClick(report.id)} />
+                    </>
+                );
+            }
         }
     ];
 

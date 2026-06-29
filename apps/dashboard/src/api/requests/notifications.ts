@@ -1,5 +1,5 @@
 import secureApiFetch from "services/api.js";
-import { requestEntities, requestEntityDelete, requestEntityPatch, requestEntityPut } from "utilities/requests.js";
+import { requestEntities, requestEntityDelete, requestEntitiesDelete, requestEntityPatch, requestEntityPut } from "utilities/requests.js";
 
 const API_BASE_URL = "/notifications";
 
@@ -13,6 +13,8 @@ export const requestPartialNotificationUpdate = (notificationId: number, data: a
 
 const requestNotificationDelete = (notificationId: number) => requestEntityDelete(`${API_BASE_URL}/${notificationId}`);
 
+const requestNotificationsDelete = (data: any): Promise<Response> => requestEntitiesDelete(`${API_BASE_URL}`, data);
+
 const requestNotificationsPatch = (data: any): Promise<Response> => requestEntityPatch(`${API_BASE_URL}`, data);
 
-export { requestNotificationDelete, requestNotifications, requestNotificationsPatch };
+export { requestNotificationDelete, requestNotificationsDelete, requestNotifications, requestNotificationsPatch };
