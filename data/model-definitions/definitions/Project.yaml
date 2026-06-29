@@ -48,12 +48,7 @@ properties:
   external_id:
     type: string
     nullable: true
-  vulnerability_metrics:
-    type: string
-    nullable: true
-    enum:
-    - CVSS
-    - OWASP_RR
+
 required:
 - created_at
 - created_by_uid

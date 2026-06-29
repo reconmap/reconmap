@@ -11,11 +11,11 @@ import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import Tooltip from "components/ui/Tooltip.jsx";
 import RemediationComplexity from "models/RemediationComplexity";
 import RemediationPriority from "models/RemediationPriority";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Risks from "../../models/Risks";
 import Primary from "../ui/buttons/Primary";
 import CvssAbbr from "./CvssAbbr";
-import OwaspRR from "./OwaspRR";
+import CvssCalculator from "./CvssCalculator";
 
 const TargetsSelectControl = ({ projectId, value, onFormChange }) => {
     const { data: targets, isLoading } = useAssetsQuery({ projectId });
@@ -52,10 +52,25 @@ const VulnerabilityForm = ({
     vulnerabilitySetter: setVulnerability,
     onFormSubmit,
 }) => {
-    const [selectedProject, setSelectedProject] = useState(null);
     const { data: customFields } = useSystemCustomFieldsQuery();
 
+    const cvssDialogRef = useRef(null);
+
     const { data: projects, isLoading: isLoadingProjects } = useProjectsQuery({});
+
+    useEffect(() => {
+        if (projects?.data?.length > 0 && !vulnerability.isTemplate) {
+            let targetProjectId = parseInt(vulnerability.projectId);
+            if (!targetProjectId || targetProjectId === 0) {
+                targetProjectId = projects.data[0].id;
+                setVulnerability(v => ({
+                    ...v,
+                    projectId: targetProjectId,
+                    targetId: 0,
+                }));
+            }
+        }
+    }, [projects, vulnerability?.projectId, vulnerability?.isTemplate]);
     const { data: categories, isLoading: isLoadingVulnerabilityCategories } = useVulnerabilityCategoriesQuery({
         parentsOnly: false,
     });
@@ -84,10 +99,11 @@ const VulnerabilityForm = ({
         const name = target.name;
         let value = target.value;
 
-        const project = projects.data.find((proj) => proj.id === parseInt(value));
-        setSelectedProject(project);
-
-        setVulnerability({ ...vulnerability, [name]: value, targetId: 0 });
+        setVulnerability({
+            ...vulnerability,
+            [name]: value,
+            targetId: 0,
+        });
     };
 
     return (
@@ -123,6 +139,8 @@ const VulnerabilityForm = ({
                         />
                     }
                 />
+
+
 
                 <HorizontalLabelledField
                     label="Summary"
@@ -295,45 +313,55 @@ const VulnerabilityForm = ({
                     Impact
                     <MarkdownEditor name="impact" value={vulnerability.impact || ""} onChange={onFormChange} />
                 </label>
-                {"CVSS" === selectedProject?.vulnerability_metrics && (
-                    <>
-                        <label>
-                            CVSS score
-                            <NativeInput
-                                type="number"
-                                step="0.1"
-                                min="0"
-                                max="10"
-                                name="cvss_score"
-                                value={vulnerability.cvss_score || ""}
-                                onChange={onFormChange}
-                            />
-                        </label>
-                        <label>
-                            <span>
-                                <CvssAbbr /> vector
-                            </span>
-                            <NativeInput
-                                type="text"
-                                name="cvss_vector"
-                                value={vulnerability.cvss_vector || ""}
-                                onChange={onFormChange}
-                                placeholder="eg: AV:N/AC:L/Au:S/C:P/I:P/A:N"
-                            />
-                        </label>
-                    </>
-                )}
+                <HorizontalLabelledField
+                    label="CVSS score"
+                    htmlFor="cvssScore"
+                    control={
+                        <NativeInput
+                            id="cvssScore"
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max="10"
+                            name="cvssScore"
+                            value={vulnerability.cvssScore || ""}
+                            onChange={onFormChange}
+                        />
+                    }
+                />
+                <HorizontalLabelledField
+                    label={
+                        <span>
+                            <CvssAbbr /> vector
+                        </span>
+                    }
+                    htmlFor="cvssVector"
+                    control={
+                        <div className="field has-addons" style={{ width: "100%" }}>
+                            <div className="control is-expanded">
+                                <NativeInput
+                                    id="cvssVector"
+                                    type="text"
+                                    name="cvssVector"
+                                    value={vulnerability.cvssVector || ""}
+                                    onChange={onFormChange}
+                                    placeholder="eg: CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+                                />
+                            </div>
+                            <div className="control">
+                                <button
+                                    type="button"
+                                    className="button is-info"
+                                    style={{ background: "linear-gradient(135deg, var(--blue), #00d1b2)", color: "white", border: "none" }}
+                                    onClick={() => cvssDialogRef.current?.showModal()}
+                                >
+                                    Calculate
+                                </button>
+                            </div>
+                        </div>
+                    }
+                />
             </fieldset>
-
-            {"OWASP_RR" === selectedProject?.vulnerability_metrics && (
-                <div>
-                    <h2>
-                        <div>Owasp Risk Rating calculator</div>
-                    </h2>
-                    <label>Owasp Risk Rating</label>
-                    <OwaspRR vulnerability={vulnerability} vulnerabilitySetter={setVulnerability} />
-                </div>
-            )}
 
             <fieldset>
                 <legend>Remediation</legend>
@@ -389,6 +417,50 @@ const VulnerabilityForm = ({
             {customFields && <DynamicForm fields={customFields} />}
 
             <Primary type="submit">{isEditForm ? "Save" : "Add"}</Primary>
+
+            {/* CVSS Dialog */}
+            <dialog
+                ref={cvssDialogRef}
+                style={{
+                    border: "none",
+                    borderRadius: "16px",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+                    padding: "24px",
+                    width: "90%",
+                    maxWidth: "600px",
+                    background: "#252535",
+                    color: "white",
+                }}
+            >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "12px" }}>
+                    <h3 className="title is-5" style={{ color: "white", margin: 0 }}>CVSS Calculator</h3>
+                    <button
+                        type="button"
+                        onClick={() => cvssDialogRef.current?.close()}
+                        style={{
+                            background: "transparent",
+                            border: "none",
+                            color: "white",
+                            fontSize: "24px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div style={{ maxHeight: "60vh", overflowY: "auto", padding: "12px 0" }}>
+                    <CvssCalculator vulnerability={vulnerability} vulnerabilitySetter={setVulnerability} />
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "12px", marginTop: "12px" }}>
+                    <button
+                        type="button"
+                        className="button is-primary"
+                        onClick={() => cvssDialogRef.current?.close()}
+                    >
+                        Done
+                    </button>
+                </div>
+            </dialog>
         </form>
     );
 };

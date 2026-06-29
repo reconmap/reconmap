@@ -56,17 +56,4 @@ public class Project : TimestampedEntity
     [MaxLength(40)]
     public string? ExternalId { get; set; }
 
-    [Column("vulnerability_metrics")] public string? VulnerabilityMetrics { get; set; }
-}
-
-public enum Visibility
-{
-    Public,
-    Private
-}
-
-public enum VulnerabilityMetrics
-{
-    CVSS,
-    OWASP_RR
 }

@@ -31,7 +31,7 @@ build:
 
 .PHONY: start
 start:
-	$(DC) --profile testing up -d
+	$(DC) up -d
 
 .PHONY:
 logs:

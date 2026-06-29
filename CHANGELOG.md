@@ -7,12 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+### Added
 
-- Fixed the empty Project column on the global Reports list page by left-joining the Projects table in the backend API reports query.
+- Added an interactive CVSS v4.0 calculator component (`CvssCalculator.jsx`) that opens in a native HTML `<dialog>` launched from a field addon button next to the vulnerability vector input.
+
+### Changed
+
+- Standardized vulnerability metrics strictly on the CVSS v4.0 standard, replacing generic metric properties with explicit `cvss_score` and `cvss_vector` fields.
 
 ### Removed
 
+- Removed all support for OWASP Risk Rating metrics across the database schema, C# API entities, Go CLI models, and React dashboard components.
+- Removed project-level vulnerability metrics settings (`vulnerability_metrics` column).
 - Removed obsolete references and configuration mounts for `data/attachments` (templates are now packaged inside the API container).
 - Removed support for generating and previewing reports in HTML and TXT formats (only Word, Markdown, and Typst remain).
 - Removed report preview functionality from the dashboard and API.

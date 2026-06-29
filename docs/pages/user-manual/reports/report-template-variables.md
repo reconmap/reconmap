@@ -74,7 +74,7 @@ When you are designing your pentest project template, you can reference a number
             <td>findings</td>
             <td>array</td>
             <td>Findings stats and list</td>
-            <td>list (summary, description, risk, remediation, status, cvss_score, cvss_vector, proof_of_concept, owasp_vector, owasp_overall), stats (severity, count)</td>
+            <td>list (summary, description, risk, remediation, status, cvss_vector, cvss_score, proof_of_concept), stats (severity, count)</td>
         </tr>
     </tbody>
 </table>

@@ -34,10 +34,7 @@ const ProjectsTable = ({ projects, showClientColumn = true }) => {
             header: "Category",
             cell: (project) => (project.categoryId !== null ? project.category?.name : "(undefined)"),
         },
-        {
-            header: "Vulnerability metrics",
-            cell: (project) => (project.vulnerabilityMetrics ? project.vulnerabilityMetrics : "(undefined)"),
-        },
+
         { header: "Status", cell: (project) => (project.archived ? "Archived" : "Active") },
         {
             header: "",

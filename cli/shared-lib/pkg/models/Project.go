@@ -15,5 +15,4 @@ type Project struct {
 	EngagementStartDate string `json:"engagement_start_date"`
 	EngagementEndDate string `json:"engagement_end_date"`
 	ExternalId string `json:"external_id"`
-	VulnerabilityMetrics string `json:"vulnerability_metrics"`
 }

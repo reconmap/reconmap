@@ -40,12 +40,7 @@ const ProjectDetailsTab = ({ project }) => {
                         </>
                     )}
 
-                    {project.vulnerabilityMetrics && (
-                        <>
-                            <dt>Vulnerability metrics</dt>
-                            <dd>{project.vulnerabilityMetrics}</dd>
-                        </>
-                    )}
+
 
                     <dt>Description</dt>
                     <dd>

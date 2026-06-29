@@ -11,7 +11,6 @@ interface ProjectInterface {
     engagement_start_date?: string;
     engagement_end_date?: string;
     external_id?: string;
-    vulnerability_metrics?: string;
 }
 
 /**

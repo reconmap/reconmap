@@ -34,7 +34,6 @@ CREATE TABLE project
     archived              BOOLEAN                    NOT NULL DEFAULT FALSE,
     archived_at            TIMESTAMP                  NULL,
     external_id           VARCHAR(40)                NULL,
-    vulnerability_metrics ENUM ('CVSS', 'OWASP_RR')  NULL,
 
     PRIMARY KEY (id),
     UNIQUE KEY (name),
@@ -309,15 +308,11 @@ CREATE TABLE vulnerability
     remediation_complexity ENUM ('unknown', 'low', 'medium', 'high')                                                          NULL,
     remediation_priority   ENUM ('low','medium','high')                                                                       NULL,
 
-    cvss_score             DECIMAL(3, 1)                                                                                      NULL,
-    cvss_vector            VARCHAR(80)                                                                                        NULL,
+    cvss_vector          VARCHAR(150)                                                                                       NULL,
+    cvss_score           DECIMAL(3, 1)                                                                                      NULL,
     status                 ENUM ('open', 'confirmed', 'resolved', 'closed')                                                   NOT NULL DEFAULT 'open',
     substatus              ENUM ('reported', 'unresolved', 'unexploited', 'exploited', 'remediated', 'mitigated', 'rejected') NULL     DEFAULT 'reported',
     tags                   JSON                                                                                               NULL,
-    owasp_vector           VARCHAR(80)                                                                                        NULL,
-    owasp_likelihood         DECIMAL(5, 3)                                                                                      NULL,
-    owasp_impact           DECIMAL(5, 3)                                                                                      NULL,
-    owasp_overall          ENUM ('critical','high','medium','low','note')                                                     NULL,
     custom_fields          JSON                                                                                               NULL,
 
     PRIMARY KEY (id),
@@ -342,13 +337,9 @@ SELECT id,
        impact,
        remediation,
        risk,
-       cvss_score,
        cvss_vector,
-       tags,
-       owasp_vector,
-       owasp_likelihood,
-       owasp_impact,
-       owasp_overall
+       cvss_score,
+       tags
 FROM vulnerability
 WHERE is_template = 1;
 

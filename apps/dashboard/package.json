@@ -24,7 +24,6 @@
     "react-markdown": "^10.1.0",
     "react-router": "^8.0.1",
     "react-router-dom": "^7.18.0",
-    "react-select": "^5.10.2",
     "react-time-ago": "^7.4.4",
     "recharts": "^3.9.0",
     "remark-gfm": "^4.0.1",

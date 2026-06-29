@@ -118,7 +118,7 @@ const VulnerabilitiesTable = ({
                     </th>
                     <th style={{ width: "70px" }}>
                         <DescendingSortLink callback={onSortChange} property="cvss_score" />{" "}
-                        <abbr title="Common Vulnerability Scoring System">CVSS</abbr> score{" "}
+                        CVSS score{" "}
                         <AscendingSortLink callback={onSortChange} property="cvss_score" />
                     </th>
                     <th className="only-desktop" style={{ width: "20%" }}>
@@ -176,7 +176,7 @@ const VulnerabilitiesTable = ({
                                     <RiskBadge risk={vulnerability.risk} />
                                 </td>
                                 <td>
-                                    <CvssScore score={vulnerability.cvssScore} />
+                                     <CvssScore score={vulnerability.cvssScore} />
                                 </td>
                                 <td className="only-desktop">
                                     <VulnerabilityCategorySpan

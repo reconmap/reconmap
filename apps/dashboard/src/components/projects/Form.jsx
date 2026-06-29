@@ -5,7 +5,6 @@ import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
-import ProjectVulnerabilityMetrics from "models/ProjectVulnerabilityMetrics";
 import Loading from "../ui/Loading";
 import PrimaryButton from "../ui/buttons/Primary";
 
@@ -174,25 +173,6 @@ const ProjectForm = ({ isEdit = false, project, projectSetter: setProject, onFor
 
             <fieldset>
                 <legend>Rules of engagement</legend>
-
-                <HorizontalLabelledField
-                    label="Vulnerability metrics"
-                    control={
-                        <NativeSelect
-                            id="vulnerabilityMetrics"
-                            name="vulnerabilityMetrics"
-                            value={notEmpty(project.vulnerabilityMetrics) ? project.vulnerabilityMetrics : "(null)"}
-                            onChange={handleFormChange}
-                        >
-                            <option value="(null)">(undefined)</option>
-                            {ProjectVulnerabilityMetrics.map((type) => (
-                                <option key={`metrics_${type.id}`} value={type.id}>
-                                    {type.name}
-                                </option>
-                            ))}
-                        </NativeSelect>
-                    }
-                />
                 {!project.isTemplate && (
                     <>
                         <HorizontalLabelledField

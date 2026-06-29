@@ -16,6 +16,6 @@ From the vulnerability details view, you can:
 - View and manage assets affected by this vulnerability.
 - Add notes and attachments as evidence.
 - View vulnerability history and audit logs.
-- Map the vulnerability to OWASP categories and CVE IDs.
+- Map the vulnerability to CVE IDs.
 
 The vulnerability details view is where you can document findings and evidence of exploitation.
