@@ -5,7 +5,6 @@
     "@fortawesome/fontawesome-free": "^7.3.0",
     "@tanstack/react-query": "^5.101.1",
     "@testing-library/dom": "^10.4.1",
-    "@uiw/react-md-editor": "^4.1.1",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
     "bulma": "^1.0.4",

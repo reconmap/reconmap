@@ -1,4 +1,49 @@
+.markdown-editor {
+    border: 1px solid var(--bulma-border-color, #4a4a4a);
+    border-radius: 6px;
+    background-color: var(--bulma-scheme-main-bis, #1f1f1f);
+    padding: 0.5rem;
+}
 
-.mde-header .mde-tabs button {
-  color: black;
+.markdown-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--bulma-border-color, #4a4a4a);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.markdown-editor-header .buttons {
+    margin-bottom: 0 !important;
+}
+
+.markdown-editor-header .tabs {
+    margin-bottom: 0 !important;
+}
+
+.markdown-editor-content textarea.textarea {
+    resize: vertical;
+    border: none;
+    box-shadow: none;
+    padding: 0.5rem;
+    background-color: transparent;
+    color: inherit;
+}
+
+.markdown-editor-content textarea.textarea:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.markdown-preview-box {
+    padding: 0.5rem;
+    background-color: transparent !important;
+    border: none;
+    box-shadow: none;
+    color: inherit !important;
+    min-height: 200px;
+    overflow-y: auto;
 }

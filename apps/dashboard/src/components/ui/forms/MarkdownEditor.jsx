@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 import "./MarkdownEditor.css";
 
-import MDEditor from "@uiw/react-md-editor";
 import Configuration from "Configuration.js";
 import { requestEntityPost } from "utilities/requests.js";
 
@@ -74,6 +74,8 @@ const onImagePasted = async (ev) => {
 
 const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...options }) => {
     const [markdown, setMarkdown] = useState(value || "");
+    const [mode, setMode] = useState("edit"); // "edit" or "preview"
+    const textareaRef = useRef(null);
 
     useEffect(() => {
         setMarkdown(value || "");
@@ -103,18 +105,181 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
         emitFormChange(insertedMarkdown);
     };
 
+    const handleFormat = (type) => {
+        // Switch to edit mode if we are previewing
+        if (mode !== "edit") {
+            setMode("edit");
+        }
+
+        setTimeout(() => {
+            const textarea = textareaRef.current;
+            if (!textarea) return;
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selectedText = text.slice(start, end);
+
+            let before = "";
+            let after = "";
+
+            switch (type) {
+                case "bold":
+                    before = "**";
+                    after = "**";
+                    break;
+                case "italic":
+                    before = "*";
+                    after = "*";
+                    break;
+                case "header":
+                    const needsNewlineBeforeHeader = start > 0 && text[start - 1] !== "\n";
+                    before = (needsNewlineBeforeHeader ? "\n" : "") + "### ";
+                    after = "";
+                    break;
+                case "link":
+                    before = "[";
+                    after = "](url)";
+                    break;
+                case "code":
+                    if (selectedText.includes("\n")) {
+                        before = "```\n";
+                        after = "\n```";
+                    } else {
+                        before = "`";
+                        after = "`";
+                    }
+                    break;
+                case "list":
+                    const needsNewlineBeforeList = start > 0 && text[start - 1] !== "\n";
+                    before = (needsNewlineBeforeList ? "\n" : "") + "- ";
+                    after = "";
+                    break;
+                default:
+                    break;
+            }
+
+            const replacement = before + selectedText + after;
+            const nextValue = text.slice(0, start) + replacement + text.slice(end);
+
+            setMarkdown(nextValue);
+            emitFormChange(nextValue);
+
+            textarea.focus();
+            const newStart = start + before.length;
+            const newEnd = newStart + selectedText.length;
+            textarea.setSelectionRange(newStart, newEnd);
+        }, 0);
+    };
+
     return (
-        <MDEditor
-            height={200}
-            value={markdown}
-            onPaste={onEditorPaste}
-            onChange={(editorValue) => {
-                const nextValue = editorValue || "";
-                setMarkdown(nextValue);
-                emitFormChange(nextValue);
-            }}
-            {...options}
-        />
+        <div className="markdown-editor">
+            <div className="markdown-editor-header">
+                <div className="buttons has-addons">
+                    <button
+                        type="button"
+                        className="button is-small is-dark"
+                        onClick={() => handleFormat("bold")}
+                        title="Bold"
+                    >
+                        <i className="fas fa-bold"></i>
+                    </button>
+                    <button
+                        type="button"
+                        className="button is-small is-dark"
+                        onClick={() => handleFormat("italic")}
+                        title="Italic"
+                    >
+                        <i className="fas fa-italic"></i>
+                    </button>
+                    <button
+                        type="button"
+                        className="button is-small is-dark"
+                        onClick={() => handleFormat("header")}
+                        title="Heading"
+                    >
+                        <i className="fas fa-heading"></i>
+                    </button>
+                    <button
+                        type="button"
+                        className="button is-small is-dark"
+                        onClick={() => handleFormat("link")}
+                        title="Link"
+                    >
+                        <i className="fas fa-link"></i>
+                    </button>
+                    <button
+                        type="button"
+                        className="button is-small is-dark"
+                        onClick={() => handleFormat("code")}
+                        title="Code"
+                    >
+                        <i className="fas fa-code"></i>
+                    </button>
+                    <button
+                        type="button"
+                        className="button is-small is-dark"
+                        onClick={() => handleFormat("list")}
+                        title="Bullet List"
+                    >
+                        <i className="fas fa-list"></i>
+                    </button>
+                </div>
+                <div className="tabs is-toggle is-small">
+                    <ul>
+                        <li className={mode === "edit" ? "is-active" : ""}>
+                            <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setMode("edit");
+                                }}
+                            >
+                                Edit
+                            </a>
+                        </li>
+                        <li className={mode === "preview" ? "is-active" : ""}>
+                            <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setMode("preview");
+                                }}
+                            >
+                                Preview
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div className="markdown-editor-content">
+                <textarea
+                    ref={textareaRef}
+                    className="textarea"
+                    style={{ display: mode === "edit" ? "block" : "none", minHeight: "200px" }}
+                    value={markdown}
+                    onPaste={onEditorPaste}
+                    onChange={(ev) => {
+                        const nextValue = ev.target.value;
+                        setMarkdown(nextValue);
+                        emitFormChange(nextValue);
+                    }}
+                    {...options}
+                />
+                {mode === "preview" && (
+                    <div className="box markdown-preview-box">
+                        {markdown ? (
+                            <div className="content">
+                                <ReactMarkdown>{markdown}</ReactMarkdown>
+                            </div>
+                        ) : (
+                            <span className="has-text-grey-light">Nothing to preview</span>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
     );
 };
 

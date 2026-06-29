@@ -13,10 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Replaced the third-party `@uiw/react-md-editor` component in the React dashboard with a custom, lightweight markdown editor featuring a native `<textarea>`, a basic formatting toolbar (bold, italic, headers, links, code, lists), and a tabbed edit/preview view.
 - Standardized vulnerability metrics strictly on the CVSS v4.0 standard, replacing generic metric properties with explicit `cvss_score` and `cvss_vector` fields.
 
 ### Removed
 
+- Removed the `@uiw/react-md-editor` dependency from the dashboard application.
 - Removed all support for OWASP Risk Rating metrics across the database schema, C# API entities, Go CLI models, and React dashboard components.
 - Removed project-level vulnerability metrics settings (`vulnerability_metrics` column).
 - Removed obsolete references and configuration mounts for `data/attachments` (templates are now packaged inside the API container).
