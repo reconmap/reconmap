@@ -22,6 +22,7 @@ import ProjectTargets from "components/projects/Targets";
 import ProjectTasks from "components/projects/Tasks";
 import ProjectVaultTab from "components/projects/vault/VaultTab";
 import ProjectVulnerabilities from "components/projects/Vulnerabilities";
+import ReportRevisions from "components/reports/Revisions";
 
 const ProjectDetails = () => {
     const navigate = useNavigate();
@@ -55,9 +56,7 @@ const ProjectDetails = () => {
         });
     }
 
-    const handleGenerateReport = () => {
-        navigate(`/projects/${project.id}/report`);
-    };
+
 
     const handleManageTeam = () => {
         navigate(`/projects/${project.id}/membership`);
@@ -87,7 +86,7 @@ const ProjectDetails = () => {
                                 {!project.archived && (
                                     <>
                                         <LinkButton href={`/projects/${project.id}/edit`}>Edit</LinkButton>
-                                        <SecondaryButton onClick={handleGenerateReport}>Report</SecondaryButton>
+
                                         <SecondaryButton onClick={handleManageTeam}>Membership</SecondaryButton>
                                     </>
                                 )}
@@ -122,6 +121,7 @@ const ProjectDetails = () => {
                             t("Comments"),
                             t("Attachments"),
                             t("Vault"),
+                            t("Reports"),
                         ]}
                         tabIndex={tabIndex}
                         tabIndexSetter={tabIndexSetter}
@@ -161,6 +161,11 @@ const ProjectDetails = () => {
                         {6 === tabIndex && (
                             <div>
                                 <ProjectVaultTab project={project} />
+                            </div>
+                        )}
+                        {7 === tabIndex && (
+                            <div>
+                                <ReportRevisions projectId={project.id} />
                             </div>
                         )}
                     </div>

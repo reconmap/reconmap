@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed obsolete references and configuration mounts for `data/attachments` (templates are now packaged inside the API container).
+- Removed support for generating and previewing reports in HTML and TXT formats (only Word, Markdown, and Typst remain).
+- Removed report preview functionality from the dashboard and API.
+
+### Changed
+
+- Integrated report revisions as a dedicated "Reports" tab directly within the project details page, rather than keeping it as a standalone page.
 
 ### Added
 

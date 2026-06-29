@@ -87,36 +87,7 @@ public class ReportsController(
         return Ok(results);
     }
 
-    [HttpGet("{id:int}/preview")]
-    [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PreviewReport(uint id)
-    {
-        var existing = await dbContext.Projects.FindAsync(id);
-        if (existing == null) return NotFound();
 
-        var client = await dbContext.Organisations.FindAsync(existing.ClientId);
-
-        string data;
-        await using (var templateStream = await attachmentStorage.GetFileStreamAsync("default-report-template.html"))
-        {
-            using (var reader = new StreamReader(templateStream))
-            {
-                data = await reader.ReadToEndAsync();
-            }
-        }
-
-        var tpl = Template.Parse(data);
-        var res = await tpl.RenderAsync(new { project = existing, client });
-
-        var result = new ContentResult
-        {
-            Content = res,
-            ContentType = "text/html; charset=utf-8"
-        };
-        return result;
-    }
 
 
     [HttpGet("templates")]

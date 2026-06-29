@@ -1,5 +1,5 @@
 import ProjectMembership from "components/projects/Membership";
-import ProjectReport from "components/projects/Report";
+
 import ProjectsLayout from "layouts/Layout.jsx";
 import ProjectCreateForm from "pages/projects/Create";
 import ProjectDetails from "pages/projects/Details";
@@ -15,7 +15,7 @@ const ProjectsRoutes = [
         <Route index element={<ProjectsListPage />} />,
         <Route path={`create`} element={<ProjectCreateForm />} />,
         <Route path={`:projectId/edit`} element={<ProjectEdit />} />,
-        <Route path={`:projectId/report`} element={<ProjectReport />} />,
+
         <Route path={`:projectId/report/send`} element={<SendReport />} />,
         <Route path={`:projectId/membership`} element={<ProjectMembership />} />,
         <Route path={`:projectId/tasks/create`} element={<TaskCreationPage />} />,

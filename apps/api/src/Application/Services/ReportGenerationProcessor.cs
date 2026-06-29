@@ -255,7 +255,7 @@ public sealed class ReportGenerationProcessor(
                         document.MainDocumentPart.Document.Save();
                     }
                 }
-                else
+                else if (templateExtension is ".md" or ".typ" or ".typst")
                 {
                     var templateContent = await System.IO.File.ReadAllTextAsync(tempFilePath, cancellationToken);
                     var template = Template.Parse(templateContent);
@@ -269,6 +269,11 @@ public sealed class ReportGenerationProcessor(
                     }
                     var renderedTemplate = await template.RenderAsync(new { project });
                     await System.IO.File.WriteAllTextAsync(tempFilePath, renderedTemplate, cancellationToken);
+                }
+                else
+                {
+                    logger.LogWarning("Unsupported template extension: {Extension}", templateExtension);
+                    return;
                 }
 
                 await using (var resultStream = System.IO.File.OpenRead(tempFilePath))

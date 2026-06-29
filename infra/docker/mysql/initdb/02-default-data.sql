@@ -143,14 +143,6 @@ INSERT INTO contact (organisation_id, name, email)
 VALUES (LAST_INSERT_ID(), 'Contributors', 'no-reply@reconmap.com');
 
 INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
-VALUES (NULL, @admin_user_id, TRUE, 'Report template (HTML)', 'Default report template in HTML format');
-
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
-                        file_hash)
-VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.html', 'default-report-template.html', 0,
-        'text/html', '');
-
-INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
 VALUES (NULL, @admin_user_id, TRUE, 'Report template (Word)', 'Default report template in Word format');
 
 INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
@@ -165,14 +157,6 @@ INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name
                         file_hash)
 VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.md', 'default-report-template.md', 0,
         'text/markdown', '');
-
-INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
-VALUES (NULL, @admin_user_id, TRUE, 'Report template (TXT)', 'Default report template in Text format');
-
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
-                        file_hash)
-VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.txt', 'default-report-template.txt', 0,
-        'text/plain', '');
 
 INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
 VALUES (NULL, @admin_user_id, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
