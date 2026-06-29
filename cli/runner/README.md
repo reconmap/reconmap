@@ -33,12 +33,6 @@ To search for a task
 ./rmap task search -k "check domain"
 ```
 
-To search for a command to run
-
-```shell
-./rmap command search -k amass
-```
-
 To execute a command once you know its arguments
 
 ```shell

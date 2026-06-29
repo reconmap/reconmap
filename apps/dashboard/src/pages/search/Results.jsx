@@ -1,4 +1,4 @@
-import CommandsSearchResults from "components/search/CommandsSearchResults.jsx";
+
 import ProjectsSearchResults from "components/search/ProjectsSearchResults.jsx";
 import ProjectTemplatesSearchResults from "components/search/ProjectTemplatesSearchResults.jsx";
 import TasksSearchResults from "components/search/TasksSearchResults.jsx";
@@ -21,7 +21,7 @@ const SearchResultsPage = React.memo(() => {
 
     const entitiesParam = query.has("entities")
         ? query.get("entities")
-        : "commands,tasks,vulnerabilities,vulnerability_templates,projects,project_templates";
+        : "tasks,vulnerabilities,vulnerability_templates,projects,project_templates";
     const entities = useMemo(() => entitiesParam.split(","), [entitiesParam]);
 
     const [emptyResults, setEmptyResults] = useState([]);
@@ -40,9 +40,6 @@ const SearchResultsPage = React.memo(() => {
                 <div status="warning">No results were found for: {[...new Set([...emptyResults])].join(", ")}</div>
             )}
 
-            {entities.includes("commands") && (
-                <CommandsSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
-            )}
             {entities.includes("tasks") && (
                 <TasksSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
             )}

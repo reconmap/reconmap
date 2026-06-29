@@ -10,7 +10,6 @@ import Breadcrumb from "../ui/Breadcrumb";
 import Title from "../ui/Title";
 
 const entityList = {
-    commands: "Commands",
     tasks: "Tasks",
     vulnerabilities: "Vulnerabilities",
     vulnerability_templates: "Vulnerability templates",

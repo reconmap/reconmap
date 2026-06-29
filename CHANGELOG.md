@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed command search capability from both the React dashboard search results and the Go `rmap` runner CLI tool, as commands are now static.
 - Removed the `@uiw/react-md-editor` dependency from the dashboard application.
 - Removed all support for OWASP Risk Rating metrics across the database schema, C# API entities, Go CLI models, and React dashboard components.
 - Removed project-level vulnerability metrics settings (`vulnerability_metrics` column).

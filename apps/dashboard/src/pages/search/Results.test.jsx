@@ -8,7 +8,7 @@ vi.mock("react-i18next", () => ({
 
 vi.mock("components/ui/Breadcrumb.jsx", () => ({ default: () => <div data-testid="breadcrumb" /> }));
 vi.mock("components/ui/Title", () => ({ default: ({ title }) => <div data-testid="title">{title}</div> }));
-vi.mock("components/search/CommandsSearchResults.jsx", () => ({ default: () => <div data-testid="commands-search" /> }));
+
 vi.mock("components/search/ProjectsSearchResults.jsx", () => ({ default: () => <div data-testid="projects-search" /> }));
 vi.mock("components/search/ProjectTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="project-templates-search" /> }));
 vi.mock("components/search/TasksSearchResults.jsx", () => ({ default: () => <div data-testid="tasks-search" /> }));

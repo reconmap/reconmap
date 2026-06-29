@@ -38,18 +38,7 @@ public class CommandsController(
     [HttpGet]
     public IActionResult GetMany()
     {
-        var query = HttpContext.Request.Query;
-        string? keywords = query["keywords"];
-
         var allCommands = CommandDiscovery.GetAll();
-
-        if (!string.IsNullOrWhiteSpace(keywords))
-        {
-            allCommands = allCommands.Where(c => 
-                c.Name.Contains(keywords, StringComparison.OrdinalIgnoreCase) || 
-                (c.Description != null && c.Description.Contains(keywords, StringComparison.OrdinalIgnoreCase))
-            );
-        }
 
         var results = allCommands.Select(c => new Command
         {

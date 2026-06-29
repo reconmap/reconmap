@@ -4,13 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 
-	"github.com/fatih/color"
 	"github.com/reconmap/cli/internal/configuration"
 	"github.com/reconmap/shared-lib/pkg/api"
 	shareconfig "github.com/reconmap/shared-lib/pkg/configuration"
-	"github.com/rodaine/table"
 	"github.com/urfave/cli/v3"
 )
 
@@ -47,41 +44,7 @@ func ConfigAction(ctx context.Context, c *cli.Command) error {
 	return nil
 }
 
-func SearchCommandsAction(ctx context.Context, c *cli.Command) error {
-	if c.Args().Len() == 0 {
-		return errors.New("no keywords were entered after the search command")
-	}
-	var keywords string = strings.Join(c.Args().Slice(), " ")
-	config, err := shareconfig.ReadConfig[configuration.Config](configuration.ConfigFileName)
-	if err != nil {
-		return err
-	}
-	commands, err := api.GetCommandsByKeywords(config.ReconmapApiConfig.BaseUri, keywords)
-	if err != nil {
-		return err
-	}
 
-	var numCommands int = len(*commands)
-	fmt.Printf("%d commands matching '%s'\n", numCommands, keywords)
-
-	if numCommands > 0 {
-		fmt.Println()
-
-		headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
-		columnFmt := color.New(color.FgYellow).SprintfFunc()
-
-		tbl := table.New("ID", "Name", "Description", "Output parser", "Executable type", "Executable path", "Arguments")
-		tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
-
-		for _, command := range *commands {
-			tbl.AddRow(command.ID, command.Name, command.Description)
-
-		}
-		tbl.Print()
-	}
-
-	return err
-}
 
 func RunCommandAction(ctx context.Context, c *cli.Command) error {
 	projectId := c.Int("projectId")
@@ -129,14 +92,9 @@ var CommandList []*cli.Command = []*cli.Command{
 	{
 		Name:    "command",
 		Aliases: []string{"c"},
-		Usage:   "Search and run commands",
+		Usage:   "Run commands",
 		Before:  preActionChecks,
 		Commands: []*cli.Command{
-			{
-				Name:   "search",
-				Usage:  "Search commands by keywords",
-				Action: SearchCommandsAction,
-			},
 			{
 				Name:  "run",
 				Usage: "Run a command and upload its output to the server",
