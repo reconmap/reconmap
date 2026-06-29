@@ -1,11 +1,11 @@
 
 package models
 
-type Target struct {
+type Asset struct {
 
 	ProjectId int `json:"project_id"`
 	ParentId int `json:"parent_id"`
 	Name string `json:"name"`
-	Kind string `json:"kind"`
+	Type string `json:"type"`
 	Tags string `json:"tags"`
 }

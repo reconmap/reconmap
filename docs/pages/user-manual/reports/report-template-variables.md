@@ -62,7 +62,7 @@ When you are designing your pentest project template, you can reference a number
             <td>assets</td>
             <td>array</td>
             <td>Project's assets</td>
-            <td>name, kind, tags</td>
+            <td>name, type, tags</td>
         </tr>
         <tr>
             <td>tasks</td>

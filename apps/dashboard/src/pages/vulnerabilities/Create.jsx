@@ -26,7 +26,7 @@ const VulnerabilityCreate = () => {
         var formData = new FormData(document.getElementById("vulnerabilityCreateForm"));
         var fields = Object.fromEntries(formData);
         fields.tags = JSON.stringify(fields.tags.split(","));
-        fields.targetId = null;
+        fields.assetId = null;
         fields.categoryId = null;
         if (!fields.hasOwnProperty("isTemplate")) {
             fields.isTemplate = false;

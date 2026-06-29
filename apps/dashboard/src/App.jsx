@@ -17,7 +17,7 @@ import SearchRoutes from "pages/search/Routes";
 import SettingsRoutes from "pages/settings/Routes";
 import SupportRoutes from "pages/support/Routes";
 import SystemRoutes from "pages/system/Routes";
-import TargetRoutes from "pages/target/Routes";
+import AssetRoutes from "pages/asset/Routes";
 import TasksRoutes from "pages/tasks/Routes";
 import ToolsRoutes from "pages/tools/Routes";
 import UsersRoutes from "pages/users/Routes";
@@ -59,7 +59,7 @@ const App = () => {
                                     ...SettingsRoutes,
                                     ...SupportRoutes,
                                     ...SystemRoutes,
-                                    ...TargetRoutes,
+                                    ...AssetRoutes,
                                     ...TasksRoutes,
                                     ...ToolsRoutes,
                                     ...AgentRoutes,

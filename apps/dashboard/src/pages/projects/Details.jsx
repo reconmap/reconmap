@@ -18,7 +18,7 @@ import Title from "components/ui/Title";
 import ProjectAttachmentsTab from "components/projects/AttachmentsTab";
 import ProjectDetailsTab from "components/projects/DetailsTab";
 import ProjectNotesTab from "components/projects/NotesTab";
-import ProjectTargets from "components/projects/Targets";
+import ProjectAssets from "components/projects/Assets";
 import ProjectTasks from "components/projects/Tasks";
 import ProjectVaultTab from "components/projects/vault/VaultTab";
 import ProjectVulnerabilities from "components/projects/Vulnerabilities";
@@ -140,7 +140,7 @@ const ProjectDetails = () => {
                         )}
                         {2 === tabIndex && (
                             <div>
-                                <ProjectTargets project={project} />
+                                <ProjectAssets project={project} />
                             </div>
                         )}
                         {3 === tabIndex && (

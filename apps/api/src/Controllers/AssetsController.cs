@@ -48,7 +48,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
         var asset = await dbContext.Assets.FindAsync(id);
         if (asset == null) return NotFound();
 
-        var recommendation = await aiService.EnrichAssetAsync(asset.Name, asset.Kind);
+        var recommendation = await aiService.EnrichAssetAsync(asset.Name, asset.Type);
 
         return Ok(new { recommendation });
     }

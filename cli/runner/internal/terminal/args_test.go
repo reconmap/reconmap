@@ -16,23 +16,23 @@ func TestReplaceArgs(t *testing.T) {
 		{
 			name: "basic replacement",
 			command: &models.CommandUsage{
-				Arguments: "ls -la {{{target}}}",
+				Arguments: "ls -la {{{asset}}}",
 			},
-			vars:     []string{"target=example.com"},
+			vars:     []string{"asset=example.com"},
 			expected: "ls -la example.com",
 		},
 		{
 			name: "multiple variables",
 			command: &models.CommandUsage{
-				Arguments: "nmap -p {{{port}}} {{{target}}}",
+				Arguments: "nmap -p {{{port}}} {{{asset}}}",
 			},
-			vars:     []string{"port=80", "target=127.0.0.1"},
+			vars:     []string{"port=80", "asset=127.0.0.1"},
 			expected: "nmap -p 80 127.0.0.1",
 		},
 		{
 			name: "variable with description",
 			command: &models.CommandUsage{
-				Arguments: "curl {{{url:the target URL}}}",
+				Arguments: "curl {{{url:the asset URL}}}",
 			},
 			vars:     []string{"url=https://google.com"},
 			expected: "curl https://google.com",
@@ -42,24 +42,24 @@ func TestReplaceArgs(t *testing.T) {
 			command: &models.CommandUsage{
 				Arguments: "ls -la",
 			},
-			vars:     []string{"target=example.com"},
+			vars:     []string{"asset=example.com"},
 			expected: "ls -la",
 		},
 		{
 			name: "empty vars",
 			command: &models.CommandUsage{
-				Arguments: "ls {{{target}}}",
+				Arguments: "ls {{{asset}}}",
 			},
 			vars:     []string{},
-			expected: "ls {{{target}}}",
+			expected: "ls {{{asset}}}",
 		},
 		{
 			name: "invalid var format (no =)",
 			command: &models.CommandUsage{
-				Arguments: "ls {{{target}}}",
+				Arguments: "ls {{{asset}}}",
 			},
-			vars:     []string{"target"},
-			expected: "ls {{{target}}}",
+			vars:     []string{"asset"},
+			expected: "ls {{{asset}}}",
 		},
 	}
 

@@ -1,9 +1,9 @@
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
-import TargetKinds from "../../models/TargetKinds";
+import AssetTypes from "../../models/AssetTypes";
 
-const TargetForm = ({ newTarget, onFormSubmit, targetSetter: setTarget }) => {
+const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }) => {
     const onFormChange = (ev) => {
         const target = ev.target;
         const name = target.name;
@@ -13,7 +13,7 @@ const TargetForm = ({ newTarget, onFormSubmit, targetSetter: setTarget }) => {
             value = JSON.stringify(value.split(","));
         }
 
-        setTarget({ ...newTarget, [name]: value });
+        setAsset({ ...newAsset, [name]: value });
     };
 
     return (
@@ -37,12 +37,12 @@ const TargetForm = ({ newTarget, onFormSubmit, targetSetter: setTarget }) => {
                 />
 
                 <HorizontalLabelledField
-                    label="Kind"
+                    label="Type"
                     control={
-                        <NativeSelect name="kind" onChange={onFormChange}>
-                            {TargetKinds.map((targetKind, index) => (
-                                <option key={index} value={targetKind.value}>
-                                    {targetKind.description}
+                        <NativeSelect name="type" onChange={onFormChange}>
+                            {AssetTypes.map((assetType, index) => (
+                                <option key={index} value={assetType.value}>
+                                    {assetType.description}
                                 </option>
                             ))}
                         </NativeSelect>
@@ -53,4 +53,4 @@ const TargetForm = ({ newTarget, onFormSubmit, targetSetter: setTarget }) => {
     );
 };
 
-export default TargetForm;
+export default AssetForm;

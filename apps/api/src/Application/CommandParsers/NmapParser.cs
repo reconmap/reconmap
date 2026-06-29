@@ -40,7 +40,7 @@ public class NmapParser(IAttachmentStorage attachmentStorage) : ICommandParser
                 continue;
 
             var hostAsset = new Asset();
-            hostAsset.Kind = "hostname";
+            hostAsset.Type = "hostname";
             hostAsset.Name = hostAddress;
 
             var addrType = (string)addressElement.Attribute("addrtype");
@@ -55,7 +55,7 @@ public class NmapParser(IAttachmentStorage attachmentStorage) : ICommandParser
                         if (int.TryParse((string)port.Attribute("portid"), out var portNumber))
                         {
                             var portAsset = new Asset();
-                            portAsset.Kind = "port";
+                            portAsset.Type = "port";
                             portAsset.Name = portNumber.ToString();
 
                             //hostAsset.AddChild(portAsset);

@@ -1,8 +1,8 @@
 import { useAssetsQuery, useDeleteAssetMutation } from "api/assets.js";
 import PaginationV2 from "components/layout/PaginationV2";
 import RestrictedComponent from "components/logic/RestrictedComponent";
-import TargetModalDialog from "components/target/ModalDialog";
-import TargetBadge from "components/target/TargetBadge";
+import AssetModalDialog from "components/asset/ModalDialog";
+import AssetBadge from "components/asset/AssetBadge";
 import Tags from "components/ui/Tags";
 import CreateButton from "components/ui/buttons/Create";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
@@ -13,29 +13,29 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Loading from "../ui/Loading";
 
-const ProjectTargets = ({ project }) => {
+const ProjectAssets = ({ project }) => {
     const query = useQuery();
     const urlPageNumber = query.get("page") !== null ? parseInt(query.get("page")) : 1;
     const [pageNumber, setPageNumber] = useState(urlPageNumber);
 
-    const { value: isAddTargetDialogOpen, setTrue: openAddTargetDialog, setFalse: closeAddTargetDialog } = useBoolean();
+    const { value: isAddAssetDialogOpen, setTrue: openAddAssetDialog, setFalse: closeAddAssetDialog } = useBoolean();
     const {
-        data: targets,
+        data: assets,
         isLoading,
         refetch,
     } = useAssetsQuery({ limit: 5, projectId: project.id, page: pageNumber - 1 });
     const deleteAssetMutation = useDeleteAssetMutation();
 
-    const onDeleteButtonClick = (ev, targetId) => {
+    const onDeleteButtonClick = (ev, assetId) => {
         ev.preventDefault();
 
-        deleteAssetMutation.mutate(targetId);
+        deleteAssetMutation.mutate(assetId);
         refetch();
     };
 
-    const onTargetFormSaved = () => {
+    const onAssetFormSaved = () => {
         refetch();
-        closeAddTargetDialog();
+        closeAddAssetDialog();
     };
 
     const onPageChange = (pageNumber) => {
@@ -45,23 +45,23 @@ const ProjectTargets = ({ project }) => {
     const columns = [
         {
             header: "Name",
-            cell: (target) => <>
-                {!target.parent_id && (
-                    <Link to={`/targets/${target.id}`}>
-                        <TargetBadge name={target.name} />
+            cell: (asset) => <>
+                {!asset.parent_id && (
+                    <Link to={`/assets/${asset.id}`}>
+                        <AssetBadge name={asset.name} />
                     </Link>
                 )}
-                {target.parent_id !== null && <>{target.parent?.name}</>}
+                {asset.parent_id !== null && <>{asset.parent?.name}</>}
             </>
         },
         {
-            header: "Sub-target",
-            cell: (target) => (
+            header: "Sub-asset",
+            cell: (asset) => (
                 <>
-                    {target.parent_id ? (
+                    {asset.parent_id ? (
                         <>
-                            <Link to={`/targets/${target.id}`}>
-                                <TargetBadge name={target.name} />
+                            <Link to={`/assets/${asset.id}`}>
+                                <AssetBadge name={asset.name} />
                             </Link>
                         </>
                     ) : (
@@ -71,28 +71,28 @@ const ProjectTargets = ({ project }) => {
             )
         },
         {
-            header: "Kind",
-            cell: (target) => (
+            header: "Type",
+            cell: (asset) => (
                 <>
-                    {target.kind} <Tags values={target.tags} />
+                    {asset.type} <Tags values={asset.tags} />
                 </>
             )
         },
         {
             header: "Vulnerable?",
-            cell: (target) => (
+            cell: (asset) => (
                 <>
-                    {target.num_vulnerabilities > 0
-                        ? `Yes (${target.num_vulnerabilities} vulnerabilities found)`
+                    {asset.num_vulnerabilities > 0
+                        ? `Yes (${asset.num_vulnerabilities} vulnerabilities found)`
                         : "No"}
                 </>
             )
         },
         {
             header: "",
-            cell: (target) => (
+            cell: (asset) => (
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                    <DeleteIconButton onClick={(ev) => onDeleteButtonClick(ev, target.id)} />
+                    <DeleteIconButton onClick={(ev) => onDeleteButtonClick(ev, asset.id)} />
                 </RestrictedComponent>
             )
         }
@@ -103,25 +103,25 @@ const ProjectTargets = ({ project }) => {
             <h4 className="title is-4">Assets</h4>
             {!project.archived && (
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                    <TargetModalDialog
+                    <AssetModalDialog
                         project={project}
-                        isOpen={isAddTargetDialogOpen}
-                        onSubmit={onTargetFormSaved}
-                        onCancel={closeAddTargetDialog}
+                        isOpen={isAddAssetDialogOpen}
+                        onSubmit={onAssetFormSaved}
+                        onCancel={closeAddAssetDialog}
                     />
-                    <CreateButton onClick={openAddTargetDialog}>Add asset&hellip;</CreateButton>
+                    <CreateButton onClick={openAddAssetDialog}>Add asset&hellip;</CreateButton>
                 </RestrictedComponent>
             )}
             {isLoading ? (
                 <Loading />
             ) : (
                 <>
-                    {targets.pageCount > 1 && (
+                    {assets.pageCount > 1 && (
                         <center>
-                            <PaginationV2 page={pageNumber - 1} total={targets.pageCount} onPageChange={onPageChange} />
+                            <PaginationV2 page={pageNumber - 1} total={assets.pageCount} onPageChange={onPageChange} />
                         </center>
                     )}
-                    <NativeTable rows={targets.data} rowId={(target) => target.id} columns={columns}>
+                    <NativeTable rows={assets.data} rowId={(asset) => asset.id} columns={columns}>
                     </NativeTable>
                 </>
             )}
@@ -129,4 +129,4 @@ const ProjectTargets = ({ project }) => {
     );
 };
 
-export default ProjectTargets;
+export default ProjectAssets;

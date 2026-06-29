@@ -107,9 +107,9 @@ export const SettingsUrls = {
     CustomFields: "/settings/custom-fields",
 };
 
-export const TargetUrls = {
-    Add: "/projects/:projectId/targets/add",
-    Details: "/targets/:targetId",
+export const AssetUrls = {
+    Add: "/projects/:projectId/assets/add",
+    Details: "/assets/:assetId",
 };
 
 export const NotificationsUrls = {

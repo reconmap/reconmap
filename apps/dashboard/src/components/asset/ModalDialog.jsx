@@ -4,31 +4,31 @@ import PrimaryButton from "components/ui/buttons/Primary.jsx";
 import ModalDialog from "components/ui/ModalDIalog.jsx";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import TargetIcon from "images/icons/target.svg?react";
-import TargetKinds from "models/TargetKinds";
+import AssetTypes from "models/AssetTypes";
 import { useState } from "react";
-import TargetForm from "./Form";
+import AssetForm from "./Form";
 
-const TargetModalDialog = ({ project, isOpen, onSubmit, onCancel }) => {
-    const emptyTarget = {
+const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }) => {
+    const emptyAsset = {
         projectId: project.id,
         name: null,
-        kind: TargetKinds[0].value,
+        type: AssetTypes[0].value,
     };
-    const [target, setTarget] = useState(emptyTarget);
+    const [asset, setAsset] = useState(emptyAsset);
 
-    const onAddTargetFormSubmit = (ev) => {
+    const onAddAssetFormSubmit = (ev) => {
         ev.preventDefault();
 
-        requestAssetPost(target)
+        requestAssetPost(asset)
             .then(() => {
                 onSubmit();
-                actionCompletedToast(`The target "${target.name}" has been added.`);
+                actionCompletedToast(`The asset "${asset.name}" has been added.`);
             })
             .catch((err) => {
                 errorToast(err);
             })
             .finally(() => {
-                setTarget(emptyTarget);
+                setAsset(emptyAsset);
             });
     };
 
@@ -47,16 +47,16 @@ const TargetModalDialog = ({ project, isOpen, onSubmit, onCancel }) => {
         >
             <div>
                 <div>
-                    <TargetForm newTarget={target} onFormSubmit={onAddTargetFormSubmit} targetSetter={setTarget} />
+                    <AssetForm newAsset={asset} onFormSubmit={onAddAssetFormSubmit} assetSetter={setAsset} />
                 </div>
 
                 <div>
                     <NativeButton onClick={onCancel}>Cancel</NativeButton>
-                    <PrimaryButton onClick={onAddTargetFormSubmit}>Save</PrimaryButton>
+                    <PrimaryButton onClick={onAddAssetFormSubmit}>Save</PrimaryButton>
                 </div>
             </div>
         </ModalDialog>
     );
 };
 
-export default TargetModalDialog;
+export default AssetModalDialog;

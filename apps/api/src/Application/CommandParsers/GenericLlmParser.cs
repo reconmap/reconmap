@@ -37,7 +37,7 @@ public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmen
             result.AddAsset(new Asset
             {
                 Name = aiAsset.Name,
-                Kind = aiAsset.Kind
+                Type = aiAsset.Type
             });
         }
 

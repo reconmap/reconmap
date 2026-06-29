@@ -80,7 +80,7 @@ public class SystemDataController(AppDbContext db) : AppController(db)
             ["project_templates"] = async ct =>
                 await _db.Projects.AsNoTracking().Where(p => p.IsTemplate).ToListAsync(ct),
             ["tasks"] = async ct => await _db.Tasks.AsNoTracking().ToListAsync(ct),
-            ["targets"] = async ct => await _db.Assets.AsNoTracking().ToListAsync(ct),
+            ["assets"] = async ct => await _db.Assets.AsNoTracking().ToListAsync(ct),
             ["organisations"] = async ct => await _db.Organisations.AsNoTracking().ToListAsync(ct),
             ["users"] = async ct => await _db.Users.AsNoTracking().ToListAsync(ct),
             ["vulnerabilities"] = async ct =>

@@ -20,13 +20,13 @@ const TopVulnerableAssetsWidget = () => {
     const assetCountsMap = {};
     if (vulnerabilities && vulnerabilities.data) {
         vulnerabilities.data.forEach((vuln) => {
-            if (vuln.targetId && vuln.asset) {
-                const assetId = vuln.targetId;
+            if (vuln.assetId && vuln.asset) {
+                const assetId = vuln.assetId;
                 if (!assetCountsMap[assetId]) {
                     assetCountsMap[assetId] = {
                         id: assetId,
                         name: vuln.asset.name,
-                        kind: vuln.asset.kind,
+                        type: vuln.asset.type,
                         critical: 0,
                         high: 0,
                         medium: 0,
@@ -57,7 +57,7 @@ const TopVulnerableAssetsWidget = () => {
                     <thead>
                         <tr>
                             <th>Asset</th>
-                            <th>Kind</th>
+                            <th>Type</th>
                             <th className="has-text-centered">Findings</th>
                             <th>Breakdown</th>
                         </tr>
@@ -66,10 +66,10 @@ const TopVulnerableAssetsWidget = () => {
                         {sortedAssets.map((asset) => (
                             <tr key={asset.id}>
                                 <td>
-                                    <Link to={`/targets/${asset.id}`}><strong>{asset.name}</strong></Link>
+                                    <Link to={`/assets/${asset.id}`}><strong>{asset.name}</strong></Link>
                                 </td>
                                 <td>
-                                    <span className="tag is-light">{asset.kind}</span>
+                                    <span className="tag is-light">{asset.type}</span>
                                 </td>
                                 <td className="has-text-centered">
                                     <span className="tag is-danger is-light"><strong>{asset.total}</strong></span>

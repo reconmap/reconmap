@@ -20,8 +20,8 @@ public class AiAsset
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
-    [JsonPropertyName("kind")]
-    public string Kind { get; set; } = "hostname";
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = "hostname";
 }
 
 public class AiFinding
@@ -46,7 +46,7 @@ public interface IAiService
 {
     Task<string> GenerateRemediationAsync(string vulnerabilitySummary);
     Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output);
-    Task<string> EnrichAssetAsync(string assetName, string assetKind);
+    Task<string> EnrichAssetAsync(string assetName, string assetType);
 }
 
 public sealed class AiService(IAiSettingsService aiSettingsService) : IAiService
@@ -92,7 +92,7 @@ The output should contain a list of Assets (targets) and Vulnerabilities (findin
 Strictly follow this JSON schema:
 {{
   ""assets"": [
-    {{ ""name"": ""string (e.g. hostname, IP)"", ""kind"": ""string (e.g. hostname, ip, url)"" }}
+    {{ ""name"": ""string (e.g. hostname, IP)"", ""type"": ""string (e.g. hostname, ip, url)"" }}
   ],
   ""findings"": [
     {{
@@ -145,9 +145,9 @@ Command Output:
         }
     }
 
-    public async Task<string> EnrichAssetAsync(string assetName, string assetKind)
+    public async Task<string> EnrichAssetAsync(string assetName, string assetType)
     {
-        var prompt = $"As a penetration tester, suggest the next steps and potential tools to use for scanning this asset: {assetName} (Kind: {assetKind}). Provide a concise list of recommended commands.";
+        var prompt = $"As a penetration tester, suggest the next steps and potential tools to use for scanning this asset: {assetName} (Type: {assetType}). Provide a concise list of recommended commands.";
 
         var settings = await aiSettingsService.GetSettingsAsync();
         var client = await GetClientAsync();

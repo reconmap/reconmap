@@ -76,7 +76,7 @@ public class CommandResultProcessor(
                     finding.CreatedByUid = job.UserId;
                     if (finding.Asset != null)
                     {
-                        finding.TargetId = await GetAssetId(db, finding.Asset);
+                        finding.AssetId = await GetAssetId(db, finding.Asset);
                         finding.Asset = null;
                     }
 
@@ -136,14 +136,14 @@ public class CommandResultProcessor(
     {
         return await db.Vulnerabilities.AnyAsync(v =>
             v.ProjectId == finding.ProjectId &&
-            v.TargetId == finding.TargetId &&
+            v.AssetId == finding.AssetId &&
             v.Summary == finding.Summary &&
             v.Status == "open");
     }
 
     private async Task<uint> GetAssetId(AppDbContext db, Asset asset)
     {
-        var dbAsset = await db.Assets.AsNoTracking().Where(a => a.Kind == asset.Kind && a.Name == asset.Name)
+        var dbAsset = await db.Assets.AsNoTracking().Where(a => a.Type == asset.Type && a.Name == asset.Name)
             .SingleOrDefaultAsync();
         if (dbAsset != null) return dbAsset.Id;
 

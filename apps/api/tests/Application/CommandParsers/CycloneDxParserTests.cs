@@ -91,7 +91,7 @@ public class CycloneDxParserTests
         Assert.Single(result.assets);
         var asset = result.assets.First();
         Assert.Equal("log4j-core@2.14.1", asset.Name);
-        Assert.Equal("package", asset.Kind);
+        Assert.Equal("package", asset.Type);
         Assert.Contains("license:Apache-2.0", asset.Tags);
         Assert.Contains("purl:pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1", asset.Tags);
 

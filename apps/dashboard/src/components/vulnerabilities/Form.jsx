@@ -17,16 +17,16 @@ import Primary from "../ui/buttons/Primary";
 import CvssAbbr from "./CvssAbbr";
 import CvssCalculator from "./CvssCalculator";
 
-const TargetsSelectControl = ({ projectId, value, onFormChange }) => {
-    const { data: targets, isLoading } = useAssetsQuery({ projectId });
+const AssetsSelectControl = ({ projectId, value, onFormChange }) => {
+    const { data: assets, isLoading } = useAssetsQuery({ projectId });
 
     return (
-        <NativeSelect name="targetId" value={value} onChange={onFormChange}>
+        <NativeSelect name="assetId" value={value} onChange={onFormChange}>
             <option value="0">(none)</option>
             {!isLoading &&
-                targets.data.map((target, index) => (
-                    <option key={index} value={target.id}>
-                        {target.name}
+                assets.data.map((asset, index) => (
+                    <option key={index} value={asset.id}>
+                        {asset.name}
                     </option>
                 ))}
         </NativeSelect>
@@ -66,7 +66,7 @@ const VulnerabilityForm = ({
                 setVulnerability(v => ({
                     ...v,
                     projectId: targetProjectId,
-                    targetId: 0,
+                    assetId: 0,
                 }));
             }
         }
@@ -102,7 +102,7 @@ const VulnerabilityForm = ({
         setVulnerability({
             ...vulnerability,
             [name]: value,
-            targetId: 0,
+            assetId: 0,
         });
     };
 
@@ -280,11 +280,11 @@ const VulnerabilityForm = ({
 
                         <HorizontalLabelledField
                             label="Affected asset"
-                            htmlFor="targetId"
+                            htmlFor="assetId"
                             control={
-                                <TargetsSelectControl
+                                <AssetsSelectControl
                                     projectId={vulnerability.projectId}
-                                    value={vulnerability.targetId}
+                                    value={vulnerability.assetId}
                                     onFormChange={onFormChange}
                                 />
                             }

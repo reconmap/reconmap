@@ -54,19 +54,19 @@ public class VulnerabilitiesController(
     [HttpGet]
     public async Task<IActionResult> GetMany(
         [FromQuery] int? projectId,
-        [FromQuery] int? targetId,
+        [FromQuery] int? assetId,
         [FromQuery] string? status,
         [FromQuery] string? risk)
     {
         var q = _dbContext.Vulnerabilities
-            .Include(v => v.Project)
-            .Include(v => v.Asset)
-            .AsNoTracking()
-            .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk);
-        if (projectId.HasValue)
-            q = q.Where(v => v.ProjectId == projectId);
-        if(targetId.HasValue)
-            q = q.Where(v => v.TargetId == targetId);
+             .Include(v => v.Project)
+             .Include(v => v.Asset)
+             .AsNoTracking()
+             .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk);
+         if (projectId.HasValue)
+             q = q.Where(v => v.ProjectId == projectId);
+         if(assetId.HasValue)
+             q = q.Where(v => v.AssetId == assetId);
         if (!string.IsNullOrWhiteSpace(status))
             q = q.Where(v => v.Status == status);
         q = q.OrderByDescending(a => a.CreatedAt);

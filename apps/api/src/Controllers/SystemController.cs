@@ -29,7 +29,7 @@ public static class ExportablesRegistry
             Key = "project_templates", Description = "Project templates"
         }, //ClassType = typeof(ProjectTemplatesExporter) },
         new() { Key = "tasks", Description = "Tasks" }, //ClassType = typeof(TasksExporter) },
-        new() { Key = "targets", Description = "Targets" }, //ClassType = typeof(TargetsExporter) },
+        new() { Key = "assets", Description = "Assets" }, //ClassType = typeof(AssetsExporter) },
         new() { Key = "organisations", Description = "Organisations" }, //ClassType = typeof(ClientsExporter) },
         new() { Key = "users", Description = "Users" }, //ClassType = typeof(UsersExporter) },
         new()

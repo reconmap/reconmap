@@ -54,7 +54,7 @@ public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandPar
                 var assetName = string.IsNullOrEmpty(version) ? name : $"{name}@{version}";
                 var asset = new Asset
                 {
-                    Kind = "package",
+                    Type = "package",
                     Name = assetName,
                     ProjectId = job.ProjectId
                 };

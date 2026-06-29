@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Standardized entity and parameter naming by renaming all remaining references of "target/targets" to "asset/assets", and renamed asset "kind/kinds" to "type/types" across the database schema, C# API entities, Go CLI models, and React dashboard components.
 - Replaced the third-party `@uiw/react-md-editor` component in the React dashboard with a custom, lightweight markdown editor featuring a native `<textarea>`, a basic formatting toolbar (bold, italic, headers, links, code, lists), and a tabbed edit/preview view.
 - Standardized vulnerability metrics strictly on the CVSS v4.0 standard, replacing generic metric properties with explicit `cvss_score` and `cvss_vector` fields.
 

@@ -243,9 +243,9 @@ CREATE TABLE project_user
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS target;
+DROP TABLE IF EXISTS asset;
 
-CREATE TABLE target
+CREATE TABLE asset
 (
     id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
     parent_id  INT UNSIGNED NULL,
@@ -253,12 +253,12 @@ CREATE TABLE target
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NULL ON UPDATE CURRENT_TIMESTAMP,
     name       VARCHAR(200) NOT NULL,
-    kind       ENUM ('hostname', 'ip_address', 'port', 'cidr_range', 'url', 'binary', 'path', 'file'),
+    type       ENUM ('hostname', 'ip_address', 'port', 'cidr_range', 'url', 'binary', 'path', 'file'),
     tags       JSON         NULL,
 
     PRIMARY KEY (id),
     UNIQUE KEY (project_id, name),
-    FOREIGN KEY (parent_id) REFERENCES target (id) ON DELETE CASCADE,
+    FOREIGN KEY (parent_id) REFERENCES asset (id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
@@ -290,9 +290,9 @@ CREATE TABLE vulnerability
 
     is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
 
-    external_id            VARCHAR(50)                                                                                        NULL COMMENT 'External reference eg RMAP-CLIENT-001',
+        external_id            VARCHAR(50)                                                                                        NULL COMMENT 'External reference eg RMAP-CLIENT-001',
     project_id             INT UNSIGNED                                                                                       NULL,
-    target_id              INT UNSIGNED                                                                                       NULL,
+    asset_id              INT UNSIGNED                                                                                       NULL,
     category_id            INT UNSIGNED                                                                                       NULL,
 
     summary                VARCHAR(500)                                                                                       NOT NULL,
@@ -316,11 +316,11 @@ CREATE TABLE vulnerability
     custom_fields          JSON                                                                                               NULL,
 
     PRIMARY KEY (id),
-    UNIQUE KEY (project_id, target_id, summary),
+    UNIQUE KEY (project_id, asset_id, summary),
     KEY (is_template),
     FOREIGN KEY (created_by_uid) REFERENCES user (id) ON DELETE NO ACTION,
     CONSTRAINT vulnerability_fk_project_id FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
-    FOREIGN KEY (target_id) REFERENCES target (id) ON DELETE SET NULL,
+    FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES vulnerability_category (id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 

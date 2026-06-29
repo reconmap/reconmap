@@ -15,7 +15,7 @@ properties:
     nullable: true
   name:
     type: string
-  kind:
+  type:
     type: string
     nullable: true
     enum:

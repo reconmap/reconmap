@@ -75,7 +75,7 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
             "documents" => await ImportAsync(element, _db.Documents, cancellationToken),
             "projects" or "project_templates" => await ImportAsync(element, _db.Projects, cancellationToken),
             "tasks" => await ImportAsync(element, _db.Tasks, cancellationToken),
-            "targets" => await ImportAsync(element, _db.Assets, cancellationToken),
+            "assets" => await ImportAsync(element, _db.Assets, cancellationToken),
             "organisations" => await ImportAsync(element, _db.Organisations, cancellationToken),
             "users" => await ImportAsync(element, _db.Users, cancellationToken),
             "vault" => await ImportAsync(element, _db.Secrets, cancellationToken),
