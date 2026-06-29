@@ -14,7 +14,7 @@ This is the main orchestration repository. It contains:
    - `runner/`: The Reconmap runner (`rmap`).
    - `shared-lib/`: Shared Go libraries for CLI tools.
 4. **Documentation**: MkDocs-based documentation in `docs/`.
-5. **Data & Seed Data**: JSON templates for initial imports in `data/imports/`, model definitions in `data/model-definitions/`, and file attachments in `data/attachments/`.
+5. **Data & Seed Data**: JSON templates for initial imports in `data/imports/`, and model definitions in `data/model-definitions/`.
 
 ## Key Architectural Concepts
 

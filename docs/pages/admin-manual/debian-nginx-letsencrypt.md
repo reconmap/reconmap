@@ -119,8 +119,6 @@ sudo certbot -d "YOUR-SECURITY-COMPANY-DOMAIN.com,auth.YOUR-SECURITY-COMPANY-DOM
 ```shell
 mkdir reconmap && cd reconmap
 
-mkdir -p data/attachments && chmod ug+w data/attachments/
-
 mkdir -p logs && chmod ug+w logs
 
 wget https://raw.githubusercontent.com/reconmap/reconmap/master/compose.yaml

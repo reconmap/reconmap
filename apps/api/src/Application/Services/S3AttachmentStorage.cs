@@ -28,7 +28,7 @@ public class S3AttachmentStorage : IAttachmentStorage
             await _s3Client.PutBucketAsync(bucketName);
 
             // Seed from local directory if present
-            var seedPaths = new[] { "/seed/attachments", "../data/attachments", "data/attachments", "../../data/attachments" };
+            var seedPaths = new[] { "/seed/attachments", "data/attachments" };
             foreach (var seedPath in seedPaths)
             {
                 if (Directory.Exists(seedPath))

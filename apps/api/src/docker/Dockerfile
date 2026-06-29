@@ -21,6 +21,6 @@ LABEL org.opencontainers.image.vendor="Netfoe" \
 
 WORKDIR /app
 RUN mkdir -p /seed/attachments
-COPY data/attachments /seeds/attachments
+COPY data/attachments /seed/attachments
 COPY --from=build /build/publish .
 ENTRYPOINT ["/app/App"]

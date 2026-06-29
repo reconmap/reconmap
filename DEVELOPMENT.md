@@ -21,7 +21,6 @@ Welcome! This guide helps you set up and contribute to the Reconmap ecosystem.
 - `data/`: Data-related files and seed data.
     - `imports/`: Seed data for fresh installations.
     - `model-definitions/`: Database and model definitions.
-    - `attachments/`: Default location for file attachments.
 - `docs/`: Product documentation (MkDocs).
 - `infra/`: Infrastructure files (K8s, Docker).
 

@@ -34,7 +34,6 @@ A directory of important files and folders in the Reconmap repository.
 - `docs/`: Markdown files for user and developer manuals.
 - `data/imports/`: JSON seed data for initial setup (commands, project templates).
 - `data/model-definitions/`: Database and model definitions.
-- `data/attachments/`: Default location for file attachments.
 
 ## Metadata & Guidelines
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Removed obsolete references and configuration mounts for `data/attachments` (templates are now packaged inside the API container).
+
 ### Added
 
 - Added ability to select multiple notifications and perform bulk actions (mark as read, mark as unread, delete).

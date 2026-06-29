@@ -105,7 +105,6 @@ services:
     image: ghcr.io/reconmap/ng-api:latest
     volumes:
       - "./config-ngapi.json:/app/appsettings.json"
-      - "./data/attachments:/seed/attachments:ro"
       - dataprotection-keys:/root/.aspnet/DataProtection-Keys
     ports:
       - "5510:5510"
