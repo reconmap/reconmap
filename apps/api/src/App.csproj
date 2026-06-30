@@ -23,6 +23,7 @@
         <PackageReference Include="Microsoft.Extensions.AI" Version="9.0.0-preview.9.24507.7" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.0.0-preview.9.24507.7" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.2" />
+        <PackageReference Include="ModelContextProtocol.AspNetCore" Version="1.4.0" />
         <PackageReference Include="OllamaSharp" Version="5.4.25" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
         <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />

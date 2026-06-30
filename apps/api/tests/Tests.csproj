@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\App.csproj" />
+    <ProjectReference Include="..\McpServer\McpServer.csproj" />
   </ItemGroup>
 
 </Project>

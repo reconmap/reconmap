@@ -19,6 +19,7 @@
 - Execute security commands instantly or schedule them for later
 - Automatically capture and store command outputs while tracking identified vulnerabilities
 - Generate professional reports in formats like Word, Markdown and HTML.
+- **Model Context Protocol (MCP)** support to integrate Reconmap seamlessly with AI assistants and LLMs.
 - And much more to streamline your security assessments!
 
 ## Try it

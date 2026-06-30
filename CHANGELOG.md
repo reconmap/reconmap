@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implemented an experimental Model Context Protocol (MCP) server under `apps/api/McpServer` to expose Reconmap tools and resources (projects, tasks, findings, documents, agents) to AI assistants.
 - Added a comprehensive `NOTES.txt` post-installation message to the unified `reconmap` Helm chart detailing service URLs, port-forwarding instructions, and default credentials.
 - Added a `Makefile` to the unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` to validate (lint), install, uninstall, and retrieve values/manifests.
 - Created a unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` that packages the complete platform stack (Dashboard, API, Keycloak, MySQL, Redis, RabbitMQ) into a single, cohesive, and configurable installation.
