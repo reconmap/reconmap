@@ -1,0 +1,60 @@
+Reconmap has been successfully installed!
+
+###############################################################################
+###                           Accessing Reconmap                            ###
+###############################################################################
+
+{{- if contains "LoadBalancer" .Values.dashboard.service.type }}
+1. Get the Dashboard URL by running these commands:
+   NOTE: It may take a few minutes for the LoadBalancer IP/Hostname to be available.
+         If you are running in a local environment (like minikube), ensure you run 'minikube tunnel' in a separate terminal.
+
+   export DASHBOARD_IP=$(kubectl get svc dashboard --namespace {{ .Values.global.namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+   if [ -z "$DASHBOARD_IP" ]; then
+     export DASHBOARD_IP=$(kubectl get svc dashboard --namespace {{ .Values.global.namespace }} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+   fi
+   echo "Dashboard URL: http://$DASHBOARD_IP:{{ .Values.dashboard.service.port }}"
+
+{{- else if contains "NodePort" .Values.dashboard.service.type }}
+1. Get the Dashboard URL by running these commands:
+   export NODE_PORT=$(kubectl get --namespace {{ .Values.global.namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services dashboard)
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Values.global.namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Dashboard URL: http://$NODE_IP:$NODE_PORT"
+
+{{- else }}
+1. Access the Dashboard by port-forwarding:
+   kubectl port-forward svc/dashboard 5500:{{ .Values.dashboard.service.port }} --namespace {{ .Values.global.namespace }}
+   echo "Dashboard URL: http://localhost:5500"
+{{- end }}
+
+2. To access the REST API (ngapi) and Keycloak services externally, you can also port-forward them:
+   
+   # Forward the REST API (Port 5510)
+   kubectl port-forward svc/ngapi 5510:5510 --namespace {{ .Values.global.namespace }} &
+
+   # Forward Keycloak Auth Server (Port 8080)
+   kubectl port-forward svc/keycloak 8080:8080 --namespace {{ .Values.global.namespace }} &
+
+###############################################################################
+###                           Default Credentials                           ###
+###############################################################################
+
+Keycloak Admin Console:
+- URL: http://localhost:8080/auth/ (or external Keycloak IP)
+- Admin Username: {{ .Values.keycloak.bootstrapAdminUser }}
+- Admin Password: {{ .Values.keycloak.bootstrapAdminPassword }}
+
+Database Configuration (MySQL):
+- Host: mysql.{{ .Values.global.namespace }}.svc.cluster.local
+- Database Name: {{ .Values.mysql.database }}
+- Username: {{ .Values.mysql.user }}
+- Password: {{ .Values.mysql.password }}
+
+Redis Cache Configuration:
+- Host: redis.{{ .Values.global.namespace }}.svc.cluster.local
+- Password: {{ .Values.redis.password }}
+
+RabbitMQ Message Queue Configuration:
+- Host: rabbitmq.{{ .Values.global.namespace }}.svc.cluster.local
+- Username: {{ .Values.rabbitmq.defaultUser }}
+- Password: {{ .Values.rabbitmq.defaultPass }}

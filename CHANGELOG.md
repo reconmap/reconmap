@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a comprehensive `NOTES.txt` post-installation message to the unified `reconmap` Helm chart detailing service URLs, port-forwarding instructions, and default credentials.
+- Added a `Makefile` to the unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` to validate (lint), install, uninstall, and retrieve values/manifests.
 - Created a unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` that packages the complete platform stack (Dashboard, API, Keycloak, MySQL, Redis, RabbitMQ) into a single, cohesive, and configurable installation.
 - Added RabbitMQ deployment and service manifests to the Kubernetes configuration, and registered the corresponding RabbitMQ connection settings in the API ConfigMap.
 - Added "Agents" dashboard widget to show status of registered security agents.
@@ -17,12 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Standardized the REST API (`ngapi`) port to `5510` across all Kubernetes raw manifests, Helm templates, values, and port-forwarding scripts, aligning with local development configuration.
+- Updated network ports documentation (`docs/pages/admin-manual/network-ports.md`) to correctly reflect all ports used by the application components (including Keycloak, RabbitMQ, and Rustfs).
 - Standardized entity and parameter naming by renaming all remaining references of "target/targets" to "asset/assets", and renamed asset "kind/kinds" to "type/types" across the database schema, C# API entities, Go CLI models, and React dashboard components.
 - Replaced the third-party `@uiw/react-md-editor` component in the React dashboard with a custom, lightweight markdown editor featuring a native `<textarea>`, a basic formatting toolbar (bold, italic, headers, links, code, lists), and a tabbed edit/preview view.
 - Standardized vulnerability metrics strictly on the CVSS v4.0 standard, replacing generic metric properties with explicit `cvss_score` and `cvss_vector` fields.
 
 ### Removed
 
+- Removed the deprecated and obsolete `dashboard` Helm chart (`infra/k8s/helm-charts/dashboard`) in favor of the unified `reconmap` Helm chart.
 - Removed the "Popular commands" widget from the dashboard as commands are now static/hardcoded.
 - Removed command search capability from both the React dashboard search results and the Go `rmap` runner CLI tool, as commands are now static.
 - Removed the `@uiw/react-md-editor` dependency from the dashboard application.

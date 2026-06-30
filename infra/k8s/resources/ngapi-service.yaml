@@ -7,8 +7,8 @@ metadata:
   namespace: nonprod
 spec:
   ports:
-    - name: "5253"
-      port: 5253
-      targetPort: 5253
+    - name: "5510"
+      port: 5510
+      targetPort: 5510
   selector:
     app.kubernetes.io/name: ngapi

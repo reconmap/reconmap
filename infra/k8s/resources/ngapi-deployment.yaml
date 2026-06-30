@@ -22,11 +22,11 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
             - name: ASPNETCORE_URLS
-              value: http://0.0.0.0:5253
+              value: http://0.0.0.0:5510
           image: ghcr.io/reconmap/ng-api:latest
           name: rmap-ngapi
           ports:
-            - containerPort: 5253
+            - containerPort: 5510
               protocol: TCP
           volumeMounts:
             - mountPath: /app/appsettings.json

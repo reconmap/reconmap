@@ -9,9 +9,9 @@ metadata:
   namespace: {{ .Values.global.namespace }}
 spec:
   ports:
-    - name: "5253"
-      port: 5253
-      targetPort: 5253
+    - name: "5510"
+      port: 5510
+      targetPort: 5510
   selector:
     {{- include "reconmap.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: api

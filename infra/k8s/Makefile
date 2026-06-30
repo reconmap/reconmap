@@ -8,7 +8,7 @@ deploy:
 	done
 
 portforward:
-	@kubectl port-forward service/ngapi 5253:5253 & \
+	@kubectl port-forward service/ngapi 5510:5510 & \
 	kubectl port-forward service/dashboard 5500:5500 & \
 	kubectl port-forward service/keycloak 8080:8080 &
 

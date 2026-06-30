@@ -29,11 +29,18 @@ Alternatively, you can deploy the entire stack using the unified Helm chart, whi
 # 1. Move to the helm-charts directory
 cd helm-charts/reconmap
 
-# 2. Deploy using Helm
+# 2. Deploy using Helm (or use `make install`)
 helm install reconmap .
 ```
 
 To configure custom options, secrets, or external databases, modify `values.yaml` or provide your overrides using `--set` or a custom values file.
+
+A `Makefile` is also available in the `reconmap` Helm chart directory for convenience:
+- `make validate`: Lints the Helm chart.
+- `make install`: Lints and installs the `reconmap` chart.
+- `make uninstall`: Uninstalls the `reconmap` chart.
+- `make get-values`: Gets the active release values.
+- `make get-manifest`: Gets the active release manifest.
 
 ## Tear down
 
@@ -47,6 +54,7 @@ To uninstall the Helm release:
 
 ```shell
 helm uninstall reconmap
+# Or run `make uninstall` from the `helm-charts/reconmap` directory
 ```
 
 ## Troubleshooting

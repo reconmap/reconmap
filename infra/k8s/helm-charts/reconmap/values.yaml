@@ -56,7 +56,7 @@ api:
     tag: latest
     pullPolicy: IfNotPresent
   environment: Production
-  urls: http://0.0.0.0:5253
+  urls: http://0.0.0.0:5510
   persistence:
     size: 100Mi
 

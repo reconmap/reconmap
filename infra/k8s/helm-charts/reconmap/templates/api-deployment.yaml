@@ -31,7 +31,7 @@ spec:
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           name: rmap-ngapi
           ports:
-            - containerPort: 5253
+            - containerPort: 5510
               protocol: TCP
           volumeMounts:
             - mountPath: /app/appsettings.json
