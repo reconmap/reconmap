@@ -2964,14 +2964,17 @@
 <hr />
 <h3 id="kubernetes">Kubernetes</h3>
 <p><strong>Best for:</strong> Production deployments, large teams, and publicly accessible instances.</p>
-<p>Kubernetes provides the scalability and resilience needed for running Reconmap in production. Helm charts and raw Kubernetes resource manifests are provided in the <code>infra/k8s/</code> directory of this repository.</p>
+<p>Kubernetes provides the scalability and resilience needed for running Reconmap in production. </p>
+<p>Reconmap supports two deployment methods on Kubernetes:
+1. <strong>Unified Helm Chart (Recommended)</strong>: Packages the entire platform stack (Dashboard, API, Keycloak, MySQL, Redis, RabbitMQ) into a single, highly configurable installation release.
+2. <strong>Raw Resource Manifests</strong>: Plain YAML manifests located under the <code>infra/k8s/resources/</code> directory for direct <code>kubectl</code> provisioning.</p>
 <p>This option is ideal when you need:</p>
 <ul>
 <li>Horizontal scaling of individual services.</li>
 <li>Rolling updates with zero downtime.</li>
 <li>Integration with cloud-native tooling (ingress controllers, secrets managers, monitoring stacks, etc.).</li>
 </ul>
-<p>More information on how to deploy Reconmap to Kubernetes, including Helm chart values and configuration examples, can be found in the <a href="https://github.com/reconmap/reconmap/tree/main/infra/k8s">infra/k8s directory on GitHub</a>.</p>
+<p>For step-by-step deployment instructions, value reference guides, and configurations, see the <a href="https://github.com/reconmap/reconmap/tree/main/infra/k8s">infra/k8s directory on GitHub</a>.</p>
 <p><strong>Considerations:</strong></p>
 <ul>
 <li>Requires a working Kubernetes cluster (self-hosted or cloud-managed).</li>
@@ -3020,7 +3023,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 18, 2026 23:56:33 UTC">March 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 30, 2026 17:37:39 UTC">June 30, 2026</span>
   </span>
 
     
