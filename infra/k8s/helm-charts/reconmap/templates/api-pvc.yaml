@@ -1,0 +1,16 @@
+{{- if .Values.api.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+  name: ngapi-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.api.persistence.size | default "100Mi" }}
+{{- end }}

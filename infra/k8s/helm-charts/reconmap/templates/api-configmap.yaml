@@ -1,0 +1,60 @@
+{{- if .Values.api.enabled -}}
+apiVersion: v1
+data:
+  config-ngapi.json: |
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "ConnectionStrings": {
+        "MySqlConnection": "server=mysql;port=3306;database={{ .Values.mysql.database }};user={{ .Values.mysql.user }};password={{ .Values.mysql.password }};"
+      },
+      "Redis": {
+        "Host": "redis",
+        "Port": 6379,
+        "User": "default",
+        "Password": {{ .Values.redis.password | quote }}
+      },
+      "RabbitMQ": {
+        "HostName": "rabbitmq",
+        "UserName": {{ .Values.rabbitmq.defaultUser | quote }},
+        "Password": {{ .Values.rabbitmq.defaultPass | quote }}
+      },
+      "Keycloak": {
+        "MetadataAddress": "http://keycloak:8080/realms/reconmap/.well-known/openid-configuration",
+        "ValidIssuer": "http://localhost:8080/realms/reconmap",
+        "Audience": "account",
+        "ClientId": "api-client",
+        "ClientSecret": {{ .Values.keycloak.clientSecrets.api | quote }},
+        "KeycloakUrl": "http://keycloak:8080",
+        "Realm": "reconmap"
+      },
+      "Storage": {
+        "S3": {
+          "Endpoint": "http://rustfs:9000",
+          "AccessKey": "rustfsadmin",
+          "SecretKey": "rustfsadmin",
+          "BucketName": "attachments",
+          "UseHttp": true
+        }
+      },
+      "Cors": {
+        "AllowedOrigins": [
+          "http://localhost:5500",
+          "http://127.0.0.1:5500"
+        ]
+      }
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+  name: ngapi-configmap
+  namespace: {{ .Values.global.namespace }}
+{{- end }}

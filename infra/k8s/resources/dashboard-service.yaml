@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    io.kompose.service: web-client
-  name: web-client
+    app.kubernetes.io/name: dashboard
+  name: dashboard
   namespace: nonprod
 spec:
   ports:
@@ -11,4 +11,4 @@ spec:
       port: 5500
       targetPort: 5500
   selector:
-    io.kompose.service: web-client
+    app.kubernetes.io/name: dashboard

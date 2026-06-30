@@ -1,31 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "reconmap-dashboard.fullname" . }}
   labels:
-    io.kompose.service: web-client
-  name: web-client
-  namespace: nonprod
+    {{- include "reconmap-dashboard.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: web-client
+      {{- include "reconmap-dashboard.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        io.kompose.network/reconmap-default: "true"
-        io.kompose.service: web-client
+        {{- include "reconmap-dashboard.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          name: rmap-web-client
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 5500
               hostPort: 5500
               protocol: TCP
-          resources: {}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: config-volume
               mountPath: /usr/share/nginx/html/environment.js
@@ -34,4 +33,4 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: web-client-configmap
+            name: {{ include "reconmap-dashboard.fullname" . }}-configmap

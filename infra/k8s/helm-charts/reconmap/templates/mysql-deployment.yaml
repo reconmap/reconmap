@@ -1,35 +1,40 @@
+{{- if .Values.mysql.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: mysql
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mysql
   name: mysql
-  namespace: nonprod
+  namespace: {{ .Values.global.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: mysql
+      {{- include "reconmap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: mysql
+        {{- include "reconmap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mysql
     spec:
       containers:
         - env:
             - name: MYSQL_KEYCLOAK_PASSWORD
-              value: keycloaked
+              value: {{ .Values.mysql.keycloakPassword | quote }}
             - name: MYSQL_KEYCLOAK_USER
-              value: keycloaker
+              value: {{ .Values.mysql.keycloakUser | quote }}
             - name: MYSQL_RECONMAP_PASSWORD
-              value: reconmapped
+              value: {{ .Values.mysql.password | quote }}
             - name: MYSQL_RECONMAP_USER
-              value: reconmapper
+              value: {{ .Values.mysql.user | quote }}
             - name: MYSQL_ROOT_PASSWORD
-              value: reconmuppet
-          image: ghcr.io/reconmap/rest-api-db:latest
+              value: {{ .Values.mysql.rootPassword | quote }}
+          image: "{{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag }}"
+          imagePullPolicy: {{ .Values.mysql.image.pullPolicy }}
           livenessProbe:
             exec:
               command:
@@ -51,3 +56,4 @@ spec:
         - name: mysql-storage
           persistentVolumeClaim:
             claimName: mysql-pvc
+{{- end }}

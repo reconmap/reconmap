@@ -1,0 +1,26 @@
+{{- if .Values.dashboard.enabled -}}
+apiVersion: v1
+data:
+  config-ui.json: |
+    {
+        "$schema": "https://raw.githubusercontent.com/reconmap/web-client/refs/heads/main/config-schema.json",
+        "contextPath": "",
+        "logoUrl": "/logo-name.png",
+        "reconmapApiUrl": {{ .Values.dashboard.apiUrl | quote }},
+        "notificationsServiceUrl": {{ .Values.dashboard.notificationsUrl | quote }},
+        "keycloak": {
+            "url": "http://localhost:8080",
+            "realm": "reconmap",
+            "clientId": "web-client"
+        }
+    }
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: dashboard
+  name: dashboard-configmap
+  namespace: {{ .Values.global.namespace }}
+{{- end }}

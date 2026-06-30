@@ -1,29 +1,34 @@
+{{- if .Values.api.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: ngapi
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
   name: ngapi
-  namespace: nonprod
+  namespace: {{ .Values.global.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: ngapi
+      {{- include "reconmap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: api
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: ngapi
+        {{- include "reconmap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: api
     spec:
       containers:
         - env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Production
+              value: {{ .Values.api.environment | quote }}
             - name: ASPNETCORE_URLS
-              value: http://0.0.0.0:5253
-          image: ghcr.io/reconmap/ng-api:latest
+              value: {{ .Values.api.urls | quote }}
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           name: rmap-ngapi
           ports:
             - containerPort: 5253
@@ -45,3 +50,4 @@ spec:
         - name: ngapi-storage
           persistentVolumeClaim:
             claimName: ngapi-pvc
+{{- end }}

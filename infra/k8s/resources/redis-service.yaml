@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    io.kompose.service: redis
+    app.kubernetes.io/name: redis
   name: redis
   namespace: nonprod
 spec:
@@ -11,4 +11,4 @@ spec:
       port: 6379
       targetPort: 6379
   selector:
-    io.kompose.service: redis
+    app.kubernetes.io/name: redis

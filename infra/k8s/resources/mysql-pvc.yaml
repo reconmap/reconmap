@@ -2,8 +2,8 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    io.kompose.service: redis-data
-  name: redis-data
+    app.kubernetes.io/name: mysql
+  name: mysql-pvc
   namespace: nonprod
 spec:
   accessModes:

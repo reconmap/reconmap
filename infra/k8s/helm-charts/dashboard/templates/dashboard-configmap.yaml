@@ -1,7 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: web-client-configmap
+  name: {{ include "reconmap-dashboard.fullname" . }}-configmap
+  labels:
+    {{- include "reconmap-dashboard.labels" . | nindent 4 }}
 data:
   environment.js: |-
     window.env = {
@@ -27,4 +29,3 @@ data:
             clientId: 'web-client'
         }
     };
-

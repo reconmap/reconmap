@@ -9,13 +9,18 @@ data:
         }
       },
       "ConnectionStrings": {
-        "MySqlConnection": "server=rmap-mysql;port=3306;database=reconmap;user=reconmapper;password=reconmapped;"
+        "MySqlConnection": "server=mysql;port=3306;database=reconmap;user=reconmapper;password=reconmapped;"
       },
       "Redis": {
-        "Host": "rmap-redis",
+        "Host": "redis",
         "Port": 6379,
         "User": "default",
         "Password": "REconDIS"
+      },
+      "RabbitMQ": {
+        "HostName": "rabbitmq",
+        "UserName": "guest",
+        "Password": "guest"
       },
       "Keycloak": {
         "MetadataAddress": "http://keycloak:8080/realms/reconmap/.well-known/openid-configuration",
@@ -28,7 +33,7 @@ data:
       },
       "Storage": {
         "S3": {
-          "Endpoint": "http://rmap-rustfs:9000",
+          "Endpoint": "http://rustfs:9000",
           "AccessKey": "rustfsadmin",
           "SecretKey": "rustfsadmin",
           "BucketName": "attachments",
@@ -47,6 +52,6 @@ metadata:
   annotations:
     use-subpath: "true"
   labels:
-    io.kompose.service: ngapi
-  name: ngapi-cm0
+    app.kubernetes.io/name: ngapi
+  name: ngapi-configmap
   namespace: nonprod

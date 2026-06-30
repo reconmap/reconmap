@@ -1,16 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-client
-  namespace: nonprod
+  name: {{ include "reconmap-dashboard.fullname" . }}
   labels:
-    io.kompose.service: web-client
+    {{- include "reconmap-dashboard.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   selector:
-    io.kompose.service: web-client
+    {{- include "reconmap-dashboard.selectorLabels" . | nindent 4 }}
   ports:
     - name: "5500"
       port: {{ .Values.service.port }}
       targetPort: 5500
-

@@ -1,19 +1,23 @@
+{{- if .Values.keycloak.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: keycloak
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
   name: keycloak
-  namespace: nonprod
+  namespace: {{ .Values.global.namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: keycloak
+      {{- include "reconmap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: keycloak
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: keycloak
+        {{- include "reconmap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: keycloak
     spec:
       containers:
         - args:
@@ -26,28 +30,29 @@ spec:
             - --import-realm
           env:
             - name: KC_BOOTSTRAP_ADMIN_PASSWORD
-              value: admin
+              value: {{ .Values.keycloak.bootstrapAdminPassword | quote }}
             - name: KC_BOOTSTRAP_ADMIN_USERNAME
-              value: admin
+              value: {{ .Values.keycloak.bootstrapAdminUser | quote }}
             - name: KC_DB
               value: mysql
             - name: KC_DB_DATABASE
-              value: keycloak
+              value: {{ .Values.mysql.database | quote }}
             - name: KC_DB_PASSWORD
-              value: keycloaked
+              value: {{ .Values.mysql.keycloakPassword | quote }}
             - name: KC_DB_URL_HOST
               value: mysql
             - name: KC_DB_USERNAME
-              value: keycloaker
+              value: {{ .Values.mysql.keycloakUser | quote }}
             - name: VAR_ADMIN_CLIENT_SECRET
-              value: r2TO5uRy0RlpB5TRI6GvvXtBKxUCaaz0
+              value: {{ .Values.keycloak.clientSecrets.admin | quote }}
             - name: VAR_API_CLIENT_SECRET
-              value: I0jppD5zSIXuBAql31zrXfe5OAa0nvyE
+              value: {{ .Values.keycloak.clientSecrets.api | quote }}
             - name: VAR_RECONMAPD_CLIENT_SECRET
-              value: VH8HDKabxlTpnpPkEgLlTq2dEanedEGC
+              value: {{ .Values.keycloak.clientSecrets.agent | quote }}
             - name: VAR_WEB_CLIENT_URL
-              value: http://localhost:5500
-          image: ghcr.io/reconmap/keycloak-custom:latest
+              value: {{ .Values.keycloak.webClientUrl | quote }}
+          image: "{{ .Values.keycloak.image.repository }}:{{ .Values.keycloak.image.tag }}"
+          imagePullPolicy: {{ .Values.keycloak.image.pullPolicy }}
           livenessProbe:
             exec:
               command:
@@ -62,3 +67,4 @@ spec:
             - containerPort: 8080
               protocol: TCP
       restartPolicy: Always
+{{- end }}

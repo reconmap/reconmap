@@ -1,0 +1,6 @@
+apiVersion: v2
+name: reconmap
+description: A unified Helm chart to deploy the Reconmap pentesting management platform, including frontend, API, Keycloak, and dependencies.
+type: application
+version: 1.0.0
+appVersion: "1.16.0"

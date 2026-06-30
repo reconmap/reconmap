@@ -2,31 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    io.kompose.service: web-client
-  name: web-client
+    app.kubernetes.io/name: dashboard
+  name: dashboard
   namespace: nonprod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: web-client
-  strategy:
-    type: Recreate
+      app.kubernetes.io/name: dashboard
   template:
     metadata:
       labels:
-        io.kompose.service: web-client
+        app.kubernetes.io/name: dashboard
     spec:
       containers:
         - image: ghcr.io/reconmap/web-client:latest
-          name: rmap-web-client
+          name: rmap-dashboard
           ports:
             - containerPort: 5500
               protocol: TCP
           volumeMounts:
             - mountPath: /usr/share/nginx/html/config.json
-              name: web-client-cm0
-              readOnly: true
+              name: dashboard-config
               subPath: config.json
       restartPolicy: Always
       volumes:
@@ -34,5 +31,5 @@ spec:
             items:
               - key: config-ui.json
                 path: config.json
-            name: web-client-cm0
-          name: web-client-cm0
+            name: dashboard-configmap
+          name: dashboard-config

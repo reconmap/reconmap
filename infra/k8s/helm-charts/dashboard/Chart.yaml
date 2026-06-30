@@ -1,6 +1,6 @@
 apiVersion: v2
-name: reconmap-webclient
-description: Helm chart for the Reconmap Web client
+name: reconmap-dashboard
+description: Helm chart for the Reconmap Dashboard
 type: application
 
 # This is the chart version. This version number should be incremented each time you make changes

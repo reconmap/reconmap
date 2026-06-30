@@ -35,7 +35,11 @@ Once all containers are healthy, the dashboard will be available on port `5500` 
 
 **Best for:** Production deployments, large teams, and publicly accessible instances.
 
-Kubernetes provides the scalability and resilience needed for running Reconmap in production. Helm charts and raw Kubernetes resource manifests are provided in the `infra/k8s/` directory of this repository.
+Kubernetes provides the scalability and resilience needed for running Reconmap in production. 
+
+Reconmap supports two deployment methods on Kubernetes:
+1. **Unified Helm Chart (Recommended)**: Packages the entire platform stack (Dashboard, API, Keycloak, MySQL, Redis, RabbitMQ) into a single, highly configurable installation release.
+2. **Raw Resource Manifests**: Plain YAML manifests located under the `infra/k8s/resources/` directory for direct `kubectl` provisioning.
 
 This option is ideal when you need:
 
@@ -43,7 +47,7 @@ This option is ideal when you need:
 - Rolling updates with zero downtime.
 - Integration with cloud-native tooling (ingress controllers, secrets managers, monitoring stacks, etc.).
 
-More information on how to deploy Reconmap to Kubernetes, including Helm chart values and configuration examples, can be found in the [infra/k8s directory on GitHub](https://github.com/reconmap/reconmap/tree/main/infra/k8s).
+For step-by-step deployment instructions, value reference guides, and configurations, see the [infra/k8s directory on GitHub](https://github.com/reconmap/reconmap/tree/main/infra/k8s).
 
 **Considerations:**
 

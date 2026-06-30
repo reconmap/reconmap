@@ -1,0 +1,19 @@
+{{- if .Values.dashboard.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: dashboard
+  name: dashboard
+  namespace: {{ .Values.global.namespace }}
+spec:
+  ports:
+    - name: "5500"
+      port: {{ .Values.dashboard.service.port }}
+      targetPort: 5500
+  selector:
+    {{- include "reconmap.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: dashboard
+  type: {{ .Values.dashboard.service.type }}
+{{- end }}

@@ -1,0 +1,18 @@
+{{- if .Values.redis.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: redis
+  name: redis
+  namespace: {{ .Values.global.namespace }}
+spec:
+  ports:
+    - name: "6379"
+      port: 6379
+      targetPort: 6379
+  selector:
+    {{- include "reconmap.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: redis
+{{- end }}

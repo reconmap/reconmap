@@ -1,0 +1,41 @@
+{{- if .Values.dashboard.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: dashboard
+  name: dashboard
+  namespace: {{ .Values.global.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dashboard
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: dashboard
+    spec:
+      containers:
+        - image: "{{ .Values.dashboard.image.repository }}:{{ .Values.dashboard.image.tag }}"
+          imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
+          name: rmap-dashboard
+          ports:
+            - containerPort: 5500
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html/config.json
+              name: dashboard-config
+              subPath: config.json
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: config-ui.json
+                path: config.json
+            name: dashboard-configmap
+          name: dashboard-config
+{{- end }}

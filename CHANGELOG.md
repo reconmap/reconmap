@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Created a unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` that packages the complete platform stack (Dashboard, API, Keycloak, MySQL, Redis, RabbitMQ) into a single, cohesive, and configurable installation.
+- Added RabbitMQ deployment and service manifests to the Kubernetes configuration, and registered the corresponding RabbitMQ connection settings in the API ConfigMap.
 - Added "Agents" dashboard widget to show status of registered security agents.
 - Added "Top vulnerable assets" dashboard widget to show assets with the highest count of active findings.
 - Added an interactive CVSS v4.0 calculator component (`CvssCalculator.jsx`) that opens in a native HTML `<dialog>` launched from a field addon button next to the vulnerability vector input.
@@ -81,6 +83,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix Web Client API URL configuration in Kubernetes by adding the missing `/api` prefix to `reconmapApiUrl` in `dashboard-configmap.yaml`.
+- Fix Kubernetes deployments crash loop by wrapping the liveness probe execution in a shell (`/bin/sh -c`) for the `mysql` and `keycloak` deployments.
+- Fix MySQL database initialization on Kubernetes by adding the missing user and password environment variables to `mysql-deployment.yaml`.
+- Fix Kubernetes DNS service name resolution in the API configuration by updating the database, cache, message queue, and storage hostnames in `ngapi-configmap.yaml`.
+- Renamed Kubernetes `web-client` manifest filenames, resource names, and labels to `dashboard` for consistency, and updated the Helm chart template files and Makefile targets accordingly.
 - Fix report templates deletion and creation by implementing the missing template upload `POST` endpoint in the API, cascade-deleting associated attachments on template deletion, and adding react-query invalidation and refetching on the frontend.
 - Fixed Entity Framework Core row-limiting operator warning in documents query by adding explicit order by.
 - Fixed missing push notifications after asynchronous report generation by ensuring Notification database records are persisted before broadcasting SSE ping via RabbitMQ.

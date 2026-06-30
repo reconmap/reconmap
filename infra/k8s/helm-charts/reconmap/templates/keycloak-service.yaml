@@ -1,0 +1,18 @@
+{{- if .Values.keycloak.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+  name: keycloak
+  namespace: {{ .Values.global.namespace }}
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  selector:
+    {{- include "reconmap.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: keycloak
+{{- end }}
