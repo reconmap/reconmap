@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://reconmap.com/admin-manual/data-management/">
+        <link rel="canonical" href="https://reconmap.com/admin-manual/access-control/">
       
       
-        <link rel="prev" href="../configuring-smtp-settings/">
+        <link rel="prev" href="../..">
       
       
-        <link rel="next" href="../debian-nginx-letsencrypt/">
+        <link rel="next" href="../attachment-limits/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Data management - Reconmap docs</title>
+        <title>Access Control (OPA / Rego) - Reconmap docs</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#data-export" class="md-skip">
+        <a href="#access-control-opa-rego" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Data management
+              Access Control (OPA / Rego)
             
           </span>
         </div>
@@ -339,10 +339,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../access-control/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access Control (OPA / Rego)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -358,6 +385,76 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opa-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OPA Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OPA Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modifying-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modifying Policies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit Logging
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -535,35 +632,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Data management
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../data-management/" class="md-nav__link">
         
   
   
@@ -579,57 +651,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#data-export" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Data export
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-import" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Data import
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#audit-log" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Audit log
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2912,6 +2933,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -2920,35 +2943,52 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#data-export" class="md-nav__link">
+  <a href="#opa-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data export
+        OPA Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OPA Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default Policies
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#data-import" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#modifying-policies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Data import
+        Modifying Policies
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#audit-log" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#audit-logging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Audit log
+        Audit Logging
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2969,7 +3009,7 @@
 
 
   
-    <a href="https://github.com/reconmap/reconmap/edit/main/docs/pages/admin-manual/data-management.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/reconmap/reconmap/edit/main/docs/pages/admin-manual/access-control.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -2977,32 +3017,20 @@
   
 
 
-  <h1>Data management</h1>
-
-<p>Reconmap provides tools for administrators to manage the platform's data, including exporting for backups and importing from other instances.</p>
-<h3 id="data-export">Data export</h3>
-<p>The data export tool allows you to generate a JSON backup of your Reconmap data.</p>
-<p><img alt="Data export" src="/images/screenshots/export-data.png" /></p>
-<p>Go to <code>System -&gt; Export data</code> to download a copy of:
-- Clients and organisations
-- Commands and tools
-- Documents and templates
-- Projects and tasks
-- Users and roles
-- Vulnerabilities</p>
-<h3 id="data-import">Data import</h3>
-<p>You can restore data from a previously generated export file or migrate data between Reconmap instances using the import tool.</p>
-<p><img alt="Data import" src="/images/screenshots/import-data.png" /></p>
-<p>Go to <code>System -&gt; Import data</code> to upload a Reconmap JSON export file.</p>
-<h3 id="audit-log">Audit log</h3>
-<p>The audit log is a permanent record of all administrative and user actions within the platform.</p>
-<p><img alt="Audit log" src="/images/screenshots/audit-log.png" /></p>
-<p>Go to <code>System -&gt; Audit log</code> to review:
-- User logins and logouts
-- Resource creation, modification, and deletion
-- Integration configuration changes
-- System setting updates</p>
-<p>Audit logs can be filtered and exported to CSV for external analysis and compliance reporting.</p>
+<h1 id="access-control-opa-rego">Access Control (OPA / Rego)</h1>
+<p>Reconmap utilizes Open Policy Agent (OPA) combined with Rego policies to enforce fine-grained Attribute-Based Access Control (ABAC).</p>
+<h2 id="opa-integration">OPA Integration</h2>
+<p>OPA is deployed as a container within the Docker Compose (<code>compose.yaml</code>) and Kubernetes definitions. 
+The C# API intercepts incoming requests and queries the OPA server to verify if the requesting user has permission to perform the desired action. The target OPA endpoint is dynamically configured via the <code>OPA_SERVER_URL</code> variable in the root <code>.env</code> file (which defaults to <code>http://opa:8181</code> inside the Docker network).</p>
+<h3 id="default-policies">Default Policies</h3>
+<p>The default policies are located in <code>policy/authz.rego</code>. By default:
+- <strong>Administrators</strong> have unrestricted access to all resources.
+- <strong>Clients</strong> are restricted and can only access projects they are explicitly assigned to as project members.</p>
+<h3 id="modifying-policies">Modifying Policies</h3>
+<p>You can customize the authorization logic by modifying the <code>policy/authz.rego</code> file. Changes take effect automatically, as the OPA container mounts this directory as a volume.</p>
+<h3 id="audit-logging">Audit Logging</h3>
+<p>Any request that fails OPA authorization is logged into the <code>audit_log</code> table with the action <code>opa_authz_failed</code>. 
+This allows system administrators to monitor and track unauthorized access attempts to restricted resources, meeting compliance and security auditing requirements.</p>
 
 
 
@@ -3023,7 +3051,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 26, 2026 21:12:47 UTC">March 26, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 1, 2026 19:53:57 UTC">July 1, 2026</span>
   </span>
 
     
@@ -3055,7 +3083,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../configuring-smtp-settings/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Configuring SMTP settings">
+          <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3065,20 +3093,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Configuring SMTP settings
+                Home
               </div>
             </div>
           </a>
         
         
           
-          <a href="../debian-nginx-letsencrypt/" class="md-footer__link md-footer__link--next" aria-label="Next: Installing on Debian, Nginx and Letsencrypt">
+          <a href="../attachment-limits/" class="md-footer__link md-footer__link--next" aria-label="Next: Attachment limits">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Installing on Debian, Nginx and Letsencrypt
+                Attachment limits
               </div>
             </div>
             <div class="md-footer__button md-icon">
