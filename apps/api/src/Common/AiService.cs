@@ -1,8 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using api_v2.Application.Services;
+using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
+using OpenAI;
 
 namespace api_v2.Common;
 
@@ -60,9 +62,15 @@ public sealed class AiService(IAiSettingsService aiSettingsService) : IAiService
             "Ollama" => new OllamaApiClient(
                 new Uri(settings.OllamaBaseUrl ?? "http://localhost:11434/"),
                 settings.OllamaModel ?? "llama3.2"),
-            // AzureOpenAI and OpenRouter support can be added here once the necessary adapters are fully integrated.
-            // They require Microsoft.Extensions.AI.OpenAI and Azure.AI.OpenAI packages.
-            _ => throw new InvalidOperationException($"AI provider '{settings.Provider}' is not yet supported or configured correctly.")
+            "AzureOpenAI" => new AzureOpenAIClient(
+                new Uri(settings.AzureOpenAiEndpoint ?? throw new InvalidOperationException("Azure OpenAI Endpoint not configured")),
+                new System.ClientModel.ApiKeyCredential(settings.AzureOpenAiApiKey ?? throw new InvalidOperationException("Azure OpenAI API Key not configured")))
+                .AsChatClient(settings.AzureOpenAiDeployment ?? "gpt-4o"),
+            "OpenRouter" => new OpenAIClient(
+                new System.ClientModel.ApiKeyCredential(settings.OpenRouterApiKey ?? throw new InvalidOperationException("OpenRouter API Key not configured")),
+                new OpenAIClientOptions { Endpoint = new Uri("https://openrouter.ai/api/v1") })
+                .AsChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct"),
+            _ => throw new InvalidOperationException($"AI provider '{settings.Provider}' is not supported or configured correctly.")
         };
     }
 
