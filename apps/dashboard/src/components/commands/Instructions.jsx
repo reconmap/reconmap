@@ -61,7 +61,7 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
 const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFrequency = null }) => {
     const [commandArgsRendered, setCommandArgsRendered] = useState("");
     const [commandArgs, setCommandArgs] = useState(parseArguments(usage));
-    const [findingsStorageAction, setFindingsStorageAction] = useState("discard");
+    const [vulnerabilitiesStorageAction, setVulnerabilitiesStorageAction] = useState("discard");
     const [showTerminal, setShowTerminal] = useState(false);
     const [runFrequency, setRunFrequency] = useState(forcedRunFrequency || "once");
     const [projectId, setProjectId] = useState(null);
@@ -159,11 +159,11 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
             </h5>
 
             <HorizontalLabelledField
-                label="Findings storage action"
+                label="Vulnerabilities storage action"
                 control={
                     <NativeSelect
                         onChange={(ev) => {
-                            setFindingsStorageAction(ev.target.value);
+                            setVulnerabilitiesStorageAction(ev.target.value);
                             if (ev.target.value === "discard") {
                                 setProjectId(null);
                             } else {
@@ -177,7 +177,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                 }
             />
 
-            {findingsStorageAction === "project" && (
+            {vulnerabilitiesStorageAction === "project" && (
                 <HorizontalLabelledField
                     label="Project"
                     htmlFor="projectId"

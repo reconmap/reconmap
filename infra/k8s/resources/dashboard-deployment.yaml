@@ -16,8 +16,8 @@ spec:
         app.kubernetes.io/name: dashboard
     spec:
       containers:
-        - image: ghcr.io/reconmap/web-client:latest
-          name: rmap-dashboard
+        - image: ghcr.io/reconmap/dashboard:latest
+          name: dashboard
           ports:
             - containerPort: 5500
               protocol: TCP

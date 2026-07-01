@@ -27,7 +27,7 @@ spec:
               value: {{ .Values.rabbitmq.defaultUser | quote }}
           image: "{{ .Values.rabbitmq.image.repository }}:{{ .Values.rabbitmq.image.tag }}"
           imagePullPolicy: {{ .Values.rabbitmq.image.pullPolicy }}
-          name: rmap-rabbitmq
+          name: rabbitmq
           ports:
             - containerPort: 5672
               protocol: TCP

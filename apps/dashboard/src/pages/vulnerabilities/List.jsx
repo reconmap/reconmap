@@ -102,7 +102,7 @@ const VulnerabilitiesList = () => {
                 <PaginationV2 page={apiPageNumber} total={numberPages} onPageChange={onPageChange} />
                 <div>
                     <NativeButtonGroup>
-                        <CreateButton onClick={onAddVulnerabilityClick}>Add finding</CreateButton>
+                        <CreateButton onClick={onAddVulnerabilityClick}>Add vulnerability</CreateButton>
                         <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                             <DeleteButton onClick={onDeleteButtonClick} disabled={!tableModel.selection.length}>
                                 Delete selected
@@ -111,7 +111,7 @@ const VulnerabilitiesList = () => {
                     </NativeButtonGroup>
                 </div>
             </div>
-            <Title title={`Findings (${totalCount})`} />
+            <Title title={`Vulnerabilities (${totalCount})`} />
             <VulnerabilityFilters tableModel={tableModel} tableModelSetter={setTableModel} />
             <VulnerabilitiesTable
                 tableModel={tableModel}

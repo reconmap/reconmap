@@ -45,7 +45,7 @@ spec:
               value: I0jppD5zSIXuBAql31zrXfe5OAa0nvyE
             - name: VAR_RECONMAPD_CLIENT_SECRET
               value: VH8HDKabxlTpnpPkEgLlTq2dEanedEGC
-            - name: VAR_WEB_CLIENT_URL
+            - name: VAR_DASHBOARD_URL
               value: http://localhost:5500
           image: ghcr.io/reconmap/keycloak-custom:latest
           livenessProbe:
@@ -57,7 +57,7 @@ spec:
             failureThreshold: 10
             periodSeconds: 30
             timeoutSeconds: 10
-          name: rmap-keycloak
+          name: keycloak
           ports:
             - containerPort: 8080
               protocol: TCP

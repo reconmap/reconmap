@@ -28,7 +28,7 @@ spec:
             - --loglevel
             - warning
           image: redis:8.6-alpine
-          name: rmap-redis
+          name: redis
           ports:
             - containerPort: 6379
               protocol: TCP

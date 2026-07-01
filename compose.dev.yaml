@@ -1,0 +1,18 @@
+services:
+  keycloak:
+    command: "start --hostname-strict false --proxy-headers xforwarded --http-enabled true --import-realm --hostname-debug=true"
+    environment:
+      KC_LOG_LEVEL: debug
+
+  rustfs:
+    environment:
+      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY}
+      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY}
+      - RUSTFS_ADDRESS=0.0.0.0:9000
+      - RUSTFS_CONSOLE_ENABLE=true
+      - RUSTFS_CONSOLE_ADDRESS=0.0.0.0:9001
+
+  ngapi:
+    volumes:
+      - "./apps/api/src/appsettings.Production.json:/App/appsettings.Production.json"
+      - "./apps/api/src/appsettings.json:/App/appsettings.json"

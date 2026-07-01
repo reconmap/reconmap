@@ -302,7 +302,7 @@
       ],
       "reconmapd-client": [],
       "api-client": [],
-      "web-client": [
+      "dashboard": [
         {
           "id": "2d3317a7-e8cc-4a11-bc96-e2923536fc58",
           "name": "superuser",
@@ -450,7 +450,7 @@
       "attributes": {},
       "realmRoles": [],
       "clientRoles": {
-        "web-client": [
+        "dashboard": [
           "administrator"
         ]
       }
@@ -463,7 +463,7 @@
       "attributes": {},
       "realmRoles": [],
       "clientRoles": {
-        "web-client": [
+        "dashboard": [
           "client"
         ]
       }
@@ -476,7 +476,7 @@
       "attributes": {},
       "realmRoles": [],
       "clientRoles": {
-        "web-client": [
+        "dashboard": [
           "superuser"
         ]
       }
@@ -489,7 +489,7 @@
       "attributes": {},
       "realmRoles": [],
       "clientRoles": {
-        "web-client": [
+        "dashboard": [
           "user"
         ]
       }
@@ -623,7 +623,7 @@
           "view-profile",
           "manage-account"
         ],
-        "web-client": [
+        "dashboard": [
           "administrator"
         ]
       }
@@ -1191,18 +1191,18 @@
     },
     {
       "id": "3f0deae3-4464-40fd-be93-971cb717bd71",
-      "clientId": "web-client",
-      "rootUrl": "${VAR_WEB_CLIENT_URL}",
-      "adminUrl": "${VAR_WEB_CLIENT_URL}",
+      "clientId": "dashboard",
+      "rootUrl": "${VAR_DASHBOARD_URL}",
+      "adminUrl": "${VAR_DASHBOARD_URL}",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "${VAR_WEB_CLIENT_URL}/*"
+        "${VAR_DASHBOARD_URL}/*"
       ],
       "webOrigins": [
-        "${VAR_WEB_CLIENT_URL}"
+        "${VAR_DASHBOARD_URL}"
       ],
       "notBefore": 0,
       "bearerOnly": false,

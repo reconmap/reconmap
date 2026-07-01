@@ -89,7 +89,7 @@ const Widgets = {
         title: "Top vulnerable assets",
         visible: true,
         component: <TopVulnerableAssetsWidget />,
-        description: "It shows assets with the highest count of active findings.",
+        description: "It shows assets with the highest count of active vulnerabilities.",
     },
 };
 

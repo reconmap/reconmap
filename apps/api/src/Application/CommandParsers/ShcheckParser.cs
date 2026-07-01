@@ -53,7 +53,7 @@ public class ShcheckParser(IAttachmentStorage attachmentStorage) : ICommandParse
                         Tags = "[\"headers\"]" // new List<string> { "headers" }
                     };
 
-                    result.AddFinding(vulnerability);
+                    result.AddVulnerability(vulnerability);
                 }
 
         return result;

@@ -5,15 +5,15 @@ namespace api_v2.Application.CommandParsers;
 public class CommandParserResult
 {
     public List<Asset> assets = new();
-    public List<Vulnerability> findings = new();
+    public List<Vulnerability> vulnerabilities = new();
 
     public void AddAsset(Asset asset)
     {
         assets.Add(asset);
     }
 
-    public void AddFinding(Vulnerability vulnerability)
+    public void AddVulnerability(Vulnerability vulnerability)
     {
-        findings.Add(vulnerability);
+        vulnerabilities.Add(vulnerability);
     }
 }

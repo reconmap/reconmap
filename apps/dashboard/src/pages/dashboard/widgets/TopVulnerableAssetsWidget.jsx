@@ -58,7 +58,7 @@ const TopVulnerableAssetsWidget = () => {
                         <tr>
                             <th>Asset</th>
                             <th>Type</th>
-                            <th className="has-text-centered">Findings</th>
+                            <th className="has-text-centered">Vulnerabilities</th>
                             <th>Breakdown</th>
                         </tr>
                     </thead>

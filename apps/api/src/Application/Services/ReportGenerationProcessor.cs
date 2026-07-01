@@ -221,15 +221,15 @@ public sealed class ReportGenerationProcessor(
                 })
                 .ToArray();
 
-            var findings = (await dbContext.Vulnerabilities
+            var vulnerabilities = (await dbContext.Vulnerabilities
                     .Where(v => v.ProjectId == project.Id)
                     .Select(v => new { v.Summary, CategoryName = v.Category.Name, v.Risk })
                     .ToListAsync(cancellationToken))
                 .Select(v => new Dictionary<string, string>()
                 {
-                    ["finding.summary"] = v.Summary,
-                    ["finding.category.name"] = v.CategoryName,
-                    ["finding.severity"] = v.Risk
+                    ["vulnerability.summary"] = v.Summary,
+                    ["vulnerability.category.name"] = v.CategoryName,
+                    ["vulnerability.severity"] = v.Risk
                 })
                 .ToArray();
 
@@ -251,7 +251,7 @@ public sealed class ReportGenerationProcessor(
                         var body = document.MainDocumentPart!.Document.Body;
                         WordTemplateReplacer.ReplaceContentControls(body, replacements);
                         WordTemplateReplacer.PopulateTableAtBookmark(body, "assetsTable", assets);
-                        WordTemplateReplacer.PopulateRichTextList(body, "finding", findings);
+                        WordTemplateReplacer.PopulateRichTextList(body, "vulnerability", vulnerabilities);
                         document.MainDocumentPart.Document.Save();
                     }
                 }

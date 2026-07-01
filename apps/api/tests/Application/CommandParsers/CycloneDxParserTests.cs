@@ -95,15 +95,15 @@ public class CycloneDxParserTests
         Assert.Contains("license:Apache-2.0", asset.Tags);
         Assert.Contains("purl:pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1", asset.Tags);
 
-        // Verify Findings (Vulnerabilities)
-        Assert.Single(result.findings);
-        var finding = result.findings.First();
-        Assert.Equal("CVE-2021-44228 in log4j-core@2.14.1", finding.Summary);
-        Assert.Equal("Apache Log4j2 remote code execution vulnerability.", finding.Description);
-        Assert.Equal("Upgrade to 2.15.0 or higher", finding.Remediation);
-        Assert.Equal("high", finding.Risk);
-        Assert.Equal("open", finding.Status);
-        Assert.NotNull(finding.Asset);
-        Assert.Equal("log4j-core@2.14.1", finding.Asset.Name);
+        // Verify Vulnerabilities
+        Assert.Single(result.vulnerabilities);
+        var vulnerability = result.vulnerabilities.First();
+        Assert.Equal("CVE-2021-44228 in log4j-core@2.14.1", vulnerability.Summary);
+        Assert.Equal("Apache Log4j2 remote code execution vulnerability.", vulnerability.Description);
+        Assert.Equal("Upgrade to 2.15.0 or higher", vulnerability.Remediation);
+        Assert.Equal("high", vulnerability.Risk);
+        Assert.Equal("open", vulnerability.Status);
+        Assert.NotNull(vulnerability.Asset);
+        Assert.Equal("log4j-core@2.14.1", vulnerability.Asset.Name);
     }
 }

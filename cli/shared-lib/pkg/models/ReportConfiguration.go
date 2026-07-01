@@ -8,7 +8,7 @@ type ReportConfiguration struct {
 	IncludeToc bool `json:"include_toc"`
 	IncludeRevisionsTable bool `json:"include_revisions_table"`
 	IncludeTeamBios bool `json:"include_team_bios"`
-	IncludeFindingsOverview bool `json:"include_findings_overview"`
+	IncludeVulnerabilitiesOverview bool `json:"include_vulnerabilities_overview"`
 	IncludeCover string `json:"include_cover"`
 	IncludeHeader string `json:"include_header"`
 	IncludeFooter string `json:"include_footer"`

@@ -11,8 +11,8 @@ public class AiParsingResult
     [JsonPropertyName("assets")]
     public List<AiAsset> Assets { get; set; } = new();
 
-    [JsonPropertyName("findings")]
-    public List<AiFinding> Findings { get; set; } = new();
+    [JsonPropertyName("vulnerabilities")]
+    public List<AiVulnerability> Vulnerabilities { get; set; } = new();
 }
 
 public class AiAsset
@@ -24,7 +24,7 @@ public class AiAsset
     public string Type { get; set; } = "hostname";
 }
 
-public class AiFinding
+public class AiVulnerability
 {
     [JsonPropertyName("summary")]
     public string Summary { get; set; } = string.Empty;
@@ -87,14 +87,14 @@ public sealed class AiService(IAiSettingsService aiSettingsService) : IAiService
     {
         var prompt = $@"
 You are a cybersecurity expert. Parse the following command output from the tool '{toolName}' into a structured JSON format.
-The output should contain a list of Assets (targets) and Vulnerabilities (findings).
+The output should contain a list of Assets (targets) and Vulnerabilities.
 
 Strictly follow this JSON schema:
 {{
   ""assets"": [
     {{ ""name"": ""string (e.g. hostname, IP)"", ""type"": ""string (e.g. hostname, ip, url)"" }}
   ],
-  ""findings"": [
+  ""vulnerabilities"": [
     {{
       ""summary"": ""string (short title)"",
       ""description"": ""string (detailed description)"",
@@ -105,7 +105,7 @@ Strictly follow this JSON schema:
   ]
 }}
 
-If no assets or findings are found, return empty lists.
+If no assets or vulnerabilities are found, return empty lists.
 Do not include any text outside the JSON block.
 
 Command Output:

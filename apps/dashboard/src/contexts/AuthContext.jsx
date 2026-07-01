@@ -24,8 +24,8 @@ function useAuth() {
         if (!user.preferences) {
             return;
         }
-        setTheme(user.preferences["web-client.theme"]);
-        i18n.changeLanguage(user.preferences["web-client.language"]);
+        setTheme(user.preferences["dashboard.theme"]);
+        i18n.changeLanguage(user.preferences["dashboard.language"]);
     }, [user]);
 
     return { user, logout };

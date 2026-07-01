@@ -39,7 +39,7 @@ public class SarifParserTests
 
         var result = parser.Parse(job);
 
-        Assert.Empty(result.findings);
+        Assert.Empty(result.vulnerabilities);
         Assert.Empty(result.assets);
     }
 
@@ -101,13 +101,13 @@ public class SarifParserTests
 
         var result = parser.Parse(job);
 
-        Assert.Single(result.findings);
-        var finding = result.findings.First();
-        Assert.Equal("Errors unhandled", finding.Summary);
-        Assert.Equal("Audit unhandled errors in Go code.", finding.Description);
-        Assert.Equal("https://securego.io/rule-details.html#G104", finding.ExternalRefs);
-        Assert.Equal("Locations:\nmain.go:42", finding.ProofOfConcept);
-        Assert.Equal("high", finding.Risk);
+        Assert.Single(result.vulnerabilities);
+        var vulnerability = result.vulnerabilities.First();
+        Assert.Equal("Errors unhandled", vulnerability.Summary);
+        Assert.Equal("Audit unhandled errors in Go code.", vulnerability.Description);
+        Assert.Equal("https://securego.io/rule-details.html#G104", vulnerability.ExternalRefs);
+        Assert.Equal("Locations:\nmain.go:42", vulnerability.ProofOfConcept);
+        Assert.Equal("high", vulnerability.Risk);
     }
 
     [Fact]
@@ -149,15 +149,15 @@ public class SarifParserTests
 
         var result = parser.Parse(job);
 
-        Assert.Equal(3, result.findings.Count);
+        Assert.Equal(3, result.vulnerabilities.Count);
         
-        var r1 = result.findings.First(f => f.Summary == "Warning message");
+        var r1 = result.vulnerabilities.First(f => f.Summary == "Warning message");
         Assert.Equal("medium", r1.Risk);
 
-        var r2 = result.findings.First(f => f.Summary == "Note message");
+        var r2 = result.vulnerabilities.First(f => f.Summary == "Note message");
         Assert.Equal("low", r2.Risk);
 
-        var r3 = result.findings.First(f => f.Summary == "None message");
+        var r3 = result.vulnerabilities.First(f => f.Summary == "None message");
         Assert.Equal("none", r3.Risk);
     }
 }

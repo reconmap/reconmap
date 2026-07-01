@@ -14,9 +14,9 @@ endif
 
 MYSQL_ROOT_PASSWORD ?= reconmuppet
 
-PROJECT := rest-api
-DC := docker compose -p $(PROJECT)
-DB_CONTAINER=rmap-mysql
+PROJECT := reconmap
+DC := COMPOSE_PROFILES=default docker compose -p $(PROJECT) -f ../../compose.yaml -f ../../compose.dev.yaml
+DB_CONTAINER=reconmap-mysql-1
 
 HOST_UID=$(shell id -u)
 HOST_GID=$(shell id -g)

@@ -22,7 +22,7 @@ spec:
       containers:
         - image: "{{ .Values.dashboard.image.repository }}:{{ .Values.dashboard.image.tag }}"
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
-          name: rmap-dashboard
+          name: dashboard
           ports:
             - containerPort: 5500
               protocol: TCP

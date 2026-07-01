@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Integrated Open Policy Agent (OPA) / Rego for centralized attribute-based access control (ABAC).
+- Enforced project visibility constraints ensuring users with the Client role can only view their assigned projects.
+- Added detailed audit logging for failed OPA authorization checks (`opa_authz_failed`).
 - Implemented an experimental Model Context Protocol (MCP) server under `apps/api/McpServer` to expose Reconmap tools and resources (projects, tasks, findings, documents, agents) to AI assistants.
 - Added a comprehensive `NOTES.txt` post-installation message to the unified `reconmap` Helm chart detailing service URLs, port-forwarding instructions, and default credentials.
 - Added a `Makefile` to the unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` to validate (lint), install, uninstall, and retrieve values/manifests.
@@ -20,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Standardized Docker Compose project and container naming settings by explicitly defining project name `reconmap` at the root of `compose.yaml`, removing all custom static `container_name` properties to support environment scaling/flexibility, and updating all internal API configuration files, env secrets, and Kubernetes/Helm manifest container specs to resolve services directly via Docker network DNS names.
+- Renamed all remaining occurrences and configuration properties of the old UI name `web-client` to `dashboard` across application config files, user preferences, C# API claims transformations, Helm chart templates, compose orchestrations, Kubernetes manifests, Keycloak realm mappings, and developer/user documentation.
+- Standardized terminology by unifying on "vulnerability" / "vulnerabilities" instead of using "finding" / "findings" interchangeably, updating C# API parser properties, queue names, event types, report generation variables, Go CLI models, React dashboard views, and documentation.
+- Consolidated Docker Compose configuration by migrating all development overrides from `apps/api/compose.yaml` to the root `compose.dev.yaml`, deleting the redundant compose file, and utilizing Docker Compose profiles (`profiles: ["app"]` with `COMPOSE_PROFILES=app` in `.env`) to allow default run-all and dev-exclude startups.
 - Standardized the REST API (`ngapi`) port to `5510` across all Kubernetes raw manifests, Helm templates, values, and port-forwarding scripts, aligning with local development configuration.
 - Updated network ports documentation (`docs/pages/admin-manual/network-ports.md`) to correctly reflect all ports used by the application components (including Keycloak, RabbitMQ, and Rustfs).
 - Standardized entity and parameter naming by renaming all remaining references of "target/targets" to "asset/assets", and renamed asset "kind/kinds" to "type/types" across the database schema, C# API entities, Go CLI models, and React dashboard components.

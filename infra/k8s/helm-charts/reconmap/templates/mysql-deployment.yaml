@@ -44,7 +44,7 @@ spec:
             failureThreshold: 5
             periodSeconds: 5
             timeoutSeconds: 10
-          name: rmap-mysql
+          name: mysql
           ports:
             - containerPort: 3306
               protocol: TCP

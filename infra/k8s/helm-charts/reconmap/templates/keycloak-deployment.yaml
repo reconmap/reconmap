@@ -49,8 +49,8 @@ spec:
               value: {{ .Values.keycloak.clientSecrets.api | quote }}
             - name: VAR_RECONMAPD_CLIENT_SECRET
               value: {{ .Values.keycloak.clientSecrets.agent | quote }}
-            - name: VAR_WEB_CLIENT_URL
-              value: {{ .Values.keycloak.webClientUrl | quote }}
+            - name: VAR_DASHBOARD_URL
+              value: {{ .Values.keycloak.dashboardUrl | quote }}
           image: "{{ .Values.keycloak.image.repository }}:{{ .Values.keycloak.image.tag }}"
           imagePullPolicy: {{ .Values.keycloak.image.pullPolicy }}
           livenessProbe:
@@ -62,7 +62,7 @@ spec:
             failureThreshold: 10
             periodSeconds: 30
             timeoutSeconds: 10
-          name: rmap-keycloak
+          name: keycloak
           ports:
             - containerPort: 8080
               protocol: TCP

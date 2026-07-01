@@ -13,7 +13,7 @@ const Configuration = {
         window.env.keycloak || {
             url: "http://localhost:8080",
             realm: "reconmap",
-            clientId: "web-client",
+            clientId: "dashboard",
         },
 };
 

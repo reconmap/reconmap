@@ -21,7 +21,7 @@ make
 
 Run as any regular container passing these environment variables:
 
-- `VAR_WEB_CLIENT_URL`: URL of the Reconmap Web client. Something like https://demo.reconmap.com
+- `VAR_DASHBOARD_URL`: URL of the Reconmap Dashboard. Something like https://demo.reconmap.com
 - `VAR_ADMIN_CLI_SECRET`: This is the secret needed to communicate the Reconmap REST API with the Keycloak server.
 - `VAR_API_CLI_SECRET`: This is the secret needed to communicate the Reconmap REST API with the Keycloak server.
 - `VAR_RECONMAPD_CLI_SECRET`: This is the secret needed to communicate the Reconmap REST API with the Keycloak server.

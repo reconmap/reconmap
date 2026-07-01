@@ -47,7 +47,7 @@ keycloak:
     admin: r2TO5uRy0RlpB5TRI6GvvXtBKxUCaaz0
     api: I0jppD5zSIXuBAql31zrXfe5OAa0nvyE
     agent: VH8HDKabxlTpnpPkEgLlTq2dEanedEGC
-  webClientUrl: http://localhost:5500
+  dashboardUrl: http://localhost:5500
 
 api:
   enabled: true
@@ -63,7 +63,7 @@ api:
 dashboard:
   enabled: true
   image:
-    repository: ghcr.io/reconmap/web-client
+    repository: ghcr.io/reconmap/dashboard
     tag: latest
     pullPolicy: IfNotPresent
   apiUrl: http://localhost:5510/api

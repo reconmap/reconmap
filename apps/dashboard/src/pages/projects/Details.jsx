@@ -117,7 +117,7 @@ const ProjectDetails = () => {
                             t("Details"),
                             t("Tasks"),
                             t("Assets"),
-                            t("Findings"),
+                            t("Vulnerabilities"),
                             t("Comments"),
                             t("Attachments"),
                             t("Vault"),

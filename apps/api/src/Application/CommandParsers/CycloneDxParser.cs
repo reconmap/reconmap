@@ -32,7 +32,7 @@ public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandPar
         using var jsonDoc = JsonDocument.Parse(fileContent);
         var root = jsonDoc.RootElement;
 
-        // Build mapping of bom-ref / purl -> Asset to associate findings to correct assets
+        // Build mapping of bom-ref / purl -> Asset to associate vulnerabilities to correct assets
         var refToAssetMap = new Dictionary<string, Asset>(StringComparer.OrdinalIgnoreCase);
         var componentsList = new List<Asset>();
 
@@ -169,7 +169,7 @@ public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandPar
                     vulnerability.Asset = affectedAsset;
                 }
 
-                result.AddFinding(vulnerability);
+                result.AddVulnerability(vulnerability);
             }
         }
 

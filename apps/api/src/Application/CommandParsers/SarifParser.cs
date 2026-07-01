@@ -62,7 +62,7 @@ public class SarifParser(IAttachmentStorage attachmentStorage) : ICommandParser
                 var summary = rule?.ShortDescription?.Text ?? message;
                 if (string.IsNullOrWhiteSpace(summary))
                 {
-                    summary = ruleId ?? "SARIF Finding";
+                    summary = ruleId ?? "SARIF Vulnerability";
                 }
 
                 // Truncate summary to max length 500
@@ -134,7 +134,7 @@ public class SarifParser(IAttachmentStorage attachmentStorage) : ICommandParser
                     Status = "open"
                 };
 
-                result.AddFinding(vulnerability);
+                result.AddVulnerability(vulnerability);
             }
         }
 

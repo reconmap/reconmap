@@ -1,7 +1,7 @@
 const DefaultUserPreferences = {
-    "web-client.theme": "dark",
-    "web-client.language": "en",
-    "web-client.widgets": null,
+    "dashboard.theme": "dark",
+    "dashboard.language": "en",
+    "dashboard.widgets": null,
 };
 
 const initialiseUserPreferences = (user: any) => {

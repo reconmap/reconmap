@@ -17,15 +17,15 @@ public class JiraPublisher(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Jira publisher started, watching 'findings' queue");
+        logger.LogInformation("Jira publisher started, watching 'vulnerabilities' queue");
 
-        await messageQueue.SubscribeAsync<VulnerabilityJob>("findings", async job =>
+        await messageQueue.SubscribeAsync<VulnerabilityJob>("vulnerabilities", async job =>
         {
-            await ProcessFinding(job);
+            await ProcessVulnerability(job);
         }, stoppingToken);
     }
 
-    private async Task ProcessFinding(VulnerabilityJob job)
+    private async Task ProcessVulnerability(VulnerabilityJob job)
     {
         using var scope = scopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -72,12 +72,12 @@ public class JiraPublisher(
             }
             else
             {
-                logger.LogInformation("Finding pushed successfully to Jira at {Url}", integration.Url);
+                logger.LogInformation("Vulnerability pushed successfully to Jira at {Url}", integration.Url);
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error pushing finding to Jira at {Url}", integration.Url);
+            logger.LogError(ex, "Error pushing vulnerability to Jira at {Url}", integration.Url);
         }
     }
 

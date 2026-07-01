@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/reconmap/web-client/refs/heads/main/config-schema.json",
+    "$schema": "https://raw.githubusercontent.com/reconmap/reconmap/refs/heads/main/apps/dashboard/config-schema.json",
     "contextPath": "",
     "logoUrl": "/logo-name.png",
     "reconmapApiUrl": "http://localhost:5510/api",
@@ -7,6 +7,6 @@
     "keycloak": {
         "url": "http://localhost:8080",
         "realm": "reconmap",
-        "clientId": "web-client"
+        "clientId": "dashboard"
     }
 }

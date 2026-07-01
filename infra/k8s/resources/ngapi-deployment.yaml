@@ -24,7 +24,7 @@ spec:
             - name: ASPNETCORE_URLS
               value: http://0.0.0.0:5510
           image: ghcr.io/reconmap/ng-api:latest
-          name: rmap-ngapi
+          name: ngapi
           ports:
             - containerPort: 5510
               protocol: TCP

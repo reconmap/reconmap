@@ -17,15 +17,15 @@ public class AzureDevopsPublisher(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Azure DevOps publisher started, watching 'findings' queue");
+        logger.LogInformation("Azure DevOps publisher started, watching 'vulnerabilities' queue");
 
-        await messageQueue.SubscribeAsync<VulnerabilityJob>("findings", async job =>
+        await messageQueue.SubscribeAsync<VulnerabilityJob>("vulnerabilities", async job =>
         {
-            await ProcessFinding(job);
+            await ProcessVulnerability(job);
         }, stoppingToken);
     }
 
-    private async Task ProcessFinding(VulnerabilityJob job)
+    private async Task ProcessVulnerability(VulnerabilityJob job)
     {
         using var scope = scopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -95,12 +95,12 @@ public class AzureDevopsPublisher(
             }
             else
             {
-                logger.LogInformation("Finding pushed successfully to Azure DevOps at {Url}", integration.Url);
+                logger.LogInformation("Vulnerability pushed successfully to Azure DevOps at {Url}", integration.Url);
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error pushing finding to Azure DevOps at {Url}", integration.Url);
+            logger.LogError(ex, "Error pushing vulnerability to Azure DevOps at {Url}", integration.Url);
         }
     }
 

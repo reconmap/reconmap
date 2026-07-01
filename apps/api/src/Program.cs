@@ -73,6 +73,8 @@ services.AddDataProtection()
     .SetApplicationName("Reconmap");
 
 services.AddScoped<IAiService, AiService>();
+services.AddHttpClient();
+services.AddScoped<api_v2.Infrastructure.Security.OpaAuthorizationService>();
 
 services.AddRedisServices(builder.Configuration);
 services.AddRabbitMQServices(builder.Configuration);
@@ -112,7 +114,10 @@ services.AddHsts(options =>
     options.ExcludedHosts.Add("reconmap.com");
 });
 
-services.AddControllers()
+services.AddControllers(options =>
+    {
+        options.Filters.Add<api_v2.Infrastructure.Security.OpaActionFilter>();
+    })
     .AddJsonOptions(opt =>
     {
         opt.JsonSerializerOptions.Converters.Add(
@@ -124,12 +129,7 @@ services.AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .AddAuthenticationSchemes("ApiToken", "Bearer")
         .RequireAuthenticatedUser()
-        .RequireRole("administrator")
-        .Build())
-    .AddPolicy("AdminOnly", policy =>
-        policy.RequireRole("administrator"))
-    .AddPolicy("AdminOrUser", policy =>
-        policy.RequireRole("administrator", "user"));
+        .Build());
 
 var app = builder.Build();
 await app.Services.EnsureAuxiliaryTablesAsync();

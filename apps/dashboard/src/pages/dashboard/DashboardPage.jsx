@@ -28,7 +28,7 @@ const filterWidgets = (user) => {
             if (
                 (!widget.hasOwnProperty("permissions") ||
                     PermissionsService.isAllowed(widget.permissions, user.permissions)) &&
-                widgetIsVisible(user.preferences["web-client.widgets"], widgetKey)
+                widgetIsVisible(user.preferences["dashboard.widgets"], widgetKey)
             ) {
                 return React.cloneElement(widget.component, { key: widgetKey });
             }
@@ -43,7 +43,7 @@ const DashboardPage = () => {
 
     user.preferences = initialiseUserPreferences(user);
     const [dashboardConfig, setDashboardConfig] = useState(
-        user?.preferences?.["web-client.widgets"] || InitialiseWidgetConfig(),
+        user?.preferences?.["dashboard.widgets"] || InitialiseWidgetConfig(),
     );
     const [visibleWidgets, setVisibleWidgets] = useState(filterWidgets(user));
 
@@ -63,7 +63,7 @@ const DashboardPage = () => {
         const user = loggedInUser;
         user.preferences = initialiseUserPreferences(user);
 
-        user.preferences["web-client.widgets"] = dashboardConfig;
+        user.preferences["dashboard.widgets"] = dashboardConfig;
 
         requestUserPatch(user.id, { preferences: user.preferences })
             .then(() => {

@@ -31,7 +31,7 @@ const login = (onLoginSuccess: Function, onLoginFailure: Function) => {
 const getUserInfo = () => {
     const kcInstance = keycloak;
     if (kcInstance.authenticated) {
-        const role = kcInstance?.resourceAccess?.["web-client"]?.roles?.[0];
+        const role = kcInstance?.resourceAccess?.["dashboard"]?.roles?.[0];
 
         const user = {
             fullName: kcInstance?.tokenParsed?.name,

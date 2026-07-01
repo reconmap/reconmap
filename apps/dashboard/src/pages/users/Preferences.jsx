@@ -37,8 +37,8 @@ const UserPreferences = () => {
 
         user.preferences = {
             ...initialiseUserPreferences(user),
-            "web-client.theme": formValues.theme,
-            "web-client.language": formValues.language,
+            "dashboard.theme": formValues.theme,
+            "dashboard.language": formValues.language,
         };
 
         requestUserPatch(user.id, {
@@ -58,8 +58,8 @@ const UserPreferences = () => {
         if (userData && userData.preferences) {
             setFormValues({
                 timezone: userData.timezone,
-                theme: userData.preferences["web-client.theme"],
-                language: userData.preferences["web-client.language"],
+                theme: userData.preferences["dashboard.theme"],
+                language: userData.preferences["dashboard.language"],
             });
         }
     }, [userData]);
@@ -83,7 +83,7 @@ const UserPreferences = () => {
                             name="language"
                             onChange={updateFormValues}
                             defaultValue={
-                                userData.preferences ? userData.preferences["web-client.language"] : LanguageList[0].id
+                                userData.preferences ? userData.preferences["dashboard.language"] : LanguageList[0].id
                             }
                         >
                             {LanguageList.map((lang) => (
@@ -102,7 +102,7 @@ const UserPreferences = () => {
                             name="theme"
                             onChange={updateFormValues}
                             defaultValue={
-                                userData.preferences ? userData.preferences["web-client.theme"] : ThemeList[0].id
+                                userData.preferences ? userData.preferences["dashboard.theme"] : ThemeList[0].id
                             }
                         >
                             {ThemeList.map((theme) => (

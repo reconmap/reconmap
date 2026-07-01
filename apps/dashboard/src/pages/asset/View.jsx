@@ -94,7 +94,7 @@ const AssetView = () => {
                         </div>
                     </div>
 
-                    <h4>Findings</h4>
+                    <h4>Vulnerabilities</h4>
                     <VulnerabilitiesTable
                         tableModel={tableModel}
                         tableModelSetter={setTableModel}

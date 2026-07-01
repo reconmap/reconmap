@@ -72,7 +72,7 @@ public class TestsslParser(IAttachmentStorage attachmentStorage) : ICommandParse
             vulnerability.Tags = JsonSerializer.Serialize(tags);
             vulnerability.ProjectId = job.ProjectId;
 
-            result.AddFinding(vulnerability);
+            result.AddVulnerability(vulnerability);
         }
 
         return result;

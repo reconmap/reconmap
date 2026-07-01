@@ -6,9 +6,9 @@ MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
 ENV_FILE_NAME ?= config.local.json
-DOCKER_IMAGE_NAME = ghcr.io/reconmap/web-client
-DOCKER_CONTAINER_NAME = reconmap-web-client
-DOCKER_DEV_TAG = reconmap/web-client:dev
+DOCKER_IMAGE_NAME = ghcr.io/reconmap/dashboard
+DOCKER_CONTAINER_NAME = reconmap-dashboard
+DOCKER_DEV_TAG = reconmap/dashboard:dev
 
 # macOS is using different IDs than linux
 UNAME=$(shell uname)

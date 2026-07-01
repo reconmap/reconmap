@@ -37,13 +37,13 @@ public class ReconmapResources
         return JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true });
     }
 
-    [McpServerResource(UriTemplate = "reconmap://findings", Name = "Reconmap Findings", MimeType = "application/json")]
-    public async Task<string> GetFindings()
+    [McpServerResource(UriTemplate = "reconmap://vulnerabilities", Name = "Reconmap Vulnerabilities", MimeType = "application/json")]
+    public async Task<string> GetVulnerabilities()
     {
-        var findings = await _dbContext.Vulnerabilities
+        var vulnerabilities = await _dbContext.Vulnerabilities
             .Select(f => new { f.Id, f.ProjectId, f.Summary, f.Risk, f.Status })
             .ToListAsync();
-        return JsonSerializer.Serialize(findings, new JsonSerializerOptions { WriteIndented = true });
+        return JsonSerializer.Serialize(vulnerabilities, new JsonSerializerOptions { WriteIndented = true });
     }
 
     [McpServerResource(UriTemplate = "reconmap://documents", Name = "Reconmap Documents", MimeType = "application/json")]

@@ -66,6 +66,8 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
         [FromQuery] bool? isTemplate,
         [FromQuery] uint? clientId)
     {
+        var currentUser = HttpContext.GetCurrentUser()!;
+
         if (!string.IsNullOrEmpty(keywords))
         {
             var setName = $"recent-searches-user${HttpContext.GetCurrentUser()!.Id}";
@@ -78,6 +80,12 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
             .Include(p => p.Category)
             .AsNoTracking()
             .Where(p => !isTemplate.HasValue || p.IsTemplate == isTemplate);
+            
+        if (currentUser.Role == UserRole.Client) {
+            var memberProjectIds = dbContext.ProjectMembers.Where(pm => pm.UserId == currentUser.Id).Select(pm => pm.ProjectId);
+            q = q.Where(p => memberProjectIds.Contains(p.Id));
+        }
+
         if (clientId != null)
             q = q.Where(p => p.ClientId == clientId);
         if (!string.IsNullOrEmpty(status))
@@ -126,6 +134,7 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
             .FirstOrDefaultAsync();
         if (project == null) return NotFound();
 
+        var currentUser = HttpContext.GetCurrentUser()!;
         return Ok(project);
     }
 

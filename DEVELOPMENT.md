@@ -46,7 +46,7 @@ This starts the production-grade baseline:
 - `rabbitmq`: Message queue for integrations and async tasks.
 - `keycloak`: Identity Provider (8080).
 - `ngapi`: C# REST API (5510).
-- `web-client`: React Frontend (5500).
+- `dashboard`: React Frontend (5500).
 
 ### Compose File Inheritance
 
@@ -58,7 +58,7 @@ To prevent configuration duplication, the sub-project compose files inherit from
   - Configures a local `mysql` build context pointing to `infra/docker/mysql/Dockerfile`.
   - Configures `keycloak` in debug mode (running under the `testing` profile).
   - Enables the `rustfs` debug console on port `9001`.
-  - Places `ngapi` and `web-client` under the `testing` profile to avoid host port conflicts while debugging the API on the host machine.
+  - Places `ngapi` and `dashboard` under the `testing` profile to avoid host port conflicts while debugging the API on the host machine.
   - Overlays the local build context and local configuration files (`appsettings.json`) for the `ngapi` service under the `testing` profile.
 
 ## CLI Development

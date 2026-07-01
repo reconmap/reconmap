@@ -25,4 +25,4 @@ Available widgets:
 | API health                | Presents information about the status of the API                                                                   |
 | Recent vulnerabilities    | Shows the most recently reported vulnerabilities                                                                   |
 | Agents                    | Shows the status of registered security agents                                                                     |
-| Top vulnerable assets     | Shows assets with the highest count of active findings                                                             |
+| Top vulnerable assets     | Shows assets with the highest count of active vulnerabilities                                                      |

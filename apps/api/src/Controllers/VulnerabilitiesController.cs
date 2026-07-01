@@ -31,10 +31,10 @@ public class VulnerabilitiesController(
         AuditAction(AuditActions.Created, "Vulnerability", new { id = vulnerability.Id });
         await _dbContext.SaveChangesAsync();
 
-        await messageQueue.PublishAsync("findings",
-            new { @event = "finding.created", payload = vulnerability });
+        await messageQueue.PublishAsync("vulnerabilities",
+            new { @event = "vulnerability.created", payload = vulnerability });
         await messageQueue.PublishAsync("webhooks",
-            new { @event = "finding.created", payload = vulnerability });
+            new { @event = "vulnerability.created", payload = vulnerability });
 
         return CreatedAtAction(nameof(GetOne), new { id = vulnerability.Id }, vulnerability);
     }

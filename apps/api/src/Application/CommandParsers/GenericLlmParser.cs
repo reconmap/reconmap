@@ -41,15 +41,15 @@ public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmen
             });
         }
 
-        foreach (var aiFinding in aiResult.Findings)
+        foreach (var aiVulnerability in aiResult.Vulnerabilities)
         {
-            result.AddFinding(new Vulnerability
+            result.AddVulnerability(new Vulnerability
             {
-                Summary = aiFinding.Summary,
-                Description = aiFinding.Description,
-                Risk = aiFinding.Risk,
-                Remediation = aiFinding.Remediation,
-                ProofOfConcept = aiFinding.ProofOfConcept
+                Summary = aiVulnerability.Summary,
+                Description = aiVulnerability.Description,
+                Risk = aiVulnerability.Risk,
+                Remediation = aiVulnerability.Remediation,
+                ProofOfConcept = aiVulnerability.ProofOfConcept
             });
         }
 

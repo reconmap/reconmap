@@ -27,8 +27,8 @@ public class RoleClaimsTransformation : IClaimsTransformation
             // Deserialize the realm_access JSON to extract the roles
             var realmAccess = JsonSerializer.Deserialize<RealmAccess>(resourceAccessClaims.Value, options);
 
-            if (realmAccess?.WebClient?.Roles != null)
-                foreach (var role in realmAccess.WebClient.Roles)
+            if (realmAccess?.Dashboard?.Roles != null)
+                foreach (var role in realmAccess.Dashboard.Roles)
                     // Add each role as a Claim of type ClaimTypes.Role
                     identity?.AddClaim(new Claim(ClaimTypes.Role, role));
         }
@@ -43,6 +43,6 @@ public class RoleClaimsTransformation : IClaimsTransformation
 
     public class RealmAccess
     {
-        [JsonPropertyName("web-client")] public Foo WebClient { get; set; }
+        [JsonPropertyName("dashboard")] public Foo Dashboard { get; set; }
     } // one user can be assigned multiple roles
 }

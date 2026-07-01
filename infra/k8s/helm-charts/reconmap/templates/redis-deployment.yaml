@@ -33,7 +33,7 @@ spec:
             - warning
           image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
           imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
-          name: rmap-redis
+          name: redis
           ports:
             - containerPort: 6379
               protocol: TCP

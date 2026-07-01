@@ -18,4 +18,4 @@ From the vulnerability details view, you can:
 - View vulnerability history and audit logs.
 - Map the vulnerability to CVE IDs.
 
-The vulnerability details view is where you can document findings and evidence of exploitation.
+The vulnerability details view is where you can document vulnerabilities and evidence of exploitation.

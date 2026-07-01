@@ -29,7 +29,7 @@ spec:
               value: {{ .Values.api.urls | quote }}
           image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
-          name: rmap-ngapi
+          name: ngapi
           ports:
             - containerPort: 5510
               protocol: TCP
