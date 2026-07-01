@@ -9,7 +9,7 @@ volumes:
 
 services:
   redis:
-    image: redis:8.6-alpine
+    image: redis:8.8-alpine
     command: redis-server --requirepass ${REDIS_PASSWORD} --save 20 1 --loglevel warning
     restart: unless-stopped
     ports:
@@ -18,7 +18,7 @@ services:
       - redis_data:/data
 
   rabbitmq:
-    image: rabbitmq:4.2-alpine
+    image: rabbitmq:4.3-alpine
     restart: unless-stopped
     ports:
       - "5672:5672"
@@ -143,7 +143,7 @@ services:
       RMAP_REDIS_PASSWORD: "${REDIS_PASSWORD}"
 
   rustfs:
-    image: rustfs/rustfs:latest
+    image: rustfs/rustfs:1.0.0-beta.8
     restart: unless-stopped
     ports:
       - "9000:9000"
@@ -153,10 +153,11 @@ services:
       - rustfs_logs:/logs
 
   opa:
-    image: openpolicyagent/opa:latest
+    image: openpolicyagent/opa:1.18.1-istio
     restart: unless-stopped
     ports:
       - "8181:8181"
     volumes:
       - ./policy:/policy
     command: ["run", "--server", "--addr", ":8181", "--log-format=json", "/policy"]
+
