@@ -6,8 +6,8 @@ LABEL org.opencontainers.image.vendor="Netfoe" \
 	org.opencontainers.image.description="Custom Keycloak for Reconmap" \
 	org.opencontainers.image.licenses="Apache-2.0" \
 	org.opencontainers.image.url="https://github.com/reconmap/reconmap" \
-	org.opencontainers.image.source="https://github.com/reconmap/reconmap/tree/master/docker/keycloak" \
-	org.opencontainers.image.documentation="https://github.com/reconmap/documentation"
+	org.opencontainers.image.source="https://github.com/reconmap/reconmap/tree/main/infra/docker/keycloak" \
+	org.opencontainers.image.documentation="https://github.com/reconmap/reconmap/tree/main/docs"
 
 COPY reconmap-theme-keycloak.jar /opt/keycloak/providers/
 
