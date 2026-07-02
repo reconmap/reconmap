@@ -62,6 +62,7 @@ export const ScansUrls = {
     List: "/scans",
     RunOnce: "/scans/run-once",
     RunOnSchedule: "/scans/run-on-schedule",
+    RunFromUrl: "/scans/run-from-url",
     Schedules: "/scans/schedules",
     Import: "/scans/import",
 };

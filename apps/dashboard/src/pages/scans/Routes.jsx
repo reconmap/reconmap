@@ -8,6 +8,7 @@ const ScansRoutes = [
         <Route index element={<Navigate to="run-once" />} />
         <Route path="run-once" element={<ScansPage mode="once" />} />
         <Route path="run-on-schedule" element={<ScansPage mode="on_schedule" />} />
+        <Route path="run-from-url" element={<ScansPage mode="url" />} />
         <Route path="schedules" element={<ScansPage mode="schedules" />} />
         <Route path="import" element={<ScansPage mode="import" />} />
     </Route>,

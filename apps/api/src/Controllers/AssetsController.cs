@@ -11,6 +11,15 @@ namespace api_v2.Controllers;
 [ApiController]
 public class AssetsController(AppDbContext dbContext, IAiService aiService) : ControllerBase
 {
+    public sealed class EnsureAssetRequest
+    {
+        public uint ProjectId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Type { get; set; }
+        public uint? ParentId { get; set; }
+        public string? Tags { get; set; }
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateOne(Asset asset)
     {
@@ -29,6 +38,39 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
 
         var assets = await q.ToListAsync();
         return Ok(assets);
+    }
+
+    [HttpPost("ensure")]
+    public async Task<IActionResult> EnsureOne([FromBody] EnsureAssetRequest request)
+    {
+        var name = request.Name?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return BadRequest("Missing asset name");
+        }
+
+        var assetType = request.Type?.Trim();
+        var existingAsset = await dbContext.Assets.AsNoTracking()
+            .FirstOrDefaultAsync(a => a.ProjectId == request.ProjectId && a.Name == name && a.Type == assetType);
+
+        if (existingAsset != null)
+        {
+            return Ok(existingAsset);
+        }
+
+        var asset = new Asset
+        {
+            ProjectId = request.ProjectId,
+            Name = name,
+            Type = assetType,
+            ParentId = request.ParentId,
+            Tags = request.Tags
+        };
+
+        dbContext.Assets.Add(asset);
+        await dbContext.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetOne), new { id = asset.Id }, asset);
     }
 
     [HttpGet("{id:int}")]

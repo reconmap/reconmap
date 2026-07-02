@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { requestAsset, requestAssetDelete, requestAssets } from "./requests/assets.js";
+import { requestAsset, requestAssetDelete, requestAssetEnsure, requestAssets } from "./requests/assets.js";
 
 const useAssetQuery = (assetId: number) => {
     return useQuery({
@@ -25,4 +25,4 @@ const useDeleteAssetMutation = () => {
     });
 };
 
-export { useAssetQuery, useAssetsQuery, useDeleteAssetMutation };
+export { requestAssetEnsure, useAssetQuery, useAssetsQuery, useDeleteAssetMutation };

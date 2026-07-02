@@ -6,6 +6,8 @@ grand_parent: User manual
 
 Reconmap can parse the output of many security tools, and incorporate their results in one of your projects. The instructions below show how to do so step by step.
 
+Reconmap also provides a URL-first scan launcher under **Scans -> Start from URL**. Use it when you want to launch a web-target scan from a project and an explicit URL. Reconmap will create a URL asset for that project if it does not already exist, then prepare a command usage that accepts the `URL` placeholder.
+
 ### Step 1 - Choose a command usage under Scans
 
 Reconmap has built-in, code-defined commands and usages. You do not need to manually configure executable paths or associate output parsers.

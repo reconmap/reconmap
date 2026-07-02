@@ -19,15 +19,32 @@ import parseArguments from "services/commands/arguments";
 
 const Bullet = () => <span style={{ color: "var(--bulma-primary" }}>▸</span>;
 
-const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = null }) => {
+const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = null, defaultUsageId = null, defaultArgumentValues = null }) => {
     const { data: commandUsages } = useCommandUsagesQuery(command?.id);
 
     const [usage, setUsage] = useState(null);
 
     const onUsageChange = (ev) => {
-        const usage = commandUsages.find((usage) => usage.id === ev.target.value);
+        const usages = commandUsages ?? [];
+        const usage = usages.find((usage) => usage.id === ev.target.value);
         setUsage(usage || null);
     };
+
+    useEffect(() => {
+        const usages = commandUsages ?? [];
+
+        if (defaultUsageId) {
+            const defaultUsage = usages.find((usage) => usage.id === defaultUsageId);
+            if (defaultUsage) {
+                setUsage(defaultUsage);
+                return;
+            }
+        }
+
+        if (usage === null && usages.length === 1) {
+            setUsage(usages[0]);
+        }
+    }, [commandUsages, defaultUsageId, usage]);
 
     if (commandUsages == null) {
         return (
@@ -39,7 +56,7 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
 
     return (
         <>
-            <NativeSelect onChange={(ev) => onUsageChange(ev)}>
+            <NativeSelect onChange={(ev) => onUsageChange(ev)} value={usage?.id || defaultUsageId || "0"}>
                 <option value="0">(select)</option>
                 {commandUsages.map((usage) => (
                     <option key={usage.id} value={usage.id}>
@@ -51,20 +68,20 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
             {usage !== null && (
                 <>
                     <h4 className="title is-4">Instructions for command "{command.name}"</h4>
-                    <UsageDetail projectId={projectId} command={command} usage={usage} forcedRunFrequency={forcedRunFrequency} />
+                    <UsageDetail projectId={projectId} command={command} usage={usage} forcedRunFrequency={forcedRunFrequency} defaultArgumentValues={defaultArgumentValues} />
                 </>
             )}
         </>
     );
 };
 
-const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFrequency = null }) => {
+const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFrequency = null, defaultArgumentValues = null }) => {
     const [commandArgsRendered, setCommandArgsRendered] = useState("");
-    const [commandArgs, setCommandArgs] = useState(parseArguments(usage));
-    const [vulnerabilitiesStorageAction, setVulnerabilitiesStorageAction] = useState("discard");
+    const [commandArgs, setCommandArgs] = useState(() => parseArguments(usage));
+    const [vulnerabilitiesStorageAction, setVulnerabilitiesStorageAction] = useState(parentProjectId ? "project" : "discard");
     const [showTerminal, setShowTerminal] = useState(false);
     const [runFrequency, setRunFrequency] = useState(forcedRunFrequency || "once");
-    const [projectId, setProjectId] = useState(null);
+    const [projectId, setProjectId] = useState(parentProjectId ?? null);
     const [terminalEnvironment, setTerminalEnvironment] = useState("desktop");
     const [agent, setAgent] = useState(null);
     const { data: projects } = useProjectsQuery({ isTemplate: false, status: "active" });
@@ -75,6 +92,13 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
             setRunFrequency(forcedRunFrequency);
         }
     }, [forcedRunFrequency]);
+
+    useEffect(() => {
+        if (parentProjectId) {
+            setProjectId(parentProjectId);
+            setVulnerabilitiesStorageAction("project");
+        }
+    }, [parentProjectId]);
 
     const [cronExpression, setCronExpression] = useState("");
     const [cronExpressionErrorMessage, setCronExpressionErrorMessage] = useState(null);
@@ -89,6 +113,21 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
         });
 
     };
+
+    useEffect(() => {
+        const parsedArgs = parseArguments(usage);
+        if (defaultArgumentValues) {
+            Object.entries(defaultArgumentValues).forEach(([key, value]) => {
+                if (parsedArgs[key]) {
+                    parsedArgs[key] = {
+                        ...parsedArgs[key],
+                        placeholder: value,
+                    };
+                }
+            });
+        }
+        setCommandArgs(parsedArgs);
+    }, [usage, defaultArgumentValues]);
 
     const runOnTerminal = (ev) => {
         setShowTerminal(true);
@@ -170,6 +209,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                                 setProjectId(projects.data[0].id);
                             }
                         }}
+                        value={vulnerabilitiesStorageAction}
                     >
                         <option value="discard">Discard (only captures output)</option>
                         <option value="project">Project</option>
@@ -182,7 +222,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                     label="Project"
                     htmlFor="projectId"
                     control={
-                        <NativeSelect id="projectId" name="project_id" onChange={(ev) => setProjectId(ev.target.value)}>
+                        <NativeSelect id="projectId" name="project_id" onChange={(ev) => setProjectId(ev.target.value)} value={projectId || ""}>
                             {projects.data.map((project) => (
                                 <option value={project.id}>{project.name}</option>
                             ))}

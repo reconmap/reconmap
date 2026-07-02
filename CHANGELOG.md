@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a new dashboard scan launcher under **Scans -> Start from URL** that ensures a URL asset exists for the selected project before preparing a URL-capable command usage.
 - Implemented Azure OpenAI and OpenRouter/OpenAI chat client integrations in the C# API's `AiService` utilizing `Microsoft.Extensions.AI.OpenAI`, allowing admins to configure cloud LLM providers in the dashboard settings instead of being limited to local Ollama installations.
 - Integrated Open Policy Agent (OPA) / Rego for centralized attribute-based access control (ABAC).
 - Enforced project visibility constraints ensuring users with the Client role can only view their assigned projects.

@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import AttachmentsDropzone from "components/attachments/Dropzone.jsx";
 import CommandInstructions from "components/commands/Instructions.jsx";
 import ScheduledRuns from "components/commands/ScheduledRuns.jsx";
+import UrlScanLauncher from "components/scans/UrlLauncher.jsx";
 
 const ScansPage = ({ mode }) => {
     const [t] = useTranslation();
@@ -49,6 +50,7 @@ const ScansPage = ({ mode }) => {
             case "on_schedule": return t("Run on schedule");
             case "schedules": return t("Scheduled scans");
             case "import": return t("Import scan");
+            case "url": return t("Start from URL");
             default: return t("Scans");
         }
     };
@@ -126,6 +128,12 @@ const ScansPage = ({ mode }) => {
             {mode === "schedules" && (
                 <article className="mt-4 content">
                     <ScheduledRuns />
+                </article>
+            )}
+
+            {mode === "url" && (
+                <article className="mt-4 content">
+                    <UrlScanLauncher />
                 </article>
             )}
 

@@ -8,6 +8,7 @@ const requestAsset = (assetId: number) => {
 };
 
 export const requestAssetPost = (data: any) => requestEntityPost(API_BASE_URL, data);
+export const requestAssetEnsure = (data: any) => requestEntityPost(`${API_BASE_URL}/ensure`, data);
 
 const requestAssets = async (params: any) => {
     const resp = await secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { method: "GET" });

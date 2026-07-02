@@ -74,6 +74,12 @@ export const getNavigationStructure = (t) => [
             },
             {
                 type: "menu",
+                name: t("Start from URL"),
+                url: ScansUrls.RunFromUrl,
+                permissions: "commands.*",
+            },
+            {
+                type: "menu",
                 name: t("Import scan"),
                 url: ScansUrls.Import,
                 permissions: "commands.*",
