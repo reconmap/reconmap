@@ -7,22 +7,17 @@ namespace api_v2.Domain.Entities;
 public class AiSettings : TimestampedEntity
 {
     [Key]
-    [Column("id")]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public uint Id { get; set; } = 1;
 
-    [Column("provider")]
     [MaxLength(50)]
     public string Provider { get; set; } = "Ollama";
 
-    [Column("max_output_tokens")]
     public int MaxOutputTokens { get; set; } = 4000;
 
-    [Column("ollama_base_url")]
     [MaxLength(255)]
     public string? OllamaBaseUrl { get; set; }
 
-    [Column("ollama_model")]
     [MaxLength(255)]
     public string? OllamaModel { get; set; }
 

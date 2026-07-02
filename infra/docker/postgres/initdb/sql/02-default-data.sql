@@ -1,20 +1,11 @@
-USE reconmap;
+INSERT INTO "user" (id, subject_id, first_name, last_name, username, email, role)
+VALUES (0, 'NULL', 'System', '-', 'system','system@localhost', 'administrator');
 
-SET @system_user_id = 0;
-SET @admin_user_id = 1;
-
-SET @@SESSION.sql_mode='NO_AUTO_VALUE_ON_ZERO';
-INSERT INTO user (id, subject_id, first_name, last_name, username, email, role)
-VALUES (@system_user_id, 'NULL', 'System', '-', 'system','system@localhost',
-        'administrator');
-SET @@SESSION.sql_mode='';
-
-INSERT INTO user (id, subject_id, first_name, last_name, username, email, role)
-VALUES (@admin_user_id, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'Administrator', '-', 'admin','admin@localhost',
-        'administrator');
+INSERT INTO "user" (id, subject_id, first_name, last_name, username, email, role)
+VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'Administrator', '-', 'admin','admin@localhost', 'administrator');
 
 INSERT INTO audit_log (created_by_uid, client_ip, action, object)
-VALUES (@system_user_id, INET6_ATON('127.0.0.1'), 'Initialised', 'System');
+VALUES (0, '\x7f000001'::bytea, 'Initialised', 'System');
 
 INSERT INTO vulnerability_category (id, parent_id, name, description)
 VALUES (1, NULL, 'General', 'General categories.'),
@@ -32,34 +23,28 @@ VALUES (1, NULL, 'General', 'General categories.'),
        (13, 1, 'Timing', 'Related to race conditions, locking, or order of operations.');
 
 INSERT INTO organisation (created_by_uid, kind, name, url)
-VALUES (@admin_user_id, 'service_provider', 'Reconmap', 'https://reconmap.com');
+VALUES (1, 'service_provider', 'Reconmap', 'https://reconmap.com');
 
 INSERT INTO contact (organisation_id, name, email)
-VALUES (LAST_INSERT_ID(), 'Contributors', 'no-reply@reconmap.com');
+VALUES (currval(pg_get_serial_sequence('organisation', 'id')), 'Contributors', 'no-reply@reconmap.com');
 
 INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
-VALUES (NULL, @admin_user_id, TRUE, 'Report template (Word)', 'Default report template in Word format');
+VALUES (NULL, 1, TRUE, 'Report template (Word)', 'Default report template in Word format');
 
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
-                        file_hash)
-VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.docx', 'default-report-template.docx', 0,
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '');
+INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.docx', 'default-report-template.docx', 0, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '');
 
 INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
-VALUES (NULL, @admin_user_id, TRUE, 'Report template (MD)', 'Default report template in Markdown format');
+VALUES (NULL, 1, TRUE, 'Report template (MD)', 'Default report template in Markdown format');
 
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
-                        file_hash)
-VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.md', 'default-report-template.md', 0,
-        'text/markdown', '');
+INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.md', 'default-report-template.md', 0, 'text/markdown', '');
 
 INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
-VALUES (NULL, @admin_user_id, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
+VALUES (NULL, 1, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
 
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype,
-        file_hash)
-VALUES ('report', LAST_INSERT_ID(), @admin_user_id, 'default-report-template.typ', 'default-report-template.typ', 0,
-        'text/typst', '');
+INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.typ', 'default-report-template.typ', 0, 'text/typst', '');
 
 INSERT INTO project_category (name, description)
 VALUES ('Managed security monitoring',
@@ -80,9 +65,7 @@ VALUES ('Managed security monitoring',
         'Also known as pentesting, which entails simulating a cyberattack against the organization\’s information and technology assets to check for exploitable vulnerabilities. This service constitutes a form of ethical hacking that can be very effective at uncovering the vulnerabilities that may be successfully targeted by hackers ');
 
 INSERT INTO project (created_by_uid, name, description, engagement_end_date)
-VALUES (@admin_user_id, 'Onboarding to Reconmap',
-        'Project to ensure all Reconmap\'s onboarding tasks are done in order.',
-        CURRENT_DATE);
+VALUES (1, 'Onboarding to Reconmap', 'Project to ensure all Reconmap''s onboarding tasks are done in order.', CURRENT_DATE);
 
 INSERT INTO task (created_by_uid, assigned_to_uid, project_id, summary, description, priority)
 VALUES (1, 1, 1, '1. Update your organisation details', '[Follow this link](/settings/organisation)', 'medium'),
@@ -92,3 +75,10 @@ VALUES (1, 1, 1, '1. Update your organisation details', '[Follow this link](/set
        (1, 1, 1, '5. Create project', '[Follow this link](/projects/create)', 'medium'),
        (1, 1, 1, '6. Archive the onboarding project', NULL, 'medium');
 
+-- Default settings rows
+INSERT INTO mail_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
+INSERT INTO ai_settings (id, provider, max_output_tokens, ollama_base_url, ollama_model) VALUES (1, 'Ollama', 4000, 'http://localhost:11434/', 'llama3.2') ON CONFLICT (id) DO NOTHING;
+
+-- Reset sequences to prevent conflicts due to explicit ID insertions
+SELECT setval(pg_get_serial_sequence('user', 'id'), COALESCE(MAX(id), 1)) FROM "user";
+SELECT setval(pg_get_serial_sequence('vulnerability_category', 'id'), COALESCE(MAX(id), 1)) FROM vulnerability_category;

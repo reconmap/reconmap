@@ -1,16 +1,16 @@
-{{- if .Values.mysql.enabled -}}
+{{- if .Values.postgres.enabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
     {{- include "reconmap.labels" . | nindent 4 }}
-    app.kubernetes.io/component: mysql
-  name: mysql-pvc
+    app.kubernetes.io/component: postgres
+  name: postgres-pvc
   namespace: {{ .Values.global.namespace }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.mysql.persistence.size | default "100Mi" }}
+      storage: {{ .Values.postgres.persistence.size | default "100Mi" }}
 {{- end }}

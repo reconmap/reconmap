@@ -131,14 +131,14 @@ wget https://raw.githubusercontent.com/reconmap/reconmap/master/config-ui.json
 
 Changes to `compose.yaml`:
 
-- Change default MySQL and Redis passwords.
+- Change default PostgreSQL and Redis passwords.
 
 Changes to `config-api.json`:
 
 - Change all values under the `jwt` key.
 - Change the `allowedOrigins` array under the `cors` key.
 - Change the SMTP settings to match your SMTP settings.
-- Change the database settings to match what you have put on the MySQL section on the `compose.yaml` file.
+- Change the database settings to match what you have put on the PostgreSQL section on the `compose.yaml` file.
 
 Changes to `config-ui.json`:
 

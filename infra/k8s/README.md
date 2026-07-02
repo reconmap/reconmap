@@ -12,7 +12,7 @@
 
 ## Provisioning
 
-The Kubernetes resources include deployments for Keycloak, MySQL, Redis, dashboard, the C# REST API (`ngapi`), and the **RabbitMQ** message queue.
+The Kubernetes resources include deployments for Keycloak, PostgreSQL, Redis, dashboard, the C# REST API (`ngapi`), and the **RabbitMQ** message queue.
 
 To deploy using the raw manifests:
 

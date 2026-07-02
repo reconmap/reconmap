@@ -1,0 +1,650 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-configmap
+  namespace: {{ .Values.global.namespace }}
+data:
+  00-databases.sh: |
+    #!/bin/bash
+    set -e
+
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+        CREATE USER "${POSTGRES_RECONMAP_USER}" WITH PASSWORD '${POSTGRES_RECONMAP_PASSWORD}';
+        CREATE DATABASE reconmap OWNER "${POSTGRES_RECONMAP_USER}" ENCODING 'UTF8';
+        GRANT ALL PRIVILEGES ON DATABASE reconmap TO "${POSTGRES_RECONMAP_USER}";
+        ALTER DATABASE reconmap SET timezone TO 'UTC';
+
+        CREATE USER "${POSTGRES_KEYCLOAK_USER}" WITH PASSWORD '${POSTGRES_KEYCLOAK_PASSWORD}';
+        CREATE DATABASE keycloak OWNER "${POSTGRES_KEYCLOAK_USER}" ENCODING 'UTF8';
+        GRANT ALL PRIVILEGES ON DATABASE keycloak TO "${POSTGRES_KEYCLOAK_USER}";
+        ALTER DATABASE keycloak SET timezone TO 'UTC';
+    EOSQL
+
+    # Now run the schema and default-data scripts as the reconmap user on the reconmap database
+    PGPASSWORD="${POSTGRES_RECONMAP_PASSWORD}" psql -v ON_ERROR_STOP=1 --username "${POSTGRES_RECONMAP_USER}" --dbname "reconmap" -f /docker-entrypoint-initdb.d/sql/01-schema.sql
+    PGPASSWORD="${POSTGRES_RECONMAP_PASSWORD}" psql -v ON_ERROR_STOP=1 --username "${POSTGRES_RECONMAP_USER}" --dbname "reconmap" -f /docker-entrypoint-initdb.d/sql/02-default-data.sql
+  01-schema.sql: |
+    DROP VIEW IF EXISTS vulnerability_template;
+    DROP VIEW IF EXISTS project_template;
+    DROP VIEW IF EXISTS user_info;
+    DROP TABLE IF EXISTS user_api_token CASCADE;
+    DROP TABLE IF EXISTS agent CASCADE;
+    DROP TABLE IF EXISTS notification CASCADE;
+    DROP TABLE IF EXISTS note CASCADE;
+    DROP TABLE IF EXISTS document CASCADE;
+    DROP TABLE IF EXISTS ai_settings CASCADE;
+    DROP TABLE IF EXISTS mail_settings CASCADE;
+    DROP TABLE IF EXISTS custom_field CASCADE;
+    DROP TABLE IF EXISTS report CASCADE;
+    DROP TABLE IF EXISTS command_schedule CASCADE;
+    DROP TABLE IF EXISTS task CASCADE;
+    DROP TABLE IF EXISTS vulnerability CASCADE;
+    DROP TABLE IF EXISTS vulnerability_category CASCADE;
+    DROP TABLE IF EXISTS asset CASCADE;
+    DROP TABLE IF EXISTS project_user CASCADE;
+    DROP TABLE IF EXISTS vault CASCADE;
+    DROP TABLE IF EXISTS audit_log CASCADE;
+    DROP TABLE IF EXISTS azure_devops_integration CASCADE;
+    DROP TABLE IF EXISTS jira_integration CASCADE;
+    DROP TABLE IF EXISTS webhook CASCADE;
+    DROP TABLE IF EXISTS contact CASCADE;
+    DROP TABLE IF EXISTS project CASCADE;
+    DROP TABLE IF EXISTS project_category CASCADE;
+    DROP TABLE IF EXISTS organisation CASCADE;
+    DROP TABLE IF EXISTS attachment CASCADE;
+    DROP TABLE IF EXISTS "user" CASCADE;
+
+    -- 1. user
+    CREATE TABLE "user"
+    (
+        id            SERIAL PRIMARY KEY,
+        created_at     TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at     TIMESTAMPTZ   NULL,
+        last_login_ts TIMESTAMPTZ   NULL,
+        subject_id    VARCHAR(40)   NOT NULL,
+        active        BOOLEAN       NOT NULL DEFAULT TRUE,
+        email         VARCHAR(200)  NOT NULL,
+        role          VARCHAR(20)   NULL,
+        username      VARCHAR(80)   NOT NULL UNIQUE,
+        first_name    VARCHAR(100)  NOT NULL,
+        last_name     VARCHAR(100)  NOT NULL,
+        full_name     VARCHAR(210) GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED,
+        short_bio     VARCHAR(1000) NULL,
+        timezone      VARCHAR(200)  NOT NULL DEFAULT 'UTC',
+        mfa_enabled   BOOLEAN       NOT NULL DEFAULT FALSE,
+        preferences   JSONB         NULL
+    );
+
+    -- 2. attachment
+    CREATE TABLE attachment
+    (
+        id               SERIAL PRIMARY KEY,
+        created_at  TIMESTAMPTZ             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        created_by_uid    INT                                                                             NOT NULL,
+        updated_at  TIMESTAMPTZ             NULL,
+        parent_type      VARCHAR(20) NOT NULL,
+        parent_id        INT                                                                             NOT NULL,
+        client_file_name VARCHAR(200)                                                                             NOT NULL,
+        file_name        VARCHAR(200)                                                                             NOT NULL,
+        file_size        INT                                                                             NOT NULL,
+        file_mimetype    VARCHAR(200)                                                                             NULL,
+        file_hash        VARCHAR(128)                                                                           NOT NULL,
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+    );
+
+    -- 3. organisation
+    CREATE TABLE organisation
+    (
+        id                       SERIAL PRIMARY KEY,
+        created_at                TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at                TIMESTAMPTZ                         NULL,
+        created_by_uid INT                        NOT NULL,
+        kind                     VARCHAR(20) NOT NULL,
+        name                     VARCHAR(80)                         NOT NULL UNIQUE,
+        address                  VARCHAR(400)                        NULL,
+        url                      VARCHAR(255)                        NULL,
+        logo_attachment_id       INT                        NULL,
+        small_logo_attachment_id INT                        NULL,
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+        FOREIGN KEY (logo_attachment_id) REFERENCES attachment (id) ON DELETE SET NULL,
+        FOREIGN KEY (small_logo_attachment_id) REFERENCES attachment (id) ON DELETE SET NULL
+    );
+
+    -- 4. project_category
+    CREATE TABLE project_category
+    (
+        id          SERIAL PRIMARY KEY,
+        name        VARCHAR(200)  NOT NULL UNIQUE,
+        description VARCHAR(2000) NULL
+    );
+
+    -- 5. project
+    CREATE TABLE project
+    (
+        id                    SERIAL PRIMARY KEY,
+        created_at             TIMESTAMPTZ                NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at             TIMESTAMPTZ                NULL,
+        created_by_uid           INT                        NOT NULL,
+        service_provider_id   INT                        NULL,
+        client_id             INT                        NULL,
+        category_id           INT                        NULL,
+        is_template           BOOLEAN                    NOT NULL DEFAULT FALSE,
+        visibility            VARCHAR(20) NOT NULL DEFAULT 'public',
+        name                  VARCHAR(200)               NOT NULL UNIQUE,
+        description           VARCHAR(2000)              NULL,
+        engagement_start_date DATE,
+        engagement_end_date   DATE,
+        archived              BOOLEAN                    NOT NULL DEFAULT FALSE,
+        archived_at            TIMESTAMPTZ                NULL,
+        external_id           VARCHAR(40)                NULL,
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+        CONSTRAINT project_fk_client_id FOREIGN KEY (client_id) REFERENCES organisation (id) ON DELETE SET NULL,
+        CONSTRAINT project_fk_category_id FOREIGN KEY (category_id) REFERENCES project_category (id) ON DELETE SET NULL
+    );
+
+    -- 6. contact
+    CREATE TABLE contact
+    (
+        id    SERIAL PRIMARY KEY,
+        organisation_id INT             NOT NULL,
+        kind  VARCHAR(20) NOT NULL DEFAULT 'general',
+        name  VARCHAR(200)                             NOT NULL,
+        email VARCHAR(200)                             NOT NULL,
+        phone VARCHAR(200)                             NULL,
+        role  VARCHAR(200)                             NULL,
+        FOREIGN KEY (organisation_id) REFERENCES organisation (id) ON DELETE CASCADE
+    );
+
+    -- 7. webhook
+    CREATE TABLE webhook
+    (
+        id         SERIAL PRIMARY KEY,
+        created_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMPTZ  NULL,
+        name       VARCHAR(200) NOT NULL,
+        url        VARCHAR(512) NOT NULL,
+        secret     VARCHAR(100) NULL,
+        is_enabled BOOLEAN      NOT NULL DEFAULT TRUE,
+        events     VARCHAR(512) NOT NULL
+    );
+
+    -- 8. jira_integration
+    CREATE TABLE jira_integration
+    (
+        id          SERIAL PRIMARY KEY,
+        created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at  TIMESTAMPTZ  NULL,
+        name        VARCHAR(200) NOT NULL,
+        url         VARCHAR(512) NOT NULL,
+        email       VARCHAR(200) NOT NULL,
+        api_token   VARCHAR(512) NOT NULL,
+        project_key VARCHAR(50)  NOT NULL,
+        is_enabled  BOOLEAN      NOT NULL DEFAULT TRUE
+    );
+
+    -- 9. azure_devops_integration
+    CREATE TABLE azure_devops_integration
+    (
+        id          SERIAL PRIMARY KEY,
+        created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at  TIMESTAMPTZ  NULL,
+        name        VARCHAR(200) NOT NULL,
+        url         VARCHAR(512) NOT NULL,
+        project_name       VARCHAR(200) NOT NULL,
+        personal_access_token   VARCHAR(512) NOT NULL,
+        is_enabled  BOOLEAN      NOT NULL DEFAULT TRUE
+    );
+
+    -- 10. audit_log
+    CREATE TABLE audit_log
+    (
+        id         SERIAL PRIMARY KEY,
+        created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        created_by_uid INT NULL,
+        user_agent VARCHAR(250) NULL,
+        client_ip  BYTEA NOT NULL,
+        action     VARCHAR(200) NOT NULL,
+        object     VARCHAR(200) NOT NULL,
+        context    JSONB         NULL,
+        CONSTRAINT audit_log_fk_user_id FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE CASCADE
+    );
+
+    -- 11. vault
+    CREATE TABLE vault
+    (
+        id              SERIAL PRIMARY KEY,
+        created_at       TIMESTAMPTZ                            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at       TIMESTAMPTZ                            NULL,
+        owner_uid       INT                           NOT NULL,
+        project_id      INT                           NULL,
+        type            VARCHAR(20) NOT NULL,
+        name            VARCHAR(200)                           NOT NULL,
+        value           BYTEA                        NOT NULL,
+        url             VARCHAR(300)                           NULL,
+        expiration_date DATE                                   NULL,
+        iv              BYTEA                             NOT NULL,
+        tag             BYTEA                             NOT NULL,
+        note            VARCHAR(1000)                          NULL,
+        UNIQUE (project_id, name),
+        FOREIGN KEY (owner_uid) REFERENCES "user" (id) ON DELETE CASCADE,
+        FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
+    );
+
+    -- 12. project_user
+    CREATE TABLE project_user
+    (
+        id         SERIAL PRIMARY KEY,
+        created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        project_id INT NOT NULL,
+        user_id    INT NOT NULL,
+        UNIQUE (project_id, user_id),
+        FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE
+    );
+
+    -- 13. asset
+    CREATE TABLE asset
+    (
+        id         SERIAL PRIMARY KEY,
+        parent_id  INT NULL,
+        project_id INT NOT NULL,
+        created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at  TIMESTAMPTZ  NULL,
+        name       VARCHAR(200) NOT NULL,
+        type       VARCHAR(20),
+        tags       JSONB         NULL,
+        UNIQUE (project_id, name),
+        FOREIGN KEY (parent_id) REFERENCES asset (id) ON DELETE CASCADE,
+        FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
+    );
+
+    -- 14. vulnerability_category
+    CREATE TABLE vulnerability_category
+    (
+        id          SERIAL PRIMARY KEY,
+        created_at   TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at   TIMESTAMPTZ   NULL,
+        parent_id   INT  NULL,
+        name        VARCHAR(200)  NOT NULL UNIQUE,
+        description VARCHAR(2000) NULL,
+        FOREIGN KEY (parent_id) REFERENCES vulnerability_category (id) ON DELETE CASCADE
+    );
+
+    -- 15. vulnerability
+    CREATE TABLE vulnerability
+    (
+        id                     SERIAL PRIMARY KEY,
+        created_at              TIMESTAMPTZ                                                                                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at              TIMESTAMPTZ                                                                                        NULL,
+        created_by_uid            INT                                                                                       NOT NULL,
+        is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
+        external_id            VARCHAR(50)                                                                                        NULL,
+        project_id             INT                                                                                       NULL,
+        asset_id              INT                                                                                       NULL,
+        category_id            INT                                                                                       NULL,
+        summary                VARCHAR(500)                                                                                       NOT NULL,
+        description            TEXT                                                                                               NULL,
+        external_refs          TEXT                                                                                               NULL,
+        visibility             VARCHAR(20)                                                                         NOT NULL DEFAULT 'public',
+        risk                   VARCHAR(20)                                                 NOT NULL,
+        proof_of_concept       TEXT                                                                                               NULL,
+        impact                 TEXT                                                                                               NULL,
+        remediation            TEXT                                                                                               NULL,
+        remediation_complexity VARCHAR(20)                                                          NULL,
+        remediation_priority   VARCHAR(20)                                                                       NULL,
+        cvss_vector          VARCHAR(150)                                                                                       NULL,
+        cvss_score           DECIMAL(3, 1)                                                                                      NULL,
+        status                 VARCHAR(20)                                                   NOT NULL DEFAULT 'open',
+        substatus              VARCHAR(20) NULL     DEFAULT 'reported',
+        tags                   JSONB                                                                                               NULL,
+        custom_fields          JSONB                                                                                               NULL,
+        UNIQUE (project_id, asset_id, summary),
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+        CONSTRAINT vulnerability_fk_project_id FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
+        FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE SET NULL,
+        FOREIGN KEY (category_id) REFERENCES vulnerability_category (id) ON DELETE SET NULL
+    );
+
+    -- 16. task
+    CREATE TABLE task
+    (
+        id                SERIAL PRIMARY KEY,
+        project_id        INT                                        NOT NULL,
+        created_by_uid       INT                                        NOT NULL,
+        assigned_to_uid      INT                                        NULL,
+        created_at         TIMESTAMPTZ                                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at         TIMESTAMPTZ                                         NULL,
+        priority          VARCHAR(20) NOT NULL,
+        summary           VARCHAR(200)                                        NOT NULL,
+        description       VARCHAR(2000)                                       NULL,
+        status            VARCHAR(20)                      NOT NULL DEFAULT 'todo',
+        duration_estimate SMALLINT                                   NULL,
+        due_date          DATE                                                NULL,
+        FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+        FOREIGN KEY (assigned_to_uid) REFERENCES "user" (id) ON DELETE SET NULL
+    );
+
+    -- 17. command_schedule
+    CREATE TABLE command_schedule
+    (
+        id              SERIAL PRIMARY KEY,
+        created_by_uid     INT  NOT NULL,
+        project_id INT DEFAULT NULL,
+        created_at       TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at       TIMESTAMPTZ   NULL,
+        command_id      VARCHAR(100)  NULL,
+        command_usage_id      VARCHAR(100)  NULL,
+        argument_values VARCHAR(1000) NULL,
+        cron_expression VARCHAR(60)   NOT NULL,
+        FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE SET NULL
+    );
+
+    -- 18. report
+    CREATE TABLE report
+    (
+        id                  SERIAL PRIMARY KEY,
+        project_id          INT NULL,
+        created_by_uid    INT NOT NULL,
+        created_at           TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        is_template         BOOLEAN      NOT NULL DEFAULT FALSE,
+        version_name        VARCHAR(50)  NOT NULL,
+        version_description VARCHAR(300) NOT NULL,
+        FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+    );
+
+    -- 19. custom_field
+    CREATE TABLE custom_field
+    (
+        id          SERIAL PRIMARY KEY,
+        created_at   TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at   TIMESTAMPTZ                         NULL,
+        parent_type VARCHAR(50)              NOT NULL,
+        name        VARCHAR(100)                        NOT NULL,
+        label       VARCHAR(100)                        NOT NULL,
+        kind        VARCHAR(20) NOT NULL,
+        config      JSONB                                NOT NULL,
+        UNIQUE (parent_type, name)
+    );
+
+    -- 20. mail_settings
+    CREATE TABLE mail_settings
+    (
+        id              INTEGER NOT NULL PRIMARY KEY,
+        created_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at      TIMESTAMPTZ  NULL DEFAULT NULL,
+        smtp_host       VARCHAR(255) NULL,
+        smtp_port       INTEGER NULL,
+        smtp_username   VARCHAR(255) NULL,
+        smtp_password   TEXT NULL,
+        smtp_from_email VARCHAR(255) NULL,
+        smtp_from_name  VARCHAR(255) NULL,
+        smtp_use_ssl    BOOLEAN      NOT NULL DEFAULT TRUE,
+        imap_host       VARCHAR(255) NULL,
+        imap_port       INTEGER NULL,
+        imap_username   VARCHAR(255) NULL,
+        imap_password   TEXT NULL,
+        imap_use_ssl    BOOLEAN      NOT NULL DEFAULT TRUE
+    );
+
+    -- 21. ai_settings
+    CREATE TABLE ai_settings
+    (
+        id                     INTEGER NOT NULL PRIMARY KEY,
+        created_at             TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at             TIMESTAMPTZ  NULL DEFAULT NULL,
+        provider               VARCHAR(50)  NOT NULL DEFAULT 'Ollama',
+        max_output_tokens      INTEGER          NOT NULL DEFAULT 4000,
+        ollama_base_url        VARCHAR(255) NULL,
+        ollama_model           VARCHAR(255) NULL,
+        azure_openai_endpoint  VARCHAR(255) NULL,
+        azure_openai_api_key   TEXT         NULL,
+        azure_openai_deployment VARCHAR(255) NULL,
+        openrouter_api_key     TEXT         NULL,
+        openrouter_model       VARCHAR(255) NULL
+    );
+
+    -- 22. document
+    CREATE TABLE document
+    (
+        id          SERIAL PRIMARY KEY,
+        created_at   TIMESTAMPTZ                                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at   TIMESTAMPTZ                                  NULL,
+        created_by_uid     INT                                 NOT NULL,
+        parent_type VARCHAR(20) NOT NULL,
+        parent_id   INT                                 NULL,
+        visibility  VARCHAR(20)                   NOT NULL DEFAULT 'private',
+        title       VARCHAR(250)                                 NULL,
+        content     TEXT                                         NOT NULL,
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+    );
+
+    -- 23. note
+    CREATE TABLE note
+    (
+        id          SERIAL PRIMARY KEY,
+        created_at   TIMESTAMPTZ                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        created_by_uid     INT                      NOT NULL,
+        parent_type VARCHAR(20) NOT NULL,
+        parent_id   INT                      NOT NULL,
+        visibility  VARCHAR(20)        NOT NULL DEFAULT 'private',
+        content     TEXT                              NOT NULL,
+        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+    );
+
+    -- 24. notification
+    CREATE TABLE notification
+    (
+        id         SERIAL PRIMARY KEY,
+        created_at  TIMESTAMPTZ             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at  TIMESTAMPTZ             NULL,
+        to_user_id INT            NOT NULL,
+        title      VARCHAR(200)            NULL,
+        content    VARCHAR(4000)           NOT NULL,
+        status     VARCHAR(20) NOT NULL DEFAULT 'unread',
+        FOREIGN KEY (to_user_id) REFERENCES "user" (id) ON DELETE CASCADE
+    );
+
+    -- 25. agent
+    CREATE TABLE agent
+    (
+        id           SERIAL PRIMARY KEY,
+        name         VARCHAR(100) NOT NULL,
+        client_id    VARCHAR(100) NOT NULL,
+        last_boot_at TIMESTAMPTZ  NULL,
+        last_ping_at TIMESTAMPTZ  NULL,
+        active       BOOLEAN      NOT NULL DEFAULT FALSE,
+        version      VARCHAR(100) NULL,
+        hostname     VARCHAR(100) NULL,
+        arch         VARCHAR(100) NULL,
+        cpu          VARCHAR(100) NULL,
+        memory       VARCHAR(100) NULL,
+        os           VARCHAR(100) NULL,
+        ip VARCHAR(100) NULL,
+        listen_addr           VARCHAR(100) NULL
+    );
+
+    -- 26. user_api_token
+    CREATE TABLE user_api_token
+    (
+        id          SERIAL PRIMARY KEY,
+        user_id     INT               NOT NULL,
+        created_at  TIMESTAMPTZ                NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        expires_at  TIMESTAMPTZ                NOT NULL,
+        name        VARCHAR(100)               NOT NULL,
+        token       VARCHAR(128)               NOT NULL UNIQUE,
+        scope       VARCHAR(20) NOT NULL DEFAULT 'full',
+        FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE
+    );
+
+    -- Views
+    CREATE VIEW user_info AS SELECT id, email, role, username, first_name, last_name, full_name, short_bio FROM "user";
+
+    CREATE VIEW project_template AS
+    SELECT id, created_at, updated_at, created_by_uid, name, description, category_id
+    FROM project
+    WHERE is_template = TRUE;
+
+    CREATE VIEW vulnerability_template AS
+    SELECT id,
+           created_by_uid,
+           category_id,
+           created_at,
+           updated_at,
+           summary,
+           description,
+           proof_of_concept,
+           impact,
+           remediation,
+           risk,
+           cvss_vector,
+           cvss_score,
+           tags
+    FROM vulnerability
+    WHERE is_template = TRUE;
+
+    -- Functions
+    CREATE OR REPLACE FUNCTION PARENT_CHILD_NAME(
+        parent_name VARCHAR(100),
+        child_name VARCHAR(100)
+    )
+    RETURNS VARCHAR(202)
+    AS $$
+    BEGIN
+        IF parent_name IS NULL THEN
+            RETURN child_name;
+        END IF;
+        RETURN parent_name || ', ' || child_name;
+    END;
+    $$ LANGUAGE plpgsql IMMUTABLE;
+
+    CREATE OR REPLACE FUNCTION project_archived_at_func()
+    RETURNS TRIGGER AS $$
+    BEGIN
+        IF NEW.archived = TRUE AND OLD.archived = FALSE THEN
+            NEW.archived_at = CURRENT_TIMESTAMP;
+        ELSIF NEW.archived = FALSE THEN
+            NEW.archived_at = NULL;
+        END IF;
+        RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+
+    CREATE OR REPLACE FUNCTION update_updated_at_column()
+    RETURNS TRIGGER AS $$
+    BEGIN
+        NEW.updated_at = CURRENT_TIMESTAMP;
+        RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+
+    -- Triggers
+    CREATE TRIGGER project_archived_at_trigger
+    BEFORE UPDATE ON project
+    FOR EACH ROW
+    EXECUTE FUNCTION project_archived_at_func();
+
+    CREATE TRIGGER update_project_updated_at BEFORE UPDATE ON project FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_webhook_updated_at BEFORE UPDATE ON webhook FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_jira_integration_updated_at BEFORE UPDATE ON jira_integration FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_azure_devops_integration_updated_at BEFORE UPDATE ON azure_devops_integration FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_organisation_updated_at BEFORE UPDATE ON organisation FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_user_updated_at BEFORE UPDATE ON "user" FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_vault_updated_at BEFORE UPDATE ON vault FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_asset_updated_at BEFORE UPDATE ON asset FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_vulnerability_category_updated_at BEFORE UPDATE ON vulnerability_category FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_vulnerability_updated_at BEFORE UPDATE ON vulnerability FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_task_updated_at BEFORE UPDATE ON task FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_command_schedule_updated_at BEFORE UPDATE ON command_schedule FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_custom_field_updated_at BEFORE UPDATE ON custom_field FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_mail_settings_updated_at BEFORE UPDATE ON mail_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_ai_settings_updated_at BEFORE UPDATE ON ai_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_document_updated_at BEFORE UPDATE ON document FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_attachment_updated_at BEFORE UPDATE ON attachment FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    CREATE TRIGGER update_notification_updated_at BEFORE UPDATE ON notification FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+  02-default-data.sql: |
+    INSERT INTO "user" (id, subject_id, first_name, last_name, username, email, role)
+    VALUES (0, 'NULL', 'System', '-', 'system','system@localhost', 'administrator');
+
+    INSERT INTO "user" (id, subject_id, first_name, last_name, username, email, role)
+    VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'Administrator', '-', 'admin','admin@localhost', 'administrator');
+
+    INSERT INTO audit_log (created_by_uid, client_ip, action, object)
+    VALUES (0, '\x7f000001'::bytea, 'Initialised', 'System');
+
+    INSERT INTO vulnerability_category (id, parent_id, name, description)
+    VALUES (1, NULL, 'General', 'General categories.'),
+           (2, 1, 'Access Controls', 'Related to authorization of users, and assessment of rights.'),
+           (3, 1, 'Auditing and Logging', 'Related to auditing of actions, or logging of problems.'),
+           (4, 1, 'Authentication', 'Related to the identification of users.'),
+           (5, 1, 'Configuration', 'Related to security configurations of servers, devices, or software.'),
+           (6, 1, 'Cryptography', 'Related to mathematical protections for data.'),
+           (7, 1, 'Data Exposure', 'Related to unintended exposure of sensitive information.'),
+           (8, 1, 'Data Validation', 'Related to improper reliance on the structure or values of data.'),
+           (9, 1, 'Denial of Service', 'Related to causing system failure.'),
+           (10, 1, 'Error Reporting', 'Related to the reporting of error conditions in a secure fashion.'),
+           (11, 1, 'Patching', 'Related to keeping software up to date.'),
+           (12, 1, 'Session Management', 'Related to the identification of authenticated users.'),
+           (13, 1, 'Timing', 'Related to race conditions, locking, or order of operations.');
+
+    INSERT INTO organisation (created_by_uid, kind, name, url)
+    VALUES (1, 'service_provider', 'Reconmap', 'https://reconmap.com');
+
+    INSERT INTO contact (organisation_id, name, email)
+    VALUES (currval(pg_get_serial_sequence('organisation', 'id')), 'Contributors', 'no-reply@reconmap.com');
+
+    INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+    VALUES (NULL, 1, TRUE, 'Report template (Word)', 'Default report template in Word format');
+
+    INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+    VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.docx', 'default-report-template.docx', 0, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '');
+
+    INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+    VALUES (NULL, 1, TRUE, 'Report template (MD)', 'Default report template in Markdown format');
+
+    INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+    VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.md', 'default-report-template.md', 0, 'text/markdown', '');
+
+    INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+    VALUES (NULL, 1, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
+
+    INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+    VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.typ', 'default-report-template.typ', 0, 'text/typst', '');
+
+    INSERT INTO project_category (name, description)
+    VALUES ('Managed security monitoring',
+            'Includes the day-to-day monitoring and investigation of system events throughout the network as well as security events, such as user permission changes and user logins.'),
+           ('Vulnerability risk assessment',
+            'Determines the state of the organization''s existing security readiness, and provides insights into potential vulnerabilities for minimizing exposure.'),
+           ('Compliance monitoring',
+            'Involves checking how well the organization complies with data security policies and procedures. The MSSP typically performs ongoing scans of security devices and infrastructure to determine if any changes need to be made to boost compliance. And with the compliance landscape becoming more complex all the time, this service is especially valuable to organizations that need to comply with GDPR, CCPA, HIPAA, PCI DSS, and others.'),
+           ('Threat intelligence',
+            'Involves gathering information to help the organization determine which threats have, will, or are currently targeting the organization and its employees, as well as which of these threats represent a viable risk.'),
+           ('Security consultation',
+            'for several domains including executing a detailed assessment of the network to identify potential and real-world vulnerabilities, finding security lacunae, and providing recommendations on how to fix them.'),
+           ('Security program development',
+            'Includes policy development for helping to protect the organization\’s infrastructure, systems, network, and devices.'),
+           ('Perimeter management',
+            'Protects the defenses around the network from external attackers as well as from bad insiders.Relevant activities including establishing the controls and processes that limit access to sensitive data in the network and on the end point.'),
+           ('Penetration testing',
+            'Also known as pentesting, which entails simulating a cyberattack against the organization\’s information and technology assets to check for exploitable vulnerabilities. This service constitutes a form of ethical hacking that can be very effective at uncovering the vulnerabilities that may be successfully targeted by hackers ');
+
+    INSERT INTO project (created_by_uid, name, description, engagement_end_date)
+    VALUES (1, 'Onboarding to Reconmap', 'Project to ensure all Reconmap''s onboarding tasks are done in order.', CURRENT_DATE);
+
+    INSERT INTO task (created_by_uid, assigned_to_uid, project_id, summary, description, priority)
+    VALUES (1, 1, 1, '1. Update your organisation details', '[Follow this link](/settings/organisation)', 'medium'),
+           (1, 1, 1, '2. Update your preferences', '[Follow this link](/users/preferences)', 'medium'),
+           (1, 1, 1, '3. Invite your team', '[Follow this link](/users/create)', 'medium'),
+           (1, 1, 1, '4. Create client', '[Follow this link](/clients/create)', 'medium'),
+           (1, 1, 1, '5. Create project', '[Follow this link](/projects/create)', 'medium'),
+           (1, 1, 1, '6. Archive the onboarding project', NULL, 'medium');
+
+    -- Default settings rows
+    INSERT INTO mail_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
+    INSERT INTO ai_settings (id, provider, max_output_tokens, ollama_base_url, ollama_model) VALUES (1, 'Ollama', 4000, 'http://localhost:11434/', 'llama3.2') ON CONFLICT (id) DO NOTHING;
+
+    -- Reset sequences to prevent conflicts due to explicit ID insertions
+    SELECT setval(pg_get_serial_sequence('user', 'id'), COALESCE(MAX(id), 1)) FROM "user";
+    SELECT setval(pg_get_serial_sequence('vulnerability_category', 'id'), COALESCE(MAX(id), 1)) FROM vulnerability_category;

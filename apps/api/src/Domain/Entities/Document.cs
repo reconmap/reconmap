@@ -20,21 +20,20 @@ public enum DocumentParentType
 [Table("document")]
 public class Document : TimestampedEntity
 {
-    [Column("id")] public int Id { get; set; }
+    public int Id { get; set; }
 
-    [Column("created_by_uid")] public uint CreatedByUid { get; set; }
+    public uint CreatedByUid { get; set; }
     
     [ForeignKey(nameof(CreatedByUid))]
     public User? CreatedBy { get; private set; }
     
-    [Column("visibility")] public DocumentVisibility Visibility { get; set; } = DocumentVisibility.Private;
+    public DocumentVisibility Visibility { get; set; } = DocumentVisibility.Private;
 
-    [Column("parent_id")] public int? ParentId { get; set; }
-    [Column("parent_type")] public DocumentParentType ParentType { get; set; }
+    public int? ParentId { get; set; }
+    public DocumentParentType ParentType { get; set; }
 
-    [Column("content")]
     [Required]
     public string? Content { get; set; }
 
-    [Column("title")] public string? Title { get; set; }
+    public string? Title { get; set; }
 }

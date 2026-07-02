@@ -4,7 +4,7 @@ namespace api_v2.Domain.Entities;
 
 public abstract class CreationTimestampedEntity
 {
-    [Column("created_at", TypeName = "timestamp")]
+    [Column(TypeName = "timestamptz")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime? CreatedAt { get; private set; }
 }

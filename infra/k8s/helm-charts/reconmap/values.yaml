@@ -1,11 +1,11 @@
 global:
   namespace: nonprod
 
-mysql:
+postgres:
   enabled: true
   image:
-    repository: ghcr.io/reconmap/rest-api-db
-    tag: latest
+    repository: postgres
+    tag: 17-alpine
     pullPolicy: IfNotPresent
   rootPassword: reconmuppet
   database: reconmap

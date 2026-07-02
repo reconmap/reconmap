@@ -10,7 +10,7 @@ data:
         }
       },
       "ConnectionStrings": {
-        "MySqlConnection": "server=mysql;port=3306;database={{ .Values.mysql.database }};user={{ .Values.mysql.user }};password={{ .Values.mysql.password }};"
+        "PostgreSqlConnection": "Host=postgres;Port=5432;Database={{ .Values.postgres.database }};Username={{ .Values.postgres.user }};Password={{ .Values.postgres.password }};"
       },
       "Redis": {
         "Host": "redis",

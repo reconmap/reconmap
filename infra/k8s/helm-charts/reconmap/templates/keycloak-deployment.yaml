@@ -34,15 +34,15 @@ spec:
             - name: KC_BOOTSTRAP_ADMIN_USERNAME
               value: {{ .Values.keycloak.bootstrapAdminUser | quote }}
             - name: KC_DB
-              value: mysql
+              value: postgres
             - name: KC_DB_DATABASE
-              value: {{ .Values.mysql.database | quote }}
+              value: {{ .Values.postgres.database | quote }}
             - name: KC_DB_PASSWORD
-              value: {{ .Values.mysql.keycloakPassword | quote }}
+              value: {{ .Values.postgres.keycloakPassword | quote }}
             - name: KC_DB_URL_HOST
-              value: mysql
+              value: postgres
             - name: KC_DB_USERNAME
-              value: {{ .Values.mysql.keycloakUser | quote }}
+              value: {{ .Values.postgres.keycloakUser | quote }}
             - name: VAR_ADMIN_CLIENT_SECRET
               value: {{ .Values.keycloak.clientSecrets.admin | quote }}
             - name: VAR_API_CLIENT_SECRET

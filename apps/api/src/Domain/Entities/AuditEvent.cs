@@ -12,11 +12,10 @@ public class AuditEntry : CreationTimestampedEntity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Column("created_by_uid")] public uint? CreatedByUid { get; set; }
+    public uint? CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public UserInfo? CreatedBy { get; set; }
 
-    [Column("user_agent")]
     [MaxLength(250)]
     public string? UserAgent { get; set; }
 
@@ -25,7 +24,7 @@ public class AuditEntry : CreationTimestampedEntity
     [MinLength(4)]
     [MaxLength(16)]
     [JsonIgnore]
-    public byte[] ClientIpBinary { get; set; }
+    public byte[] ClientIpBinary { get; set; } = null!;
 
     [NotMapped]
     public string ClientIp
@@ -34,9 +33,9 @@ public class AuditEntry : CreationTimestampedEntity
         set => ClientIpBinary = IPAddress.Parse(value).GetAddressBytes();
     }
 
-    [Column("action")] [MaxLength(200)] public string Action { get; set; } = string.Empty;
+    [MaxLength(200)] public string Action { get; set; } = string.Empty;
 
-    [Column("object")] [MaxLength(200)] public string Object { get; set; } = string.Empty;
+    [MaxLength(200)] public string Object { get; set; } = string.Empty;
 
-    [Column("context")] public string? Context { get; set; }
+    [Column(TypeName = "jsonb")] public string? Context { get; set; }
 }

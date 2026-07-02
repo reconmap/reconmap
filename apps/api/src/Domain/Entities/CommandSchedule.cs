@@ -6,16 +6,16 @@ namespace api_v2.Domain.Entities;
 [Table("command_schedule")]
 public class CommandSchedule : TimestampedEntity
 {
-    [Key][Column("id")] public uint Id { get; set; }
+    [Key]public uint Id { get; set; }
 
-    [Column("created_by_uid")] public uint CreatedByUid { get; set; }
+    public uint CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))]
     public User? CreatedBy { get; set; }
 
-    [Column("command_id")] public string? CommandId { get; set; }
+    public string? CommandId { get; set; }
 
-    [Column("command_usage_id")] public string? CommandUsageId { get; set; }
+    public string? CommandUsageId { get; set; }
 
     [NotMapped]
     public Command? Command { get; set; }
@@ -23,16 +23,14 @@ public class CommandSchedule : TimestampedEntity
     [NotMapped]
     public CommandUsage? CommandUsage { get; set; }
 
-    [Column("project_id")] public uint? ProjectId { get; set; }
+    public uint? ProjectId { get; set; }
 
     [ForeignKey(nameof(ProjectId))]
     public Project? Project { get; set; }
 
-    [Column("argument_values")]
     [MaxLength(1000)]
     public string? ArgumentValues { get; set; }
 
-    [Column("cron_expression")]
     [Required]
     [MaxLength(60)]
     public string CronExpression { get; set; } = null!;

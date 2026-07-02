@@ -20,7 +20,7 @@ This is the main orchestration repository. It contains:
 
 - **Multi-tier**: React Frontend (dashboard), C# REST API (api), and Go CLI tools.
 - **Authentication**: Keycloak (OIDC) is used for all auth.
-- **Data Persistence**: MySQL for relational data, Redis for caching.
+- **Data Persistence**: PostgreSQL for relational data, Redis for caching.
 - **Integration**: The agent connects to the API to receive tasks and execute security tools.
 
 ## Development Stack

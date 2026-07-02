@@ -12,11 +12,12 @@ ifneq (,$(wildcard ../../.env))
     export
 endif
 
-MYSQL_ROOT_PASSWORD ?= reconmuppet
+POSTGRES_PASSWORD ?= reconmuppet
+POSTGRES_RECONMAP_USER ?= reconmapper
 
 PROJECT := reconmap
 DC := COMPOSE_PROFILES=default docker compose -p $(PROJECT) -f ../../compose.yaml -f ../../compose.dev.yaml
-DB_CONTAINER=reconmap-mysql-1
+DB_CONTAINER=reconmap-postgres-1
 
 HOST_UID=$(shell id -u)
 HOST_GID=$(shell id -g)
@@ -54,15 +55,15 @@ cache-clear:
 
 .PHONY: db-shell
 db-shell:
-	$(DC) exec mysql mysql --silent -uroot -p$(MYSQL_ROOT_PASSWORD) reconmap
+	$(DC) exec postgres psql -U $(POSTGRES_RECONMAP_USER) -d reconmap
 
 .PHONY: db-reset
 db-reset:
-	cat ../../infra/docker/mysql/initdb/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -p$(MYSQL_ROOT_PASSWORD) reconmap
+	cat ../../infra/docker/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
 
 .PHONY: db-import
 db-import:
-	cat ../../infra/docker/mysql/initdb/{01,02,03}*.sql | docker container exec -i $(DB_CONTAINER) mysql -uroot -p$(MYSQL_ROOT_PASSWORD) reconmap
+	cat ../../infra/docker/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
 
 .PHONY: redis-shell
 redis-shell:

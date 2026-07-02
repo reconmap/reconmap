@@ -132,7 +132,6 @@ services.AddAuthorizationBuilder()
         .Build());
 
 var app = builder.Build();
-await app.Services.EnsureAuxiliaryTablesAsync();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();

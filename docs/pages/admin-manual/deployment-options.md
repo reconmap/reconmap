@@ -3,7 +3,7 @@ title: Deployment options
 parent: Admin manual
 ---
 
-Reconmap is composed of several microservices and client applications — including a REST API, a React dashboard, an agent, and supporting infrastructure such as MySQL, Redis, and Keycloak. Because of this architecture, there are multiple ways to deploy the platform depending on your team size, technical expertise, and infrastructure preferences.
+Reconmap is composed of several microservices and client applications — including a REST API, a React dashboard, an agent, and supporting infrastructure such as PostgreSQL, Redis, and Keycloak. Because of this architecture, there are multiple ways to deploy the platform depending on your team size, technical expertise, and infrastructure preferences.
 
 The sections below describe each deployment option, along with its trade-offs, to help you choose the best fit for your environment.
 
@@ -13,7 +13,7 @@ The sections below describe each deployment option, along with its trade-offs, t
 
 **Best for:** Local development, small teams, and quick evaluations.
 
-Docker Compose is the recommended starting point for most users. It bundles all required services into a single configuration file (`compose.yaml`) and brings everything up with one command, so there is no need to install .NET, MySQL, or any other dependency directly on your host.
+Docker Compose is the recommended starting point for most users. It bundles all required services into a single configuration file (`compose.yaml`) and brings everything up with one command, so there is no need to install .NET, PostgreSQL, or any other dependency directly on your host.
 
 **Getting started:**
 
@@ -38,7 +38,7 @@ Once all containers are healthy, the dashboard will be available on port `5500` 
 Kubernetes provides the scalability and resilience needed for running Reconmap in production. 
 
 Reconmap supports two deployment methods on Kubernetes:
-1. **Unified Helm Chart (Recommended)**: Packages the entire platform stack (Dashboard, API, Keycloak, MySQL, Redis, RabbitMQ) into a single, highly configurable installation release.
+1. **Unified Helm Chart (Recommended)**: Packages the entire platform stack (Dashboard, API, Keycloak, PostgreSQL, Redis, RabbitMQ) into a single, highly configurable installation release.
 2. **Raw Resource Manifests**: Plain YAML manifests located under the `infra/k8s/resources/` directory for direct `kubectl` provisioning.
 
 This option is ideal when you need:
@@ -61,11 +61,11 @@ For step-by-step deployment instructions, value reference guides, and configurat
 
 **Best for:** Advanced users who need full control over the runtime environment.
 
-A manual installation means setting up each component — the .NET runtime, MySQL, Redis, Keycloak, Nginx, and the Reconmap services themselves — directly on an operating system of your choice. This approach is framework-agnostic and works on any Linux server or VM.
+A manual installation means setting up each component — the .NET runtime, PostgreSQL, Redis, Keycloak, Nginx, and the Reconmap services themselves — directly on an operating system of your choice. This approach is framework-agnostic and works on any Linux server or VM.
 
 **High-level steps:**
 
-1. Install runtime dependencies (.NET 10, MySQL 8, Redis, Keycloak).
+1. Install runtime dependencies (.NET 10, PostgreSQL 17, Redis, Keycloak).
 2. Configure Nginx (or another reverse proxy) to route traffic to the API and dashboard.
 3. Clone the repository and build the API and dashboard.
 4. Apply the database migrations and seed data from `data/`.

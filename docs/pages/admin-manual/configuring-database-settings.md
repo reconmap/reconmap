@@ -12,22 +12,22 @@ In your `config-ngapi.json`, the database connection string should look like thi
 ```json
 {
   "ConnectionStrings": {
-    "MySqlConnection": "server=mysql;port=3306;database=reconmap;user=reconmapper;password=reconmapped;"
+    "PostgreSqlConnection": "Host=postgres;Port=5432;Database=reconmap;Username=reconmapper;Password=reconmapped;"
   }
 }
 ```
 
-Adjust the values (server, port, database, user, password) according to your environment.
+Adjust the values (Host, Port, Database, Username, Password) according to your environment.
 
 ### Docker Compose environment
 
-If you are using the default `compose.yaml`, the MySQL service is named `mysql` and the credentials match the example above.
+If you are using the default `compose.yaml`, the PostgreSQL service is named `postgres` and the credentials match the example above.
 
 ```yaml
-  mysql:
+  postgres:
     image: ghcr.io/reconmap/rest-api-db:latest
     environment:
-      MYSQL_ROOT_PASSWORD: reconmuppet
+      POSTGRES_PASSWORD: reconmuppet
 ```
 
-The database schema and initial data are automatically applied when the `mysql` container starts for the first time.
+The database schema and initial data are automatically applied when the `postgres` container starts for the first time.

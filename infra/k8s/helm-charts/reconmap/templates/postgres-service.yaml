@@ -1,18 +1,18 @@
-{{- if .Values.mysql.enabled -}}
+{{- if .Values.postgres.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     {{- include "reconmap.labels" . | nindent 4 }}
-    app.kubernetes.io/component: mysql
-  name: mysql
+    app.kubernetes.io/component: postgres
+  name: postgres
   namespace: {{ .Values.global.namespace }}
 spec:
   ports:
-    - name: "3306"
-      port: 3306
-      targetPort: 3306
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
   selector:
     {{- include "reconmap.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: mysql
+    app.kubernetes.io/component: postgres
 {{- end }}

@@ -30,13 +30,13 @@ spec:
             - name: KC_BOOTSTRAP_ADMIN_USERNAME
               value: admin
             - name: KC_DB
-              value: mysql
+              value: postgres
             - name: KC_DB_DATABASE
               value: keycloak
             - name: KC_DB_PASSWORD
               value: keycloaked
             - name: KC_DB_URL_HOST
-              value: mysql
+              value: postgres
             - name: KC_DB_USERNAME
               value: keycloaker
             - name: VAR_ADMIN_CLIENT_SECRET

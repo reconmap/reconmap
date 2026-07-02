@@ -13,7 +13,7 @@ The system health view provides real-time status of all the platform's microserv
 
 Go to `System -> Health` to see the status of:
 - API connectivity
-- Database (MySQL)
+- Database (PostgreSQL)
 - Identity Provider (Keycloak)
 - Message Broker (RabbitMQ)
 - Cache (Redis)

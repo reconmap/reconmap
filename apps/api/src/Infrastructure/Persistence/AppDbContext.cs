@@ -81,6 +81,40 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 v => v.ToString().ToLower().Replace("_", "-"),
                 v => Enum.Parse<ApiTokenScope>(v.Replace("-", "_"), ignoreCase: true)
             );
+
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entity.GetProperties())
+            {
+                var columnName = property.GetColumnName();
+                if (columnName == property.Name)
+                {
+                    property.SetColumnName(ToSnakeCase(columnName));
+                }
+            }
+        }
+    }
+
+    private static string ToSnakeCase(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return input;
+        return System.Text.RegularExpressions.Regex.Replace(input, @"([a-z0-9])([A-Z])", "$1_$2").ToLower();
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder
+            .Properties<uint>()
+            .HaveConversion<long>();
+        configurationBuilder
+            .Properties<uint?>()
+            .HaveConversion<long?>();
+        configurationBuilder
+            .Properties<ushort>()
+            .HaveConversion<int>();
+        configurationBuilder
+            .Properties<ushort?>()
+            .HaveConversion<int?>();
     }
 
     public async Task UpdateLastLoginTs(uint userId)

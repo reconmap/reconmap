@@ -1,0 +1,75 @@
+{{- if .Values.postgres.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "reconmap.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+  name: postgres
+  namespace: {{ .Values.global.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_KEYCLOAK_PASSWORD
+              value: {{ .Values.postgres.keycloakPassword | quote }}
+            - name: POSTGRES_KEYCLOAK_USER
+              value: {{ .Values.postgres.keycloakUser | quote }}
+            - name: POSTGRES_RECONMAP_PASSWORD
+              value: {{ .Values.postgres.password | quote }}
+            - name: POSTGRES_RECONMAP_USER
+              value: {{ .Values.postgres.user | quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgres.rootPassword | quote }}
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - pg_isready -U postgres
+            failureThreshold: 5
+            periodSeconds: 5
+            timeoutSeconds: 10
+          name: postgres
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
+            - mountPath: /docker-entrypoint-initdb.d
+              name: postgres-init-scripts
+      restartPolicy: Always
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+        - name: postgres-init-scripts
+          configMap:
+            name: postgres-init-configmap
+            items:
+              - key: 00-databases.sh
+                path: 00-databases.sh
+              - key: 01-schema.sql
+                path: sql/01-schema.sql
+              - key: 02-default-data.sql
+                path: sql/02-default-data.sql
+{{- end }}

@@ -103,7 +103,7 @@ public class SystemController(
         // Check writing to attachments directory
         var attachmentsWritable = await CheckStorageWritableAsync();
 
-        // Check MySQL connection (Pomelo)
+        // Check PostgreSQL connection (Npgsql)
         var dbReachable = await CheckDatabaseAsync();
 
         // Check Redis availability
@@ -153,7 +153,7 @@ public class SystemController(
     {
         try
         {
-            // A tiny query to verify MySQL connection works
+            // A tiny query to verify PostgreSQL connection works
             await db.Database.ExecuteSqlRawAsync("SELECT 1");
             return true;
         }

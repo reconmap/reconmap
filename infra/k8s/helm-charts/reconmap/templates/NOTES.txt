@@ -44,11 +44,11 @@ Keycloak Admin Console:
 - Admin Username: {{ .Values.keycloak.bootstrapAdminUser }}
 - Admin Password: {{ .Values.keycloak.bootstrapAdminPassword }}
 
-Database Configuration (MySQL):
-- Host: mysql.{{ .Values.global.namespace }}.svc.cluster.local
-- Database Name: {{ .Values.mysql.database }}
-- Username: {{ .Values.mysql.user }}
-- Password: {{ .Values.mysql.password }}
+Database Configuration (PostgreSQL):
+- Host: postgres.{{ .Values.global.namespace }}.svc.cluster.local
+- Database Name: {{ .Values.postgres.database }}
+- Username: {{ .Values.postgres.user }}
+- Password: {{ .Values.postgres.password }}
 
 Redis Cache Configuration:
 - Host: redis.{{ .Values.global.namespace }}.svc.cluster.local

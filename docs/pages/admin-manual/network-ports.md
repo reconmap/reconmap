@@ -14,6 +14,6 @@ The docker images provided by Reconmap use the ports described below by default.
 | RabbitMQ | Message Queue                 | 5672 |
 | Rustfs   | Object Storage                | 9000 & 9001 |
 | Redis    | Redis Cache                   | 6379 |
-| MySQL    | Database                      | 3306 |
+| PostgreSQL | Database                    | 5432 |
 
 You might need to configure your firewall rules to open these ports depending on your network setup.
