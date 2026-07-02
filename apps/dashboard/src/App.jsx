@@ -6,7 +6,6 @@ import PageNotFound from "pages/PageNotFound.jsx";
 import AgentRoutes from "pages/agents/Routes";
 import ClientsRoutes from "pages/clients/Routes";
 import DashboardRoutes from "pages/dashboard/Routes.jsx";
-import DocumentsRoutes from "pages/documents/Routes";
 import IntegrationsRoutes from "pages/integrations/Routes";
 import NotificationsRoutes from "pages/notifications/Routes";
 import ProjectsRoutes from "pages/projects/Routes";
@@ -49,7 +48,6 @@ const App = () => {
                                 {[
                                     ...DashboardRoutes,
                                     ...ClientsRoutes,
-                                    ...DocumentsRoutes,
                                     ...ProjectsRoutes,
                                     ...ReportTemplatesRoutes,
                                     ...ReportsRoutes,

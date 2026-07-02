@@ -12,7 +12,7 @@ The export data functionality allows you to export Reconmap data to JSON. The ex
 
 - Clients
 - Commands
-- Documents and notes
+- Notes
 - Projects and templates (including associated data such as assets)
 - Tasks
 - Users

@@ -43,12 +43,6 @@ export const CommandsUrls = {
     Usages: "/commands/:commandId/usages",
 };
 
-export const DocumentsUrls = {
-    List: "/documents",
-    Add: "/documents/add",
-    Details: "/documents/:documentId",
-    Edit: "/documents/:documentId/edit",
-};
 
 export const UsersUrls = {
     List: "/users",

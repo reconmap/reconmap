@@ -11,7 +11,7 @@ nav_order: 1
 - Users and roles (including client access to projects)
 - Projects and projects templates
 - Vulnerabilities and vulnerability templates database
-- Security commands database and automation
+- Security commands automation
 - Scheduled commands using cron expressions
 - Tasks manager
 - Support for multiple top-level organisations (eg many pentest companies on the same tenant)
@@ -20,10 +20,9 @@ nav_order: 1
 - Weekly email reports
 - Export/import data
 - [Jira, Azure DevOps, and Webhooks integrations](/user-manual/system/integrations/)
-- High-performance message queue based on [RabbitMQ](https://www.rabbitmq.com/)
-- Tagging
+- Resource tagging
 - Browser terminal integration
-- Notes with markdown support
+- Comments with markdown support
 - Attachments (docs, screenshots) to projects, vulnerabilities and tasks
 - [Report generation](/user-manual/reports/pentest-report-configuration/) in rich (Word) and plain text formats (Markdown, Typst)
 - Custom (whitelabel) reporting

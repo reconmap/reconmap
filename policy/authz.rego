@@ -54,7 +54,7 @@ allow if {
     input.user.role == "user"
     
     # Can list and read anything within their assigned projects
-    project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports", "documents", "notes"]
+    project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports", "notes"]
     input.resource_type in project_scoped_resources
     
     # If project_id is provided, check membership
@@ -81,7 +81,7 @@ allow if {
     input.method == "GET"
     
     # Clients can read project-scoped data if they are a member
-    project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports", "documents"]
+    project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports"]
     input.resource_type in project_scoped_resources
     
     # If project_id is provided, check membership

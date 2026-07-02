@@ -16,7 +16,6 @@ In addition, the server exposes the following Resources (data sources):
 * `reconmap://projects`
 * `reconmap://tasks`
 * `reconmap://vulnerabilities`
-* `reconmap://documents`
 * `reconmap://agents`
 
 ## Requirements

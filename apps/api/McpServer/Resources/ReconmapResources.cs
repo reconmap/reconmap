@@ -46,15 +46,6 @@ public class ReconmapResources
         return JsonSerializer.Serialize(vulnerabilities, new JsonSerializerOptions { WriteIndented = true });
     }
 
-    [McpServerResource(UriTemplate = "reconmap://documents", Name = "Reconmap Documents", MimeType = "application/json")]
-    public async Task<string> GetDocuments()
-    {
-        var documents = await _dbContext.Documents
-            .Select(d => new { d.Id, d.ParentId, d.ParentType, d.Title, d.Visibility })
-            .ToListAsync();
-        return JsonSerializer.Serialize(documents, new JsonSerializerOptions { WriteIndented = true });
-    }
-
     [McpServerResource(UriTemplate = "reconmap://agents", Name = "Reconmap Agents", MimeType = "application/json")]
     public async Task<string> GetAgents()
     {

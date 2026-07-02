@@ -3,7 +3,6 @@ import {
     ClientsUrls,
     CommandsUrls,
     DashboardUrls,
-    DocumentsUrls,
     IntegrationsUrls,
     ProjectsUrls,
     ReportsUrls,
@@ -88,7 +87,7 @@ export const getNavigationStructure = (t) => [
     },
     {
         name: t("Library"),
-        title: t("Vulnerabilities, documents, and search"),
+        title: t("Vulnerabilities and search"),
         url: "/library",
         items: [
             {
@@ -100,13 +99,6 @@ export const getNavigationStructure = (t) => [
                     { name: t("Create"), url: VulnerabilitiesUrls.Create, permissions: "vulnerabilities.*" },
                     { name: t("Categories"), url: VulnerabilitiesUrls.Categories, permissions: "vulnerabilities.*" },
                 ]
-            },
-            {
-                type: "menu",
-                name: t("Documents"),
-                url: DocumentsUrls.List,
-                permissions: "documents.*",
-                children: [{ name: t("Create"), url: DocumentsUrls.Add, permissions: "documents.*" }]
             },
             { type: "divider" },
             {

@@ -14,7 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integrated Open Policy Agent (OPA) / Rego for centralized attribute-based access control (ABAC).
 - Enforced project visibility constraints ensuring users with the Client role can only view their assigned projects.
 - Added detailed audit logging for failed OPA authorization checks (`opa_authz_failed`).
-- Implemented an experimental Model Context Protocol (MCP) server under `apps/api/McpServer` to expose Reconmap tools and resources (projects, tasks, findings, documents, agents) to AI assistants.
+- Implemented an experimental Model Context Protocol (MCP) server under `apps/api/McpServer` to expose Reconmap tools and resources (projects, tasks, findings, agents) to AI assistants.
+
+### Removed
+
+- Removed the **Documents** feature (document library, CRUD pages, dashboard widget, API endpoints, MCP resource, and OPA policy entries) to simplify the product surface and focus on intelligence and insights rather than record-keeping.
 - Added a comprehensive `NOTES.txt` post-installation message to the unified `reconmap` Helm chart detailing service URLs, port-forwarding instructions, and default credentials.
 - Added a `Makefile` to the unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` to validate (lint), install, uninstall, and retrieve values/manifests.
 - Created a unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` that packages the complete platform stack (Dashboard, API, Keycloak, PostgreSQL, Redis, RabbitMQ) into a single, cohesive, and configurable installation.

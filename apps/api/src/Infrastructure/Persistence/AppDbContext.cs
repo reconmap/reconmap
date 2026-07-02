@@ -5,7 +5,6 @@ namespace api_v2.Infrastructure.Persistence;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<Document> Documents { get; set; }
     public DbSet<User> Users { get; set; }
 
     public DbSet<Contact> Contacts { get; set; }
@@ -60,19 +59,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasConversion(
                 v => v.ToString().ToLower(), // C# enum → DB string
                 v => Enum.Parse<UserRole>(v, ignoreCase: true)
-            );
-
-        modelBuilder.Entity<Document>()
-            .Property(d => d.Visibility)
-            .HasConversion(
-                v => v.ToString().ToLower(),
-                v => Enum.Parse<DocumentVisibility>(v, ignoreCase: true)
-            );
-        modelBuilder.Entity<Document>()
-            .Property(d => d.ParentType)
-            .HasConversion(
-                v => v.ToString().ToLower(), // C# enum → DB string
-                v => Enum.Parse<DocumentParentType>(v, ignoreCase: true)
             );
 
         modelBuilder.Entity<UserApiToken>()

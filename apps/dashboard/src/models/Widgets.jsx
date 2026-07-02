@@ -3,7 +3,6 @@ import ApiHealthWidget from "pages/dashboard/widgets/ApiHealthWidget.jsx";
 import DiscussionsWidget from "pages/dashboard/widgets/DiscussionsWidget.jsx";
 import MyTasksWidget from "pages/dashboard/widgets/MyTasksWidget.jsx";
 import RecentActivityWidget from "pages/dashboard/widgets/RecentActivityWidget.jsx";
-import RecentDocumentsWidget from "pages/dashboard/widgets/RecentDocumentsWidget.jsx";
 import RecentVulnerabilitiesWidget from "pages/dashboard/widgets/RecentVulnerabilitiesWidget.jsx";
 import ReleasesWidget from "pages/dashboard/widgets/ReleasesWidget.jsx";
 import UserActivityStatsWidget from "pages/dashboard/widgets/UserActivityStatsWidget.jsx";
@@ -42,13 +41,7 @@ const Widgets = {
         component: <ActiveProjectsWidget />,
         description: "It shows a list of all non-archived projects.",
     },
-    "recent-documents": {
-        title: "Recent documents",
-        visible: true,
-        component: <RecentDocumentsWidget />,
-        description: "It shows a list of the most recent documents.",
-        permissions: "documents.*",
-    },
+
     "vulnerability-by-category-stats": {
         title: "Vulnerability by category",
         visible: true,

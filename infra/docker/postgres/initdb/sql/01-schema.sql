@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS user_api_token CASCADE;
 DROP TABLE IF EXISTS agent CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 DROP TABLE IF EXISTS note CASCADE;
-DROP TABLE IF EXISTS document CASCADE;
 DROP TABLE IF EXISTS ai_settings CASCADE;
 DROP TABLE IF EXISTS mail_settings CASCADE;
 DROP TABLE IF EXISTS custom_field CASCADE;
@@ -379,21 +378,6 @@ CREATE TABLE ai_settings
     openrouter_model       VARCHAR(255) NULL
 );
 
--- 22. document
-CREATE TABLE document
-(
-    id          SERIAL PRIMARY KEY,
-    created_at   TIMESTAMPTZ                                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMPTZ                                  NULL,
-    created_by_uid     INT                                 NOT NULL,
-    parent_type VARCHAR(20) NOT NULL,
-    parent_id   INT                                 NULL,
-    visibility  VARCHAR(20)                   NOT NULL DEFAULT 'private',
-    title       VARCHAR(250)                                 NULL,
-    content     TEXT                                         NOT NULL,
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
-);
-
 -- 23. note
 CREATE TABLE note
 (
@@ -534,6 +518,5 @@ CREATE TRIGGER update_command_schedule_updated_at BEFORE UPDATE ON command_sched
 CREATE TRIGGER update_custom_field_updated_at BEFORE UPDATE ON custom_field FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_mail_settings_updated_at BEFORE UPDATE ON mail_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_ai_settings_updated_at BEFORE UPDATE ON ai_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_document_updated_at BEFORE UPDATE ON document FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_attachment_updated_at BEFORE UPDATE ON attachment FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_notification_updated_at BEFORE UPDATE ON notification FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

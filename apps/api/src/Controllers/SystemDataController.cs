@@ -75,7 +75,6 @@ public class SystemDataController(AppDbContext db) : AppController(db)
                 MoreInfoUrl = c.MoreInfoUrl,
                 Tags = string.Join(",", c.Tags)
             }).ToList()),
-            ["documents"] = async ct => await _db.Documents.AsNoTracking().ToListAsync(ct),
             ["projects"] = async ct => await _db.Projects.AsNoTracking().Where(p => !p.IsTemplate).ToListAsync(ct),
             ["project_templates"] = async ct =>
                 await _db.Projects.AsNoTracking().Where(p => p.IsTemplate).ToListAsync(ct),
