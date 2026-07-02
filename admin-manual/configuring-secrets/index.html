@@ -2992,23 +2992,23 @@
 </thead>
 <tbody>
 <tr>
-<td><code>MYSQL_ROOT_PASSWORD</code></td>
-<td>The root password for the MySQL database container.</td>
+<td><code>POSTGRES_PASSWORD</code></td>
+<td>The root/superuser password for the PostgreSQL database container.</td>
 </tr>
 <tr>
-<td><code>MYSQL_RECONMAP_USER</code></td>
+<td><code>POSTGRES_RECONMAP_USER</code></td>
 <td>The database username for the core Reconmap API.</td>
 </tr>
 <tr>
-<td><code>MYSQL_RECONMAP_PASSWORD</code></td>
+<td><code>POSTGRES_RECONMAP_PASSWORD</code></td>
 <td>The database password for the core Reconmap API.</td>
 </tr>
 <tr>
-<td><code>MYSQL_KEYCLOAK_USER</code></td>
+<td><code>POSTGRES_KEYCLOAK_USER</code></td>
 <td>The database username for the Keycloak Identity Provider.</td>
 </tr>
 <tr>
-<td><code>MYSQL_KEYCLOAK_PASSWORD</code></td>
+<td><code>POSTGRES_KEYCLOAK_PASSWORD</code></td>
 <td>The database password for the Keycloak Identity Provider.</td>
 </tr>
 <tr>
@@ -3058,7 +3058,7 @@
 </tbody>
 </table>
 <h3 id="database-user-initialization">Database User Initialization</h3>
-<p>During the first container startup, a dynamic shell script (<code>infra/docker/mysql/initdb/00-databases.sh</code>) executes inside the database container to create the databases and assign permissions to the users using the passwords defined above.</p>
+<p>During the first container startup, a dynamic shell script (<code>infra/docker/postgres/initdb/00-databases.sh</code>) executes inside the database container to create the databases and assign permissions to the users using the passwords defined above.</p>
 <h3 id="updating-or-rotating-secrets">Updating or Rotating Secrets</h3>
 <ol>
 <li>Modify the values inside the <code>.env</code> file at the root of the repository.</li>
@@ -3069,7 +3069,7 @@
 </ol>
 <blockquote>
 <p>[!WARNING]
-If you rotate the database passwords (<code>MYSQL_RECONMAP_PASSWORD</code> or <code>MYSQL_KEYCLOAK_PASSWORD</code>), you must delete the existing database volume before restarting the stack so that they can be re-initialized:
+If you rotate the database passwords (<code>POSTGRES_RECONMAP_PASSWORD</code> or <code>POSTGRES_KEYCLOAK_PASSWORD</code>), you must delete the existing database volume before restarting the stack so that they can be re-initialized:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 </span></code></pre></div></p>
@@ -3094,7 +3094,7 @@ If you rotate the database passwords (<code>MYSQL_RECONMAP_PASSWORD</code> or <c
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 1, 2026 19:53:57 UTC">July 1, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 2, 2026 17:48:18 UTC">July 2, 2026</span>
   </span>
 
     
