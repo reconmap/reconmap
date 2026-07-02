@@ -1,4 +1,4 @@
-import LibraryLayout from "layouts/LibraryLayout.jsx";
+import ToolsLayout from "layouts/ToolsLayout.jsx";
 import AddCommandPage from "pages/commands/Add";
 import EditCommandPage from "pages/commands/Edit";
 import { Route } from "react-router-dom";
@@ -8,7 +8,7 @@ import CommandDetailsPage from "./Details.jsx";
 import CommandsListPage from "./List.jsx";
 
 const CommandsRoutes = [
-    <Route path={CommandsUrls.List} element={<LibraryLayout />}>
+    <Route path={CommandsUrls.List} element={<ToolsLayout />}>
         <Route index element={<CommandsListPage />} />,
         <Route path=":commandId" element={<CommandDetailsPage />} />,
         <Route path=":commandId/edit" element={<EditCommandPage />} />,

@@ -42,6 +42,16 @@ export const getNavigationStructure = (t) => [
             },
             {
                 type: "menu",
+                name: t("Vulnerabilities"),
+                url: VulnerabilitiesUrls.List,
+                permissions: "vulnerabilities.*",
+                children: [
+                    { name: t("Create"), url: VulnerabilitiesUrls.Create, permissions: "vulnerabilities.*" },
+                    { name: t("Categories"), url: VulnerabilitiesUrls.Categories, permissions: "vulnerabilities.*" },
+                ]
+            },
+            {
+                type: "menu",
                 name: t("Reports"),
                 url: ReportsUrls.List,
                 children: [{ name: t("Report templates"), url: ReportsUrls.Templates }]
@@ -86,33 +96,16 @@ export const getNavigationStructure = (t) => [
         ]
     },
     {
-        name: t("Library"),
-        title: t("Vulnerabilities and search"),
-        url: "/library",
-        items: [
-            {
-                type: "menu",
-                name: t("Vulnerabilities"),
-                url: VulnerabilitiesUrls.List,
-                permissions: "vulnerabilities.*",
-                children: [
-                    { name: t("Create"), url: VulnerabilitiesUrls.Create, permissions: "vulnerabilities.*" },
-                    { name: t("Categories"), url: VulnerabilitiesUrls.Categories, permissions: "vulnerabilities.*" },
-                ]
-            },
-            { type: "divider" },
-            {
-                type: "menu",
-                name: t("Search"),
-                url: SearchUrls.AdvancedSearch
-            }
-        ]
-    },
-    {
         name: t("Tools"),
         title: t("Security tools and agents"),
         url: "/tools",
         items: [
+            {
+                type: "menu",
+                name: t("Search"),
+                url: SearchUrls.AdvancedSearch
+            },
+            { type: "divider" },
             {
                 type: "menu",
                 name: t("Data"),
