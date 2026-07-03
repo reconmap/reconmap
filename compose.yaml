@@ -50,9 +50,12 @@ services:
 
   keycloak:
     image: ghcr.io/reconmap/keycloak-custom:latest
-    command: "start --hostname-strict=false --proxy-headers xforwarded --http-enabled true --import-realm"
+    command: "start --import-realm"
     # See https://www.keycloak.org/server/all-config
     environment:
+      KC_HOSTNAME_STRICT: false
+      KC_HTTP_ENABLED: true
+      KC_HTTP_PORT: 8080
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}
       KC_DB: postgres
@@ -67,23 +70,6 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e 'GET /health/ready HTTP/1.1\r
-
-            host: http://localhost\r
-
-            Connection: close\r
-
-            \r
-
-            ' >&3;if [ $? -eq 0 ]; then echo 'Healthcheck Successful';exit 0;else echo 'Healthcheck Failed';exit 1;fi;"
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 10
     depends_on:
       postgres:
         condition: service_healthy
