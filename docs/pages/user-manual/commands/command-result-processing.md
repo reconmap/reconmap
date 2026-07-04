@@ -8,10 +8,10 @@ Reconmap can parse the output of many security tools, and incorporate their resu
 
 Reconmap also provides a URL-first scan launcher under **Scans -> Start from URL**. Use it when you want to launch a web-target scan from a project and an explicit URL. Reconmap will create a URL asset for that project if it does not already exist, then prepare a command usage that accepts the `URL` placeholder.
 
-### Step 1 - Choose a command usage under Scans
+### Step 1 - Choose a command under Scans
 
 Reconmap has built-in, code-defined commands and usages. You do not need to manually configure executable paths or associate output parsers.
-Go to the **Scans** page and select the command and its usage you want to run.
+Go to the **Scans** page and select the command you want to run. Choosing the specific command usage is handled internally and determined automatically by the system's LLM.
 
 Reconmap supports several built-in output parsers, including:
 * **Sarif**: Parses Static Analysis Results Interchange Format (SARIF) JSON files (e.g. produced by `gosec`, `semgrep`, `trivy`, or `gitleaks`). It extracts vulnerabilities, maps severity levels to Reconmap risk levels, maps source code locations to proof of concepts, and copies rule details/descriptions.

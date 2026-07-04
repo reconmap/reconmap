@@ -27,15 +27,19 @@ const ScansPage = ({ mode }) => {
         }
     }, [projects, selectedProjectId]);
 
+    useEffect(() => {
+        if (commandUsages && commandUsages.length > 0) {
+            setSelectedCommandUsageId(commandUsages[0].id);
+        } else {
+            setSelectedCommandUsageId(null);
+        }
+    }, [commandUsages]);
+
     if (isCommandsLoading || isProjectsLoading) return <Loading />;
 
     const onCommandChange = (ev) => {
         setSelectedCommandId(ev.target.value || null);
         setSelectedCommandUsageId(null);
-    };
-
-    const onCommandUsageChange = (ev) => {
-        setSelectedCommandUsageId(ev.target.value || null);
     };
 
     const onProjectChange = (ev) => {
@@ -92,22 +96,6 @@ const ScansPage = ({ mode }) => {
                             </NativeSelect>
                         }
                     />
-
-                    {selectedCommandId && (
-                        <HorizontalLabelledField
-                            label={t("Command usage")}
-                            control={
-                                <NativeSelect onChange={onCommandUsageChange} value={selectedCommandUsageId || ""}>
-                                    <option value="">{t("(select usage)")}</option>
-                                    {commandUsages?.map((usage) => (
-                                        <option key={usage.id} value={usage.id}>
-                                            {usage.description}
-                                        </option>
-                                    ))}
-                                </NativeSelect>
-                            }
-                        />
-                    )}
 
                     <div className="mt-4">
                         <label className="label">{t("Scan file")}</label>

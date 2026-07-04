@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Hidden the command usages selection dropdown in the scans execution and import pages in the dashboard UI, delegating usage selection internally.
 - Updated scans to always require a target project where the findings will be saved, both on the frontend dashboard and on the C# API backend `UploadOutput` endpoint.
 - Fixed type mismatch (uint key parameters) in C# controller tests.
 - Removed the **Documents** feature (document library, CRUD pages, dashboard widget, API endpoints, MCP resource, and OPA policy entries) to simplify the product surface and focus on intelligence and insights rather than record-keeping.

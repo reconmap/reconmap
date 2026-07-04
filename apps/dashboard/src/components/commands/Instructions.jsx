@@ -22,12 +22,6 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
 
     const [usage, setUsage] = useState(null);
 
-    const onUsageChange = (ev) => {
-        const usages = commandUsages ?? [];
-        const usage = usages.find((usage) => usage.id === ev.target.value);
-        setUsage(usage || null);
-    };
-
     useEffect(() => {
         const usages = commandUsages ?? [];
 
@@ -39,7 +33,7 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
             }
         }
 
-        if (usage === null && usages.length === 1) {
+        if (usage === null && usages.length > 0) {
             setUsage(usages[0]);
         }
     }, [commandUsages, defaultUsageId, usage]);
@@ -54,15 +48,6 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
 
     return (
         <>
-            <NativeSelect onChange={(ev) => onUsageChange(ev)} value={usage?.id || defaultUsageId || "0"}>
-                <option value="0">(select)</option>
-                {commandUsages.map((usage) => (
-                    <option key={usage.id} value={usage.id}>
-                        {usage.description}
-                    </option>
-                ))}
-            </NativeSelect>
-
             {usage !== null && (
                 <>
                     <h4 className="title is-4">Instructions for command "{command.name}"</h4>
