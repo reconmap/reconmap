@@ -5,7 +5,7 @@ namespace api_v2.Domain.Entities;
 [Table("azure_devops_integration")]
 public class AzureDevopsIntegration : TimestampedEntity
 {
-    public uint Id { get; set; }
+    public int Id { get; set; }
 
     public string Name { get; set; } = "Default Azure DevOps Integration";
 

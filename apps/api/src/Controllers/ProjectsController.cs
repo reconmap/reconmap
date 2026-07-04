@@ -37,7 +37,7 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
 
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, Project project)
+    public async Task<IActionResult> UpdateOne(int id, Project project)
     {
         var dbModel = await dbContext.Projects.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -49,7 +49,7 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
     }
 
     [HttpPatch("{id:int}")]
-    public async Task<IActionResult> PatchOne(uint id, [FromBody] JsonElement json)
+    public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement json)
     {
         await dbContext.Projects
             .Where(n => n.Id == id)
@@ -64,7 +64,7 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
         [FromQuery] string? status,
         [FromQuery] string? keywords,
         [FromQuery] bool? isTemplate,
-        [FromQuery] uint? clientId)
+        [FromQuery] int? clientId)
     {
         var currentUser = HttpContext.GetCurrentUser()!;
 
@@ -124,7 +124,7 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var project = await dbContext.Projects
             .Include(p => p.CreatedBy)

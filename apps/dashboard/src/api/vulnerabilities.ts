@@ -7,6 +7,7 @@ import {
     requestVulnerabilityCategoryDelete,
     requestVulnerabilityDelete,
     requestVulnerabilityPost,
+    requestVulnerabilityTriage,
 } from "./requests/vulnerabilities.js";
 
 const useVulnerabilitiesQuery = (params: any) => {
@@ -68,6 +69,13 @@ const useDeleteVulnerabilityCategoryMutation = () => {
     });
 };
 
+const useVulnerabilityTriageMutation = () => {
+    return useMutation({
+        mutationFn: (vulnerabilityId: number) =>
+            requestVulnerabilityTriage(vulnerabilityId).then((res) => res.json()),
+    });
+};
+
 export {
     useDeleteVulnerabilityCategoryMutation,
     useDeleteVulnerabilityMutation,
@@ -75,6 +83,6 @@ export {
     useVulnerabilitiesQuery,
     useVulnerabilitiesStatsQuery,
     useVulnerabilityCategoriesQuery,
-    useVulnerabilityQuery
+    useVulnerabilityQuery,
+    useVulnerabilityTriageMutation,
 };
-

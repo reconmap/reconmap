@@ -6,9 +6,9 @@ namespace api_v2.Domain.Entities;
 [Table("organisation")]
 public class Organisation : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    public uint CreatedByUid { get; set; }
+    public int CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public UserInfo? CreatedBy { get; set; }
 
@@ -24,9 +24,9 @@ public class Organisation : TimestampedEntity
 
     [MaxLength(255)] public string? Url { get; set; }
 
-    public uint? LogoAttachmentId { get; set; }
+    public int? LogoAttachmentId { get; set; }
 
-    public uint? SmallLogoAttachmentId { get; set; }
+    public int? SmallLogoAttachmentId { get; set; }
 }
 
 public enum ClientKind

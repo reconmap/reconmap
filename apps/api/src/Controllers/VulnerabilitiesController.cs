@@ -40,7 +40,7 @@ public class VulnerabilitiesController(
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, Vulnerability vulnerability)
+    public async Task<IActionResult> UpdateOne(int id, Vulnerability vulnerability)
     {
         var dbModel = await _dbContext.Vulnerabilities.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -93,7 +93,7 @@ public class VulnerabilitiesController(
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var existing = await _dbContext.Vulnerabilities
             .Include(v => v.Project)
@@ -125,7 +125,7 @@ public class VulnerabilitiesController(
     [HttpPut]
     [Route("{id:int}/remediation")]
     public async Task<IActionResult> PutRemediation(
-        uint id,
+        int id,
         [FromServices] IAiService aiService)
     {
         var vulnerability = await _dbContext.Vulnerabilities.FindAsync(id);
@@ -149,5 +149,25 @@ public class VulnerabilitiesController(
         await messageQueue.PublishAsync("notifications", new { type = "message" });
 
         return Ok();
+    }
+
+    [HttpPost]
+    [Route("{id:int}/triage")]
+    public async Task<IActionResult> PostTriage(
+        int id,
+        [FromServices] IAiService aiService)
+    {
+        var vulnerability = await _dbContext.Vulnerabilities
+            .AsNoTracking()
+            .Where(v => v.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (vulnerability == null) return NotFound();
+
+        var triage = await aiService.TriageVulnerabilityAsync(
+            vulnerability.Summary,
+            vulnerability.Description ?? string.Empty);
+
+        return Ok(new { triage });
     }
 }

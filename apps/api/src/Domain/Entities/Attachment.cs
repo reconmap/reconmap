@@ -6,15 +6,15 @@ namespace api_v2.Domain.Entities;
 [Table("attachment")]
 public class Attachment : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
     [Required]
     [MaxLength(20)]
     public string? ParentType { get; set; }
 
-    public uint ParentId { get; set; }
+    public int ParentId { get; set; }
 
-    public uint CreatedByUid { get; set; }
+    public int CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public User? CreatedBy { get; set; }
 
@@ -26,7 +26,7 @@ public class Attachment : TimestampedEntity
     [MaxLength(200)]
     public string FileName { get; set; } = string.Empty;
 
-    public uint FileSize { get; set; }
+    public int FileSize { get; set; }
 
     [Column("file_mimetype")]
     [MaxLength(200)]

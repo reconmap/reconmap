@@ -6,7 +6,7 @@ namespace api_v2.Domain.Entities;
 [Table("custom_field")]
 public class CustomField : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
     [Required]
     [Column(TypeName = "varchar")]

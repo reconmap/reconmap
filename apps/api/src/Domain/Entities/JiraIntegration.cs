@@ -5,7 +5,7 @@ namespace api_v2.Domain.Entities;
 [Table("jira_integration")]
 public class JiraIntegration : TimestampedEntity
 {
-    public uint Id { get; set; }
+    public int Id { get; set; }
 
     public string Name { get; set; } = "Default Jira Integration";
 

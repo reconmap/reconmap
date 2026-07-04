@@ -77,7 +77,7 @@ public class AgentsController(AppDbContext dbContext, ILogger<AgentsController> 
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var agent = await dbContext.Agents.FindAsync(id);
         if (agent == null) return NotFound();
@@ -127,7 +127,7 @@ public class AgentsController(AppDbContext dbContext, ILogger<AgentsController> 
 
     [HttpDelete("{id:int}")]
     [Audit(AuditActions.Deleted, "Agent")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var deleteCount = await dbContext.Agents
             .Where(n => n.Id == id)

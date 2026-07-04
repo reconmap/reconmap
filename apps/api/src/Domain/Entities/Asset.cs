@@ -6,11 +6,11 @@ namespace api_v2.Domain.Entities;
 [Table("asset")]
 public class Asset : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    public uint? ParentId { get; set; }
+    public int? ParentId { get; set; }
 
-    [Required] public uint ProjectId { get; set; }
+    [Required] public int ProjectId { get; set; }
 
     [Required]
     [MaxLength(200)]

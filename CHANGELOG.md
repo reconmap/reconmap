@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added agentic vulnerability triage: when scans discover new vulnerabilities, the AI autonomously produces a structured triage report (severity, exploitability, attack surface, immediate actions, false-positive check) for each finding during background processing.
+- Added on-demand vulnerability triage: a new **Triage** tab on vulnerability detail pages lets analysts request a fresh AI triage assessment at any time via `POST /api/vulnerabilities/{id}/triage`.
+- Added `TriageVulnerabilityAsync` to `IAiService` with a purpose-built rapid-triage prompt; works with any configured AI provider (Ollama, Azure OpenAI, OpenRouter).
+- Improved `EnrichAssetAsync` / asset suggest-commands prompt to produce a tactical plan (recommended tools, exact runnable commands, key indicators to look for) instead of generic advice.
+- Added AI features documentation page covering all agentic capabilities and the recommended Ollama setup.
 - Added a new dashboard scan launcher under **Scans -> Start from URL** that ensures a URL asset exists for the selected project before preparing a URL-capable command usage.
 - Implemented Azure OpenAI and OpenRouter/OpenAI chat client integrations in the C# API's `AiService` utilizing `Microsoft.Extensions.AI.OpenAI`, allowing admins to configure cloud LLM providers in the dashboard settings instead of being limited to local Ollama installations.
 - Integrated Open Policy Agent (OPA) / Rego for centralized attribute-based access control (ABAC).
@@ -18,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed `uint`/`ushort` types from all API entity models and service/controller signatures, replacing them with `int` throughout. This eliminates the EF Core `ConfigureConventions` workaround (which was converting `uint`→`bigint` and `ushort`→`int` for PostgreSQL compatibility) since all IDs and foreign keys are now native `int`, matching the existing `SERIAL`/`INT` PostgreSQL column types directly. No database migration is required.
 - Removed the **Documents** feature (document library, CRUD pages, dashboard widget, API endpoints, MCP resource, and OPA policy entries) to simplify the product surface and focus on intelligence and insights rather than record-keeping.
 - Added a comprehensive `NOTES.txt` post-installation message to the unified `reconmap` Helm chart detailing service URLs, port-forwarding instructions, and default credentials.
 - Added a `Makefile` to the unified `reconmap` Helm chart under `infra/k8s/helm-charts/reconmap` to validate (lint), install, uninstall, and retrieve values/manifests.

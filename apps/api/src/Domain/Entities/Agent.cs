@@ -7,7 +7,7 @@ namespace api_v2.Domain.Entities;
 public class Agent
 {
     [Key]
-    public uint Id { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [MaxLength(100)]

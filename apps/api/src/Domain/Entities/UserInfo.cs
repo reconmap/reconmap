@@ -8,7 +8,7 @@ public class UserInfo
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public uint Id { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [StringLength(200)]

@@ -87,23 +87,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         return System.Text.RegularExpressions.Regex.Replace(input, @"([a-z0-9])([A-Z])", "$1_$2").ToLower();
     }
 
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-    {
-        configurationBuilder
-            .Properties<uint>()
-            .HaveConversion<long>();
-        configurationBuilder
-            .Properties<uint?>()
-            .HaveConversion<long?>();
-        configurationBuilder
-            .Properties<ushort>()
-            .HaveConversion<int>();
-        configurationBuilder
-            .Properties<ushort?>()
-            .HaveConversion<int?>();
-    }
 
-    public async Task UpdateLastLoginTs(uint userId)
+    public async Task UpdateLastLoginTs(int userId)
     {
         await Users
             .Where(u => u.Id == userId)

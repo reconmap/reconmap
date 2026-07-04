@@ -25,7 +25,7 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, ProjectTask requestModel)
+    public async Task<IActionResult> UpdateOne(int id, ProjectTask requestModel)
     {
         var dbModel = await dbContext.Tasks.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -39,7 +39,7 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
 
     [HttpGet]
     public async Task<IActionResult> GetMany([FromQuery] int? limit,
-        [FromQuery] uint? projectId,
+        [FromQuery] int? projectId,
         [FromQuery] string? priority,
         [FromQuery] string? status)
     {
@@ -59,7 +59,7 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var existing = await dbContext.Tasks
             .Include(t => t.CreatedBy)
@@ -92,7 +92,7 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
     {
         var ids = body.GetProperty("ids")
             .EnumerateArray()
-            .Select(e => e.GetUInt32())
+            .Select(e => e.GetInt32())
             .ToList();
 
         switch (operation)

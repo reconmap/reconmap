@@ -14,16 +14,16 @@ public class ProjectMembersController(AppDbContext dbContext, IConnectionMultipl
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AddProjectMember(uint projectId, [FromBody] JsonElement body)
+    public async Task<IActionResult> AddProjectMember(int projectId, [FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("userId", out var value))
             return BadRequest("Missing userId");
 
-        uint userId;
+        int userId;
 
         try
         {
-            userId = value.GetUInt32();
+            userId = value.GetInt32();
         }
         catch
         {
@@ -44,7 +44,7 @@ public class ProjectMembersController(AppDbContext dbContext, IConnectionMultipl
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetProjectMembers(uint projectId)
+    public async Task<IActionResult> GetProjectMembers(int projectId)
     {
         var users = await dbContext.ProjectMembers
             .Where(pu => pu.ProjectId == projectId)

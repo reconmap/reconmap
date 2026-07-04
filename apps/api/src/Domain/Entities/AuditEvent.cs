@@ -12,7 +12,7 @@ public class AuditEntry : CreationTimestampedEntity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    public uint? CreatedByUid { get; set; }
+    public int? CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public UserInfo? CreatedBy { get; set; }
 

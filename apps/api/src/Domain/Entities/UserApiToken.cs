@@ -6,9 +6,9 @@ namespace api_v2.Domain.Entities;
 [Table("user_api_token")]
 public class UserApiToken
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    public uint UserId { get; set; }
+    public int UserId { get; set; }
 
     [Column(TypeName = "timestamptz")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]

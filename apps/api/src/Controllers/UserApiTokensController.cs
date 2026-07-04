@@ -60,7 +60,7 @@ public class UserApiTokensController(AppDbContext dbContext) : AppController(dbC
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var user = HttpContext.GetCurrentUser()!;
         var deleteCount = await dbContext.UserApiTokens

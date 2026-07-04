@@ -19,8 +19,8 @@ namespace api_v2.Controllers;
 
 public class ReportRequestDto
 {
-    public uint ProjectId { get; set; }
-    public uint ReportTemplateId { get; set; }
+    public int ProjectId { get; set; }
+    public int ReportTemplateId { get; set; }
     public string VersionName { get; set; }
     public string VersionDescription { get; set; }
 }
@@ -88,7 +88,7 @@ public class ReportsController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMany([FromQuery] int? limit, [FromQuery] uint? projectId)
+    public async Task<IActionResult> GetMany([FromQuery] int? limit, [FromQuery] int? projectId)
     {
         var results = await GetReportsInternal(limit, false, projectId);
         return Ok(results);
@@ -144,7 +144,7 @@ public class ReportsController(
             ParentId = report.Id,
             ClientFileName = templateDto.ResultFile.FileName,
             FileName = uniqueName,
-            FileSize = (uint)templateDto.ResultFile.Length,
+            FileSize = (int)templateDto.ResultFile.Length,
             FileMimeType = templateDto.ResultFile.ContentType,
             FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
         };
@@ -156,7 +156,7 @@ public class ReportsController(
     }
 
     [HttpPost("{id:int}/send")]
-    public async Task<IActionResult> Send(uint id, [FromBody] ReportSendRequestDto request)
+    public async Task<IActionResult> Send(int id, [FromBody] ReportSendRequestDto request)
     {
         var report = await dbContext.Reports
             .AsNoTracking()
@@ -220,7 +220,7 @@ public class ReportsController(
         });
     }
 
-    private async Task<List<object>> GetReportsInternal(int? limit, bool isTemplate, uint? projectId = null)
+    private async Task<List<object>> GetReportsInternal(int? limit, bool isTemplate, int? projectId = null)
     {
         const int maxLimit = 500;
         var take = Math.Min(limit ?? 100, maxLimit);
@@ -247,14 +247,14 @@ public class ReportsController(
                 r.VersionName,
                 r.VersionDescription,
 
-                Project = p != null ? new { Id = (uint?)p.Id, Name = p.Name } : null,
+                Project = p != null ? new { Id = (int?)p.Id, Name = p.Name } : null,
 
                 // attachment fields
-                AttachmentId = (uint?)a.Id,
+                AttachmentId = (int?)a.Id,
                 AttachmentInsertTs = (DateTime?)a.CreatedAt,
                 ClientFileName = a.ClientFileName,
                 FileName = a.FileName,
-                FileSize = (uint?)a.FileSize,
+                FileSize = (int?)a.FileSize,
                 FileMimeType = a.FileMimeType
             };
 
@@ -329,7 +329,7 @@ public class ReportsController(
 
     [HttpDelete("{id:int}")]
     [Audit(AuditActions.Deleted, "Report")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var report = await dbContext.Reports.FindAsync(id);
         if (report == null) return NotFound();

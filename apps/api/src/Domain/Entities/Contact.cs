@@ -6,9 +6,9 @@ namespace api_v2.Domain.Entities;
 [Table("contact")]
 public class Contact
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    public uint OrganisationId { get; set; }
+    public int OrganisationId { get; set; }
 
     [Required] public string? Kind { get; set; }
 

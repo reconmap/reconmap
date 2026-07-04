@@ -39,6 +39,9 @@ const requestVulnerabilityCategoryDelete = (categoryId: number) =>
 
 const requestVulnerabilityDelete = (vulnerabilityId: number) => requestEntityDelete(`/vulnerabilities/${vulnerabilityId}`);
 
+export const requestVulnerabilityTriage = (vulnerabilityId: number): Promise<Response> =>
+    secureApiFetch(`/vulnerabilities/${vulnerabilityId}/triage`, { method: 'POST' });
+
 export {
     requestVulnerabilities,
     requestVulnerabilitiesStats,

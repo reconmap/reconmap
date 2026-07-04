@@ -65,7 +65,7 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(uint id)
+    public async Task<IActionResult> Get(int id)
     {
         var existing = await dbContext.Users.FindAsync(id);
         if (existing == null) return NotFound();
@@ -74,7 +74,7 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
     }
 
     [HttpGet("{id:int}/activity")]
-    public async Task<IActionResult> GetActivity(uint id, [FromQuery] int? limit)
+    public async Task<IActionResult> GetActivity(int id, [FromQuery] int? limit)
     {
         const int maxLimit = 500;
         var take = Math.Min(limit ?? 100, maxLimit);
@@ -103,7 +103,7 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> PatchOne(uint id, [FromBody] JsonElement body)
+    public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("preferences", out var prefs))
             return BadRequest("Missing 'preferences' property in request body.");

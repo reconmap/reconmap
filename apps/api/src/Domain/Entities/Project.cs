@@ -6,21 +6,21 @@ namespace api_v2.Domain.Entities;
 [Table("project")]
 public class Project : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    public uint CreatedByUid { get; set; }
+    public int CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public UserInfo? CreatedBy { get; set; }
 
-    public uint? ServiceProviderId { get; set; }
+    public int? ServiceProviderId { get; set; }
 
     [ForeignKey(nameof(ServiceProviderId))] public Organisation? ServiceProvider { get; set; }
 
-    public uint? ClientId { get; set; }
+    public int? ClientId { get; set; }
 
     [ForeignKey(nameof(ClientId))] public Organisation? Client { get; set; }
 
-    public uint? CategoryId { get; set; }
+    public int? CategoryId { get; set; }
 
     [ForeignKey(nameof(CategoryId))] public ProjectCategory? Category { get; set; }
 

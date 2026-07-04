@@ -17,7 +17,7 @@ public class JiraIntegrationsController(AppDbContext dbContext) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var integration = await dbContext.JiraIntegrations.FindAsync(id);
         if (integration == null) return NotFound();
@@ -33,7 +33,7 @@ public class JiraIntegrationsController(AppDbContext dbContext) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, [FromBody] JiraIntegration integration)
+    public async Task<IActionResult> UpdateOne(int id, [FromBody] JiraIntegration integration)
     {
         var dbModel = await dbContext.JiraIntegrations.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -45,7 +45,7 @@ public class JiraIntegrationsController(AppDbContext dbContext) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var deleteCount = await dbContext.JiraIntegrations
             .Where(n => n.Id == id)

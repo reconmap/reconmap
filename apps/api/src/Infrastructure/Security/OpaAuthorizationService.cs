@@ -7,7 +7,7 @@ namespace api_v2.Infrastructure.Security;
 
 public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbContext, IConfiguration configuration)
 {
-    public async Task<bool> AuthorizeAsync(User user, string method, string resourceType, object? resourceData = null, List<uint>? memberProjectIds = null)
+    public async Task<bool> AuthorizeAsync(User user, string method, string resourceType, object? resourceData = null, List<int>? memberProjectIds = null)
     {
         var input = new
         {
@@ -17,7 +17,7 @@ public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbConte
                 {
                     id = user.Id,
                     role = user.Role.ToString().ToLower(),
-                    member_project_ids = memberProjectIds ?? new List<uint>()
+                    member_project_ids = memberProjectIds ?? new List<int>()
                 },
                 method = method.ToUpper(),
                 resource_type = resourceType,

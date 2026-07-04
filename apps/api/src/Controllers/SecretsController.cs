@@ -20,9 +20,9 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
         var name = json.GetProperty("name").GetString()!;
         var type = json.GetProperty("type").GetString()!;
         var note = json.TryGetProperty("note", out var noteElement) ? noteElement.GetString() : null;
-        uint? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
+        int? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
                           projectIdElement.ValueKind == JsonValueKind.Number
-            ? projectIdElement.GetUInt32()
+            ? projectIdElement.GetInt32()
             : null;
 
         var secret = await secretsService.CreateAsync(HttpContext.GetCurrentUser().Id, password, name, type, value, note,
@@ -34,7 +34,7 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSecret(uint id)
+    public async Task<IActionResult> GetSecret(int id)
     {
         var secret = await secretsService.GetByIdAsync(id);
         if (secret == null) return NotFound();
@@ -50,7 +50,7 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
     }
 
     [HttpPost("{id:int}/decrypt")]
-    public async Task<IActionResult> GetOne(uint id, JsonElement json)
+    public async Task<IActionResult> GetOne(int id, JsonElement json)
     {
         var password = json.GetProperty("password").GetString()!;
         var result = await secretsService.DecryptAsync(id, password);
@@ -68,16 +68,16 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PatchOne(uint id, JsonElement json)
+    public async Task<IActionResult> PatchOne(int id, JsonElement json)
     {
         var password = json.GetProperty("password").GetString()!;
         var value = json.GetProperty("value").GetString()!;
         var name = json.GetProperty("name").GetString()!;
         var type = json.GetProperty("type").GetString()!;
         var note = json.TryGetProperty("note", out var noteElement) ? noteElement.GetString() : null;
-        uint? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
+        int? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
                           projectIdElement.ValueKind == JsonValueKind.Number
-            ? projectIdElement.GetUInt32()
+            ? projectIdElement.GetInt32()
             : null;
 
         var success = await secretsService.UpdateAsync(id, password, name, type, value, note, projectId);
@@ -88,7 +88,7 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
 
     [HttpDelete("{id:int}")]
     [Audit(AuditActions.Deleted, "Secret")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var success = await secretsService.DeleteAsync(id);
         if (!success) return NotFound();

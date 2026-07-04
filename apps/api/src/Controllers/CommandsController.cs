@@ -19,8 +19,8 @@ namespace api_v2.Controllers;
 public class CommandProcessorJob
 {
     public string CommandUsageId { get; set; } = string.Empty;
-    public uint ProjectId { get; set; }
-    public uint UserId { get; set; }
+    public int ProjectId { get; set; }
+    public int UserId { get; set; }
     public string FilePath { get; set; } = string.Empty;
 }
 
@@ -108,7 +108,7 @@ public class CommandsController(
         int userId = 0;
         try
         {
-            userId = (int)HttpContext.GetCurrentUser()!.Id;
+            userId = HttpContext.GetCurrentUser()!.Id;
         }
         catch
         {
@@ -124,12 +124,12 @@ public class CommandsController(
 
         var attachment = new Attachment
         {
-            CreatedByUid = (uint)userId,
+            CreatedByUid = userId,
             ParentType = "command",
             ParentId = 0,
             ClientFileName = resultFile.FileName,
             FileName = uniqueName,
-            FileSize = (uint)resultFile.Length,
+            FileSize = (int)resultFile.Length,
             FileMimeType = resultFile.ContentType,
             FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
         };
@@ -147,8 +147,8 @@ public class CommandsController(
             var job = new CommandProcessorJob
             {
                 CommandUsageId = commandUsageId,
-                ProjectId = (uint)projectId.Value,
-                UserId = (uint)userId,
+                ProjectId = projectId.Value,
+                UserId = userId,
                 FilePath = uniqueName
             };
 

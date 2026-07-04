@@ -32,7 +32,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var attachment = await dbContext.Attachments.FindAsync(id);
         if (attachment == null) return NotFound();
@@ -53,7 +53,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
 
     [HttpDelete("{id:int}")]
     [Audit(AuditActions.Deleted, "Attachment")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var attachment = await dbContext.Attachments.FindAsync(id);
         if (attachment == null) return NotFound();
@@ -71,7 +71,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
     [HttpPost]
     [DisableRequestSizeLimit]
     [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
-    public async Task<IActionResult> CreateMany([FromForm] uint parentId, [FromForm] string parentType)
+    public async Task<IActionResult> CreateMany([FromForm] int parentId, [FromForm] string parentType)
     {
         if (!Request.Form.Files.Any())
             return BadRequest();
@@ -92,7 +92,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
                 ParentId = parentId,
                 ClientFileName = file.FileName,
                 FileName = uniqueName,
-                FileSize = (uint)file.Length,
+                FileSize = (int)file.Length,
                 FileMimeType = file.ContentType,
                 FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
             };

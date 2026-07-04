@@ -25,7 +25,7 @@ public class OrganisationsController(AppDbContext dbContext, ILogger<Organisatio
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, Organisation requestModel)
+    public async Task<IActionResult> UpdateOne(int id, Organisation requestModel)
     {
         var dbModel = await dbContext.Organisations.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -55,7 +55,7 @@ public class OrganisationsController(AppDbContext dbContext, ILogger<Organisatio
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var org = await dbContext.Organisations
             .Include(o => o.CreatedBy)

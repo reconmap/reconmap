@@ -271,6 +271,7 @@ CREATE TABLE vulnerability
     substatus              VARCHAR(20) NULL     DEFAULT 'reported',
     tags                   JSONB                                                                                               NULL,
     custom_fields          JSONB                                                                                               NULL,
+    ai_triage              TEXT                                                                                               NULL,
     UNIQUE (project_id, asset_id, summary),
     FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
     CONSTRAINT vulnerability_fk_project_id FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,

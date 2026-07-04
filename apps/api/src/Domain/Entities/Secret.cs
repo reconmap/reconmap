@@ -6,11 +6,11 @@ namespace api_v2.Domain.Entities;
 [Table("vault")]
 public class Secret : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    [Required] public uint OwnerUid { get; set; }
+    [Required] public int OwnerUid { get; set; }
 
-    public uint? ProjectId { get; set; }
+    public int? ProjectId { get; set; }
 
     [Required]
     [Column(TypeName = "varchar")]

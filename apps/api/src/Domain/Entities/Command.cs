@@ -4,7 +4,7 @@ public class Command : TimestampedEntity
 {
     public string Id { get; set; } = string.Empty;
 
-    public uint CreatedByUid { get; set; }
+    public int CreatedByUid { get; set; }
 
     public User? CreatedBy { get; set; }
 

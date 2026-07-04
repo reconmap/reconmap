@@ -8,7 +8,7 @@ public class AiSettings : TimestampedEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public uint Id { get; set; } = 1;
+    public int Id { get; set; } = 1;
 
     [MaxLength(50)]
     public string Provider { get; set; } = "Ollama";

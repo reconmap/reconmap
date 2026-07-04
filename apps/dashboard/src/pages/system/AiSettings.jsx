@@ -156,7 +156,7 @@ const AiSettingsPage = () => {
                                     name="ollamaModel"
                                     value={formState.ollamaModel}
                                     onChange={updateField}
-                                    placeholder="llama3.2"
+                                    placeholder="e.g. hf.co/BugTraceAI/BugTraceAI-CORE-Fast (pentesting-optimised)"
                                 />
                             }
                         />

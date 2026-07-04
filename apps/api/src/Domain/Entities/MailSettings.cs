@@ -8,7 +8,7 @@ public class MailSettings : TimestampedEntity
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public uint Id { get; set; } = 1;
+    public int Id { get; set; } = 1;
 
     [MaxLength(255)]
     public string? SmtpHost { get; set; }

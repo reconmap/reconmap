@@ -6,15 +6,15 @@ namespace api_v2.Domain.Entities;
 [Table("task")]
 public class ProjectTask : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    [Required] public uint ProjectId { get; set; }
+    [Required] public int ProjectId { get; set; }
 
-    public uint CreatedByUid { get; set; }
+    public int CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public UserInfo? CreatedBy { get; set; }
 
-    public uint? AssignedToUid { get; set; }
+    public int? AssignedToUid { get; set; }
 
     [ForeignKey(nameof(AssignedToUid))] public UserInfo? AssignedTo { get; set; }
 
@@ -29,7 +29,7 @@ public class ProjectTask : TimestampedEntity
 
     [Required] public string? Status { get; set; }
 
-    public ushort? DurationEstimate { get; set; }
+    public int? DurationEstimate { get; set; }
 
     public DateTime? DueDate { get; set; }
 }

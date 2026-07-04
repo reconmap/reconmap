@@ -21,7 +21,7 @@ public class WebhooksController(AppDbContext dbContext) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var webhook = await dbContext.Webhooks.FindAsync(id);
         if (webhook == null) return NotFound();
@@ -40,7 +40,7 @@ public class WebhooksController(AppDbContext dbContext) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, [FromBody] Webhook webhook)
+    public async Task<IActionResult> UpdateOne(int id, [FromBody] Webhook webhook)
     {
         var dbModel = await dbContext.Webhooks.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -52,7 +52,7 @@ public class WebhooksController(AppDbContext dbContext) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var deleteCount = await dbContext.Webhooks
             .Where(w => w.Id == id)

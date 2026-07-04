@@ -135,10 +135,10 @@ public static class WordTemplateReplacer
 
 public sealed class ReportGenerationJob
 {
-    public uint ReportId { get; set; }
-    public uint ProjectId { get; set; }
-    public uint ReportTemplateId { get; set; }
-    public uint CreatedByUserId { get; set; }
+    public int ReportId { get; set; }
+    public int ProjectId { get; set; }
+    public int ReportTemplateId { get; set; }
+    public int CreatedByUserId { get; set; }
 }
 
 public sealed class ReportGenerationProcessor(
@@ -289,7 +289,7 @@ public sealed class ReportGenerationProcessor(
                     FileName = reportFileName,
                     FileMimeType = templateAttachment.FileMimeType,
                     ClientFileName = clientFileName,
-                    FileSize = (uint)new FileInfo(tempFilePath).Length,
+                    FileSize = (int)new FileInfo(tempFilePath).Length,
                     FileHash = await attachmentStorage.GetFileHashAsync(reportFileName)
                 };
 

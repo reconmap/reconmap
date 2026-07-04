@@ -13,10 +13,10 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
 {
     public sealed class EnsureAssetRequest
     {
-        public uint ProjectId { get; set; }
+        public int ProjectId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Type { get; set; }
-        public uint? ParentId { get; set; }
+        public int? ParentId { get; set; }
         public string? Tags { get; set; }
     }
 
@@ -76,7 +76,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var asset = await dbContext.Assets.FindAsync(id);
         if (asset == null) return NotFound();
@@ -85,7 +85,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
     }
 
     [HttpPost("{id:int}/enrich")]
-    public async Task<IActionResult> Enrich(uint id)
+    public async Task<IActionResult> Enrich(int id)
     {
         var asset = await dbContext.Assets.FindAsync(id);
         if (asset == null) return NotFound();

@@ -10,8 +10,8 @@ namespace api_v2.Application.Services;
 
 public sealed class ReportEmailJob
 {
-    public uint ReportId { get; set; }
-    public uint RequestedByUserId { get; set; }
+    public int ReportId { get; set; }
+    public int RequestedByUserId { get; set; }
     public required List<string> Recipients { get; set; }
     public required string Subject { get; set; }
     public string Body { get; set; } = string.Empty;
@@ -113,7 +113,7 @@ public sealed class ReportEmailProcessor(
 
     private static async Task CreateUserNotificationAsync(
         AppDbContext db,
-        uint userId,
+        int userId,
         string title,
         string content,
         CancellationToken cancellationToken)

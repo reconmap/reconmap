@@ -17,7 +17,7 @@ public class AzureDevopsIntegrationsController(AppDbContext dbContext) : Control
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetOne(uint id)
+    public async Task<IActionResult> GetOne(int id)
     {
         var integration = await dbContext.AzureDevopsIntegrations.FindAsync(id);
         if (integration == null) return NotFound();
@@ -33,7 +33,7 @@ public class AzureDevopsIntegrationsController(AppDbContext dbContext) : Control
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateOne(uint id, [FromBody] AzureDevopsIntegration integration)
+    public async Task<IActionResult> UpdateOne(int id, [FromBody] AzureDevopsIntegration integration)
     {
         var dbModel = await dbContext.AzureDevopsIntegrations.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -45,7 +45,7 @@ public class AzureDevopsIntegrationsController(AppDbContext dbContext) : Control
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteOne(uint id)
+    public async Task<IActionResult> DeleteOne(int id)
     {
         var deleteCount = await dbContext.AzureDevopsIntegrations
             .Where(n => n.Id == id)

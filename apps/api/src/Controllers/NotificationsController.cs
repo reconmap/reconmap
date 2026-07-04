@@ -68,7 +68,7 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
     {
         var ids = body.GetProperty("ids")
             .EnumerateArray()
-            .Select(e => e.GetUInt32())
+            .Select(e => e.GetInt32())
             .ToList();
 
         var deleteCount = await dbContext.Notifications
@@ -81,7 +81,7 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
 
 
     [HttpPatch("{id:int}")]
-    public async Task<IActionResult> PatchOne(uint id, [FromBody] JsonElement body)
+    public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement body)
     {
         var notification = await dbContext.Notifications.FindAsync(id);
         if (notification == null) return NotFound();
@@ -97,7 +97,7 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
     {
         var ids = body.GetProperty("ids")
             .EnumerateArray()
-            .Select(e => e.GetUInt32())
+            .Select(e => e.GetInt32())
             .ToList();
 
         var status = body.GetProperty("status").GetString();

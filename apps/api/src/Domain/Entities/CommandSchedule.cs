@@ -6,9 +6,9 @@ namespace api_v2.Domain.Entities;
 [Table("command_schedule")]
 public class CommandSchedule : TimestampedEntity
 {
-    [Key]public uint Id { get; set; }
+    [Key]public int Id { get; set; }
 
-    public uint CreatedByUid { get; set; }
+    public int CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))]
     public User? CreatedBy { get; set; }
@@ -23,7 +23,7 @@ public class CommandSchedule : TimestampedEntity
     [NotMapped]
     public CommandUsage? CommandUsage { get; set; }
 
-    public uint? ProjectId { get; set; }
+    public int? ProjectId { get; set; }
 
     [ForeignKey(nameof(ProjectId))]
     public Project? Project { get; set; }

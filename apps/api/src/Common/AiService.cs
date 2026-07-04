@@ -49,6 +49,7 @@ public interface IAiService
     Task<string> GenerateRemediationAsync(string vulnerabilitySummary);
     Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output);
     Task<string> EnrichAssetAsync(string assetName, string assetType);
+    Task<string> TriageVulnerabilityAsync(string summary, string description);
 }
 
 public sealed class AiService(IAiSettingsService aiSettingsService) : IAiService
@@ -131,7 +132,7 @@ Command Output:
             });
 
         var json = response.Text;
-        
+
         // Clean markdown code blocks if present
         if (json.Contains("```json"))
         {
@@ -139,7 +140,7 @@ Command Output:
         }
         else if (json.Contains("```"))
         {
-             json = json.Split("```")[1].Split("```")[0];
+            json = json.Split("```")[1].Split("```")[0];
         }
 
         try
@@ -155,7 +156,17 @@ Command Output:
 
     public async Task<string> EnrichAssetAsync(string assetName, string assetType)
     {
-        var prompt = $"As a penetration tester, suggest the next steps and potential tools to use for scanning this asset: {assetName} (Type: {assetType}). Provide a concise list of recommended commands.";
+        var prompt = $@"You are an autonomous penetration testing agent. Given the following asset, produce a concise tactical plan:
+
+Asset: {assetName}
+Type: {assetType}
+
+Provide:
+1. **Recommended tools** – list the most relevant CLI tools for this asset type
+2. **Priority commands** – exact runnable commands with the asset substituted in, ordered by impact
+3. **Key things to look for** – specific indicators of compromise or misconfigurations relevant to this asset type
+
+Be concise and actionable. Format as markdown.";
 
         var settings = await aiSettingsService.GetSettingsAsync();
         var client = await GetClientAsync();
@@ -163,7 +174,36 @@ Command Output:
             prompt,
             new ChatOptions
             {
-                Instructions = "You are a pentesting strategist.",
+                Instructions = "You are an autonomous penetration testing agent. Be tactical, concise, and precise.",
+                MaxOutputTokens = settings.MaxOutputTokens
+            });
+
+        return response.Text;
+    }
+
+    public async Task<string> TriageVulnerabilityAsync(string summary, string description)
+    {
+        var details = string.IsNullOrWhiteSpace(description) ? summary : $"{summary}\n\n{description}";
+        var prompt = $@"You are a penetration testing triage agent. Rapidly assess the following vulnerability finding:
+
+{details}
+
+Provide a brief structured triage report with:
+- **Severity assessment** – confirm or adjust the risk level with justification
+- **Exploitability** – how easily could this be exploited in the wild?
+- **Attack surface** – what systems or data are at risk?
+- **Immediate actions** – up to 3 specific next steps an analyst should take right now
+- **False positive check** – any reasons this might not be a real issue?
+
+Be concise. Format as markdown.";
+
+        var settings = await aiSettingsService.GetSettingsAsync();
+        var client = await GetClientAsync();
+        var response = await client.GetResponseAsync(
+            prompt,
+            new ChatOptions
+            {
+                Instructions = "You are a rapid vulnerability triage agent. Provide fast, accurate, actionable assessments.",
                 MaxOutputTokens = settings.MaxOutputTokens
             });
 

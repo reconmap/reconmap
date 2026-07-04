@@ -6,9 +6,9 @@ namespace api_v2.Domain.Entities;
 [Table("notification")]
 public class Notification : TimestampedEntity
 {
-    [Key] public uint Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    [Required] public uint ToUserId { get; set; }
+    [Required] public int ToUserId { get; set; }
 
     [MaxLength(200)] public string? Title { get; set; }
 

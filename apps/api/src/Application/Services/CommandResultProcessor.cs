@@ -98,6 +98,18 @@ public class CommandResultProcessor(
                         }
                     }
 
+                    // Autonomously triage the vulnerability as it is discovered
+                    try
+                    {
+                        vulnerability.AiTriage = await aiService.TriageVulnerabilityAsync(
+                            vulnerability.Summary,
+                            vulnerability.Description ?? string.Empty);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogWarning(ex, "Failed to triage vulnerability {Summary}", vulnerability.Summary);
+                    }
+
                     db.Vulnerabilities.Add(vulnerability);
                     numVulnerabilitiesAdded++;
                 }
@@ -141,7 +153,7 @@ public class CommandResultProcessor(
             v.Status == "open");
     }
 
-    private async Task<uint> GetAssetId(AppDbContext db, Asset asset)
+    private async Task<int> GetAssetId(AppDbContext db, Asset asset)
     {
         var dbAsset = await db.Assets.AsNoTracking().Where(a => a.Type == asset.Type && a.Name == asset.Name)
             .SingleOrDefaultAsync();
