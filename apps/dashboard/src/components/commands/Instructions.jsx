@@ -76,7 +76,6 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
 const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFrequency = null, defaultArgumentValues = null }) => {
     const [commandArgsRendered, setCommandArgsRendered] = useState("");
     const [commandArgs, setCommandArgs] = useState(() => parseArguments(usage));
-    const [vulnerabilitiesStorageAction, setVulnerabilitiesStorageAction] = useState(parentProjectId ? "project" : "discard");
     const [showTerminal, setShowTerminal] = useState(false);
     const [runFrequency, setRunFrequency] = useState(forcedRunFrequency || "once");
     const [projectId, setProjectId] = useState(parentProjectId ?? null);
@@ -93,9 +92,10 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
     useEffect(() => {
         if (parentProjectId) {
             setProjectId(parentProjectId);
-            setVulnerabilitiesStorageAction("project");
+        } else if (projects?.data?.length > 0 && !projectId) {
+            setProjectId(projects.data[0].id);
         }
-    }, [parentProjectId]);
+    }, [parentProjectId, projects, projectId]);
 
     const [cronExpression, setCronExpression] = useState("");
     const [cronExpressionErrorMessage, setCronExpressionErrorMessage] = useState(null);
@@ -195,38 +195,17 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
             </h5>
 
             <HorizontalLabelledField
-                label="Vulnerabilities storage action"
+                label="Project"
+                htmlFor="projectId"
                 control={
-                    <NativeSelect
-                        onChange={(ev) => {
-                            setVulnerabilitiesStorageAction(ev.target.value);
-                            if (ev.target.value === "discard") {
-                                setProjectId(null);
-                            } else {
-                                setProjectId(projects.data[0].id);
-                            }
-                        }}
-                        value={vulnerabilitiesStorageAction}
-                    >
-                        <option value="discard">Discard (only captures output)</option>
-                        <option value="project">Project</option>
+                    <NativeSelect id="projectId" name="project_id" onChange={(ev) => setProjectId(parseInt(ev.target.value) || null)} value={projectId || ""}>
+                        <option value="">(select project)</option>
+                        {projects?.data?.map((project) => (
+                            <option key={project.id} value={project.id}>{project.name}</option>
+                        ))}
                     </NativeSelect>
                 }
             />
-
-            {vulnerabilitiesStorageAction === "project" && (
-                <HorizontalLabelledField
-                    label="Project"
-                    htmlFor="projectId"
-                    control={
-                        <NativeSelect id="projectId" name="project_id" onChange={(ev) => setProjectId(ev.target.value)} value={projectId || ""}>
-                            {projects.data.map((project) => (
-                                <option value={project.id}>{project.name}</option>
-                            ))}
-                        </NativeSelect>
-                    }
-                />
-            )}
 
             {!forcedRunFrequency && (
                 <HorizontalLabelledField
@@ -272,7 +251,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                     />
 
                     <NativeButton
-                        disabled={cronExpression === ""}
+                        disabled={cronExpression === "" || !projectId}
                         onClick={(ev) => saveScheduledCommand(ev, command, usage, commandArgsRendered)}
                     >
                         Save scheduled command
@@ -295,7 +274,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                         }
                     />
 
-                    <NativeButton onClick={runOnTerminal} disabled={isAgentsLoading || agents.length === 0} title={isAgentsLoading || agents.length === 0 ? "No available agents" : ""}>Run on a browser terminal</NativeButton>
+                    <NativeButton onClick={runOnTerminal} disabled={isAgentsLoading || agents.length === 0 || !projectId} title={isAgentsLoading || agents.length === 0 ? "No available agents" : !projectId ? "Please select a project" : ""}>Run on a browser terminal</NativeButton>
 
                     {showTerminal && (
                         <CommandTerminal agentIp={agent?.ip} agentPort={agent?.listenAddr}

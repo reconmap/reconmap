@@ -10,7 +10,21 @@ public static class CommandDiscovery
     {
         var commandType = typeof(ICommand);
         var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(a => a.GetTypes())
+            .SelectMany(a =>
+            {
+                try
+                {
+                    return a.GetTypes();
+                }
+                catch (System.Reflection.ReflectionTypeLoadException ex)
+                {
+                    return ex.Types.Where(t => t != null)!;
+                }
+                catch
+                {
+                    return Type.EmptyTypes;
+                }
+            })
             .Where(t => commandType.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
 
         var list = new List<ICommand>();

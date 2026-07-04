@@ -23,6 +23,8 @@ Reconmap supports several built-in output parsers, including:
 
 ### Step 2 - Running the command and uploading the results
 
+All scans now require a selected target project where the findings will be saved. When configuring a run, choose the target project from the project dropdown. The previously available "Vulnerabilities storage action" option has been removed, making the project selection mandatory for all scan executions.
+
 Run the command from the Scans page using the integrated web terminal (connected to a Reconmap agent). The agent will execute the command, capture the output, and automatically upload the results to the server for processing. Manual execution via a local `rmap` command line client is not supported.
 
 ### Step 3 - Waiting for results

@@ -23,7 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed the "Vulnerabilities storage action" dropdown from the dashboard scan execution form.
 - Removed `uint`/`ushort` types from all API entity models and service/controller signatures, replacing them with `int` throughout. This eliminates the EF Core `ConfigureConventions` workaround (which was converting `uint`→`bigint` and `ushort`→`int` for PostgreSQL compatibility) since all IDs and foreign keys are now native `int`, matching the existing `SERIAL`/`INT` PostgreSQL column types directly. No database migration is required.
+
+### Changed
+
+- Updated scans to always require a target project where the findings will be saved, both on the frontend dashboard and on the C# API backend `UploadOutput` endpoint.
+- Fixed type mismatch (uint key parameters) in C# controller tests.
 - Removed the **Documents** feature (document library, CRUD pages, dashboard widget, API endpoints, MCP resource, and OPA policy entries) to simplify the product surface and focus on intelligence and insights rather than record-keeping.
 - Removed the ability to execute commands manually using the `rmap` CLI runner tool, including the `command run` subcommand, associated runner packages, and manual execution tests.
 - Removed the "Desktop" terminal environment option and instructions for manual `rmap` execution from the Scans page in the React dashboard UI, standardizing on agent-driven browser terminal executions.

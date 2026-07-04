@@ -137,25 +137,23 @@ public class CommandsController(
         await dbContext.Attachments.AddAsync(attachment);
         await dbContext.SaveChangesAsync();
 
-        int? projectId = null;
-        if (form.TryGetValue("projectId", out var projectIdValue) &&
-            int.TryParse(projectIdValue, out var parsedProjectId))
-            projectId = parsedProjectId;
-
-        if (projectId.HasValue)
+        if (!form.TryGetValue("projectId", out var projectIdValue) ||
+            !int.TryParse(projectIdValue, out var parsedProjectId))
         {
-            var job = new CommandProcessorJob
-            {
-                CommandUsageId = commandUsageId,
-                ProjectId = projectId.Value,
-                UserId = userId,
-                FilePath = uniqueName
-            };
-
-            await messageQueue.PublishAsync("tasks", job);
-
-            logger.LogInformation("pushed new job to tasks");
+            return BadRequest("A project is required to save the findings.");
         }
+
+        var job = new CommandProcessorJob
+        {
+            CommandUsageId = commandUsageId,
+            ProjectId = parsedProjectId,
+            UserId = userId,
+            FilePath = uniqueName
+        };
+
+        await messageQueue.PublishAsync("tasks", job);
+
+        logger.LogInformation("pushed new job to tasks");
 
         return new JsonResult(new { success = true });
     }

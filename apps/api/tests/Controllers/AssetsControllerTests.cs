@@ -14,6 +14,7 @@ public class AssetsControllerTests
         public Task<string> GenerateRemediationAsync(string vulnerabilitySummary) => Task.FromResult(string.Empty);
         public Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output) => Task.FromResult(new AiParsingResult());
         public Task<string> EnrichAssetAsync(string assetName, string assetType) => Task.FromResult(string.Empty);
+        public Task<string> TriageVulnerabilityAsync(string summary, string description) => Task.FromResult(string.Empty);
     }
 
     private static AppDbContext CreateDbContext()
@@ -44,7 +45,7 @@ public class AssetsControllerTests
         Assert.Equal("url", asset.Type);
 
         var saved = await db.Assets.SingleAsync();
-        Assert.Equal(12u, saved.ProjectId);
+        Assert.Equal(12, saved.ProjectId);
         Assert.Equal("https://example.com", saved.Name);
     }
 

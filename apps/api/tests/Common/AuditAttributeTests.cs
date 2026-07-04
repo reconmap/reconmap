@@ -64,7 +64,7 @@ public class AuditAttributeTests
         var auditService = serviceProvider.ServiceProvider.GetRequiredService<IAuditService>();
         var recordingAuditService = Assert.IsType<RecordingAuditService>(auditService);
         var entry = Assert.Single(recordingAuditService.Entries);
-        Assert.Equal((uint)42, entry.CreatedByUid);
+        Assert.Equal(42, entry.CreatedByUid);
         Assert.Equal("create", entry.Action);
         Assert.Equal("project", entry.Object);
         Assert.Equal("127.0.0.1", entry.ClientIp);

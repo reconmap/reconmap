@@ -126,9 +126,9 @@ public class ReportGenerationTests
         
         var jobPayload = Assert.IsType<ReportGenerationJob>(publishedJob.Message);
         Assert.Equal(dbReport.Id, jobPayload.ReportId);
-        Assert.Equal(1u, jobPayload.ProjectId);
-        Assert.Equal(10u, jobPayload.ReportTemplateId);
-        Assert.Equal(42u, jobPayload.CreatedByUserId);
+        Assert.Equal(1, jobPayload.ProjectId);
+        Assert.Equal(10, jobPayload.ReportTemplateId);
+        Assert.Equal(42, jobPayload.CreatedByUserId);
     }
 
     [Fact]
@@ -218,10 +218,10 @@ public class ReportGenerationTests
         Assert.IsType<NoContentResult>(result);
 
         // Verify database
-        var dbReport = await db.Reports.FindAsync(101u);
+        var dbReport = await db.Reports.FindAsync(101);
         Assert.Null(dbReport);
 
-        var dbAttachment = await db.Attachments.FindAsync(500u);
+        var dbAttachment = await db.Attachments.FindAsync(500);
         Assert.Null(dbAttachment);
 
         // Verify storage
@@ -279,6 +279,6 @@ public class ReportGenerationTests
 
         var idProperty = projectVal.GetType().GetProperty("Id");
         Assert.NotNull(idProperty);
-        Assert.Equal(1u, idProperty.GetValue(projectVal));
+        Assert.Equal(1, idProperty.GetValue(projectVal));
     }
 }
