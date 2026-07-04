@@ -1,12 +1,12 @@
 import Configuration from "Configuration.js";
-import KeyCloakService from "./keycloak.js";
+import AuthService from "./auth.js";
 
 function resetSessionStorageAndRedirect() {
     window.location.assign(Configuration.getContextPath());
 }
 
 async function secureApiFetch(url: string, init: RequestInit = {}): Promise<Response> {
-    const user = KeyCloakService.getUserInfo();
+    const user = AuthService.getUserInfo();
 
     const headers = new Headers(init.headers);
     if (user?.access_token) {

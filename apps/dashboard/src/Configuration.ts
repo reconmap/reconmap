@@ -1,4 +1,8 @@
-import { KeycloakConfig } from "keycloak-js";
+export interface KeycloakConfig {
+    url: string;
+    realm: string;
+    clientId: string;
+}
 
 const Configuration = {
     getDefaultApiUrl: (): string => window.env.reconmapApiUrl,

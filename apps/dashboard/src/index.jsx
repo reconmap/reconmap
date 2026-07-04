@@ -5,15 +5,19 @@ import en from "javascript-time-ago/locale/en";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Toaster } from "react-hot-toast";
-import KeyCloakService from "services/keycloak.js";
+import { AuthProvider } from "react-oidc-context";
+import AuthService, { oidcConfig } from "services/auth.js";
 import { initialiseUserPreferences } from "services/userPreferences.js";
 import "translations/i18n";
 import { memoryStore } from "utilities/memoryStore.js";
 import App from "./App.jsx";
 import "./styles/main.css";
 
+TimeAgo.addDefaultLocale(en);
+
 const rootContainer = document.getElementById("root");
 const appRoot = ReactDOM.createRoot(rootContainer);
+
 appRoot.render(
     <div>
         <a href="/" className="logo">
@@ -23,37 +27,20 @@ appRoot.render(
     </div>,
 );
 
-const scheduleTokenRefreshBeforeExpiration = () => {
-    const keycloak = KeyCloakService.getInstance();
-    const jwtExpiration = keycloak.tokenParsed?.exp;
-    console.debug("Token expiration (exp): " + jwtExpiration);
-    if (typeof jwtExpiration === "number") {
-        setTimeout(
-            () => {
-                keycloak
-                    .updateToken(50)
-                    .then((refreshed) => {
-                        if (refreshed) {
-                            console.log("refreshed " + new Date());
-
-                            scheduleTokenRefreshBeforeExpiration();
-                        } else {
-                            console.log("not refreshed " + new Date());
-                        }
-                    })
-                    .catch((err) => {
-                        console.error("Failed to refresh token " + new Date());
-                    });
-            },
-            jwtExpiration * 1000 - Date.now() - 5000,
+const onSigninCallback = (user) => {
+    if (!user) {
+        appRoot.render(
+            <div>
+                <a href="/" className="logo">
+                    <HeaderLogo />
+                    <h3>Authentication error: no user returned</h3>
+                </a>
+            </div>,
         );
-    } else {
-        console.error("Token expiration (exp) is not available.");
+        return;
     }
-};
 
-const onAuthSuccess = () => {
-    TimeAgo.addDefaultLocale(en);
+    AuthService.setCurrentUser(user);
 
     requestSessionPost()
         .then((resp) => resp.json())
@@ -61,34 +48,39 @@ const onAuthSuccess = () => {
             const userObject = {
                 id: data.id,
                 preferences: initialiseUserPreferences(data),
-                ...KeyCloakService.getUserInfo(),
+                ...AuthService.getUserInfo(),
             };
             memoryStore.set("user", userObject);
 
             appRoot.render(
                 <React.StrictMode>
-                    <App />
-                    <Toaster />
+                    <AuthProvider {...oidcConfig} onSigninCallback={onSigninCallback}>
+                        <App />
+                        <Toaster />
+                    </AuthProvider>
                 </React.StrictMode>,
             );
         })
         .catch((err) => {
-            throw err;
+            appRoot.render(
+                <div>
+                    <a href="/" className="logo">
+                        <HeaderLogo />
+                        <h3>Session error: {JSON.stringify(err?.message ?? err)}</h3>
+                    </a>
+                </div>,
+            );
         });
-
-    scheduleTokenRefreshBeforeExpiration();
 };
 
-const onAuthFailure = (message) => {
+// Kick off OIDC login flow
+AuthService.login(onSigninCallback, (err) => {
     appRoot.render(
         <div>
             <a href="/" className="logo">
                 <HeaderLogo />
-                <h3>Authentication error: {JSON.stringify(message)}</h3>
+                <h3>Authentication error: {JSON.stringify(err)}</h3>
             </a>
         </div>,
     );
-};
-
-KeyCloakService.login(onAuthSuccess, onAuthFailure);
-
+});

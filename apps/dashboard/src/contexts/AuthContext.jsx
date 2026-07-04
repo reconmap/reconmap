@@ -2,7 +2,7 @@ import { requestSessionDelete } from "api/requests/session.js";
 import { useTheme } from "hooks/useTheme";
 import { createContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import KeyCloakService from "services/keycloak";
+import AuthService from "services/auth";
 import { memoryStore } from "utilities/memoryStore.js";
 
 const AuthContext = createContext();
@@ -16,7 +16,7 @@ function useAuth() {
 
     const logout = () => {
         requestSessionDelete().finally(() => {
-            KeyCloakService.logout();
+            AuthService.logout();
         });
     };
 
