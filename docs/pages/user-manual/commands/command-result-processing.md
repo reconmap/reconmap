@@ -23,7 +23,7 @@ Reconmap supports several built-in output parsers, including:
 
 ### Step 2 - Running the command and uploading the results
 
-Copy the command from the Scans page to your terminal (running the `rmap` CLI) or the integrated web terminal. The `rmap` CLI will execute the command, capture the output, and automatically upload the results to the server for processing.
+Run the command from the Scans page using the integrated web terminal (connected to a Reconmap agent). The agent will execute the command, capture the output, and automatically upload the results to the server for processing. Manual execution via a local `rmap` command line client is not supported.
 
 ### Step 3 - Waiting for results
 

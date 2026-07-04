@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/reconmap/cli/internal/configuration"
-	"github.com/reconmap/shared-lib/pkg/api"
 	shareconfig "github.com/reconmap/shared-lib/pkg/configuration"
 	"github.com/urfave/cli/v3"
 )
@@ -44,30 +43,6 @@ func ConfigAction(ctx context.Context, c *cli.Command) error {
 	return nil
 }
 
-
-
-func RunCommandAction(ctx context.Context, c *cli.Command) error {
-	projectId := c.Int("projectId")
-	commandUsageId := c.String("cuid")
-
-	config, err := shareconfig.ReadConfig[configuration.Config](configuration.ConfigFileName)
-	if err != nil {
-		return err
-	}
-
-	usage, err := api.GetCommandUsageById(config.ReconmapApiConfig.BaseUri, commandUsageId)
-	if err != nil {
-		return fmt.Errorf("unable to retrieve command usage with id=%s (%w)", commandUsageId, err)
-	}
-	err = RunCommand(projectId, usage, c.StringSlice("var"))
-	if err != nil {
-		return err
-	}
-
-	err = UploadResults(projectId, usage)
-	return err
-}
-
 var CommandList []*cli.Command = []*cli.Command{
 	{
 		Name:   "login",
@@ -89,22 +64,5 @@ var CommandList []*cli.Command = []*cli.Command{
 		Flags:  []cli.Flag{},
 		Action: ConfigAction,
 	},
-	{
-		Name:    "command",
-		Aliases: []string{"c"},
-		Usage:   "Run commands",
-		Before:  preActionChecks,
-		Commands: []*cli.Command{
-			{
-				Name:  "run",
-				Usage: "Run a command and upload its output to the server",
-				Flags: []cli.Flag{
-					&cli.IntFlag{Name: "projectId", Aliases: []string{"pid"}, Required: false},
-					&cli.StringFlag{Name: "commandUsageId", Aliases: []string{"cuid"}, Required: true},
-					&cli.StringSliceFlag{Name: "var", Required: false},
-				},
-				Action: RunCommandAction,
-			},
-		},
-	},
 }
+

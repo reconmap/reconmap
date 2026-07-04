@@ -8,12 +8,10 @@ import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect.jsx";
 import CommandTerminal from "components/ui/CommandTerminal";
 import ExternalLink from "components/ui/ExternalLink";
-import ShellCommand from "components/ui/ShellCommand";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import cronstrue from "cronstrue";
 import { StatusCodes } from "http-status-codes";
 import { useEffect, useState } from "react";
-import { CliDownloadUrl } from "ServerUrls";
 import CommandService from "services/command";
 import parseArguments from "services/commands/arguments";
 
@@ -82,7 +80,6 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
     const [showTerminal, setShowTerminal] = useState(false);
     const [runFrequency, setRunFrequency] = useState(forcedRunFrequency || "once");
     const [projectId, setProjectId] = useState(parentProjectId ?? null);
-    const [terminalEnvironment, setTerminalEnvironment] = useState("desktop");
     const [agent, setAgent] = useState(null);
     const { data: projects } = useProjectsQuery({ isTemplate: false, status: "active" });
     const { data: agents, isLoading: isAgentsLoading } = useAgentsQuery();
@@ -286,20 +283,6 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
             {runFrequency === "once" && (
                 <>
                     <HorizontalLabelledField
-                        label="Terminal environment"
-                        control={
-                            <NativeSelect onChange={(ev) => setTerminalEnvironment(ev.target.value)}>
-                                <option value="desktop">Desktop</option>
-                                <option value="browser" disabled={isAgentsLoading || agents.length === 0} title={isAgentsLoading || agents.length === 0 ? "No available agents" : ""}>Browser</option>
-                            </NativeSelect>
-                        }
-                    />
-                </>
-            )}
-
-            {runFrequency === "once" && terminalEnvironment === "browser" && (
-                <>
-                    <HorizontalLabelledField
                         label="Agent"
                         control={
                             <NativeSelect onChange={(ev) => { console.dir(agents); setAgent(agents.find((a) => a.id === parseInt(ev.target.value))) }}>
@@ -312,7 +295,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                         }
                     />
 
-                    <NativeButton onClick={runOnTerminal}>Run on a browser terminal</NativeButton>
+                    <NativeButton onClick={runOnTerminal} disabled={isAgentsLoading || agents.length === 0} title={isAgentsLoading || agents.length === 0 ? "No available agents" : ""}>Run on a browser terminal</NativeButton>
 
                     {showTerminal && (
                         <CommandTerminal agentIp={agent?.ip} agentPort={agent?.listenAddr}
@@ -323,32 +306,6 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                             ]}
                         />
                     )}
-                </>
-            )}
-
-            {runFrequency === "once" && terminalEnvironment === "desktop" && (
-                <>
-                    <h5 className="title is-5">
-                        <Bullet /> Execute <strong>rmap</strong> on any terminal
-                    </h5>
-                    <div>
-                        Make sure you have a copy of <strong>rmap</strong> on a machine you trust. Download the CLI for
-                        Macos/Linux and Windows from <ExternalLink href={CliDownloadUrl}>Github</ExternalLink>.<br />
-                        Once <strong>rmap</strong> is within reach execute the command shown below.
-                        <ShellCommand>
-                            {CommandService.generateEntryPoint(projectId, command, usage)} {commandArgsRendered}
-                        </ShellCommand>
-                    </div>
-
-                    <h5 className="title is-5">
-                        <Bullet /> Wait for results
-                    </h5>
-
-                    <div>
-                        The <strong>rmap</strong> command will automatically capture the output of the previous command
-                        and upload it to the server for analysis. If there are new hosts discovered, or new
-                        vulnerabilities detected, they will be reported in the dashboard.
-                    </div>
                 </>
             )}
         </>

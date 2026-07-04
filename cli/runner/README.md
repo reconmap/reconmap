@@ -25,20 +25,6 @@ Make sure you replace `https://demo.api.reconmap.com` with your actual API URL. 
 ./rmap logout
 ```
 
-### Security commands
-
-To search for a task
-
-```shell
-./rmap task search -k "check domain"
-```
-
-To execute a command once you know its arguments
-
-```shell
-./rmap command run -cid 2 -var Host=soki.com.ar
-```
-
 ## Build instructions
 
 ### Compilation
