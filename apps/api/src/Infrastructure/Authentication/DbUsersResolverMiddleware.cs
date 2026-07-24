@@ -17,7 +17,15 @@ public class DbUserResolverMiddleware(RequestDelegate next, ILogger<DbUserResolv
             var user = await db.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.SubjectId == subjectId);
-            if (user == null) logger.LogWarning("No subject found in db for user {SubjectId}", subjectId);
+            if (user == null)
+            {
+                var username = context.User.FindFirstValue("preferred_username");
+                var isServiceAccount = !string.IsNullOrEmpty(username) && username.StartsWith("service-account-");
+                if (!isServiceAccount)
+                {
+                    logger.LogWarning("No subject found in db for user {SubjectId}", subjectId);
+                }
+            }
 
             context.Items["DbUser"] = user;
         }

@@ -1,7 +1,6 @@
 import {
     AgentsUrls,
     ClientsUrls,
-    CommandsUrls,
     DashboardUrls,
     IntegrationsUrls,
     ProjectsUrls,
@@ -65,26 +64,14 @@ export const getNavigationStructure = (t) => [
         items: [
             {
                 type: "menu",
-                name: t("Run once"),
+                name: t("Run scan"),
                 url: ScansUrls.RunOnce,
-                permissions: "commands.*",
-            },
-            {
-                type: "menu",
-                name: t("Run on schedule"),
-                url: ScansUrls.RunOnSchedule,
                 permissions: "commands.*",
             },
             {
                 type: "menu",
                 name: t("View scheduled scans"),
                 url: ScansUrls.Schedules,
-                permissions: "commands.*",
-            },
-            {
-                type: "menu",
-                name: t("Start from URL"),
-                url: ScansUrls.RunFromUrl,
                 permissions: "commands.*",
             },
             {

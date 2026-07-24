@@ -13,11 +13,31 @@ public class OpaActionFilter(OpaAuthorizationService opaService, AppDbContext db
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var user = context.HttpContext.GetCurrentUser();
+        var username = context.HttpContext.User.FindFirst("preferred_username")?.Value;
+        var isServiceAccount = !string.IsNullOrEmpty(username) && username.StartsWith("service-account-");
+
         if (user == null)
         {
-            context.Result = new UnauthorizedResult();
-            return;
+            if (isServiceAccount)
+            {
+                user = new User
+                {
+                    Id = 0,
+                    Username = username!,
+                    Email = string.Empty,
+                    FirstName = "Service",
+                    LastName = "Account",
+                    Role = UserRole.Administrator,
+                    Active = true
+                };
+            }
+            else
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
         }
+
 
         var method = context.HttpContext.Request.Method;
         var controller = context.RouteData.Values["controller"]?.ToString()?.ToLower() ?? "unknown";

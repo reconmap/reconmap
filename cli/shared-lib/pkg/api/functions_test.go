@@ -50,3 +50,58 @@ func TestGetCommandUsageById(t *testing.T) {
 		t.Errorf("Expected command ID 1 and Description test-command, got ID %v and Description %v", command.ID, command.Description)
 	}
 }
+
+func TestAgentBoot_ErrorOnNonSuccess(t *testing.T) {
+	originalClient := DefaultHTTPClient
+	defer func() { DefaultHTTPClient = originalClient }()
+
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusInternalServerError,
+				Status:     "500 Internal Server Error",
+				Body:       io.NopCloser(bytes.NewBufferString("Error message")),
+			}, nil
+		},
+	}
+	DefaultHTTPClient = mockClient
+
+	systemInfo := &SystemInfo{
+		Version: "1.0.0",
+	}
+	_, err := AgentBoot("http://api.example.com", "agent-client", "token", systemInfo)
+
+	if err == nil {
+		t.Fatal("Expected error on non-success status code, got nil")
+	}
+	expectedErrMsg := "unexpected status code from API: 500 Internal Server Error"
+	if err.Error() != expectedErrMsg {
+		t.Errorf("Expected error message %q, got %q", expectedErrMsg, err.Error())
+	}
+}
+
+func TestAgentPing_ErrorOnNonSuccess(t *testing.T) {
+	originalClient := DefaultHTTPClient
+	defer func() { DefaultHTTPClient = originalClient }()
+
+	mockClient := &MockHTTPClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusUnauthorized,
+				Status:     "401 Unauthorized",
+				Body:       io.NopCloser(bytes.NewBufferString("Unauthorized")),
+			}, nil
+		},
+	}
+	DefaultHTTPClient = mockClient
+
+	_, err := AgentPing("http://api.example.com", "agent-client", "token")
+
+	if err == nil {
+		t.Fatal("Expected error on non-success status code, got nil")
+	}
+	expectedErrMsg := "unexpected status code from API: 401 Unauthorized"
+	if err.Error() != expectedErrMsg {
+		t.Errorf("Expected error message %q, got %q", expectedErrMsg, err.Error())
+	}
+}

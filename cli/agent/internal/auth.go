@@ -46,15 +46,6 @@ func GetAccessToken(app *App) (string, error) {
 		return "", err
 	}
 
-	tokenInfo, err := client.RetrospectToken(ctx, token.AccessToken, clientID, clientSecret, realm)
-	if err != nil {
-		return "", fmt.Errorf("unable to retrospect token (%w)", err)
-	}
-
-	if !*tokenInfo.Active {
-		return "", errors.New("token is not active")
-	}
-
 	return token.AccessToken, nil
 }
 

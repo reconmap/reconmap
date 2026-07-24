@@ -35,14 +35,6 @@ export const VulnerabilitiesUrls = {
     Categories: "/vulnerabilities/categories",
 };
 
-export const CommandsUrls = {
-    List: "/commands",
-    Add: "/commands/add",
-    Details: "/commands/:commandId",
-    Edit: "/commands/:commandId/edit",
-    Usages: "/commands/:commandId/usages",
-};
-
 
 export const UsersUrls = {
     List: "/users",

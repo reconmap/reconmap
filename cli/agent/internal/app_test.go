@@ -54,7 +54,7 @@ func TestSetupSchedules(t *testing.T) {
 		},
 	}
 
-	err := app.setupSchedules(schedules)
+	err := app.setupSchedules(schedules, "http://localhost:5510", "token")
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
 	}

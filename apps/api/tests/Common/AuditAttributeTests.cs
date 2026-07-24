@@ -72,6 +72,60 @@ public class AuditAttributeTests
         Assert.Equal("""{"ProjectId":7}""", entry.Context);
     }
 
+    [Fact]
+    public async Task OnActionExecutionAsync_NullCurrentUser_SetsCreatedByUidToNull()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        services.AddScoped<IAuditService, RecordingAuditService>();
+
+        await using var serviceProvider = services.BuildServiceProvider().CreateAsyncScope();
+
+        var httpContext = new DefaultHttpContext
+        {
+            RequestServices = serviceProvider.ServiceProvider
+        };
+        httpContext.Connection.RemoteIpAddress = IPAddress.Parse("127.0.0.1");
+        httpContext.Request.Headers.UserAgent = "xunit";
+
+        var actionContext = new ActionContext(
+            httpContext,
+            new RouteData(),
+            new ActionDescriptor());
+
+        var controller = new object();
+
+        var actionExecutingContext = new ActionExecutingContext(
+            actionContext,
+            [],
+            new Dictionary<string, object?>(),
+            controller);
+
+        var attribute = new AuditAttribute("create", "project");
+
+        // Act
+        await attribute.OnActionExecutionAsync(actionExecutingContext, () =>
+        {
+            var executedContext = new ActionExecutedContext(
+                actionContext,
+                [],
+                controller)
+            {
+                Result = new OkResult()
+            };
+
+            return Task.FromResult(executedContext);
+        });
+
+        // Assert
+        var auditService = serviceProvider.ServiceProvider.GetRequiredService<IAuditService>();
+        var recordingAuditService = Assert.IsType<RecordingAuditService>(auditService);
+        var entry = Assert.Single(recordingAuditService.Entries);
+        Assert.Null(entry.CreatedByUid);
+        Assert.Equal("create", entry.Action);
+        Assert.Equal("project", entry.Object);
+    }
+
     private sealed class RecordingAuditService : IAuditService
     {
         public List<AuditEntry> Entries { get; } = [];

@@ -31,7 +31,7 @@ public sealed class AuditAttribute(string action, string entity) : ActionFilterA
         {
             ClientIp = remoteIpAddress,
             UserAgent = userAgent,
-            CreatedByUid = http.GetCurrentUser()!.Id,
+            CreatedByUid = http.GetCurrentUser()?.Id,
             Action = action,
             Object = entity,
             Context = data != null ? JsonSerializer.Serialize(data) : null

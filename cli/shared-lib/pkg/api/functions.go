@@ -29,6 +29,10 @@ func AgentBoot(apiBaseUri string, clientId string, accessToken string, systemInf
 
 	defer response.Body.Close()
 
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return nil, errors.New("unexpected status code from API: " + response.Status)
+	}
+
 	_, err = io.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
@@ -54,6 +58,10 @@ func AgentPing(apiBaseUri string, clientId string, accessToken string) (*models.
 
 	defer response.Body.Close()
 
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return nil, errors.New("unexpected status code from API: " + response.Status)
+	}
+
 	_, err = io.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
@@ -78,6 +86,10 @@ func GetCommandsSchedules(apiBaseUri string, accessToken string) (*models.Comman
 	}
 
 	defer response.Body.Close()
+
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return nil, errors.New("unexpected status code from API: " + response.Status)
+	}
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {

@@ -48,7 +48,7 @@ public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbConte
             {
                 Action = "opa_authz_failed",
                 Object = resourceType,
-                CreatedByUid = user.Id,
+                CreatedByUid = user.Id == 0 ? null : user.Id,
                 Context = JsonSerializer.Serialize(new { method, resourceType, resourceData }),
                 ClientIpBinary = new byte[4] // Placeholder, you might want to inject HttpContext to get real IP
             });

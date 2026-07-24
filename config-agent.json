@@ -2,8 +2,8 @@
     "$schema": "https://raw.githubusercontent.com/reconmap/command-line-tools/refs/heads/main/agent/config-schema.json",
     "keycloak": {
         "baseUri": "http://keycloak:8080",
-        "clientId": "reconmapd-client",
-        "clientSecret": "VH8HDKabxlTpnpPkEgLlTq2dEanedEGC"
+        "clientId": "",
+        "clientSecret": ""
     },
     "reconmapApi": {
         "baseUri": "http://api:5510"

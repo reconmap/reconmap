@@ -300,7 +300,6 @@
           "attributes": {}
         }
       ],
-      "reconmapd-client": [],
       "api-client": [],
       "dashboard": [
         {
@@ -586,21 +585,6 @@
           "manage-users"
         ]
       },
-      "notBefore": 0,
-      "groups": []
-    },
-    {
-      "id": "83ce59df-3aab-4600-8a25-24a49a53e543",
-      "username": "service-account-reconmapd-client",
-      "emailVerified": false,
-      "enabled": true,
-      "totp": false,
-      "serviceAccountClientId": "reconmapd-client",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-reconmap"
-      ],
       "notBefore": 0,
       "groups": []
     },
@@ -1000,63 +984,6 @@
         "acr",
         "profile",
         "roles",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "microprofile-jwt"
-      ]
-    },
-    {
-      "id": "b1f176b4-866d-4ecd-b6ee-93a1ec161cbd",
-      "clientId": "reconmapd-client",
-      "name": "",
-      "description": "",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "${VAR_RECONMAPD_CLIENT_SECRET}",
-      "redirectUris": [
-        "/*"
-      ],
-      "webOrigins": [
-        "/*"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": false,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1750944978",
-        "backchannel.logout.session.required": "true",
-        "standard.token.exchange.enabled": "false",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "backchannel.logout.revoke.offline.tokens": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "defaultClientScopes": [
-        "web-origins",
-        "service_account",
-        "acr",
-        "profile",
-        "roles",
-        "basic",
         "email"
       ],
       "optionalClientScopes": [

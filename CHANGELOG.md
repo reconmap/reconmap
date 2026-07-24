@@ -7,8 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed `NullReferenceException` in `AuditAttribute` when an action is executed under a null user context (such as a service account or user not resolved to the DB).
+- Fixed agent ping/boot authorization by allowing dynamically registered service accounts (agent clients) to bypass database user checks in the global OPA authorization filter.
+- Removed the hardcoded static Keycloak client `reconmapd-client` to guarantee all agents are registered dynamically.
+- Fixed Keycloak token retrospection error ("token is not active") during agent (`reconmapd`) login due to missing audience mapping on dynamically created agents.
+- Fixed typo in default agent configuration Client ID, correcting it from `reconmapd-cli` to `reconmapd-client`.
+- Suppressed DB user resolver warning ("No subject found in db for user") for Keycloak service account (agent) requests.
+
 ### Added
 
+- Added HTTP status code validation in Go agent client calls, ensuring `reconmapd` logs an error when the REST API returns a non-2xx response.
+- Automatically add/ensure URL targets as project assets/targets in the selected project when a scan is initiated.
+- Added AI-powered scan planning and tool recommendation: a new target-centric scan planner (`ScanTargetForm`) analyzes target inputs (URL, domain, IP, hostname, code repository), detects target type, and requests a tailored, ordered execution plan from the API via `POST /api/commands/recommend`.
+- Created C# API recommendation engine (`ToolRecommendationService`) supporting two-tier recommendation (AI-enhanced plan if an LLM provider is configured, falling back to a rule-based matching engine).
+- Added direct tool chaining via scheduled runner jobs (users can queue all recommended tools to the queue at once).
 - Added agentic vulnerability triage: when scans discover new vulnerabilities, the AI autonomously produces a structured triage report (severity, exploitability, attack surface, immediate actions, false-positive check) for each finding during background processing.
 - Added on-demand vulnerability triage: a new **Triage** tab on vulnerability detail pages lets analysts request a fresh AI triage assessment at any time via `POST /api/vulnerabilities/{id}/triage`.
 - Added `TriageVulnerabilityAsync` to `IAiService` with a purpose-built rapid-triage prompt; works with any configured AI provider (Ollama, Azure OpenAI, OpenRouter).
@@ -23,11 +37,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed command management CRUD pages (Add, Edit, Details, List, Add Usage) and components (Form, UsageForm, Table, Badge, Outputs) from the dashboard to simplify platform workflow.
+- Removed manual command selection dropdowns from the scan execution pages.
 - Removed the "Vulnerabilities storage action" dropdown from the dashboard scan execution form.
 - Removed `uint`/`ushort` types from all API entity models and service/controller signatures, replacing them with `int` throughout. This eliminates the EF Core `ConfigureConventions` workaround (which was converting `uint`→`bigint` and `ushort`→`int` for PostgreSQL compatibility) since all IDs and foreign keys are now native `int`, matching the existing `SERIAL`/`INT` PostgreSQL column types directly. No database migration is required.
 
 ### Changed
 
+- Updated target scans to execute recommended tools automatically and transparently, showing live queuing status (Pending, Queuing, Queued, Failed) without requiring manual tool selection or manual queue triggers.
+- Renamed the submit button in the scan target form from "Analyze & Recommend" to "Start scan" to align with the automated scan execution workflow.
+- Simplified Scans navigation menu, consolidating "Run once", "Run on schedule", and "Start from URL" into a single, unified "Run scan" page.
 - Hidden the command usages selection dropdown in the scans execution and import pages in the dashboard UI, delegating usage selection internally.
 - Updated scans to always require a target project where the findings will be saved, both on the frontend dashboard and on the C# API backend `UploadOutput` endpoint.
 - Fixed type mismatch (uint key parameters) in C# controller tests.

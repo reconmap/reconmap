@@ -26,7 +26,6 @@ The following secrets and configuration variables are defined in the `.env` file
 | `KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME` | The bootstrap administrator username for Keycloak setup. |
 | `KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD` | The bootstrap administrator password for Keycloak setup. |
 | `KEYCLOAK_ADMIN_CLIENT_SECRET` | The client secret used for Keycloak admin client authorization. |
-| `KEYCLOAK_RECONMAPD_CLIENT_SECRET` | The client secret used by the Reconmap Agent (`reconmapd`). |
 | `KEYCLOAK_API_CLIENT_SECRET` | The client secret used by the core Reconmap REST API client. |
 | `OPA_SERVER_URL` | The HTTP endpoint for the Open Policy Agent service (e.g., `http://opa:8181`). |
 

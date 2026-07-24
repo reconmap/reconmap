@@ -30,6 +30,14 @@ Any Ollama-compatible model works — this is just a recommended starting point 
 
 ## Agentic capabilities
 
+### AI Scan Planning & Tool Chaining
+
+Reconmap automates scanning by analyzing target inputs (URL, domain, IP, hostname, code repository) and generating an optimal execution plan:
+
+- **Target Analysis**: When entering a target on the **Run scan** page, the AI identifies the target type and scope.
+- **Ordered Tool Recommendations**: The AI parses the system command catalog and recommends matching tools (e.g. Subfinder, Nmap, Testssl, Trivy, Bandit) in an optimal execution order, along with a written strategy and rationale.
+- **Queued Job Execution**: Instead of forcing manual command entry, the user queues the generated execution plan directly into RabbitMQ to run in parallel or sequence.
+
 ### Automatic vulnerability triage (background)
 
 When a scan completes and vulnerabilities are discovered, Reconmap automatically runs a triage assessment for each new finding. This happens in the background as part of scan result processing — no user action required.

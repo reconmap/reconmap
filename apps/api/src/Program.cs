@@ -73,6 +73,7 @@ services.AddDataProtection()
     .SetApplicationName("Reconmap");
 
 services.AddScoped<IAiService, AiService>();
+services.AddScoped<IToolRecommendationService, ToolRecommendationService>();
 services.AddHttpClient();
 services.AddScoped<api_v2.Infrastructure.Security.OpaAuthorizationService>();
 

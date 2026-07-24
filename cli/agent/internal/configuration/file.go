@@ -35,7 +35,7 @@ func NewConfig() Config {
 	return Config{
 		KeycloakConfig: KeycloakConfig{
 			BaseUri:      "http://localhost:8080",
-			ClientID:     "reconmapd-cli",
+			ClientID:     "reconmapd-client",
 			ClientSecret: "REPLACE THIS WITH YOUR CLIENT SECRET",
 		},
 		ReconmapApiConfig: ReconmapApiConfig{

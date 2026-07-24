@@ -157,4 +157,14 @@ public class CommandsController(
 
         return new JsonResult(new { success = true });
     }
+
+    [HttpPost("recommend")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> RecommendTools(
+        [FromBody] ToolRecommendationRequest request,
+        [FromServices] IToolRecommendationService recommendationService)
+    {
+        var recommendations = await recommendationService.RecommendToolsAsync(request);
+        return Ok(recommendations);
+    }
 }
