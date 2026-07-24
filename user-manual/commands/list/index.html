@@ -85,6 +85,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#automatic-scan-planning-tool-chaining" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -1784,6 +1789,24 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commands list
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1800,6 +1823,45 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#automatic-scan-planning-tool-chaining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic Scan Planning &amp; Tool Chaining
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-library-removal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command Library Removal
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2842,6 +2904,36 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#automatic-scan-planning-tool-chaining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic Scan Planning &amp; Tool Chaining
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#command-library-removal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command Library Removal
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2868,7 +2960,16 @@
   <h1>Commands list</h1>
 
 <p>Reconmap commands are fully defined in code, integrating both the runner definitions (executable path, flags, arguments) and the output parsers directly.</p>
-<p>The "Commands Library" has been removed from the user interface, making the system simpler and more reliable. All available commands are directly accessible when running scans once, from a URL, or on a schedule under the <strong>Scans</strong> page. Command usages (specific configurations/arguments) are internal, and which one is executed is decided automatically by the system's LLM.</p>
+<h3 id="automatic-scan-planning-tool-chaining">Automatic Scan Planning &amp; Tool Chaining</h3>
+<p>Instead of manually picking which security tools to run, the <strong>Scans</strong> page now features an intelligent, target-centric scan planning workflow:</p>
+<ol>
+<li><strong>Enter Target</strong>: Specify a target URL, domain, IP, hostname, or code repository. If a URL target is specified, Reconmap automatically adds/ensures it as a target/asset in the selected project.</li>
+<li><strong>Objective (Optional)</strong>: Choose a scan goal, such as Web scan, Full recon, Code audit, or SSL/TLS check.</li>
+<li><strong>AI-Powered Recommendation</strong>: The system automatically analyzes the target. If an AI provider is configured under <strong>System → AI Settings</strong>, Reconmap uses the LLM to design an optimal, ordered toolchain strategy and rationale. If AI is not configured, the system falls back to a rule-based matching engine.</li>
+<li><strong>Transparent Job Execution</strong>: Once the scan is started, the system transparently queues each recommended tool as a separate background job in the runner queue. The UI displays the execution progress (e.g. Pending, Queuing, Queued, Failed) without requiring manual tool selection or manual queue actions. All jobs are visible in <strong>View scheduled scans</strong>.</li>
+</ol>
+<h3 id="command-library-removal">Command Library Removal</h3>
+<p>To simplify platform workflows, the manual <strong>Commands Library</strong> CRUD pages and tool dropdown selection options have been completely removed from the user interface. Command definitions and usages are managed internally by the codebase. For uploading external reports manually, the <strong>Import scan</strong> page continues to support optional command selection.</p>
 
 
 
@@ -2889,7 +2990,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 4, 2026 23:06:57 UTC">July 4, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 24, 2026 19:18:02 UTC">July 24, 2026</span>
   </span>
 
     

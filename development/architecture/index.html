@@ -85,6 +85,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#authorization-service-accounts" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -846,6 +851,24 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -862,6 +885,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-service-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization &amp; Service Accounts
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2840,6 +2891,25 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-service-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization &amp; Service Accounts
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2867,6 +2937,12 @@
 
 <p>The Reconmap multi-tier architecture was designed to scale and serve anything from small pentesting teams to large infosec organisations. At a high-level it consists of multiple clients (web and command line) that communicate to a Rest API to get and process information. Data is stored permanently in a PostgreSQL database, and a Redis service is used to cache information.</p>
 <p>A keycloak identity service (Open ID connect) is used to authenticate users and JWT tokens are also used for service to service communication.</p>
+<h3 id="authorization-service-accounts">Authorization &amp; Service Accounts</h3>
+<p>Centralized authorization is enforced via <strong>Open Policy Agent (OPA)</strong> rules integrated with the C# REST API through <code>OpaActionFilter</code>. </p>
+<ul>
+<li><strong>Regular Users:</strong> Authenticated users are resolved to database records in the <code>user</code> table. Their roles and permissions are queried to validate requests.</li>
+<li><strong>Service Accounts (Agents):</strong> Reconmap agent clients (<code>reconmapd</code>) authenticate via OAuth Client Credentials grant. Because they are machine accounts and do not exist in the database <code>user</code> table, the API bypasses the database user lookup during authorization check and maps them to a virtual Administrator user. This ensures agents can successfully execute their boot, ping, and check-in endpoints.</li>
+</ul>
 <p>The last part of this architecture is Rabbitmq, a message queue and broker. This queue handles heavy or asynchronous background tasks like sending report emails and generating reports asynchronously.</p>
 <p><img alt="Reconmap architecture" src="../reconmap-high-level-architecture.png" /></p>
 <p><em>The diagram above was created from code using <a href="https://www.drawio.com/">draw.io</a>. See the source <a href="../../diagrams/reconmap-high-level-architecture.drawio">here</a>.</em></p>
@@ -2890,7 +2966,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 2, 2026 17:48:18 UTC">July 2, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 24, 2026 19:18:02 UTC">July 24, 2026</span>
   </span>
 
     

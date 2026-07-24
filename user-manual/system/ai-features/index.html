@@ -2299,6 +2299,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#ai-scan-planning-tool-chaining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI Scan Planning &amp; Tool Chaining
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#automatic-vulnerability-triage-background" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3046,6 +3057,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#ai-scan-planning-tool-chaining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI Scan Planning &amp; Tool Chaining
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#automatic-vulnerability-triage-background" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3163,6 +3185,13 @@
 <p>Any Ollama-compatible model works — this is just a recommended starting point for security-focused workloads.</p>
 <hr />
 <h2 id="agentic-capabilities">Agentic capabilities</h2>
+<h3 id="ai-scan-planning-tool-chaining">AI Scan Planning &amp; Tool Chaining</h3>
+<p>Reconmap automates scanning by analyzing target inputs (URL, domain, IP, hostname, code repository) and generating an optimal execution plan:</p>
+<ul>
+<li><strong>Target Analysis</strong>: When entering a target on the <strong>Run scan</strong> page, the AI identifies the target type and scope.</li>
+<li><strong>Ordered Tool Recommendations</strong>: The AI parses the system command catalog and recommends matching tools (e.g. Subfinder, Nmap, Testssl, Trivy, Bandit) in an optimal execution order, along with a written strategy and rationale.</li>
+<li><strong>Queued Job Execution</strong>: Instead of forcing manual command entry, the user queues the generated execution plan directly into RabbitMQ to run in parallel or sequence.</li>
+</ul>
 <h3 id="automatic-vulnerability-triage-background">Automatic vulnerability triage (background)</h3>
 <p>When a scan completes and vulnerabilities are discovered, Reconmap automatically runs a triage assessment for each new finding. This happens in the background as part of scan result processing — no user action required.</p>
 <p>The triage report covers:</p>
@@ -3211,7 +3240,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 4, 2026 17:37:57 UTC">July 4, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 24, 2026 19:18:02 UTC">July 24, 2026</span>
   </span>
 
     
