@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Keycloak token retrospection error ("token is not active") during agent (`reconmapd`) login due to missing audience mapping on dynamically created agents.
 - Fixed typo in default agent configuration Client ID, correcting it from `reconmapd-cli` to `reconmapd-client`.
 - Suppressed DB user resolver warning ("No subject found in db for user") for Keycloak service account (agent) requests.
+- Resolved peer dependency conflict in dashboard between `@typescript-eslint` and TypeScript 7 by adding a package override for TypeScript in `apps/dashboard/package.json`.
 
 ### Added
 
