@@ -25,7 +25,7 @@ If you are using the default `compose.yaml`, the PostgreSQL service is named `po
 
 ```yaml
   postgres:
-    image: ghcr.io/reconmap/rest-api-db:latest
+    image: postgres:17-alpine
     environment:
       POSTGRES_PASSWORD: reconmuppet
 ```

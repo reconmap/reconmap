@@ -2,8 +2,7 @@
 
 <h1>Reconmap</h1>
 
-[![Bluesky](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpublic.api.bsky.app%2Fxrpc%2Fapp.bsky.actor.getProfile%2F%3Factor%3Dnetfoe.com&query=%24.followersCount&style=social&logo=bluesky&label=Follow%20us%20on%20BlueSky&style=flat)](https://bsky.app/profile/netfoe.com)
-[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCKJM12YKHqvvATHkdIKopeQ?style=flat&logo=youtube&label=Subscribe%20to%20our%20YouTube%20channel&link=https%3A%2F%2Fwww.youtube.com%2Freconmap)](https://www.youtube.com/reconmap)
+[![YouTube](https://img.shields.io/youtube/channel/subscribers/UCKJM12YKHqvvATHkdIKopeQ?style=flat&logo=youtube&label=YouTube%20channel&link=https%3A%2F%2Fwww.youtube.com%2Freconmap)](https://www.youtube.com/reconmap)
 
 <h3>Pentesting Management, Automation and Reporting Platform</h3>
 </div>
@@ -69,3 +68,14 @@ Before contributing, please read our [Contributing Guidelines](https://github.co
 
 If you have bugs to report please use the [issues](https://github.com/reconmap/reconmap/issues) tab on Github to submit the details.
 
+## Sponsors and supporters
+
+<p>
+  <a href="https://www.digitalocean.com/" target="_blank">
+    <img src="./digitalocean.svg" width="201px">
+  </a>
+  <br/>
+  <a href="https://snyk.io/?utm_source=open-source&utm_medium=pg-ptr&utm_campaign=ref-2501-osp&utm_content=pg-cta" target="_blank">
+    <img src="./SnykSecureDeveloperBadge.png" width="201px" />
+  </a>
+</p>
