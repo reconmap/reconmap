@@ -1,6 +1,6 @@
 module reconmap/agent
 
-go 1.26.4
+go 1.27.0
 
 require (
 	github.com/creack/pty v1.1.24
@@ -12,7 +12,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/reconmap/shared-lib v0.0.0-20220910165932-7d018d9111fc
 	github.com/shirou/gopsutil/v4 v4.26.7
-	github.com/urfave/cli/v3 v3.10.1
+	github.com/urfave/cli/v3 v3.11.0
 	go.uber.org/zap v1.28.0
 )
 
@@ -39,7 +39,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/net v0.57.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
 )
 
 replace github.com/reconmap/shared-lib => ../shared-lib
