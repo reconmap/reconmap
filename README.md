@@ -72,10 +72,10 @@ If you have bugs to report please use the [issues](https://github.com/reconmap/r
 
 <p>
   <a href="https://www.digitalocean.com/" target="_blank">
-    <img src="./digitalocean.svg" width="201px">
+    <img src="https://github.com/reconmap/.github/raw/main/profile/digitalocean.svg" width="201px">
   </a>
   <br/>
   <a href="https://snyk.io/?utm_source=open-source&utm_medium=pg-ptr&utm_campaign=ref-2501-osp&utm_content=pg-cta" target="_blank">
-    <img src="./SnykSecureDeveloperBadge.png" width="201px" />
+    <img src="https://github.com/reconmap/.github/raw/main/profile/SnykSecureDeveloperBadge.png" width="201px" />
   </a>
 </p>
