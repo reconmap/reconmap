@@ -41,11 +41,9 @@ func NewConfig() Config {
 		ReconmapApiConfig: ReconmapApiConfig{
 			BaseUri: "http://localhost:5510/api",
 		},
-		RedisConfig: RedisConfig{
-			Host:     "localhost",
-			Port:     6379,
-			Password: "REconDIS",
-		},
+		Host:           "localhost",
+		Port:           6379,
+		Password:       "REconDIS",
 		ValidOrigins:   "http://localhost:5500",
 		AgentDirectory: homeDir,
 	}

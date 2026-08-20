@@ -38,30 +38,28 @@ func main() {
 		Name:    "reconmapd",
 		Usage:   "Reconmap's agent",
 		Version: "1.0.0",
-	}
-	mainCommand.Copyright = "Apache License v2.0"
-	mainCommand.Usage = "Reconmap's agent"
-	mainCommand.Description = "Reconmap's agent for running scheduled commands"
-	mainCommand.Commands = []*cli.Command{
-		{
-			Name:   "config",
-			Usage:  "Creates a configuration file for Reconmapd",
-			Flags:  []cli.Flag{},
-			Action: ConfigAction,
-		},
-		{
-			Name:  "run",
-			Usage: "Starts the Reconmapd server",
-			Flags: []cli.Flag{
-				&cli.StringFlag{
-					Name:  "listen",
-					Value: ":10000",
-					Usage: "address and port to listen",
-				},
+		Copyright:   "Apache License v2.0",
+		Description: "Reconmap's agent for running scheduled commands",
+		Commands: []*cli.Command{
+			{
+				Name:   "config",
+				Usage:  "Creates a configuration file for Reconmapd",
+				Flags:  []cli.Flag{},
+				Action: ConfigAction,
 			},
-			Action: RunAction,
-		},
-	}
+			{
+				Name:  "run",
+				Usage: "Starts the Reconmapd server",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "listen",
+						Value: ":10000",
+						Usage: "address and port to listen",
+					},
+				},
+				Action: RunAction,
+			},
+		}}
 
 	err := mainCommand.Run(context.Background(), os.Args)
 	if err != nil {

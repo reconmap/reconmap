@@ -8,6 +8,10 @@ update-deps:
 	go get -u ./...
 	go mod tidy
 
+.PHONY: fix
+fix:
+	go fix ./...
+
 .PHONY: lint
 lint: GOLANGCI_LINT_VERSION ?= 2.0.2
 lint:

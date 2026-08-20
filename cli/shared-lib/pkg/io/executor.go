@@ -24,11 +24,9 @@ func (e *DefaultExecutor) Execute(name string, args ...string) ([]byte, []byte, 
 		return nil, nil, err
 	}
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
+	wg.Go(func() {
 		stdout, errStdout = CopyAndCapture(os.Stdout, stdoutIn)
-		wg.Done()
-	}()
+	})
 
 	stderr, errStderr = CopyAndCapture(os.Stderr, stderrIn)
 

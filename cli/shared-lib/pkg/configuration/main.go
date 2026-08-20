@@ -41,7 +41,7 @@ func SaveConfig[T any](config T, fileName string) (string, error) {
 }
 
 func overrideFromEnv(v reflect.Value, prefix string) {
-	if v.Kind() == reflect.Ptr {
+	if v.Kind() == reflect.Pointer {
 		v = v.Elem()
 	}
 	if v.Kind() != reflect.Struct {
