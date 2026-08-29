@@ -4,7 +4,7 @@ Welcome! This guide helps you set up and contribute to the Reconmap ecosystem.
 
 ## Prerequisites
 
-- **Go 1.26+**: Required for building CLI tools.
+- **Go 1.27+**: Required for building CLI tools.
 - **Docker & Docker Compose**: For local stack orchestration.
 - **Node.js 24+**: If you're working on the dashboard.
 - **.NET 10**: If you're working on the API.
