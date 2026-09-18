@@ -4,12 +4,15 @@ import { User, UserManager, WebStorageStateStore } from "oidc-client-ts";
 
 const keycloakConfig = Configuration.getKeycloakConfig();
 
-const redirectUri: string =
-    window.location.protocol +
-    "//" +
-    window.location.hostname +
-    ("https" !== window.location.protocol ? ":" + window.location.port : "") +
-    Configuration.getContextPath();
+export const getRedirectUri = (
+    location: Pick<Location, "protocol" | "hostname" | "port"> = window.location,
+    contextPath: string = Configuration.getContextPath(),
+): string =>
+    `${location.protocol}//${location.hostname}${
+        location.protocol !== "https:" && location.port ? `:${location.port}` : ""
+    }${contextPath}`;
+
+const redirectUri = getRedirectUri();
 
 export const oidcConfig = {
     authority: `${keycloakConfig.url}/realms/${keycloakConfig.realm}`,

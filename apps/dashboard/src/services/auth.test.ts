@@ -1,9 +1,19 @@
 import { User } from "oidc-client-ts";
-import { getDashboardRoles, hasAgentTerminalAccess } from "./auth.js";
+import { getDashboardRoles, getRedirectUri, hasAgentTerminalAccess } from "./auth.js";
 
 const userWithRoles = (roles: string[]): User => ({
     profile: { resource_access: { dashboard: { roles } } },
 } as unknown as User);
+
+describe("getRedirectUri", () => {
+    it.each([
+        ["http:", "reconmap.example", "", "/dashboard", "http://reconmap.example/dashboard"],
+        ["http:", "localhost", "5500", "/", "http://localhost:5500/"],
+        ["https:", "reconmap.example", "443", "/dashboard", "https://reconmap.example/dashboard"],
+    ])("builds %s redirect URIs correctly", (protocol, hostname, port, contextPath, expected) => {
+        expect(getRedirectUri({ protocol, hostname, port }, contextPath)).toBe(expected);
+    });
+});
 
 describe("agent terminal access", () => {
     it("allows administrator and superuser roles", () => {
