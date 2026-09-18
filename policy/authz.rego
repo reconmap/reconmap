@@ -1,114 +1,120 @@
 package reconmap.authz
 
+import future.keywords.or
+
 default allow := false
 
 # Helper to check if a resource belongs to a project the user is a member of
 user_is_member_of_project if {
-    input.resource.project_id in input.user.member_project_ids
+	input.resource.project_id in input.user.member_project_ids
 }
 
 # Helper to check if the user is accessing their own profile
 is_own_profile if {
-    input.resource.id == input.user.id
+	input.resource.id == input.user.id
+}
+
+# OPA 1.20's `or` keyword keeps identical user/client collection grants in one
+# rule without broadening either role's permissions.
+is_user_or_client if {
+	input.user.role == "user" or input.user.role == "client"
 }
 
 # 1. Administrator & Superuser
 allow if {
-    input.user.role in ["administrator", "superuser"]
+	input.user.role in ["administrator", "superuser"]
 }
 
 # 2. General Access (Any authenticated user role: administrator, superuser, user, client)
 # Allow anyone to manage their own sessions (login/logout)
 allow if {
-    input.resource_type == "sessions"
+	input.resource_type == "sessions"
 }
 
 # Allow anyone to view and edit their own user profile/preferences
 allow if {
-    input.resource_type == "users"
-    is_own_profile
+	input.resource_type == "users"
+	is_own_profile
 }
 
 # Allow anyone to search
 allow if {
-    input.resource_type == "searches"
+	input.resource_type == "searches"
 }
 
 # Notification ownership is enforced by the API query layer. The policy only
 # permits this explicitly named endpoint; it must never be generalized to GET.
 allow if {
-    input.user.role in ["user", "client"]
-    input.resource_type == "notifications"
+	input.user.role in ["user", "client"]
+	input.resource_type == "notifications"
 }
 
 # 3. User (Pentester)
 allow if {
-    input.user.role == "user"
-    
-    # Can access globally readable metadata (never exports or configuration).
-    globally_readable_resources := ["projectcategories", "vulnerabilitiescategories", "system"]
-    input.resource_type in globally_readable_resources
-    input.method == "GET"
+	input.user.role == "user"
+
+	# Can access globally readable metadata (never exports or configuration).
+	globally_readable_resources := ["projectcategories", "vulnerabilitiescategories", "system"]
+	input.resource_type in globally_readable_resources
+	input.method == "GET"
 }
 
 allow if {
-    input.user.role == "user"
-    
-    # Can list and read anything within their assigned projects
-    project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports", "notes"]
-    input.resource_type in project_scoped_resources
-    
-    # If project_id is provided, check membership
-    user_is_member_of_project
+	input.user.role == "user"
+
+	# Can list and read anything within their assigned projects
+	project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports", "notes"]
+	input.resource_type in project_scoped_resources
+
+	# If project_id is provided, check membership
+	user_is_member_of_project
 }
 
 # These collection endpoints are scoped by RequestAccessScope in the API.
 # Do not add arbitrary controllers here: a missing project id is not permission.
 allow if {
-    input.user.role == "user"
-    input.method == "GET"
-    input.resource_type in ["vulnerabilities", "attachments", "notes", "secrets"]
-    not input.resource.project_id
+	is_user_or_client
+	input.method == "GET"
+	input.resource_type in ["vulnerabilities", "attachments", "notes"]
+	not input.resource.project_id
 }
 
 allow if {
-    input.user.role == "user"
-    input.resource_type in ["attachments", "notes", "secrets"]
-    input.method in ["POST", "PUT", "PATCH", "DELETE"]
-    not input.resource.project_id
+	input.user.role == "user"
+	input.method == "GET"
+	input.resource_type == "secrets"
+	not input.resource.project_id
 }
 
 allow if {
-    input.user.role == "user"
-    input.method in ["POST", "PUT", "PATCH", "DELETE"]
-    user_is_member_of_project
+	is_user_or_client
+	input.resource_type in ["attachments", "notes"]
+	input.method in ["POST", "PUT", "PATCH", "DELETE"]
+	not input.resource.project_id
+}
+
+allow if {
+	input.user.role == "user"
+	input.method in ["POST", "PUT", "PATCH", "DELETE"]
+	user_is_member_of_project
 }
 
 # 4. Client
 allow if {
-    input.user.role == "client"
-    input.method == "GET"
-    
-    # Clients can read project-scoped data if they are a member
-    project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports"]
-    input.resource_type in project_scoped_resources
-    
-    # If project_id is provided, check membership
-    user_is_member_of_project
-}
+	input.user.role == "client"
+	input.method == "GET"
 
-# Client collection endpoints are explicitly scoped by the API. Clients do not
-# have vault access.
-allow if {
-    input.user.role == "client"
-    input.method == "GET"
-    input.resource_type in ["vulnerabilities", "attachments", "notes"]
-    not input.resource.project_id
+	# Clients can read project-scoped data if they are a member
+	project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports"]
+	input.resource_type in project_scoped_resources
+
+	# If project_id is provided, check membership
+	user_is_member_of_project
 }
 
 allow if {
-    input.user.role == "client"
-    input.resource_type in ["attachments", "notes"]
-    input.method in ["POST", "PUT", "PATCH", "DELETE"]
-    not input.resource.project_id
+	input.user.role == "user"
+	input.resource_type == "secrets"
+	input.method in ["POST", "PUT", "PATCH", "DELETE"]
+	not input.resource.project_id
 }

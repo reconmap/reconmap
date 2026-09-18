@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a GitHub Actions workflow that runs the OPA policy tests when Rego policy files change.
 - Added HTTP status code validation in Go agent client calls, ensuring `reconmapd` logs an error when the REST API returns a non-2xx response.
 - Automatically add/ensure URL targets as project assets/targets in the selected project when a scan is initiated.
 - Added AI-powered scan planning and tool recommendation: a new target-centric scan planner (`ScanTargetForm`) analyzes target inputs (URL, domain, IP, hostname, code repository), detects target type, and requests a tailored, ordered execution plan from the API via `POST /api/commands/recommend`.
@@ -48,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Upgraded the Docker Compose Open Policy Agent image to `openpolicyagent/opa:1.20.2-istio` and simplified equivalent user/client collection authorization rules with OPA 1.20's `or` keyword.
 - Updated target scans to execute recommended tools automatically and transparently, showing live queuing status (Pending, Queuing, Queued, Failed) without requiring manual tool selection or manual queue triggers.
 - Renamed the submit button in the scan target form from "Analyze & Recommend" to "Start scan" to align with the automated scan execution workflow.
 - Simplified Scans navigation menu, consolidating "Run once", "Run on schedule", and "Start from URL" into a single, unified "Run scan" page.

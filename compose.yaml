@@ -135,11 +135,10 @@ services:
       - rustfs_logs:/logs
 
   opa:
-    image: openpolicyagent/opa:1.18.1-istio
+    image: openpolicyagent/opa:1.20.2-istio
     restart: unless-stopped
     ports:
       - "8181:8181"
     volumes:
       - ./policy:/policy
     command: ["run", "--server", "--addr", ":8181", "--log-format=json", "/policy"]
-

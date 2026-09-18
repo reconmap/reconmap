@@ -1,0 +1,25 @@
+name: OPA policy tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'policy/**'
+      - '.github/workflows/opa-policy-test.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'policy/**'
+      - '.github/workflows/opa-policy-test.yml'
+
+jobs:
+  test:
+    name: Test Rego policies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Run OPA tests
+        run: docker run --rm -v "$GITHUB_WORKSPACE/policy:/policy:ro" openpolicyagent/opa:1.20.2-istio test /policy
