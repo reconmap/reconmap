@@ -42,7 +42,7 @@ curl http://localhost:5510
 
 ## Startup diagnostics
 
-At startup, the API logs a secret-safe summary of its listener URL and the database, Redis, RabbitMQ, Keycloak, and S3 endpoint hosts. It also reports invalid or missing connection settings before Kestrel begins listening. If startup is cancelled, the log explicitly identifies it as a host shutdown cancellation and records the API lifecycle transition. Do not paste the full configuration or environment output into support requests; redact passwords, client secrets, and access keys.
+At startup, the API writes a secret-safe summary of its listener URL and the database, Redis, RabbitMQ, Keycloak, and S3 endpoint hosts directly to standard error, as well as through the configured logger. This makes the bootstrap milestones visible even when production log filtering suppresses informational messages. It also reports invalid or missing connection settings before Kestrel begins listening. If startup is cancelled, the log explicitly identifies it as a host shutdown cancellation and records the API lifecycle transition. Do not paste the full configuration or environment output into support requests; redact passwords, client secrets, and access keys.
 
 ## How to contribute
 

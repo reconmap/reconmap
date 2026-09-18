@@ -28,7 +28,10 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", false, isDevelopment)
     .AddJsonFile($"appsettings.{environmentName}.json", true, isDevelopment).Build();
 
+Console.Error.WriteLine("Reconmap API bootstrap: appsettings configuration loaded.");
+
 var builder = WebApplication.CreateBuilder(args);
+Console.Error.WriteLine("Reconmap API bootstrap: web host builder created.");
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
@@ -36,7 +39,13 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 var startupDiagnostics = StartupDiagnostics.Create(builder.Configuration);
-Log.Information(
+var startupDiagnosticMessage = string.Format(
+    "API startup configuration: urls={0}; databaseHost={1}; redis={2}:{3}; rabbitMqHost={4}; keycloakHost={5}; storageHost={6}",
+    startupDiagnostics.ListenerUrls, startupDiagnostics.DatabaseHost, startupDiagnostics.RedisHost,
+    startupDiagnostics.RedisPort, startupDiagnostics.RabbitMqHost, startupDiagnostics.KeycloakHost,
+    startupDiagnostics.StorageHost);
+Console.Error.WriteLine($"Reconmap API bootstrap: {startupDiagnosticMessage}");
+Log.Warning(
     "API startup configuration: urls={ListenerUrls}; databaseHost={DatabaseHost}; redis={RedisHost}:{RedisPort}; rabbitMqHost={RabbitMqHost}; keycloakHost={KeycloakHost}; storageHost={StorageHost}",
     startupDiagnostics.ListenerUrls, startupDiagnostics.DatabaseHost, startupDiagnostics.RedisHost,
     startupDiagnostics.RedisPort, startupDiagnostics.RabbitMqHost, startupDiagnostics.KeycloakHost,
@@ -143,6 +152,7 @@ services.AddAuthorizationBuilder()
         .Build());
 
 var app = builder.Build();
+Console.Error.WriteLine("Reconmap API bootstrap: application pipeline built; starting Kestrel.");
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();
@@ -188,9 +198,16 @@ app.MapControllers();
 app.Lifetime.ApplicationStarted.Register(() =>
     Log.Information("API startup completed; Kestrel is accepting requests."));
 app.Lifetime.ApplicationStopping.Register(() =>
-    Log.Warning("API shutdown was requested while running or starting. Check Docker events, host logs, and earlier API log entries for the initiating failure."));
+{
+    const string message = "API shutdown was requested while running or starting. Check Docker events, host logs, and earlier API log entries for the initiating failure.";
+    Console.Error.WriteLine($"Reconmap API lifecycle: {message}");
+    Log.Warning(message);
+});
 app.Lifetime.ApplicationStopped.Register(() =>
-    Log.Warning("API host has stopped."));
+{
+    Console.Error.WriteLine("Reconmap API lifecycle: host has stopped.");
+    Log.Warning("API host has stopped.");
+});
 
 AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
     Log.Fatal(eventArgs.ExceptionObject as Exception,
@@ -202,12 +219,14 @@ try
 }
 catch (OperationCanceledException exception) when (app.Lifetime.ApplicationStopping.IsCancellationRequested)
 {
+    Console.Error.WriteLine("Reconmap API fatal: Kestrel startup was cancelled because the host shutdown token was signalled.");
     Log.Fatal(exception,
         "API startup was cancelled because the host shutdown token was signalled. This is not a listener-address error; inspect preceding startup diagnostics and Docker/host events for the initiating failure.");
     throw;
 }
 catch (Exception exception)
 {
+    Console.Error.WriteLine($"Reconmap API fatal: startup failed with {exception.GetType().FullName}: {exception.Message}");
     Log.Fatal(exception, "API terminated during startup.");
     throw;
 }
