@@ -30,8 +30,11 @@ jobs:
 
       - name: Run containers
         run: |
-          cp ../../.env .env
-          docker compose -p rest-api up -d
+          docker compose -p rest-api up -d postgres rustfs
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose -p rest-api logs --no-color
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -47,4 +50,3 @@ jobs:
       - name: Push NGAPI image
         run: make build push
         working-directory: apps/api/src
-
