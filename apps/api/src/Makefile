@@ -1,5 +1,5 @@
 PROJECT := rest-api
-DC := docker compose -f ../compose.yaml -p $(PROJECT)
+DC := docker compose -f ../../../compose.yaml -p $(PROJECT)
 
 .PHONY: start
 start:
