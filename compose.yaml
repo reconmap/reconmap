@@ -75,7 +75,6 @@ services:
 
   dashboard:
     profiles: ["app"]
-    container_name: rmap-dashboard
     image: ghcr.io/reconmap/dashboard:latest
     restart: unless-stopped
     volumes:

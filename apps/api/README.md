@@ -40,6 +40,10 @@ If everything went ok you should be able to use curl or any other HTTP client (e
 curl http://localhost:5510
 ```
 
+## Startup diagnostics
+
+At startup, the API logs a secret-safe summary of its listener URL and the database, Redis, RabbitMQ, Keycloak, and S3 endpoint hosts. It also reports invalid or missing connection settings before Kestrel begins listening. If startup is cancelled, the log explicitly identifies it as a host shutdown cancellation and records the API lifecycle transition. Do not paste the full configuration or environment output into support requests; redact passwords, client secrets, and access keys.
+
 ## How to contribute
 
 **We are glad you are thinking about contributing to this project.** All help is hugely appreciated.

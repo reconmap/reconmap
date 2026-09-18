@@ -35,6 +35,15 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 builder.Host.UseSerilog();
 
+var startupDiagnostics = StartupDiagnostics.Create(builder.Configuration);
+Log.Information(
+    "API startup configuration: urls={ListenerUrls}; databaseHost={DatabaseHost}; redis={RedisHost}:{RedisPort}; rabbitMqHost={RabbitMqHost}; keycloakHost={KeycloakHost}; storageHost={StorageHost}",
+    startupDiagnostics.ListenerUrls, startupDiagnostics.DatabaseHost, startupDiagnostics.RedisHost,
+    startupDiagnostics.RedisPort, startupDiagnostics.RabbitMqHost, startupDiagnostics.KeycloakHost,
+    startupDiagnostics.StorageHost);
+foreach (var validationError in startupDiagnostics.ValidationErrors)
+    Log.Error("API startup configuration error: {ValidationError}", validationError);
+
 var services = builder.Services;
 services.Configure<StorageSettings>(builder.Configuration.GetSection("Storage"));
 
@@ -176,4 +185,33 @@ app.UseCustomWebSockets();
 
 app.MapControllers();
 
-app.Run();
+app.Lifetime.ApplicationStarted.Register(() =>
+    Log.Information("API startup completed; Kestrel is accepting requests."));
+app.Lifetime.ApplicationStopping.Register(() =>
+    Log.Warning("API shutdown was requested while running or starting. Check Docker events, host logs, and earlier API log entries for the initiating failure."));
+app.Lifetime.ApplicationStopped.Register(() =>
+    Log.Warning("API host has stopped."));
+
+AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
+    Log.Fatal(eventArgs.ExceptionObject as Exception,
+        "Unhandled CLR exception. IsTerminating={IsTerminating}", eventArgs.IsTerminating);
+
+try
+{
+    app.Run();
+}
+catch (OperationCanceledException exception) when (app.Lifetime.ApplicationStopping.IsCancellationRequested)
+{
+    Log.Fatal(exception,
+        "API startup was cancelled because the host shutdown token was signalled. This is not a listener-address error; inspect preceding startup diagnostics and Docker/host events for the initiating failure.");
+    throw;
+}
+catch (Exception exception)
+{
+    Log.Fatal(exception, "API terminated during startup.");
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
+}
