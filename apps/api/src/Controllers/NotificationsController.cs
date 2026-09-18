@@ -1,6 +1,7 @@
 using System.Text.Json;
 using api_v2.Domain.AuditActions;
 using api_v2.Infrastructure.Persistence;
+using api_v2.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,7 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class NotificationsController(AppDbContext dbContext, SseConnectionManager sseConnectionManager) : ControllerBase
+public class NotificationsController(AppDbContext dbContext, SseConnectionManager sseConnectionManager, IRequestAccessScope accessScope) : ControllerBase
 {
     [HttpGet("stream")]
     public async Task GetStream(CancellationToken cancellationToken)
@@ -39,7 +40,8 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
     [HttpGet]
     public async Task<IActionResult> GetMany([FromQuery] string? status)
     {
-        var q = dbContext.Notifications.AsNoTracking();
+        var q = dbContext.Notifications.AsNoTracking()
+            .Where(n => accessScope.IsPrivileged || n.ToUserId == accessScope.UserId);
         if (status != null) q = q.Where(n => n.Status == status);
         q = q
             .OrderByDescending(a => a.CreatedAt);
@@ -53,7 +55,7 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
     public async Task<IActionResult> DeleteOne(int id)
     {
         var deleteCount = await dbContext.Notifications
-            .Where(n => n.Id == id)
+            .Where(n => n.Id == id && (accessScope.IsPrivileged || n.ToUserId == accessScope.UserId))
             .ExecuteDeleteAsync();
 
         if (deleteCount == 0) return NotFound();
@@ -72,7 +74,7 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
             .ToList();
 
         var deleteCount = await dbContext.Notifications
-            .Where(n => ids.Contains(n.Id))
+            .Where(n => ids.Contains(n.Id) && (accessScope.IsPrivileged || n.ToUserId == accessScope.UserId))
             .ExecuteDeleteAsync();
 
         return NoContent();
@@ -83,7 +85,8 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
     [HttpPatch("{id:int}")]
     public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement body)
     {
-        var notification = await dbContext.Notifications.FindAsync(id);
+        var notification = await dbContext.Notifications
+            .FirstOrDefaultAsync(n => n.Id == id && (accessScope.IsPrivileged || n.ToUserId == accessScope.UserId));
         if (notification == null) return NotFound();
 
         notification.Status = body.GetProperty("status").GetString();
@@ -103,7 +106,7 @@ public class NotificationsController(AppDbContext dbContext, SseConnectionManage
         var status = body.GetProperty("status").GetString();
 
         await dbContext.Notifications
-            .Where(n => ids.Contains(n.Id))
+            .Where(n => ids.Contains(n.Id) && (accessScope.IsPrivileged || n.ToUserId == accessScope.UserId))
             .ExecuteUpdateAsync(upd => upd
                 .SetProperty(n => n.Status, status));
 

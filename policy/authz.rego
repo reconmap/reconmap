@@ -34,7 +34,8 @@ allow if {
     input.resource_type == "searches"
 }
 
-# Allow users and clients to manage their own notifications
+# Notification ownership is enforced by the API query layer. The policy only
+# permits this explicitly named endpoint; it must never be generalized to GET.
 allow if {
     input.user.role in ["user", "client"]
     input.resource_type == "notifications"
@@ -44,8 +45,8 @@ allow if {
 allow if {
     input.user.role == "user"
     
-    # Can access globally readable resources (like categories, system info)
-    globally_readable_resources := ["projectcategories", "vulnerabilitiescategories", "systemdata", "system"]
+    # Can access globally readable metadata (never exports or configuration).
+    globally_readable_resources := ["projectcategories", "vulnerabilitiescategories", "system"]
     input.resource_type in globally_readable_resources
     input.method == "GET"
 }
@@ -61,12 +62,20 @@ allow if {
     user_is_member_of_project
 }
 
-# Allow listing (GET without specific project ID) for users, 
-# relying on the C# API to filter the actual DB results via memberProjectIds
+# These collection endpoints are scoped by RequestAccessScope in the API.
+# Do not add arbitrary controllers here: a missing project id is not permission.
 allow if {
     input.user.role == "user"
     input.method == "GET"
-    not input.resource.project_id # No specific project_id provided in context
+    input.resource_type in ["vulnerabilities", "attachments", "notes", "secrets"]
+    not input.resource.project_id
+}
+
+allow if {
+    input.user.role == "user"
+    input.resource_type in ["attachments", "notes", "secrets"]
+    input.method in ["POST", "PUT", "PATCH", "DELETE"]
+    not input.resource.project_id
 }
 
 allow if {
@@ -88,10 +97,18 @@ allow if {
     user_is_member_of_project
 }
 
-# Allow listing (GET without specific project ID) for clients,
-# relying on the C# API to filter the actual DB results.
+# Client collection endpoints are explicitly scoped by the API. Clients do not
+# have vault access.
 allow if {
     input.user.role == "client"
     input.method == "GET"
+    input.resource_type in ["vulnerabilities", "attachments", "notes"]
+    not input.resource.project_id
+}
+
+allow if {
+    input.user.role == "client"
+    input.resource_type in ["attachments", "notes"]
+    input.method in ["POST", "PUT", "PATCH", "DELETE"]
     not input.resource.project_id
 }

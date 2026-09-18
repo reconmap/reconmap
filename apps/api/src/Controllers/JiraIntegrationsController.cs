@@ -9,11 +9,16 @@ namespace api_v2.Controllers;
 [ApiController]
 public class JiraIntegrationsController(AppDbContext dbContext) : ControllerBase
 {
+    public sealed record JiraIntegrationResponse(int Id, string Name, string Url, string Email, bool IsEnabled, string ProjectKey);
+
+    private static JiraIntegrationResponse ToResponse(JiraIntegration integration) => new(
+        integration.Id, integration.Name, integration.Url, integration.Email, integration.IsEnabled, integration.ProjectKey);
+
     [HttpGet]
     public async Task<IActionResult> GetMany()
     {
-        var integrations = await dbContext.JiraIntegrations.ToListAsync();
-        return Ok(integrations);
+        var integrations = await dbContext.JiraIntegrations.AsNoTracking().ToListAsync();
+        return Ok(integrations.Select(ToResponse));
     }
 
     [HttpGet("{id:int}")]
@@ -21,7 +26,7 @@ public class JiraIntegrationsController(AppDbContext dbContext) : ControllerBase
     {
         var integration = await dbContext.JiraIntegrations.FindAsync(id);
         if (integration == null) return NotFound();
-        return Ok(integration);
+        return Ok(ToResponse(integration));
     }
 
     [HttpPost]
@@ -29,7 +34,7 @@ public class JiraIntegrationsController(AppDbContext dbContext) : ControllerBase
     {
         dbContext.JiraIntegrations.Add(integration);
         await dbContext.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetOne), new { id = integration.Id }, integration);
+        return CreatedAtAction(nameof(GetOne), new { id = integration.Id }, ToResponse(integration));
     }
 
     [HttpPut("{id:int}")]
@@ -41,7 +46,7 @@ public class JiraIntegrationsController(AppDbContext dbContext) : ControllerBase
         dbContext.Entry(dbModel).CurrentValues.SetValues(integration);
         dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
         await dbContext.SaveChangesAsync();
-        return Ok(dbModel);
+        return Ok(ToResponse(dbModel));
     }
 
     [HttpDelete("{id:int}")]

@@ -14,6 +14,16 @@ Centralized authorization is enforced via **Open Policy Agent (OPA)** rules inte
 - **Regular Users:** Authenticated users are resolved to database records in the `user` table. Their roles and permissions are queried to validate requests.
 - **Service Accounts (Agents):** Reconmap agent clients (`reconmapd`) authenticate via OAuth Client Credentials grant. Because they are machine accounts and do not exist in the database `user` table, the API bypasses the database user lookup during authorization check and maps them to a virtual Administrator user. This ensures agents can successfully execute their boot, ping, and check-in endpoints.
 
+### Tenant data access
+
+OPA grants only explicitly named endpoint capabilities; it never treats a missing `project_id` as authorization. Collection and indirect-resource endpoints additionally use the API's request access scope, which resolves the caller's project memberships and applies them to every database query.
+
+- Users and clients can access project data only in projects where they are members.
+- Users can access vault secrets they own or secrets associated with one of their projects. Clients cannot access the vault.
+- Notifications are visible and mutable only by their recipient.
+- Attachments and notes must resolve through a project, task, vulnerability, or non-template report in a member project. Unscoped attachment parents are administrator-only.
+- Jira/Azure DevOps integration configuration and system data import/export are administrator-only. Integration API tokens and personal access tokens are never included in API responses.
+
 The last part of this architecture is Rabbitmq, a message queue and broker. This queue handles heavy or asynchronous background tasks like sending report emails and generating reports asynchronously.
 
 ![Reconmap architecture](reconmap-high-level-architecture.png)

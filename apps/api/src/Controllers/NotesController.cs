@@ -2,6 +2,7 @@ using api_v2.Common.Extensions;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
+using api_v2.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +10,13 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class NotesController(AppDbContext dbContext, ILogger<NotesController> logger)
+public class NotesController(AppDbContext dbContext, ILogger<NotesController> logger, IRequestAccessScope accessScope)
     : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateOne(Note note)
     {
+        if (!await accessScope.CanAccessParentAsync(note.ParentType!, note.ParentId)) return NotFound();
         note.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
         dbContext.Notes.Add(note);
         await dbContext.SaveChangesAsync();
@@ -27,6 +29,7 @@ public class NotesController(AppDbContext dbContext, ILogger<NotesController> lo
         [FromQuery] string parentType,
         [FromQuery] int parentId)
     {
+        if (!await accessScope.CanAccessParentAsync(parentType, parentId)) return NotFound();
         var q = dbContext.Notes
             .Include(n => n.CreatedBy)
             .AsNoTracking()
@@ -41,11 +44,10 @@ public class NotesController(AppDbContext dbContext, ILogger<NotesController> lo
     [Audit(AuditActions.Deleted, "Comment")]
     public async Task<IActionResult> DeleteOne(int id)
     {
-        var deleteCount = await dbContext.Notes
-            .Where(n => n.Id == id)
-            .ExecuteDeleteAsync();
-
-        if (deleteCount == 0) return NotFound();
+        var note = await dbContext.Notes.FindAsync(id);
+        if (note == null || !await accessScope.CanAccessParentAsync(note.ParentType!, note.ParentId)) return NotFound();
+        dbContext.Notes.Remove(note);
+        await dbContext.SaveChangesAsync();
 
         HttpContext.Items["AuditData"] = new { id };
 

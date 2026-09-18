@@ -9,11 +9,16 @@ namespace api_v2.Controllers;
 [ApiController]
 public class AzureDevopsIntegrationsController(AppDbContext dbContext) : ControllerBase
 {
+    public sealed record AzureDevopsIntegrationResponse(int Id, string Name, string Url, string ProjectName, bool IsEnabled);
+
+    private static AzureDevopsIntegrationResponse ToResponse(AzureDevopsIntegration integration) => new(
+        integration.Id, integration.Name, integration.Url, integration.ProjectName, integration.IsEnabled);
+
     [HttpGet]
     public async Task<IActionResult> GetMany()
     {
-        var integrations = await dbContext.AzureDevopsIntegrations.ToListAsync();
-        return Ok(integrations);
+        var integrations = await dbContext.AzureDevopsIntegrations.AsNoTracking().ToListAsync();
+        return Ok(integrations.Select(ToResponse));
     }
 
     [HttpGet("{id:int}")]
@@ -21,7 +26,7 @@ public class AzureDevopsIntegrationsController(AppDbContext dbContext) : Control
     {
         var integration = await dbContext.AzureDevopsIntegrations.FindAsync(id);
         if (integration == null) return NotFound();
-        return Ok(integration);
+        return Ok(ToResponse(integration));
     }
 
     [HttpPost]
@@ -29,7 +34,7 @@ public class AzureDevopsIntegrationsController(AppDbContext dbContext) : Control
     {
         dbContext.AzureDevopsIntegrations.Add(integration);
         await dbContext.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetOne), new { id = integration.Id }, integration);
+        return CreatedAtAction(nameof(GetOne), new { id = integration.Id }, ToResponse(integration));
     }
 
     [HttpPut("{id:int}")]
@@ -41,7 +46,7 @@ public class AzureDevopsIntegrationsController(AppDbContext dbContext) : Control
         dbContext.Entry(dbModel).CurrentValues.SetValues(integration);
         dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
         await dbContext.SaveChangesAsync();
-        return Ok(dbModel);
+        return Ok(ToResponse(dbModel));
     }
 
     [HttpDelete("{id:int}")]

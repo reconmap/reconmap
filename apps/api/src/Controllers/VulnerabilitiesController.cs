@@ -5,6 +5,7 @@ using api_v2.Common.Messaging;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
+using api_v2.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -17,7 +18,8 @@ public class VulnerabilitiesController(
     AppDbContext dbContext,
     ILogger<VulnerabilitiesController> logger,
     IMessageQueue messageQueue,
-    IConnectionMultiplexer redisConnections)
+    IConnectionMultiplexer redisConnections,
+    IRequestAccessScope accessScope)
     : AppController(dbContext)
 {
     private readonly AppDbContext _dbContext = dbContext;
@@ -58,10 +60,13 @@ public class VulnerabilitiesController(
         [FromQuery] string? status,
         [FromQuery] string? risk)
     {
+        var memberProjectIds = await accessScope.MemberProjectIdsAsync();
         var q = _dbContext.Vulnerabilities
              .Include(v => v.Project)
              .Include(v => v.Asset)
              .AsNoTracking()
+             .Where(v => accessScope.IsPrivileged ||
+                 (v.ProjectId.HasValue && memberProjectIds.Contains(v.ProjectId.Value)))
              .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk);
          if (projectId.HasValue)
              q = q.Where(v => v.ProjectId == projectId);
@@ -103,6 +108,7 @@ public class VulnerabilitiesController(
             .Where(v => v.Id == id)
             .FirstOrDefaultAsync();
         if (existing == null) return NotFound();
+        if (!await accessScope.CanAccessProjectAsync(existing.ProjectId)) return NotFound();
 
         return Ok(existing);
     }

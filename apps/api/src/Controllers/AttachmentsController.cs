@@ -4,6 +4,7 @@ using api_v2.Common.Extensions;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
+using api_v2.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,7 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsController> logger, IAttachmentStorage attachmentStorage)
+public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsController> logger, IAttachmentStorage attachmentStorage, IRequestAccessScope accessScope)
     : AppController(dbContext)
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
@@ -21,6 +22,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
         [FromQuery] string parentType,
         [FromQuery] int parentId)
     {
+        if (!await accessScope.CanAccessParentAsync(parentType, parentId)) return NotFound();
         var q = dbContext.Attachments.AsNoTracking()
             .Where(a => a.ParentType == parentType && a.ParentId == parentId)
             .OrderByDescending(a => a.CreatedAt);
@@ -36,6 +38,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
     {
         var attachment = await dbContext.Attachments.FindAsync(id);
         if (attachment == null) return NotFound();
+        if (!await accessScope.CanAccessParentAsync(attachment.ParentType!, attachment.ParentId)) return NotFound();
 
         var stream = await attachmentStorage.GetFileStreamAsync(attachment.FileName);
 
@@ -57,6 +60,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
     {
         var attachment = await dbContext.Attachments.FindAsync(id);
         if (attachment == null) return NotFound();
+        if (!await accessScope.CanAccessParentAsync(attachment.ParentType!, attachment.ParentId)) return NotFound();
 
         await attachmentStorage.DeleteFileAsync(attachment.FileName);
 
@@ -75,6 +79,7 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
     {
         if (!Request.Form.Files.Any())
             return BadRequest();
+        if (!await accessScope.CanAccessParentAsync(parentType, parentId)) return NotFound();
 
         foreach (var file in Request.Form.Files)
         {

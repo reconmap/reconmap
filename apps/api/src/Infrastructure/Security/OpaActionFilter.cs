@@ -65,6 +65,14 @@ public class OpaActionFilter(OpaAuthorizationService opaService, AppDbContext db
             {
                 projectId = await dbContext.Tasks.Where(t => t.Id == id).Select(t => (int?)t.ProjectId).FirstOrDefaultAsync();
             }
+            else if (controller == "assets")
+            {
+                projectId = await dbContext.Assets.Where(a => a.Id == id).Select(a => (int?)a.ProjectId).FirstOrDefaultAsync();
+            }
+            else if (controller == "reports")
+            {
+                projectId = await dbContext.Reports.Where(r => r.Id == id && !r.IsTemplate).Select(r => r.ProjectId).FirstOrDefaultAsync();
+            }
         }
         else if (context.ActionArguments.Values.FirstOrDefault(v => v is Vulnerability) is Vulnerability v)
         {

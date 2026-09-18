@@ -76,6 +76,7 @@ services.AddScoped<IAiService, AiService>();
 services.AddScoped<IToolRecommendationService, ToolRecommendationService>();
 services.AddHttpClient();
 services.AddScoped<api_v2.Infrastructure.Security.OpaAuthorizationService>();
+services.AddScoped<api_v2.Infrastructure.Security.IRequestAccessScope, api_v2.Infrastructure.Security.RequestAccessScope>();
 
 services.AddRedisServices(builder.Configuration);
 services.AddRabbitMQServices(builder.Configuration);
