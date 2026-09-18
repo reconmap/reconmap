@@ -13,7 +13,8 @@ public class KeycloakOptions
 
 public static class AuthenticationExtensions
 {
-    public static IServiceCollection AddReconmapAuthentication(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddReconmapAuthentication(this IServiceCollection services, IConfiguration config,
+    IHostEnvironment environment)
     {
         services.Configure<KeycloakOptions>(
             config.GetSection("Keycloak"));
@@ -26,15 +27,12 @@ public static class AuthenticationExtensions
             })
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = !environment.IsDevelopment(); ;
                 options.Audience = config["Keycloak:Audience"];
                 options.MetadataAddress = config["Keycloak:MetadataAddress"];
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = config["Keycloak:ValidIssuer"],
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true
                 };
                 options.Events = new JwtBearerEvents

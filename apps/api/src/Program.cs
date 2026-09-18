@@ -86,7 +86,7 @@ services.AddHostedService<JiraPublisher>();
 services.AddHostedService<AzureDevopsPublisher>();
 services.AddHostedService<ReportEmailProcessor>();
 services.AddHostedService<ReportGenerationProcessor>();
-services.AddReconmapAuthentication(builder.Configuration);
+services.AddReconmapAuthentication(builder.Configuration, builder.Environment);
 services.AddDatabase(builder.Configuration);
 
 services.AddHealthChecks()
