@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Cryptography;
 using api_v2.Application.Services;
 using api_v2.Common.Extensions;
@@ -83,7 +84,10 @@ public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsCo
 
         foreach (var file in Request.Form.Files)
         {
-            var uniqueName = _attachmentFilePath.GenerateFileName(Path.GetExtension(file.FileName));
+            var rawExtension = Path.GetExtension(file.FileName);
+            var safeExtension = new string(rawExtension.Where(char.IsLetterOrDigit).ToArray());
+            var extension = safeExtension.Length > 0 ? "." + safeExtension : string.Empty;
+            var uniqueName = _attachmentFilePath.GenerateFileName(extension);
             
             await using (var stream = file.OpenReadStream())
             {
