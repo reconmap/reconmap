@@ -19,7 +19,6 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.12" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.12" GeneratePathProperty="true" />
-        <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.3.13" />
         <PackageReference Include="Microsoft.Extensions.AI" Version="10.10.0" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.10.0" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.12" />
