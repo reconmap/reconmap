@@ -153,6 +153,21 @@ services.AddAuthorizationBuilder()
 
 var app = builder.Build();
 Console.Error.WriteLine("Reconmap API bootstrap: application pipeline built; starting Kestrel.");
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next(context);
+    }
+    catch (Exception exception)
+    {
+        Console.Error.WriteLine(
+            $"Reconmap API request failure: {context.Request.Method} {context.Request.Path} threw {exception.GetType().FullName}: {exception}");
+        Log.Error(exception, "Unhandled request failure for {RequestMethod} {RequestPath}",
+            context.Request.Method, context.Request.Path);
+        throw;
+    }
+});
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();
@@ -196,7 +211,10 @@ app.UseCustomWebSockets();
 app.MapControllers();
 
 app.Lifetime.ApplicationStarted.Register(() =>
-    Log.Information("API startup completed; Kestrel is accepting requests."));
+{
+    Console.Error.WriteLine("Reconmap API lifecycle: startup completed; Kestrel is accepting requests.");
+    Log.Information("API startup completed; Kestrel is accepting requests.");
+});
 app.Lifetime.ApplicationStopping.Register(() =>
 {
     const string message = "API shutdown was requested while running or starting. Check Docker events, host logs, and earlier API log entries for the initiating failure.";
