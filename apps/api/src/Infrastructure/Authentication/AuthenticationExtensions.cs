@@ -35,7 +35,7 @@ public static class AuthenticationExtensions
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = false
+                    ValidateIssuerSigningKey = true
                 };
                 options.Events = new JwtBearerEvents
                 {
