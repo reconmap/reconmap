@@ -66,11 +66,13 @@ public sealed class AiService(IAiSettingsService aiSettingsService) : IAiService
             "AzureOpenAI" => new AzureOpenAIClient(
                 new Uri(settings.AzureOpenAiEndpoint ?? throw new InvalidOperationException("Azure OpenAI Endpoint not configured")),
                 new System.ClientModel.ApiKeyCredential(settings.AzureOpenAiApiKey ?? throw new InvalidOperationException("Azure OpenAI API Key not configured")))
-                .AsChatClient(settings.AzureOpenAiDeployment ?? "gpt-4o"),
+                .GetChatClient(settings.AzureOpenAiDeployment ?? "gpt-4o")
+                .AsIChatClient(),
             "OpenRouter" => new OpenAIClient(
                 new System.ClientModel.ApiKeyCredential(settings.OpenRouterApiKey ?? throw new InvalidOperationException("OpenRouter API Key not configured")),
                 new OpenAIClientOptions { Endpoint = new Uri("https://openrouter.ai/api/v1") })
-                .AsChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct"),
+                .GetChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct")
+                .AsIChatClient(),
             _ => throw new InvalidOperationException($"AI provider '{settings.Provider}' is not supported or configured correctly.")
         };
     }

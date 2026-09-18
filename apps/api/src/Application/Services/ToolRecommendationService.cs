@@ -35,14 +35,14 @@ public class ToolRecommendationService(IAiSettingsService aiSettingsService, ILo
         {
             logger.LogWarning(ex, "AI tool recommendation failed or is not configured. Falling back to rule-based.");
         }
-        
+
         return GetRuleBasedRecommendations(request);
     }
 
     private async Task<ToolRecommendationResponse?> GetAiRecommendationsAsync(ToolRecommendationRequest request, AiSettings settings)
     {
         var client = GetChatClient(settings);
-        
+
         var allCommands = CommandDiscovery.GetAll();
         var catalog = allCommands.Select(c => new {
             c.Id,
@@ -50,9 +50,9 @@ public class ToolRecommendationService(IAiSettingsService aiSettingsService, ILo
             c.Description,
             Usages = c.Usages.Select(u => new { u.Id, u.Arguments })
         });
-        
+
         var prompt = $@"
-You are a security tool recommendation engine. 
+You are a security tool recommendation engine.
 Given the target '{request.Target}' of type '{request.TargetType}', recommend tools from the catalog.
 Pre-fill arguments replacing placeholders like {{{{{{Host|||localhost}}}}}}.
 
@@ -107,11 +107,13 @@ Catalog: {JsonSerializer.Serialize(catalog)}
             "AzureOpenAI" => new AzureOpenAIClient(
                 new Uri(settings.AzureOpenAiEndpoint ?? throw new InvalidOperationException("Azure OpenAI Endpoint not configured")),
                 new System.ClientModel.ApiKeyCredential(settings.AzureOpenAiApiKey ?? throw new InvalidOperationException("Azure OpenAI API Key not configured")))
-                .AsChatClient(settings.AzureOpenAiDeployment ?? "gpt-4o"),
+                .GetChatClient(settings.AzureOpenAiDeployment ?? "gpt-4o")
+                .AsIChatClient(),
             "OpenRouter" => new OpenAIClient(
                 new System.ClientModel.ApiKeyCredential(settings.OpenRouterApiKey ?? throw new InvalidOperationException("OpenRouter API Key not configured")),
                 new OpenAIClientOptions { Endpoint = new Uri("https://openrouter.ai/api/v1") })
-                .AsChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct"),
+                .GetChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct")
+                .AsIChatClient(),
             _ => throw new InvalidOperationException($"AI provider '{settings.Provider}' is not supported or configured correctly.")
         };
     }
@@ -120,7 +122,7 @@ Catalog: {JsonSerializer.Serialize(catalog)}
     {
         var response = new ToolRecommendationResponse();
         var type = request.TargetType.ToLowerInvariant();
-        
+
         var targetToTools = new Dictionary<string, string[]>
         {
             { "url", new[] { "shcheck", "testssl", "nmap" } },
@@ -142,7 +144,7 @@ Catalog: {JsonSerializer.Serialize(catalog)}
             {
                 var usage = cmd.Usages.First();
                 var args = usage.Arguments ?? string.Empty;
-                
+
                 // Pre-fill argument placeholders
                 args = args.Replace("{{{Host|||localhost}}}", request.Target)
                            .Replace("{{{URL|||https://example.com}}}", request.Target)
