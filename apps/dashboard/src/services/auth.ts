@@ -43,11 +43,12 @@ let currentUser: User | null = null;
  * Keycloak admin: Clients → dashboard → Client scopes → dashboard-dedicated
  *   → Add mapper → User Client Role → Add to ID token ✅
  */
-const extractRole = (user: User): string | undefined => {
+export const getDashboardRoles = (user: User): string[] => {
     // Prefer the ID token claim (requires the protocol mapper above).
     const profileAccess = (user.profile as Record<string, any>)?.resource_access;
-    if (profileAccess) {
-        return profileAccess["dashboard"]?.roles?.[0];
+    const profileRoles = profileAccess?.["dashboard"]?.roles;
+    if (Array.isArray(profileRoles)) {
+        return profileRoles.filter((role): role is string => typeof role === "string");
     }
 
     // Fallback: decode the access token. Works without Keycloak config changes
@@ -55,10 +56,20 @@ const extractRole = (user: User): string | undefined => {
     // — prefer fixing this at the Keycloak protocol mapper level.
     try {
         const payload = JSON.parse(atob(user.access_token!.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
-        return payload?.resource_access?.["dashboard"]?.roles?.[0];
+        const tokenRoles = payload?.resource_access?.["dashboard"]?.roles;
+        return Array.isArray(tokenRoles)
+            ? tokenRoles.filter((role: unknown): role is string => typeof role === "string")
+            : [];
     } catch {
-        return undefined;
+        return [];
     }
+};
+
+const extractRole = (user: User): string | undefined => getDashboardRoles(user)[0];
+
+export const hasAgentTerminalAccess = (user: User | null | undefined): boolean => {
+    if (!user) return false;
+    return getDashboardRoles(user).some((role) => role === "administrator" || role === "superuser");
 };
 
 /**

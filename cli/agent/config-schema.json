@@ -78,7 +78,8 @@
             "additionalProperties": false
         },
         "validOrigins": {
-            "type": "string"
+            "type": "string",
+            "description": "Exact dashboard origin permitted to open terminal WebSockets, including scheme and optional port, without a path."
         },
         "agentDirectory": {
             "type": "string"

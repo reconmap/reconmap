@@ -14,6 +14,8 @@ import { StatusCodes } from "http-status-codes";
 import { useEffect, useState } from "react";
 import CommandService from "services/command";
 import parseArguments from "services/commands/arguments";
+import { useAuth } from "contexts/AuthContext";
+import { hasAgentTerminalAccess } from "services/auth";
 
 const Bullet = () => <span style={{ color: "var(--bulma-primary" }}>▸</span>;
 
@@ -59,6 +61,8 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
 };
 
 const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFrequency = null, defaultArgumentValues = null }) => {
+    const { user } = useAuth();
+    const terminalAllowed = hasAgentTerminalAccess(user);
     const [commandArgsRendered, setCommandArgsRendered] = useState("");
     const [commandArgs, setCommandArgs] = useState(() => parseArguments(usage));
     const [showTerminal, setShowTerminal] = useState(false);
@@ -244,7 +248,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
                 </>
             )}
 
-            {runFrequency === "once" && (
+            {runFrequency === "once" && terminalAllowed && (
                 <>
                     <HorizontalLabelledField
                         label="Agent"

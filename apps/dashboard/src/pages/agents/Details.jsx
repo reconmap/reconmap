@@ -7,6 +7,8 @@ import Tag from "components/ui/Tag.jsx";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loading from "components/ui/Loading.jsx";
+import { useAuth } from "contexts/AuthContext";
+import { hasAgentTerminalAccess } from "services/auth";
 
 const pingedRecently = (lastPingAt) => {
     if (!lastPingAt) return false;
@@ -19,6 +21,8 @@ const pingedRecently = (lastPingAt) => {
 
 const AgentDetailsPage = () => {
     const { agentId } = useParams();
+    const { user } = useAuth();
+    const terminalAllowed = hasAgentTerminalAccess(user);
 
     const { data: agent, isLoading } = useAgentQuery(agentId);
 
@@ -64,7 +68,7 @@ const AgentDetailsPage = () => {
                 <dd>{agent.lastPingAt}</dd>
             </dl>
 
-            <NativeButtonGroup>
+            {terminalAllowed && <NativeButtonGroup>
                 <PrimaryButton onClick={connect} disabled={terminalVisibility === true}>
                     Connect
                 </PrimaryButton>
@@ -75,9 +79,9 @@ const AgentDetailsPage = () => {
                 >
                     Disconnect
                 </PrimaryButton>
-            </NativeButtonGroup>
+            </NativeButtonGroup>}
 
-            {terminalVisibility &&
+            {terminalAllowed && terminalVisibility &&
                 <CommandTerminal agentIp={agent.ip} agentPort={agent.listenAddr} commands={[]} />
             }
         </div>

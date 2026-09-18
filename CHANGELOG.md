@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed a critical authorization bypass in the agent browser terminal. `/term` now requires a valid dashboard access token with the `administrator` or `superuser` role, validates issuer/audience/authorized party claims, enforces the configured dashboard origin, and no longer accepts credentials in URLs. Credit: @hackchang.
 - Fixed a cross-tenant authorization bypass in unscoped API GET requests. Low-privilege users and clients are now limited to explicitly authorized, membership-scoped data; notification operations are recipient-scoped; vault, vulnerability, attachment, and note access is enforced in the API data layer; system data export/import and global ticketing integrations are administrator-only; and Jira/Azure DevOps tokens are no longer serialized in API responses. Credit: @hackchang.
 - Fixed `NullReferenceException` in `AuditAttribute` when an action is executed under a null user context (such as a service account or user not resolved to the DB).
 - Fixed agent ping/boot authorization by allowing dynamically registered service accounts (agent clients) to bypass database user checks in the global OPA authorization filter.

@@ -53,7 +53,13 @@ func handleWebsocket(w http.ResponseWriter, r *http.Request) {
 
 	err := CheckRequestToken(r)
 	if err != nil {
-		logger.Error(err)
+		logger.Warnw("terminal authentication or authorization rejected", "remoteaddr", r.RemoteAddr, "reason", err.Error())
+		status := http.StatusUnauthorized
+		var accessDenied *terminalAccessDeniedError
+		if errors.As(err, &accessDenied) {
+			status = http.StatusForbidden
+		}
+		http.Error(w, http.StatusText(status), status)
 		return
 	}
 

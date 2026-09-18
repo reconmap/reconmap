@@ -3,6 +3,7 @@ import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
 import { useAuth } from "contexts/AuthContext";
 import { useEffect, useRef, useState } from "react";
+import { hasAgentTerminalAccess } from "services/auth";
 
 const textEncoder = new TextEncoder();
 
@@ -14,10 +15,14 @@ const CommandTerminal = ({ agentIp, agentPort, commands }) => {
     const terminalEl = useRef();
     const [terminalTitle, setTerminalTitle] = useState("Terminal");
     const { user } = useAuth();
+    const terminalAllowed = hasAgentTerminalAccess(user);
 
     const [wsError, setWsError] = useState(null);
 
     useEffect(() => {
+        if (!terminalAllowed || !user?.access_token) {
+            return undefined;
+        }
         const term = new Terminal({
             screenKeys: true,
             useStyle: true,
@@ -30,8 +35,12 @@ const CommandTerminal = ({ agentIp, agentPort, commands }) => {
         let retryHandle = null;
 
         const connectTerminal = () => {
-            const agentServiceUrl = `ws://${agentIp}${agentPort}`;
-            const webSocket = new WebSocket(`${agentServiceUrl}/term?token=` + user.access_token);
+            const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+            const agentServiceUrl = `${scheme}://${agentIp}${agentPort}`;
+            const webSocket = new WebSocket(`${agentServiceUrl}/term`, [
+                "reconmap-terminal",
+                `bearer.${user.access_token}`,
+            ]);
             webSocket.binaryType = "arraybuffer";
 
             term.onData((data) => {
@@ -83,7 +92,15 @@ const CommandTerminal = ({ agentIp, agentPort, commands }) => {
         return () => {
             term.dispose();
         };
-    }, [commands]);
+    }, [agentIp, agentPort, commands, terminalAllowed, user?.access_token]);
+
+    if (!terminalAllowed) {
+        return (
+            <article className="message is-danger">
+                <div className="message-body">Terminal access is restricted to administrators and superusers.</div>
+            </article>
+        );
+    }
 
     return (
         <div>
