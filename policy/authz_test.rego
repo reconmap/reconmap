@@ -54,3 +54,33 @@ test_only_users_can_access_unscoped_secrets if {
 		"method": "PATCH",
 	}
 }
+
+test_only_privileged_roles_can_manage_webhooks if {
+	data.reconmap.authz.allow with input as {
+		"user": {"role": "administrator", "member_project_ids": []},
+		"resource": {},
+		"resource_type": "webhooks",
+		"method": "GET",
+	}
+
+	data.reconmap.authz.allow with input as {
+		"user": {"role": "superuser", "member_project_ids": []},
+		"resource": {},
+		"resource_type": "webhooks",
+		"method": "DELETE",
+	}
+
+	not data.reconmap.authz.allow with input as {
+		"user": {"role": "user", "member_project_ids": []},
+		"resource": {},
+		"resource_type": "webhooks",
+		"method": "POST",
+	}
+
+	not data.reconmap.authz.allow with input as {
+		"user": {"role": "client", "member_project_ids": []},
+		"resource": {},
+		"resource_type": "webhooks",
+		"method": "GET",
+	}
+}

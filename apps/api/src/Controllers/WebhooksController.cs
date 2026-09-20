@@ -1,6 +1,5 @@
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +7,6 @@ namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize("AdminOnly")]
 public class WebhooksController(AppDbContext dbContext) : ControllerBase
 {
     [HttpGet]

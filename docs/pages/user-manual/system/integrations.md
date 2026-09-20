@@ -11,6 +11,8 @@ Reconmap supports several ways to integrate with external tools and services. Th
 
 Webhooks allow you to receive real-time notifications when certain events occur in Reconmap. When an event is triggered, Reconmap sends an HTTP POST request to the configured URL with a JSON payload.
 
+Webhook configuration is restricted to users with the `administrator` or `superuser` role. Reconmap enforces this through its central OPA authorization policy.
+
 ### Configuring a Webhook
 
 1. Go to **Settings > Integrations**.
