@@ -114,6 +114,11 @@ Catalog: {JsonSerializer.Serialize(catalog)}
                 new OpenAIClientOptions { Endpoint = new Uri("https://openrouter.ai/api/v1") })
                 .GetChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct")
                 .AsIChatClient(),
+            "AnonRouter" => new OpenAIClient(
+                new System.ClientModel.ApiKeyCredential(settings.AnonRouterApiKey ?? throw new InvalidOperationException("AnonRouter API Key not configured")),
+                new OpenAIClientOptions { Endpoint = new Uri("https://api.anonrouter.ai/v1") })
+                .GetChatClient(settings.AnonRouterModel ?? throw new InvalidOperationException("AnonRouter Model not configured"))
+                .AsIChatClient(),
             _ => throw new InvalidOperationException($"AI provider '{settings.Provider}' is not supported or configured correctly.")
         };
     }

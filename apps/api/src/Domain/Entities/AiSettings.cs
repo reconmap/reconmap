@@ -38,4 +38,11 @@ public class AiSettings : TimestampedEntity
     [Column("openrouter_model")]
     [MaxLength(255)]
     public string? OpenRouterModel { get; set; }
+
+    [Column("anonrouter_api_key")]
+    public string? AnonRouterApiKey { get; set; }
+
+    [Column("anonrouter_model")]
+    [MaxLength(255)]
+    public string? AnonRouterModel { get; set; }
 }

@@ -21,6 +21,9 @@ const defaultFormState = {
     openRouterApiKey: "",
     clearOpenRouterApiKey: false,
     openRouterModel: "",
+    anonRouterApiKey: "",
+    clearAnonRouterApiKey: false,
+    anonRouterModel: "",
 };
 
 const AiSettingsPage = () => {
@@ -45,6 +48,9 @@ const AiSettingsPage = () => {
             openRouterApiKey: "",
             clearOpenRouterApiKey: false,
             openRouterModel: data.openRouterModel ?? "",
+            anonRouterApiKey: "",
+            clearAnonRouterApiKey: false,
+            anonRouterModel: data.anonRouterModel ?? "",
         });
     }, [data]);
 
@@ -71,6 +77,9 @@ const AiSettingsPage = () => {
             openRouterApiKey: formState.openRouterApiKey,
             clearOpenRouterApiKey: formState.clearOpenRouterApiKey,
             openRouterModel: formState.openRouterModel,
+            anonRouterApiKey: formState.anonRouterApiKey,
+            clearAnonRouterApiKey: formState.clearAnonRouterApiKey,
+            anonRouterModel: formState.anonRouterModel,
         };
 
         updateMutation
@@ -83,6 +92,8 @@ const AiSettingsPage = () => {
                     clearAzureOpenAiApiKey: false,
                     openRouterApiKey: "",
                     clearOpenRouterApiKey: false,
+                    anonRouterApiKey: "",
+                    clearAnonRouterApiKey: false,
                 }));
             })
             .catch((error) => {
@@ -112,6 +123,7 @@ const AiSettingsPage = () => {
                             <option value="Ollama">Ollama</option>
                             <option value="AzureOpenAI">Azure OpenAI</option>
                             <option value="OpenRouter">OpenRouter</option>
+                            <option value="AnonRouter">AnonRouter</option>
                         </NativeSelect>
                     }
                 />
@@ -264,6 +276,53 @@ const AiSettingsPage = () => {
                                     value={formState.openRouterModel}
                                     onChange={updateField}
                                     placeholder="meta-llama/llama-3.1-70b-instruct"
+                                />
+                            }
+                        />
+                    </>
+                )}
+
+                {formState.provider === "AnonRouter" && (
+                    <>
+                        <h2 className="title is-5">AnonRouter</h2>
+
+                        <HorizontalLabelledField
+                            label="API Key"
+                            control={
+                                <NativeInput
+                                    type="password"
+                                    name="anonRouterApiKey"
+                                    value={formState.anonRouterApiKey}
+                                    onChange={updateField}
+                                    placeholder={data?.hasAnonRouterApiKey ? "Leave blank to keep the stored key" : ""}
+                                />
+                            }
+                        />
+
+                        <HorizontalLabelledField
+                            label=""
+                            control={
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="clearAnonRouterApiKey"
+                                        checked={formState.clearAnonRouterApiKey}
+                                        onChange={updateField}
+                                    />{" "}
+                                    Clear stored API key
+                                </label>
+                            }
+                        />
+
+                        <HorizontalLabelledField
+                            label="Model"
+                            control={
+                                <NativeInput
+                                    type="text"
+                                    name="anonRouterModel"
+                                    value={formState.anonRouterModel}
+                                    onChange={updateField}
+                                    placeholder="Model ID exactly as listed by the provider"
                                 />
                             }
                         />

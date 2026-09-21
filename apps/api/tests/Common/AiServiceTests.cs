@@ -72,6 +72,34 @@ public class AiServiceTests
     }
 
     [Fact]
+    public async Task GenerateRemediationAsync_WithAnonRouterMissingApiKey_ThrowsInvalidOperationException()
+    {
+        var fakeService = new FakeAiSettingsService();
+        fakeService.Settings.Provider = "AnonRouter";
+        fakeService.Settings.AnonRouterApiKey = null;
+        fakeService.Settings.AnonRouterModel = "some/model";
+
+        var aiService = new AiService(fakeService);
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => aiService.GenerateRemediationAsync("some vuln"));
+        Assert.Equal("AnonRouter API Key not configured", exception.Message);
+    }
+
+    [Fact]
+    public async Task GenerateRemediationAsync_WithAnonRouterMissingModel_ThrowsInvalidOperationException()
+    {
+        var fakeService = new FakeAiSettingsService();
+        fakeService.Settings.Provider = "AnonRouter";
+        fakeService.Settings.AnonRouterApiKey = "secret";
+        fakeService.Settings.AnonRouterModel = null;
+
+        var aiService = new AiService(fakeService);
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => aiService.GenerateRemediationAsync("some vuln"));
+        Assert.Equal("AnonRouter Model not configured", exception.Message);
+    }
+
+    [Fact]
     public async Task GenerateRemediationAsync_WithUnknownProvider_ThrowsInvalidOperationException()
     {
         var fakeService = new FakeAiSettingsService();

@@ -152,6 +152,7 @@ services.AddAuthorizationBuilder()
         .Build());
 
 var app = builder.Build();
+await app.Services.EnsureAiSettingsSchemaAsync();
 Console.Error.WriteLine("Reconmap API bootstrap: application pipeline built; starting Kestrel.");
 app.Use(async (context, next) =>
 {
