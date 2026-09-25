@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useVulnerabilityQuery } from "api/vulnerabilities.js";
+import { normalizeVulnerabilityForSave } from "api/requests/vulnerabilities.js";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { requestEntityPut } from "utilities/requests.js";
@@ -21,7 +22,7 @@ const VulnerabilityEdit = () => {
     const onFormSubmit = async (ev) => {
         ev.preventDefault();
 
-        await requestEntityPut(`/vulnerabilities/${vulnerabilityId}`, clientVulnerability)
+        await requestEntityPut(`/vulnerabilities/${vulnerabilityId}`, normalizeVulnerabilityForSave(clientVulnerability))
             .then((resp) => {
                 queryClient.invalidateQueries({ queryKey: ["vulnerabilities"] });
                 actionCompletedToast(`The vulnerability "${clientVulnerability.summary}" has been updated.`);

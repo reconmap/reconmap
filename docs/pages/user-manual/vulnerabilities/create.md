@@ -13,6 +13,7 @@ When creating a vulnerability, you can specify:
 - **Summary**: A concise summary of the vulnerability.
 - **Description**: A detailed description of the vulnerability and its location.
 - **Risk level**: The severity of the vulnerability (none, low, medium, high, critical).
+- **CVSS score**: An optional CVSS score, when one is available.
 - **Status**: The current state of the vulnerability (open, confirmed, resolved, closed).
 - **Category**: The vulnerability category (e.g., Access Controls, Authentication).
 - **Project**: The project this vulnerability belongs to.

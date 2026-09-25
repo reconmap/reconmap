@@ -24,7 +24,22 @@ const requestVulnerability = (vulnerabilityId: number) => {
     return secureApiFetch(`/vulnerabilities/${vulnerabilityId}`, { method: "GET" });
 };
 
-const requestVulnerabilityPost = (vulnerability: any) => requestEntityPost(API_BASE_URL, vulnerability);
+/**
+ * HTML number inputs are serialized as strings. Convert the optional CVSS
+ * value before sending it so an empty input is represented as JSON null,
+ * rather than an invalid empty decimal string.
+ */
+export const normalizeVulnerabilityForSave = (vulnerability: any) => {
+    const cvssScore = vulnerability.cvssScore;
+
+    return {
+        ...vulnerability,
+        cvssScore: cvssScore === "" || cvssScore == null ? null : Number(cvssScore),
+    };
+};
+
+const requestVulnerabilityPost = (vulnerability: any) =>
+    requestEntityPost(API_BASE_URL, normalizeVulnerabilityForSave(vulnerability));
 
 const requestVulnerabilityCategories = (params: any) => {
     const url = "/vulnerabilities/categories?" + new URLSearchParams(params).toString();
@@ -52,4 +67,3 @@ export {
     requestVulnerabilityPatch,
     requestVulnerabilityPost
 };
-

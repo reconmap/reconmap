@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed vulnerability creation and editing with a blank optional CVSS score. Empty scores are now saved as `null` instead of being submitted as invalid empty decimal values.
 - Fixed webhook API requests failing because they referenced an undefined ASP.NET authorization policy. Webhook access now uses Reconmap's central OPA policy, which restricts it to `administrator` and `superuser` roles.
 - Added secret-safe API startup diagnostics for listener and dependency configuration, emitted directly to standard error as well as through the configured logger, explicit lifecycle logs when startup is cancelled or the host stops, and direct request-pipeline exception diagnostics.
 - Fixed a critical authorization bypass in the agent browser terminal. `/term` now requires a valid dashboard access token with the `administrator` or `superuser` role, validates issuer/audience/authorized party claims, enforces the configured dashboard origin, and no longer accepts credentials in URLs. Credit: @hackchang.
