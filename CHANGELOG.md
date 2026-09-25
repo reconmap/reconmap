@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added AnonRouter as a selectable AI provider. It reuses the existing OpenAI-compatible chat client against `https://api.anonrouter.ai/v1`, stores its API key encrypted alongside the other provider keys, and requires an explicit model identifier (no default model is assumed).
 - Added a GitHub Actions workflow that runs the OPA policy tests when Rego policy files change.
 - Added HTTP status code validation in Go agent client calls, ensuring `reconmapd` logs an error when the REST API returns a non-2xx response.
 - Automatically add/ensure URL targets as project assets/targets in the selected project when a scan is initiated.

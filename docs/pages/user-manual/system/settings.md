@@ -27,11 +27,12 @@ The **AI settings** view allows you to configure the AI features in Reconmap, su
 
 You can specify:
 
-- **AI Provider**: Select between Ollama (for self-hosted local models), Azure OpenAI, or OpenRouter.
+- **AI Provider**: Select between Ollama (for self-hosted local models), Azure OpenAI, OpenRouter, or AnonRouter.
 - **Provider Settings**:
   - **Ollama**: Configure the Ollama base URL and Model name (e.g. `llama3.2`).
   - **Azure OpenAI**: Configure the endpoint URL, API key, and model deployment name.
   - **OpenRouter**: Configure the API key and preferred model name (e.g. `meta-llama/llama-3.1-70b-instruct`).
+  - **AnonRouter**: Configure the API key and model name. Both are required; there is no default model. Enter the model identifier exactly as the provider lists it — identifiers are case-sensitive and may contain a `provider/model` prefix.
 - **Max output tokens**: Control the maximum response length.
 
 These AI features help you speed up the reporting process by automatically generating descriptions and advice for reported vulnerabilities.

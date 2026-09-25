@@ -376,7 +376,9 @@ CREATE TABLE ai_settings
     azure_openai_api_key   TEXT         NULL,
     azure_openai_deployment VARCHAR(255) NULL,
     openrouter_api_key     TEXT         NULL,
-    openrouter_model       VARCHAR(255) NULL
+    openrouter_model       VARCHAR(255) NULL,
+    anonrouter_api_key     TEXT         NULL,
+    anonrouter_model       VARCHAR(255) NULL
 );
 
 -- 23. note

@@ -16,6 +16,8 @@ public sealed class AiSettingsResponse
     public string? AzureOpenAiDeployment { get; set; }
     public bool HasOpenRouterApiKey { get; set; }
     public string? OpenRouterModel { get; set; }
+    public bool HasAnonRouterApiKey { get; set; }
+    public string? AnonRouterModel { get; set; }
 }
 
 public sealed class AiSettingsUpdateRequest
@@ -31,6 +33,9 @@ public sealed class AiSettingsUpdateRequest
     public string? OpenRouterApiKey { get; set; }
     public bool ClearOpenRouterApiKey { get; set; }
     public string? OpenRouterModel { get; set; }
+    public string? AnonRouterApiKey { get; set; }
+    public bool ClearAnonRouterApiKey { get; set; }
+    public string? AnonRouterModel { get; set; }
 }
 
 public interface IAiSettingsService
@@ -71,6 +76,7 @@ public sealed class AiSettingsService(AppDbContext db, IDataProtectionProvider d
         settings.AzureOpenAiEndpoint = NormalizeText(request.AzureOpenAiEndpoint);
         settings.AzureOpenAiDeployment = NormalizeText(request.AzureOpenAiDeployment);
         settings.OpenRouterModel = NormalizeText(request.OpenRouterModel);
+        settings.AnonRouterModel = NormalizeText(request.AnonRouterModel);
 
         if (request.ClearAzureOpenAiApiKey)
             settings.AzureOpenAiApiKey = null;
@@ -81,6 +87,11 @@ public sealed class AiSettingsService(AppDbContext db, IDataProtectionProvider d
             settings.OpenRouterApiKey = null;
         else if (!string.IsNullOrWhiteSpace(request.OpenRouterApiKey))
             settings.OpenRouterApiKey = _protector.Protect(request.OpenRouterApiKey.Trim());
+
+        if (request.ClearAnonRouterApiKey)
+            settings.AnonRouterApiKey = null;
+        else if (!string.IsNullOrWhiteSpace(request.AnonRouterApiKey))
+            settings.AnonRouterApiKey = _protector.Protect(request.AnonRouterApiKey.Trim());
 
         await db.SaveChangesAsync(cancellationToken);
 
@@ -122,6 +133,18 @@ public sealed class AiSettingsService(AppDbContext db, IDataProtectionProvider d
             }
         }
 
+        if (!string.IsNullOrWhiteSpace(settings.AnonRouterApiKey))
+        {
+            try
+            {
+                settings.AnonRouterApiKey = _protector.Unprotect(settings.AnonRouterApiKey);
+            }
+            catch
+            {
+                settings.AnonRouterApiKey = null;
+            }
+        }
+
         return settings;
     }
 
@@ -137,7 +160,9 @@ public sealed class AiSettingsService(AppDbContext db, IDataProtectionProvider d
             HasAzureOpenAiApiKey = !string.IsNullOrWhiteSpace(settings?.AzureOpenAiApiKey),
             AzureOpenAiDeployment = settings?.AzureOpenAiDeployment,
             HasOpenRouterApiKey = !string.IsNullOrWhiteSpace(settings?.OpenRouterApiKey),
-            OpenRouterModel = settings?.OpenRouterModel
+            OpenRouterModel = settings?.OpenRouterModel,
+            HasAnonRouterApiKey = !string.IsNullOrWhiteSpace(settings?.AnonRouterApiKey),
+            AnonRouterModel = settings?.AnonRouterModel
         };
     }
 

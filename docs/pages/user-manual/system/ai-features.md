@@ -9,6 +9,7 @@ AI features are powered by whichever model you configure under **System → AI S
 - **Ollama** (default) — run any compatible model locally; no data leaves your infrastructure
 - **Azure OpenAI** — use a cloud-hosted deployment
 - **OpenRouter** — access hundreds of models via a single API key
+- **AnonRouter** — an OpenAI-compatible router reached with a single API key; requires both an API key and a model identifier
 
 ### Recommended: Ollama with a security-focused model
 
@@ -78,4 +79,4 @@ When using the **Generic LLM** output parser for a command, Reconmap passes the 
 
 When using Ollama, all inference happens on your own infrastructure — no data is sent to external services.
 
-When using Azure OpenAI or OpenRouter, tool output, vulnerability descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.
+When using Azure OpenAI, OpenRouter or AnonRouter, tool output, vulnerability descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.
