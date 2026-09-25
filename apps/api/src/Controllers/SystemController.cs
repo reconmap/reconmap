@@ -210,7 +210,14 @@ public class SystemController(
     [HttpPut("ai-settings")]
     public async Task<IActionResult> UpdateAiSettings([FromBody] AiSettingsUpdateRequest request)
     {
-        var settings = await aiSettingsService.UpdateAsync(request);
-        return Ok(settings);
+        try
+        {
+            var settings = await aiSettingsService.UpdateAsync(request);
+            return Ok(settings);
+        }
+        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException)
+        {
+            return BadRequest(new { message = exception.Message });
+        }
     }
 }

@@ -1,10 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using api_v2.Application.Services;
-using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
-using OllamaSharp;
-using OpenAI;
 
 namespace api_v2.Common;
 
@@ -52,48 +49,19 @@ public interface IAiService
     Task<string> TriageVulnerabilityAsync(string summary, string description);
 }
 
-public sealed class AiService(IAiSettingsService aiSettingsService) : IAiService
+public sealed class AiService(IAiChatClientFactory clientFactory) : IAiService
 {
-    private async Task<IChatClient> GetClientAsync()
-    {
-        var settings = await aiSettingsService.GetSettingsAsync();
-
-        return settings.Provider switch
-        {
-            "Ollama" => new OllamaApiClient(
-                new Uri(settings.OllamaBaseUrl ?? "http://localhost:11434/"),
-                settings.OllamaModel ?? "llama3.2"),
-            "AzureOpenAI" => new AzureOpenAIClient(
-                new Uri(settings.AzureOpenAiEndpoint ?? throw new InvalidOperationException("Azure OpenAI Endpoint not configured")),
-                new System.ClientModel.ApiKeyCredential(settings.AzureOpenAiApiKey ?? throw new InvalidOperationException("Azure OpenAI API Key not configured")))
-                .GetChatClient(settings.AzureOpenAiDeployment ?? "gpt-4o")
-                .AsIChatClient(),
-            "OpenRouter" => new OpenAIClient(
-                new System.ClientModel.ApiKeyCredential(settings.OpenRouterApiKey ?? throw new InvalidOperationException("OpenRouter API Key not configured")),
-                new OpenAIClientOptions { Endpoint = new Uri("https://openrouter.ai/api/v1") })
-                .GetChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct")
-                .AsIChatClient(),
-            "AnonRouter" => new OpenAIClient(
-                new System.ClientModel.ApiKeyCredential(settings.AnonRouterApiKey ?? throw new InvalidOperationException("AnonRouter API Key not configured")),
-                new OpenAIClientOptions { Endpoint = new Uri("https://api.anonrouter.ai/v1") })
-                .GetChatClient(settings.AnonRouterModel ?? throw new InvalidOperationException("AnonRouter Model not configured"))
-                .AsIChatClient(),
-            _ => throw new InvalidOperationException($"AI provider '{settings.Provider}' is not supported or configured correctly.")
-        };
-    }
-
     public async Task<string> GenerateRemediationAsync(string summary)
     {
         var prompt = $"Write instructions on how to remediate this vulnerability: {summary}";
 
-        var settings = await aiSettingsService.GetSettingsAsync();
-        var client = await GetClientAsync();
-        var response = await client.GetResponseAsync(
+        var context = await clientFactory.CreateAsync();
+        var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
             {
                 Instructions = "You are a vulnerability and pentesting expert system",
-                MaxOutputTokens = settings.MaxOutputTokens
+                MaxOutputTokens = context.MaxOutputTokens
             });
 
         return response.Text;
@@ -128,14 +96,13 @@ Command Output:
 {output}
 ";
 
-        var settings = await aiSettingsService.GetSettingsAsync();
-        var client = await GetClientAsync();
-        var response = await client.GetResponseAsync(
+        var context = await clientFactory.CreateAsync();
+        var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
             {
                 Instructions = "You are a strict JSON parser for security tool outputs.",
-                MaxOutputTokens = settings.MaxOutputTokens
+                MaxOutputTokens = context.MaxOutputTokens
             });
 
         var json = response.Text;
@@ -175,14 +142,13 @@ Provide:
 
 Be concise and actionable. Format as markdown.";
 
-        var settings = await aiSettingsService.GetSettingsAsync();
-        var client = await GetClientAsync();
-        var response = await client.GetResponseAsync(
+        var context = await clientFactory.CreateAsync();
+        var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
             {
                 Instructions = "You are an autonomous penetration testing agent. Be tactical, concise, and precise.",
-                MaxOutputTokens = settings.MaxOutputTokens
+                MaxOutputTokens = context.MaxOutputTokens
             });
 
         return response.Text;
@@ -204,14 +170,13 @@ Provide a brief structured triage report with:
 
 Be concise. Format as markdown.";
 
-        var settings = await aiSettingsService.GetSettingsAsync();
-        var client = await GetClientAsync();
-        var response = await client.GetResponseAsync(
+        var context = await clientFactory.CreateAsync();
+        var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
             {
                 Instructions = "You are a rapid vulnerability triage agent. Provide fast, accurate, actionable assessments.",
-                MaxOutputTokens = settings.MaxOutputTokens
+                MaxOutputTokens = context.MaxOutputTokens
             });
 
         return response.Text;

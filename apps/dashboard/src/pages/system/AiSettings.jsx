@@ -5,105 +5,104 @@ import PrimaryButton from "components/ui/buttons/Primary";
 import Title from "components/ui/Title";
 import { actionCompletedToast, errorToast } from "components/ui/toast.jsx";
 import Loading from "components/ui/Loading";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Breadcrumb from "components/ui/Breadcrumb";
 import NativeSelect from "components/forms/NativeSelect";
 
-const defaultFormState = {
-    provider: "Ollama",
-    maxOutputTokens: "4000",
-    ollamaBaseUrl: "http://localhost:11434/",
-    ollamaModel: "llama3.2",
-    azureOpenAiEndpoint: "",
-    azureOpenAiApiKey: "",
-    clearAzureOpenAiApiKey: false,
-    azureOpenAiDeployment: "",
-    openRouterApiKey: "",
-    clearOpenRouterApiKey: false,
-    openRouterModel: "",
-    anonRouterApiKey: "",
-    clearAnonRouterApiKey: false,
-    anonRouterModel: "",
+export const buildSettingsPayload = (provider, providerValues, clearedSecrets) => {
+    const settings = {};
+
+    for (const field of provider.fields) {
+        const value = providerValues?.[field.key] ?? "";
+        if (field.type === "secret") {
+            if (clearedSecrets[field.key]) {
+                settings[field.key] = null;
+            } else if (value.trim() !== "") {
+                settings[field.key] = value;
+            }
+        } else {
+            settings[field.key] = value.trim() === "" ? null : value;
+        }
+    }
+
+    return settings;
 };
 
 const AiSettingsPage = () => {
     const { data, isLoading } = useSystemAiSettingsQuery();
     const updateMutation = useSystemAiSettingsUpdateMutation();
-    const [formState, setFormState] = useState(defaultFormState);
+    const [providerId, setProviderId] = useState("");
+    const [maxOutputTokens, setMaxOutputTokens] = useState("4000");
+    const [values, setValues] = useState({});
+    const [clearedSecrets, setClearedSecrets] = useState({});
 
     useEffect(() => {
-        if (!data) {
-            return;
+        if (!data) return;
+
+        const initialValues = {};
+        for (const provider of data.providers) {
+            initialValues[provider.id] = { ...(data.values?.[provider.id] ?? {}) };
+            for (const field of provider.fields) {
+                initialValues[provider.id][field.key] ??= field.defaultValue ?? "";
+                if (field.type === "secret") initialValues[provider.id][field.key] = "";
+            }
         }
 
-        setFormState({
-            provider: data.provider ?? "Ollama",
-            maxOutputTokens: String(data.maxOutputTokens ?? 4000),
-            ollamaBaseUrl: data.ollamaBaseUrl ?? "http://localhost:11434/",
-            ollamaModel: data.ollamaModel ?? "llama3.2",
-            azureOpenAiEndpoint: data.azureOpenAiEndpoint ?? "",
-            azureOpenAiApiKey: "",
-            clearAzureOpenAiApiKey: false,
-            azureOpenAiDeployment: data.azureOpenAiDeployment ?? "",
-            openRouterApiKey: "",
-            clearOpenRouterApiKey: false,
-            openRouterModel: data.openRouterModel ?? "",
-            anonRouterApiKey: "",
-            clearAnonRouterApiKey: false,
-            anonRouterModel: data.anonRouterModel ?? "",
-        });
+        setProviderId(data.provider);
+        setMaxOutputTokens(String(data.maxOutputTokens ?? 4000));
+        setValues(initialValues);
+        setClearedSecrets({});
     }, [data]);
 
-    const updateField = (ev) => {
-        const { name, type, checked, value } = ev.target;
-        setFormState((currentState) => ({
-            ...currentState,
-            [name]: type === "checkbox" ? checked : value,
+    const provider = useMemo(
+        () => data?.providers.find((candidate) => candidate.id === providerId),
+        [data, providerId],
+    );
+
+    const updateSetting = (key, value) => {
+        setValues((current) => ({
+            ...current,
+            [providerId]: {
+                ...current[providerId],
+                [key]: value,
+            },
         }));
     };
 
-    const handleSubmit = async (ev) => {
-        ev.preventDefault();
-
-        const payload = {
-            provider: formState.provider,
-            maxOutputTokens: formState.maxOutputTokens === "" ? null : Number(formState.maxOutputTokens),
-            ollamaBaseUrl: formState.ollamaBaseUrl,
-            ollamaModel: formState.ollamaModel,
-            azureOpenAiEndpoint: formState.azureOpenAiEndpoint,
-            azureOpenAiApiKey: formState.azureOpenAiApiKey,
-            clearAzureOpenAiApiKey: formState.clearAzureOpenAiApiKey,
-            azureOpenAiDeployment: formState.azureOpenAiDeployment,
-            openRouterApiKey: formState.openRouterApiKey,
-            clearOpenRouterApiKey: formState.clearOpenRouterApiKey,
-            openRouterModel: formState.openRouterModel,
-            anonRouterApiKey: formState.anonRouterApiKey,
-            clearAnonRouterApiKey: formState.clearAnonRouterApiKey,
-            anonRouterModel: formState.anonRouterModel,
-        };
-
-        updateMutation
-            .mutateAsync(payload)
-            .then(() => {
-                actionCompletedToast("AI settings saved");
-                setFormState((currentState) => ({
-                    ...currentState,
-                    azureOpenAiApiKey: "",
-                    clearAzureOpenAiApiKey: false,
-                    openRouterApiKey: "",
-                    clearOpenRouterApiKey: false,
-                    anonRouterApiKey: "",
-                    clearAnonRouterApiKey: false,
-                }));
-            })
-            .catch((error) => {
-                errorToast(error.message ?? "Unable to save AI settings");
-            });
+    const toggleClearSecret = (key, checked) => {
+        setClearedSecrets((current) => ({ ...current, [key]: checked }));
+        if (checked) updateSetting(key, "");
     };
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (!provider) return;
+
+        const payload = {
+            provider: provider.id,
+            maxOutputTokens: maxOutputTokens === "" ? null : Number(maxOutputTokens),
+            settings: buildSettingsPayload(provider, values[provider.id], clearedSecrets),
+        };
+
+        try {
+            await updateMutation.mutateAsync(payload);
+            actionCompletedToast("AI settings saved");
+            setValues((current) => ({
+                ...current,
+                [provider.id]: {
+                    ...current[provider.id],
+                    ...Object.fromEntries(
+                        provider.fields.filter((field) => field.type === "secret").map((field) => [field.key, ""]),
+                    ),
+                },
+            }));
+            setClearedSecrets({});
+        } catch (error) {
+            errorToast(error.message ?? "Unable to save AI settings");
+        }
+    };
+
+    if (isLoading || !data || !provider) return <Loading />;
 
     return (
         <div>
@@ -119,11 +118,19 @@ const AiSettingsPage = () => {
                 <HorizontalLabelledField
                     label="Provider"
                     control={
-                        <NativeSelect name="provider" value={formState.provider} onChange={updateField}>
-                            <option value="Ollama">Ollama</option>
-                            <option value="AzureOpenAI">Azure OpenAI</option>
-                            <option value="OpenRouter">OpenRouter</option>
-                            <option value="AnonRouter">AnonRouter</option>
+                        <NativeSelect
+                            name="provider"
+                            value={providerId}
+                            onChange={(event) => {
+                                setProviderId(event.target.value);
+                                setClearedSecrets({});
+                            }}
+                        >
+                            {data.providers.map((item) => (
+                                <option key={item.id} value={item.id}>
+                                    {item.name}
+                                </option>
+                            ))}
                         </NativeSelect>
                     }
                 />
@@ -134,203 +141,61 @@ const AiSettingsPage = () => {
                         <NativeInput
                             type="number"
                             min="1"
+                            required
                             name="maxOutputTokens"
-                            value={formState.maxOutputTokens}
-                            onChange={updateField}
+                            value={maxOutputTokens}
+                            onChange={(event) => setMaxOutputTokens(event.target.value)}
                         />
                     }
                 />
 
                 <hr />
+                <h2 className="title is-5">{provider.name}</h2>
 
-                {formState.provider === "Ollama" && (
-                    <>
-                        <h2 className="title is-5">Ollama</h2>
+                {provider.fields.map((field) => {
+                    const isSecret = field.type === "secret";
+                    const isCleared = clearedSecrets[field.key] ?? false;
+                    return (
+                        <div key={field.key}>
+                            <HorizontalLabelledField
+                                label={field.label}
+                                control={
+                                    <NativeInput
+                                        type={isSecret ? "password" : field.type}
+                                        name={field.key}
+                                        value={values[provider.id]?.[field.key] ?? ""}
+                                        onChange={(event) => updateSetting(field.key, event.target.value)}
+                                        placeholder={
+                                            isSecret && field.hasValue
+                                                ? "Leave blank to keep the stored value"
+                                                : field.placeholder
+                                        }
+                                        required={field.required && (!isSecret || (!field.hasValue && !isCleared))}
+                                        disabled={isCleared}
+                                    />
+                                }
+                            />
 
-                        <HorizontalLabelledField
-                            label="Base URL"
-                            control={
-                                <NativeInput
-                                    type="text"
-                                    name="ollamaBaseUrl"
-                                    value={formState.ollamaBaseUrl}
-                                    onChange={updateField}
-                                    placeholder="http://localhost:11434/"
+                            {isSecret && field.hasValue && (
+                                <HorizontalLabelledField
+                                    label=""
+                                    control={
+                                        <label className="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                checked={isCleared}
+                                                onChange={(event) => toggleClearSecret(field.key, event.target.checked)}
+                                            />{" "}
+                                            Clear stored {field.label.toLowerCase()}
+                                        </label>
+                                    }
                                 />
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label="Model"
-                            control={
-                                <NativeInput
-                                    type="text"
-                                    name="ollamaModel"
-                                    value={formState.ollamaModel}
-                                    onChange={updateField}
-                                    placeholder="e.g. hf.co/BugTraceAI/BugTraceAI-CORE-Fast (pentesting-optimised)"
-                                />
-                            }
-                        />
-                    </>
-                )}
-
-                {formState.provider === "AzureOpenAI" && (
-                    <>
-                        <h2 className="title is-5">Azure OpenAI</h2>
-
-                        <HorizontalLabelledField
-                            label="Endpoint"
-                            control={
-                                <NativeInput
-                                    type="text"
-                                    name="azureOpenAiEndpoint"
-                                    value={formState.azureOpenAiEndpoint}
-                                    onChange={updateField}
-                                    placeholder="https://my-openai.openai.azure.com/"
-                                />
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label="API Key"
-                            control={
-                                <NativeInput
-                                    type="password"
-                                    name="azureOpenAiApiKey"
-                                    value={formState.azureOpenAiApiKey}
-                                    onChange={updateField}
-                                    placeholder={data?.hasAzureOpenAiApiKey ? "Leave blank to keep the stored key" : ""}
-                                />
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label=""
-                            control={
-                                <label className="checkbox">
-                                    <input
-                                        type="checkbox"
-                                        name="clearAzureOpenAiApiKey"
-                                        checked={formState.clearAzureOpenAiApiKey}
-                                        onChange={updateField}
-                                    />{" "}
-                                    Clear stored API key
-                                </label>
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label="Deployment"
-                            control={
-                                <NativeInput
-                                    type="text"
-                                    name="azureOpenAiDeployment"
-                                    value={formState.azureOpenAiDeployment}
-                                    onChange={updateField}
-                                    placeholder="gpt-4o"
-                                />
-                            }
-                        />
-                    </>
-                )}
-
-                {formState.provider === "OpenRouter" && (
-                    <>
-                        <h2 className="title is-5">OpenRouter</h2>
-
-                        <HorizontalLabelledField
-                            label="API Key"
-                            control={
-                                <NativeInput
-                                    type="password"
-                                    name="openRouterApiKey"
-                                    value={formState.openRouterApiKey}
-                                    onChange={updateField}
-                                    placeholder={data?.hasOpenRouterApiKey ? "Leave blank to keep the stored key" : ""}
-                                />
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label=""
-                            control={
-                                <label className="checkbox">
-                                    <input
-                                        type="checkbox"
-                                        name="clearOpenRouterApiKey"
-                                        checked={formState.clearOpenRouterApiKey}
-                                        onChange={updateField}
-                                    />{" "}
-                                    Clear stored API key
-                                </label>
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label="Model"
-                            control={
-                                <NativeInput
-                                    type="text"
-                                    name="openRouterModel"
-                                    value={formState.openRouterModel}
-                                    onChange={updateField}
-                                    placeholder="meta-llama/llama-3.1-70b-instruct"
-                                />
-                            }
-                        />
-                    </>
-                )}
-
-                {formState.provider === "AnonRouter" && (
-                    <>
-                        <h2 className="title is-5">AnonRouter</h2>
-
-                        <HorizontalLabelledField
-                            label="API Key"
-                            control={
-                                <NativeInput
-                                    type="password"
-                                    name="anonRouterApiKey"
-                                    value={formState.anonRouterApiKey}
-                                    onChange={updateField}
-                                    placeholder={data?.hasAnonRouterApiKey ? "Leave blank to keep the stored key" : ""}
-                                />
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label=""
-                            control={
-                                <label className="checkbox">
-                                    <input
-                                        type="checkbox"
-                                        name="clearAnonRouterApiKey"
-                                        checked={formState.clearAnonRouterApiKey}
-                                        onChange={updateField}
-                                    />{" "}
-                                    Clear stored API key
-                                </label>
-                            }
-                        />
-
-                        <HorizontalLabelledField
-                            label="Model"
-                            control={
-                                <NativeInput
-                                    type="text"
-                                    name="anonRouterModel"
-                                    value={formState.anonRouterModel}
-                                    onChange={updateField}
-                                    placeholder="Model ID exactly as listed by the provider"
-                                />
-                            }
-                        />
-                    </>
-                )}
+                            )}
+                        </div>
+                    );
+                })}
 
                 <hr />
-
                 <HorizontalLabelledField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
             </form>
         </div>

@@ -27,6 +27,43 @@ Then in **System → AI Settings**, set:
 
 Any Ollama-compatible model works — this is just a recommended starting point for security-focused workloads.
 
+### Adding an OpenAI-compatible provider
+
+Deployment maintainers can add another OpenAI-compatible model router without
+changing the database, API DTOs, or dashboard. Add its definition to
+`apps/api/src/ai-providers.json` with a unique ID, display name, the
+`openai-compatible` adapter, an absolute API endpoint, and its form fields.
+For example:
+
+```json
+{
+  "Id": "ExampleRouter",
+  "Name": "Example Router",
+  "Adapter": "openai-compatible",
+  "Endpoint": "https://router.example/api/v1",
+  "Fields": [
+    {
+      "Key": "apiKey",
+      "Label": "API key",
+      "Type": "secret",
+      "Required": true
+    },
+    {
+      "Key": "model",
+      "Label": "Model",
+      "Type": "text",
+      "Required": true
+    }
+  ]
+}
+```
+
+Supported field types are `text`, `url`, and `secret`. Secret fields are
+write-only in the settings API and encrypted at rest. Provider and field IDs
+must remain stable because they identify stored settings. Providers requiring
+a protocol other than Ollama, Azure OpenAI, or an OpenAI-compatible API need a
+corresponding API adapter.
+
 ---
 
 ## Agentic capabilities

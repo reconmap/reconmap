@@ -35,4 +35,9 @@ You can specify:
   - **AnonRouter**: Configure the API key and model name. Both are required; there is no default model. Enter the model identifier exactly as the provider lists it — identifiers are case-sensitive and may contain a `provider/model` prefix.
 - **Max output tokens**: Control the maximum response length.
 
+The provider selector and its fields are generated from the API's
+`ai-providers.json` catalog. API keys are encrypted before storage and are
+never returned to the browser; leaving a populated key field blank preserves
+the stored value.
+
 These AI features help you speed up the reporting process by automatically generating descriptions and advice for reported vulnerabilities.

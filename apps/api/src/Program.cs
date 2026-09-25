@@ -31,6 +31,7 @@ var configuration = new ConfigurationBuilder()
 Console.Error.WriteLine("Reconmap API bootstrap: appsettings configuration loaded.");
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("ai-providers.json", optional: false, reloadOnChange: true);
 Console.Error.WriteLine("Reconmap API bootstrap: web host builder created.");
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 Log.Logger = new LoggerConfiguration()
@@ -86,11 +87,14 @@ services.AddScoped<SystemUsageService>();
 services.AddScoped<IAuditService, AuditService>();
 services.AddScoped<ISecretsService, SecretsService>();
 services.AddScoped<IMailSettingsService, MailSettingsService>();
+services.Configure<AiProviderCatalogOptions>(builder.Configuration.GetSection("AiProviders"));
+services.AddSingleton<IAiProviderCatalog, AiProviderCatalog>();
 services.AddScoped<IAiSettingsService, AiSettingsService>();
 services.AddDataProtection()
     .SetApplicationName("Reconmap");
 
 services.AddScoped<IAiService, AiService>();
+services.AddScoped<IAiChatClientFactory, AiChatClientFactory>();
 services.AddScoped<IToolRecommendationService, ToolRecommendationService>();
 services.AddHttpClient();
 services.AddScoped<api_v2.Infrastructure.Security.OpaAuthorizationService>();
@@ -152,7 +156,7 @@ services.AddAuthorizationBuilder()
         .Build());
 
 var app = builder.Build();
-await app.Services.EnsureAiSettingsSchemaAsync();
+_ = app.Services.GetRequiredService<IAiProviderCatalog>();
 Console.Error.WriteLine("Reconmap API bootstrap: application pipeline built; starting Kestrel.");
 app.Use(async (context, next) =>
 {

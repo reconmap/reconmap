@@ -77,7 +77,7 @@ VALUES (1, 1, 1, '1. Update your organisation details', '[Follow this link](/set
 
 -- Default settings rows
 INSERT INTO mail_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
-INSERT INTO ai_settings (id, provider, max_output_tokens, ollama_base_url, ollama_model) VALUES (1, 'Ollama', 4000, 'http://localhost:11434/', 'llama3.2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO ai_settings (id, provider, max_output_tokens) VALUES (1, 'Ollama', 4000) ON CONFLICT (id) DO NOTHING;
 
 -- Reset sequences to prevent conflicts due to explicit ID insertions
 SELECT setval(pg_get_serial_sequence('user', 'id'), COALESCE(MAX(id), 1)) FROM "user";

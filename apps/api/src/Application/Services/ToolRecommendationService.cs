@@ -5,11 +5,9 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using api_v2.Application.Commands;
 using api_v2.Domain.Entities;
-using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
-using OllamaSharp;
-using OpenAI;
 using Microsoft.Extensions.Logging;
+using api_v2.Common;
 
 namespace api_v2.Application.Services;
 
@@ -18,14 +16,13 @@ public interface IToolRecommendationService
     Task<ToolRecommendationResponse> RecommendToolsAsync(ToolRecommendationRequest request);
 }
 
-public class ToolRecommendationService(IAiSettingsService aiSettingsService, ILogger<ToolRecommendationService> logger) : IToolRecommendationService
+public class ToolRecommendationService(IAiChatClientFactory clientFactory, ILogger<ToolRecommendationService> logger) : IToolRecommendationService
 {
     public async Task<ToolRecommendationResponse> RecommendToolsAsync(ToolRecommendationRequest request)
     {
         try
         {
-            var aiSettings = await aiSettingsService.GetSettingsAsync();
-            var response = await GetAiRecommendationsAsync(request, aiSettings);
+            var response = await GetAiRecommendationsAsync(request);
             if (response != null && response.Recommendations.Any())
             {
                 return response;
@@ -39,9 +36,9 @@ public class ToolRecommendationService(IAiSettingsService aiSettingsService, ILo
         return GetRuleBasedRecommendations(request);
     }
 
-    private async Task<ToolRecommendationResponse?> GetAiRecommendationsAsync(ToolRecommendationRequest request, AiSettings settings)
+    private async Task<ToolRecommendationResponse?> GetAiRecommendationsAsync(ToolRecommendationRequest request)
     {
-        var client = GetChatClient(settings);
+        var context = await clientFactory.CreateAsync();
 
         var allCommands = CommandDiscovery.GetAll();
         var catalog = allCommands.Select(c => new {
@@ -73,12 +70,12 @@ Strictly follow this JSON schema:
 Catalog: {JsonSerializer.Serialize(catalog)}
 ";
 
-        var response = await client.GetResponseAsync(
+        var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
             {
                 Instructions = "You return strictly valid JSON.",
-                MaxOutputTokens = settings.MaxOutputTokens
+                MaxOutputTokens = context.MaxOutputTokens
             });
 
         var json = response.Text;
@@ -95,32 +92,6 @@ Catalog: {JsonSerializer.Serialize(catalog)}
         {
             return null;
         }
-    }
-
-    private IChatClient GetChatClient(AiSettings settings)
-    {
-        return settings.Provider switch
-        {
-            "Ollama" => new OllamaApiClient(
-                new Uri(settings.OllamaBaseUrl ?? "http://localhost:11434/"),
-                settings.OllamaModel ?? "llama3.2"),
-            "AzureOpenAI" => new AzureOpenAIClient(
-                new Uri(settings.AzureOpenAiEndpoint ?? throw new InvalidOperationException("Azure OpenAI Endpoint not configured")),
-                new System.ClientModel.ApiKeyCredential(settings.AzureOpenAiApiKey ?? throw new InvalidOperationException("Azure OpenAI API Key not configured")))
-                .GetChatClient(settings.AzureOpenAiDeployment ?? "gpt-4o")
-                .AsIChatClient(),
-            "OpenRouter" => new OpenAIClient(
-                new System.ClientModel.ApiKeyCredential(settings.OpenRouterApiKey ?? throw new InvalidOperationException("OpenRouter API Key not configured")),
-                new OpenAIClientOptions { Endpoint = new Uri("https://openrouter.ai/api/v1") })
-                .GetChatClient(settings.OpenRouterModel ?? "meta-llama/llama-3.1-70b-instruct")
-                .AsIChatClient(),
-            "AnonRouter" => new OpenAIClient(
-                new System.ClientModel.ApiKeyCredential(settings.AnonRouterApiKey ?? throw new InvalidOperationException("AnonRouter API Key not configured")),
-                new OpenAIClientOptions { Endpoint = new Uri("https://api.anonrouter.ai/v1") })
-                .GetChatClient(settings.AnonRouterModel ?? throw new InvalidOperationException("AnonRouter Model not configured"))
-                .AsIChatClient(),
-            _ => throw new InvalidOperationException($"AI provider '{settings.Provider}' is not supported or configured correctly.")
-        };
     }
 
     private ToolRecommendationResponse GetRuleBasedRecommendations(ToolRecommendationRequest request)

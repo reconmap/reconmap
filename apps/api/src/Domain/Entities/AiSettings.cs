@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_v2.Domain.Entities;
 
@@ -14,35 +15,19 @@ public class AiSettings : TimestampedEntity
     public string Provider { get; set; } = "Ollama";
 
     public int MaxOutputTokens { get; set; } = 4000;
+}
 
-    [MaxLength(255)]
-    public string? OllamaBaseUrl { get; set; }
+[Table("ai_provider_settings")]
+[PrimaryKey(nameof(ProviderId), nameof(SettingKey))]
+public class AiProviderSetting : TimestampedEntity
+{
+    [MaxLength(50)]
+    public required string ProviderId { get; set; }
 
-    [MaxLength(255)]
-    public string? OllamaModel { get; set; }
+    [MaxLength(100)]
+    public required string SettingKey { get; set; }
 
-    [Column("azure_openai_endpoint")]
-    [MaxLength(255)]
-    public string? AzureOpenAiEndpoint { get; set; }
+    public required string SettingValue { get; set; }
 
-    [Column("azure_openai_api_key")]
-    public string? AzureOpenAiApiKey { get; set; }
-
-    [Column("azure_openai_deployment")]
-    [MaxLength(255)]
-    public string? AzureOpenAiDeployment { get; set; }
-
-    [Column("openrouter_api_key")]
-    public string? OpenRouterApiKey { get; set; }
-
-    [Column("openrouter_model")]
-    [MaxLength(255)]
-    public string? OpenRouterModel { get; set; }
-
-    [Column("anonrouter_api_key")]
-    public string? AnonRouterApiKey { get; set; }
-
-    [Column("anonrouter_model")]
-    [MaxLength(255)]
-    public string? AnonRouterModel { get; set; }
+    public bool IsSecret { get; set; }
 }

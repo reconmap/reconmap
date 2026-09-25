@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Refactored AI provider configuration into a validated `ai-providers.json` catalog, generic encrypted key/value persistence, a data-driven dashboard form, and a shared chat-client factory. OpenAI-compatible routers can now be added without provider-specific database columns or application UI changes.
 - Upgraded the Docker Compose Open Policy Agent image to `openpolicyagent/opa:1.20.2-istio` and simplified equivalent user/client collection authorization rules with OPA 1.20's `or` keyword.
 - Updated target scans to execute recommended tools automatically and transparently, showing live queuing status (Pending, Queuing, Queued, Failed) without requiring manual tool selection or manual queue triggers.
 - Renamed the submit button in the scan target form from "Analyze & Recommend" to "Start scan" to align with the automated scan execution workflow.

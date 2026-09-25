@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS user_api_token CASCADE;
 DROP TABLE IF EXISTS agent CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 DROP TABLE IF EXISTS note CASCADE;
+DROP TABLE IF EXISTS ai_provider_settings CASCADE;
 DROP TABLE IF EXISTS ai_settings CASCADE;
 DROP TABLE IF EXISTS mail_settings CASCADE;
 DROP TABLE IF EXISTS custom_field CASCADE;
@@ -365,20 +366,22 @@ CREATE TABLE mail_settings
 -- 21. ai_settings
 CREATE TABLE ai_settings
 (
-    id                     INTEGER NOT NULL PRIMARY KEY,
-    created_at             TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at             TIMESTAMPTZ  NULL DEFAULT NULL,
-    provider               VARCHAR(50)  NOT NULL DEFAULT 'Ollama',
-    max_output_tokens      INTEGER          NOT NULL DEFAULT 4000,
-    ollama_base_url        VARCHAR(255) NULL,
-    ollama_model           VARCHAR(255) NULL,
-    azure_openai_endpoint  VARCHAR(255) NULL,
-    azure_openai_api_key   TEXT         NULL,
-    azure_openai_deployment VARCHAR(255) NULL,
-    openrouter_api_key     TEXT         NULL,
-    openrouter_model       VARCHAR(255) NULL,
-    anonrouter_api_key     TEXT         NULL,
-    anonrouter_model       VARCHAR(255) NULL
+    id                INTEGER NOT NULL PRIMARY KEY,
+    created_at        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at        TIMESTAMPTZ NULL DEFAULT NULL,
+    provider          VARCHAR(50) NOT NULL DEFAULT 'Ollama',
+    max_output_tokens INTEGER NOT NULL DEFAULT 4000
+);
+
+CREATE TABLE ai_provider_settings
+(
+    provider_id   VARCHAR(50) NOT NULL,
+    setting_key   VARCHAR(100) NOT NULL,
+    setting_value TEXT NOT NULL,
+    is_secret     BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMPTZ NULL DEFAULT NULL,
+    PRIMARY KEY (provider_id, setting_key)
 );
 
 -- 23. note
@@ -521,5 +524,6 @@ CREATE TRIGGER update_command_schedule_updated_at BEFORE UPDATE ON command_sched
 CREATE TRIGGER update_custom_field_updated_at BEFORE UPDATE ON custom_field FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_mail_settings_updated_at BEFORE UPDATE ON mail_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_ai_settings_updated_at BEFORE UPDATE ON ai_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_ai_provider_settings_updated_at BEFORE UPDATE ON ai_provider_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_attachment_updated_at BEFORE UPDATE ON attachment FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_notification_updated_at BEFORE UPDATE ON notification FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

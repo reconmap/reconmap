@@ -1,0 +1,101 @@
+{
+  "AiProviders": {
+    "DefaultProvider": "Ollama",
+    "Providers": [
+      {
+        "Id": "Ollama",
+        "Name": "Ollama",
+        "Adapter": "ollama",
+        "Fields": [
+          {
+            "Key": "baseUrl",
+            "Label": "Base URL",
+            "Type": "url",
+            "Required": true,
+            "DefaultValue": "http://localhost:11434/",
+            "Placeholder": "http://localhost:11434/"
+          },
+          {
+            "Key": "model",
+            "Label": "Model",
+            "Type": "text",
+            "Required": true,
+            "DefaultValue": "llama3.2",
+            "Placeholder": ""
+          }
+        ]
+      },
+      {
+        "Id": "AzureOpenAI",
+        "Name": "Azure OpenAI",
+        "Adapter": "azure-openai",
+        "Fields": [
+          {
+            "Key": "endpoint",
+            "Label": "Endpoint",
+            "Type": "url",
+            "Required": true,
+            "Placeholder": "https://my-openai.openai.azure.com/"
+          },
+          {
+            "Key": "apiKey",
+            "Label": "API key",
+            "Type": "secret",
+            "Required": true
+          },
+          {
+            "Key": "deployment",
+            "Label": "Deployment",
+            "Type": "text",
+            "Required": true,
+            "DefaultValue": "gpt-4o",
+            "Placeholder": "gpt-4o"
+          }
+        ]
+      },
+      {
+        "Id": "OpenRouter",
+        "Name": "OpenRouter",
+        "Adapter": "openai-compatible",
+        "Endpoint": "https://openrouter.ai/api/v1",
+        "Fields": [
+          {
+            "Key": "apiKey",
+            "Label": "API key",
+            "Type": "secret",
+            "Required": true
+          },
+          {
+            "Key": "model",
+            "Label": "Model",
+            "Type": "text",
+            "Required": true,
+            "DefaultValue": "meta-llama/llama-3.1-70b-instruct",
+            "Placeholder": "meta-llama/llama-3.1-70b-instruct"
+          }
+        ]
+      },
+      {
+        "Id": "AnonRouter",
+        "Name": "AnonRouter",
+        "Adapter": "openai-compatible",
+        "Endpoint": "https://api.anonrouter.ai/v1",
+        "Fields": [
+          {
+            "Key": "apiKey",
+            "Label": "API key",
+            "Type": "secret",
+            "Required": true
+          },
+          {
+            "Key": "model",
+            "Label": "Model",
+            "Type": "text",
+            "Required": true,
+            "Placeholder": "Model ID exactly as listed by the provider"
+          }
+        ]
+      }
+    ]
+  }
+}
