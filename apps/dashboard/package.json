@@ -53,7 +53,7 @@
     "globals": "^17.12.0",
     "husky": "^9.1.7",
     "jsdom": "^30.1.0",
-    "knip": "^6.37.0",
+    "knip": "^6.38.0",
     "lint-staged": "^17.5.1",
     "npm-check-updates": "^23.1.0",
     "prettier": "^3.9.8",
