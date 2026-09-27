@@ -6,7 +6,7 @@ require (
 	github.com/coreos/go-oidc v2.5.0+incompatible
 	github.com/fatih/color v1.19.0
 	github.com/reconmap/shared-lib v0.0.0-20220910165932-7d018d9111fc
-	github.com/urfave/cli/v3 v3.12.0
+	github.com/urfave/cli/v3 v3.13.0
 	golang.org/x/oauth2 v0.37.0
 )
 
