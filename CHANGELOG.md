@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Switched Docker Compose to the official Keycloak image, mounting Reconmap's realm import and theme provider and defining its readiness check in Compose.
 - Refactored AI provider configuration into a validated `ai-providers.json` catalog, generic encrypted key/value persistence, a data-driven dashboard form, and a shared chat-client factory. OpenAI-compatible routers can now be added without provider-specific database columns or application UI changes.
 - Upgraded the Docker Compose Open Policy Agent image to `openpolicyagent/opa:1.20.2-istio` and simplified equivalent user/client collection authorization rules with OPA 1.20's `or` keyword.
 - Updated target scans to execute recommended tools automatically and transparently, showing live queuing status (Pending, Queuing, Queued, Failed) without requiring manual tool selection or manual queue triggers.

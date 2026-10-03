@@ -43,19 +43,20 @@ services:
       POSTGRES_KEYCLOAK_USER: ${POSTGRES_KEYCLOAK_USER}
       POSTGRES_KEYCLOAK_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 10s
       retries: 5
 
   keycloak:
-    image: ghcr.io/reconmap/keycloak-custom:latest
+    image: quay.io/keycloak/keycloak:26.8
     command: "start --import-realm"
     # See https://www.keycloak.org/server/all-config
     environment:
       KC_HOSTNAME_STRICT: false
       KC_HTTP_ENABLED: true
       KC_HTTP_PORT: 8080
+      KC_HEALTH_ENABLED: true
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD}
       KC_DB: postgres
@@ -66,15 +67,24 @@ services:
       VAR_DASHBOARD_URL: "http://localhost:5500"
       VAR_ADMIN_CLIENT_SECRET: "${KEYCLOAK_ADMIN_CLIENT_SECRET}"
       VAR_API_CLIENT_SECRET: "${KEYCLOAK_API_CLIENT_SECRET}"
+    volumes:
+      - ./infra/keycloak/reconmap-theme-keycloak.jar:/opt/keycloak/providers/reconmap-theme-keycloak.jar:ro
+      - ./infra/keycloak/realm.json:/opt/keycloak/data/import/reconmap-realm.json:ro
+      - ./infra/keycloak/healthcheck.sh:/opt/keycloak/healthcheck.sh:ro
     restart: unless-stopped
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "/opt/keycloak/healthcheck.sh"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
     depends_on:
       postgres:
         condition: service_healthy
 
   dashboard:
-    profiles: ["app"]
+    profiles: [ "app" ]
     image: ghcr.io/reconmap/dashboard:latest
     restart: unless-stopped
     volumes:
@@ -86,7 +96,7 @@ services:
         condition: service_healthy
 
   ngapi:
-    profiles: ["app"]
+    profiles: [ "app" ]
     image: ghcr.io/reconmap/ng-api:latest
     build:
       context: ./apps/api/src
@@ -141,4 +151,4 @@ services:
       - "8181:8181"
     volumes:
       - ./policy:/policy
-    command: ["run", "--server", "--addr", ":8181", "--log-format=json", "/policy"]
+    command: [ "run", "--server", "--addr", ":8181", "--log-format=json", "/policy" ]

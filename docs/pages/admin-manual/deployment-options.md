@@ -15,6 +15,8 @@ The sections below describe each deployment option, along with its trade-offs, t
 
 Docker Compose is the recommended starting point for most users. It bundles all required services into a single configuration file (`compose.yaml`) and brings everything up with one command, so there is no need to install .NET, PostgreSQL, or any other dependency directly on your host.
 
+The Compose stack runs the official Keycloak image. It mounts Reconmap's realm import and custom theme provider from `infra/keycloak`, so run Compose from the repository root and keep those files available.
+
 **Getting started:**
 
 ```bash

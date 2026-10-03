@@ -28,7 +28,7 @@ This is the main orchestration repository. It contains:
 - **CLI Tools**: Go (Golang).
 - **Orchestration**: Docker Compose, Kubernetes (Helm).
 - **Documentation**: MkDocs, Markdown.
-- **Infrastructure**: Keycloak (customized image in `infra/docker/keycloak`).
+- **Infrastructure**: Keycloak (customized image in `infra/keycloak`).
 
 ## How to Help
 
