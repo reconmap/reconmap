@@ -424,5 +424,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add basic functionality: clients, projects, tasks, vulnerabilities, ...
 
-[Unreleased]: https://github.com/reconmap/reconmap/compare/1.5.0...master
+[Unreleased]: https://github.com/reconmap/reconmap/compare/1.5.0...main
 [1.5.0]: https://github.com/reconmap/reconmap/compare/0.1.0...1.5.0

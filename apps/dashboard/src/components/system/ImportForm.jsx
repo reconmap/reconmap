@@ -1,6 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
 import NativeInput from "components/forms/NativeInput";
-import ExternalLink from "components/ui/ExternalLink";
 import { useRef, useState } from "react";
 import { requestEntityPost } from "utilities/requests.js";
 import PrimaryButton from "../ui/buttons/Primary";
@@ -43,12 +42,6 @@ const ImportForm = () => {
                         <li>Everything on the file will be attempted to be imported.</li>
                         <li>If there is an error the import process will continue resulting on a partial import.</li>
                         <li>If there are missing attributes, Reconmap will attempt to use defaults instead.</li>
-                        <li>
-                            Example of the files to import can be found on the following url:{" "}
-                            <ExternalLink href="https://github.com/reconmap/reconmap/tree/master/imports">
-                                https://github.com/reconmap/reconmap/tree/master/imports
-                            </ExternalLink>{" "}
-                        </li>
                     </ul>
                 </div>
                 <div id="importFile">
