@@ -1,4 +1,4 @@
-import { resetPassword } from "api/requests/users.js";
+import { enableMfaApi, resetPassword } from "api/requests/users.js";
 import { useUserActivity, useUserDeleteMutation, useUserQuery } from "api/users.js";
 import AuditLogsTable from "components/auditlog/AuditLogsTable";
 import UserAvatar from "components/badges/UserAvatar";
@@ -16,6 +16,7 @@ import Title from "components/ui/Title";
 import DeleteButton from "components/ui/buttons/Delete";
 import LinkButton from "components/ui/buttons/Link";
 import { actionCompletedToast } from "components/ui/toast";
+import { errorToast } from "components/ui/toast.jsx";
 import { LastLogin } from "components/users/LastLogin";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -39,8 +40,12 @@ const UserProfile = () => {
     };
 
     const enableMfa = () => {
-        enableMfa(userId).then(() => {
-            actionCompletedToast("MFA enabled");
+        enableMfaApi(userId).then((res) => {
+            if (!res.ok) {
+                errorToast(`MFA could not be enabled (status ${res.status})`);
+                return;
+            }
+            actionCompletedToast("The user will be asked to set up 2FA at their next login");
         });
     };
 

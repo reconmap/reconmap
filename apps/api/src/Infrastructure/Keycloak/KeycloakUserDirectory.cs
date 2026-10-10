@@ -139,6 +139,19 @@ public sealed class KeycloakUserDirectory(
         await InvalidateAsync(subjectId);
     }
 
+    public async Task AddRequiredActionAsync(string subjectId, string requiredAction, CancellationToken ct = default)
+    {
+        using var session = OpenSession();
+
+        var representation = await session.Users.GetUsersByUserIdAsync(Keycloak.Realm, subjectId, cancellationToken: ct);
+        representation.RequiredActions ??= [];
+        if (representation.RequiredActions.Contains(requiredAction)) return;
+
+        representation.RequiredActions.Add(requiredAction);
+        await session.Users.PutUsersByUserIdAsync(Keycloak.Realm, subjectId, representation, cancellationToken: ct);
+        await InvalidateAsync(subjectId);
+    }
+
     public async Task SetRoleGroupAsync(string subjectId, string roleGroup, CancellationToken ct = default)
     {
         using var session = OpenSession();

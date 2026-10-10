@@ -158,6 +158,31 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
         return NoContent();
     }
 
+    [HttpPost("{id:int}/actions")]
+    public async Task<IActionResult> ExecuteAction(int id, [FromBody] UserActionRequest request)
+    {
+        var user = await dbContext.Users.FindAsync(id);
+        if (user == null)
+            return NotFound();
+
+        switch (request.Name)
+        {
+            case "enable-mfa":
+                // Keycloak creates the OTP credential when the user completes this required action at next login.
+                await directory.AddRequiredActionAsync(user.SubjectId, KeycloakRequiredActions.ConfigureTotp);
+                return NoContent();
+            default:
+                return BadRequest($"Unsupported user action '{request.Name}'.");
+        }
+    }
+
+    public sealed record UserActionRequest(string? Name);
+
+    private static class KeycloakRequiredActions
+    {
+        public const string ConfigureTotp = "CONFIGURE_TOTP";
+    }
+
     private async Task ApplyLoginInfoAsync(User user)
     {
         if (user.SubjectId == KeycloakUserDirectory.SystemSubjectId) return;

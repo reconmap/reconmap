@@ -6,7 +6,23 @@ vi.mock("services/api.js", () => ({
     default: secureApiFetch,
 }));
 
-import { updateUser } from "./users.js";
+import { enableMfaApi, updateUser } from "./users.js";
+
+describe("enableMfaApi", () => {
+    beforeEach(() => {
+        secureApiFetch.mockReset();
+        secureApiFetch.mockResolvedValue(new Response(null, { status: 204 }));
+    });
+
+    it("posts the enable-mfa action to the user's actions endpoint", async () => {
+        await enableMfaApi(7);
+
+        const [url, init] = secureApiFetch.mock.calls[0];
+        expect(url).toBe("/users/7/actions");
+        expect(init.method).toBe("POST");
+        expect(JSON.parse(init.body)).toEqual({ name: "enable-mfa" });
+    });
+});
 
 describe("updateUser", () => {
     beforeEach(() => {

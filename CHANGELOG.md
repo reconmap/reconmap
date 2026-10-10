@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed the **Enable MFA** action on the user profile doing nothing. The dashboard called `POST /api/users/{id}/actions`, which the API did not implement, and reported success regardless. The endpoint now adds the Keycloak `CONFIGURE_TOTP` required action so the user is asked to set up an authenticator app at next login, and the dashboard shows an error when the request fails.
 - Fixed creating users from the dashboard failing with HTTP 400 ("Unable to create user: 400"). The API required a `subjectId` that the client never sends; it is now assigned from Keycloak during creation, so the request is no longer rejected by model validation.
 - Fixed user creation sending role groups to Keycloak in the wrong case. Groups are now sent in lowercase (for example `administrator-group`), matching the realm configuration (#271).
 - Fixed vulnerability creation and editing with a blank optional CVSS score. Empty scores are now saved as `null` instead of being submitted as invalid empty decimal values.

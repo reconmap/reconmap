@@ -337,6 +337,40 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public async Task ExecuteAction_EnableMfa_AddsConfigureTotpRequiredActionInKeycloak()
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = UserRole.User });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, keycloak.Url);
+
+        var result = await controller.ExecuteAction(2, new UsersController.UserActionRequest("enable-mfa"));
+
+        Assert.IsType<NoContentResult>(result);
+
+        var put = Assert.Single(keycloak.Requests, r => r.Method == "PUT");
+        using var sent = JsonDocument.Parse(put.Body);
+        var requiredActions = sent.RootElement.GetProperty("requiredActions").EnumerateArray().Select(a => a.GetString());
+        Assert.Contains("CONFIGURE_TOTP", requiredActions);
+    }
+
+    [Fact]
+    public async Task ExecuteAction_UnknownAction_ReturnsBadRequestWithoutCallingKeycloak()
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = UserRole.User });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, keycloak.Url);
+
+        var result = await controller.ExecuteAction(2, new UsersController.UserActionRequest("unknown-action"));
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Empty(keycloak.Requests);
+    }
+
+    [Fact]
     public async Task DeleteOne_RemovesUserFromKeycloakAndDatabase()
     {
         using var keycloak = new FakeKeycloak();

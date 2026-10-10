@@ -40,6 +40,12 @@ public interface IKeycloakUserDirectory
 
     Task UpdateAsync(string subjectId, KeycloakUserUpdate update, CancellationToken ct = default);
 
+    /// <summary>
+    /// Adds a Keycloak required action (for example <c>CONFIGURE_TOTP</c>) so the user is asked
+    /// to complete it at the next login. Keycloak does not let admins create OTP credentials directly.
+    /// </summary>
+    Task AddRequiredActionAsync(string subjectId, string requiredAction, CancellationToken ct = default);
+
     /// <summary>Replaces the role group membership so the user belongs to <paramref name="roleGroup"/> only.</summary>
     Task SetRoleGroupAsync(string subjectId, string roleGroup, CancellationToken ct = default);
 
