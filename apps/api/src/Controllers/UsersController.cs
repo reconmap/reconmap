@@ -22,7 +22,7 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
             user.Email,
             user.FirstName,
             user.LastName,
-            RoleGroupFor(user.Role),
+            GetKeycloakGroupName(user.Role),
             user.Locale,
             user.TimeZone));
 
@@ -44,6 +44,9 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
 
         return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
     }
+
+    internal static string GetKeycloakGroupName(UserRole role) =>
+        $"{role.ToString().ToLowerInvariant()}-group";
 
     [HttpGet]
     public async Task<IActionResult> GetMany()
@@ -192,7 +195,7 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
         user.LastLoginAt = info.LastLoginAt;
     }
 
-    private static string RoleGroupFor(UserRole role) => $"{role.ToString().ToLower()}-group";
+    private static string GetKeycloakGroupName(UserRole role) => $"{role.ToString().ToLower()}-group";
 
     private static string? ReadString(JsonElement body, string name)
         => body.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
