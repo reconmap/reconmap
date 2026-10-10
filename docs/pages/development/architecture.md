@@ -11,7 +11,7 @@ A keycloak identity service (Open ID connect) is used to authenticate users and 
 
 Centralized authorization is enforced via **Open Policy Agent (OPA)** rules integrated with the C# REST API through `OpaActionFilter`. 
 
-- **Regular Users:** Authenticated users are resolved to database records in the `user` table. Their roles and permissions are queried to validate requests.
+- **Regular Users:** Authenticated users are resolved to database records in the `user` table by their Keycloak subject id. The table holds Reconmap's own data (role, short bio, preferences). Identity fields such as username, email, names, locale, timezone and MFA status live in Keycloak; the API merges them into responses and writes changes to whichever system owns them. Their roles and permissions are queried to validate requests.
 - **Service Accounts (Agents):** Reconmap agent clients (`reconmapd`) authenticate via OAuth Client Credentials grant. Because they are machine accounts and do not exist in the database `user` table, the API bypasses the database user lookup during authorization check and maps them to a virtual Administrator user. This ensures agents can successfully execute their boot, ping, and check-in endpoints.
 
 ### Tenant data access

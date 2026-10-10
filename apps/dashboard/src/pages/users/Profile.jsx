@@ -1,24 +1,25 @@
-import { resetPassword } from "api/requests/users.js";
+import { enableMfaApi, resetPassword } from "api/requests/users.js";
 import { useUserActivity, useUserDeleteMutation, useUserQuery } from "api/users.js";
+import AuditLogsTable from "components/auditlog/AuditLogsTable";
+import UserAvatar from "components/badges/UserAvatar";
+import UserRoleBadge from "components/badges/UserRoleBadge";
 import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import NativeTabs from "components/forms/NativeTabs";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import BooleanText from "components/ui/BooleanText";
-import EmptyField from "components/ui/EmptyField";
-import TimestampsSection from "components/ui/TimestampsSection";
-import { actionCompletedToast } from "components/ui/toast";
-import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import AuditLogsTable from "components/auditlog/AuditLogsTable";
-import UserAvatar from "components/badges/UserAvatar";
-import UserRoleBadge from "components/badges/UserRoleBadge";
 import Breadcrumb from "components/ui/Breadcrumb";
+import EmptyField from "components/ui/EmptyField";
 import Loading from "components/ui/Loading";
+import TimestampsSection from "components/ui/TimestampsSection";
 import Title from "components/ui/Title";
 import DeleteButton from "components/ui/buttons/Delete";
 import LinkButton from "components/ui/buttons/Link";
+import { actionCompletedToast } from "components/ui/toast";
+import { errorToast } from "components/ui/toast.jsx";
 import { LastLogin } from "components/users/LastLogin";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const UserProfile = () => {
     const navigate = useNavigate();
@@ -39,8 +40,12 @@ const UserProfile = () => {
     };
 
     const enableMfa = () => {
-        enableMfa(userId).then(() => {
-            actionCompletedToast("MFA enabled");
+        enableMfaApi(userId).then((res) => {
+            if (!res.ok) {
+                errorToast(`MFA could not be enabled (status ${res.status})`);
+                return;
+            }
+            actionCompletedToast("The user will be asked to set up 2FA at their next login");
         });
     };
 
@@ -66,7 +71,7 @@ const UserProfile = () => {
                 <NativeButtonGroup>
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                         <LinkButton href={`/users/${user.id}/edit`}>Edit</LinkButton>
-                        {!user.mfa_enabled && <NativeButton onClick={enableMfa}>Enable MFA</NativeButton>}
+                        {!user.mfaEnabled && <NativeButton onClick={enableMfa}>Enable MFA</NativeButton>}
                         <NativeButton onClick={onResetPasswordClick}>Reset password</NativeButton>
                         <DeleteButton onClick={onDeleteButtonClick} />
                     </RestrictedComponent>
@@ -76,7 +81,7 @@ const UserProfile = () => {
                 <Title
                     type="User profile"
                     title={user.fullName}
-                    icon={user.email ? <UserAvatar email={user.email} /> : null}
+                    icon={user.email ? <UserAvatar /> : null}
                 />
 
                 <NativeTabs labels={["Details", "Activity"]} tabIndex={tabIndex} tabIndexSetter={tabIndexSetter} />
@@ -96,9 +101,6 @@ const UserProfile = () => {
                                             <UserRoleBadge role={user.role} />
                                             <br />
                                         </dd>
-
-                                        <dt>Timezone</dt>
-                                        <dd>{user.timeZone}</dd>
 
                                         <dt>Active?</dt>
                                         <dd>

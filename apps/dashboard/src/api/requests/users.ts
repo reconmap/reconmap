@@ -32,13 +32,23 @@ const getUsers = (): Promise<Response> => {
     });
 };
 
-const updateUser = (user: UserInterface): Promise<Response> => {
-    return secureApiFetch(`${API_PREFIX}/${user.id}`, {
+// Language, timezone and preferences are personal: only the profile owner can send them (see ownerFields).
+interface OwnerFields {
+    locale: string;
+    timezone: string;
+    preferences: Record<string, unknown>;
+}
+
+const updateUser = (user: UserInterface, ownerFields?: OwnerFields): Promise<Response> => {
+    // Only editable fields are sent: the API rejects read-only ones (such as mfaEnabled).
+    const { id, subjectId, fullName, mfaEnabled, lastLoginAt, createdAt, updatedAt, preferences, locale, timezone, ...editable } = user;
+
+    return secureApiFetch(`${API_PREFIX}/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({ ...editable, ...ownerFields }),
     });
 };
 
@@ -78,6 +88,8 @@ const enableMfaApi = (userId: number): Promise<Response> => {
 const resetPassword = (userId: number): Promise<Response> => {
     return requestUserAction(userId, "reset-password");
 };
+
+export type { OwnerFields };
 
 export {
     createUserApi,

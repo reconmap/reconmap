@@ -1,5 +1,6 @@
 using System.Text.Json;
 using api_v2.Domain.Entities;
+using api_v2.Infrastructure.Keycloak;
 using api_v2.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ namespace api_v2.Controllers;
 
 [Route("api/projects/{projectId:int}/members")]
 [ApiController]
-public class ProjectMembersController(AppDbContext dbContext, IConnectionMultiplexer redis) : ControllerBase
+public class ProjectMembersController(AppDbContext dbContext, IConnectionMultiplexer redis, IKeycloakUserDirectory directory) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -46,7 +47,7 @@ public class ProjectMembersController(AppDbContext dbContext, IConnectionMultipl
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProjectMembers(int projectId)
     {
-        var users = await dbContext.ProjectMembers
+        var members = await dbContext.ProjectMembers
             .Where(pu => pu.ProjectId == projectId)
             .Join(
                 dbContext.Users,
@@ -56,13 +57,26 @@ public class ProjectMembersController(AppDbContext dbContext, IConnectionMultipl
                 {
                     pu.Id,
                     UserId = u.Id,
-                    u.FullName,
-                    u.Email,
+                    u.SubjectId,
                     u.Role
                 }
             )
             .ToListAsync();
-        return Ok(users);
+
+        var identities = await directory.GetManyAsync(members.Select(m => m.SubjectId));
+
+        return Ok(members.Select(m =>
+        {
+            identities.TryGetValue(m.SubjectId, out var identity);
+            return new
+            {
+                m.Id,
+                m.UserId,
+                FullName = identity is null ? string.Empty : $"{identity.FirstName} {identity.LastName}".Trim(),
+                Email = identity?.Email,
+                m.Role
+            };
+        }));
     }
 
     [HttpDelete("{id:int}")]

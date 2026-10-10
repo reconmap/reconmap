@@ -582,7 +582,9 @@
       "clientRoles": {
         "realm-management": [
           "manage-clients",
-          "manage-users"
+          "manage-users",
+          "view-users",
+          "view-events"
         ]
       },
       "notBefore": 0,
@@ -1814,11 +1816,14 @@
   "smtpServer": {},
   "loginTheme": "reconmap-theme",
   "accountTheme": "reconmap-theme",
-  "eventsEnabled": false,
+  "eventsEnabled": true,
+  "eventsExpiration": 7776000,
   "eventsListeners": [
     "jboss-logging"
   ],
-  "enabledEventTypes": [],
+  "enabledEventTypes": [
+    "LOGIN"
+  ],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
   "identityProviders": [],

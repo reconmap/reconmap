@@ -41,7 +41,6 @@ export const UsersUrls = {
     Create: "/users/create",
     Details: "/users/:userId",
     Edit: "/users/:userId/edit",
-    Preferences: "/users/preferences",
 };
 
 export const ScansUrls = {

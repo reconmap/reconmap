@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using api_v2.Infrastructure.Keycloak;
 using api_v2.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,8 @@ public class ApiTokenHandler(
     IOptionsMonitor<ApiTokenOptions> options,
     ILoggerFactory logger,
     UrlEncoder encoder,
-    AppDbContext dbContext)
+    AppDbContext dbContext,
+    IKeycloakUserDirectory directory)
     : AuthenticationHandler<ApiTokenOptions>(options, logger, encoder)
 {
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -51,11 +53,13 @@ public class ApiTokenHandler(
             return AuthenticateResult.Fail("User not found");
         }
 
+        var keycloakUser = await directory.GetAsync(user.SubjectId);
+
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.SubjectId),
-            new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.Name, keycloakUser?.Username ?? string.Empty),
+            new(ClaimTypes.Email, keycloakUser?.Email ?? string.Empty),
             new(ClaimTypes.Role, user.Role.ToString().ToLower()),
             new("api_token_scope", apiToken.Scope.ToString().ToLower().Replace("_", "-"))
         };

@@ -87,15 +87,4 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         if (string.IsNullOrEmpty(input)) return input;
         return System.Text.RegularExpressions.Regex.Replace(input, @"([a-z0-9])([A-Z])", "$1_$2").ToLower();
     }
-
-
-    public async Task UpdateLastLoginTs(int userId)
-    {
-        await Users
-            .Where(u => u.Id == userId)
-            .ExecuteUpdateAsync(s => s
-                .SetProperty(u => u.LastLoginAt, DateTime.UtcNow)
-                .SetProperty(u => u.UpdatedAt, DateTime.UtcNow)
-            );
-    }
 }
