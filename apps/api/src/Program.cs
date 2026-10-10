@@ -79,6 +79,8 @@ foreach (var type in parserTypes)
 }
 
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+services.AddSingleton<api_v2.Infrastructure.Keycloak.IKeycloakUserCache, api_v2.Infrastructure.Keycloak.RedisKeycloakUserCache>();
+services.AddSingleton<api_v2.Infrastructure.Keycloak.IKeycloakUserDirectory, api_v2.Infrastructure.Keycloak.KeycloakUserDirectory>();
 
 services.AddTransient<IClaimsTransformation, RoleClaimsTransformation>();
 services.AddSingleton<WebSocketConnectionManager>();
@@ -141,6 +143,7 @@ services.AddHsts(options =>
 services.AddControllers(options =>
     {
         options.Filters.Add<api_v2.Infrastructure.Security.OpaActionFilter>();
+        options.Filters.Add<api_v2.Infrastructure.Keycloak.KeycloakUserEnrichmentFilter>();
     })
     .AddJsonOptions(opt =>
     {

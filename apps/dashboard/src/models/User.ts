@@ -1,20 +1,23 @@
 interface UserInterface {
     id?: number;
-    createdAt?: string;
-    updatedAt?: string;
-    lastLoginAt?: string;
-    subject_id?: string;
-    active?: boolean;
-    mfaEnabled: boolean | undefined;
+    subjectId?: string;
+    role?: string;
+    shortBio?: string;
+    preferences: any | undefined;
+
+    // Identity fields are owned by Keycloak and returned merged by the API.
+    username: string | undefined;
+    email: string | undefined;
     firstName: string | undefined;
     lastName: string | undefined;
     fullName?: string;
-    short_bio?: string;
-    username: string | undefined;
-    email: string | undefined;
+    active?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    lastLoginAt?: string;
+    locale?: string;
     timezone: string | undefined;
-    preferences: any | undefined;
-    role?: string;
+    mfaEnabled?: boolean;
 }
 
 export { UserInterface };
@@ -32,6 +35,7 @@ const User: UserInterface = {
     lastName: undefined,
     username: undefined,
     email: undefined,
+    locale: undefined,
     timezone: undefined,
     preferences: undefined,
 };

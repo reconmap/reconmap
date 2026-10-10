@@ -25,7 +25,7 @@ function useAuth() {
             return;
         }
         setTheme(user.preferences["dashboard.theme"]);
-        i18n.changeLanguage(user.preferences["dashboard.language"]);
+        i18n.changeLanguage(user.locale || "en");
     }, [user]);
 
     return { user, logout };

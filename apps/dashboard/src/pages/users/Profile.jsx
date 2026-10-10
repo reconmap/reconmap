@@ -66,7 +66,7 @@ const UserProfile = () => {
                 <NativeButtonGroup>
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                         <LinkButton href={`/users/${user.id}/edit`}>Edit</LinkButton>
-                        {!user.mfa_enabled && <NativeButton onClick={enableMfa}>Enable MFA</NativeButton>}
+                        {!user.mfaEnabled && <NativeButton onClick={enableMfa}>Enable MFA</NativeButton>}
                         <NativeButton onClick={onResetPasswordClick}>Reset password</NativeButton>
                         <DeleteButton onClick={onDeleteButtonClick} />
                     </RestrictedComponent>

@@ -1,6 +1,5 @@
 const DefaultUserPreferences = {
     "dashboard.theme": "dark",
-    "dashboard.language": "en",
     "dashboard.widgets": null,
 };
 

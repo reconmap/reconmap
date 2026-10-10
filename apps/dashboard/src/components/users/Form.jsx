@@ -113,9 +113,9 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit }) =
                             <NativeCheckbox name="active" checked={user.active} onChange={onFormChange}>
                                 Active
                             </NativeCheckbox>
-                            <NativeCheckbox name="mfaEnabled" checked={user.mfaEnabled} onChange={onFormChange}>
-                                2FA enabled
-                            </NativeCheckbox>
+                            <p className="hint">
+                                2FA: {user.mfaEnabled ? "enabled" : "not enabled"}. Users set up 2FA in their account settings.
+                            </p>
                         </div>
                     }
                 />

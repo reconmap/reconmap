@@ -1,57 +1,45 @@
 using System.Text.Json;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Authentication;
+using api_v2.Infrastructure.Keycloak;
 using api_v2.Infrastructure.Persistence;
-using FS.Keycloak.RestApiClient.Api;
-using FS.Keycloak.RestApiClient.Authentication.ClientFactory;
-using FS.Keycloak.RestApiClient.Authentication.Flow;
-using FS.Keycloak.RestApiClient.ClientFactory;
-using FS.Keycloak.RestApiClient.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace api_v2.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> keycloakOptions)
+public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory directory)
     : AppController(dbContext)
 {
     [HttpPost]
     public async Task<IActionResult> CreatOne(User user)
     {
-        var creds = new ClientCredentialsFlow
+        var subjectId = await directory.CreateAsync(new KeycloakUserInput(
+            user.Username,
+            user.Email,
+            user.FirstName,
+            user.LastName,
+            RoleGroupFor(user.Role),
+            user.Locale,
+            user.TimeZone));
+
+        user.SubjectId = subjectId;
+
+        try
         {
-            ClientId = keycloakOptions.Value.ClientId,
-            ClientSecret = keycloakOptions.Value.ClientSecret,
-            KeycloakUrl = keycloakOptions.Value.KeycloakUrl,
-            Realm = keycloakOptions.Value.Realm
-        };
+            dbContext.Users.Add(user);
 
-        using var httpClient = AuthenticationHttpClientFactory.Create(creds);
-        using var usersApi = ApiClientFactory.Create<UsersApi>(httpClient);
-        await usersApi.PostUsersAsync(creds.Realm, new UserRepresentation
+            AuditAction(AuditActions.Created, "User", new { id = user.Id });
+            await dbContext.SaveChangesAsync();
+        }
+        catch
         {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Enabled = true,
-            Username = user.Username,
-            RequiredActions = ["UPDATE_PASSWORD"],
-            Groups = [$"{user.Role.ToString().ToLower()}-group"]
-        });
-
-        var createdUser = await usersApi
-            .GetUsersAsync(creds.Realm, username: user.Username, exact: true);
-
-        user.SubjectId = createdUser[0].Id;
-
-        dbContext.Users.Add(user);
-
-        AuditAction(AuditActions.Created, "User", new { id = user.Id });
-        await dbContext.SaveChangesAsync();
+            // Keep Keycloak and the user table in step: do not leave an orphaned Keycloak user behind.
+            await directory.DeleteAsync(subjectId);
+            throw;
+        }
 
         return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
     }
@@ -59,7 +47,10 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
     [HttpGet]
     public async Task<IActionResult> GetMany()
     {
-        return Ok(await dbContext.Users.ToListAsync());
+        var users = await dbContext.Users.ToListAsync();
+        await Task.WhenAll(users.Select(ApplyLoginInfoAsync));
+
+        return Ok(users);
     }
 
     [HttpGet("{id:int}")]
@@ -69,6 +60,8 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
     {
         var existing = await dbContext.Users.FindAsync(id);
         if (existing == null) return NotFound();
+
+        await ApplyLoginInfoAsync(existing);
 
         return Ok(existing);
     }
@@ -91,11 +84,16 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
     [Audit(AuditActions.Deleted, "User")]
     public async Task<IActionResult> DeleteOne(int id)
     {
-        var deleteCount = await dbContext.Users
-            .Where(n => n.Id == id)
-            .ExecuteDeleteAsync();
+        var user = await dbContext.Users.FindAsync(id);
+        if (user == null) return NotFound();
 
-        if (deleteCount == 0) return NotFound();
+        if (user.SubjectId != KeycloakUserDirectory.SystemSubjectId)
+        {
+            await directory.DeleteAsync(user.SubjectId);
+        }
+
+        dbContext.Users.Remove(user);
+        await dbContext.SaveChangesAsync();
 
         HttpContext.Items["AuditData"] = new { id };
 
@@ -105,19 +103,75 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
     [HttpPatch("{id}")]
     public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement body)
     {
-        if (!body.TryGetProperty("preferences", out var prefs))
-            return BadRequest("Missing 'preferences' property in request body.");
+        if (body.TryGetProperty("mfaEnabled", out _))
+            return BadRequest("MFA is managed in Keycloak and cannot be changed from Reconmap.");
 
         var user = await dbContext.Users.FindAsync(id);
         if (user == null)
             return NotFound();
 
-        // Store the entire preferences object as JSON text
-        user.Preferences = prefs.GetRawText();
+        // Identity fields live in Keycloak.
+        var identityUpdate = new KeycloakUserUpdate(
+            Username: ReadString(body, "username"),
+            Email: ReadString(body, "email"),
+            FirstName: ReadString(body, "firstName"),
+            LastName: ReadString(body, "lastName"),
+            Enabled: ReadBool(body, "active"),
+            Locale: ReadString(body, "locale"),
+            TimeZone: ReadString(body, "timezone"));
+
+        if (HasAnyValue(identityUpdate))
+        {
+            await directory.UpdateAsync(user.SubjectId, identityUpdate);
+        }
+
+        // Role is authorisation data: stored in Reconmap and mirrored as a Keycloak group.
+        if (body.TryGetProperty("role", out var roleProperty) &&
+            Enum.TryParse<UserRole>(roleProperty.GetString(), ignoreCase: true, out var role) &&
+            role != user.Role)
+        {
+            await directory.SetRoleGroupAsync(user.SubjectId, RoleGroupFor(role));
+            user.Role = role;
+        }
+
+        // Application data lives in Reconmap.
+        if (body.TryGetProperty("shortBio", out var shortBio))
+        {
+            user.ShortBio = shortBio.ValueKind == JsonValueKind.Null ? null : shortBio.GetString();
+        }
+
+        if (body.TryGetProperty("preferences", out var prefs))
+        {
+            // Store the entire preferences object as JSON text
+            user.Preferences = prefs.GetRawText();
+        }
 
         dbContext.Users.Update(user);
         await dbContext.SaveChangesAsync();
 
         return NoContent();
     }
+
+    private async Task ApplyLoginInfoAsync(User user)
+    {
+        if (user.SubjectId == KeycloakUserDirectory.SystemSubjectId) return;
+
+        var info = await directory.GetLoginInfoAsync(user.SubjectId);
+        user.MfaEnabled = info.MfaEnabled;
+        user.LastLoginAt = info.LastLoginAt;
+    }
+
+    private static string RoleGroupFor(UserRole role) => $"{role.ToString().ToLower()}-group";
+
+    private static string? ReadString(JsonElement body, string name)
+        => body.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+
+    private static bool? ReadBool(JsonElement body, string name)
+        => body.TryGetProperty(name, out var value) && (value.ValueKind is JsonValueKind.True or JsonValueKind.False)
+            ? value.GetBoolean()
+            : null;
+
+    private static bool HasAnyValue(KeycloakUserUpdate update)
+        => update.Username != null || update.Email != null || update.FirstName != null ||
+           update.LastName != null || update.Enabled != null || update.Locale != null || update.TimeZone != null;
 }

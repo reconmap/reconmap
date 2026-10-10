@@ -96,7 +96,7 @@ const UsersList = () => {
         },
         {
             header: "2FA enabled?",
-            cell: (user) => <BooleanText value={user.mfa_enabled} />,
+            cell: (user) => <BooleanText value={user.mfaEnabled} />,
         },
         {
             header: <>&nbsp;</>,

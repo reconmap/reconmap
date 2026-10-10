@@ -33,12 +33,16 @@ const getUsers = (): Promise<Response> => {
 };
 
 const updateUser = (user: UserInterface): Promise<Response> => {
-    return secureApiFetch(`${API_PREFIX}/${user.id}`, {
+    // Only editable fields are sent: the API rejects read-only ones (such as mfaEnabled),
+    // and preferences are saved through their own endpoint.
+    const { id, subjectId, fullName, mfaEnabled, lastLoginAt, createdAt, updatedAt, preferences, ...editable } = user;
+
+    return secureApiFetch(`${API_PREFIX}/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(editable),
     });
 };
 

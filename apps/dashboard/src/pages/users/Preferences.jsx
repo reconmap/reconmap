@@ -38,11 +38,12 @@ const UserPreferences = () => {
         user.preferences = {
             ...initialiseUserPreferences(user),
             "dashboard.theme": formValues.theme,
-            "dashboard.language": formValues.language,
         };
 
+        // Language is stored in Keycloak as the user's locale; timezone is stored there too.
         requestUserPatch(user.id, {
             timezone: formValues.timezone,
+            locale: formValues.language,
             preferences: user.preferences,
         })
             .then(() => {
@@ -59,7 +60,7 @@ const UserPreferences = () => {
             setFormValues({
                 timezone: userData.timezone,
                 theme: userData.preferences["dashboard.theme"],
-                language: userData.preferences["dashboard.language"],
+                language: userData.locale,
             });
         }
     }, [userData]);
@@ -83,7 +84,7 @@ const UserPreferences = () => {
                             name="language"
                             onChange={updateFormValues}
                             defaultValue={
-                                userData.preferences ? userData.preferences["dashboard.language"] : LanguageList[0].id
+                                userData.locale ?? LanguageList[0].id
                             }
                         >
                             {LanguageList.map((lang) => (

@@ -3,41 +3,8 @@ properties:
   id:
     type: integer
     nullable: true
-  created_at:
-    type: string
-  updated_at:
-    type: string
-    nullable: true
-  last_login_ts:
-    type: string
-    nullable: true
   subject_id:
     type: string
-  active:
-    type: boolean
-    default: true
-  mfa_enabled:
-    type: boolean
-    default: false
-  first_name:
-    type: string
-  last_name:
-    type: string
-  full_name:
-    type: string
-    nullable: true
-    default: ''
-  short_bio:
-    type: string
-    nullable: true
-  username:
-    type: string
-  email:
-    type: string
-  timezone:
-    type: string
-  preferences:
-    nullable: true
   role:
     type: string
     nullable: true
@@ -46,11 +13,48 @@ properties:
     - superuser
     - user
     - client
+  short_bio:
+    type: string
+    nullable: true
+  preferences:
+    nullable: true
+  # Identity fields below are owned by Keycloak and returned merged by the API.
+  username:
+    type: string
+  email:
+    type: string
+  first_name:
+    type: string
+  last_name:
+    type: string
+  full_name:
+    type: string
+    nullable: true
+    default: ''
+  active:
+    type: boolean
+    default: true
+  created_at:
+    type: string
+    nullable: true
+  updated_at:
+    type: string
+    nullable: true
+  last_login_at:
+    type: string
+    nullable: true
+  locale:
+    type: string
+    nullable: true
+  timezone:
+    type: string
+  mfa_enabled:
+    type: boolean
+    default: false
 required:
-- created_at
 - subject_id
-- first_name
-- last_name
 - username
 - email
+- first_name
+- last_name
 - timezone

@@ -1,6 +1,6 @@
-import { getUser, updateUser } from "api/requests/users.js";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useUserQuery, useUserUpdateMutation } from "api/users.js";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
@@ -12,22 +12,23 @@ const EditUserPage = () => {
     const { userId } = useParams();
     const [clientUser, setClientUser] = useState(null);
 
-    const handleCreate = async (ev) => {
-        ev.preventDefault();
-
-        updateUser(clientUser).then(() => {
-            navigate(`/users/${userId}`);
-            actionCompletedToast(`The user "${clientUser.fullName}" has been updated.`);
-        });
-    };
+    const { data: user } = useUserQuery(userId);
+    const updateUserMutation = useUserUpdateMutation(userId);
 
     useEffect(() => {
-        async function fetchUser() {
-            const user = await getUser(userId);
-            setClientUser(await user.json());
-        }
-        fetchUser();
-    }, []);
+        if (user) setClientUser(user);
+    }, [user]);
+
+    const handleSubmit = async (ev) => {
+        ev.preventDefault();
+
+        updateUserMutation.mutate(clientUser, {
+            onSuccess: () => {
+                navigate(`/users/${userId}`);
+                actionCompletedToast(`The user "${clientUser.firstName} ${clientUser.lastName}" has been updated.`);
+            },
+        });
+    };
 
     if (!clientUser) return <Loading />;
 
@@ -41,7 +42,7 @@ const EditUserPage = () => {
 
             <Title title="User details" />
 
-            <UserForm isEdit={true} user={clientUser} userSetter={setClientUser} onFormSubmit={handleCreate} />
+            <UserForm isEdit={true} user={clientUser} userSetter={setClientUser} onFormSubmit={handleSubmit} />
         </div>
     );
 };

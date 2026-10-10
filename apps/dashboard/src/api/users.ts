@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteUser, getUser, getUsers, requestUserActivity } from "./requests/users.js";
+import { UserInterface } from "models/User.js";
+import { deleteUser, getUser, getUsers, requestUserActivity, updateUser } from "./requests/users.js";
 
 const useUserQuery = (userId: number) => {
     return useQuery({
@@ -22,6 +23,22 @@ const useUsersQuery = () => {
     });
 };
 
+const useUserUpdateMutation = (userId: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (user: UserInterface) => {
+            const res = await updateUser(user);
+            if (!res.ok) throw new Error(`Updating the user failed with status ${res.status}`);
+            return res;
+        },
+        onSuccess: () => {
+            // The API merges Keycloak data into responses, so refetch the user and any list showing it.
+            queryClient.invalidateQueries({ queryKey: ["users", userId] });
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+        },
+    });
+};
+
 const useUserDeleteMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -32,4 +49,13 @@ const useUserDeleteMutation = () => {
     });
 };
 
-export { deleteUser, getUser, getUsers, useUserActivity, useUserDeleteMutation, useUserQuery, useUsersQuery };
+export {
+    deleteUser,
+    getUser,
+    getUsers,
+    useUserActivity,
+    useUserDeleteMutation,
+    useUserQuery,
+    useUsersQuery,
+    useUserUpdateMutation,
+};

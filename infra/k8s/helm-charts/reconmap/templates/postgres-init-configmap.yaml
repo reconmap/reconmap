@@ -57,22 +57,11 @@ data:
     -- 1. user
     CREATE TABLE "user"
     (
-        id            SERIAL PRIMARY KEY,
-        created_at     TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at     TIMESTAMPTZ   NULL,
-        last_login_ts TIMESTAMPTZ   NULL,
-        subject_id    VARCHAR(40)   NOT NULL,
-        active        BOOLEAN       NOT NULL DEFAULT TRUE,
-        email         VARCHAR(200)  NOT NULL,
-        role          VARCHAR(20)   NULL,
-        username      VARCHAR(80)   NOT NULL UNIQUE,
-        first_name    VARCHAR(100)  NOT NULL,
-        last_name     VARCHAR(100)  NOT NULL,
-        full_name     VARCHAR(210) GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED,
-        short_bio     VARCHAR(1000) NULL,
-        timezone      VARCHAR(200)  NOT NULL DEFAULT 'UTC',
-        mfa_enabled   BOOLEAN       NOT NULL DEFAULT FALSE,
-        preferences   JSONB         NULL
+        id          SERIAL PRIMARY KEY,
+        subject_id  VARCHAR(40)   NOT NULL UNIQUE,
+        role        VARCHAR(20)   NULL,
+        short_bio   VARCHAR(1000) NULL,
+        preferences JSONB         NULL
     );
 
     -- 2. attachment
@@ -468,7 +457,7 @@ data:
     );
 
     -- Views
-    CREATE VIEW user_info AS SELECT id, email, role, username, first_name, last_name, full_name, short_bio FROM "user";
+    CREATE VIEW user_info AS SELECT id, subject_id, role, short_bio FROM "user";
 
     CREATE VIEW project_template AS
     SELECT id, created_at, updated_at, created_by_uid, name, description, category_id
@@ -539,7 +528,7 @@ data:
     CREATE TRIGGER update_jira_integration_updated_at BEFORE UPDATE ON jira_integration FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
     CREATE TRIGGER update_azure_devops_integration_updated_at BEFORE UPDATE ON azure_devops_integration FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
     CREATE TRIGGER update_organisation_updated_at BEFORE UPDATE ON organisation FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-    CREATE TRIGGER update_user_updated_at BEFORE UPDATE ON "user" FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    
     CREATE TRIGGER update_vault_updated_at BEFORE UPDATE ON vault FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
     CREATE TRIGGER update_asset_updated_at BEFORE UPDATE ON asset FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
     CREATE TRIGGER update_vulnerability_category_updated_at BEFORE UPDATE ON vulnerability_category FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -553,11 +542,11 @@ data:
     CREATE TRIGGER update_attachment_updated_at BEFORE UPDATE ON attachment FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
     CREATE TRIGGER update_notification_updated_at BEFORE UPDATE ON notification FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
   02-default-data.sql: |
-    INSERT INTO "user" (id, subject_id, first_name, last_name, username, email, role)
-    VALUES (0, 'NULL', 'System', '-', 'system','system@localhost', 'administrator');
+    INSERT INTO "user" (id, subject_id, role)
+VALUES (0, 'NULL', 'administrator');
 
-    INSERT INTO "user" (id, subject_id, first_name, last_name, username, email, role)
-    VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'Administrator', '-', 'admin','admin@localhost', 'administrator');
+    INSERT INTO "user" (id, subject_id, role)
+VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
 
     INSERT INTO audit_log (created_by_uid, client_ip, action, object)
     VALUES (0, '\x7f000001'::bytea, 'Initialised', 'System');
