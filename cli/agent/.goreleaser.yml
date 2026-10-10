@@ -40,7 +40,7 @@ homebrew_casks:
     homepage: "https://github.com/reconmap/command-line-tools/tree/main/agent"
     description: "Reconmapd: The Reconmap agent allows clients to launch commands remotely, open interactive browser terminals, and receive push notifications."
     directory: Formula
-    license: "GPL-3.0"
+    license: "MIT"
     commit_author:
       name: Santiago Lizardo
       email: santiagolizardo@users.noreply.github.com

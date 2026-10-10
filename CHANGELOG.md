@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated target scans to execute recommended tools automatically and transparently, showing live queuing status (Pending, Queuing, Queued, Failed) without requiring manual tool selection or manual queue triggers.
 - Renamed the submit button in the scan target form from "Analyze & Recommend" to "Start scan" to align with the automated scan execution workflow.
 - Simplified Scans navigation menu, consolidating "Run once", "Run on schedule", and "Start from URL" into a single, unified "Run scan" page.
+- Changed the project license from Apache License 2.0 to the MIT License. The root `LICENSE`, the documentation license page, and the license labels in the API, dashboard, and agent Docker images and the agent/runner GoReleaser packaging now reflect MIT.
 - Hidden the command usages selection dropdown in the scans execution and import pages in the dashboard UI, delegating usage selection internally.
 - Updated scans to always require a target project where the findings will be saved, both on the frontend dashboard and on the C# API backend `UploadOutput` endpoint.
 - Fixed type mismatch (uint key parameters) in C# controller tests.

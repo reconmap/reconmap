@@ -41,7 +41,7 @@ homebrew_casks:
     homepage: 'https://github.com/reconmap/command-line-tools/tree/main/cli'
     description: 'Rmap: Command line interface for the Reconmap pentest automation and reporting tool.'
     directory: Formula
-    license: "GPL-3.0"
+    license: "MIT"
     commit_author:
       name: Santiago Lizardo
       email: santiagolizardo@users.noreply.github.com

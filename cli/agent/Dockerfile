@@ -16,7 +16,7 @@ FROM kalilinux/kali-rolling
 
 LABEL org.opencontainers.image.source=https://github.com/reconmap/reconmap
 LABEL org.opencontainers.image.description="reconmap/agent"
-LABEL org.opencontainers.image.licenses="Apache-2.0"
+LABEL org.opencontainers.image.licenses="MIT"
 
 WORKDIR /app
 
