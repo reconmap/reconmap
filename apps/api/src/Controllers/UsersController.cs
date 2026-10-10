@@ -40,7 +40,7 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
             Enabled = true,
             Username = user.Username,
             RequiredActions = ["UPDATE_PASSWORD"],
-            Groups = [$"{user.Role}-group"]
+            Groups = [GetKeycloakGroupName(user.Role)]
         });
 
         var createdUser = await usersApi
@@ -55,6 +55,9 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
 
         return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
     }
+
+    internal static string GetKeycloakGroupName(UserRole role) =>
+        $"{role.ToString().ToLowerInvariant()}-group";
 
     [HttpGet]
     public async Task<IActionResult> GetMany()
