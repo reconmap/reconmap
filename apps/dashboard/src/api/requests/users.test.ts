@@ -49,8 +49,38 @@ describe("updateUser", () => {
             active: true,
             role: "user",
             shortBio: "Pentester",
+        });
+    });
+
+    it("sends language, timezone and preferences when the owner saves them", async () => {
+        await updateUser(
+            { id: 7, username: "jdoe", email: "john@example.com", firstName: "John", lastName: "Doe", timezone: "UTC", locale: "en", preferences: undefined },
+            { locale: "es", timezone: "Europe/Madrid", preferences: { "dashboard.theme": "light" } },
+        );
+
+        const [, init] = secureApiFetch.mock.calls[0];
+        const body = JSON.parse(init.body);
+        expect(body.locale).toBe("es");
+        expect(body.timezone).toBe("Europe/Madrid");
+        expect(body.preferences).toEqual({ "dashboard.theme": "light" });
+        expect(body.firstName).toBe("John");
+    });
+
+    it("never sends the owner-only language and timezone", async () => {
+        await updateUser({
+            id: 7,
+            username: "jdoe",
+            email: "john@example.com",
+            firstName: "John",
+            lastName: "Doe",
             timezone: "Europe/Madrid",
             locale: "es",
+            preferences: "{}",
         });
+
+        const [, init] = secureApiFetch.mock.calls[0];
+        const body = JSON.parse(init.body);
+        expect(body).not.toHaveProperty("timezone");
+        expect(body).not.toHaveProperty("locale");
     });
 });

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using api_v2.Domain.Identity;
 
 namespace api_v2.Domain.Entities;
@@ -11,6 +12,8 @@ public class User : IKeycloakIdentity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
+    // Assigned by the API from Keycloak when the user is created, so requests are not required to send it.
+    [ValidateNever]
     [Required]
     [StringLength(40)]
     public string SubjectId { get; set; } = default!;

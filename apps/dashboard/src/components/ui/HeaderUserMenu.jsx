@@ -22,7 +22,7 @@ const HeaderUserMenu = () => {
                     onClick={toggle}
                 >
                     <span>
-                        <UserAvatar email={user.email} />{" "}
+                        <UserAvatar />{" "}
                         <span color="gray.500">
                             {AuthService.getUsername()}
                         </span>{" "}
@@ -37,9 +37,6 @@ const HeaderUserMenu = () => {
                 <div className="dropdown-content">
                     <Link className="dropdown-item" to={`/users/${user.id}`}>
                         <div>Your profile</div>
-                    </Link>
-                    <Link className="dropdown-item" to="/users/preferences">
-                        <div>Your preferences</div>
                     </Link>
                     <hr className="dropdown-divider" />
                     <Link className="dropdown-item" to="/" onClick={logout}>

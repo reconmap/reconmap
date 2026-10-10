@@ -65,7 +65,7 @@ const path = require('path');
         
         // Settings / System
         await takeScreenshot('users', '/users');
-        await takeScreenshot('user-preferences', '/users/preferences');
+        await takeScreenshot('user-preferences', '/users/1/edit');
         await takeScreenshot('audit-log', '/auditlog');
         await takeScreenshot('system-health', '/system/health');
         await takeScreenshot('system-usage', '/system/usage');

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 
@@ -181,11 +182,11 @@ public class UsersControllerTests
     private static KeycloakUserDirectory CreateDirectory(string keycloakUrl, IKeycloakUserCache cache)
         => new(Options.Create(CreateOptions(keycloakUrl)), cache, NullLogger<KeycloakUserDirectory>.Instance);
 
-    private static UsersController CreateController(AppDbContext db, string keycloakUrl)
+    private static UsersController CreateController(AppDbContext db, string keycloakUrl, int callerId = 1)
     {
         var httpContext = new DefaultHttpContext();
         httpContext.Connection.RemoteIpAddress = IPAddress.Loopback;
-        httpContext.Items["DbUser"] = new User { Id = 1, Role = UserRole.Administrator };
+        httpContext.Items["DbUser"] = new User { Id = callerId, Role = UserRole.Administrator };
 
         var directory = CreateDirectory(keycloakUrl, new InMemoryKeycloakUserCache());
 
@@ -230,13 +231,37 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public void CreatOne_ModelValidation_AcceptsPayloadWithoutSubjectId()
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        var controller = CreateController(db, keycloak.Url);
+        // Model validation runs through MVC's validator, which needs the MVC services.
+        var services = new ServiceCollection().AddControllers().Services.BuildServiceProvider();
+        controller.HttpContext.RequestServices = services;
+
+        // The dashboard creates users without a subjectId: the API assigns it from Keycloak.
+        var newUser = new User
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john@example.com",
+            Username = "jdoe",
+            Role = UserRole.User
+        };
+
+        Assert.True(controller.TryValidateModel(newUser), string.Join("; ", controller.ModelState.Values
+            .SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+    }
+
+    [Fact]
     public async Task PatchOne_SendsIdentityFieldsToKeycloakAndAppFieldsToDatabase()
     {
         using var keycloak = new FakeKeycloak();
         using var db = CreateDbContext();
         db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = UserRole.User });
         await db.SaveChangesAsync();
-        var controller = CreateController(db, keycloak.Url);
+        var controller = CreateController(db, keycloak.Url, callerId: 2);
 
         using var patch = JsonDocument.Parse("""{"firstName":"Jane","shortBio":"Pentester","locale":"es"}""");
         var result = await controller.PatchOne(2, patch.RootElement);
@@ -250,6 +275,49 @@ public class UsersControllerTests
 
         var stored = await db.Users.FindAsync(2);
         Assert.Equal("Pentester", stored!.ShortBio);
+    }
+
+    [Fact]
+    public async Task PatchOne_RejectsLocaleTimezoneAndPreferences_WhenCallerIsNotTheOwner()
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = UserRole.User });
+        await db.SaveChangesAsync();
+        // Caller is an administrator (id 1) who does not own profile 2.
+        var controller = CreateController(db, keycloak.Url);
+
+        foreach (var json in new[]
+        {
+            """{"locale":"es"}""",
+            """{"timezone":"Europe/Madrid"}""",
+            """{"preferences":{"dashboard.theme":"light"}}"""
+        })
+        {
+            using var patch = JsonDocument.Parse(json);
+            var result = await controller.PatchOne(2, patch.RootElement);
+
+            Assert.IsType<ForbidResult>(result);
+        }
+
+        Assert.Empty(keycloak.Requests);
+        Assert.Null((await db.Users.FindAsync(2))!.Preferences);
+    }
+
+    [Fact]
+    public async Task PatchOne_LetsAdministratorsEditIdentityOfOtherUsers()
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = UserRole.User });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, keycloak.Url);
+
+        using var patch = JsonDocument.Parse("""{"firstName":"Jane","shortBio":"Pentester"}""");
+        var result = await controller.PatchOne(2, patch.RootElement);
+
+        Assert.IsType<NoContentResult>(result);
+        Assert.Single(keycloak.Requests, r => r.Method == "PUT");
     }
 
     [Fact]

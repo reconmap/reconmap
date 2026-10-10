@@ -49,7 +49,7 @@ const ProjectMembership = () => {
     const columns = [
         {
             header: "",
-            cell: (member) => (<UserAvatar email={member.email} />)
+            cell: (member) => (<UserAvatar />)
         },
         {
             header: "Name",

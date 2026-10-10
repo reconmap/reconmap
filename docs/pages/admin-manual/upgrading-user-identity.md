@@ -88,5 +88,5 @@ Then start the new API.
 ## 4. Check the result
 
 - Open **Users**. Names, emails and status should appear for every user.
-- Open a user's preferences and save them. Timezone and language should persist in Keycloak.
+- Sign in as a user, open your profile, select **Edit** and save the **Preferences** section. Timezone and language should persist in Keycloak. Only the user can change their preferences.
 - Create a user and confirm it appears in both Keycloak and the Reconmap user list.

@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Breaking (database schema):** Keycloak is now the source of truth for user identity. The `user` table no longer stores `username`, `email`, `first_name`, `last_name`, `active`, `created_at`, `updated_at`, `last_login_ts`, `timezone` or `mfa_enabled`. The API merges these from Keycloak into responses, and editing a user writes identity fields to Keycloak and app fields (role, short bio, preferences) to the database. Language is stored as the Keycloak `locale` instead of `preferences.dashboard.language`. Existing installations must follow [Upgrading user identity storage](docs/pages/admin-manual/upgrading-user-identity.md) before running the new API.
+- Moved language, theme and timezone from the separate "Your preferences" page into a **Preferences** section of the user edit form (`/users/{id}/edit`). Preferences are read-only for everyone except the user they belong to. The API rejects changes to `locale`, `timezone` and `preferences` made by anyone else, including administrators, with `403 Forbidden`. The `/users/preferences` page and the "Your preferences" menu entry have been removed.
 - Users can now be edited in full from the dashboard: `PATCH /api/users/{id}` accepts names, email, username, active status, locale, timezone and role. Deleting a user also removes it from Keycloak. MFA status is read-only and comes from Keycloak.
 
 ### Fixed
 
+- Fixed creating users from the dashboard failing with HTTP 400 ("Unable to create user: 400"). The API required a `subjectId` that the client never sends; it is now assigned from Keycloak during creation, so the request is no longer rejected by model validation.
 - Fixed user creation sending role groups to Keycloak in the wrong case. Groups are now sent in lowercase (for example `administrator-group`), matching the realm configuration (#271).
 - Fixed vulnerability creation and editing with a blank optional CVSS score. Empty scores are now saved as `null` instead of being submitted as invalid empty decimal values.
 - Fixed webhook API requests failing because they referenced an undefined ASP.NET authorization policy. Webhook access now uses Reconmap's central OPA policy, which restricts it to `administrator` and `superuser` roles.

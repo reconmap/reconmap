@@ -1,4 +1,5 @@
 using System.Text.Json;
+using api_v2.Common.Extensions;
 using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Keycloak;
@@ -109,6 +110,11 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
         var user = await dbContext.Users.FindAsync(id);
         if (user == null)
             return NotFound();
+
+        // Language, timezone and preferences (theme) are personal: only the owner of the profile can change them, administrators included.
+        var isOwner = HttpContext.GetCurrentUser()?.Id == user.Id;
+        if (!isOwner && (body.TryGetProperty("locale", out _) || body.TryGetProperty("timezone", out _) || body.TryGetProperty("preferences", out _)))
+            return Forbid();
 
         // Identity fields live in Keycloak.
         var identityUpdate = new KeycloakUserUpdate(

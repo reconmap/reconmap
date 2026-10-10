@@ -1,25 +1,24 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteUsers } from "api/requests/users.js";
 import { useUserDeleteMutation, useUsersQuery } from "api/users.js";
+import UserRoleBadge from "components/badges/UserRoleBadge";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import BooleanText from "components/ui/BooleanText";
+import Breadcrumb from "components/ui/Breadcrumb";
+import CreateButton from "components/ui/buttons/Create";
+import DeleteButton from "components/ui/buttons/Delete";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import LinkButton from "components/ui/buttons/Link";
 import ExportMenuItem from "components/ui/menuitems/ExportMenuItem";
 import NativeTable from "components/ui/tables/NativeTable.jsx";
 import Title from "components/ui/Title";
-import { AuthContext } from "contexts/AuthContext";
-import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import CreateButton from "components/ui/buttons/Create";
-import UserAvatar from "components/badges/UserAvatar";
-import UserRoleBadge from "components/badges/UserRoleBadge";
-import Breadcrumb from "components/ui/Breadcrumb";
-import DeleteButton from "components/ui/buttons/Delete";
-import LinkButton from "components/ui/buttons/Link";
 import { actionCompletedToast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
 import UserLink from "components/users/Link";
+import { AuthContext } from "contexts/AuthContext";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const UsersList = () => {
     const navigate = useNavigate();
@@ -69,10 +68,6 @@ const UsersList = () => {
                     checked={selectedUsers.includes(user.id)}
                 />
             ),
-        },
-        {
-            header: <>&nbsp;</>,
-            cell: (user) => <UserAvatar email={user.email} />,
         },
         {
             header: "Full name",

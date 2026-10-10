@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserInterface } from "models/User.js";
-import { deleteUser, getUser, getUsers, requestUserActivity, updateUser } from "./requests/users.js";
+import { deleteUser, getUser, getUsers, OwnerFields, requestUserActivity, updateUser } from "./requests/users.js";
 
 const useUserQuery = (userId: number) => {
     return useQuery({
@@ -26,8 +26,8 @@ const useUsersQuery = () => {
 const useUserUpdateMutation = (userId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (user: UserInterface) => {
-            const res = await updateUser(user);
+        mutationFn: async ({ user, ownerFields }: { user: UserInterface; ownerFields?: OwnerFields }) => {
+            const res = await updateUser(user, ownerFields);
             if (!res.ok) throw new Error(`Updating the user failed with status ${res.status}`);
             return res;
         },
