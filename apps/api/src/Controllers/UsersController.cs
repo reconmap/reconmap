@@ -40,7 +40,7 @@ public class UsersController(AppDbContext dbContext, IOptions<KeycloakOptions> k
             Enabled = true,
             Username = user.Username,
             RequiredActions = ["UPDATE_PASSWORD"],
-            Groups = [$"{user.Role}-group"]
+            Groups = [$"{user.Role.ToString().ToLower()}-group"]
         });
 
         var createdUser = await usersApi
