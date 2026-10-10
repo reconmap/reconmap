@@ -5,7 +5,6 @@ import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import AuthService from "services/auth";
-import ExternalLink from "./ExternalLink";
 
 const HeaderUserMenu = () => {
     const [t] = useTranslation();
@@ -36,11 +35,6 @@ const HeaderUserMenu = () => {
             </div>{" "}
             <div className="dropdown-menu" id="dropdown-menu" role="menu">
                 <div className="dropdown-content">
-                    <div className="dropdown-item">
-                        <ExternalLink href={AuthService.getProfileUrl()}>
-                            Identity settings
-                        </ExternalLink>
-                    </div>
                     <Link className="dropdown-item" to={`/users/${user.id}`}>
                         <div>Your profile</div>
                     </Link>

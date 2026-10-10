@@ -8,8 +8,7 @@ export const getRedirectUri = (
     location: Pick<Location, "protocol" | "hostname" | "port"> = window.location,
     contextPath: string = Configuration.getContextPath(),
 ): string =>
-    `${location.protocol}//${location.hostname}${
-        location.protocol !== "https:" && location.port ? `:${location.port}` : ""
+    `${location.protocol}//${location.hostname}${location.protocol !== "https:" && location.port ? `:${location.port}` : ""
     }${contextPath}`;
 
 const redirectUri = getRedirectUri();
@@ -153,15 +152,6 @@ const getUsername = (): string | undefined => {
         string | undefined;
 };
 
-const getProfileUrl = (): string => {
-    const cfg = Configuration.getKeycloakConfig();
-    return `${cfg.url}/realms/${cfg.realm}/account?referrer=${cfg.clientId}&referrer_uri=${encodeURIComponent(redirectUri)}`;
-};
-
-const redirectToAccountManagement = (): void => {
-    window.location.assign(getProfileUrl());
-};
-
 const getToken = (): string | undefined => currentUser?.access_token;
 
 const setCurrentUser = (user: User | null) => {
@@ -173,8 +163,6 @@ const AuthService = {
     logout,
     getUserInfo,
     getUsername,
-    getProfileUrl,
-    redirectToAccountManagement,
     getToken,
     setCurrentUser,
     userManager,
