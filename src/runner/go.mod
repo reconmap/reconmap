@@ -12,15 +12,15 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/websocket v1.5.3
 	github.com/reconmap/shared-lib v0.0.0-20220910165932-7d018d9111fc
-	github.com/shirou/gopsutil/v4 v4.26.8
-	github.com/urfave/cli/v3 v3.12.0
+	github.com/shirou/gopsutil/v4 v4.26.9
+	github.com/urfave/cli/v3 v3.14.0
 	go.uber.org/zap v1.28.0
 )
 
 require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/ebitengine/purego v0.11.0 // indirect
+	github.com/ebitengine/purego v0.11.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-resty/resty/v2 v2.17.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
@@ -35,8 +35,8 @@ require (
 	github.com/tklauser/numcpus v0.12.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/net v0.59.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
+	golang.org/x/net v0.61.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
 )
 
 replace github.com/reconmap/shared-lib => ../shared-lib
