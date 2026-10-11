@@ -35,10 +35,10 @@ func RunAction(ctx context.Context, c *cli.Command) error {
 
 func main() {
 	mainCommand := cli.Command{
-		Name:    "reconmapd",
-		Usage:   "Reconmap's agent",
-		Version: "1.0.0",
-		Copyright:   "Apache License v2.0",
+		Name:        "reconmapd",
+		Usage:       "Reconmap's agent",
+		Version:     "1.0.0",
+		Copyright:   "MIT",
 		Description: "Reconmap's agent for running scheduled commands",
 		Commands: []*cli.Command{
 			{

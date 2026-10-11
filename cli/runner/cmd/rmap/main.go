@@ -41,7 +41,7 @@ func newRootCommand() *cli.Command {
 		Usage:       "Reconmap's CLI",
 		Description: "Reconmap's command line interface",
 		Version:     build.BuildVersion,
-		Copyright:   "Apache License v2.0",
+		Copyright:   "MIT",
 		Authors: []any{
 			mail.Address{
 				Name:    "Reconmap",
