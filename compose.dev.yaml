@@ -14,5 +14,5 @@ services:
 
   ngapi:
     volumes:
-      - "./apps/api/src/appsettings.Production.json:/App/appsettings.Production.json"
-      - "./apps/api/src/appsettings.json:/App/appsettings.json"
+      - "./src/api/src/appsettings.Production.json:/App/appsettings.Production.json"
+      - "./src/api/src/appsettings.json:/App/appsettings.json"

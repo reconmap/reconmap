@@ -5,7 +5,9 @@ on:
     tags:
       - "*" # triggers only if push new tag version, like `0.8.4` or else
     paths:
-      - 'cli/**'
+      - 'src/agent/**'
+      - 'src/runner/**'
+      - 'src/shared-lib/**'
       - '.github/workflows/cli-binaries-build-deploy.yml'      
 
 jobs:
@@ -15,7 +17,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: cli/runner
+        working-directory: src/runner
 
     steps:
       - name: Check out code into the Go module directory
@@ -41,7 +43,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v7.2.3
         with:
           version: latest
-          workdir: cli/runner
+          workdir: src/runner
           args: release --config .goreleaser.yml --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GO_RELEASER_GITHUB_TOKEN }}
@@ -52,7 +54,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: cli/agent
+        working-directory: src/agent
 
     steps:
       - name: Check out code into the Go module directory
@@ -78,7 +80,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v7.2.3
         with:
           version: latest
-          workdir: cli/agent
+          workdir: src/agent
           args: release --config .goreleaser.yml --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GO_RELEASER_GITHUB_TOKEN }}
@@ -106,5 +108,5 @@ jobs:
 
       - name: Build and push docker image
         run: |
-          docker build -t ghcr.io/reconmap/agent:latest -f cli/agent/Dockerfile cli
+          docker build -t ghcr.io/reconmap/agent:latest -f src/agent/Dockerfile src
           docker push ghcr.io/reconmap/agent:latest

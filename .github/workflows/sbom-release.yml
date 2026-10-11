@@ -17,16 +17,16 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin v1.42.2
 
       - name: Generate SBOM for Dashboard
-        run: syft dir:apps/dashboard --source-name reconmap-dashboard --source-version ${{ github.ref_name }} -o spdx-json > dashboard-sbom.spdx.json
+        run: syft dir:src/dashboard --source-name reconmap-dashboard --source-version ${{ github.ref_name }} -o spdx-json > dashboard-sbom.spdx.json
 
       - name: Generate SBOM for API
-        run: syft dir:apps/api --source-name reconmap-api --source-version ${{ github.ref_name }} -o spdx-json > api-sbom.spdx.json
+        run: syft dir:src/api --source-name reconmap-api --source-version ${{ github.ref_name }} -o spdx-json > api-sbom.spdx.json
 
       - name: Generate SBOM for CLI Agent
-        run: syft dir:cli/agent --source-name reconmap-agent --source-version ${{ github.ref_name }} -o spdx-json > agent-sbom.spdx.json
+        run: syft dir:src/agent --source-name reconmap-agent --source-version ${{ github.ref_name }} -o spdx-json > agent-sbom.spdx.json
 
       - name: Generate SBOM for CLI Runner
-        run: syft dir:cli/runner --source-name reconmap-runner --source-version ${{ github.ref_name }} -o spdx-json > runner-sbom.spdx.json
+        run: syft dir:src/runner --source-name reconmap-runner --source-version ${{ github.ref_name }} -o spdx-json > runner-sbom.spdx.json
 
       - name: Create Release and Upload SBOMs
         uses: softprops/action-gh-release@v3

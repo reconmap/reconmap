@@ -14,8 +14,8 @@ import (
 	"github.com/reconmap/shared-lib/pkg/logging"
 
 	"github.com/coreos/go-oidc"
-	"github.com/reconmap/cli/internal/configuration"
-	"github.com/reconmap/cli/internal/terminal"
+	"github.com/reconmap/reconmap/src/runner/internal/configuration"
+	"github.com/reconmap/reconmap/src/runner/internal/terminal"
 	"github.com/reconmap/shared-lib/pkg/api"
 	sharedconfig "github.com/reconmap/shared-lib/pkg/configuration"
 	"golang.org/x/oauth2"

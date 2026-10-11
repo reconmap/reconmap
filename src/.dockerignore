@@ -1,0 +1,12 @@
+# The agent image (agent/Dockerfile) only needs agent/ and shared-lib/.
+# Everything else in this directory is excluded from the build context.
+api
+dashboard
+runner
+
+# Local build artifacts and logs
+**/*.log
+**/*.out
+**/*-sbom.spdx.json
+**/.idea
+**/.vscode

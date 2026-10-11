@@ -6,10 +6,10 @@ Look at each subdirectory to learn more about each tool including building and r
 
 From the repository root:
 ```shell
-docker build -t ghcr.io/reconmap/agent:latest -f cli/agent/Dockerfile cli
+docker build -t ghcr.io/reconmap/agent:latest -f src/agent/Dockerfile src
 ```
 
-From the `cli` directory:
+From this (`src`) directory:
 ```shell
 docker build -t ghcr.io/reconmap/agent:latest -f agent/Dockerfile .
 ```

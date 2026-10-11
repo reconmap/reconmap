@@ -5,14 +5,14 @@ Welcome, AI Assistant! This repository is the central hub for **Reconmap**, an o
 ## Repository Purpose
 
 This is the main orchestration repository. It contains:
-1. **Core Applications**: The `apps/` directory contains the main software components:
-   - `api/`: The C# REST API (.NET 10).
-   - `dashboard/`: The React web frontend.
+1. **Core Applications**: The `src/` directory contains the main software components:
+   - `src/api/`: The C# REST API (.NET 10).
+   - `src/dashboard/`: The React web frontend.
 2. **Deployment Configurations**: Docker Compose (`compose.yaml`) and Kubernetes resources (`infra/k8s/`).
-3. **Command Line Tools**: The `cli/` directory contains Go-based tools:
-   - `agent/`: The Reconmap agent (`reconmapd`).
-   - `runner/`: The Reconmap runner (`rmap`).
-   - `shared-lib/`: Shared Go libraries for CLI tools.
+3. **Command Line Tools**: The `src/` directory also contains Go-based tools:
+   - `src/agent/`: The Reconmap agent (`reconmapd`).
+   - `src/runner/`: The Reconmap runner (`rmap`).
+   - `src/shared-lib/`: Shared Go libraries for CLI tools.
 4. **Documentation**: MkDocs-based documentation in `docs/`.
 5. **Data & Seed Data**: JSON templates for initial imports in `data/imports/`, and model definitions in `data/model-definitions/`.
 
@@ -33,7 +33,7 @@ This is the main orchestration repository. It contains:
 ## How to Help
 
 - **Orchestration**: Help users configure and deploy Reconmap using Docker or K8s.
-- **CLI Development**: Assist in modifying the Go CLI tools in `cli/`. Follow the existing Go patterns and use the `Makefile` in `cli/`.
+- **CLI Development**: Assist in modifying the Go CLI tools in `src/agent`, `src/runner` and `src/shared-lib`. Follow the existing Go patterns and use the `Makefile` in `src/`.
 - **Documentation**: Help improve or update the manuals in `docs/`.
 - **Infrastructure**: Assist with Keycloak configuration or database migrations.
 
@@ -41,18 +41,18 @@ This is the main orchestration repository. It contains:
 
 - `compose.yaml`: Primary way to run the stack locally.
 - `config-*.json`: Template configuration files for different components.
-- `cli/Makefile`: Build entry point for Go tools.
+- `src/Makefile`: Build entry point for Go tools.
 - `docs/mkdocs.yml`: Configuration for the documentation site.
 
 ## Conventions
 
-- Follow Go idiomatic patterns in `cli/`.
+- Follow Go idiomatic patterns in `src/agent`, `src/runner` and `src/shared-lib`.
 - Maintain semantic versioning in `CHANGELOG.md`.
 - Ensure all new features are documented in `docs/`.
 
 ## Mandatory Feature Completion Gate
 
-For every new feature (across `apps/`, `cli/`, `docs/`, or infra-related code), AI agents must complete all of the following before considering the task done:
+For every new feature (across `src/`, `docs/`, or infra-related code), AI agents must complete all of the following before considering the task done:
 
 1. **Run tests**
    - Execute the relevant test suite(s) for the components touched.

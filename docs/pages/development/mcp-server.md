@@ -20,7 +20,7 @@ In addition, the server exposes the following Resources (data sources):
 
 ## Requirements
 
-The MCP server is a standard .NET 10 Console application located in the `apps/api/McpServer` directory.
+The MCP server is a standard .NET 10 Console application located in the `src/api/McpServer` directory.
 
 ## How to use it
 
@@ -32,7 +32,7 @@ The MCP Server has been configured to use the **Streamable HTTP (SSE)** transpor
 2. Build and run the project: 
 
 ```bash
-cd apps/api
+cd src/api
 dotnet run --project McpServer/McpServer.csproj
 ```
 

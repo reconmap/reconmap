@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   config-ui.json: |
     {
-        "$schema": "https://raw.githubusercontent.com/reconmap/reconmap/refs/heads/main/apps/dashboard/config-schema.json",
+        "$schema": "https://raw.githubusercontent.com/reconmap/reconmap/refs/heads/main/src/dashboard/config-schema.json",
         "contextPath": "",
         "logoUrl": "/logo-name.png",
         "reconmapApiUrl": "http://localhost:5510/api",

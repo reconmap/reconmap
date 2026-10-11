@@ -4,15 +4,15 @@
 version: 2
 updates:
   - package-ecosystem: "gomod"
-    directory: "/cli/shared-lib"
+    directory: "/src/shared-lib"
     schedule:
       interval: "weekly"
   - package-ecosystem: "gomod"
-    directory: "/cli/runner"
+    directory: "/src/runner"
     schedule:
       interval: "weekly"
   - package-ecosystem: "gomod"
-    directory: "/cli/agent"
+    directory: "/src/agent"
     schedule:
       interval: "weekly"
 
@@ -22,12 +22,12 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "npm"
-    directory: "/apps/dashboard"
+    directory: "/src/dashboard"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "dotnet-sdk"
-    directory: "/apps/api"
+    directory: "/src/api"
     schedule:
       interval: "weekly"
       day: "wednesday"

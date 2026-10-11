@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/reconmap/cli/internal/configuration"
+	"github.com/reconmap/reconmap/src/runner/internal/configuration"
 	shareconfig "github.com/reconmap/shared-lib/pkg/configuration"
 	"github.com/urfave/cli/v3"
 )

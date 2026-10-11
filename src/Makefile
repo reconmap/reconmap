@@ -1,5 +1,5 @@
 SHELL := bash
-SUBDIRS := $(wildcard */.)
+SUBDIRS := agent runner shared-lib
 
 include Golang.mk
 

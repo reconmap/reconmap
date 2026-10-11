@@ -10,8 +10,8 @@ import (
 	"github.com/reconmap/shared-lib/pkg/logging"
 
 	"github.com/fatih/color"
-	"github.com/reconmap/cli/internal/build"
-	"github.com/reconmap/cli/internal/commands"
+	"github.com/reconmap/reconmap/src/runner/internal/build"
+	"github.com/reconmap/reconmap/src/runner/internal/commands"
 	"github.com/urfave/cli/v3"
 )
 

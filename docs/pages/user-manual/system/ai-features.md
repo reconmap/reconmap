@@ -31,7 +31,7 @@ Any Ollama-compatible model works — this is just a recommended starting point 
 
 Deployment maintainers can add another OpenAI-compatible model router without
 changing the database, API DTOs, or dashboard. Add its definition to
-`apps/api/src/ai-providers.json` with a unique ID, display name, the
+`src/api/src/ai-providers.json` with a unique ID, display name, the
 `openai-compatible` adapter, an absolute API endpoint, and its form fields.
 For example:
 

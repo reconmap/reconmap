@@ -25,9 +25,9 @@ builds:
       - -X main.commit={{.Commit}}
       - -X main.date={{.CommitDate}}
       - -X main.builtBy=goreleaser
-      - -X github.com/reconmap/cli/internal/build.BuildVersion={{.Version}}
-      - -X github.com/reconmap/cli/internal/build.BuildTime={{.CommitDate}}
-      - -X github.com/reconmap/cli/internal/build.BuildCommit={{.Commit}}
+      - -X github.com/reconmap/reconmap/src/runner/internal/build.BuildVersion={{.Version}}
+      - -X github.com/reconmap/reconmap/src/runner/internal/build.BuildTime={{.CommitDate}}
+      - -X github.com/reconmap/reconmap/src/runner/internal/build.BuildCommit={{.Commit}}
     mod_timestamp: '{{ .CommitTimestamp }}'
     flags:
     - -trimpath
@@ -38,7 +38,7 @@ release:
 
 homebrew_casks:
   - name: rmap
-    homepage: 'https://github.com/reconmap/command-line-tools/tree/main/cli'
+    homepage: 'https://github.com/reconmap/reconmap/tree/main/src/runner'
     description: 'Rmap: Command line interface for the Reconmap pentest automation and reporting tool.'
     directory: Formula
     license: "MIT"

@@ -1,4 +1,4 @@
-module github.com/reconmap/cli
+module github.com/reconmap/reconmap/src/runner
 
 go 1.27.0
 

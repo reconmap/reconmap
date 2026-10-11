@@ -4,11 +4,15 @@ on:
   push:
     branches: [main]
     paths:
-      - 'cli/**'
+      - 'src/agent/**'
+      - 'src/runner/**'
+      - 'src/shared-lib/**'
   pull_request:
     branches: [main]
     paths:
-      - 'cli/**'
+      - 'src/agent/**'
+      - 'src/runner/**'
+      - 'src/shared-lib/**'
 
 jobs:
   build-rmap:
@@ -18,7 +22,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: cli/runner
+        working-directory: src/runner
 
     steps:
       - name: Check out code into the Go module directory
@@ -44,7 +48,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: cli/agent
+        working-directory: src/agent
 
     steps:
       - name: Check out code into the Go module directory
@@ -70,7 +74,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: cli/shared-lib
+        working-directory: src/shared-lib
 
     steps:
       - name: Check out code into the Go module directory

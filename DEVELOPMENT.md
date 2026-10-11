@@ -11,13 +11,12 @@ Welcome! This guide helps you set up and contribute to the Reconmap ecosystem.
 
 ## Project Structure
 
-- `apps/`: Core applications.
+- `src/`: Application source code.
     - `api/`: The C# REST API (.NET 10).
     - `dashboard/`: The React web frontend.
-- `cli/`: Go CLI tools.
-    - `agent/`: The `reconmapd` agent.
-    - `runner/`: The `rmap` runner.
-    - `shared-lib/`: Common libraries for CLI tools.
+    - `agent/`: The `reconmapd` agent (Go).
+    - `runner/`: The `rmap` runner (Go).
+    - `shared-lib/`: Common libraries for CLI tools (Go).
 - `data/`: Data-related files and seed data.
     - `imports/`: Seed data for fresh installations.
     - `model-definitions/`: Database and model definitions.
@@ -53,7 +52,7 @@ This starts the production-grade baseline:
 To prevent configuration duplication, the sub-project compose files inherit from the root `compose.yaml` file using the Docker Compose `include` feature:
 
 - **Root `compose.yaml`**: The production-ready baseline. It uses clean, production-grade configurations, avoids local builds (uses prebuilt registry images), and exposes no development debugging or management features.
-- **`apps/api/compose.yaml`**: Used for local API development and testing. It includes the root `compose.yaml` and applies development-specific overrides:
+- **`src/api/compose.yaml`**: Used for local API development and testing. It includes the root `compose.yaml` and applies development-specific overrides:
   - Switches `rabbitmq` to `rabbitmq:4.2-management-alpine` and exposes the management port `15672`.
   - Configures a local `postgres` build context pointing to `infra/docker/postgres/Dockerfile`.
   - Configures `keycloak` in debug mode (running under the `testing` profile).
@@ -63,10 +62,10 @@ To prevent configuration duplication, the sub-project compose files inherit from
 
 ## CLI Development
 
-Navigate to the `cli/` directory to manage Go-based tools:
+Navigate to the `src/` directory to manage Go-based tools:
 
 ```bash
-cd cli
+cd src
 make build # Builds all CLI tools
 ```
 

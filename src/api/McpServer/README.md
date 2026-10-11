@@ -13,7 +13,7 @@ Unlike traditional console-based MCP servers, this server runs as an **ASP.NET C
 To start the MCP server locally:
 
 ```bash
-cd apps/api
+cd src/api
 dotnet run --project McpServer/McpServer.csproj
 ```
 
@@ -37,4 +37,4 @@ The MCP server shares the same `AppDbContext` and Entity Framework schema as the
 
 - **Resources**: Configured in `Resources/ReconmapResources.cs`. Exposes entity endpoints like `reconmap://projects`.
 - **Tools**: Configured in `Tools/ReconmapTools.cs`. Exposes executable functions.
-- **Database**: Database configurations are automatically loaded from `apps/api/src/appsettings.json` and `appsettings.Development.json` during build. Ensure your `launchSettings.json` or `ASPNETCORE_ENVIRONMENT` environment variable is set to `Development` for local testing.
+- **Database**: Database configurations are automatically loaded from `src/api/src/appsettings.json` and `appsettings.Development.json` during build. Ensure your `launchSettings.json` or `ASPNETCORE_ENVIRONMENT` environment variable is set to `Development` for local testing.

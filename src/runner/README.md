@@ -1,4 +1,4 @@
-![Build and test workflow](https://github.com/Reconmap/cli/workflows/Build%20and%20test%20workflow/badge.svg)
+![Build and test workflow](https://github.com/reconmap/reconmap/actions/workflows/cli-binaries-build-test.yml/badge.svg)
 
 # Reconmap CLI
 

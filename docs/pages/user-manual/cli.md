@@ -7,4 +7,4 @@ There is a large number of commands a pentester needs to execute as part of thei
 
 ![Tasks](/images/screenshots/reconmap-cli.png)
 
-Up to date information on how to use the CLI can be found on [this README file](https://github.com/reconmap/cli/blob/master/README.md).
+Up to date information on how to use the CLI can be found on [this README file](https://github.com/reconmap/reconmap/blob/main/src/runner/README.md).
