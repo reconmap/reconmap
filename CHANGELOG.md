@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Breaking (database schema):** Keycloak is now the source of truth for user identity. The `user` table no longer stores `username`, `email`, `first_name`, `last_name`, `active`, `created_at`, `updated_at`, `last_login_ts`, `timezone` or `mfa_enabled`. The API merges these from Keycloak into responses, and editing a user writes identity fields to Keycloak and app fields (role, short bio, preferences) to the database. Language is stored as the Keycloak `locale` instead of `preferences.dashboard.language`. Existing installations must follow [Upgrading user identity storage](docs/pages/admin-manual/upgrading-user-identity.md) before running the new API.
 - Moved language, theme and timezone from the separate "Your preferences" page into a **Preferences** section of the user edit form (`/users/{id}/edit`). Preferences are read-only for everyone except the user they belong to. The API rejects changes to `locale`, `timezone` and `preferences` made by anyone else, including administrators, with `403 Forbidden`. The `/users/preferences` page and the "Your preferences" menu entry have been removed.
 - Users can now be edited in full from the dashboard: `PATCH /api/users/{id}` accepts names, email, username, active status, locale, timezone and role. Deleting a user also removes it from Keycloak. MFA status is read-only and comes from Keycloak.
+- Improved the runner pages in the dashboard:
+    - The **Add runner** form moved from the runners list to its own page at `/runners/create`. The runner credentials are displayed on that page after the runner is created.
+    - The runners list, runner details and add runner pages have a page header and breadcrumbs.
+    - The runners list has a **Refresh** button to reload the list on demand.
+    - The runner details page shows every detail the runner reports: ID, client ID, enabled state, version, hostname, OS, architecture, CPU, memory, IP address, listen address, and last boot and ping times.
 
 ### Fixed
 

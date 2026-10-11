@@ -3,9 +3,11 @@ import NativeButtonGroup from "components/forms/NativeButtonGroup.jsx";
 import Breadcrumb from "components/ui/Breadcrumb.jsx";
 import PrimaryButton from "components/ui/buttons/Primary.jsx";
 import CommandTerminal from "components/ui/CommandTerminal.jsx";
-import Tag from "components/ui/Tag.jsx";
+import EmptyField from "components/ui/EmptyField.jsx";
+import RelativeDateFormatter from "components/ui/RelativeDateFormatter.jsx";
+import Title from "components/ui/Title";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Loading from "components/ui/Loading.jsx";
 import { useAuth } from "contexts/AuthContext";
 import { hasRunnerTerminalAccess } from "services/auth";
@@ -18,6 +20,15 @@ const pingedRecently = (lastPingAt) => {
     return diffMinutes < 5; // Consider online if pinged within the last 5 minutes
 }
 
+const DateValue = ({ value }) => {
+    if (!value) return <EmptyField />;
+
+    return <>
+        <time dateTime={value}>{value}</time> (<RelativeDateFormatter date={value} />)
+    </>;
+};
+
+const FieldValue = ({ value }) => (value === null || value === undefined || value === "" ? <EmptyField /> : value);
 
 const RunnerDetailsPage = () => {
     const { runnerId } = useParams();
@@ -39,33 +50,56 @@ const RunnerDetailsPage = () => {
 
     return (
         <div>
-            <Breadcrumb>
-                <Link to="/runners">Runners</Link>
-                <Link>{runner.name}</Link>
-            </Breadcrumb>
+            <div className="heading">
+                <Breadcrumb current={runner.name} />
+            </div>
+            <Title type="Runner" title={runner.name} />
 
-
-            <Tag>{runner.os}</Tag>                {pingedRecently(runner.lastPingAt) ? (<span className="tag is-success">Online</span>) : (
-                <span className="tag is-warning">Offline</span>
-            )}
-
-            <h3 className="title is-3">Runner: {runner.name}</h3>
+            <p className="mb-4">
+                <span className={`tag ${pingedRecently(runner.lastPingAt) ? "is-success" : "is-warning"}`}>
+                    {pingedRecently(runner.lastPingAt) ? "Online" : "Offline"}
+                </span>
+            </p>
 
             <dl className="content">
+                <dt>ID:</dt>
+                <dd><FieldValue value={runner.id} /></dd>
+
+                <dt>Client ID:</dt>
+                <dd><FieldValue value={runner.clientId} /></dd>
+
+                <dt>Enabled:</dt>
+                <dd>{runner.active ? "True" : "False"}</dd>
+
+                <dt>Version:</dt>
+                <dd><FieldValue value={runner.version} /></dd>
+
                 <dt>Hostname:</dt>
-                <dd>{runner.hostname}</dd>
+                <dd><FieldValue value={runner.hostname} /></dd>
+
+                <dt>OS:</dt>
+                <dd><FieldValue value={runner.os} /></dd>
+
+                <dt>Architecture:</dt>
+                <dd><FieldValue value={runner.arch} /></dd>
+
+                <dt>CPU:</dt>
+                <dd><FieldValue value={runner.cpu} /></dd>
+
+                <dt>Memory:</dt>
+                <dd><FieldValue value={runner.memory} /></dd>
 
                 <dt>IP Address:</dt>
-                <dd>{runner.ip}</dd>
+                <dd><FieldValue value={runner.ip} /></dd>
 
                 <dt>Listen Address:</dt>
-                <dd>{runner.listenAddr}</dd>
+                <dd><FieldValue value={runner.listenAddr} /></dd>
 
                 <dt>Last Booted At:</dt>
-                <dd>{runner.lastBootAt}</dd>
+                <dd><DateValue value={runner.lastBootAt} /></dd>
 
                 <dt>Last Pinged At:</dt>
-                <dd>{runner.lastPingAt}</dd>
+                <dd><DateValue value={runner.lastPingAt} /></dd>
             </dl>
 
             {terminalAllowed && <NativeButtonGroup>

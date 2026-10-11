@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getNavigationStructure } from "components/layout/NavigationStructure";
 
-const Breadcrumb = () => {
+const Breadcrumb = ({ current }) => {
     const { pathname } = useLocation();
     const [t] = useTranslation();
     const navigation = getNavigationStructure(t);
@@ -58,6 +58,11 @@ const Breadcrumb = () => {
             uniquePath.push(crumb);
         }
     });
+
+    // Optional final crumb for pages whose URL is not in the navigation (e.g. a runner's name)
+    if (current) {
+        uniquePath.push({ name: current, url: pathname });
+    }
 
     return (
         <nav className="breadcrumb has-arrow-separator" aria-label="breadcrumbs">

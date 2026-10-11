@@ -1,11 +1,13 @@
 import { useRunnersQuery } from "api/runners.js";
-import { requestRunnerDelete, requestRunnerPost } from "api/requests/runners.js";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField.jsx";
+import { requestRunnerDelete } from "api/requests/runners.js";
 import NativeButton from "components/forms/NativeButton.jsx";
-import NativeInput from "components/forms/NativeInput.jsx";
+import NativeButtonGroup from "components/forms/NativeButtonGroup.jsx";
+import Breadcrumb from "components/ui/Breadcrumb.jsx";
+import CreateButton from "components/ui/buttons/Create.jsx";
+import Title from "components/ui/Title";
 import NativeTable from "components/ui/tables/NativeTable.jsx";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { RunnersUrls } from "AppUrls";
 
 const pingedRecently = (lastPingAt) => {
     if (!lastPingAt) return false;
@@ -16,31 +18,8 @@ const pingedRecently = (lastPingAt) => {
 }
 
 const RunnersListPage = () => {
-    const { data: runners, isLoading, refetch } = useRunnersQuery();
-
-    const [runnerCredentials, setRunnerCredentials] = useState(null);
-
-    if (isLoading) return <div>Loading&hellip;</div>;
-
-    const onSubmit = (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = Object.fromEntries(formData.entries());
-        requestRunnerPost(data).then((response) => {
-            if (response.status === 201) {
-                return response.json();
-            } else {
-                alert("Failed to add runner");
-            }
-        }).then((data) => {
-            if (data) {
-                event.target.reset();
-                setRunnerCredentials(data);
-                refetch();
-                alert("Runner added successfully");
-            }
-        });
-    }
+    const navigate = useNavigate();
+    const { data: runners, isLoading, isFetching, refetch } = useRunnersQuery();
 
     const columns = [
         {
@@ -130,28 +109,16 @@ const RunnersListPage = () => {
     ];
 
     return <>
-        <NativeTable columns={columns} rows={runners} rowId={(runner) => runner.id}></NativeTable>
+        <div className="heading">
+            <Breadcrumb />
+            <NativeButtonGroup>
+                <NativeButton onClick={() => refetch()} disabled={isFetching}>Refresh</NativeButton>
+                <CreateButton onClick={() => navigate(RunnersUrls.Create)}>Add runner</CreateButton>
+            </NativeButtonGroup>
+        </div>
+        <Title title="Runners" />
 
-        {runnerCredentials && (
-            <div>
-                The runner credentials are (please copy them as they are only displayed once):
-                <pre>{JSON.stringify(runnerCredentials, null, 2)}</pre>
-
-            </div>
-        )}
-
-        <details>
-            <summary>Add runner</summary>
-            <form method="POST" action="/api/runners" onSubmit={onSubmit}>
-                <HorizontalLabelledField label="Name" control={<NativeInput type="text" name="name" placeholder="Name" required />} />
-
-                <HorizontalLabelledField label="Hostname" control={<NativeInput type="text" name="hostname" placeholder="Hostname" required />} />
-
-                <HorizontalLabelledField label="Listen Address" control={<NativeInput type="text" name="listenAddr" placeholder="Listen Address" required />} />
-
-                <NativeButton type="submit" className="button is-primary">Add new runner</NativeButton>
-            </form>
-        </details>
+        <NativeTable columns={columns} rows={isLoading ? null : runners} rowId={(runner) => runner.id}></NativeTable>
     </>
 }
 
