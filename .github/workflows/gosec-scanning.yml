@@ -5,8 +5,8 @@ name: CLI binaries security scan
 on:
   push:
     paths:
-      - 'src/agent/**'
       - 'src/runner/**'
+      - 'src/cli/**'
       - 'src/shared-lib/**'
   schedule:
     - cron: "0 0 * * 0"

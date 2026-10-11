@@ -23,5 +23,5 @@ Available widgets:
 | User activitiy over time  | Chart of activity over time                                                                                        |
 | API health                | Presents information about the status of the API                                                                   |
 | Recent vulnerabilities    | Shows the most recently reported vulnerabilities                                                                   |
-| Agents                    | Shows the status of registered security agents                                                                     |
+| Runners                    | Shows the status of registered security runners                                                                     |
 | Top vulnerable assets     | Shows assets with the highest count of active vulnerabilities                                                      |

@@ -30,8 +30,8 @@ jobs:
         with:
           filters: |
             go:
-              - 'src/agent/**'
               - 'src/runner/**'
+              - 'src/cli/**'
               - 'src/shared-lib/**'
             csharp:
               - 'src/api/**'

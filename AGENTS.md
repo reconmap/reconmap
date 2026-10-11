@@ -10,8 +10,8 @@ This is the main orchestration repository. It contains:
    - `src/dashboard/`: The React web frontend.
 2. **Deployment Configurations**: Docker Compose (`compose.yaml`) and Kubernetes resources (`infra/k8s/`).
 3. **Command Line Tools**: The `src/` directory also contains Go-based tools:
-   - `src/agent/`: The Reconmap agent (`reconmapd`).
-   - `src/runner/`: The Reconmap runner (`rmap`).
+   - `src/runner/`: The Reconmap runner (`reconmapd`).
+   - `src/cli/`: The Reconmap CLI (`rmap`).
    - `src/shared-lib/`: Shared Go libraries for CLI tools.
 4. **Documentation**: MkDocs-based documentation in `docs/`.
 5. **Data & Seed Data**: JSON templates for initial imports in `data/imports/`, and model definitions in `data/model-definitions/`.
@@ -21,7 +21,7 @@ This is the main orchestration repository. It contains:
 - **Multi-tier**: React Frontend (dashboard), C# REST API (api), and Go CLI tools.
 - **Authentication**: Keycloak (OIDC) is used for all auth.
 - **Data Persistence**: PostgreSQL for relational data, Redis for caching.
-- **Integration**: The agent connects to the API to receive tasks and execute security tools.
+- **Integration**: The runner connects to the API to receive tasks and execute security tools.
 
 ## Development Stack
 
@@ -33,7 +33,7 @@ This is the main orchestration repository. It contains:
 ## How to Help
 
 - **Orchestration**: Help users configure and deploy Reconmap using Docker or K8s.
-- **CLI Development**: Assist in modifying the Go CLI tools in `src/agent`, `src/runner` and `src/shared-lib`. Follow the existing Go patterns and use the `Makefile` in `src/`.
+- **CLI Development**: Assist in modifying the Go CLI tools in `src/runner`, `src/cli` and `src/shared-lib`. Follow the existing Go patterns and use the `Makefile` in `src/`.
 - **Documentation**: Help improve or update the manuals in `docs/`.
 - **Infrastructure**: Assist with Keycloak configuration or database migrations.
 
@@ -46,7 +46,7 @@ This is the main orchestration repository. It contains:
 
 ## Conventions
 
-- Follow Go idiomatic patterns in `src/agent`, `src/runner` and `src/shared-lib`.
+- Follow Go idiomatic patterns in `src/runner`, `src/cli` and `src/shared-lib`.
 - Maintain semantic versioning in `CHANGELOG.md`.
 - Ensure all new features are documented in `docs/`.
 

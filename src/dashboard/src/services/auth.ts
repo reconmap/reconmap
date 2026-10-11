@@ -69,7 +69,7 @@ export const getDashboardRoles = (user: User): string[] => {
 
 const extractRole = (user: User): string | undefined => getDashboardRoles(user)[0];
 
-export const hasAgentTerminalAccess = (user: User | null | undefined): boolean => {
+export const hasRunnerTerminalAccess = (user: User | null | undefined): boolean => {
     if (!user) return false;
     return getDashboardRoles(user).some((role) => role === "administrator" || role === "superuser");
 };

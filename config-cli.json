@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/reconmap/reconmap/refs/heads/main/src/runner/config-schema.json",
+    "$schema": "https://raw.githubusercontent.com/reconmap/reconmap/refs/heads/main/src/cli/config-schema.json",
     "keycloak": {
         "baseUri": "http://localhost:8080/realms/reconmap",
         "clientId": "rmap-client"

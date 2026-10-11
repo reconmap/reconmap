@@ -114,7 +114,7 @@ export const ToolsUrls = {
     VaultItemEdit: "/vault/:vaultItemId/edit",
 };
 
-export const AgentsUrls = {
-    List: "/agents",
-    Details: "/agents/:agentId",
+export const RunnersUrls = {
+    List: "/runners",
+    Details: "/runners/:runnerId",
 };

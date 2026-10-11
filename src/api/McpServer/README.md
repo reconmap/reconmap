@@ -1,6 +1,6 @@
 # Reconmap MCP Server
 
-This is the Model Context Protocol (MCP) server for Reconmap. It exposes Reconmap's core features (Projects, Tasks, Findings, Documents, Agents) as tools and resources that AI assistants and LLMs can interact with directly.
+This is the Model Context Protocol (MCP) server for Reconmap. It exposes Reconmap's core features (Projects, Tasks, Findings, Documents, Runners) as tools and resources that AI assistants and LLMs can interact with directly.
 
 ## Overview
 

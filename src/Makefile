@@ -1,5 +1,5 @@
 SHELL := bash
-SUBDIRS := agent runner shared-lib
+SUBDIRS := runner cli shared-lib
 
 include Golang.mk
 
@@ -12,10 +12,10 @@ $(SUBDIRS):
 .PHONY: programs clean
 
 programs:
-	pushd agent && make reconmapd && popd
-	pushd runner && make rmap && popd
+	pushd runner && make reconmapd && popd
+	pushd cli && make rmap && popd
 
 clean:
-	pushd agent && make clean && popd
 	pushd runner && make clean && popd
+	pushd cli && make clean && popd
 

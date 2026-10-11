@@ -3,7 +3,7 @@ title: Deployment options
 parent: Admin manual
 ---
 
-Reconmap is composed of several microservices and client applications — including a REST API, a React dashboard, an agent, and supporting infrastructure such as PostgreSQL, Redis, and Keycloak. Because of this architecture, there are multiple ways to deploy the platform depending on your team size, technical expertise, and infrastructure preferences.
+Reconmap is composed of several microservices and client applications — including a REST API, a React dashboard, a runner, and supporting infrastructure such as PostgreSQL, Redis, and Keycloak. Because of this architecture, there are multiple ways to deploy the platform depending on your team size, technical expertise, and infrastructure preferences.
 
 The sections below describe each deployment option, along with its trade-offs, to help you choose the best fit for your environment.
 

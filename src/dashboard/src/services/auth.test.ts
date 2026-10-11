@@ -1,5 +1,5 @@
 import { User } from "oidc-client-ts";
-import { getDashboardRoles, getRedirectUri, hasAgentTerminalAccess } from "./auth.js";
+import { getDashboardRoles, getRedirectUri, hasRunnerTerminalAccess } from "./auth.js";
 
 const userWithRoles = (roles: string[]): User => ({
     profile: { resource_access: { dashboard: { roles } } },
@@ -15,20 +15,20 @@ describe("getRedirectUri", () => {
     });
 });
 
-describe("agent terminal access", () => {
+describe("runner terminal access", () => {
     it("allows administrator and superuser roles", () => {
-        expect(hasAgentTerminalAccess(userWithRoles(["administrator"]))).toBe(true);
-        expect(hasAgentTerminalAccess(userWithRoles(["superuser"]))).toBe(true);
+        expect(hasRunnerTerminalAccess(userWithRoles(["administrator"]))).toBe(true);
+        expect(hasRunnerTerminalAccess(userWithRoles(["superuser"]))).toBe(true);
     });
 
     it("rejects user and client roles", () => {
-        expect(hasAgentTerminalAccess(userWithRoles(["user"]))).toBe(false);
-        expect(hasAgentTerminalAccess(userWithRoles(["client"]))).toBe(false);
+        expect(hasRunnerTerminalAccess(userWithRoles(["user"]))).toBe(false);
+        expect(hasRunnerTerminalAccess(userWithRoles(["client"]))).toBe(false);
     });
 
     it("uses every dashboard role rather than only the first", () => {
         const user = userWithRoles(["user", "superuser"]);
         expect(getDashboardRoles(user)).toEqual(["user", "superuser"]);
-        expect(hasAgentTerminalAccess(user)).toBe(true);
+        expect(hasRunnerTerminalAccess(user)).toBe(true);
     });
 });

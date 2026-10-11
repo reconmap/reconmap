@@ -1,13 +1,16 @@
 {
     "$schema": "https://json-schema.org/draft-07/schema",
-    "$id": "https://reconmap.com/reconmap-cli.schema.json",
-    "title": "Reconmap CLI configuration schema",
-    "description": "Schema for the configuration of the Reconmap CLI",
+    "$id": "https://reconmap.com/reconmap-runner.schema.json",
+    "title": "Reconmap runner configuration schema",
+    "description": "Schema for the configuration of the Reconmap runner",
     "type": "object",
     "required": [
         "$schema",
         "keycloak",
-        "reconmapApi"
+        "reconmapApi",
+        "redis",
+        "validOrigins",
+        "runnerDirectory"
     ],
     "properties": {
         "$schema": {
@@ -18,7 +21,8 @@
             "type": "object",
             "required": [
                 "baseUri",
-                "clientId"
+                "clientId",
+                "clientSecret"
             ],
             "properties": {
                 "baseUri": {
@@ -26,6 +30,9 @@
                     "format": "uri"
                 },
                 "clientId": {
+                    "type": "string"
+                },
+                "clientSecret": {
                     "type": "string"
                 }
             },
@@ -43,6 +50,39 @@
                 }
             },
             "additionalProperties": false
+        },
+        "redis": {
+            "type": "object",
+            "required": [
+                "host",
+                "port",
+                "username",
+                "password"
+            ],
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "validOrigins": {
+            "type": "string",
+            "description": "Exact dashboard origin permitted to open terminal WebSockets, including scheme and optional port, without a path."
+        },
+        "runnerDirectory": {
+            "type": "string"
         }
     },
     "additionalProperties": false

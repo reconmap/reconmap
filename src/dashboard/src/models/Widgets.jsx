@@ -8,7 +8,7 @@ import ReleasesWidget from "pages/dashboard/widgets/ReleasesWidget.jsx";
 import UserActivityStatsWidget from "pages/dashboard/widgets/UserActivityStatsWidget.jsx";
 import VulnerabilitiesByCategoryStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget.jsx";
 import VulnerabilitiesByRiskStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByRiskStatsWidget.jsx";
-import AgentsWidget from "pages/dashboard/widgets/AgentsWidget.jsx";
+import RunnersWidget from "pages/dashboard/widgets/RunnersWidget.jsx";
 import TopVulnerableAssetsWidget from "pages/dashboard/widgets/TopVulnerableAssetsWidget.jsx";
 
 const Widgets = {
@@ -72,11 +72,11 @@ const Widgets = {
         component: <RecentVulnerabilitiesWidget />,
         description: "It shows the most recently reported vulnerabilities.",
     },
-    "agents": {
-        title: "Agents",
+    "runners": {
+        title: "Runners",
         visible: true,
-        component: <AgentsWidget />,
-        description: "It shows the status of security agents.",
+        component: <RunnersWidget />,
+        description: "It shows the status of security runners.",
     },
     "top-vulnerable-assets": {
         title: "Top vulnerable assets",

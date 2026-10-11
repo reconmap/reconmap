@@ -51,7 +51,7 @@ func TestGetCommandUsageById(t *testing.T) {
 	}
 }
 
-func TestAgentBoot_ErrorOnNonSuccess(t *testing.T) {
+func TestRunnerBoot_ErrorOnNonSuccess(t *testing.T) {
 	originalClient := DefaultHTTPClient
 	defer func() { DefaultHTTPClient = originalClient }()
 
@@ -69,7 +69,7 @@ func TestAgentBoot_ErrorOnNonSuccess(t *testing.T) {
 	systemInfo := &SystemInfo{
 		Version: "1.0.0",
 	}
-	_, err := AgentBoot("http://api.example.com", "agent-client", "token", systemInfo)
+	_, err := RunnerBoot("http://api.example.com", "runner-client", "token", systemInfo)
 
 	if err == nil {
 		t.Fatal("Expected error on non-success status code, got nil")
@@ -80,7 +80,7 @@ func TestAgentBoot_ErrorOnNonSuccess(t *testing.T) {
 	}
 }
 
-func TestAgentPing_ErrorOnNonSuccess(t *testing.T) {
+func TestRunnerPing_ErrorOnNonSuccess(t *testing.T) {
 	originalClient := DefaultHTTPClient
 	defer func() { DefaultHTTPClient = originalClient }()
 
@@ -95,7 +95,7 @@ func TestAgentPing_ErrorOnNonSuccess(t *testing.T) {
 	}
 	DefaultHTTPClient = mockClient
 
-	_, err := AgentPing("http://api.example.com", "agent-client", "token")
+	_, err := RunnerPing("http://api.example.com", "runner-client", "token")
 
 	if err == nil {
 		t.Fatal("Expected error on non-success status code, got nil")

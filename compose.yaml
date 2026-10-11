@@ -120,14 +120,14 @@ services:
       rustfs:
         condition: service_started
 
-  agent:
-    profiles: [ 'agent' ]
-    image: ghcr.io/reconmap/agent:latest
+  runner:
+    profiles: [ 'runner' ]
+    image: ghcr.io/reconmap/runner:latest
     restart: unless-stopped
     ports:
       - "5520:5520"
     volumes:
-      - "./config-agent.json:/root/.config/reconmap/config-reconmapd.json"
+      - "./config-runner.json:/root/.config/reconmap/config-reconmapd.json"
     command: /app/reconmapd run
     environment:
       RMAP_KEYCLOAK_DEBUG: "false"

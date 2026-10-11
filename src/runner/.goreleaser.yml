@@ -1,19 +1,18 @@
 version: 2
-project_name: rmap
+project_name: reconmapd
 
 before:
   hooks:
     - go mod download
 
 builds:
-  - id: "rmap"
-    main: ./cmd/rmap/main.go
-    binary: rmap
+  - id: "reconmapd"
+    main: ./cmd/reconmapd/main.go
+    binary: reconmapd
     env:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
       - darwin
     goarch:
       - amd64
@@ -25,21 +24,21 @@ builds:
       - -X main.commit={{.Commit}}
       - -X main.date={{.CommitDate}}
       - -X main.builtBy=goreleaser
-      - -X github.com/reconmap/reconmap/src/runner/internal/build.BuildVersion={{.Version}}
-      - -X github.com/reconmap/reconmap/src/runner/internal/build.BuildTime={{.CommitDate}}
-      - -X github.com/reconmap/reconmap/src/runner/internal/build.BuildCommit={{.Commit}}
-    mod_timestamp: '{{ .CommitTimestamp }}'
+      - -X github.com/reconmap/reconmapd/internal/build.BuildVersion={{.Version}}
+      - -X github.com/reconmap/reconmapd/internal/build.BuildTime={{.CommitDate}}
+      - -X github.com/reconmap/reconmapd/internal/build.BuildCommit={{.Commit}}
+    mod_timestamp: "{{ .CommitTimestamp }}"
     flags:
-    - -trimpath
+      - -trimpath
 
 release:
   extra_files:
-    - glob: rmap-sbom.spdx.json
+    - glob: reconmapd-sbom.spdx.json
 
 homebrew_casks:
-  - name: rmap
-    homepage: 'https://github.com/reconmap/reconmap/tree/main/src/runner'
-    description: 'Rmap: Command line interface for the Reconmap pentest automation and reporting tool.'
+  - name: reconmapd
+    homepage: "https://github.com/reconmap/reconmap/tree/main/src/runner"
+    description: "Reconmapd: The Reconmap runner allows clients to launch commands remotely, open interactive browser terminals, and receive push notifications."
     directory: Formula
     license: "MIT"
     commit_author:
@@ -52,15 +51,11 @@ homebrew_casks:
       post:
         install: |
           if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/rmap"]
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/reconmapd"]
           end
-
 
 archives:
   - name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
-    format_overrides:
-    - goos: windows
-      formats: [ 'zip' ]
 
 checksum:
   name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"

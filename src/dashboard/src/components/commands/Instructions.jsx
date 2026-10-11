@@ -1,4 +1,4 @@
-import { useAgentsQuery } from "api/agents.js";
+import { useRunnersQuery } from "api/runners.js";
 import { useCommandUsagesQuery } from "api/commands.js";
 import { useProjectsQuery } from "api/projects.js";
 import { requestCommandSchedulePost } from "api/requests/commands.js";
@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import CommandService from "services/command";
 import parseArguments from "services/commands/arguments";
 import { useAuth } from "contexts/AuthContext";
-import { hasAgentTerminalAccess } from "services/auth";
+import { hasRunnerTerminalAccess } from "services/auth";
 
 const Bullet = () => <span style={{ color: "var(--bulma-primary" }}>▸</span>;
 
@@ -62,15 +62,15 @@ const CommandInstructions = ({ command, projectId = null, forcedRunFrequency = n
 
 const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFrequency = null, defaultArgumentValues = null }) => {
     const { user } = useAuth();
-    const terminalAllowed = hasAgentTerminalAccess(user);
+    const terminalAllowed = hasRunnerTerminalAccess(user);
     const [commandArgsRendered, setCommandArgsRendered] = useState("");
     const [commandArgs, setCommandArgs] = useState(() => parseArguments(usage));
     const [showTerminal, setShowTerminal] = useState(false);
     const [runFrequency, setRunFrequency] = useState(forcedRunFrequency || "once");
     const [projectId, setProjectId] = useState(parentProjectId ?? null);
-    const [agent, setAgent] = useState(null);
+    const [runner, setRunner] = useState(null);
     const { data: projects } = useProjectsQuery({ isTemplate: false, status: "active" });
-    const { data: agents, isLoading: isAgentsLoading } = useAgentsQuery();
+    const { data: runners, isLoading: isRunnersLoading } = useRunnersQuery();
 
     useEffect(() => {
         if (forcedRunFrequency) {
@@ -152,9 +152,9 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
     };
 
     useEffect(() => {
-        if (isAgentsLoading || agents.length === 0) return;
-        setAgent(agents[0]);
-    }, [isAgentsLoading]);
+        if (isRunnersLoading || runners.length === 0) return;
+        setRunner(runners[0]);
+    }, [isRunnersLoading]);
 
     useEffect(() => {
         setCommandArgsRendered(CommandService.renderArguments(projectId, command, commandArgs));
@@ -251,22 +251,22 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
             {runFrequency === "once" && terminalAllowed && (
                 <>
                     <HorizontalLabelledField
-                        label="Agent"
+                        label="Runner"
                         control={
-                            <NativeSelect onChange={(ev) => { console.dir(agents); setAgent(agents.find((a) => a.id === parseInt(ev.target.value))) }}>
-                                {agents?.map((agent) => (
-                                    <option key={agent.id} value={agent.id}>
-                                        {agent.clientId} - {agent.hostname} ({agent.ip})
+                            <NativeSelect onChange={(ev) => { console.dir(runners); setRunner(runners.find((a) => a.id === parseInt(ev.target.value))) }}>
+                                {runners?.map((runner) => (
+                                    <option key={runner.id} value={runner.id}>
+                                        {runner.clientId} - {runner.hostname} ({runner.ip})
                                     </option>
                                 ))}
                             </NativeSelect>
                         }
                     />
 
-                    <NativeButton onClick={runOnTerminal} disabled={isAgentsLoading || agents.length === 0 || !projectId} title={isAgentsLoading || agents.length === 0 ? "No available agents" : !projectId ? "Please select a project" : ""}>Run on a browser terminal</NativeButton>
+                    <NativeButton onClick={runOnTerminal} disabled={isRunnersLoading || runners.length === 0 || !projectId} title={isRunnersLoading || runners.length === 0 ? "No available runners" : !projectId ? "Please select a project" : ""}>Run on a browser terminal</NativeButton>
 
                     {showTerminal && (
-                        <CommandTerminal agentIp={agent?.ip} agentPort={agent?.listenAddr}
+                        <CommandTerminal runnerIp={runner?.ip} runnerPort={runner?.listenAddr}
                             commands={[
                                 CommandService.generateEntryPoint(projectId, command, usage) +
                                 " " +

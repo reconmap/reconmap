@@ -1,5 +1,5 @@
 import {
-    AgentsUrls,
+    RunnersUrls,
     ClientsUrls,
     DashboardUrls,
     IntegrationsUrls,
@@ -84,7 +84,7 @@ export const getNavigationStructure = (t) => [
     },
     {
         name: t("Tools"),
-        title: t("Security tools and agents"),
+        title: t("Security tools and runners"),
         url: "/tools",
         items: [
             {
@@ -114,7 +114,7 @@ export const getNavigationStructure = (t) => [
             { type: "menu", name: t("Users"), url: UsersUrls.List, children: [{ name: t("Create"), url: UsersUrls.Create }] },
             { type: "menu", name: t("Organisations"), url: ClientsUrls.List },
             { type: "divider" },
-            { type: "menu", name: t("Agents"), url: AgentsUrls.List },
+            { type: "menu", name: t("Runners"), url: RunnersUrls.List },
             { type: "divider" },
             { type: "menu", name: t("Custom fields"), url: "/settings/custom-fields" },
             { type: "divider" },

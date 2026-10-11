@@ -5,22 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Agent",
+            "name": "Launch Runner",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/agent/cmd/reconmapd/main.go",
+            "program": "${workspaceFolder}/runner/cmd/reconmapd/main.go",
             "args": [
                 "run"
             ],
             "env": {}
         },
         {
-            "name": "Launch Runner",
+            "name": "Launch CLI",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/runner/cmd/rmap/main.go",
+            "program": "${workspaceFolder}/cli/cmd/rmap/main.go",
             "args": [
                 "command",
                 "run",

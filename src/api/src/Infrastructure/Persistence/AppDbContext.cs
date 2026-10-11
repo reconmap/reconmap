@@ -17,7 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<VulnerabilityCategory> VulnerabilityCategories { get; set; }
     public DbSet<Notification> Notifications { get; set; }
 
-    public DbSet<Agent> Agents { get; set; }
+    public DbSet<Runner> Runners { get; set; }
 
     public DbSet<Report> Reports { get; set; }
 

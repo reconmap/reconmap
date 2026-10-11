@@ -3,7 +3,7 @@ import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
 import { useAuth } from "contexts/AuthContext";
 import { useEffect, useRef, useState } from "react";
-import { hasAgentTerminalAccess } from "services/auth";
+import { hasRunnerTerminalAccess } from "services/auth";
 
 const textEncoder = new TextEncoder();
 
@@ -11,11 +11,11 @@ const arrayBufferToString = (buf) => {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
 };
 
-const CommandTerminal = ({ agentIp, agentPort, commands }) => {
+const CommandTerminal = ({ runnerIp, runnerPort, commands }) => {
     const terminalEl = useRef();
     const [terminalTitle, setTerminalTitle] = useState("Terminal");
     const { user } = useAuth();
-    const terminalAllowed = hasAgentTerminalAccess(user);
+    const terminalAllowed = hasRunnerTerminalAccess(user);
 
     const [wsError, setWsError] = useState(null);
 
@@ -36,8 +36,8 @@ const CommandTerminal = ({ agentIp, agentPort, commands }) => {
 
         const connectTerminal = () => {
             const scheme = window.location.protocol === "https:" ? "wss" : "ws";
-            const agentServiceUrl = `${scheme}://${agentIp}${agentPort}`;
-            const webSocket = new WebSocket(`${agentServiceUrl}/term`, [
+            const runnerServiceUrl = `${scheme}://${runnerIp}${runnerPort}`;
+            const webSocket = new WebSocket(`${runnerServiceUrl}/term`, [
                 "reconmap-terminal",
                 `bearer.${user.access_token}`,
             ]);
@@ -92,7 +92,7 @@ const CommandTerminal = ({ agentIp, agentPort, commands }) => {
         return () => {
             term.dispose();
         };
-    }, [agentIp, agentPort, commands, terminalAllowed, user?.access_token]);
+    }, [runnerIp, runnerPort, commands, terminalAllowed, user?.access_token]);
 
     if (!terminalAllowed) {
         return (
@@ -107,7 +107,7 @@ const CommandTerminal = ({ agentIp, agentPort, commands }) => {
             {wsError != null ?
                 <article className="message is-danger">
                     <div className="message-body">
-                        <strong>Unable to establish connection to the Reconmap agent.</strong> Please review the
+                        <strong>Unable to establish connection to the Reconmap runner.</strong> Please review the
                         web socket connection settings.
                     </div>
                 </article>

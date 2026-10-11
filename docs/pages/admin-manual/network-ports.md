@@ -9,7 +9,7 @@ The docker images provided by Reconmap use the ports described below by default.
 | -------- | ----------------------------- | ---- |
 | Reconmap | Web client                    | 5500 |
 | Reconmap | Rest API                      | 5510 |
-| Reconmap | Agent / Notifications service | 5520 |
+| Reconmap | Runner / Notifications service | 5520 |
 | Keycloak | Identity Provider             | 8080 |
 | RabbitMQ | Message Queue                 | 5672 |
 | Rustfs   | Object Storage                | 9000 & 9001 |

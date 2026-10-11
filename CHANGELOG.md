@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking:** Renamed "agents" to "runners". A runner is a machine where commands, models and AI agents run, in the same way as runners in GitHub Actions and other CI/CD platforms. The rename covers:
+    - Dashboard: the **Agents** page is now **Runners** (`/runners`, `/runners/:runnerId`), and the dashboard widget is **Runners**.
+    - API: `/api/agents` is now `/api/runners`, and the boot and ping endpoints moved to `/api/runners/{clientId}/boot` and `/api/runners/{clientId}/ping`. The MCP resource `reconmap://agents` is now `reconmap://runners`.
+    - Database: the `agent` table is now `runner`. Existing installations must run `ALTER TABLE agent RENAME TO runner;` before starting the new API.
+    - Runner configuration: `config-agent.json` is now `config-runner.json`, and the `agentDirectory` key is now `runnerDirectory`.
+    - Docker and Kubernetes: the image `ghcr.io/reconmap/agent` is now `ghcr.io/reconmap/runner`, and the Compose service and profile `agent` are now `runner`.
+    - Repository: `src/agent` (the `reconmapd` runner) is now `src/runner`, and `src/runner` (the `rmap` CLI) is now `src/cli`. The Go module `reconmap/agent` is now `reconmap/runner`, and the shared library functions `AgentBoot` and `AgentPing` are now `RunnerBoot` and `RunnerPing`.
+    - Release assets: the SBOMs are now `runner-sbom.spdx.json` and `cli-sbom.spdx.json`.
+    - Runners and the API must be upgraded together, because runners call the renamed endpoints.
 - Restructured the repository: `apps/` was renamed to `src/`, and the contents of `cli/` (`agent`, `runner`, `shared-lib`, plus its `Makefile`, `README.md` and Golang tooling) were moved into `src/`. Paths in GitHub workflows, Dependabot, Docker Compose, Kubernetes manifests and the documentation were updated accordingly. Go import paths are unchanged.
 - **Breaking (database schema):** Keycloak is now the source of truth for user identity. The `user` table no longer stores `username`, `email`, `first_name`, `last_name`, `active`, `created_at`, `updated_at`, `last_login_ts`, `timezone` or `mfa_enabled`. The API merges these from Keycloak into responses, and editing a user writes identity fields to Keycloak and app fields (role, short bio, preferences) to the database. Language is stored as the Keycloak `locale` instead of `preferences.dashboard.language`. Existing installations must follow [Upgrading user identity storage](docs/pages/admin-manual/upgrading-user-identity.md) before running the new API.
 - Moved language, theme and timezone from the separate "Your preferences" page into a **Preferences** section of the user edit form (`/users/{id}/edit`). Preferences are read-only for everyone except the user they belong to. The API rejects changes to `locale`, `timezone` and `preferences` made by anyone else, including administrators, with `403 Forbidden`. The `/users/preferences` page and the "Your preferences" menu entry have been removed.

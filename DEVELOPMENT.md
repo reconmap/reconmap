@@ -14,8 +14,8 @@ Welcome! This guide helps you set up and contribute to the Reconmap ecosystem.
 - `src/`: Application source code.
     - `api/`: The C# REST API (.NET 10).
     - `dashboard/`: The React web frontend.
-    - `agent/`: The `reconmapd` agent (Go).
-    - `runner/`: The `rmap` runner (Go).
+    - `runner/`: The `reconmapd` runner (Go).
+    - `cli/`: The `rmap` CLI (Go).
     - `shared-lib/`: Common libraries for CLI tools (Go).
 - `data/`: Data-related files and seed data.
     - `imports/`: Seed data for fresh installations.
@@ -33,7 +33,7 @@ docker compose up -d
 
 ### Secrets Management
 
-All environment variables and secrets are centralized in a single `.env` file at the root. Both C# API and Go agent applications, as well as database and infrastructure containers, automatically read these values dynamically at runtime:
+All environment variables and secrets are centralized in a single `.env` file at the root. Both C# API and Go runner applications, as well as database and infrastructure containers, automatically read these values dynamically at runtime:
 
 - **Modifying Secrets**:
   Simply edit the `.env` file at the root and restart the docker stack to pick up new secrets.

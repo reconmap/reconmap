@@ -1,34 +1,40 @@
-![Build and test workflow](https://github.com/reconmap/reconmap/actions/workflows/cli-binaries-build-test.yml/badge.svg)
 
-# Reconmap CLI
+# Reconmap runner
 
-Command line interface for the Reconmap pentest automation and reporting tool.
+The Reconmap runner allows clients (such as the Web client) to launch commands remotely, open interactive browser terminals, and receive push notifications. 
 
-[![asciicast](https://asciinema.org/a/402505.svg)](https://asciinema.org/a/402505)
+This is a component of many in the [Reconmap's architecture](https://reconmap.org/development/architecture.html).
 
-## Run instructions
+## Runtime requirements 
 
-### Configure
+- Docker
+- Make
+- Linux/Macos operating system due to dependency on OS dependent syscalls
+
+## Terminal security
+
+The `/term` endpoint creates an interactive shell and is restricted to Keycloak
+`dashboard` users with the `administrator` or `superuser` role. Configure
+`validOrigins` to the exact dashboard origin (for example,
+`https://reconmap.example.com`). The runner rejects missing or mismatched Origin
+headers. Deploy the endpoint behind TLS in production and ensure the proxy
+forwards `Sec-WebSocket-Protocol` unchanged.
+
+Browser clients authenticate with the `reconmap-terminal` WebSocket protocol
+and a `bearer.<access-token>` protocol value. Query-string tokens are not
+supported.
+
+The dashboard access token must contain `dashboard` in `aud` and `azp`. For an
+existing Keycloak realm, add an Audience protocol mapper to the `dashboard`
+client with **Included Client Audience** set to `dashboard`, enable **Add to
+access token**, then have users sign in again.
+
+## How to run
 
 ```shell
-./rmap config set --api-url https://api.reconmap.org
-./rmap config view
+RMAP_KEYCLOAK_HOSTNAME=http://localhost:8080 RMAP_RUNNER_CLIENT_ID=admin-cli RMAP_RUNNER_CLIENT_SECRET=******************** RMAP_REST_API_URL=http://localhost:5510/api VALID_ORIGINS=http://localhost:5500 REDIS_HOST=127.0.0.1 REDIS_PORT=6379 REDIS_PASSWORD=REconDIS ./reconmapd
 ```
 
-Make sure you replace `https://demo.api.reconmap.com` with your actual API URL. Users from our [SaaS](https://reconmap.com) offering should enter something like `https://ACCOUNTNAME.api.reconmap.com`.
+## Logging & Error Handling
 
-### Logging in and out
-
-```shell
-./rmap login -u admin -p ******
-
-./rmap logout
-```
-
-## Build instructions
-
-### Compilation
-
-```shell
-make
-```
+During background boot and ping processes, the runner tracks the HTTP response status. If the REST API returns any non-2xx response (e.g., `401 Unauthorized` or `500 Internal Server Error`), the runner will capture the unexpected status code and log it under an Error severity.

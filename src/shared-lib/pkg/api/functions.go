@@ -10,8 +10,8 @@ import (
 	"github.com/reconmap/shared-lib/pkg/models"
 )
 
-func AgentBoot(apiBaseUri string, clientId string, accessToken string, systemInfo *SystemInfo) (*models.CommandSchedules, error) {
-	var apiUrl string = apiBaseUri + "/agents/" + clientId + "/boot"
+func RunnerBoot(apiBaseUri string, clientId string, accessToken string, systemInfo *SystemInfo) (*models.CommandSchedules, error) {
+	var apiUrl string = apiBaseUri + "/runners/" + clientId + "/boot"
 	marshalled, err := json.Marshal(systemInfo)
 
 	client := DefaultHTTPClient
@@ -41,8 +41,8 @@ func AgentBoot(apiBaseUri string, clientId string, accessToken string, systemInf
 	return nil, nil
 }
 
-func AgentPing(apiBaseUri string, clientId string, accessToken string) (*models.CommandSchedules, error) {
-	var apiUrl string = apiBaseUri + "/agents/" + clientId + "/ping"
+func RunnerPing(apiBaseUri string, clientId string, accessToken string) (*models.CommandSchedules, error) {
+	var apiUrl string = apiBaseUri + "/runners/" + clientId + "/ping"
 
 	client := DefaultHTTPClient
 	req, err := http.NewRequest("PATCH", apiUrl, nil)

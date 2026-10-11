@@ -2,7 +2,7 @@ DROP VIEW IF EXISTS vulnerability_template;
 DROP VIEW IF EXISTS project_template;
 DROP VIEW IF EXISTS user_info;
 DROP TABLE IF EXISTS user_api_token CASCADE;
-DROP TABLE IF EXISTS agent CASCADE;
+DROP TABLE IF EXISTS runner CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 DROP TABLE IF EXISTS note CASCADE;
 DROP TABLE IF EXISTS ai_provider_settings CASCADE;
@@ -399,8 +399,8 @@ CREATE TABLE notification
     FOREIGN KEY (to_user_id) REFERENCES "user" (id) ON DELETE CASCADE
 );
 
--- 25. agent
-CREATE TABLE agent
+-- 25. runner
+CREATE TABLE runner
 (
     id           SERIAL PRIMARY KEY,
     name         VARCHAR(100) NOT NULL,

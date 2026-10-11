@@ -3,7 +3,7 @@ import Compose from "components/logic/Compose.jsx";
 import SseProvider from "contexts/SseContext";
 import DashboardLayout from "layouts/DashboardLayout.jsx";
 import PageNotFound from "pages/PageNotFound.jsx";
-import AgentRoutes from "pages/agents/Routes";
+import RunnerRoutes from "pages/runners/Routes";
 import ClientsRoutes from "pages/clients/Routes";
 import DashboardRoutes from "pages/dashboard/Routes.jsx";
 import IntegrationsRoutes from "pages/integrations/Routes";
@@ -60,7 +60,7 @@ const App = () => {
                                     ...AssetRoutes,
                                     ...TasksRoutes,
                                     ...ToolsRoutes,
-                                    ...AgentRoutes,
+                                    ...RunnerRoutes,
                                     ...UsersRoutes,
                                     ...VulnerabilitiesRoutes,
                                     ...IntegrationsRoutes,
