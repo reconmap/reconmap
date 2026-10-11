@@ -9,10 +9,6 @@
          <lastmod>2026-10-11</lastmod>
     </url>
     <url>
-         <loc>https://reconmap.com/admin-manual/agent-terminal-security/</loc>
-         <lastmod>2026-10-11</lastmod>
-    </url>
-    <url>
          <loc>https://reconmap.com/admin-manual/attachment-limits/</loc>
          <lastmod>2026-10-11</lastmod>
     </url>
@@ -58,6 +54,10 @@
     </url>
     <url>
          <loc>https://reconmap.com/admin-manual/network-ports/</loc>
+         <lastmod>2026-10-11</lastmod>
+    </url>
+    <url>
+         <loc>https://reconmap.com/admin-manual/runner-terminal-security/</loc>
          <lastmod>2026-10-11</lastmod>
     </url>
     <url>
