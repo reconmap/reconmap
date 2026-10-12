@@ -4,8 +4,8 @@ vi.mock("api/assets.js", () => ({
     requestAssetEnsure: vi.fn(),
 }));
 
-import { requestAssetEnsure } from "api/assets.js";
-import { ensureUrlAsset, getUrlCapableUsages, isUrlCapableUsage } from "./url.js";
+import { requestAssetEnsure } from "api/assets";
+import { ensureUrlAsset, getUrlCapableUsages, isUrlCapableUsage } from "./url";
 
 const mockedRequestAssetEnsure = vi.mocked(requestAssetEnsure);
 

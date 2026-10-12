@@ -1,5 +1,5 @@
-import secureApiFetch from "services/api.js";
-import { requestEntities, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests.js";
+import secureApiFetch from "services/api";
+import { requestEntities, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests";
 
 const API_BASE_URL = "/vulnerabilities";
 

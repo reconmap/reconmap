@@ -1,4 +1,4 @@
-import { CommandUsageInterface } from "models/CommandUsage.js";
+import { CommandUsageInterface } from "models/CommandUsage";
 
 const argRegex = /{{{(.+?)}}}/g;
 

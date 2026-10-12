@@ -1,4 +1,4 @@
-import { requestEntities, requestEntityDelete, requestEntitiesDelete, requestEntityPatch, requestEntityPut } from "utilities/requests.js";
+import { requestEntities, requestEntityDelete, requestEntitiesDelete, requestEntityPatch, requestEntityPut } from "utilities/requests";
 
 const API_BASE_URL = "/notifications";
 

@@ -1,4 +1,4 @@
-import { requestEntities, requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests.js";
+import { requestEntities, requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests";
 
 
 const requestJiraIntegrations = () => {

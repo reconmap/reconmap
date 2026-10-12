@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { requestReportDelete, requestReports, requestReportsTemplates } from "./requests/reports.js";
+import { requestReportDelete, requestReports, requestReportsTemplates } from "./requests/reports";
 
 const useReportsQuery = (params: any) => {
     return useQuery({

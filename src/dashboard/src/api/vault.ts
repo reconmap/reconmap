@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import secureApiFetch from "services/api.js";
+import secureApiFetch from "services/api";
 
 const requestVault = () => {
     return secureApiFetch(`/secrets`, { method: "GET" }).then((res) => res.json());

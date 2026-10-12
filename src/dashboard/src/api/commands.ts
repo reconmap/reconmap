@@ -4,7 +4,7 @@ import {
     requestSchedules,
     requestCommandUsages,
     requestCommandOutputPost,
-} from "./requests/commands.js";
+} from "./requests/commands";
 
 const useCommandsQuery = (params: any) => {
     return useQuery({

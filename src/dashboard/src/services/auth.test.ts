@@ -1,5 +1,5 @@
 import { User } from "oidc-client-ts";
-import { getDashboardRoles, getRedirectUri, hasRunnerTerminalAccess } from "./auth.js";
+import { getDashboardRoles, getRedirectUri, hasRunnerTerminalAccess } from "./auth";
 
 const userWithRoles = (roles: string[]): User => ({
     profile: { resource_access: { dashboard: { roles } } },

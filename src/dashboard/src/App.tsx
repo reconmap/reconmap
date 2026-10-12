@@ -1,0 +1,78 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Compose from "components/logic/Compose";
+import SseProvider from "contexts/SseContext";
+import DashboardLayout from "layouts/DashboardLayout";
+import PageNotFound from "pages/PageNotFound";
+import RunnerRoutes from "pages/runners/Routes";
+import ClientsRoutes from "pages/clients/Routes";
+import DashboardRoutes from "pages/dashboard/Routes";
+import IntegrationsRoutes from "pages/integrations/Routes";
+import NotificationsRoutes from "pages/notifications/Routes";
+import ProjectsRoutes from "pages/projects/Routes";
+import ReportsRoutes from "pages/reports/Routes";
+import ReportTemplatesRoutes from "pages/reports/templates/Routes";
+import ScansRoutes from "pages/scans/Routes";
+import SearchRoutes from "pages/search/Routes";
+import SettingsRoutes from "pages/settings/Routes";
+import SupportRoutes from "pages/support/Routes";
+import SystemRoutes from "pages/system/Routes";
+import AssetRoutes from "pages/asset/Routes";
+import TasksRoutes from "pages/tasks/Routes";
+import ToolsRoutes from "pages/tools/Routes";
+import UsersRoutes from "pages/users/Routes";
+import VulnerabilitiesRoutes from "pages/vulnerabilities/Routes";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Configuration from "./Configuration";
+import { AuthProvider } from "./contexts/AuthContext";
+import ErrorBoundary from "components/ui/ErrorBoundary";
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 2 * (60 * 1000), // 2 mins
+            gcTime: 5 * (60 * 1000), // 5 mins
+        },
+    },
+});
+
+const App = () => {
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ErrorBoundary>
+                <BrowserRouter basename={Configuration.getContextPath()}>
+                    {/* Order of provider components matters */}
+                    <Compose components={[AuthProvider, SseProvider]}>
+                        <Routes>
+                            <Route element={<DashboardLayout />}>
+                                {[
+                                    ...DashboardRoutes,
+                                    ...ClientsRoutes,
+                                    ...ProjectsRoutes,
+                                    ...ReportTemplatesRoutes,
+                                    ...ReportsRoutes,
+                                    ...ScansRoutes,
+                                    ...NotificationsRoutes,
+                                    ...SearchRoutes,
+                                    ...SettingsRoutes,
+                                    ...SupportRoutes,
+                                    ...SystemRoutes,
+                                    ...AssetRoutes,
+                                    ...TasksRoutes,
+                                    ...ToolsRoutes,
+                                    ...RunnerRoutes,
+                                    ...UsersRoutes,
+                                    ...VulnerabilitiesRoutes,
+                                    ...IntegrationsRoutes,
+                                ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
+                                <Route path="*" element={<PageNotFound />} />
+                            </Route>
+                        </Routes>
+                    </Compose>
+                </BrowserRouter>
+            </ErrorBoundary>
+        </QueryClientProvider>
+    );
+};
+
+export default App;

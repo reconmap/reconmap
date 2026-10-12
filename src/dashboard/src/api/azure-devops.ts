@@ -5,7 +5,7 @@ import {
     requestAzureDevopsIntegrationDelete,
     requestAzureDevopsIntegrationUpdate,
     requestAzureDevopsIntegrations,
-} from "./requests/azure-devops.js";
+} from "./requests/azure-devops";
 
 const useAzureDevopsIntegrationQuery = (id: number) => {
     return useQuery({

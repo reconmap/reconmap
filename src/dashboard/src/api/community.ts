@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { requestDiscussions, requestReleases } from "./requests/community.js";
+import { requestDiscussions, requestReleases } from "./requests/community";
 
 export const useReleasesQuery = () => {
     return useQuery({

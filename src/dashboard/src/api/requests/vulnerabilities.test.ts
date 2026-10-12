@@ -7,7 +7,7 @@ vi.mock("utilities/requests.js", () => ({
     requestEntityPut: vi.fn(),
 }));
 
-import { normalizeVulnerabilityForSave } from "./vulnerabilities.js";
+import { normalizeVulnerabilityForSave } from "./vulnerabilities";
 
 describe("normalizeVulnerabilityForSave", () => {
     it("serializes a blank optional CVSS score as null", () => {

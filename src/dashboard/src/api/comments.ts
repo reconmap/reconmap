@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { requestCommentDelete, requestCommentPost, requestComments } from "./requests/comments.js";
+import { requestCommentDelete, requestCommentPost, requestComments } from "./requests/comments";
 
 const useNotesQuery = (params: any) => {
     return useQuery({

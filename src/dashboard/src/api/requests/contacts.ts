@@ -1,4 +1,4 @@
-import secureApiFetch from "services/api.js";
+import secureApiFetch from "services/api";
 
 const API_BASE_URL = "/organisations";
 

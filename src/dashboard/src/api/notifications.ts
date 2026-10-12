@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { requestNotificationDelete, requestNotifications } from "./requests/notifications.js";
+import { requestNotificationDelete, requestNotifications } from "./requests/notifications";
 
 const useNotificationsQuery = (params: any) => {
     return useQuery({

@@ -3,7 +3,7 @@ import {
     requestWebhook,
     requestWebhookDelete,
     requestWebhooks,
-} from "./requests/webhooks.js";
+} from "./requests/webhooks";
 
 const useWebhookQuery = (webhookId: number) => {
     return useQuery({

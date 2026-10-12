@@ -1,6 +1,6 @@
-import { CommandInterface } from "models/Command.js";
-import { CommandUsageInterface } from "models/CommandUsage.js";
-import { CommandArgumentsMap } from "./commands/arguments.js";
+import { CommandInterface } from "models/Command";
+import { CommandUsageInterface } from "models/CommandUsage";
+import { CommandArgumentsMap } from "./commands/arguments";
 
 const RmapCommandLineGenerator = {
     generateEntryPoint: (projectId: number, command: CommandInterface, usage: CommandUsageInterface) => {

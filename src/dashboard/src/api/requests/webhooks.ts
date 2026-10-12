@@ -2,8 +2,8 @@ import {
     requestEntity,
     requestEntityDelete,
     requestEntityPut,
-} from "utilities/requests.js";
-import secureApiFetch from "services/api.js";
+} from "utilities/requests";
+import secureApiFetch from "services/api";
 
 const API_BASE_URL = "/webhooks";
 

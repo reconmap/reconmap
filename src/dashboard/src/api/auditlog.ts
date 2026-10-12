@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { requestAuditLog, requestAuditLogStats } from "./requests/auditlog.js";
+import { requestAuditLog, requestAuditLogStats } from "./requests/auditlog";
 
 const useAuditLogQuery = (params: any) => {
     return useQuery({

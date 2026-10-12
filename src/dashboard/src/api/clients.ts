@@ -4,7 +4,7 @@ import {
     requestOrganisationContacts,
     requestOrganisationDelete,
     requestOrganisations,
-} from "./requests/organisations.js";
+} from "./requests/organisations";
 
 const useOrganisationsQuery = (params: any) => {
     return useQuery({

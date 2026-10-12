@@ -1,5 +1,5 @@
-import UserPermissions from "components/users/Permissions.js";
-import Configuration from "Configuration.js";
+import UserPermissions from "components/users/Permissions";
+import Configuration from "Configuration";
 import { User, UserManager, WebStorageStateStore } from "oidc-client-ts";
 
 const keycloakConfig = Configuration.getKeycloakConfig();

@@ -1,4 +1,4 @@
-import { AuthContext } from "contexts/AuthContext.jsx";
+import { AuthContext } from "contexts/AuthContext";
 import { useContext } from "react";
 
 const RestrictedComponent = ({
@@ -8,7 +8,7 @@ const RestrictedComponent = ({
 }: {
     roles: string[];
     children: any;
-    message: string;
+    message?: string;
 }) => {
     const { user } = useContext(AuthContext);
 

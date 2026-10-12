@@ -1,4 +1,4 @@
-import secureApiFetch from "services/api.js";
+import secureApiFetch from "services/api";
 import {
     requestEntities,
     requestEntity,
@@ -6,7 +6,7 @@ import {
     requestEntityPatch,
     requestEntityPost,
     requestEntityPut,
-} from "utilities/requests.js";
+} from "utilities/requests";
 
 const API_BASE_URL = "/projects";
 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { requestRunner, requestRunners } from "./requests/runners.js";
+import { requestRunner, requestRunners } from "./requests/runners";
 
 const useRunnersQuery = () => {
     return useQuery({

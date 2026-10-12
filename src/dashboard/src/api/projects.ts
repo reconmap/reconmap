@@ -6,7 +6,7 @@ import {
     requestProjects,
     requestProjectUsers,
     requestProjectVault,
-} from "./requests/projects.js";
+} from "./requests/projects";
 
 const useProjectQuery = (projectId: number) => {
     return useQuery({

@@ -12,7 +12,7 @@ import {
     requestSystemHealth,
     requestSystemIntegrations,
     requestSystemUsage,
-} from "./requests/system.js";
+} from "./requests/system";
 
 const useExportablesQuery = () => {
     return useQuery({

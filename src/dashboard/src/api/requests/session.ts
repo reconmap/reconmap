@@ -1,4 +1,4 @@
-import { requestEntityDelete, requestEntityPost } from "utilities/requests.js";
+import { requestEntityDelete, requestEntityPost } from "utilities/requests";
 
 const API_BASE_URL = "/sessions";
 

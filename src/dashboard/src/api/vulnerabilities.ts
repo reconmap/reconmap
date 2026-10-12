@@ -8,7 +8,7 @@ import {
     requestVulnerabilityDelete,
     requestVulnerabilityPost,
     requestVulnerabilityTriage,
-} from "./requests/vulnerabilities.js";
+} from "./requests/vulnerabilities";
 
 const useVulnerabilitiesQuery = (params: any) => {
     return useQuery({

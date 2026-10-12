@@ -4,7 +4,7 @@ import {
     requestEntityDelete,
     requestEntityPost,
     requestEntityPut,
-} from "utilities/requests.js";
+} from "utilities/requests";
 
 const API_BASE_URL = "/organisations";
 

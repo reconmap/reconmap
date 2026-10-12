@@ -15,7 +15,7 @@
                     .then((response) => response.json())
                     .then((config) => {
                         window.env = config;
-                        import("/src/index.jsx");
+                        import("/src/index.tsx");
                     })
                     .catch((error) => console.error("Error loading configuration:", error));
             });

@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateUserApiTokenRequest } from "./user-api-tokens.js";
+import { CreateUserApiTokenRequest } from "./user-api-tokens";
 import {
     requestUserApiTokenDeletion,
     requestUserApiTokenPost,
     requestUserApiTokens,
-} from "./requests/user-api-tokens.js";
+} from "./requests/user-api-tokens";
 
 export const useUserApiTokensQuery = () => {
     return useQuery({

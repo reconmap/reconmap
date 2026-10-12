@@ -1,5 +1,5 @@
-import Configuration from "Configuration.js";
-import AuthService from "./auth.js";
+import Configuration from "Configuration";
+import AuthService from "./auth";
 
 function resetSessionStorageAndRedirect() {
     window.location.assign(Configuration.getContextPath());

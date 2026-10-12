@@ -2,9 +2,9 @@ interface Props {
     columnsVisibility: { [key: string]: boolean };
     pageNumber: number;
     selection: string[];
-    tasks?: object[];
-    filters: object;
-    sortBy: object;
+    tasks?: any;
+    filters: any;
+    sortBy: any;
 }
 
 class TaskTableModel implements Props {
@@ -14,13 +14,13 @@ class TaskTableModel implements Props {
         project: true,
     };
     selection: string[] = [];
-    tasks?: object[] = [];
-    filters: object = {
+    tasks?: any = [];
+    filters: any = {
         projectId: null,
         priority: null,
         status: null,
     };
-    sortBy: object = { column: "createdAt", order: "DESC" };
+    sortBy: any = { column: "createdAt", order: "DESC" };
 
     constructor(isSelectionColumnVisible: boolean = false, isProjectColumnVisible: boolean = true) {
         this.columnsVisibility.selection = isSelectionColumnVisible;

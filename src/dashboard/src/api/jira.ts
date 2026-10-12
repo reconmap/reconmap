@@ -5,7 +5,7 @@ import {
     requestJiraIntegrationDelete,
     requestJiraIntegrationUpdate,
     requestJiraIntegrations,
-} from "./requests/jira.js";
+} from "./requests/jira";
 
 const useJiraIntegrationQuery = (id: number) => {
     return useQuery({

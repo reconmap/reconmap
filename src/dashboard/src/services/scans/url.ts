@@ -1,4 +1,4 @@
-import { requestAssetEnsure } from "api/assets.js";
+import { requestAssetEnsure } from "api/assets";
 
 export const URL_ASSET_TYPE = "url";
 

@@ -1,4 +1,4 @@
-import secureApiFetch from "services/api.js";
+import secureApiFetch from "services/api";
 
 const requestEntity = (url: string) => {
     return secureApiFetch(url, { method: "GET" });

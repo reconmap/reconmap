@@ -1,6 +1,6 @@
-import { UserInterface } from "models/User.js";
-import secureApiFetch from "services/api.js";
-import { requestEntityPatch } from "utilities/requests.js";
+import { UserInterface } from "models/User";
+import secureApiFetch from "services/api";
+import { requestEntityPatch } from "utilities/requests";
 
 const API_PREFIX: string = "/users";
 

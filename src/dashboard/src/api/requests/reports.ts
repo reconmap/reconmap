@@ -1,5 +1,5 @@
-import secureApiFetch from "services/api.js";
-import { requestEntityDelete, requestEntityPost } from "utilities/requests.js";
+import secureApiFetch from "services/api";
+import { requestEntityDelete, requestEntityPost } from "utilities/requests";
 
 const requestReports = (params: any) => {
     return secureApiFetch(

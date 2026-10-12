@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { UserInterface } from "models/User.js";
-import { deleteUser, getUser, getUsers, OwnerFields, requestUserActivity, updateUser } from "./requests/users.js";
+import { UserInterface } from "models/User";
+import { deleteUser, getUser, getUsers, OwnerFields, requestUserActivity, updateUser } from "./requests/users";
 
 const useUserQuery = (userId: number) => {
     return useQuery({

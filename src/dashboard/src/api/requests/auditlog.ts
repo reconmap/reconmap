@@ -1,4 +1,4 @@
-import { requestEntities } from "utilities/requests.js";
+import { requestEntities } from "utilities/requests";
 
 const API_BASE_URL = "/auditlog";
 

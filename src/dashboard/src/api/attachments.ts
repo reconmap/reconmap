@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { requestAttachmentDelete, requestAttachments } from "./requests/attachments.js";
+import { requestAttachmentDelete, requestAttachments } from "./requests/attachments";
 
 const useAttachmentsQuery = (params: any) => {
     return useQuery({

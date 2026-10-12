@@ -1,4 +1,4 @@
-import secureApiFetch from "services/api.js";
+import secureApiFetch from "services/api";
 
 const requestExportables = () => {
     return secureApiFetch("/system/exportables", { method: "GET" });

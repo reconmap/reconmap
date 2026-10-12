@@ -6,7 +6,7 @@ vi.mock("services/api.js", () => ({
     default: secureApiFetch,
 }));
 
-import { enableMfaApi, updateUser } from "./users.js";
+import { enableMfaApi, updateUser } from "./users";
 
 describe("enableMfaApi", () => {
     beforeEach(() => {

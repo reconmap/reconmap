@@ -1,5 +1,5 @@
-import secureApiFetch from "services/api.js";
-import { requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests.js";
+import secureApiFetch from "services/api";
+import { requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests";
 
 const API_BASE_URL = "/tasks";
 
