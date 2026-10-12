@@ -9,7 +9,6 @@ npm-debug.log*
 .npm/
 public/config.json
 config.json
-.eslintcache
 tags
 tags.*
 .config
