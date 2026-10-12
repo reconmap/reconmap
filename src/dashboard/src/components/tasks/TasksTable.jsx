@@ -10,7 +10,7 @@ import UserLink from "../users/Link";
 import TaskBadge from "./TaskBadge";
 import TaskStatusFormatter from "./TaskStatusFormatter";
 
-const TasksTable = ({ tableModel, tableModelSetter: setTableModel, destroy, reloadCallback = null }) => {
+const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallback = null }) => {
     const showSelection = tableModel.columnsVisibility.selection;
     const showProjectColumn = tableModel.columnsVisibility.project;
     const deleteTaskMutation = useDeleteTaskMutation();

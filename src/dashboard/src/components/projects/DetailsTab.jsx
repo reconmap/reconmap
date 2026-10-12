@@ -97,7 +97,7 @@ const ProjectDetailsTab = ({ project }) => {
                         <p>No users assigned to this project.</p>
                     )}
                     {users &&
-                        users.map((user, index) => (
+                        users.map((user) => (
                             <Link to={`/users/${user.id}`} key={user.id} >
                                 <UserAvatar /> {user.fullName}<br />
                             </Link>

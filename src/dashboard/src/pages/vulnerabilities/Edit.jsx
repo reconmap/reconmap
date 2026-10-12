@@ -23,7 +23,7 @@ const VulnerabilityEdit = () => {
         ev.preventDefault();
 
         await requestEntityPut(`/vulnerabilities/${vulnerabilityId}`, normalizeVulnerabilityForSave(clientVulnerability))
-            .then((resp) => {
+            .then(() => {
                 queryClient.invalidateQueries({ queryKey: ["vulnerabilities"] });
                 actionCompletedToast(`The vulnerability "${clientVulnerability.summary}" has been updated.`);
 

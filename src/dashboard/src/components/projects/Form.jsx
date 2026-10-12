@@ -8,10 +8,6 @@ import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import Loading from "../ui/Loading";
 import PrimaryButton from "../ui/buttons/Primary";
 
-const notEmpty = (value) => {
-    return value !== null && value !== undefined && value !== "";
-};
-
 const convertValue = (value) => {
     if (value === "(null)") return null;
     return value;

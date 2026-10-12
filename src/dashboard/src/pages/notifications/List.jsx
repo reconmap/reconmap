@@ -12,8 +12,6 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable.jsx";
 import { actionCompletedToast } from "components/ui/toast.jsx";
 
-const isUnread = (notification) => notification.status === "unread";
-
 const NotificationsList = () => {
     const { data: notifications, refetch, isLoading } = useNotificationsQuery({});
     const deleteNotificatioMutation = useDeleteNotificationMutation();

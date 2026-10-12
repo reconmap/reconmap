@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import {
     useDeleteOrganisationMutation,
     useOrganisationContactsQuery,
@@ -69,7 +68,6 @@ const ClientDetails = () => {
 
     const { clientId } = useParams();
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
 
     const { data: client, isLoading: isClientLoading } = useOrganisationQuery(clientId);
     const { data: contacts } = useOrganisationContactsQuery(clientId);

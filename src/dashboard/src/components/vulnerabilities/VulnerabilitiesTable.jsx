@@ -85,7 +85,7 @@ const VulnerabilitiesTable = ({
                 if (reloadCallback) {
                     reloadCallback();
                 }
-            } catch (error) {
+            } catch {
                 alert("An error occurred while deleting the vulnerability.");
             }
         }

@@ -1,4 +1,4 @@
-const CvssScore = ({ score, fontSize = "fontSizeXsmall" }) => {
+const CvssScore = ({ score }) => {
     const color =
         Math.floor(score) <= 3
             ? "green"

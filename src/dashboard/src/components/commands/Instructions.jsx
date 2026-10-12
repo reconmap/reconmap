@@ -89,7 +89,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
     const [cronExpression, setCronExpression] = useState("");
     const [cronExpressionErrorMessage, setCronExpressionErrorMessage] = useState(null);
 
-    const onArgUpdate = (ev, usage) => {
+    const onArgUpdate = (ev) => {
         setCommandArgs({
             ...commandArgs,
             [ev.target.name]: {
@@ -115,7 +115,7 @@ const UsageDetail = ({ projectId: parentProjectId, command, usage, forcedRunFreq
         setCommandArgs(parsedArgs);
     }, [usage, defaultArgumentValues]);
 
-    const runOnTerminal = (ev) => {
+    const runOnTerminal = () => {
         setShowTerminal(true);
     };
 

@@ -1,6 +1,6 @@
 import NativeButton from "components/forms/NativeButton";
 
-const PrimaryButton = ({ type, onClick, children, disabled = false, external = false, ...props }) => {
+const PrimaryButton = ({ type, onClick, children, disabled = false, external: _external, ...props }) => {
     return (
         <NativeButton
             className="button is-primary"

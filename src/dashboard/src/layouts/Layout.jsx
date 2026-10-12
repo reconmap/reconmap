@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 import SidemenuLayout from "./SidemenuLayout.jsx";
 
-const ProjectsLayout = ({ children }) => {
+const ProjectsLayout = () => {
     const [t] = useTranslation();
     const navigation = getNavigationStructure(t);
     const projectsSection = navigation.find(section => section.name === t("Projects"));

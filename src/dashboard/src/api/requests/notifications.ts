@@ -1,4 +1,3 @@
-import secureApiFetch from "services/api.js";
 import { requestEntities, requestEntityDelete, requestEntitiesDelete, requestEntityPatch, requestEntityPut } from "utilities/requests.js";
 
 const API_BASE_URL = "/notifications";

@@ -4,7 +4,7 @@ import "./ModalDialog.css";
 const ModalDialog = ({ title, children, visible, onModalClose, style = {} }) => {
     const htmlRef = useRef(null);
 
-    const closeDialog = (ev) => {
+    const closeDialog = () => {
         htmlRef.current?.close();
     };
 

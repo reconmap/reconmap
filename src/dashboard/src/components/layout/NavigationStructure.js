@@ -9,7 +9,6 @@ import {
     SearchUrls,
     SystemUrls,
     TasksUrls,
-    ToolsUrls,
     UsersUrls,
     VulnerabilitiesUrls,
 } from "AppUrls";

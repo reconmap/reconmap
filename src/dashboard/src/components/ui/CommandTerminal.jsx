@@ -55,7 +55,7 @@ const CommandTerminal = ({ runnerIp, runnerPort, commands }) => {
                 setTerminalTitle(title);
             });
 
-            webSocket.onopen = (ev) => {
+            webSocket.onopen = () => {
                 setTerminalTitle("Connected!");
 
                 commands.forEach((command) => {
@@ -80,7 +80,7 @@ const CommandTerminal = ({ runnerIp, runnerPort, commands }) => {
                 webSocket.close();
             };
 
-            webSocket.onclose = (ev) => {
+            webSocket.onclose = () => {
                 setTerminalTitle("Disconnected");
                 clearTimeout(retryHandle);
                 retryHandle = setTimeout(connectTerminal, 1000);

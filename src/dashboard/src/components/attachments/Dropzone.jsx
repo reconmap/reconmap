@@ -21,7 +21,7 @@ const AttachmentsDropzone = ({
     const inputRef = useRef(null);
     const [acceptedFiles, setAcceptedFiles] = useState([]);
 
-    const onUploadButtonClick = (ev) => {
+    const onUploadButtonClick = () => {
         const formData = new FormData();
         if (parentType) formData.append("parentType", parentType);
         if (parentId) formData.append("parentId", parentId);

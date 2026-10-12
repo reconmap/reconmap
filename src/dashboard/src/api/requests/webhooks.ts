@@ -1,7 +1,6 @@
 import {
     requestEntity,
     requestEntityDelete,
-    requestEntityPost,
     requestEntityPut,
 } from "utilities/requests.js";
 import secureApiFetch from "services/api.js";

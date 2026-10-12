@@ -42,7 +42,7 @@ const PasswordGeneratorModal = ({ isOpen, onClose, onSelectPassword }) => {
             try {
                 const newPassword = generatePassword(passwordConfig);
                 setPassword(newPassword);
-            } catch (err) {
+            } catch {
                 // Ignore validation/range errors during typing
             }
         }
@@ -52,7 +52,7 @@ const PasswordGeneratorModal = ({ isOpen, onClose, onSelectPassword }) => {
         try {
             const newPassword = generatePassword(passwordConfig);
             setPassword(newPassword);
-        } catch (err) {
+        } catch {
             // Handled or ignored
         }
     };

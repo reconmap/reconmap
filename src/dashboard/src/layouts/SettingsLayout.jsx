@@ -1,11 +1,10 @@
 import { getNavigationStructure } from "components/layout/NavigationStructure";
 import { useTranslation } from "react-i18next";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import SidemenuLayout from "./SidemenuLayout.jsx";
 
-const SettingsLayout = ({ children }) => {
+const SettingsLayout = () => {
     const [t] = useTranslation();
-    const location = useLocation();
 
     const navigation = getNavigationStructure(t);
     const settingsSection = navigation.find(section => section.name === t("Settings"));

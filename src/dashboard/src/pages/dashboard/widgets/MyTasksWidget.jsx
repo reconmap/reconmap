@@ -9,7 +9,7 @@ import DashboardWidget from "./Widget.jsx";
 
 const MyTasksWidget = () => {
     const { user } = useContext(AuthContext);
-    const { data: tasks, isLoading, isError } = useTasksQuery({ assignedToUid: user.id, limit: 5, projectIsArchived: 0 });
+    const { isLoading, isError } = useTasksQuery({ assignedToUid: user.id, limit: 5, projectIsArchived: 0 });
 
     if (isLoading || isError) return <Loading />;
 

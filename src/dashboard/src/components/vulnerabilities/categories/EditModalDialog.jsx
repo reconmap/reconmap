@@ -10,7 +10,6 @@ const VulnerabilityCategoryEditModalDialog = ({ category, isOpen, onClose, onCan
     const [newCategory, updateNewCategory] = useState(category);
 
     const onCreateCategoryFormSubmit = (ev) => {
-        const categoryForm = ev.target.form;
         /*
         if (!categoryForm.checkValidity()) {
             return false;

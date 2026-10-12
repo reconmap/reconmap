@@ -11,7 +11,7 @@ import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import Tooltip from "components/ui/Tooltip.jsx";
 import RemediationComplexity from "models/RemediationComplexity";
 import RemediationPriority from "models/RemediationPriority";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Risks from "../../models/Risks";
 import Primary from "../ui/buttons/Primary";
 import CvssAbbr from "./CvssAbbr";
@@ -71,7 +71,7 @@ const VulnerabilityForm = ({
             }
         }
     }, [projects, vulnerability?.projectId, vulnerability?.isTemplate]);
-    const { data: categories, isLoading: isLoadingVulnerabilityCategories } = useVulnerabilityCategoriesQuery({
+    const { data: categories } = useVulnerabilityCategoriesQuery({
         parentsOnly: false,
     });
 

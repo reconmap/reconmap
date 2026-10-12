@@ -1,6 +1,5 @@
 import { useAzureDevopsIntegrationsQuery, useDeleteAzureDevopsIntegrationMutation } from "api/azure-devops.ts";
 import { useDeleteJiraIntegrationMutation, useJiraIntegrationsQuery } from "api/jira.ts";
-import { useDeleteWebhookMutation, useWebhooksQuery } from "api/webhooks.js";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import BooleanText from "components/ui/BooleanText";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -17,20 +16,11 @@ const IntegrationsList = () => {
     const [t] = useTranslation();
     const navigate = useNavigate();
 
-    const { data: webhooks, isLoading: isWebhooksLoading } = useWebhooksQuery();
-    const deleteWebhookMutation = useDeleteWebhookMutation();
-
     const { data: jiraIntegrations, isLoading: isJiraLoading } = useJiraIntegrationsQuery();
     const deleteJiraMutation = useDeleteJiraIntegrationMutation();
 
     const { data: azureDevopsIntegrations, isLoading: isAzureDevopsLoading } = useAzureDevopsIntegrationsQuery();
     const deleteAzureDevopsMutation = useDeleteAzureDevopsIntegrationMutation();
-
-    const onDeleteWebhook = (id) => {
-        if (window.confirm(t("Are you sure you want to delete this webhook?"))) {
-            deleteWebhookMutation.mutate(id);
-        }
-    };
 
     const onDeleteJira = (id) => {
         if (window.confirm(t("Are you sure you want to delete this Jira integration?"))) {

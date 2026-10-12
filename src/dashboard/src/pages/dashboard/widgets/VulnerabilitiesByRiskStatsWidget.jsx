@@ -13,7 +13,7 @@ const RISKS = {
 };
 
 const VulnerabilitiesByRiskStatsWidget = ({ projectId = null }) => {
-    const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, index }) => {
         const radius = innerRadius + (outerRadius - innerRadius) * 1.2;
         const x = cx + radius * Math.cos(-midAngle * RADIAN);
         const y = cy + radius * Math.sin(-midAngle * RADIAN);

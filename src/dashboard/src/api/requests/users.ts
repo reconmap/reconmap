@@ -41,7 +41,7 @@ interface OwnerFields {
 
 const updateUser = (user: UserInterface, ownerFields?: OwnerFields): Promise<Response> => {
     // Only editable fields are sent: the API rejects read-only ones (such as mfaEnabled).
-    const { id, subjectId, fullName, mfaEnabled, lastLoginAt, createdAt, updatedAt, preferences, locale, timezone, ...editable } = user;
+    const { id, subjectId: _subjectId, fullName: _fullName, mfaEnabled: _mfaEnabled, lastLoginAt: _lastLoginAt, createdAt: _createdAt, updatedAt: _updatedAt, preferences: _preferences, locale: _locale, timezone: _timezone, ...editable } = user;
 
     return secureApiFetch(`${API_PREFIX}/${id}`, {
         method: "PATCH",
