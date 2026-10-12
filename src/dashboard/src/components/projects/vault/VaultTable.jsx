@@ -30,11 +30,11 @@ const VaultTable = ({ secrets, onDelete }) => {
         },
         {
             header: 'URL',
-            cell: secret => { secret.url ? <ExternalLink href={secret.url}>{secret.url}</ExternalLink> : "(none)" }
+            cell: secret => (secret.url ? <ExternalLink href={secret.url}>{secret.url}</ExternalLink> : "(none)")
         },
         {
             header: 'Expiration date',
-            cell: secret => {
+            cell: secret => (
                 secret.expirationDate ? (
                     <>
                         {secret.expirationDate}
@@ -44,7 +44,7 @@ const VaultTable = ({ secrets, onDelete }) => {
                 ) : (
                     "(none)"
                 )
-            }
+            )
         },
         {
             header: 'Notes',
