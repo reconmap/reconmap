@@ -2,71 +2,63 @@
 
 <h1>Reconmap</h1>
 
-[![YouTube](https://img.shields.io/youtube/channel/subscribers/UCKJM12YKHqvvATHkdIKopeQ?style=flat&logo=youtube&label=YouTube%20channel&link=https%3A%2F%2Fwww.youtube.com%2Freconmap)](https://www.youtube.com/reconmap)
+[![YouTube](https://img.shields.io/badge/YouTube-Reconmap-red?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/reconmap)
 
-<h3>Pentesting Management, Automation and Reporting Platform</h3>
+<h3>AI-powered vulnerability scanning and reporting for teams running many engagements.</h3>
 </div>
 
-<p><strong>Reconmap</strong> is an open source vulnerability assessment and penetration testing platform designed to support security professionals throughout the entire engagement lifecycle. It enables penetration testers and InfoSec teams to efficiently plan, execute, and report on security assessments.</p>
-
-<p>By streamlining workflows and promoting collaboration, Reconmap helps reduce the time from initial reconnaissance to final reporting — delivering faster, more organised results without compromising quality.</p>
+Give it a target. Reconmap plans the scan, runs the tools, triages the findings and writes the report. Every engagement lives in one place, so your team spends its time on the work that needs a human.
 
 ![Reconmap's screenshot](docs/images/screenshot.png)
 
-## Capabilities
+## What it does
 
-- Execute security commands instantly or schedule them for later
-- Automatically capture and store command outputs while tracking identified vulnerabilities
-- Generate professional reports in formats like Word, Markdown and HTML.
-- **Model Context Protocol (MCP)** support to integrate Reconmap seamlessly with AI assistants and LLMs.
-- And much more to streamline your security assessments!
+- **Plans scans.** Enter a URL, domain, IP or repo. The AI picks the tools from your command catalog, orders them, and queues the run.
+- **Runs them anywhere.** Runners execute commands on your own machines and send the output back.
+- **Parses everything.** Built-in parsers for SARIF, CycloneDX, Nmap, Testssl, Subfinder and more. Anything else goes through the LLM parser.
+- **Triages automatically.** Every new finding gets a severity check, exploitability, affected surface, next steps and a false-positive assessment.
+- **Writes the fix.** Generate remediation steps per vulnerability, or suggest next commands per asset.
+- **Reports.** Export to Word, Markdown or HTML.
+- **Scales across engagements.** Many projects, many people, SSO through Keycloak.
+- **Bring your own model.** Ollama for fully local inference, or Azure OpenAI, OpenRouter and other OpenAI-compatible endpoints.
+- **MCP server.** Let your AI assistant query and drive Reconmap.
 
-## Try it
+## Quickstart
 
-### Demo instance
-
-Details on how to connect to the live demo server can be found [here](https://reconmap.com/overview/live-demo/).
-
-### Hosted (SaaS)
-
-Allow our developers and architects to host Reconmap for you via our hosted offering https://www.netfoe.com, so that you can focus on delivering value to your customers.
-
-### Run it locally
-
-#### Runtime requirements
-
-- Docker
-- [Docker compose](https://docs.docker.com/compose/install/)
-
-#### How to run it locally with Docker compose
-
-1. First you need to start your docker containers:
+You need [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/).
 
 ```sh
 docker compose up -d
 ```
 
-2. After this, open your browser at http://localhost:5500
+Open http://localhost:5500.
+
+Prefer not to install anything? Try the [live demo](https://reconmap.com/overview/live-demo/) or use the hosted version at [netfoe.com](https://www.netfoe.com).
+
+## Under the hood
+
+| Component | Stack | Path |
+|---|---|---|
+| Dashboard | React | [`src/dashboard`](src/dashboard) |
+| API | C# / .NET 10 | [`src/api`](src/api) |
+| Runner (`reconmapd`) | Go | [`src/runner`](src/runner) |
+| CLI (`rmap`) | Go | [`src/cli`](src/cli) |
+
+PostgreSQL for data, Redis for cache, Keycloak for auth.
 
 ## Documentation
 
-Go to <https://reconmap.com/> to find the user, admin and developer manuals.
+User, admin and developer manuals: <https://reconmap.com>. See [AI features](docs/pages/user-manual/system/ai-features.md) for model setup and data handling.
 
-## How to Contribute
+## Contributing
 
-We welcome contributions from the community! Here are some ways you can get involved:
+- ⭐ **Star this project on GitHub** to show your support, help others discover it and be notified of new releases.
+- Fix or extend the [docs](https://github.com/reconmap/documentation).
+- Share your ideas or suggest new features on [Discussions](https://github.com/reconmap/reconmap/discussions).
+- Contribute to the project by sending pull requests.
+- Report bugs and security issues in [Issues](https://github.com/reconmap/reconmap/issues).
 
-- **★ Star this project on GitHub ★** to show your support and help others discover it.
-- Review the [documentation](https://reconmap.com) and submit improvements via a pull request to the [documentation repository](https://github.com/reconmap/documentation).
-- Share your ideas or suggest new features on the [discussion board](https://github.com/reconmap/reconmap/discussions).
-- Contribute to the codebase by improving the [backend](src/api), [frontend](src/dashboard), or [CLI tools](src/cli).
-- Report security vulnerabilities or other issues to help us maintain a secure and reliable platform.
-
-Before contributing, please read our [Contributing Guidelines](https://github.com/reconmap/.github/blob/main/CONTRIBUTING.md) to ensure a smooth collaboration process. Thank you for helping make Reconmap better!
-
-## How to report bugs
-
-If you have bugs to report please use the [issues](https://github.com/reconmap/reconmap/issues) tab on Github to submit the details.
+Read the [Contributing Guidelines](https://github.com/reconmap/.github/blob/main/CONTRIBUTING.md) first.
 
 ## Sponsors and supporters
 
