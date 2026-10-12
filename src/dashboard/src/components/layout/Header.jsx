@@ -50,17 +50,14 @@ const Header = () => {
                                 key={menuLink.name}
                                 className={`navbar-item has-dropdown ${activeMenu === menuLink.name ? "is-active" : ""}`}
                             >
-                                <a
+                                <button
+                                    type="button"
                                     className="navbar-link"
-                                    href="#"
                                     title={menuLink.title}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setActiveMenu(activeMenu === menuLink.name ? null : menuLink.name);
-                                    }}
+                                    onClick={() => setActiveMenu(activeMenu === menuLink.name ? null : menuLink.name)}
                                 >
                                     {menuLink.name}
-                                </a>
+                                </button>
                                 <div className="navbar-dropdown is-boxed">
                                     {menuLink.items.map((item, index) => {
                                         if (item.type === "label") {

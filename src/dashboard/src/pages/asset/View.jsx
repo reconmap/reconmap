@@ -73,7 +73,7 @@ const AssetView = () => {
                 <Breadcrumb>
                     <Link to="/projects">Projects</Link>
                     {savedProject && <Link to={`/projects/${savedProject.id}`}>{savedProject.name}</Link>}
-                    <a>{asset.name}</a>
+                    <span>{asset.name}</span>
                 </Breadcrumb>
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                     <DeleteButton onClick={handleDelete} />

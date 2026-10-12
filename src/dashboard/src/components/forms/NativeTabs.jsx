@@ -6,15 +6,9 @@ const NativeTabs = ({ labels, tabIndex, tabIndexSetter }) => {
                     .filter((value) => value)
                     .map((label, index) => (
                         <li key={index} className={index === tabIndex ? "is-active" : ""}>
-                            <a
-                                href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    tabIndexSetter(index);
-                                }}
-                            >
+                            <button type="button" onClick={() => tabIndexSetter(index)}>
                                 {label}
-                            </a>
+                            </button>
                         </li>
                     ))}
             </ul>

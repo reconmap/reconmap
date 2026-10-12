@@ -228,26 +228,14 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                 <div className="tabs is-toggle is-small">
                     <ul>
                         <li className={mode === "edit" ? "is-active" : ""}>
-                            <a
-                                href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setMode("edit");
-                                }}
-                            >
+                            <button type="button" onClick={() => setMode("edit")}>
                                 Edit
-                            </a>
+                            </button>
                         </li>
                         <li className={mode === "preview" ? "is-active" : ""}>
-                            <a
-                                href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setMode("preview");
-                                }}
-                            >
+                            <button type="button" onClick={() => setMode("preview")}>
                                 Preview
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>

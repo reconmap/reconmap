@@ -31,6 +31,82 @@ body {
     padding: 1rem;
 }
 
+/* Buttons that replace anchors, styled to match Bulma's .tabs and .navbar-link links */
+button.navbar-link {
+    border: none;
+    font: inherit;
+    text-align: left;
+    width: 100%;
+}
+
+.tabs button {
+    align-items: center;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-color: var(--bulma-tabs-border-bottom-color);
+    border-bottom-style: var(--bulma-tabs-border-bottom-style);
+    border-bottom-width: var(--bulma-tabs-border-bottom-width);
+    color: var(--bulma-tabs-link-color);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    justify-content: center;
+    margin-bottom: calc(-1 * var(--bulma-tabs-border-bottom-width));
+    padding: var(--bulma-tabs-link-padding);
+    vertical-align: top;
+}
+
+.tabs button:hover {
+    border-bottom-color: var(--bulma-tabs-link-hover-border-bottom-color);
+    color: var(--bulma-tabs-link-hover-color);
+}
+
+.tabs li.is-active button {
+    border-bottom-color: var(--bulma-tabs-link-active-border-bottom-color);
+    color: var(--bulma-tabs-link-active-color);
+}
+
+.tabs.is-toggle button {
+    border-color: var(--bulma-tabs-toggle-link-border-color);
+    border-style: var(--bulma-tabs-toggle-link-border-style);
+    border-width: var(--bulma-tabs-toggle-link-border-width);
+    margin-bottom: 0;
+    position: relative;
+}
+
+.tabs.is-toggle button:hover {
+    background-color: var(--bulma-tabs-toggle-link-hover-background-color);
+    border-color: var(--bulma-tabs-toggle-link-hover-border-color);
+    z-index: 2;
+}
+
+.tabs.is-toggle li + li {
+    margin-inline-start: calc(-1 * var(--bulma-tabs-toggle-link-border-width));
+}
+
+.tabs.is-toggle li:first-child button {
+    border-start-start-radius: var(--bulma-tabs-toggle-link-radius);
+    border-end-start-radius: var(--bulma-tabs-toggle-link-radius);
+}
+
+.tabs.is-toggle li:last-child button {
+    border-start-end-radius: var(--bulma-tabs-toggle-link-radius);
+    border-end-end-radius: var(--bulma-tabs-toggle-link-radius);
+}
+
+.tabs.is-toggle li.is-active button {
+    background-color: var(--bulma-tabs-toggle-link-active-background-color);
+    border-color: var(--bulma-tabs-toggle-link-active-border-color);
+    color: var(--bulma-tabs-toggle-link-active-color);
+    z-index: 1;
+}
+
+.tabs.is-toggle ul {
+    border-bottom: none;
+}
+
 .heading {
     display: flex;
     justify-content: space-between;
