@@ -60,10 +60,14 @@ const TaskDetailsPage = () => {
     const onAssigneeChange = (ev) => {
         const assigneeUid = ev.target.value;
 
+        // The API's PUT endpoint replaces the whole task and validates required fields,
+        // so send the full task with the new numeric assignee instead of a partial body.
         requestTaskPatch(task.id, {
-            assignedToUid: "" === assigneeUid ? null : assigneeUid,
+            ...task,
+            assignedToUid: "" === assigneeUid ? null : Number(assigneeUid),
         })
             .then(() => {
+                queryClient.invalidateQueries({ queryKey: ["tasks"] });
                 actionCompletedToast("The assignee has been updated.");
             })
             .catch((err) => console.error(err));

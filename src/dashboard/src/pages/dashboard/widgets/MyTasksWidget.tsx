@@ -7,26 +7,27 @@ import { AuthContext } from "contexts/AuthContext";
 import { useContext } from "react";
 import DashboardWidget from "./Widget";
 
+const columns = [
+    {
+        header: 'Summary',
+        cell: task => <TaskBadge task={task} />
+    },
+    {
+        header: 'Status',
+        cell: task => <TaskStatusFormatter task={task} />
+    }
+];
+
 const MyTasksWidget = () => {
     const { user } = useContext(AuthContext);
-    const { isLoading, isError } = useTasksQuery({ assignedToUid: user.id, limit: 5, projectIsArchived: 0 });
+    const { data: tasks, isLoading, isError, error } = useTasksQuery({ assignedToUid: user.id, limit: 5, projectIsArchived: 0 });
 
-    if (isLoading || isError) return <Loading />;
-
-    const columns = [
-        {
-            header: 'Summary',
-            cell: task => <TaskBadge task={task} />
-        },
-        {
-            header: 'Status',
-            cell: task => <TaskStatusFormatter task={task} />
-        }
-    ];
+    if (isLoading) return <Loading />;
+    if (isError) return <p className="has-text-danger">Error loading tasks: {error.message}</p>;
 
     return (
         <DashboardWidget title="My tasks">
-            <NativeTable rows={[]} rowId={task => task.id} columns={columns} emptyRowsMessage="You don't have any assigned tasks.">
+            <NativeTable rows={tasks} rowId={task => task.id} columns={columns} emptyRowsMessage="You don't have any assigned tasks.">
             </NativeTable>
         </DashboardWidget >
     );

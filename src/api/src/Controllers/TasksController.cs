@@ -42,7 +42,9 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
         [FromQuery] int? projectId,
         [FromQuery] string? priority,
         [FromQuery] string? status,
-        [FromQuery] string? keywords)
+        [FromQuery] string? keywords,
+        [FromQuery] int? assignedToUid = null,
+        [FromQuery] int? projectIsArchived = null)
     {
         var kw = keywords?.Trim().ToLower();
 
@@ -56,7 +58,19 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
                 || (t.Description != null && t.Description.ToLower().Contains(kw)));
         if (projectId != null)
             q = q.Where(t => t.ProjectId == projectId);
+        if (assignedToUid != null)
+            q = q.Where(t => t.AssignedToUid == assignedToUid);
+        if (projectIsArchived != null)
+        {
+            // 0 keeps tasks from non-archived projects, any other value keeps only tasks from archived projects
+            var archivedProjectIds = dbContext.Projects.Where(p => p.Archived).Select(p => p.Id);
+            q = projectIsArchived == 0
+                ? q.Where(t => !archivedProjectIds.Contains(t.ProjectId))
+                : q.Where(t => archivedProjectIds.Contains(t.ProjectId));
+        }
         q = q.OrderByDescending(a => a.CreatedAt);
+        if (limit != null)
+            q = q.Take(limit.Value);
 
         var tasks = await q.ToListAsync();
         return Ok(tasks);

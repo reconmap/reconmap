@@ -55,4 +55,68 @@ public class TasksControllerTests
         var ok = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(2, Assert.IsAssignableFrom<IEnumerable<ProjectTask>>(ok.Value).Count());
     }
+
+    [Fact]
+    public async Task GetMany_FiltersTasksByAssignee()
+    {
+        using var db = CreateDbContext();
+        db.Tasks.AddRange(
+            new ProjectTask { ProjectId = 1, Summary = "Mine", AssignedToUid = 7, Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = 1, Summary = "Theirs", AssignedToUid = 8, Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = 1, Summary = "Unassigned", Priority = "low", Status = "todo" }
+        );
+        await db.SaveChangesAsync();
+
+        var controller = new TasksController(db);
+
+        var result = await controller.GetMany(null, null, null, null, null, assignedToUid: 7);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        var tasks = Assert.IsAssignableFrom<IEnumerable<ProjectTask>>(ok.Value).ToList();
+        var task = Assert.Single(tasks);
+        Assert.Equal("Mine", task.Summary);
+    }
+
+    [Fact]
+    public async Task GetMany_ExcludesTasksFromArchivedProjectsWhenProjectIsArchivedIsZero()
+    {
+        using var db = CreateDbContext();
+        db.Projects.AddRange(
+            new Project { Id = 1, Name = "Active", Visibility = "private", Archived = false },
+            new Project { Id = 2, Name = "Archived", Visibility = "private", Archived = true }
+        );
+        db.Tasks.AddRange(
+            new ProjectTask { ProjectId = 1, Summary = "Active task", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = 2, Summary = "Archived task", Priority = "low", Status = "todo" }
+        );
+        await db.SaveChangesAsync();
+
+        var controller = new TasksController(db);
+
+        var result = await controller.GetMany(null, null, null, null, null, projectIsArchived: 0);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        var tasks = Assert.IsAssignableFrom<IEnumerable<ProjectTask>>(ok.Value).ToList();
+        var task = Assert.Single(tasks);
+        Assert.Equal("Active task", task.Summary);
+    }
+
+    [Fact]
+    public async Task GetMany_LimitsNumberOfTasksReturned()
+    {
+        using var db = CreateDbContext();
+        db.Tasks.AddRange(
+            new ProjectTask { ProjectId = 1, Summary = "A", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = 1, Summary = "B", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = 1, Summary = "C", Priority = "low", Status = "todo" }
+        );
+        await db.SaveChangesAsync();
+
+        var controller = new TasksController(db);
+
+        var result = await controller.GetMany(2, null, null, null, null);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(2, Assert.IsAssignableFrom<IEnumerable<ProjectTask>>(ok.Value).Count());
+    }
 }
