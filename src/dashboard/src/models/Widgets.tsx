@@ -14,15 +14,15 @@ import TopVulnerableAssetsWidget from "pages/dashboard/widgets/TopVulnerableAsse
 const Widgets = {
     "discussions": {
         title: "Community discussions",
-        description: "Recent Reconmap releases",
-        visible: true,
-        component: <ReleasesWidget />,
-    },
-    "releases": {
-        title: "Reconmap releases",
         description: "Recent community discussions",
         visible: true,
         component: <DiscussionsWidget />,
+    },
+    "releases": {
+        title: "Reconmap releases",
+        description: "Recent Reconmap releases",
+        visible: true,
+        component: <ReleasesWidget />,
     },
     "my-tasks": {
         title: "My tasks",

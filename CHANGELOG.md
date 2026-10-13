@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Dashboard: hiding the "Reconmap releases" or "Community discussions" widget hid the other one, because their components were swapped.
+
 ## [3.3.0] - 2026-10-13
 
 ### Changed
