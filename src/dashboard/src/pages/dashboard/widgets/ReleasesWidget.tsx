@@ -14,7 +14,7 @@ const ReleasesWidget = () => {
             {releases.length === 0 ? (
                 <p>You don't have any assigned tasks.</p>
             ) : (
-                <table className="table">
+                <table className="table is-fullwidth">
                     <thead>
                         <tr>
                             <th>Date</th>
