@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-10-13
+
 ### Changed
 
 - **Breaking:** Renamed "agents" to "runners". A runner is a machine where commands, models and AI agents run, in the same way as runners in GitHub Actions and other CI/CD platforms. The rename covers:
@@ -451,5 +453,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add basic functionality: clients, projects, tasks, vulnerabilities, ...
 
-[Unreleased]: https://github.com/reconmap/reconmap/compare/1.5.0...main
+[Unreleased]: https://github.com/reconmap/reconmap/compare/3.3.0...main
+[3.3.0]: https://github.com/reconmap/reconmap/compare/3.2.2...3.3.0
 [1.5.0]: https://github.com/reconmap/reconmap/compare/0.1.0...1.5.0
