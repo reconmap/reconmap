@@ -17,7 +17,7 @@ const SearchResultsPage = React.memo(() => {
     const [t] = useTranslation();
     const params = useParams() as any;
     const query = useQuery();
-    const keywords = decodeURIComponent(params.keywords);
+    const keywords = params.keywords;
 
     const entitiesParam = query.has("entities")
         ? query.get("entities")

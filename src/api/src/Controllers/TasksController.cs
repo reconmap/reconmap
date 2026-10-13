@@ -41,13 +41,19 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
     public async Task<IActionResult> GetMany([FromQuery] int? limit,
         [FromQuery] int? projectId,
         [FromQuery] string? priority,
-        [FromQuery] string? status)
+        [FromQuery] string? status,
+        [FromQuery] string? keywords)
     {
+        var kw = keywords?.Trim().ToLower();
+
         var q = dbContext.Tasks
             .Include(t => t.AssignedTo)
             .AsNoTracking()
             .Where(t => string.IsNullOrEmpty(priority) || t.Priority == priority)
-            .Where(t => string.IsNullOrEmpty(status) || t.Status == status);
+            .Where(t => string.IsNullOrEmpty(status) || t.Status == status)
+            .Where(t => string.IsNullOrEmpty(kw)
+                || t.Summary.ToLower().Contains(kw)
+                || (t.Description != null && t.Description.ToLower().Contains(kw)));
         if (projectId != null)
             q = q.Where(t => t.ProjectId == projectId);
         q = q.OrderByDescending(a => a.CreatedAt);

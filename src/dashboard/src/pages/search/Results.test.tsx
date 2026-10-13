@@ -27,3 +27,15 @@ it("renders search results page with keywords", async () => {
     expect(getByTestId("title").textContent).toBe("my-test-query");
     expect(getByText("Advanced search")).toBeInTheDocument();
 });
+
+it("shows keywords containing a percent sign without decoding them twice", () => {
+    const { getByTestId } = render(
+        <MemoryRouter initialEntries={["/search/" + encodeURIComponent("100% off")]}>
+            <Routes>
+                <Route path="/search/:keywords" element={<SearchResultsPage />} />
+            </Routes>
+        </MemoryRouter>,
+    );
+
+    expect(getByTestId("title").textContent).toBe("100% off");
+});

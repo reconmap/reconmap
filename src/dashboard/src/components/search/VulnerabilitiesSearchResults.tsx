@@ -8,7 +8,7 @@ const VulnerabilitiesSearchResults = ({ keywords, emptyResultsSetter: setEmptyRe
 
     useEffect(() => {
         const reloadData = () => {
-            requestVulnerabilities({ isTemplate: 0, keywords }).then((vulnerabilities) => {
+            requestVulnerabilities({ isTemplate: "false", keywords }).then((vulnerabilities) => {
                 setTableModel((tableModel) => ({ ...tableModel, vulnerabilities: vulnerabilities.data }));
                 setEmptyResults((emptyResults) =>
                     0 === vulnerabilities.data.length

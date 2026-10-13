@@ -75,12 +75,17 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
             db.SortedSetAdd(setName, keywords, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
         }
 
+        var kw = keywords?.Trim().ToLower();
+
         var q = dbContext.Projects
             .Include(p => p.Client)
             .Include(p => p.Category)
             .AsNoTracking()
-            .Where(p => !isTemplate.HasValue || p.IsTemplate == isTemplate);
-            
+            .Where(p => !isTemplate.HasValue || p.IsTemplate == isTemplate)
+            .Where(p => string.IsNullOrEmpty(kw)
+                || p.Name.ToLower().Contains(kw)
+                || (p.Description != null && p.Description.ToLower().Contains(kw)));
+
         if (currentUser.Role == UserRole.Client) {
             var memberProjectIds = dbContext.ProjectMembers.Where(pm => pm.UserId == currentUser.Id).Select(pm => pm.ProjectId);
             q = q.Where(p => memberProjectIds.Contains(p.Id));

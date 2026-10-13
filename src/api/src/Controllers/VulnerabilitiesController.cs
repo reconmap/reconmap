@@ -58,8 +58,12 @@ public class VulnerabilitiesController(
         [FromQuery] int? projectId,
         [FromQuery] int? assetId,
         [FromQuery] string? status,
-        [FromQuery] string? risk)
+        [FromQuery] string? risk,
+        [FromQuery] string? keywords,
+        [FromQuery] bool? isTemplate)
     {
+        var kw = keywords?.Trim().ToLower();
+
         var memberProjectIds = await accessScope.MemberProjectIdsAsync();
         var q = _dbContext.Vulnerabilities
              .Include(v => v.Project)
@@ -67,7 +71,11 @@ public class VulnerabilitiesController(
              .AsNoTracking()
              .Where(v => accessScope.IsPrivileged ||
                  (v.ProjectId.HasValue && memberProjectIds.Contains(v.ProjectId.Value)))
-             .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk);
+             .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk)
+             .Where(v => !isTemplate.HasValue || v.IsTemplate == isTemplate)
+             .Where(v => string.IsNullOrEmpty(kw)
+                 || v.Summary.ToLower().Contains(kw)
+                 || (v.Description != null && v.Description.ToLower().Contains(kw)));
          if (projectId.HasValue)
              q = q.Where(v => v.ProjectId == projectId);
          if(assetId.HasValue)

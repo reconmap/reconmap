@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Dashboard: hiding the "Reconmap releases" or "Community discussions" widget hid the other one, because their components were swapped.
+- Search returned every task, vulnerability, project and template instead of only the matches. The API now filters tasks, vulnerabilities and projects by the `keywords` query parameter (case-insensitive, matched against the name, summary or description), and `/api/vulnerabilities` honours `isTemplate`, so vulnerability template search no longer returns regular vulnerabilities. Searches containing a `%` no longer break the results page.
 
 ## [3.3.0] - 2026-10-13
 
