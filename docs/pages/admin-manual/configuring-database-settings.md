@@ -23,9 +23,11 @@ Adjust the values (Host, Port, Database, Username, Password) according to your e
 
 If you are using the default `compose.yaml`, the PostgreSQL service is named `postgres` and the credentials match the example above.
 
+If you are upgrading an installation that still has PostgreSQL 17 data, follow [Upgrading PostgreSQL to 18](upgrading-postgresql.md) first.
+
 ```yaml
   postgres:
-    image: postgres:17-alpine
+    image: postgres:18.6-alpine
     environment:
       POSTGRES_PASSWORD: reconmuppet
 ```

@@ -37,6 +37,8 @@ spec:
               value: postgres
             - name: POSTGRES_DB
               value: postgres
+            - name: PGDATA
+              value: /var/lib/postgresql/data
           image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
           imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
           livenessProbe:

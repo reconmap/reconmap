@@ -67,7 +67,7 @@ A manual installation means setting up each component — the .NET runtime, Post
 
 **High-level steps:**
 
-1. Install runtime dependencies (.NET 10, PostgreSQL 17, Redis, Keycloak).
+1. Install runtime dependencies (.NET 10, PostgreSQL 18, Redis, Keycloak).
 2. Configure Nginx (or another reverse proxy) to route traffic to the API and dashboard.
 3. Clone the repository and build the API and dashboard.
 4. Apply the database migrations and seed data from `data/`.

@@ -5,7 +5,7 @@ postgres:
   enabled: true
   image:
     repository: postgres
-    tag: 17-alpine
+    tag: 18.6-alpine
     pullPolicy: IfNotPresent
   rootPassword: reconmuppet
   database: reconmap
