@@ -145,7 +145,7 @@ services:
       - rustfs_logs:/logs
 
   opa:
-    image: openpolicyagent/opa:1.20.2-istio
+    image: openpolicyagent/opa:1.21.2
     restart: unless-stopped
     ports:
       - "8181:8181"

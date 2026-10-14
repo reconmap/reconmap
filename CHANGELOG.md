@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Switched the Docker Compose Open Policy Agent image from `openpolicyagent/opa:1.20.2-istio` to the standard `openpolicyagent/opa:1.21.2`, since the API queries OPA over HTTP and does not need the Istio variant. The policy tests in CI use the same image.
+
 ### Fixed
 
 - Dashboard: hiding the "Reconmap releases" or "Community discussions" widget hid the other one, because their components were swapped.

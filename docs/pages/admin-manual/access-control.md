@@ -13,7 +13,7 @@ The default policies are located in `policy/authz.rego`. By default:
 - **Administrators** have unrestricted access to all resources.
 - **Clients** are restricted and can only access projects they are explicitly assigned to as project members.
 
-Reconmap currently runs `openpolicyagent/opa:1.20.2-istio`. The bundled policy uses OPA 1.20's opt-in `or` keyword to keep user and client collection permissions concise. Custom policies may use `and` and `or` after importing `future.keywords.and` and/or `future.keywords.or`; run `opa test policy/` after changing a policy.
+Reconmap currently runs `openpolicyagent/opa`, the standard OPA image (the API queries it over HTTP, so no Envoy or Istio variant is needed). The bundled policy uses OPA's opt-in `or` keyword to keep user and client collection permissions concise. Custom policies may use `and` and `or` after importing `future.keywords.and` and/or `future.keywords.or`; run `opa test policy/` after changing a policy.
 
 GitHub Actions runs that same OPA version's policy tests whenever a file under `policy/` changes on a pull request to `main` or a push to `main`.
 
