@@ -135,7 +135,7 @@ services:
       RMAP_REDIS_PASSWORD: "${REDIS_PASSWORD}"
 
   rustfs:
-    image: rustfs/rustfs:1.0.0-beta.8
+    image: rustfs/rustfs:1.0.1
     restart: unless-stopped
     ports:
       - "9000:9000"

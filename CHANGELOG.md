@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Switched the Docker Compose Open Policy Agent image from `openpolicyagent/opa:1.20.2-istio` to the standard `openpolicyagent/opa:1.21.2`, since the API queries OPA over HTTP and does not need the Istio variant. The policy tests in CI use the same image.
+- Updated the Docker Compose RustFS (S3-compatible object storage) image from `rustfs/rustfs:1.0.0-beta.8` to `rustfs/rustfs:1.0.1`.
 
 ### Fixed
 
