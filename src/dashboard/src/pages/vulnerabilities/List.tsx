@@ -7,9 +7,8 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import DeleteButton from "components/ui/buttons/Delete";
 import { actionCompletedToast } from "components/ui/toast";
-import useQuery from "hooks/useQuery";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import CreateButton from "components/ui/buttons/Create";
 import VulnerabilityFilters from "components/vulnerabilities/Filters";
 import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";
@@ -17,7 +16,7 @@ import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTab
 
 const VulnerabilitiesList = () => {
     const navigate = useNavigate();
-    const query = useQuery();
+    const [query] = useSearchParams();
     let pageNumber: any = query.get("page");
     pageNumber = pageNumber !== null ? parseInt(pageNumber) : 1;
     const apiPageNumber = pageNumber - 1;

@@ -1,11 +1,10 @@
 import { requestTaskPost } from "api/requests/tasks";
 import { actionCompletedToast } from "components/ui/toast";
 import { errorToast } from "components/ui/toast";
-import useQuery from "hooks/useQuery";
 import Task from "models/Task";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import TaskForm from "components/tasks/TaskForm";
@@ -13,7 +12,7 @@ import TaskForm from "components/tasks/TaskForm";
 const TaskCreationPage = () => {
     const [t] = useTranslation();
     const navigate = useNavigate();
-    const query = useQuery();
+    const [query] = useSearchParams();
     const defaultProjectId = "";
     const projectIdParam = query.get("projectId") || defaultProjectId;
     const forTemplate = parseInt(query.get("forTemplate")!) === 1;

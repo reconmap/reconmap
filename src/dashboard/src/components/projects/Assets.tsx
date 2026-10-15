@@ -8,15 +8,12 @@ import CreateButton from "components/ui/buttons/Create";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import useBoolean from "hooks/useBoolean";
-import useQuery from "hooks/useQuery";
-import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import Loading from "../ui/Loading";
 
 const ProjectAssets = ({ project }: any) => {
-    const query = useQuery();
-    const urlPageNumber = query.get("page") !== null ? parseInt(query.get("page")!) : 1;
-    const [pageNumber, setPageNumber] = useState(urlPageNumber);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const pageNumber = parseInt(searchParams.get("page") ?? "1") || 1;
 
     const { value: isAddAssetDialogOpen, setTrue: openAddAssetDialog, setFalse: closeAddAssetDialog } = useBoolean();
     const {
@@ -39,7 +36,10 @@ const ProjectAssets = ({ project }: any) => {
     };
 
     const onPageChange = (pageNumber) => {
-        setPageNumber(pageNumber + 1);
+        setSearchParams((params) => {
+            params.set("page", String(pageNumber + 1));
+            return params;
+        });
     };
 
     const columns = [

@@ -7,16 +7,15 @@ import VulnerabilityTemplatesSearchResults from "components/search/Vulnerability
 import Breadcrumb from "components/ui/Breadcrumb";
 import LinkButton from "components/ui/buttons/Link";
 import Title from "components/ui/Title";
-import useQuery from "hooks/useQuery";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { SearchUrls } from "AppUrls";
 
 const SearchResultsPage = React.memo(() => {
     const [t] = useTranslation();
     const params = useParams() as any;
-    const query = useQuery();
+    const [query] = useSearchParams();
     const keywords = params.keywords;
 
     const entitiesParam = query.has("entities")

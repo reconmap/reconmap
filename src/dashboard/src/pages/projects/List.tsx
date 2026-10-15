@@ -5,16 +5,15 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import useDocumentTitle from "hooks/useDocumentTitle";
-import useQuery from "hooks/useQuery";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
 import ProjectsTable from "components/projects/Table";
 
 const ProjectsListPage = () => {
     const navigate = useNavigate();
-    const query = useQuery();
+    const [query] = useSearchParams();
     let pageNumber: any = query.get("page");
     pageNumber = pageNumber !== null ? parseInt(pageNumber) : 1;
     const apiPageNumber = pageNumber - 1;

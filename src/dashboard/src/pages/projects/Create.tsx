@@ -1,18 +1,17 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { requestProjectPost } from "api/requests/projects";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
-import useQuery from "hooks/useQuery";
 import { StatusCodes } from "http-status-codes";
 import Project from "models/Project";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import ProjectForm from "components/projects/Form";
 
 const ProjectCreate = () => {
     const navigate = useNavigate();
-    const query = useQuery();
+    const [query] = useSearchParams();
     const isTemplate = "true" === query.get("isTemplate");
     const [newProject, setNewProject] = useState({ ...Project, isTemplate: isTemplate });
     const queryClient = useQueryClient();

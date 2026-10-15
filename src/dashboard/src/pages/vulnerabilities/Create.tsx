@@ -1,16 +1,15 @@
 import { requestVulnerabilityPost } from "api/requests/vulnerabilities";
 import { actionCompletedToast } from "components/ui/toast";
-import useQuery from "hooks/useQuery";
 import defaultVulnerability from "models/Vulnerability";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import VulnerabilityForm from "components/vulnerabilities/Form";
 
 const VulnerabilityCreate = () => {
     const navigate = useNavigate();
-    const query = useQuery();
+    const [query] = useSearchParams();
     const urlProjectId = query.get("projectId") || 0;
     const isTemplate = "true" === query.get("isTemplate");
 

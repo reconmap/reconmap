@@ -1,8 +1,7 @@
 import { useAuditLogQuery } from "api/auditlog";
 import PaginationV2 from "components/layout/PaginationV2";
 import Loading from "components/ui/Loading";
-import useQuery from "hooks/useQuery";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { downloadFromApi } from "services/api";
 import Breadcrumb from "components/ui/Breadcrumb";
 import ExportButton from "components/ui/buttons/Export";
@@ -11,7 +10,7 @@ import AuditLogsTable from "components/auditlog/AuditLogsTable";
 
 const AuditLogList = () => {
     const navigate = useNavigate();
-    const query = useQuery();
+    const [query] = useSearchParams();
     let pageNumber: any = query.get("page");
     pageNumber = pageNumber !== null ? parseInt(pageNumber) : 1;
     const apiPageNumber = pageNumber - 1;
