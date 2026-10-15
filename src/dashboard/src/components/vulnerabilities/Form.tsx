@@ -110,14 +110,14 @@ const VulnerabilityForm = ({
         <form id="vulnerabilityCreateForm" onSubmit={onFormSubmit}>
             <fieldset>
                 <legend>Basic information</legend>
-                <label>
+                <div>
                     Properties
                     <div>
                         <NativeCheckbox name="isTemplate" onChange={onFormChange} checked={vulnerability.isTemplate}>
                             Is template
                         </NativeCheckbox>
                     </div>
-                </label>
+                </div>
                 <HorizontalLabelledField
                     label={
                         <>
@@ -292,26 +292,33 @@ const VulnerabilityForm = ({
                     </fieldset>
                 )}
 
-                <label>
+                <label htmlFor="vulnerabilityExternalRefs">
                     External references
                     <MarkdownEditor
+                        id="vulnerabilityExternalRefs"
                         name="external_refs"
                         value={vulnerability.external_refs || ""}
                         onChange={onFormChange}
                     />
                 </label>
 
-                <label>
+                <label htmlFor="vulnerabilityProofOfConcept">
                     Proof of concept
                     <MarkdownEditor
+                        id="vulnerabilityProofOfConcept"
                         name="proof_of_concept"
                         value={vulnerability.proof_of_concept || ""}
                         onChange={onFormChange}
                     />
                 </label>
-                <label>
+                <label htmlFor="vulnerabilityImpact">
                     Impact
-                    <MarkdownEditor name="impact" value={vulnerability.impact || ""} onChange={onFormChange} />
+                    <MarkdownEditor
+                        id="vulnerabilityImpact"
+                        name="impact"
+                        value={vulnerability.impact || ""}
+                        onChange={onFormChange}
+                    />
                 </label>
                 <HorizontalLabelledField
                     label="CVSS score"

@@ -156,9 +156,10 @@ const ProjectForm = ({ isEdit = false, project, projectSetter: setProject, onFor
                     </>
                 )}
 
-                <label>
+                <label htmlFor="projectDescription">
                     Description
                     <MarkdownEditor
+                        id="projectDescription"
                         name="description"
                         onChange={handleFormChange}
                         value={project.description || ""}

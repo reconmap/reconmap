@@ -45,8 +45,9 @@ const ImportForm = () => {
                     </ul>
                 </div>
                 <div id="importFile">
-                    <label>Import file</label>
+                    <label htmlFor="importFileInput">Import file</label>
                     <NativeInput
+                        id="importFileInput"
                         ref={importFileRef}
                         type="file"
                         onChange={onImportFileChange}

@@ -39,7 +39,7 @@ const PaginationV2 = ({ page, total, onPageChange }: any) => {
     }, [onKeyDownListener]);
 
     if (parseInt(total) === 1) {
-        return <label>(no more pages)</label>;
+        return <span>(no more pages)</span>;
     }
 
     return (

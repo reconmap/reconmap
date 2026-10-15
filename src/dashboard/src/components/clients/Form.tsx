@@ -81,9 +81,15 @@ const ClientForm = ({ isEditForm = false, onFormSubmit, client, clientSetter: se
                     }
                 />
 
-                <label>
+                <label htmlFor="clientUrl">
                     URL
-                    <NativeInput type="text" name="url" value={client.url || ""} onChange={onFormChange} />
+                    <NativeInput
+                        id="clientUrl"
+                        type="text"
+                        name="url"
+                        value={client.url || ""}
+                        onChange={onFormChange}
+                    />
                 </label>
             </fieldset>
 
