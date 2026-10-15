@@ -14,7 +14,7 @@ const NotesTable = ({ notes, onDeleteButtonClick }: any) => {
             <h3 className="title is-4 has-text-white">Comments</h3>
 
             {notes.map((note) => (
-                <div className="box has-background-dark has-text-white">
+                <div key={note.id} className="box has-background-dark has-text-white">
                     <div className="media">
                         <div className="media-content">
                             <p className="mb-2">

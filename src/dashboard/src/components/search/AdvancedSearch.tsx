@@ -64,6 +64,7 @@ const AdvancedSearch = () => {
 
                         {Object.keys(entityList).map((objectKey) => (
                             <NativeCheckbox
+                                key={objectKey}
                                 checked={entities.includes(objectKey)}
                                 value={objectKey}
                                 onChange={onFormInputChange}

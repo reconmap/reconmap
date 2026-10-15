@@ -67,8 +67,8 @@ const ImportForm = () => {
 
                     {importResponse.errors.length > 0 && (
                         <ul>
-                            {importResponse.errors.map((error) => (
-                                <li style={{ color: "orange" }}>{error}</li>
+                            {importResponse.errors.map((error, index) => (
+                                <li key={index} style={{ color: "orange" }}>{error}</li>
                             ))}
                         </ul>
                     )}
@@ -79,7 +79,7 @@ const ImportForm = () => {
                             <ul>
                                 {importResponse.results.map((entityResult) => {
                                     return (
-                                        <li>
+                                        <li key={entityResult.name}>
                                             {entityResult.count} {entityResult.name} ({entityResult.errors.length}{" "}
                                             errors)
                                         </li>

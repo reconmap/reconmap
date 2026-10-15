@@ -77,7 +77,7 @@ const SendReport = () => {
                         <NativeSelect id="reportId" name="report_id">
                             {revisions &&
                                 revisions.map((revision) => (
-                                    <option value={revision.id}>{revision.versionName}</option>
+                                    <option key={revision.id} value={revision.id}>{revision.versionName}</option>
                                 ))}
                         </NativeSelect>
                     }
