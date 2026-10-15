@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useVulnerabilityQuery } from "api/vulnerabilities";
 import { normalizeVulnerabilityForSave } from "api/requests/vulnerabilities";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPut } from "utilities/requests";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";

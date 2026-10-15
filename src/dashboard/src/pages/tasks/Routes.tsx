@@ -1,7 +1,7 @@
 import ProjectsLayout from "layouts/Layout";
 import TaskCreationPage from "pages/tasks/Create";
 import EditTaskPage from "pages/tasks/Edit";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { TasksUrls } from "AppUrls";
 import TaskDetailsPage from "./Details";
 import TasksListPage from "./List";

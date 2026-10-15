@@ -22,7 +22,8 @@ import ToolsRoutes from "pages/tools/Routes";
 import UsersRoutes from "pages/users/Routes";
 import VulnerabilitiesRoutes from "pages/vulnerabilities/Routes";
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from "react-router";
+import { RouterProvider } from "react-router/dom";
 import Configuration from "./Configuration";
 import { AuthProvider } from "./contexts/AuthContext";
 import ErrorBoundary from "components/ui/ErrorBoundary";
@@ -36,40 +37,51 @@ const queryClient = new QueryClient({
     },
 });
 
+// Data routers must be created once, outside of the React tree.
+// window.env is populated before this module is loaded (see index.html).
+const router = createBrowserRouter(
+    createRoutesFromElements(
+        // Order of provider components matters
+        <Route
+            element={
+                <Compose components={[AuthProvider, SseProvider]}>
+                    <Outlet />
+                </Compose>
+            }
+        >
+            <Route element={<DashboardLayout />}>
+                {[
+                    ...DashboardRoutes,
+                    ...ClientsRoutes,
+                    ...ProjectsRoutes,
+                    ...ReportTemplatesRoutes,
+                    ...ReportsRoutes,
+                    ...ScansRoutes,
+                    ...NotificationsRoutes,
+                    ...SearchRoutes,
+                    ...SettingsRoutes,
+                    ...SupportRoutes,
+                    ...SystemRoutes,
+                    ...AssetRoutes,
+                    ...TasksRoutes,
+                    ...ToolsRoutes,
+                    ...RunnerRoutes,
+                    ...UsersRoutes,
+                    ...VulnerabilitiesRoutes,
+                    ...IntegrationsRoutes,
+                ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
+                <Route path="*" element={<PageNotFound />} />
+            </Route>
+        </Route>,
+    ),
+    { basename: Configuration.getContextPath() },
+);
+
 const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
             <ErrorBoundary>
-                <BrowserRouter basename={Configuration.getContextPath()}>
-                    {/* Order of provider components matters */}
-                    <Compose components={[AuthProvider, SseProvider]}>
-                        <Routes>
-                            <Route element={<DashboardLayout />}>
-                                {[
-                                    ...DashboardRoutes,
-                                    ...ClientsRoutes,
-                                    ...ProjectsRoutes,
-                                    ...ReportTemplatesRoutes,
-                                    ...ReportsRoutes,
-                                    ...ScansRoutes,
-                                    ...NotificationsRoutes,
-                                    ...SearchRoutes,
-                                    ...SettingsRoutes,
-                                    ...SupportRoutes,
-                                    ...SystemRoutes,
-                                    ...AssetRoutes,
-                                    ...TasksRoutes,
-                                    ...ToolsRoutes,
-                                    ...RunnerRoutes,
-                                    ...UsersRoutes,
-                                    ...VulnerabilitiesRoutes,
-                                    ...IntegrationsRoutes,
-                                ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
-                                <Route path="*" element={<PageNotFound />} />
-                            </Route>
-                        </Routes>
-                    </Compose>
-                </BrowserRouter>
+                <RouterProvider router={router} />
             </ErrorBoundary>
         </QueryClientProvider>
     );

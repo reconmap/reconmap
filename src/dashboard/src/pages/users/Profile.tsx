@@ -19,7 +19,7 @@ import { actionCompletedToast } from "components/ui/toast";
 import { errorToast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 
 const UserProfile = () => {
     const navigate = useNavigate();

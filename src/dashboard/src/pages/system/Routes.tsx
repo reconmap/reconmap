@@ -3,7 +3,7 @@ import HelpSupportLayout from "layouts/HelpSupportLayout";
 import SettingsLayout from "layouts/SettingsLayout";
 import ToolsLayout from "layouts/ToolsLayout";
 import AuditLogList from "pages/auditlog/List";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { SystemUrls } from "AppUrls";
 import AiSettingsPage from "./AiSettings";
 import ExportPage from "./Export";

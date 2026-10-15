@@ -8,7 +8,7 @@ import Loading from "components/ui/Loading";
 import NativeTable from "components/ui/tables/NativeTable";
 import Title from "components/ui/Title";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router";
 import UserAvatar from "../badges/UserAvatar";
 import Breadcrumb from "../ui/Breadcrumb";
 import PrimaryButton from "../ui/buttons/Primary";

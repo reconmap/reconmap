@@ -12,7 +12,7 @@ import LinkButton from "components/ui/buttons/Link";
 import { t } from "i18next";
 import VulnerabilityStatuses from "models/VulnerabilityStatuses";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";

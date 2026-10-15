@@ -1,5 +1,5 @@
 import Tag from "components/ui/Tag";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const Tags = ({ values }: any) => {
     if (!values) return null;

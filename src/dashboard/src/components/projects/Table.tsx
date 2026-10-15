@@ -4,7 +4,7 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
 import PrimaryButton from "components/ui/buttons/Primary";
 import NativeTable from "components/ui/tables/NativeTable";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import ClientLink from "../clients/Link";
 import ProjectBadge from "./ProjectBadge";

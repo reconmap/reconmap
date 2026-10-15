@@ -3,7 +3,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import TimestampsSection from "components/ui/TimestampsSection";
 import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { requestEntity } from "utilities/requests";
 import Badge from "components/badges/Badge";
 import Breadcrumb from "components/ui/Breadcrumb";

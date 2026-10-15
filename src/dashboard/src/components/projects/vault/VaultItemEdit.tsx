@@ -4,7 +4,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import Vault from "models/Vault";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { requestEntityPost, requestEntityPut } from "utilities/requests";
 import CssIcon from "components/ui/CssIcon";
 import PasswordGeneratorModal from "./PasswordGeneratorModal";

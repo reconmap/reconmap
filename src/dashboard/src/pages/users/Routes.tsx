@@ -3,7 +3,7 @@ import CreateUserPage from "pages/users/Create";
 import EditUserPage from "pages/users/Edit";
 import UsersList from "pages/users/List";
 import UserProfile from "pages/users/Profile";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { UsersUrls } from "AppUrls";
 
 const UsersRoutes = [

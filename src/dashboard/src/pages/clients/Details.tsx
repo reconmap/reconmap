@@ -33,7 +33,7 @@ import Contact from "models/Contact";
 import OrganisationTypes from "models/OrganisationTypes";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { ClientsUrls } from "AppUrls";
 
 const ContactTypes = {

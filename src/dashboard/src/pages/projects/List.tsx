@@ -7,7 +7,7 @@ import Title from "components/ui/Title";
 import useDocumentTitle from "hooks/useDocumentTitle";
 import useQuery from "hooks/useQuery";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
 import ProjectsTable from "components/projects/Table";

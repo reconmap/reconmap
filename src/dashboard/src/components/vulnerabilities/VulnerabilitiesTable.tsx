@@ -11,7 +11,7 @@ import ReloadButton from "components/ui/buttons/Reload";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
 import { actionCompletedToast } from "components/ui/toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import CvssScore from "../badges/CvssScore";
 import RiskBadge from "../badges/RiskBadge";

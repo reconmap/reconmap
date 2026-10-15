@@ -3,7 +3,7 @@ import { createUserApi } from "api/requests/users";
 import defaultUser from "models/User";
 import UserRoles from "models/UserRoles";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { actionCompletedToast, errorToast } from "components/ui/toast";

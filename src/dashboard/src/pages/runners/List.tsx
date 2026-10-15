@@ -6,7 +6,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
 import Title from "components/ui/Title";
 import NativeTable from "components/ui/tables/NativeTable";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router";
 import { RunnersUrls } from "AppUrls";
 
 const pingedRecently = (lastPingAt) => {

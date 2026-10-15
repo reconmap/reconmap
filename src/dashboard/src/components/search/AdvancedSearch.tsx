@@ -5,7 +5,7 @@ import NativeInput from "components/forms/NativeInput";
 import Loading from "components/ui/Loading";
 import { SearchUrls } from "AppUrls";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import Breadcrumb from "../ui/Breadcrumb";
 import Title from "../ui/Title";
 

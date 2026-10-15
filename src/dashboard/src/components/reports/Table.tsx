@@ -6,7 +6,7 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import SecondaryButton from "components/ui/buttons/Secondary";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const ReportsTable = ({ reports, updateReports, includeProjectColumn = false }: any) => {
     const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import NativeButton from "components/forms/NativeButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const SecondaryButton = ({ onClick, children, to = "", disabled = false, external = false, tooltip, ...props }: any) => {
     const navigate = useNavigate();

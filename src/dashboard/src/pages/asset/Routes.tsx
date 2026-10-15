@@ -1,7 +1,7 @@
 import AssetForm from "components/asset/Form";
 import ProjectsLayout from "layouts/Layout";
 import AssetView from "pages/asset/View";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 
 const AssetsRoutes = [
     <Route element={<ProjectsLayout />}>

@@ -3,7 +3,7 @@ import ClientCreate from "pages/clients/Create";
 import ClientDetails from "pages/clients/Details";
 import EditClientPage from "pages/clients/Edit";
 import ClientsList from "pages/clients/List";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { ClientsUrls } from "AppUrls";
 
 const ClientsRoutes = [

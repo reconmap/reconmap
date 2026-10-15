@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useProjectQuery } from "api/projects";
 import { requestProjectPut } from "api/requests/projects";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";

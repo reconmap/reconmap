@@ -1,6 +1,6 @@
 import SettingsLayout from "layouts/SettingsLayout";
 import ApiTokensPage from "pages/integrations/api-tokens/ApiTokensPage";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { IntegrationsUrls } from "AppUrls";
 import AzureDevopsIntegrationCreatePage from "./ticketing/AzureDevopsCreate";
 import AzureDevopsIntegrationEditPage from "./ticketing/AzureDevopsEdit";

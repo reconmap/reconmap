@@ -7,7 +7,7 @@ import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { requestEntity } from "utilities/requests";
 import TaskStatuses from "models/TaskStatuses";
 import Breadcrumb from "components/ui/Breadcrumb";

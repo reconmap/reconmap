@@ -1,7 +1,7 @@
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import TaskTableModel from "components/tasks/TaskTableModel";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { requestEntity } from "utilities/requests";
 import TasksTable from "../tasks/TasksTable";
 import CreateButton from "../ui/buttons/Create";

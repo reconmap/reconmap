@@ -21,7 +21,7 @@ import { useAuth } from "contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import TaskStatuses from "models/TaskStatuses";
 import Breadcrumb from "components/ui/Breadcrumb";

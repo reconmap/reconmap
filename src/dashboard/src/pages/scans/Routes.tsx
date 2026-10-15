@@ -1,5 +1,5 @@
 import ScansLayout from "layouts/ScansLayout";
-import { Navigate, Route } from "react-router-dom";
+import { Navigate, Route } from "react-router";
 import { ScansUrls } from "AppUrls";
 import ScansPage from "./List";
 

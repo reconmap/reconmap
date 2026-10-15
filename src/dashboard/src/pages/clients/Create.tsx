@@ -8,7 +8,7 @@ import { StatusCodes } from "http-status-codes";
 import Client from "models/Client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import { ClientsUrls } from "AppUrls";
 
 const ClientCreate = () => {

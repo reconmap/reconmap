@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import SearchResultsPage from "./Results";
 
 vi.mock("react-i18next", () => ({

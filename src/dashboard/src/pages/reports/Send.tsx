@@ -7,7 +7,7 @@ import NativeTextArea from "components/forms/NativeTextArea";
 import Loading from "components/ui/Loading";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";

@@ -1,7 +1,7 @@
 import { useRunnersQuery } from "api/runners";
 import Loading from "components/ui/Loading";
 import DashboardWidget from "./Widget";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const pingedRecently = (lastPingAt) => {
     if (!lastPingAt) return false;

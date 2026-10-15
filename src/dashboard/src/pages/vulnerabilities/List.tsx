@@ -9,7 +9,7 @@ import DeleteButton from "components/ui/buttons/Delete";
 import { actionCompletedToast } from "components/ui/toast";
 import useQuery from "hooks/useQuery";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import CreateButton from "components/ui/buttons/Create";
 import VulnerabilityFilters from "components/vulnerabilities/Filters";
 import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";

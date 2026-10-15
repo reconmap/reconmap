@@ -1,5 +1,5 @@
 import KeyboardShortcuts from "components/support/KeyboardShortcuts";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import Header from "../components/layout/Header";
 import ErrorBoundary from "components/ui/ErrorBoundary";
 

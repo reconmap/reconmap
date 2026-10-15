@@ -7,7 +7,7 @@ import EmptyField from "components/ui/EmptyField";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import Title from "components/ui/Title";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import Loading from "components/ui/Loading";
 import { useAuth } from "contexts/AuthContext";
 import { hasRunnerTerminalAccess } from "services/auth";

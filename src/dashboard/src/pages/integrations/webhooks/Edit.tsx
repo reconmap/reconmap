@@ -6,7 +6,7 @@ import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 
 const WebhookEditPage = () => {
     const [t] = useTranslation();

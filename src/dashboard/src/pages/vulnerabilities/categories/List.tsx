@@ -8,7 +8,7 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
 import useBoolean from "hooks/useBoolean";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import VulnerabilityCategoryAddModalDialog from "components/vulnerabilities/categories/AddModalDialog";
 import VulnerabilityCategoryEditModalDialog from "components/vulnerabilities/categories/EditModalDialog";
 

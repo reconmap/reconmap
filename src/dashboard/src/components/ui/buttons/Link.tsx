@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const LinkButton = ({ children, external = false, ...props }: any) => {
     const navigate = useNavigate();

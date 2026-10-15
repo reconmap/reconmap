@@ -3,7 +3,7 @@ import { actionCompletedToast } from "components/ui/toast";
 import useQuery from "hooks/useQuery";
 import defaultVulnerability from "models/Vulnerability";
 import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import VulnerabilityForm from "components/vulnerabilities/Form";

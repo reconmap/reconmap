@@ -13,7 +13,7 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import SecondaryButton from "components/ui/buttons/Secondary";
 import { resolveMime } from "friendly-mimes";
 import useBoolean from "hooks/useBoolean";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const ReportTemplatesList = () => {
     const { data: templates, isLoading, refetch: refetchTemplates } = useReportsTemplatesQuery(undefined as any);

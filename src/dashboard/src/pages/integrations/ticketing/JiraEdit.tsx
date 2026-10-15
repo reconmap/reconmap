@@ -4,7 +4,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 
 const JiraIntegrationEditPage = () => {
     const [t] = useTranslation();

@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 
 import SettingsLayout from "layouts/SettingsLayout";
 import { RunnersUrls } from "AppUrls";

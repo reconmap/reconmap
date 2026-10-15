@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { DashboardUrls } from "AppUrls";
 import DashboardPage from "./DashboardPage";
 

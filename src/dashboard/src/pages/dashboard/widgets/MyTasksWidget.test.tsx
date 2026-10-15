@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { AuthContext } from "contexts/AuthContext";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 import MyTasksWidget from "./MyTasksWidget";
 
 const mockUseTasksQuery = vi.fn();

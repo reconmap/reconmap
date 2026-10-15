@@ -10,7 +10,7 @@ import NativeTable from "components/ui/tables/NativeTable";
 import useBoolean from "hooks/useBoolean";
 import useQuery from "hooks/useQuery";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import Loading from "../ui/Loading";
 
 const ProjectAssets = ({ project }: any) => {

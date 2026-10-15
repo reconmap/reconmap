@@ -3,7 +3,7 @@ import ExternalLink from "components/ui/ExternalLink";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import NotificationsBadge from "../notifications/NotificationsBadge";
 import SearchBox from "../search/Box";
 import HeaderUserMenu from "../ui/HeaderUserMenu";

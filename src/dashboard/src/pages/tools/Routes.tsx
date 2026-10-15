@@ -1,6 +1,6 @@
 import VaultItemEdit from "components/projects/vault/VaultItemEdit";
 import ToolsLayout from "layouts/ToolsLayout";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { ToolsUrls } from "AppUrls";
 
 const ToolsRoutes = [

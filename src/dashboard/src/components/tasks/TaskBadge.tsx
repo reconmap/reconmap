@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import "./TaskBadge.css";
 
 const TaskBadge = ({ task }: any) => {

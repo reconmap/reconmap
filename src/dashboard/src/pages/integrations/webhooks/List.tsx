@@ -8,7 +8,7 @@ import LinkButton from "components/ui/buttons/Link";
 import NativeTable from "components/ui/tables/NativeTable";
 import Title from "components/ui/Title";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const WebhooksList = () => {
     const [t] = useTranslation();

@@ -1,6 +1,6 @@
 import AdvancedSearch from "components/search/AdvancedSearch";
 import ToolsLayout from "layouts/ToolsLayout";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { SearchUrls } from "AppUrls";
 import SearchResultsPage from "./Results";
 

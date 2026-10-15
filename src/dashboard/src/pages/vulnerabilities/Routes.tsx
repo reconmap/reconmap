@@ -5,7 +5,7 @@ import VulnerabilityCreate from "pages/vulnerabilities/Create";
 import VulnerabilityDetails from "pages/vulnerabilities/Details";
 import VulnerabilityEdit from "pages/vulnerabilities/Edit";
 import VulnerabilitiesList from "pages/vulnerabilities/List";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 
 const VulnerabilitiesRoutes = [
     <Route path={VulnerabilitiesUrls.List} element={<ProjectsLayout />}>

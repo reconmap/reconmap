@@ -1,7 +1,7 @@
 import NativeInput from "components/forms/NativeInput";
 import { createRef, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import isInputElement from "../../utilities/domUtils";
 
 const SearchBox = () => {

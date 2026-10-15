@@ -1,7 +1,7 @@
 import { useVulnerabilitiesQuery } from "api/vulnerabilities";
 import Loading from "components/ui/Loading";
 import DashboardWidget from "./Widget";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const TopVulnerableAssetsWidget = () => {
     const {

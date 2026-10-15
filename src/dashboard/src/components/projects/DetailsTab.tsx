@@ -9,7 +9,7 @@ import UserLink from "components/users/Link";
 import VulnerabilitiesByCategoryStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget";
 import VulnerabilitiesByRiskStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByRiskStatsWidget";
 import ReactMarkdown from "react-markdown";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import remarkGfm from "remark-gfm";
 
 const ProjectDetailsTab = ({ project }: any) => {

@@ -2,7 +2,7 @@ import { useAuditLogQuery } from "api/auditlog";
 import PaginationV2 from "components/layout/PaginationV2";
 import Loading from "components/ui/Loading";
 import useQuery from "hooks/useQuery";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { downloadFromApi } from "services/api";
 import Breadcrumb from "components/ui/Breadcrumb";
 import ExportButton from "components/ui/buttons/Export";

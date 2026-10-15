@@ -3,7 +3,7 @@ import CreateButton from "components/ui/buttons/Create";
 import VulnerabilityFilters from "components/vulnerabilities/Filters";
 import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { requestEntity } from "utilities/requests";
 import VulnerabilitiesTable from "../vulnerabilities/VulnerabilitiesTable";
 

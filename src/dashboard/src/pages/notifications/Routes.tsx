@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import NotificationsList from "pages/notifications/List";
 
 const NotificationsRoutes = [

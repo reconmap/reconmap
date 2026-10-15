@@ -18,7 +18,7 @@ import { LastLogin } from "components/users/LastLogin";
 import UserLink from "components/users/Link";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 
 const UsersList = () => {
     const navigate = useNavigate();

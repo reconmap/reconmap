@@ -10,7 +10,7 @@ import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
 import Title from "components/ui/Title";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const IntegrationsList = () => {
     const [t] = useTranslation();

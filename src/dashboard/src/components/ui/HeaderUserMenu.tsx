@@ -3,7 +3,7 @@ import { AuthContext } from "contexts/AuthContext";
 import useToggle from "hooks/useToggle";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import AuthService from "services/auth";
 
 const HeaderUserMenu = () => {

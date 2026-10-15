@@ -5,7 +5,7 @@ import CssIcon from "components/ui/CssIcon";
 import Tag from "components/ui/Tag";
 import { useSseMessage } from "contexts/SseContext";
 import useToggle from "hooks/useToggle";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const NotificationsBadge = () => {
     const { data: notifications, refetch, isLoading } = useNotificationsQuery({ status: "unread" });

@@ -12,7 +12,7 @@ import PrimaryButton from "components/ui/buttons/Primary";
 import { actionCompletedToast } from "components/ui/toast";
 import { t } from "i18next";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import LinkButton from "components/ui/buttons/Link";
 import SecondaryButton from "components/ui/buttons/Secondary";
 import Loading from "components/ui/Loading";

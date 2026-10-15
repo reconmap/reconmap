@@ -5,7 +5,7 @@ import useQuery from "hooks/useQuery";
 import Task from "models/Task";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import TaskForm from "components/tasks/TaskForm";

@@ -1,5 +1,5 @@
 import ProjectsLayout from "layouts/Layout";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import ReportTemplatesList from "./List";
 
 const ReportTemplatesRoutes = [

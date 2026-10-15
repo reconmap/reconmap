@@ -6,7 +6,7 @@ import ProjectDetails from "pages/projects/Details";
 import ProjectEdit from "pages/projects/Edit";
 import SendReport from "pages/reports/Send";
 import TaskCreationPage from "pages/tasks/Create";
-import { Route } from "react-router-dom";
+import { Route } from "react-router";
 import { ProjectsUrls } from "AppUrls";
 import ProjectsListPage from "./List";
 
