@@ -1,9 +1,9 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using api_v2.Application.CommandParsers;
-using api_v2.Application.Services;
-using api_v2.Controllers;
+using Reconmap.Api.Application.CommandParsers;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Controllers;
 using Xunit;
 
 namespace tests.Application.CommandParsers;

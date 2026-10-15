@@ -1,5 +1,5 @@
-using api_v2.Application.Services;
-using api_v2.Common;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common;
 
 namespace Tests.Common;
 

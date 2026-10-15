@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Persistence;
 using ModelContextProtocol.AspNetCore;
 using System.IO;
 
@@ -22,8 +22,8 @@ builder.Services.AddDatabase(builder.Configuration);
 builder.Services
     .AddMcpServer()
     .WithHttpTransport()
-    .WithTools<McpServer.Tools.ReconmapTools>()
-    .WithResources<McpServer.Resources.ReconmapResources>();
+    .WithTools<Reconmap.McpServer.Tools.ReconmapTools>()
+    .WithResources<Reconmap.McpServer.Resources.ReconmapResources>();
 
 // Allow CORS so the inspector can connect
 builder.Services.AddCors(options =>

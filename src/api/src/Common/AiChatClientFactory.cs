@@ -1,10 +1,10 @@
-using api_v2.Application.Services;
+using Reconmap.Api.Application.Services;
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
 using OpenAI;
 
-namespace api_v2.Common;
+namespace Reconmap.Api.Common;
 
 public sealed record AiChatClientContext(IChatClient Client, int MaxOutputTokens);
 

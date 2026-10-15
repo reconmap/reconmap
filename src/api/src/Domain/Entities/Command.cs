@@ -1,4 +1,4 @@
-namespace api_v2.Domain.Entities;
+namespace Reconmap.Api.Domain.Entities;
 
 public class Command : TimestampedEntity
 {

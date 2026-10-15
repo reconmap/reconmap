@@ -1,10 +1,10 @@
 using System.IO;
 using System.Text.Json;
-using api_v2.Application.Services;
-using api_v2.Controllers;
-using api_v2.Domain.Entities;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Controllers;
+using Reconmap.Api.Domain.Entities;
 
-namespace api_v2.Application.CommandParsers;
+namespace Reconmap.Api.Application.CommandParsers;
 
 // docker run --rm -ti -v $PWD:/data --workdir /data ghcr.io/testssl/testssl.sh --jsonfile testssl-output.json https://localhost
 public class SubfinderParser(IAttachmentStorage attachmentStorage) : ICommandParser

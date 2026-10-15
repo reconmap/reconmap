@@ -1,11 +1,11 @@
-using api_v2.Common.Extensions;
-using api_v2.Domain.AuditActions;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Common.Extensions;
+using Reconmap.Api.Domain.AuditActions;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

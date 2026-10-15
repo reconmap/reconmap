@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Infrastructure.Persistence;
+namespace Reconmap.Api.Infrastructure.Persistence;
 
 public static class DbExtensions
 {

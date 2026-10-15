@@ -1,11 +1,11 @@
 using System.IO;
-using api_v2.Application.Services;
-using api_v2.Controllers;
-using api_v2.Domain.Entities;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Controllers;
+using Reconmap.Api.Domain.Entities;
 using Microsoft.CodeAnalysis.Sarif;
 using Newtonsoft.Json;
 
-namespace api_v2.Application.CommandParsers;
+namespace Reconmap.Api.Application.CommandParsers;
 
 public class SarifParser(IAttachmentStorage attachmentStorage) : ICommandParser
 {

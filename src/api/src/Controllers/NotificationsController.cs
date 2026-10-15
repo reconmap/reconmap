@@ -1,13 +1,13 @@
 using System.Text.Json;
-using api_v2.Domain.AuditActions;
-using api_v2.Infrastructure.Persistence;
-using api_v2.Infrastructure.Security;
+using Reconmap.Api.Domain.AuditActions;
+using Reconmap.Api.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using api_v2.Infrastructure.Sse;
+using Reconmap.Api.Infrastructure.Sse;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

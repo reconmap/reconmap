@@ -1,12 +1,12 @@
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Authentication;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Authentication;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using api_v2.Common.Extensions;
+using Reconmap.Api.Common.Extensions;
 using System.Security.Cryptography;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [Route("api/user-api-tokens")]
 [ApiController]

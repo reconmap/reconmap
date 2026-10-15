@@ -1,5 +1,5 @@
-using api_v2.Application.Services;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 

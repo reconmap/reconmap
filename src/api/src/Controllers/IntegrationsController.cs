@@ -1,7 +1,7 @@
-using api_v2.Application.Services;
+using Reconmap.Api.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [ApiController]
 [Route("/api/system/integrations")]

@@ -1,4 +1,4 @@
-namespace api_v2.Common.Messaging;
+namespace Reconmap.Api.Common.Messaging;
 
 public interface IMessageQueue
 {

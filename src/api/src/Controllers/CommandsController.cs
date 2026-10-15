@@ -2,19 +2,19 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using api_v2.Application.Commands;
-using api_v2.Application.Services;
-using api_v2.Common;
-using api_v2.Common.Extensions;
-using api_v2.Common.Messaging;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Application.Commands;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common;
+using Reconmap.Api.Common.Extensions;
+using Reconmap.Api.Common.Messaging;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 public class CommandProcessorJob
 {

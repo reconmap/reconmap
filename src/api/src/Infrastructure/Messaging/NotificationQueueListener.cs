@@ -1,7 +1,7 @@
-using api_v2.Common.Messaging;
-using api_v2.Infrastructure.Sse;
+using Reconmap.Api.Common.Messaging;
+using Reconmap.Api.Infrastructure.Sse;
 
-namespace api_v2.Infrastructure.Messaging;
+namespace Reconmap.Api.Infrastructure.Messaging;
 
 public class NotificationQueueListener(ILogger<NotificationQueueListener> logger,
     SseConnectionManager sseManager,

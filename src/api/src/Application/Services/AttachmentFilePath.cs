@@ -1,4 +1,4 @@
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public class AttachmentFilePath
 {

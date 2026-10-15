@@ -1,9 +1,9 @@
-using api_v2.Common.Extensions;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Common.Extensions;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Infrastructure.Security;
+namespace Reconmap.Api.Infrastructure.Security;
 
 /// <summary>
 /// Resolves tenant access from the authenticated database user.  Controllers must

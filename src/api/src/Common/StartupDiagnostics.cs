@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace api_v2.Common;
+namespace Reconmap.Api.Common;
 
 /// <summary>
 /// Produces a secret-safe summary of the API configuration used during startup.

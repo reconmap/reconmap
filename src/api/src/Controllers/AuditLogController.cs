@@ -1,9 +1,9 @@
-using api_v2.Common;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Common;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 public class AuditLogDailySummary
 {

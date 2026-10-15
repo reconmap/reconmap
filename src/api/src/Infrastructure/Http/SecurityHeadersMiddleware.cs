@@ -1,4 +1,4 @@
-namespace api_v2.Infrastructure.Http;
+namespace Reconmap.Api.Infrastructure.Http;
 
 public class SecurityHeadersMiddleware(RequestDelegate next)
 {

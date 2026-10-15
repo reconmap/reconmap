@@ -1,6 +1,6 @@
-using api_v2.Domain.Entities;
+using Reconmap.Api.Domain.Entities;
 
-namespace api_v2.Application.CommandParsers;
+namespace Reconmap.Api.Application.CommandParsers;
 
 public class CommandParserResult
 {

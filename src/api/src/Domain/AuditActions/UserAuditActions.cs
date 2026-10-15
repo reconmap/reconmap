@@ -1,4 +1,4 @@
-namespace api_v2.Domain.AuditActions;
+namespace Reconmap.Api.Domain.AuditActions;
 
 public static class UserAuditActions
 {

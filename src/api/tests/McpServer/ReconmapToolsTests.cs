@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Xunit;
-using McpServer.Tools;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.McpServer.Tools;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using api_v2.Domain.Entities;
+using Reconmap.Api.Domain.Entities;
 
 namespace Tests.McpServer
 {

@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using api_v2.Common.Messaging;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Common.Messaging;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scriban;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public static class WordTemplateReplacer
 {

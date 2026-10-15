@@ -1,10 +1,10 @@
 using System.Text.Json;
-using api_v2.Common.Extensions;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Common.Extensions;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 public abstract class AppController(AppDbContext dbContext) : ControllerBase
 {

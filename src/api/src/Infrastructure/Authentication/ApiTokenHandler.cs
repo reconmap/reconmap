@@ -1,12 +1,12 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using api_v2.Infrastructure.Keycloak;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Keycloak;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace api_v2.Infrastructure.Authentication;
+namespace Reconmap.Api.Infrastructure.Authentication;
 
 public class ApiTokenOptions : AuthenticationSchemeOptions
 {

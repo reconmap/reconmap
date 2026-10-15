@@ -1,7 +1,7 @@
-using api_v2.Domain.Entities;
+using Reconmap.Api.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Infrastructure.Persistence;
+namespace Reconmap.Api.Infrastructure.Persistence;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {

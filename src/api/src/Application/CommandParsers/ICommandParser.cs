@@ -1,6 +1,6 @@
-using api_v2.Controllers;
+using Reconmap.Api.Controllers;
 
-namespace api_v2.Application.CommandParsers;
+namespace Reconmap.Api.Application.CommandParsers;
 
 public interface ICommandParser
 {

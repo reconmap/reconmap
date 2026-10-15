@@ -1,11 +1,11 @@
 using System.Text.Json;
 using ModelContextProtocol.Server;
 using System.Threading.Tasks;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace McpServer.Resources;
+namespace Reconmap.McpServer.Resources;
 
 /// <summary>
 /// Reconmap MCP resources for exposing entity data.

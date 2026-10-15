@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace api_v2.Common;
+namespace Reconmap.Api.Common;
 
 public sealed class DataEncryptor
 {

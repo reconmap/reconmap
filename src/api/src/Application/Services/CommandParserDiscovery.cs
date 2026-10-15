@@ -1,6 +1,6 @@
-using api_v2.Application.CommandParsers;
+using Reconmap.Api.Application.CommandParsers;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public static class CommandParserDiscovery
 {

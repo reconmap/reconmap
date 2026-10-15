@@ -1,5 +1,5 @@
-using api_v2.Domain.Identity;
-using api_v2.Infrastructure.Authentication;
+using Reconmap.Api.Domain.Identity;
+using Reconmap.Api.Infrastructure.Authentication;
 using FS.Keycloak.RestApiClient.Api;
 using FS.Keycloak.RestApiClient.Authentication.ClientFactory;
 using FS.Keycloak.RestApiClient.Authentication.Flow;
@@ -7,7 +7,7 @@ using FS.Keycloak.RestApiClient.ClientFactory;
 using FS.Keycloak.RestApiClient.Model;
 using Microsoft.Extensions.Options;
 
-namespace api_v2.Infrastructure.Keycloak;
+namespace Reconmap.Api.Infrastructure.Keycloak;
 
 /// <summary>
 /// Reads and writes user identity in Keycloak. Reads are cached in Redis for a short

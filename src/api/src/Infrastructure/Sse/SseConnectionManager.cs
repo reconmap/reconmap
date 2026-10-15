@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace api_v2.Infrastructure.Sse;
+namespace Reconmap.Api.Infrastructure.Sse;
 
 public class SseConnectionManager
 {

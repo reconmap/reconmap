@@ -1,4 +1,4 @@
-namespace api_v2.Infrastructure.Redis;
+namespace Reconmap.Api.Infrastructure.Redis;
 
 public class RedisSettings
 {

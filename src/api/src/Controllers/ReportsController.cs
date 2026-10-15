@@ -1,11 +1,11 @@
 using System.Security.Cryptography;
 using System.Net.Mail;
-using api_v2.Application.Services;
-using api_v2.Common.Extensions;
-using api_v2.Common.Messaging;
-using api_v2.Domain.AuditActions;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common.Extensions;
+using Reconmap.Api.Common.Messaging;
+using Reconmap.Api.Domain.AuditActions;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scriban;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 
 
@@ -140,7 +140,7 @@ public class ReportsController(
             await attachmentStorage.SaveFileAsync(uniqueName, stream);
         }
 
-        var attachment = new api_v2.Domain.Entities.Attachment
+        var attachment = new Reconmap.Api.Domain.Entities.Attachment
         {
             CreatedByUid = HttpContext.GetCurrentUser()!.Id,
             ParentType = "report",

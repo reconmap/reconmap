@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using System.Text.Json.Serialization;
 
-namespace api_v2.Domain.Entities;
+namespace Reconmap.Api.Domain.Entities;
 
 [Table("audit_log")]
 public class AuditEntry : CreationTimestampedEntity

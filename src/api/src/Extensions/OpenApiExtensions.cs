@@ -1,6 +1,6 @@
 using Microsoft.OpenApi;
 
-namespace api_v2.Extensions;
+namespace Reconmap.Api.Extensions;
 
 public static class SwaggerExtensions
 {

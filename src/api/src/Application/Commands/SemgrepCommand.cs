@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace api_v2.Application.Commands;
+namespace Reconmap.Api.Application.Commands;
 
 public class SemgrepCommand : ICommand
 {

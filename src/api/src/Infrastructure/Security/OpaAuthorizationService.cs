@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.Json;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 
-namespace api_v2.Infrastructure.Security;
+namespace Reconmap.Api.Infrastructure.Security;
 
 public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbContext, IConfiguration configuration)
 {

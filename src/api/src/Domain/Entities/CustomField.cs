@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api_v2.Domain.Entities;
+namespace Reconmap.Api.Domain.Entities;
 
 [Table("custom_field")]
 public class CustomField : TimestampedEntity

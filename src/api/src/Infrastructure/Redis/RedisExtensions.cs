@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace api_v2.Infrastructure.Redis;
+namespace Reconmap.Api.Infrastructure.Redis;
 
 public static class RedisExtensions
 {

@@ -1,4 +1,4 @@
-namespace api_v2.Infrastructure.Messaging;
+namespace Reconmap.Api.Infrastructure.Messaging;
 
 public class RabbitMQSettings
 {

@@ -1,7 +1,7 @@
-using api_v2.Domain.AuditActions;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Authentication;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Domain.AuditActions;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Authentication;
+using Reconmap.Api.Infrastructure.Persistence;
 using FS.Keycloak.RestApiClient.Api;
 using FS.Keycloak.RestApiClient.Authentication.ClientFactory;
 using FS.Keycloak.RestApiClient.Authentication.Flow;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

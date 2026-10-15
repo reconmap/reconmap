@@ -1,4 +1,4 @@
-namespace api_v2.Infrastructure.WebSockets;
+namespace Reconmap.Api.Infrastructure.WebSockets;
 
 public static class WebSocketExtensions
 {

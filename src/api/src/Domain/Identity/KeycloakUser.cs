@@ -1,4 +1,4 @@
-namespace api_v2.Domain.Identity;
+namespace Reconmap.Api.Domain.Identity;
 
 /// <summary>
 /// Identity data for a user, as stored in Keycloak. Reconmap keeps only its own

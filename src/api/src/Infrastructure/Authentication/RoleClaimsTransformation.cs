@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
 
-namespace api_v2.Infrastructure.Authentication;
+namespace Reconmap.Api.Infrastructure.Authentication;
 
 public class RoleClaimsTransformation : IClaimsTransformation
 {

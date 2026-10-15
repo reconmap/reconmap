@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using api_v2.Application.Services;
+using Reconmap.Api.Application.Services;
 using Microsoft.Extensions.AI;
 
-namespace api_v2.Common;
+namespace Reconmap.Api.Common;
 
 public class AiParsingResult
 {

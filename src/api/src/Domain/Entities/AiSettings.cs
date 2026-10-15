@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Domain.Entities;
+namespace Reconmap.Api.Domain.Entities;
 
 [Table("ai_settings")]
 public class AiSettings : TimestampedEntity

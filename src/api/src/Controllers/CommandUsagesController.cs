@@ -1,10 +1,10 @@
-using api_v2.Application.Commands;
-using api_v2.Domain.Entities;
+using Reconmap.Api.Application.Commands;
+using Reconmap.Api.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [Route("api/commands/{commandId}/usages")]
 [ApiController]

@@ -1,7 +1,7 @@
-using api_v2.Common.Messaging;
+using Reconmap.Api.Common.Messaging;
 using Microsoft.Extensions.Options;
 
-namespace api_v2.Infrastructure.Messaging;
+namespace Reconmap.Api.Infrastructure.Messaging;
 
 public static class RabbitMQExtensions
 {

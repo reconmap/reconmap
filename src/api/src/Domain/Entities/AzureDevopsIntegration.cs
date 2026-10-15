@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api_v2.Domain.Entities;
+namespace Reconmap.Api.Domain.Entities;
 
 [Table("azure_devops_integration")]
 public class AzureDevopsIntegration : TimestampedEntity

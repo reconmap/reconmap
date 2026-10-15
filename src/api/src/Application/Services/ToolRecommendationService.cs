@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using api_v2.Application.Commands;
-using api_v2.Domain.Entities;
+using Reconmap.Api.Application.Commands;
+using Reconmap.Api.Domain.Entities;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
-using api_v2.Common;
+using Reconmap.Api.Common;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public interface IToolRecommendationService
 {

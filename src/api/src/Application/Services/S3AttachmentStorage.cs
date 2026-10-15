@@ -1,10 +1,10 @@
 using Amazon.S3;
 using Amazon.S3.Model;
-using api_v2.Common;
+using Reconmap.Api.Common;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public class S3AttachmentStorage : IAttachmentStorage
 {

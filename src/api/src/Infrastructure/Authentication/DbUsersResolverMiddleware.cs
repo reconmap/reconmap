@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Infrastructure.Authentication;
+namespace Reconmap.Api.Infrastructure.Authentication;
 
 public class DbUserResolverMiddleware(RequestDelegate next, ILogger<DbUserResolverMiddleware> logger)
 {

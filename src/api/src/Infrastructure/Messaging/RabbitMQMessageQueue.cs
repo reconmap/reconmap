@@ -1,11 +1,11 @@
 using System.Text;
 using System.Text.Json;
-using api_v2.Common.Messaging;
+using Reconmap.Api.Common.Messaging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace api_v2.Infrastructure.Messaging;
+namespace Reconmap.Api.Infrastructure.Messaging;
 
 public class RabbitMQMessageQueue : IMessageQueue, IAsyncDisposable
 {

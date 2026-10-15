@@ -1,9 +1,9 @@
 using System.Text.Json;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [ApiController]
 [Route("api/system/data")]

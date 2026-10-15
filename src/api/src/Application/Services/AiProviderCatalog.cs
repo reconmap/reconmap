@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public sealed class AiProviderCatalogOptions
 {

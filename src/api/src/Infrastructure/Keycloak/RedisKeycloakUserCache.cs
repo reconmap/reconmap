@@ -1,7 +1,7 @@
 using System.Text.Json;
 using StackExchange.Redis;
 
-namespace api_v2.Infrastructure.Keycloak;
+namespace Reconmap.Api.Infrastructure.Keycloak;
 
 public sealed class RedisKeycloakUserCache(IConnectionMultiplexer redis, ILogger<RedisKeycloakUserCache> logger) : IKeycloakUserCache
 {

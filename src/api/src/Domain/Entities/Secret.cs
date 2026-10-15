@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api_v2.Domain.Entities;
+namespace Reconmap.Api.Domain.Entities;
 
 [Table("vault")]
 public class Secret : TimestampedEntity

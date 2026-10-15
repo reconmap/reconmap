@@ -1,6 +1,6 @@
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
-using api_v2.Infrastructure.Security;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 

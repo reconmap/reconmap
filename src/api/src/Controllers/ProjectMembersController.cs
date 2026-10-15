@@ -1,12 +1,12 @@
 using System.Text.Json;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Keycloak;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Keycloak;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [Route("api/projects/{projectId:int}/members")]
 [ApiController]

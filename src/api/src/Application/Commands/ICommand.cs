@@ -1,4 +1,4 @@
-namespace api_v2.Application.Commands;
+namespace Reconmap.Api.Application.Commands;
 
 public interface ICommand
 {

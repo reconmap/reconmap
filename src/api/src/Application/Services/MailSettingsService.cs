@@ -1,9 +1,9 @@
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public sealed class MailSettingsResponse
 {

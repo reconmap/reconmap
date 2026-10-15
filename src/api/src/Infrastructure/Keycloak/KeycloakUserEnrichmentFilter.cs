@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Reflection;
-using api_v2.Domain.Identity;
+using Reconmap.Api.Domain.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace api_v2.Infrastructure.Keycloak;
+namespace Reconmap.Api.Infrastructure.Keycloak;
 
 /// <summary>
 /// Fills in the identity fields (username, email, names, ...) of every user that appears
@@ -56,7 +56,7 @@ public sealed class KeycloakUserEnrichmentFilter(IKeycloakUserDirectory director
 
         // Only walk the API's own types (and anonymous projections), not framework or library types.
         var type = node.GetType();
-        if (type.Namespace != null && !type.Namespace.StartsWith("api_v2", StringComparison.Ordinal)) return;
+        if (type.Namespace != null && !type.Namespace.StartsWith("Reconmap.Api", StringComparison.Ordinal)) return;
 
         foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {

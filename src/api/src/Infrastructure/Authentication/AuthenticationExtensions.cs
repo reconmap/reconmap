@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace api_v2.Infrastructure.Authentication;
+namespace Reconmap.Api.Infrastructure.Authentication;
 
 public class KeycloakOptions
 {

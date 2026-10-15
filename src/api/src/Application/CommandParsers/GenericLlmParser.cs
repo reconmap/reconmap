@@ -1,11 +1,11 @@
-using api_v2.Application.Commands;
-using api_v2.Application.Services;
-using api_v2.Common;
-using api_v2.Controllers;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Application.Commands;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common;
+using Reconmap.Api.Controllers;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 
-namespace api_v2.Application.CommandParsers;
+namespace Reconmap.Api.Application.CommandParsers;
 
 public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmentStorage, AppDbContext dbContext) : ICommandParser
 {

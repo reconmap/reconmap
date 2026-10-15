@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace api_v2.Application.Commands;
+namespace Reconmap.Api.Application.Commands;
 
 public static class CommandDiscovery
 {

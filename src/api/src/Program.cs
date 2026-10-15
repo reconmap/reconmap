@@ -1,16 +1,16 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using api_v2.Application.Services;
-using api_v2.Common;
-using api_v2.Extensions;
-using api_v2.Infrastructure.Authentication;
-using api_v2.Infrastructure.Http;
-using api_v2.Infrastructure.Persistence;
-using api_v2.Infrastructure.Redis;
-using api_v2.Infrastructure.Messaging;
-using api_v2.Infrastructure.WebSockets;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common;
+using Reconmap.Api.Extensions;
+using Reconmap.Api.Infrastructure.Authentication;
+using Reconmap.Api.Infrastructure.Http;
+using Reconmap.Api.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Redis;
+using Reconmap.Api.Infrastructure.Messaging;
+using Reconmap.Api.Infrastructure.WebSockets;
 using Amazon.S3;
-using api_v2.Application.CommandParsers;
+using Reconmap.Api.Application.CommandParsers;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -79,12 +79,12 @@ foreach (var type in parserTypes)
 }
 
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-services.AddSingleton<api_v2.Infrastructure.Keycloak.IKeycloakUserCache, api_v2.Infrastructure.Keycloak.RedisKeycloakUserCache>();
-services.AddSingleton<api_v2.Infrastructure.Keycloak.IKeycloakUserDirectory, api_v2.Infrastructure.Keycloak.KeycloakUserDirectory>();
+services.AddSingleton<Reconmap.Api.Infrastructure.Keycloak.IKeycloakUserCache, Reconmap.Api.Infrastructure.Keycloak.RedisKeycloakUserCache>();
+services.AddSingleton<Reconmap.Api.Infrastructure.Keycloak.IKeycloakUserDirectory, Reconmap.Api.Infrastructure.Keycloak.KeycloakUserDirectory>();
 
 services.AddTransient<IClaimsTransformation, RoleClaimsTransformation>();
 services.AddSingleton<WebSocketConnectionManager>();
-services.AddSingleton<api_v2.Infrastructure.Sse.SseConnectionManager>();
+services.AddSingleton<Reconmap.Api.Infrastructure.Sse.SseConnectionManager>();
 services.AddScoped<SystemUsageService>();
 services.AddScoped<IAuditService, AuditService>();
 services.AddScoped<ISecretsService, SecretsService>();
@@ -99,8 +99,8 @@ services.AddScoped<IAiService, AiService>();
 services.AddScoped<IAiChatClientFactory, AiChatClientFactory>();
 services.AddScoped<IToolRecommendationService, ToolRecommendationService>();
 services.AddHttpClient();
-services.AddScoped<api_v2.Infrastructure.Security.OpaAuthorizationService>();
-services.AddScoped<api_v2.Infrastructure.Security.IRequestAccessScope, api_v2.Infrastructure.Security.RequestAccessScope>();
+services.AddScoped<Reconmap.Api.Infrastructure.Security.OpaAuthorizationService>();
+services.AddScoped<Reconmap.Api.Infrastructure.Security.IRequestAccessScope, Reconmap.Api.Infrastructure.Security.RequestAccessScope>();
 
 services.AddRedisServices(builder.Configuration);
 services.AddRabbitMQServices(builder.Configuration);
@@ -142,8 +142,8 @@ services.AddHsts(options =>
 
 services.AddControllers(options =>
     {
-        options.Filters.Add<api_v2.Infrastructure.Security.OpaActionFilter>();
-        options.Filters.Add<api_v2.Infrastructure.Keycloak.KeycloakUserEnrichmentFilter>();
+        options.Filters.Add<Reconmap.Api.Infrastructure.Security.OpaActionFilter>();
+        options.Filters.Add<Reconmap.Api.Infrastructure.Keycloak.KeycloakUserEnrichmentFilter>();
     })
     .AddJsonOptions(opt =>
     {

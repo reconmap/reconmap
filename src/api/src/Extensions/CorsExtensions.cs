@@ -1,4 +1,4 @@
-namespace api_v2.Extensions;
+namespace Reconmap.Api.Extensions;
 
 public static class CorsExtensions
 {

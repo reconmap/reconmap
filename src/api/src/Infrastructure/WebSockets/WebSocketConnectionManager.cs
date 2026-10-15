@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 
-namespace api_v2.Infrastructure.WebSockets;
+namespace Reconmap.Api.Infrastructure.WebSockets;
 
 public class WebSocketConnectionManager
 {

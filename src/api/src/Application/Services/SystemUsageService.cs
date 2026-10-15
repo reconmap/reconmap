@@ -1,8 +1,8 @@
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public class SystemUsageService(AppDbContext db, IConnectionMultiplexer redis)
 {

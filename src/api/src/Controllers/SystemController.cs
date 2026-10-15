@@ -1,12 +1,12 @@
-using api_v2.Application.Services;
-using api_v2.Common.Messaging;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common.Messaging;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 // Your AppDbContext
 public sealed class ExportableItem

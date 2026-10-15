@@ -1,12 +1,12 @@
 using System.Net.WebSockets;
 using System.Text;
-using api_v2.Infrastructure.Persistence;
-using api_v2.Infrastructure.WebSockets;
+using Reconmap.Api.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.WebSockets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Mvc;
 
-namespace api_v2.Controllers;
+namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

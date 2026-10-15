@@ -1,7 +1,7 @@
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public interface IAuditService
 {

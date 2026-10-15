@@ -1,12 +1,12 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using api_v2.Common.Messaging;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Common.Messaging;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public class AzureDevopsPublisher(
     ILogger<AzureDevopsPublisher> logger,

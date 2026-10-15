@@ -1,6 +1,6 @@
-using api_v2.Domain.Identity;
+using Reconmap.Api.Domain.Identity;
 
-namespace api_v2.Infrastructure.Keycloak;
+namespace Reconmap.Api.Infrastructure.Keycloak;
 
 public sealed record KeycloakUserInput(
     string Username,

@@ -1,7 +1,7 @@
-using api_v2.Application.Services;
-using api_v2.Controllers;
-using api_v2.Infrastructure.Persistence;
-using api_v2.Infrastructure.Security;
+using Reconmap.Api.Application.Services;
+using Reconmap.Api.Controllers;
+using Reconmap.Api.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +34,7 @@ public class AttachmentsControllerTests
         public Task<IReadOnlyList<int>> MemberProjectIdsAsync(CancellationToken cancellationToken = default) =>
             Task.FromResult<IReadOnlyList<int>>([]);
         public Task<bool> CanAccessProjectAsync(int? projectId, CancellationToken cancellationToken = default) => Task.FromResult(true);
-        public Task<bool> CanAccessSecretAsync(api_v2.Domain.Entities.Secret secret, CancellationToken cancellationToken = default) => Task.FromResult(true);
+        public Task<bool> CanAccessSecretAsync(Reconmap.Api.Domain.Entities.Secret secret, CancellationToken cancellationToken = default) => Task.FromResult(true);
         public Task<bool> CanAccessParentAsync(string parentType, int parentId, CancellationToken cancellationToken = default) => Task.FromResult(true);
     }
 
@@ -65,7 +65,7 @@ public class AttachmentsControllerTests
         {
             Headers = new HeaderDictionary { ["Content-Type"] = "application/octet-stream" }
         };
-        controller.HttpContext.Items["DbUser"] = new api_v2.Domain.Entities.User { Id = 1 };
+        controller.HttpContext.Items["DbUser"] = new Reconmap.Api.Domain.Entities.User { Id = 1 };
         controller.HttpContext.Request.Form = new FormCollection(
             new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>(),
             new FormFileCollection { file });

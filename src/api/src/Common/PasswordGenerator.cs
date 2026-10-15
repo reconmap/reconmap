@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace api_v2.Common;
+namespace Reconmap.Api.Common;
 
 public class PasswordGenerator
 {

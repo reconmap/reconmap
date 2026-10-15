@@ -3,11 +3,11 @@ using ModelContextProtocol.Server;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace McpServer.Tools;
+namespace Reconmap.McpServer.Tools;
 
 /// <summary>
 /// Sample Reconmap MCP tools for demonstration purposes.

@@ -1,6 +1,6 @@
-using api_v2.Domain.Entities;
+using Reconmap.Api.Domain.Entities;
 
-namespace api_v2.Common.Extensions;
+namespace Reconmap.Api.Common.Extensions;
 
 public static class HttpContextExtensions
 {

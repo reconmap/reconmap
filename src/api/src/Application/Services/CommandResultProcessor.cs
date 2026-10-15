@@ -1,14 +1,14 @@
 using System.Text.Json;
-using api_v2.Application.CommandParsers;
-using api_v2.Application.Commands;
-using api_v2.Common;
-using api_v2.Common.Messaging;
-using api_v2.Controllers;
-using api_v2.Domain.Entities;
-using api_v2.Infrastructure.Persistence;
+using Reconmap.Api.Application.CommandParsers;
+using Reconmap.Api.Application.Commands;
+using Reconmap.Api.Common;
+using Reconmap.Api.Common.Messaging;
+using Reconmap.Api.Controllers;
+using Reconmap.Api.Domain.Entities;
+using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace api_v2.Application.Services;
+namespace Reconmap.Api.Application.Services;
 
 public class CommandResultProcessor(
     ILogger<CommandResultProcessor> logger,
