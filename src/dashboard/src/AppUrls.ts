@@ -84,24 +84,6 @@ export const SystemUrls = {
     Usage: "/system/usage",
 };
 
-export const SupportUrls = {
-    Default: "/support",
-};
-
-export const SettingsUrls = {
-    Default: "/settings",
-    CustomFields: "/settings/custom-fields",
-};
-
-export const AssetUrls = {
-    Add: "/projects/:projectId/assets/add",
-    Details: "/assets/:assetId",
-};
-
-export const NotificationsUrls = {
-    List: "/notifications",
-};
-
 export const SearchUrls = {
     KeywordsSearch: "/search/:keywords",
     AdvancedSearch: "/advanced-search",

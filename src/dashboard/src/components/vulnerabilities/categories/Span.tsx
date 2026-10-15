@@ -1,5 +1,5 @@
 
-export const parentChildNames = (parentName, name) => {
+const parentChildNames =(parentName, name) => {
     if (!name) {
         return '-'
     }

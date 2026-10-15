@@ -1,14 +1,6 @@
 import { requestAssetEnsure } from "api/assets";
 
-export const URL_ASSET_TYPE = "url";
-
-export const isUrlCapableUsage = (usage: { arguments?: string | null } | null | undefined) => {
-    return Boolean(usage?.arguments?.includes("{{{URL"));
-};
-
-export const getUrlCapableUsages = (usages: Array<{ arguments?: string | null }> = []) => {
-    return usages.filter((usage) => isUrlCapableUsage(usage));
-};
+const URL_ASSET_TYPE = "url";
 
 export const ensureUrlAsset = async (projectId: number, url: string) => {
     const normalizedUrl = url.trim();

@@ -1,4 +1,4 @@
-export interface KeycloakConfig {
+interface KeycloakConfig {
     url: string;
     realm: string;
     clientId: string;

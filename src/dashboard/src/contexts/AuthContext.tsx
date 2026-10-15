@@ -37,6 +37,4 @@ const AuthProvider = ({ children }: any) => {
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-const AuthConsumer = AuthContext.Consumer;
-
-export { AuthConsumer, AuthContext, AuthProvider, useAuth };
+export { AuthContext, AuthProvider, useAuth };

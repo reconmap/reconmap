@@ -5,24 +5,13 @@ vi.mock("api/assets.js", () => ({
 }));
 
 import { requestAssetEnsure } from "api/assets";
-import { ensureUrlAsset, getUrlCapableUsages, isUrlCapableUsage } from "./url";
+import { ensureUrlAsset } from "./url";
 
 const mockedRequestAssetEnsure = vi.mocked(requestAssetEnsure);
 
 describe("scan url helpers", () => {
     beforeEach(() => {
         mockedRequestAssetEnsure.mockReset();
-    });
-
-    it("detects URL-capable usages", () => {
-        expect(isUrlCapableUsage({ arguments: "-j {{{URL|||https://localhost}}}" })).toBe(true);
-        expect(isUrlCapableUsage({ arguments: "-oX - {{{Host|||localhost}}}" })).toBe(false);
-        expect(
-            getUrlCapableUsages([
-                { arguments: "-j {{{URL|||https://localhost}}}" },
-                { arguments: "-oX - {{{Host|||localhost}}}" },
-            ]),
-        ).toHaveLength(1);
     });
 
     it("requests the URL asset ensure endpoint with a trimmed URL", async () => {

@@ -46,9 +46,6 @@ const requestVulnerabilityCategories = (params: any) => {
     return secureApiFetch(url, { method: "GET" });
 };
 
-export const requestVulnerabilityCategoryPut = (categoryId: number, data: any) =>
-    requestEntityPut(`/vulnerabilities/categories/${categoryId}`, data);
-
 const requestVulnerabilityCategoryDelete = (categoryId: number) =>
     requestEntityDelete(`/vulnerabilities/categories/${categoryId}`);
 

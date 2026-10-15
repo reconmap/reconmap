@@ -1,15 +1,7 @@
 import secureApiFetch from "services/api";
-import { requestEntities, requestEntityPost } from "utilities/requests";
+import { requestEntityPost } from "utilities/requests";
 
 const API_BASE_URL = "/commands";
-
-const requestCommands = async (params: any) => {
-    return (await requestEntities(`${API_BASE_URL}?` + new URLSearchParams(params).toString())).json();
-};
-
-const requestCommandUsages = (commandId: number) => {
-    return secureApiFetch(`${API_BASE_URL}/${commandId}/usages`, { method: "GET" });
-};
 
 const requestSchedules = () => {
     return secureApiFetch(`${API_BASE_URL}/schedules`, { method: "GET" });
@@ -27,9 +19,7 @@ const requestCommandScheduleDelete = (commandId: number | string, scheduleId: nu
 };
 
 export {
-    requestCommands,
     requestSchedules,
-    requestCommandUsages,
     requestCommandOutputPost,
     requestCommandScheduleDelete
 };

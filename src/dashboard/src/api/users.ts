@@ -50,9 +50,6 @@ const useUserDeleteMutation = () => {
 };
 
 export {
-    deleteUser,
-    getUser,
-    getUsers,
     useUserActivity,
     useUserDeleteMutation,
     useUserQuery,

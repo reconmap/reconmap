@@ -22,7 +22,7 @@ const createSseConnection = (user, onClose) => {
 
 export const SseContext = createContext<any>({ connection: null });
 
-export const SseProvider = ({ children }: any) => {
+const SseProvider = ({ children }: any) => {
     const { user } = useContext(AuthContext);
     const [connection, setConnection] = useState<any>(null);
 

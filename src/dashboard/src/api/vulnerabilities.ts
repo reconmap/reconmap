@@ -6,7 +6,6 @@ import {
     requestVulnerabilityCategories,
     requestVulnerabilityCategoryDelete,
     requestVulnerabilityDelete,
-    requestVulnerabilityPost,
     requestVulnerabilityTriage,
 } from "./requests/vulnerabilities";
 
@@ -35,16 +34,6 @@ const useVulnerabilityQuery = (vulnerabilityId: number) => {
     return useQuery({
         queryKey: ["vulnerabilities", vulnerabilityId],
         queryFn: () => requestVulnerability(vulnerabilityId).then((res) => res.json()),
-    });
-};
-
-const useMutationPostDocument = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (document: any) => requestVulnerabilityPost(document).then((res) => res.json()),
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["documents"] });
-        },
     });
 };
 
@@ -79,7 +68,6 @@ const useVulnerabilityTriageMutation = () => {
 export {
     useDeleteVulnerabilityCategoryMutation,
     useDeleteVulnerabilityMutation,
-    useMutationPostDocument,
     useVulnerabilitiesQuery,
     useVulnerabilitiesStatsQuery,
     useVulnerabilityCategoriesQuery,
