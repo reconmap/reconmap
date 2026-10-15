@@ -1,6 +1,6 @@
 import NativeButton from "components/forms/NativeButton";
 import PrimaryButton from "components/ui/buttons/Primary";
-import ModalDialog from "components/ui/ModalDIalog";
+import ModalDialog from "components/ui/ModalDialog";
 import { actionCompletedToast } from "components/ui/toast";
 import { useState } from "react";
 import { requestEntityPost } from "utilities/requests";

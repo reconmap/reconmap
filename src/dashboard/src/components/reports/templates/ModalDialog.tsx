@@ -2,7 +2,7 @@ import LabelledField from "components/forms/LabelledField";
 import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/Primary";
-import ModalDialog from "components/ui/ModalDIalog";
+import ModalDialog from "components/ui/ModalDialog";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useRef, useState } from "react";
 import { requestEntityPost } from "utilities/requests";

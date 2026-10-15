@@ -1,4 +1,4 @@
-import ModalDialog from "components/ui/ModalDIalog";
+import ModalDialog from "components/ui/ModalDialog";
 import { useCallback, useEffect, useState } from "react";
 import isInputElement from "utilities/domUtils";
 import "./KeyboardShortcuts.css";

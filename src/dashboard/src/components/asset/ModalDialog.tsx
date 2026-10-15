@@ -1,7 +1,7 @@
 import { requestAssetPost } from "api/requests/assets";
 import NativeButton from "components/forms/NativeButton";
 import PrimaryButton from "components/ui/buttons/Primary";
-import ModalDialog from "components/ui/ModalDIalog";
+import ModalDialog from "components/ui/ModalDialog";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import TargetIcon from "images/icons/target.svg?react";
 import AssetTypes from "models/AssetTypes";
