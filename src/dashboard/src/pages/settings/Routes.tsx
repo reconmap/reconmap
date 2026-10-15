@@ -1,11 +1,13 @@
 import CustomFieldsPage from "components/settings/CustomFields/Form";
 import SettingsLayout from "layouts/SettingsLayout";
-import { Route } from "react-router";
+import type { RouteObject } from "react-router";
 
-const SettingsRoutes = [
-    <Route path="/settings" element={<SettingsLayout />}>
-        <Route path={`custom-fields`} element={<CustomFieldsPage />} />,
-    </Route>,
+const SettingsRoutes: RouteObject[] = [
+    {
+        path: "/settings",
+        element: <SettingsLayout />,
+        children: [{ path: "custom-fields", element: <CustomFieldsPage /> }],
+    },
 ];
 
 export default SettingsRoutes;

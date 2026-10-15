@@ -1,12 +1,13 @@
 import VaultItemEdit from "components/projects/vault/VaultItemEdit";
 import ToolsLayout from "layouts/ToolsLayout";
-import { Route } from "react-router";
+import type { RouteObject } from "react-router";
 import { ToolsUrls } from "AppUrls";
 
-const ToolsRoutes = [
-    <Route element={<ToolsLayout />}>
-        <Route path={ToolsUrls.VaultItemEdit} element={<VaultItemEdit />} />
-    </Route>
+const ToolsRoutes: RouteObject[] = [
+    {
+        element: <ToolsLayout />,
+        children: [{ path: ToolsUrls.VaultItemEdit, element: <VaultItemEdit /> }],
+    },
 ];
 
 export default ToolsRoutes;

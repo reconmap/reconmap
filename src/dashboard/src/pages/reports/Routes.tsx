@@ -1,13 +1,17 @@
 import ProjectsLayout from "layouts/Layout";
 import ReportsList from "pages/reports/List";
 import SendReport from "pages/reports/Send";
-import { Route } from "react-router";
+import type { RouteObject } from "react-router";
 
-const ReportsRoutes = [
-    <Route path={`/reports`} element={<ProjectsLayout />}>
-        <Route index element={<ReportsList />} />,
-        <Route path={`:reportId/send`} element={<SendReport />} />,
-    </Route>,
+const ReportsRoutes: RouteObject[] = [
+    {
+        path: "/reports",
+        element: <ProjectsLayout />,
+        children: [
+            { index: true, element: <ReportsList /> },
+            { path: ":reportId/send", element: <SendReport /> },
+        ],
+    },
 ];
 
 export default ReportsRoutes;

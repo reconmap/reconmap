@@ -3,7 +3,7 @@ import HelpSupportLayout from "layouts/HelpSupportLayout";
 import SettingsLayout from "layouts/SettingsLayout";
 import ToolsLayout from "layouts/ToolsLayout";
 import AuditLogList from "pages/auditlog/List";
-import { Route } from "react-router";
+import type { RouteObject } from "react-router";
 import { SystemUrls } from "AppUrls";
 import AiSettingsPage from "./AiSettings";
 import ExportPage from "./Export";
@@ -12,25 +12,40 @@ import ImportPage from "./Import";
 import MailSettingsPage from "./MailSettings";
 import SystemUsagePage from "./Usage";
 
-const SystemRoutes = [
-    <Route element={<HelpSupportLayout />}>
-        <Route path={SystemUrls.AuditLog} element={<AuditLogList />} />
-    </Route>,
-    <Route path={SystemUrls.Data} element={<ToolsLayout />}>
-    </Route>,
-    <Route path={SystemUrls.System} element={<SettingsLayout />}>
-        <Route path={`mail-settings`} element={<MailSettingsPage />} />
-        <Route path={`ai-settings`} element={<AiSettingsPage />} />
-    </Route>,
-    <Route path={SystemUrls.System} element={<ToolsLayout />}>
-        <Route path={`export-data`} element={<ExportPage />} />
-        <Route path={`import-data`} element={<ImportPage />} />
-    </Route>,
-    <Route path={SystemUrls.System} element={<HelpSupportLayout />}>
-        <Route path={`health`} element={<SystemHealthPage />} />
-        <Route path={`usage`} element={<SystemUsagePage />} />
-        <Route path={`integrations`} element={<IntegrationsPage />} />
-    </Route>,
+const SystemRoutes: RouteObject[] = [
+    {
+        element: <HelpSupportLayout />,
+        children: [{ path: SystemUrls.AuditLog, element: <AuditLogList /> }],
+    },
+    {
+        path: SystemUrls.Data,
+        element: <ToolsLayout />,
+    },
+    {
+        path: SystemUrls.System,
+        element: <SettingsLayout />,
+        children: [
+            { path: "mail-settings", element: <MailSettingsPage /> },
+            { path: "ai-settings", element: <AiSettingsPage /> },
+        ],
+    },
+    {
+        path: SystemUrls.System,
+        element: <ToolsLayout />,
+        children: [
+            { path: "export-data", element: <ExportPage /> },
+            { path: "import-data", element: <ImportPage /> },
+        ],
+    },
+    {
+        path: SystemUrls.System,
+        element: <HelpSupportLayout />,
+        children: [
+            { path: "health", element: <SystemHealthPage /> },
+            { path: "usage", element: <SystemUsagePage /> },
+            { path: "integrations", element: <IntegrationsPage /> },
+        ],
+    },
 ];
 
 export default SystemRoutes;

@@ -21,8 +21,7 @@ import TasksRoutes from "pages/tasks/Routes";
 import ToolsRoutes from "pages/tools/Routes";
 import UsersRoutes from "pages/users/Routes";
 import VulnerabilitiesRoutes from "pages/vulnerabilities/Routes";
-import React from "react";
-import { createBrowserRouter, createRoutesFromElements, Outlet, Route } from "react-router";
+import { createBrowserRouter, Outlet, type RouteObject } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Configuration from "./Configuration";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -37,20 +36,18 @@ const queryClient = new QueryClient({
     },
 });
 
-// Data routers must be created once, outside of the React tree.
-// window.env is populated before this module is loaded (see index.html).
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        // Order of provider components matters
-        <Route
-            element={
-                <Compose components={[AuthProvider, SseProvider]}>
-                    <Outlet />
-                </Compose>
-            }
-        >
-            <Route element={<DashboardLayout />}>
-                {[
+const routes: RouteObject[] = [
+    // Order of provider components matters
+    {
+        element: (
+            <Compose components={[AuthProvider, SseProvider]}>
+                <Outlet />
+            </Compose>
+        ),
+        children: [
+            {
+                element: <DashboardLayout />,
+                children: [
                     ...DashboardRoutes,
                     ...ClientsRoutes,
                     ...ProjectsRoutes,
@@ -69,13 +66,16 @@ const router = createBrowserRouter(
                     ...UsersRoutes,
                     ...VulnerabilitiesRoutes,
                     ...IntegrationsRoutes,
-                ].map((value, index) => React.cloneElement(value, { key: `protected_route_${index}` }))}
-                <Route path="*" element={<PageNotFound />} />
-            </Route>
-        </Route>,
-    ),
-    { basename: Configuration.getContextPath() },
-);
+                    { path: "*", element: <PageNotFound /> },
+                ],
+            },
+        ],
+    },
+];
+
+// Data routers must be created once, outside of the React tree.
+// window.env is populated before this module is loaded (see index.html).
+const router = createBrowserRouter(routes, { basename: Configuration.getContextPath() });
 
 const App = () => {
     return (

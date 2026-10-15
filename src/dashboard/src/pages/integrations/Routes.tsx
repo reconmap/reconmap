@@ -1,6 +1,6 @@
 import SettingsLayout from "layouts/SettingsLayout";
 import ApiTokensPage from "pages/integrations/api-tokens/ApiTokensPage";
-import { Route } from "react-router";
+import type { RouteObject } from "react-router";
 import { IntegrationsUrls } from "AppUrls";
 import AzureDevopsIntegrationCreatePage from "./ticketing/AzureDevopsCreate";
 import AzureDevopsIntegrationEditPage from "./ticketing/AzureDevopsEdit";
@@ -11,20 +11,27 @@ import WebhookCreatePage from "./webhooks/Create";
 import WebhookEditPage from "./webhooks/Edit";
 import WebhooksList from "./webhooks/List";
 
-const IntegrationsRoutes = [
-    <Route path={IntegrationsUrls.List} key="integrations-layout" element={<SettingsLayout />}>,
-        <Route path="ticketing" key="integrations-list" element={<IntegrationsList />} />,
-        <Route path="jira/create" key="integrations-jira-create" element={<JiraIntegrationCreatePage />} />,
-        <Route path="jira/:integrationId/edit" key="integrations-jira-edit" element={<JiraIntegrationEditPage />} />,
-        <Route path="azure-devops/create" key="integrations-azure-devops-create" element={<AzureDevopsIntegrationCreatePage />} />,
-        <Route path="azure-devops/:integrationId/edit" key="integrations-azure-devops-edit" element={<AzureDevopsIntegrationEditPage />} />,
-        <Route path={`api-tokens`} element={<ApiTokensPage />} />
-        <Route path="webhooks">
-            <Route index element={<WebhooksList />} />
-            <Route path="create" element={<WebhookCreatePage />} />
-            <Route path=":webhookId/edit" element={<WebhookEditPage />} />
-        </Route>,
-    </Route >
+const IntegrationsRoutes: RouteObject[] = [
+    {
+        path: IntegrationsUrls.List,
+        element: <SettingsLayout />,
+        children: [
+            { path: "ticketing", element: <IntegrationsList /> },
+            { path: "jira/create", element: <JiraIntegrationCreatePage /> },
+            { path: "jira/:integrationId/edit", element: <JiraIntegrationEditPage /> },
+            { path: "azure-devops/create", element: <AzureDevopsIntegrationCreatePage /> },
+            { path: "azure-devops/:integrationId/edit", element: <AzureDevopsIntegrationEditPage /> },
+            { path: "api-tokens", element: <ApiTokensPage /> },
+            {
+                path: "webhooks",
+                children: [
+                    { index: true, element: <WebhooksList /> },
+                    { path: "create", element: <WebhookCreatePage /> },
+                    { path: ":webhookId/edit", element: <WebhookEditPage /> },
+                ],
+            },
+        ],
+    },
 ];
 
 export default IntegrationsRoutes;
