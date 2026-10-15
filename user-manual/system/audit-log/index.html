@@ -2954,16 +2954,16 @@
 <p>The audit log keeps track of all the user actions and is a great way to see what was done by who and when. In addition to this data, it includes the network IP, the user agent and geographical location from where the action was originated.</p>
 <p><img alt="Vulnerabilities view" src="/images/screenshots/audit-log.png" /></p>
 <p>Al the data in the audit log is permanent and non-modifiable.</p>
-<p>The audit log keeps tracks of all following actions and many others:</p>
+<p>The audit log records the following actions:</p>
 <ul>
-<li>User logged in</li>
-<li>User logged out</li>
-<li>User created</li>
-<li>User modified</li>
-<li>User deleted</li>
-<li>Integration enabled</li>
-<li>Integration disabled</li>
+<li>User logged in and logged out</li>
+<li>Created: projects, assets, vulnerabilities, tasks, organisations, users, secrets (the secret value is never recorded), reports and report templates</li>
+<li>Updated: projects, vulnerabilities, tasks, organisations, users and secrets</li>
+<li>Deleted: assets, projects, tasks, vulnerabilities, users, secrets, runners, reports and other entities</li>
+<li>Attachments downloaded, and system data exported</li>
 </ul>
+<p>Only successful changes are recorded. A request that fails, such as a delete of an entity that does not exist, leaves no entry.</p>
+<p>Changes to other entities, such as notes, contacts and integrations, are not recorded yet.</p>
 <p>The audit log information can be exported to CSV to do aggregation and analysis.</p>
 
 
@@ -2985,7 +2985,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 12, 2026 21:45:58 UTC">March 12, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 15, 2026 14:07:16 UTC">October 15, 2026</span>
   </span>
 
     
