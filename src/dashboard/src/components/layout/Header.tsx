@@ -27,16 +27,19 @@ const Header = () => {
                 <Link to="/" className="navbar-brand">
                     <HeaderLogo />
                 </Link>
-                <div
+                <button
+                    type="button"
                     className={`navbar-burger ${isActive ? "is-active" : ""}`}
                     data-target="appMenu"
+                    aria-expanded={isActive}
+                    aria-controls="appMenu"
                     onClick={toggleNavBarMenu}
                 >
                     <span></span>
                     <span></span>
                     <span></span>
                     <span></span>
-                </div>
+                </button>
             </div>
 
             <div id="appMenu" className={`navbar-menu ${isActive ? "is-active" : ""}`}>

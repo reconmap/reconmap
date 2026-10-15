@@ -4,7 +4,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const JiraIntegrationCreatePage = () => {
     const [t] = useTranslation();
@@ -27,7 +27,7 @@ const JiraIntegrationCreatePage = () => {
         <div>
             <div className="heading">
                 <Breadcrumb>
-                    <div onClick={() => navigate("/integrations")}>{t("Integrations")}</div>
+                    <Link to="/integrations">{t("Integrations")}</Link>
                     <div>{t("Jira")}</div>
                 </Breadcrumb>
             </div>

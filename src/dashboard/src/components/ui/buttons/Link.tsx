@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 
-const LinkButton = ({ children, external = false, ...props }: any) => {
+const LinkButton = ({ children, external = false, href, ...props }: any) => {
     const navigate = useNavigate();
 
     const onAnchorClick = (ev) => {
@@ -16,10 +16,20 @@ const LinkButton = ({ children, external = false, ...props }: any) => {
         }
     };
 
+    // Without an href there is nowhere to navigate to, so render a real button for actions
+    const Tag = href ? "a" : "button";
+
     return (
-        <a onClick={onAnchorClick} target={external ? "_blank" : ""} className="button" {...props}>
+        <Tag
+            onClick={onAnchorClick}
+            href={href}
+            type={href ? undefined : "button"}
+            target={external ? "_blank" : undefined}
+            className="button"
+            {...props}
+        >
             {children}
-        </a>
+        </Tag>
     );
 };
 

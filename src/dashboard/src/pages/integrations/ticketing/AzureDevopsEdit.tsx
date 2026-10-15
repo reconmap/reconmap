@@ -4,7 +4,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 const AzureDevopsIntegrationEditPage = () => {
     const [t] = useTranslation();
@@ -37,7 +37,7 @@ const AzureDevopsIntegrationEditPage = () => {
         <div>
             <div className="heading">
                 <Breadcrumb>
-                    <div onClick={() => navigate("/integrations")}>{t("Integrations")}</div>
+                    <Link to="/integrations">{t("Integrations")}</Link>
                     <div>{t("Azure DevOps")}</div>
                 </Breadcrumb>
             </div>
