@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switched the Docker Compose Open Policy Agent image from `openpolicyagent/opa:1.20.2-istio` to the standard `openpolicyagent/opa:1.21.2`, since the API queries OPA over HTTP and does not need the Istio variant. The policy tests in CI use the same image.
 - Updated the Docker Compose RustFS (S3-compatible object storage) image from `rustfs/rustfs:1.0.0-beta.8` to `rustfs/rustfs:1.0.1`.
 - Dashboard: migrated routing from React Router v7 (`react-router-dom`) to React Router v8 data mode. The router is now created with `createBrowserRouter` and rendered with `RouterProvider`, and `react-router-dom` is replaced by `react-router`. This has no visible effect on URLs or pages.
+- Dashboard: when the API answers `401 Unauthorized`, the dashboard now clears the stored OIDC session and restarts login through the OIDC client (`signinRedirect`) instead of reloading the context path. Concurrent 401s trigger a single redirect, and a repeat 401 within 10 seconds of a redirect no longer redirects again, which prevents redirect loops.
 
 ### Fixed
 

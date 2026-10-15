@@ -144,6 +144,44 @@ const logout = () => {
     userManager.signoutRedirect();
 };
 
+const UNAUTHORIZED_REDIRECT_KEY = "reconmap.unauthorizedRedirectAt";
+// If the API still answers 401 right after a fresh login, redirecting again would loop forever.
+const UNAUTHORIZED_REDIRECT_COOLDOWN_MS = 10_000;
+
+let unauthorizedRedirectInFlight = false;
+
+/**
+ * Called when the API rejects our token. Drops the stale session and restarts
+ * the OIDC flow. Returns false (and does nothing) if a redirect is already
+ * underway or one happened very recently, which would indicate a loop.
+ */
+const handleUnauthorized = async (): Promise<boolean> => {
+    if (unauthorizedRedirectInFlight) return false;
+
+    try {
+        const last = Number(window.sessionStorage.getItem(UNAUTHORIZED_REDIRECT_KEY) ?? 0);
+        if (Date.now() - last < UNAUTHORIZED_REDIRECT_COOLDOWN_MS) {
+            console.error("[auth] API returned 401 right after signing in; not redirecting again.");
+            return false;
+        }
+        window.sessionStorage.setItem(UNAUTHORIZED_REDIRECT_KEY, String(Date.now()));
+    } catch {
+        // sessionStorage unavailable: fall through, the in-flight flag still guards this page load.
+    }
+
+    unauthorizedRedirectInFlight = true;
+    currentUser = null;
+    try {
+        await userManager.removeUser();
+        await userManager.signinRedirect();
+        return true;
+    } catch (err) {
+        unauthorizedRedirectInFlight = false;
+        console.error("[auth] signinRedirect failed", err);
+        return false;
+    }
+};
+
 const getUsername = (): string | undefined => {
     const profile = currentUser?.profile;
     if (!profile) return undefined;
@@ -161,6 +199,7 @@ const setCurrentUser = (user: User | null) => {
 const AuthService = {
     login,
     logout,
+    handleUnauthorized,
     getUserInfo,
     getUsername,
     getToken,

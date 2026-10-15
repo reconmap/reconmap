@@ -32,3 +32,31 @@ describe("runner terminal access", () => {
         expect(hasRunnerTerminalAccess(user)).toBe(true);
     });
 });
+
+describe("handleUnauthorized", () => {
+    beforeEach(() => {
+        vi.resetModules();
+        window.sessionStorage.clear();
+    });
+
+    const load = async () => {
+        const mod = await import("./auth");
+        const removeUser = vi.spyOn(mod.default.userManager, "removeUser").mockResolvedValue();
+        const signinRedirect = vi.spyOn(mod.default.userManager, "signinRedirect").mockResolvedValue();
+        return { auth: mod.default, removeUser, signinRedirect };
+    };
+
+    it("clears the session and starts the OIDC flow", async () => {
+        const { auth, removeUser, signinRedirect } = await load();
+        expect(await auth.handleUnauthorized()).toBe(true);
+        expect(removeUser).toHaveBeenCalledOnce();
+        expect(signinRedirect).toHaveBeenCalledOnce();
+    });
+
+    it("does not redirect twice (concurrent 401s or a 401 loop)", async () => {
+        const { auth, signinRedirect } = await load();
+        await auth.handleUnauthorized();
+        expect(await auth.handleUnauthorized()).toBe(false);
+        expect(signinRedirect).toHaveBeenCalledOnce();
+    });
+});

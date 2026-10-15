@@ -1,10 +1,6 @@
 import Configuration from "Configuration";
 import AuthService from "./auth";
 
-function resetSessionStorageAndRedirect() {
-    window.location.assign(Configuration.getContextPath());
-}
-
 async function secureApiFetch(url: string, init: RequestInit = {}): Promise<Response> {
     const user = AuthService.getUserInfo();
 
@@ -22,7 +18,7 @@ async function secureApiFetch(url: string, init: RequestInit = {}): Promise<Resp
     const resp = await fetch(Configuration.getDefaultApiUrl() + url, requestInit);
 
     if (resp.status === 401) {
-        resetSessionStorageAndRedirect();
+        void AuthService.handleUnauthorized();
     }
 
     return resp;
