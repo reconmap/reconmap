@@ -1,16 +1,20 @@
 # Reconmap model definitions
 
-This directory contains the model definitions and generation tooling used to produce Golang and Typescript models for Reconmap clients.
+This directory contains the model schemas and the tooling that generates Golang and TypeScript models from them.
 
-Code generation is based only on the model definition files in `definitions/*.yaml`.
-The Makefile first converts those files into a local OpenAPI document (`output/openapi-models.yaml`) and then runs OpenAPI Generator for each language.
-The OpenAPI Generator step uses repository-owned custom templates so the output stays minimal: plain Go structs and plain TypeScript classes, with no constructors, getters, serializers, or attribute maps.
+## Layout
+
+- `openapi.yaml`: the root OpenAPI document. Each entry under `components.schemas` points at one file in `definitions/`.
+- `definitions/*.yaml`: one OpenAPI schema per model (for example `Asset.yaml`, `Vulnerability.yaml`).
+- `templates/`: custom OpenAPI Generator templates. They keep the output minimal: plain Go structs and plain TypeScript classes, with no constructors, getters, serializers, or attribute maps.
+- `Makefile`: runs OpenAPI Generator for each language.
+
+To add a model, create `definitions/<Name>.yaml` and add a matching `$ref` entry in `openapi.yaml`.
 
 ## Requirements
 
 - [Docker](https://www.docker.com/) (default runner for OpenAPI Generator)
 - Or a local [OpenAPI Generator CLI](https://openapi-generator.tech/docs/installation)
-- [Python 3](https://www.python.org/) with `pyyaml` (used to convert model YAML files into OpenAPI)
 
 ## Usage
 
@@ -26,3 +30,5 @@ make go-files OPENAPI_GENERATOR=openapi-generator-cli
 # use a custom output directory
 make all OUTPUT_DIR=output-test
 ```
+
+The generated code is written to `output/` (`output/golang` and `output/typescript`).

@@ -1,0 +1,56 @@
+openapi: 3.0.3
+info:
+  title: Reconmap Model Definitions
+  version: 1.0.0
+  description: Model schemas shared by the Reconmap API clients. Each schema lives in definitions/ and is referenced from here.
+paths: {}
+components:
+  schemas:
+    Asset:
+      $ref: ./definitions/Asset.yaml
+    Attachment:
+      $ref: ./definitions/Attachment.yaml
+    AuditLog:
+      $ref: ./definitions/AuditLog.yaml
+    Client:
+      $ref: ./definitions/Client.yaml
+    CommandSchedule:
+      $ref: ./definitions/CommandSchedule.yaml
+    CommandUsage:
+      $ref: ./definitions/CommandUsage.yaml
+    Command:
+      $ref: ./definitions/Command.yaml
+    Contact:
+      $ref: ./definitions/Contact.yaml
+    CustomField:
+      $ref: ./definitions/CustomField.yaml
+    Document:
+      $ref: ./definitions/Document.yaml
+    Note:
+      $ref: ./definitions/Note.yaml
+    Notification:
+      $ref: ./definitions/Notification.yaml
+    Organisation:
+      $ref: ./definitions/Organisation.yaml
+    ProjectCategory:
+      $ref: ./definitions/ProjectCategory.yaml
+    ProjectUser:
+      $ref: ./definitions/ProjectUser.yaml
+    Project:
+      $ref: ./definitions/Project.yaml
+    Report:
+      $ref: ./definitions/Report.yaml
+    Runner:
+      $ref: ./definitions/Runner.yaml
+    Task:
+      $ref: ./definitions/Task.yaml
+    User:
+      $ref: ./definitions/User.yaml
+    Vault:
+      $ref: ./definitions/Vault.yaml
+    VulnerabilityCategory:
+      $ref: ./definitions/VulnerabilityCategory.yaml
+    Vulnerability:
+      $ref: ./definitions/Vulnerability.yaml
+    Webhook:
+      $ref: ./definitions/Webhook.yaml
