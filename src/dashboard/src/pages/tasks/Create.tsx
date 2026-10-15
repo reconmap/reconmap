@@ -3,7 +3,7 @@ import { actionCompletedToast } from "components/ui/toast";
 import { errorToast } from "components/ui/toast";
 import useQuery from "hooks/useQuery";
 import Task from "models/Task";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -15,10 +15,10 @@ const TaskCreationPage = () => {
     const navigate = useNavigate();
     const query = useQuery();
     const defaultProjectId = "";
-    const projectIdParam = useRef(query.get("projectId") || defaultProjectId);
+    const projectIdParam = query.get("projectId") || defaultProjectId;
     const forTemplate = parseInt(query.get("forTemplate")!) === 1;
 
-    const [newTask, setNewTask] = useState({ ...Task, projectId: projectIdParam.current });
+    const [newTask, setNewTask] = useState({ ...Task, projectId: projectIdParam });
 
     const onFormSubmit = (ev) => {
         ev.preventDefault();

@@ -2,7 +2,7 @@ import { requestVulnerabilityPost } from "api/requests/vulnerabilities";
 import { actionCompletedToast } from "components/ui/toast";
 import useQuery from "hooks/useQuery";
 import defaultVulnerability from "models/Vulnerability";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
@@ -11,13 +11,13 @@ import VulnerabilityForm from "components/vulnerabilities/Form";
 const VulnerabilityCreate = () => {
     const navigate = useNavigate();
     const query = useQuery();
-    const urlProjectId = useRef(query.get("projectId") || 0);
+    const urlProjectId = query.get("projectId") || 0;
     const isTemplate = "true" === query.get("isTemplate");
 
     const [vulnerability, setVulnerability] = useState({
         ...defaultVulnerability,
         isTemplate: isTemplate,
-        projectId: urlProjectId.current,
+        projectId: urlProjectId,
     });
 
     const onFormSubmit = (ev) => {
