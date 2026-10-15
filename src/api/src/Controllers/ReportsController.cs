@@ -54,6 +54,7 @@ public class ReportsController(
     private readonly ILogger _logger = logger;
 
     [HttpPost]
+    [Audit(AuditActions.Created, "Report")]
     public async Task<IActionResult> Create(ReportRequestDto reportRequest)
     {
         var project = await dbContext.Projects.AsNoTracking()
@@ -75,6 +76,8 @@ public class ReportsController(
         };
         dbContext.Reports.Add(report);
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id = report.Id };
 
         await messageQueue.PublishAsync("report-generation", new ReportGenerationJob
         {

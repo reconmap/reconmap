@@ -1,6 +1,7 @@
 using System.Net;
 using api_v2.Application.Services;
 using api_v2.Controllers;
+using api_v2.Domain.AuditActions;
 using api_v2.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -124,6 +125,59 @@ public class AuditAttributeTests
         Assert.Null(entry.CreatedByUid);
         Assert.Equal("create", entry.Action);
         Assert.Equal("project", entry.Object);
+    }
+
+    [Theory]
+    [InlineData(typeof(NotFoundResult))]
+    [InlineData(typeof(BadRequestResult))]
+    public async Task OnActionExecutionAsync_UnsuccessfulResult_RecordsNothing(Type resultType)
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        services.AddScoped<IAuditService, RecordingAuditService>();
+
+        await using var serviceProvider = services.BuildServiceProvider().CreateAsyncScope();
+
+        var httpContext = new DefaultHttpContext
+        {
+            RequestServices = serviceProvider.ServiceProvider
+        };
+        httpContext.Connection.RemoteIpAddress = IPAddress.Parse("127.0.0.1");
+
+        var actionContext = new ActionContext(
+            httpContext,
+            new RouteData(),
+            new ActionDescriptor());
+
+        var controller = new object();
+
+        var actionExecutingContext = new ActionExecutingContext(
+            actionContext,
+            [],
+            new Dictionary<string, object?>(),
+            controller);
+
+        var attribute = new AuditAttribute(AuditActions.Deleted, "Asset");
+        var result = (IActionResult)Activator.CreateInstance(resultType)!;
+
+        // Act
+        await attribute.OnActionExecutionAsync(actionExecutingContext, () =>
+        {
+            var executedContext = new ActionExecutedContext(
+                actionContext,
+                [],
+                controller)
+            {
+                Result = result
+            };
+
+            return Task.FromResult(executedContext);
+        });
+
+        // Assert
+        var auditService = serviceProvider.ServiceProvider.GetRequiredService<IAuditService>();
+        var recordingAuditService = Assert.IsType<RecordingAuditService>(auditService);
+        Assert.Empty(recordingAuditService.Entries);
     }
 
     private sealed class RecordingAuditService : IAuditService

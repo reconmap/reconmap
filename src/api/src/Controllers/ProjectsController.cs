@@ -16,6 +16,7 @@ namespace api_v2.Controllers;
 public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQueue, IConnectionMultiplexer redis) : ControllerBase
 {
     [HttpPost]
+    [Audit(AuditActions.Created, "Project")]
     public async Task<IActionResult> CreateOne([FromBody] Project project)
     {
         if (!ModelState.IsValid)
@@ -29,6 +30,8 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
         dbContext.ProjectMembers.Add(projectUser);
         await dbContext.SaveChangesAsync();
 
+        HttpContext.Items["AuditData"] = new { id = project.Id };
+
         await messageQueue.PublishAsync("webhooks",
             new { @event = "project.created", payload = project });
 
@@ -37,6 +40,7 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
 
 
     [HttpPut("{id:int}")]
+    [Audit(AuditActions.Updated, "Project")]
     public async Task<IActionResult> UpdateOne(int id, Project project)
     {
         var dbModel = await dbContext.Projects.FindAsync(id);
@@ -45,16 +49,24 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
         dbContext.Entry(dbModel).CurrentValues.SetValues(project);
         dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id };
+
         return Ok(dbModel);
     }
 
     [HttpPatch("{id:int}")]
+    [Audit(AuditActions.Updated, "Project")]
     public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement json)
     {
-        await dbContext.Projects
+        var updated = await dbContext.Projects
             .Where(n => n.Id == id)
             .ExecuteUpdateAsync(upd => upd
                 .SetProperty(n => n.Archived, json.GetProperty("archived").GetBoolean()));
+
+        if (updated == 0) return NotFound();
+
+        HttpContext.Items["AuditData"] = new { id };
 
         return NoContent();
     }

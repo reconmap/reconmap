@@ -13,18 +13,20 @@ namespace api_v2.Controllers;
 public class TasksController(AppDbContext dbContext) : AppController(dbContext)
 {
     [HttpPost]
+    [Audit(AuditActions.Created, "Task")]
     public async Task<IActionResult> CreateOne(ProjectTask task)
     {
         task.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
         dbContext.Tasks.Add(task);
-
-        AuditAction(AuditActions.Created, "Task", new { id = task.Id });
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id = task.Id };
 
         return CreatedAtAction(nameof(GetOne), new { id = task.Id }, task);
     }
 
     [HttpPut("{id:int}")]
+    [Audit(AuditActions.Updated, "Task")]
     public async Task<IActionResult> UpdateOne(int id, ProjectTask requestModel)
     {
         var dbModel = await dbContext.Tasks.FindAsync(id);
@@ -34,6 +36,9 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
         dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
 
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id };
+
         return Ok(dbModel);
     }
 

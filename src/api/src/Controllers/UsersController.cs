@@ -15,6 +15,7 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
     : AppController(dbContext)
 {
     [HttpPost]
+    [Audit(AuditActions.Created, "User")]
     public async Task<IActionResult> CreatOne(User user)
     {
         var subjectId = await directory.CreateAsync(new KeycloakUserInput(
@@ -31,8 +32,6 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
         try
         {
             dbContext.Users.Add(user);
-
-            AuditAction(AuditActions.Created, "User", new { id = user.Id });
             await dbContext.SaveChangesAsync();
         }
         catch
@@ -41,6 +40,8 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
             await directory.DeleteAsync(subjectId);
             throw;
         }
+
+        HttpContext.Items["AuditData"] = new { id = user.Id };
 
         return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
     }
@@ -102,6 +103,7 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
     }
 
     [HttpPatch("{id}")]
+    [Audit(AuditActions.Updated, "User")]
     public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement body)
     {
         if (body.TryGetProperty("mfaEnabled", out _))
@@ -154,6 +156,8 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
 
         dbContext.Users.Update(user);
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id };
 
         return NoContent();
     }

@@ -2,6 +2,7 @@ using System.Text.Json;
 using api_v2.Controllers;
 using api_v2.Domain.Entities;
 using api_v2.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +36,10 @@ public class TasksControllerUpdateAssigneeTests
             """;
         var requestModel = JsonSerializer.Deserialize<ProjectTask>(body, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
 
-        var controller = new TasksController(db);
+        var controller = new TasksController(db)
+        {
+            ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
+        };
         var result = await controller.UpdateOne(1, requestModel);
 
         Assert.IsType<OkObjectResult>(result);

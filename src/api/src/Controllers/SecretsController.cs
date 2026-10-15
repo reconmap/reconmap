@@ -15,6 +15,7 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
     : AppController(dbContext)
 {
     [HttpPost]
+    [Audit(AuditActions.Created, "Secret")]
     public async Task<IActionResult> CreateOne(JsonElement json)
     {
         var password = json.GetProperty("password").GetString()!;
@@ -32,6 +33,8 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
 
         var secret = await secretsService.CreateAsync(HttpContext.GetCurrentUser().Id, password, name, type, value, note,
             projectId);
+
+        HttpContext.Items["AuditData"] = new { id = secret.Id };
 
         return CreatedAtAction(nameof(GetSecret), new { id = secret.Id }, secret);
     }
@@ -83,6 +86,7 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
     }
 
     [HttpPut("{id:int}")]
+    [Audit(AuditActions.Updated, "Secret")]
     public async Task<IActionResult> PatchOne(int id, JsonElement json)
     {
         var existing = await secretsService.GetByIdAsync(id);
@@ -100,6 +104,8 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
 
         var success = await secretsService.UpdateAsync(id, password, name, type, value, note, projectId);
         if (!success) return Forbid();
+
+        HttpContext.Items["AuditData"] = new { id };
 
         return Accepted();
     }

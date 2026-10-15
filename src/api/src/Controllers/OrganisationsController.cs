@@ -13,18 +13,20 @@ public class OrganisationsController(AppDbContext dbContext, ILogger<Organisatio
     : AppController(dbContext)
 {
     [HttpPost]
+    [Audit(AuditActions.Created, "Organisation")]
     public async Task<IActionResult> CreateOne([FromForm] Organisation entity)
     {
         entity.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
         dbContext.Organisations.Add(entity);
-
-        AuditAction(AuditActions.Created, "Organisation", new { id = entity.Id });
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id = entity.Id };
 
         return CreatedAtAction(nameof(GetOne), new { id = entity.Id }, entity);
     }
 
     [HttpPut("{id:int}")]
+    [Audit(AuditActions.Updated, "Organisation")]
     public async Task<IActionResult> UpdateOne(int id, Organisation requestModel)
     {
         var dbModel = await dbContext.Organisations.FindAsync(id);
@@ -36,6 +38,8 @@ public class OrganisationsController(AppDbContext dbContext, ILogger<Organisatio
         dbModel.Kind = requestModel.Kind;
         dbModel.Url = requestModel.Url;
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id };
 
         return Ok(dbModel);
     }

@@ -25,13 +25,14 @@ public class VulnerabilitiesController(
     private readonly AppDbContext _dbContext = dbContext;
 
     [HttpPost]
+    [Audit(AuditActions.Created, "Vulnerability")]
     public async Task<IActionResult> CreateOne(Vulnerability vulnerability)
     {
         vulnerability.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
         _dbContext.Vulnerabilities.Add(vulnerability);
-
-        AuditAction(AuditActions.Created, "Vulnerability", new { id = vulnerability.Id });
         await _dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id = vulnerability.Id };
 
         await messageQueue.PublishAsync("vulnerabilities",
             new { @event = "vulnerability.created", payload = vulnerability });
@@ -42,6 +43,7 @@ public class VulnerabilitiesController(
     }
 
     [HttpPut("{id:int}")]
+    [Audit(AuditActions.Updated, "Vulnerability")]
     public async Task<IActionResult> UpdateOne(int id, Vulnerability vulnerability)
     {
         var dbModel = await _dbContext.Vulnerabilities.FindAsync(id);
@@ -50,6 +52,9 @@ public class VulnerabilitiesController(
         _dbContext.Entry(dbModel).CurrentValues.SetValues(vulnerability);
         _dbContext.Entry(dbModel).Property(x => x.Id).IsModified = false;
         await _dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id };
+
         return Ok(dbModel);
     }
 

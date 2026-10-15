@@ -21,10 +21,13 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
     }
 
     [HttpPost]
+    [Audit(AuditActions.Created, "Asset")]
     public async Task<IActionResult> CreateOne(Asset asset)
     {
         dbContext.Assets.Add(asset);
         await dbContext.SaveChangesAsync();
+
+        HttpContext.Items["AuditData"] = new { id = asset.Id };
 
         return CreatedAtAction(nameof(GetOne), new { id = asset.Id }, asset);
     }

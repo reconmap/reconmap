@@ -15,8 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dashboard: migrated routing from React Router v7 (`react-router-dom`) to React Router v8 data mode. The router is now created with `createBrowserRouter` and rendered with `RouterProvider`, and `react-router-dom` is replaced by `react-router`. This has no visible effect on URLs or pages.
 - Dashboard: when the API answers `401 Unauthorized`, the dashboard now clears the stored OIDC session and restarts login through the OIDC client (`signinRedirect`) instead of reloading the context path. Concurrent 401s trigger a single redirect, and a repeat 401 within 10 seconds of a redirect no longer redirects again, which prevents redirect loops.
 
+### Added
+
+- The audit log now records creations and updates of projects, assets, vulnerabilities, tasks, organisations, users, secrets and reports. Previously only deletions and a few creations were recorded.
+
 ### Fixed
 
+- Audit log: failed requests, such as a delete of an entity that does not exist, were recorded as successful actions. Only successful requests are audited now.
+- Audit log: creating a vulnerability, task, organisation or user recorded the entry before the row had an ID, so the context stored `"id": 0`. The entry now includes the new ID.
 - Dashboard: hiding the "Reconmap releases" or "Community discussions" widget hid the other one, because their components were swapped.
 - Search returned every task, vulnerability, project and template instead of only the matches. The API now filters tasks, vulnerabilities and projects by the `keywords` query parameter (case-insensitive, matched against the name, summary or description), and `/api/vulnerabilities` honours `isTemplate`, so vulnerability template search no longer returns regular vulnerabilities. Searches containing a `%` no longer break the results page.
 

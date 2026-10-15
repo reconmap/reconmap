@@ -25,6 +25,8 @@ public sealed class AuditAttribute(string action, string entity) : ActionFilterA
             resultContext.Exception == null &&
             resultContext.Result is IStatusCodeActionResult { StatusCode: >= 200 and < 300 };
 
+        if (!succeeded) return;
+
         var data = context.HttpContext.Items["AuditData"];
 
         var entry = new AuditEntry

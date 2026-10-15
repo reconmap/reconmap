@@ -10,14 +10,16 @@ The audit log keeps track of all the user actions and is a great way to see what
 
 Al the data in the audit log is permanent and non-modifiable.
 
-The audit log keeps tracks of all following actions and many others:
+The audit log records the following actions:
 
-- User logged in
-- User logged out
-- User created
-- User modified
-- User deleted
-- Integration enabled
-- Integration disabled
+- User logged in and logged out
+- Created: projects, assets, vulnerabilities, tasks, organisations, users, secrets (the secret value is never recorded), reports and report templates
+- Updated: projects, vulnerabilities, tasks, organisations, users and secrets
+- Deleted: assets, projects, tasks, vulnerabilities, users, secrets, runners, reports and other entities
+- Attachments downloaded, and system data exported
+
+Only successful changes are recorded. A request that fails, such as a delete of an entity that does not exist, leaves no entry.
+
+Changes to other entities, such as notes, contacts and integrations, are not recorded yet.
 
 The audit log information can be exported to CSV to do aggregation and analysis.
