@@ -24,9 +24,9 @@ const VaultItemEdit = () => {
     const onFormSubmit = (ev) => {
         ev.preventDefault();
 
-        (item as any).password = password;
+        const payload = { ...item, password };
 
-        requestEntityPut(`/secrets/${vaultItemId}`, item as any).then((resp) => {
+        requestEntityPut(`/secrets/${vaultItemId}`, payload as any).then((resp) => {
             if (resp.status === 201) {
                 setVaultItem({ ...Vault });
                 setPassword(null);

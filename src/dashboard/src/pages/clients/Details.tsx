@@ -117,6 +117,17 @@ const ClientDetails = () => {
             .catch((err) => console.error(err));
     };
 
+    const downloadAndDisplayLogo = (logoId, type) => {
+        requestAttachment(logoId).then(({ blob }) => {
+            const url = URL.createObjectURL(blob);
+            if (type === "small_logo") {
+                setSmallLogo(url);
+            } else {
+                setLogo(url);
+            }
+        });
+    };
+
     useEffect(() => {
         if (client) {
             if (client.small_logo_attachment_id) {
@@ -128,17 +139,6 @@ const ClientDetails = () => {
             }
         }
     }, [client]);
-
-    const downloadAndDisplayLogo = (logoId, type) => {
-        requestAttachment(logoId).then(({ blob }) => {
-            const url = URL.createObjectURL(blob);
-            if (type === "small_logo") {
-                setSmallLogo(url);
-            } else {
-                setLogo(url);
-            }
-        });
-    };
 
     if (isClientLoading) {
         return <Loading />;

@@ -22,16 +22,6 @@ const ClientForm = ({ isEditForm = false, onFormSubmit, client, clientSetter: se
         setClient({ ...client, [name]: value });
     };
 
-    useEffect(() => {
-        if (client.small_logo_attachment_id) {
-            downloadAndDisplayLogo(client.small_logo_attachment_id, "small_logo");
-        }
-
-        if (client.logo_attachment_id) {
-            downloadAndDisplayLogo(client.logo_attachment_id, "logo");
-        }
-    }, [client]);
-
     const downloadAndDisplayLogo = (logoId, type) => {
         requestAttachment(logoId).then(({ blob }) => {
             const url = URL.createObjectURL(blob);
@@ -42,6 +32,16 @@ const ClientForm = ({ isEditForm = false, onFormSubmit, client, clientSetter: se
             }
         });
     };
+
+    useEffect(() => {
+        if (client.small_logo_attachment_id) {
+            downloadAndDisplayLogo(client.small_logo_attachment_id, "small_logo");
+        }
+
+        if (client.logo_attachment_id) {
+            downloadAndDisplayLogo(client.logo_attachment_id, "logo");
+        }
+    }, [client]);
 
     return (
         <form onSubmit={onFormSubmit}>

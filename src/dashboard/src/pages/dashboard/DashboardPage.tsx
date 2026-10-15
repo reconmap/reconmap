@@ -7,7 +7,7 @@ import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import { useAuth } from "contexts/AuthContext";
 import Widgets from "models/Widgets";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PermissionsService from "services/permissions";
 import { initialiseUserPreferences } from "services/userPreferences";
@@ -38,10 +38,13 @@ const filterWidgets = (user) => {
 };
 
 const DashboardPage = () => {
-    const { user } = useAuth() as any;
+    const { user: authUser } = useAuth() as any;
     const [t] = useTranslation("app");
 
-    user.preferences = initialiseUserPreferences(user);
+    const user = useMemo(
+        () => ({ ...authUser, preferences: initialiseUserPreferences(authUser) }),
+        [authUser],
+    );
     const [dashboardConfig, setDashboardConfig] = useState(
         user?.preferences?.["dashboard.widgets"] || InitialiseWidgetConfig(),
     );
@@ -60,14 +63,15 @@ const DashboardPage = () => {
     };
 
     const onSave = (ev, loggedInUser) => {
-        const user = loggedInUser;
-        user.preferences = initialiseUserPreferences(user);
+        const preferences = {
+            ...initialiseUserPreferences(loggedInUser),
+            "dashboard.widgets": dashboardConfig,
+        };
+        const updatedUser = { ...loggedInUser, preferences };
 
-        user.preferences["dashboard.widgets"] = dashboardConfig;
-
-        requestUserPatch(user.id, { preferences: user.preferences })
+        requestUserPatch(updatedUser.id, { preferences })
             .then(() => {
-                setVisibleWidgets(filterWidgets(user));
+                setVisibleWidgets(filterWidgets(updatedUser));
 
                 actionCompletedToast("Your preferences have been saved.");
             })
