@@ -8,7 +8,6 @@ using Reconmap.Api.Infrastructure.Persistence;
 using Reconmap.Api.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 
 namespace Reconmap.Api.Controllers;
 
@@ -16,9 +15,7 @@ namespace Reconmap.Api.Controllers;
 [ApiController]
 public class VulnerabilitiesController(
     AppDbContext dbContext,
-    ILogger<VulnerabilitiesController> logger,
     IMessageQueue messageQueue,
-    IConnectionMultiplexer redisConnections,
     IRequestAccessScope accessScope)
     : AppController(dbContext)
 {

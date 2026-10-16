@@ -5,7 +5,6 @@ using Reconmap.Api.Infrastructure.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace tests.Controllers;
 
@@ -55,7 +54,6 @@ public class AttachmentsControllerTests
         var storage = new RecordingAttachmentStorage();
         var controller = new AttachmentsController(
             db,
-            NullLogger<AttachmentsController>.Instance,
             storage,
             new AllowAllAccessScope())
         {

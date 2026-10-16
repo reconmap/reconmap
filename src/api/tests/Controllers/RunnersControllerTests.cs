@@ -7,7 +7,6 @@ using Reconmap.Api.Infrastructure.Authentication;
 using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xunit;
 
@@ -39,7 +38,7 @@ public class RunnersControllerTests
         await db.SaveChangesAsync();
 
         var keycloakOptions = Options.Create(new KeycloakOptions());
-        var controller = new RunnersController(db, NullLogger<RunnersController>.Instance, keycloakOptions);
+        var controller = new RunnersController(db, keycloakOptions);
 
         var body = new Dictionary<string, object>
         {
@@ -79,7 +78,7 @@ public class RunnersControllerTests
         await db.SaveChangesAsync();
 
         var keycloakOptions = Options.Create(new KeycloakOptions());
-        var controller = new RunnersController(db, NullLogger<RunnersController>.Instance, keycloakOptions);
+        var controller = new RunnersController(db, keycloakOptions);
 
         var result = await controller.PatchRunner(clientId);
 

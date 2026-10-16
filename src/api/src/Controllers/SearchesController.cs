@@ -1,5 +1,4 @@
 using Reconmap.Api.Common.Extensions;
-using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using StackExchange.Redis;
@@ -9,7 +8,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SearchesController(AppDbContext dbContext, IConnectionMultiplexer redis) : ControllerBase
+public class SearchesController(IConnectionMultiplexer redis) : ControllerBase
 {
     [HttpGet("recent")]
     public async Task<IActionResult> GetRecents([FromQuery] int? limit)

@@ -9,7 +9,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class OrganisationsController(AppDbContext dbContext, ILogger<OrganisationsController> logger)
+public class OrganisationsController(AppDbContext dbContext)
     : AppController(dbContext)
 {
     [HttpPost]

@@ -15,7 +15,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RunnersController(AppDbContext dbContext, ILogger<RunnersController> logger, IOptions<KeycloakOptions> keycloakOptions)
+public class RunnersController(AppDbContext dbContext, IOptions<KeycloakOptions> keycloakOptions)
     : ControllerBase
 {
     [HttpPost]

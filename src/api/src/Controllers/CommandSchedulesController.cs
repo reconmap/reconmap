@@ -5,7 +5,6 @@ using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -13,11 +12,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/commands")]
 [ApiController]
-public class CommandSchedulesController(
-    AppDbContext dbContext,
-    IConnectionMultiplexer conn,
-    IConfiguration config,
-    ILogger<CommandSchedulesController> logger)
+public class CommandSchedulesController(AppDbContext dbContext)
     : ControllerBase
 {
     [HttpGet("schedules")]

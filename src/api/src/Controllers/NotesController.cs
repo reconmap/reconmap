@@ -10,7 +10,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class NotesController(AppDbContext dbContext, ILogger<NotesController> logger, IRequestAccessScope accessScope)
+public class NotesController(AppDbContext dbContext, IRequestAccessScope accessScope)
     : ControllerBase
 {
     [HttpPost]

@@ -3,11 +3,10 @@ using Reconmap.Api.Application.Services;
 using Reconmap.Api.Common;
 using Reconmap.Api.Controllers;
 using Reconmap.Api.Domain.Entities;
-using Reconmap.Api.Infrastructure.Persistence;
 
 namespace Reconmap.Api.Application.CommandParsers;
 
-public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmentStorage, AppDbContext dbContext) : ICommandParser
+public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmentStorage) : ICommandParser
 {
     public string Name => "Generic LLM";
     public string Description => "Parses any tool output using an LLM";

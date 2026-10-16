@@ -52,7 +52,6 @@ public static class ExportablesRegistry
 public class SystemController(
     AppDbContext db,
     IConnectionMultiplexer redis,
-    IMessageQueue messageQueue,
     ILogger<SystemController> logger,
     SystemUsageService service,
     IMailSettingsService mailSettingsService,

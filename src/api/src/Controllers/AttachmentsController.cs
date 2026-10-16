@@ -12,7 +12,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AttachmentsController(AppDbContext dbContext, ILogger<AttachmentsController> logger, IAttachmentStorage attachmentStorage, IRequestAccessScope accessScope)
+public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage attachmentStorage, IRequestAccessScope accessScope)
     : AppController(dbContext)
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();

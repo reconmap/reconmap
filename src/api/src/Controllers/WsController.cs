@@ -12,7 +12,6 @@ namespace Reconmap.Api.Controllers;
 [ApiController]
 public class WsController(
     WebSocketConnectionManager manager,
-    AppDbContext dbContext,
     ILogger<WsController> logger)
     : ControllerBase
 {

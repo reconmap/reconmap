@@ -4,13 +4,12 @@ using Reconmap.Api.Infrastructure.Keycloak;
 using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 
 namespace Reconmap.Api.Controllers;
 
 [Route("api/projects/{projectId:int}/members")]
 [ApiController]
-public class ProjectMembersController(AppDbContext dbContext, IConnectionMultiplexer redis, IKeycloakUserDirectory directory) : ControllerBase
+public class ProjectMembersController(AppDbContext dbContext, IKeycloakUserDirectory directory) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
