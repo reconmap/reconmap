@@ -11,6 +11,13 @@ Currently, the server exposes limited tools such as:
 * `ListProjects`: Retrieves a list of active Reconmap projects.
 * `GetProjectDetails`: Gets the detailed metadata and description of a specific project by its ID.
 
+The server also exposes these Prompts (reusable templates a client can offer to the user). Both take a `projectId`, require read access to that project, and point the model at the project's resources:
+
+- `triage_vulnerabilities`: prioritise a project's vulnerabilities, spot duplicates and propose a remediation order.
+- `executive_summary`: draft a short, non-technical summary of a project's security posture.
+
+Prompts live in `McpServer/Prompts/`, tools in `McpServer/Tools/` and resources in `McpServer/Resources/`, with one class per entity (`ProjectTools`, `ProjectResources`, `TaskResources`, `VulnerabilityResources`, `RunnerResources`).
+
 In addition, the server exposes the following Resources (data sources):
 
 * `reconmap://projects`

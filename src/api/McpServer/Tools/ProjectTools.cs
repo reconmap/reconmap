@@ -7,9 +7,9 @@ using Reconmap.McpServer.Security;
 namespace Reconmap.McpServer.Tools;
 
 /// <summary>
-/// Reconmap MCP tools. Every call is scoped to what the authenticated user may access.
+/// Reconmap MCP tools for projects. Every call is scoped to what the authenticated user may access.
 /// </summary>
-public class ReconmapTools(IProjectService projectService, McpAccessGuard guard)
+public class ProjectTools(IProjectService projectService, McpAccessGuard guard)
 {
     public record ProjectSummary(int Id, string Name, string Visibility, bool Archived);
 

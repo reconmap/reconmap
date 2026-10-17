@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- MCP server: prompts `triage_vulnerabilities` and `executive_summary` (each takes a `projectId` and requires read access to the project). Tools and resources are now split into one class per entity.
 - MCP server: parameterized resource templates `reconmap://projects/{id}`, `reconmap://projects/{id}/vulnerabilities` and `reconmap://vulnerabilities/{id}`, with the same project-membership and OPA checks as the tools. See [MCP Server](docs/pages/development/mcp-server.md).
 - MCP server: OAuth login for MCP clients. The server publishes OAuth protected resource metadata (`/.well-known/oauth-protected-resource`) and answers unauthenticated requests with a `WWW-Authenticate` challenge pointing to it, so clients such as the MCP Inspector can sign in through Keycloak. New public Keycloak client `mcp-client` (PKCE) for MCP clients, since Keycloak rejects anonymous dynamic client registration. New optional settings `Mcp:PublicUrl` and `Mcp:AllowedOrigins`. CORS for the MCP server now allows only the configured origins and the MCP Inspector defaults.
 - MCP server: every request now requires a Reconmap API token or a Keycloak access token, and tools and resources apply the same project-membership and OPA rules as the REST API. Non-privileged users only see their own projects, and runners are limited to administrators and superusers. See [MCP Server](docs/pages/development/mcp-server.md). Previously the server was unauthenticated and returned all data.

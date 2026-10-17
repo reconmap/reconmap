@@ -89,8 +89,12 @@ services.AddScoped<IRunnerService, RunnerService>();
 services
     .AddMcpServer()
     .WithHttpTransport()
-    .WithTools<Reconmap.McpServer.Tools.ReconmapTools>()
-    .WithResources<Reconmap.McpServer.Resources.ReconmapResources>();
+    .WithTools<Reconmap.McpServer.Tools.ProjectTools>()
+    .WithResources<Reconmap.McpServer.Resources.ProjectResources>()
+    .WithResources<Reconmap.McpServer.Resources.TaskResources>()
+    .WithResources<Reconmap.McpServer.Resources.VulnerabilityResources>()
+    .WithResources<Reconmap.McpServer.Resources.RunnerResources>()
+    .WithPrompts<Reconmap.McpServer.Prompts.ReconmapPrompts>();
 
 // Browser-based MCP clients (such as the MCP Inspector, which runs the OAuth discovery from the browser) need CORS.
 // Only the configured origins may call the server: Mcp:AllowedOrigins, plus Cors:AllowedOrigins, plus the Inspector's

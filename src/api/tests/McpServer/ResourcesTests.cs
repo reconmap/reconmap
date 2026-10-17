@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Tests.McpServer
 {
-    public class ReconmapResourcesTests
+    public class ResourcesTests
     {
         /// <summary>
         /// Guard stub: <paramref name="visible"/> null means privileged, otherwise the member project ids.
@@ -44,14 +44,17 @@ namespace Tests.McpServer
             return context;
         }
 
-        private static ReconmapResources Create(AppDbContext context, IReadOnlyList<int>? visible)
-            => new(new ProjectService(context), null!, new VulnerabilityService(context), null!, new FakeGuard(visible));
+        private static ProjectResources Projects(AppDbContext context, IReadOnlyList<int>? visible)
+            => new(new ProjectService(context), new FakeGuard(visible));
+
+        private static VulnerabilityResources Vulnerabilities(AppDbContext context, IReadOnlyList<int>? visible)
+            => new(new VulnerabilityService(context), new FakeGuard(visible));
 
         [Fact]
         public async Task GetProject_Member_ReturnsProject()
         {
             using var context = GetContext();
-            var json = await Create(context, [5]).GetProject(5);
+            var json = await Projects(context, [5]).GetProject(5);
 
             Assert.Equal("Project 5", JsonDocument.Parse(json).RootElement.GetProperty("Name").GetString());
         }
@@ -61,7 +64,7 @@ namespace Tests.McpServer
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Create(context, [5]).GetProject(1));
+            await Assert.ThrowsAsync<McpException>(() => Projects(context, [5]).GetProject(1));
         }
 
         [Fact]
@@ -69,14 +72,14 @@ namespace Tests.McpServer
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Create(context, null).GetProject(999));
+            await Assert.ThrowsAsync<McpException>(() => Projects(context, null).GetProject(999));
         }
 
         [Fact]
         public async Task GetProjectVulnerabilities_ReturnsOnlyThatProject()
         {
             using var context = GetContext();
-            var json = await Create(context, [5]).GetProjectVulnerabilities(5);
+            var json = await Vulnerabilities(context, [5]).GetProjectVulnerabilities(5);
 
             var items = JsonDocument.Parse(json).RootElement.EnumerateArray().ToList();
             Assert.Single(items);
@@ -88,14 +91,14 @@ namespace Tests.McpServer
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Create(context, [5]).GetProjectVulnerabilities(1));
+            await Assert.ThrowsAsync<McpException>(() => Vulnerabilities(context, [5]).GetProjectVulnerabilities(1));
         }
 
         [Fact]
         public async Task GetVulnerability_Member_ReturnsVulnerability()
         {
             using var context = GetContext();
-            var json = await Create(context, [5]).GetVulnerability(11);
+            var json = await Vulnerabilities(context, [5]).GetVulnerability(11);
 
             Assert.Equal("SQLi in search", JsonDocument.Parse(json).RootElement.GetProperty("Summary").GetString());
         }
@@ -105,7 +108,7 @@ namespace Tests.McpServer
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Create(context, [5]).GetVulnerability(10));
+            await Assert.ThrowsAsync<McpException>(() => Vulnerabilities(context, [5]).GetVulnerability(10));
         }
 
         [Fact]
@@ -113,7 +116,7 @@ namespace Tests.McpServer
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Create(context, null).GetVulnerability(999));
+            await Assert.ThrowsAsync<McpException>(() => Vulnerabilities(context, null).GetVulnerability(999));
         }
     }
 }
