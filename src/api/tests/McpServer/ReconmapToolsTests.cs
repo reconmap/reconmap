@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using ModelContextProtocol;
+using Reconmap.Api.Application.Services;
 using Reconmap.McpServer.Tools;
 using Reconmap.McpServer.Security;
 using Reconmap.Api.Infrastructure.Persistence;
@@ -40,8 +41,9 @@ namespace Tests.McpServer
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            context.Projects.Add(new Project { Id = 1, Name = "Internal Penetration Test", Visibility = "public" });
-            context.Projects.Add(new Project { Id = 5, Name = "Project 5", Description = "Test description", Visibility = "private" });
+            context.Set<UserInfo>().Add(new UserInfo { Id = 1 });
+            context.Projects.Add(new Project { Id = 1, CreatedByUid = 1, Name = "Internal Penetration Test", Visibility = "public" });
+            context.Projects.Add(new Project { Id = 5, CreatedByUid = 1, Name = "Project 5", Description = "Test description", Visibility = "private" });
             context.SaveChanges();
 
             return context;
@@ -51,7 +53,7 @@ namespace Tests.McpServer
         public async Task ListProjects_Privileged_ReturnsAllProjects()
         {
             using var context = GetMemoryContext();
-            var tools = new ReconmapTools(context, new FakeGuard(null));
+            var tools = new ReconmapTools(new ProjectService(context), new FakeGuard(null));
             var result = await tools.ListProjects();
 
             Assert.Contains("Internal Penetration Test", result);
@@ -62,7 +64,7 @@ namespace Tests.McpServer
         public async Task ListProjects_Member_ReturnsOnlyMemberProjects()
         {
             using var context = GetMemoryContext();
-            var tools = new ReconmapTools(context, new FakeGuard([5]));
+            var tools = new ReconmapTools(new ProjectService(context), new FakeGuard([5]));
             var result = await tools.ListProjects();
 
             Assert.Contains("Project 5", result);
@@ -73,7 +75,7 @@ namespace Tests.McpServer
         public async Task GetProjectDetails_Member_ReturnsProject()
         {
             using var context = GetMemoryContext();
-            var tools = new ReconmapTools(context, new FakeGuard([5]));
+            var tools = new ReconmapTools(new ProjectService(context), new FakeGuard([5]));
             var result = await tools.GetProjectDetails(5);
 
             Assert.Contains("Project 5", result);
@@ -83,7 +85,7 @@ namespace Tests.McpServer
         public async Task GetProjectDetails_NonMember_IsDenied()
         {
             using var context = GetMemoryContext();
-            var tools = new ReconmapTools(context, new FakeGuard([5]));
+            var tools = new ReconmapTools(new ProjectService(context), new FakeGuard([5]));
 
             await Assert.ThrowsAsync<McpException>(() => tools.GetProjectDetails(1));
         }
@@ -92,7 +94,7 @@ namespace Tests.McpServer
         public async Task GetProjectDetails_UnknownProject_Throws()
         {
             using var context = GetMemoryContext();
-            var tools = new ReconmapTools(context, new FakeGuard(null));
+            var tools = new ReconmapTools(new ProjectService(context), new FakeGuard(null));
 
             await Assert.ThrowsAsync<McpException>(() => tools.GetProjectDetails(999));
         }

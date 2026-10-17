@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Controllers;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Authentication;
@@ -38,7 +39,7 @@ public class RunnersControllerTests
         await db.SaveChangesAsync();
 
         var keycloakOptions = Options.Create(new KeycloakOptions());
-        var controller = new RunnersController(db, keycloakOptions);
+        var controller = new RunnersController(db, new RunnerService(db), keycloakOptions);
 
         var body = new Dictionary<string, object>
         {
@@ -78,7 +79,7 @@ public class RunnersControllerTests
         await db.SaveChangesAsync();
 
         var keycloakOptions = Options.Create(new KeycloakOptions());
-        var controller = new RunnersController(db, keycloakOptions);
+        var controller = new RunnersController(db, new RunnerService(db), keycloakOptions);
 
         var result = await controller.PatchRunner(clientId);
 

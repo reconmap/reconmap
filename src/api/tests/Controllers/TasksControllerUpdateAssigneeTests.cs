@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Controllers;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
@@ -36,7 +37,7 @@ public class TasksControllerUpdateAssigneeTests
             """;
         var requestModel = JsonSerializer.Deserialize<ProjectTask>(body, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
 
-        var controller = new TasksController(db)
+        var controller = new TasksController(db, new TaskService(db))
         {
             ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
         };

@@ -1,3 +1,4 @@
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Domain.AuditActions;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Authentication;
@@ -15,7 +16,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RunnersController(AppDbContext dbContext, IOptions<KeycloakOptions> keycloakOptions)
+public class RunnersController(AppDbContext dbContext, IRunnerService runnerService, IOptions<KeycloakOptions> keycloakOptions)
     : ControllerBase
 {
     [HttpPost]
@@ -67,10 +68,7 @@ public class RunnersController(AppDbContext dbContext, IOptions<KeycloakOptions>
     [HttpGet]
     public async Task<IActionResult> GetMany()
     {
-        var q = dbContext.Runners.AsNoTracking()
-            .OrderByDescending(a => a.LastPingAt);
-
-        var runners = await q.ToListAsync();
+        var runners = await runnerService.GetManyAsync();
         return Ok(runners);
     }
 

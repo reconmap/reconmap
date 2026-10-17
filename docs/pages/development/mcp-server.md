@@ -18,6 +18,10 @@ In addition, the server exposes the following Resources (data sources):
 * `reconmap://vulnerabilities`
 * `reconmap://runners`
 
+## Shared services
+
+The MCP tools and resources do not query the database themselves. They call the same application services as the REST controllers (`IProjectService`, `ITaskService`, `IVulnerabilityService` and `IRunnerService`, in `src/api/src/Application/Services`). Filtering and lookup logic lives in those services. When you add a tool or resource, add or extend a service and call it from both the controller and the MCP class. The MCP layer only applies access scoping (`McpAccessGuard`) and shapes the output.
+
 ## Requirements
 
 The MCP server is a standard .NET 10 Console application located in the `src/api/McpServer` directory.

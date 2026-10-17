@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Common.Extensions;
 using Reconmap.Api.Domain.AuditActions;
 using Reconmap.Api.Domain.Entities;
@@ -10,7 +11,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class TasksController(AppDbContext dbContext) : AppController(dbContext)
+public class TasksController(AppDbContext dbContext, ITaskService taskService) : AppController(dbContext)
 {
     [HttpPost]
     [Audit(AuditActions.Created, "Task")]
@@ -51,33 +52,8 @@ public class TasksController(AppDbContext dbContext) : AppController(dbContext)
         [FromQuery] int? assignedToUid = null,
         [FromQuery] int? projectIsArchived = null)
     {
-        var kw = keywords?.Trim().ToLower();
-
-        var q = dbContext.Tasks
-            .Include(t => t.AssignedTo)
-            .AsNoTracking()
-            .Where(t => string.IsNullOrEmpty(priority) || t.Priority == priority)
-            .Where(t => string.IsNullOrEmpty(status) || t.Status == status)
-            .Where(t => string.IsNullOrEmpty(kw)
-                || t.Summary.ToLower().Contains(kw)
-                || (t.Description != null && t.Description.ToLower().Contains(kw)));
-        if (projectId != null)
-            q = q.Where(t => t.ProjectId == projectId);
-        if (assignedToUid != null)
-            q = q.Where(t => t.AssignedToUid == assignedToUid);
-        if (projectIsArchived != null)
-        {
-            // 0 keeps tasks from non-archived projects, any other value keeps only tasks from archived projects
-            var archivedProjectIds = dbContext.Projects.Where(p => p.Archived).Select(p => p.Id);
-            q = projectIsArchived == 0
-                ? q.Where(t => !archivedProjectIds.Contains(t.ProjectId))
-                : q.Where(t => archivedProjectIds.Contains(t.ProjectId));
-        }
-        q = q.OrderByDescending(a => a.CreatedAt);
-        if (limit != null)
-            q = q.Take(limit.Value);
-
-        var tasks = await q.ToListAsync();
+        var tasks = await taskService.GetManyAsync(new TaskFilter(
+            limit, projectId, priority, status, keywords, assignedToUid, projectIsArchived));
         return Ok(tasks);
     }
 

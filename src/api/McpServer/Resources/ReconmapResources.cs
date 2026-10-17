@@ -1,7 +1,6 @@
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
 using ModelContextProtocol.Server;
-using Reconmap.Api.Infrastructure.Persistence;
+using Reconmap.Api.Application.Services;
 using Reconmap.McpServer.Security;
 
 namespace Reconmap.McpServer.Resources;
@@ -9,7 +8,12 @@ namespace Reconmap.McpServer.Resources;
 /// <summary>
 /// Reconmap MCP resources for exposing entity data. Every read is scoped to what the authenticated user may access.
 /// </summary>
-public class ReconmapResources(AppDbContext dbContext, McpAccessGuard guard)
+public class ReconmapResources(
+    IProjectService projectService,
+    ITaskService taskService,
+    IVulnerabilityService vulnerabilityService,
+    IRunnerService runnerService,
+    McpAccessGuard guard)
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
@@ -18,13 +22,9 @@ public class ReconmapResources(AppDbContext dbContext, McpAccessGuard guard)
     {
         var visibleIds = await guard.VisibleProjectIdsAsync();
 
-        var query = dbContext.Projects.AsNoTracking();
-        if (visibleIds != null)
-            query = query.Where(p => visibleIds.Contains(p.Id));
+        var page = await projectService.GetManyAsync(new ProjectFilter(VisibleProjectIds: visibleIds), Paging.Unbounded);
 
-        var projects = await query
-            .Select(p => new { p.Id, p.Name, p.Visibility, p.Archived })
-            .ToListAsync();
+        var projects = page.Data.Select(p => new { p.Id, p.Name, p.Visibility, p.Archived });
         return JsonSerializer.Serialize(projects, JsonOptions);
     }
 
@@ -33,13 +33,8 @@ public class ReconmapResources(AppDbContext dbContext, McpAccessGuard guard)
     {
         var visibleIds = await guard.VisibleProjectIdsAsync();
 
-        var query = dbContext.Tasks.AsNoTracking();
-        if (visibleIds != null)
-            query = query.Where(t => visibleIds.Contains(t.ProjectId));
-
-        var tasks = await query
-            .Select(t => new { t.Id, t.ProjectId, t.Summary, t.Priority, t.Status })
-            .ToListAsync();
+        var tasks = (await taskService.GetManyAsync(new TaskFilter(VisibleProjectIds: visibleIds)))
+            .Select(t => new { t.Id, t.ProjectId, t.Summary, t.Priority, t.Status });
         return JsonSerializer.Serialize(tasks, JsonOptions);
     }
 
@@ -48,13 +43,9 @@ public class ReconmapResources(AppDbContext dbContext, McpAccessGuard guard)
     {
         var visibleIds = await guard.VisibleProjectIdsAsync();
 
-        var query = dbContext.Vulnerabilities.AsNoTracking();
-        if (visibleIds != null)
-            query = query.Where(v => v.ProjectId.HasValue && visibleIds.Contains(v.ProjectId.Value));
+        var page = await vulnerabilityService.GetManyAsync(new VulnerabilityFilter(VisibleProjectIds: visibleIds), Paging.Unbounded);
 
-        var vulnerabilities = await query
-            .Select(f => new { f.Id, f.ProjectId, f.Summary, f.Risk, f.Status })
-            .ToListAsync();
+        var vulnerabilities = page.Data.Select(f => new { f.Id, f.ProjectId, f.Summary, f.Risk, f.Status });
         return JsonSerializer.Serialize(vulnerabilities, JsonOptions);
     }
 
@@ -64,10 +55,8 @@ public class ReconmapResources(AppDbContext dbContext, McpAccessGuard guard)
         // Runners are infrastructure, not project data: administrators and superusers only (same as the OPA policy).
         guard.RequirePrivileged();
 
-        var runners = await dbContext.Runners
-            .AsNoTracking()
-            .Select(a => new { a.Id, a.Name, a.Ip, a.Active })
-            .ToListAsync();
+        var runners = (await runnerService.GetManyAsync())
+            .Select(a => new { a.Id, a.Name, a.Ip, a.Active });
         return JsonSerializer.Serialize(runners, JsonOptions);
     }
 }

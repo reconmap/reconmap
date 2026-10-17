@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Common;
 using Reconmap.Api.Common.Extensions;
 using Reconmap.Api.Common.Messaging;
@@ -16,7 +17,8 @@ namespace Reconmap.Api.Controllers;
 public class VulnerabilitiesController(
     AppDbContext dbContext,
     IMessageQueue messageQueue,
-    IRequestAccessScope accessScope)
+    IRequestAccessScope accessScope,
+    IVulnerabilityService vulnerabilityService)
     : AppController(dbContext)
 {
     private readonly AppDbContext _dbContext = dbContext;
@@ -64,38 +66,16 @@ public class VulnerabilitiesController(
         [FromQuery] string? keywords,
         [FromQuery] bool? isTemplate)
     {
-        var kw = keywords?.Trim().ToLower();
+        var visibleProjectIds = accessScope.IsPrivileged ? null : await accessScope.MemberProjectIdsAsync();
+        var filter = new VulnerabilityFilter(projectId, assetId, status, risk, keywords, isTemplate, visibleProjectIds);
 
-        var memberProjectIds = await accessScope.MemberProjectIdsAsync();
-        var q = _dbContext.Vulnerabilities
-             .Include(v => v.Project)
-             .Include(v => v.Asset)
-             .AsNoTracking()
-             .Where(v => accessScope.IsPrivileged ||
-                 (v.ProjectId.HasValue && memberProjectIds.Contains(v.ProjectId.Value)))
-             .Where(v => string.IsNullOrEmpty(risk) || v.Risk == risk)
-             .Where(v => !isTemplate.HasValue || v.IsTemplate == isTemplate)
-             .Where(v => string.IsNullOrEmpty(kw)
-                 || v.Summary.ToLower().Contains(kw)
-                 || (v.Description != null && v.Description.ToLower().Contains(kw)));
-         if (projectId.HasValue)
-             q = q.Where(v => v.ProjectId == projectId);
-         if(assetId.HasValue)
-             q = q.Where(v => v.AssetId == assetId);
-        if (!string.IsNullOrWhiteSpace(status))
-            q = q.Where(v => v.Status == status);
-        q = q.OrderByDescending(a => a.CreatedAt);
+        var pagination = new PaginationRequestHandler(HttpContext.Request.Query);
+        var page = await vulnerabilityService.GetManyAsync(filter,
+            new Paging(pagination.CalculateOffset(), pagination.GetResultsPerPage()));
 
-        var totalCount = await q.CountAsync();
-
-        var pagination = new PaginationRequestHandler(HttpContext.Request.Query, totalCount);
-        var resultsPerPage = pagination.GetResultsPerPage();
-        var pageCount = pagination.CalculatePageCount();
-
-        var results = await q
-            .Skip(pagination.CalculateOffset())
-            .Take(resultsPerPage)
-            .ToListAsync();
+        var totalCount = page.TotalCount;
+        var results = page.Data;
+        var pageCount = new PaginationRequestHandler(HttpContext.Request.Query, totalCount).CalculatePageCount();
 
         return Ok(new
         {

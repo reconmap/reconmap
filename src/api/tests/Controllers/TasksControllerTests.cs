@@ -1,3 +1,4 @@
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Controllers;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
@@ -28,7 +29,7 @@ public class TasksControllerTests
         );
         await db.SaveChangesAsync();
 
-        var controller = new TasksController(db);
+        var controller = new TasksController(db, new TaskService(db));
 
         var result = await controller.GetMany(null, null, null, null, "network");
 
@@ -48,7 +49,7 @@ public class TasksControllerTests
         );
         await db.SaveChangesAsync();
 
-        var controller = new TasksController(db);
+        var controller = new TasksController(db, new TaskService(db));
 
         var result = await controller.GetMany(null, null, null, null, null);
 
@@ -67,7 +68,7 @@ public class TasksControllerTests
         );
         await db.SaveChangesAsync();
 
-        var controller = new TasksController(db);
+        var controller = new TasksController(db, new TaskService(db));
 
         var result = await controller.GetMany(null, null, null, null, null, assignedToUid: 7);
 
@@ -91,7 +92,7 @@ public class TasksControllerTests
         );
         await db.SaveChangesAsync();
 
-        var controller = new TasksController(db);
+        var controller = new TasksController(db, new TaskService(db));
 
         var result = await controller.GetMany(null, null, null, null, null, projectIsArchived: 0);
 
@@ -112,7 +113,7 @@ public class TasksControllerTests
         );
         await db.SaveChangesAsync();
 
-        var controller = new TasksController(db);
+        var controller = new TasksController(db, new TaskService(db));
 
         var result = await controller.GetMany(2, null, null, null, null);
 

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The MCP server no longer queries the database directly: its tools and resources call the same application services (`IProjectService`, `ITaskService`, `IVulnerabilityService`, `IRunnerService`) as the REST API controllers, so the list and lookup logic lives in one place. No change to API or MCP output.
 - **Breaking (database):** Upgraded PostgreSQL from 17 to 18.6 (`postgres:18.6-alpine`) in Docker Compose, the Kubernetes manifests and the Helm chart. PostgreSQL 17 data directories cannot be opened by PostgreSQL 18, so existing installations must dump the database and restore it into the new container before starting it. Follow [Upgrading PostgreSQL to 18](docs/pages/admin-manual/upgrading-postgresql.md). The Compose and Kubernetes definitions set `PGDATA=/var/lib/postgresql/data` explicitly, because PostgreSQL 18 images default to a different data directory that would not be on the persistent volume.
 - Switched the Docker Compose Open Policy Agent image from `openpolicyagent/opa:1.20.2-istio` to the standard `openpolicyagent/opa:1.21.2`, since the API queries OPA over HTTP and does not need the Istio variant. The policy tests in CI use the same image.
 - Updated the Docker Compose RustFS (S3-compatible object storage) image from `rustfs/rustfs:1.0.0-beta.8` to `rustfs/rustfs:1.0.1`.

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Infrastructure.Authentication;
 using Reconmap.Api.Infrastructure.Keycloak;
 using Reconmap.Api.Infrastructure.Persistence;
@@ -77,6 +78,12 @@ services.AddHttpClient();
 services.AddScoped<OpaAuthorizationService>();
 services.AddScoped<IRequestAccessScope, RequestAccessScope>();
 services.AddScoped<McpAccessGuard>();
+
+// Same services the REST controllers use, so the data logic lives in one place.
+services.AddScoped<IProjectService, ProjectService>();
+services.AddScoped<ITaskService, TaskService>();
+services.AddScoped<IVulnerabilityService, VulnerabilityService>();
+services.AddScoped<IRunnerService, RunnerService>();
 
 // Add the MCP services with HTTP transport
 services

@@ -1,6 +1,6 @@
 namespace Reconmap.Api.Common;
 
-public class PaginationRequestHandler(IQueryCollection query, int totalCount)
+public class PaginationRequestHandler(IQueryCollection query, int totalCount = 0)
 {
     public int GetResultsPerPage()
     {

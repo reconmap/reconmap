@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Reconmap.Api.Application.Services;
 using Reconmap.Api.Common;
 using Reconmap.Api.Common.Extensions;
 using Reconmap.Api.Common.Messaging;
@@ -13,7 +14,7 @@ namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQueue, IConnectionMultiplexer redis) : ControllerBase
+public class ProjectsController(AppDbContext dbContext, IProjectService projectService, IMessageQueue messageQueue, IConnectionMultiplexer redis) : ControllerBase
 {
     [HttpPost]
     [Audit(AuditActions.Created, "Project")]
@@ -87,38 +88,16 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
             db.SortedSetAdd(setName, keywords, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
         }
 
-        var kw = keywords?.Trim().ToLower();
+        var filter = new ProjectFilter(status, keywords, isTemplate, clientId,
+            MemberOfUserId: currentUser.Role == UserRole.Client ? currentUser.Id : null);
 
-        var q = dbContext.Projects
-            .Include(p => p.Client)
-            .Include(p => p.Category)
-            .AsNoTracking()
-            .Where(p => !isTemplate.HasValue || p.IsTemplate == isTemplate)
-            .Where(p => string.IsNullOrEmpty(kw)
-                || p.Name.ToLower().Contains(kw)
-                || (p.Description != null && p.Description.ToLower().Contains(kw)));
+        var pagination = new PaginationRequestHandler(HttpContext.Request.Query);
+        var page = await projectService.GetManyAsync(filter,
+            new Paging(pagination.CalculateOffset(), pagination.GetResultsPerPage()));
 
-        if (currentUser.Role == UserRole.Client) {
-            var memberProjectIds = dbContext.ProjectMembers.Where(pm => pm.UserId == currentUser.Id).Select(pm => pm.ProjectId);
-            q = q.Where(p => memberProjectIds.Contains(p.Id));
-        }
-
-        if (clientId != null)
-            q = q.Where(p => p.ClientId == clientId);
-        if (!string.IsNullOrEmpty(status))
-            q = q.Where(p => p.Archived == (status == "archived"));
-        q = q.OrderByDescending(a => a.CreatedAt);
-
-        var totalCount = await q.CountAsync();
-
-        var pagination = new PaginationRequestHandler(HttpContext.Request.Query, totalCount);
-        var resultsPerPage = pagination.GetResultsPerPage();
-        var pageCount = pagination.CalculatePageCount();
-
-        var results = await q
-            .Skip(pagination.CalculateOffset())
-            .Take(resultsPerPage)
-            .ToListAsync();
+        var totalCount = page.TotalCount;
+        var results = page.Data;
+        var pageCount = new PaginationRequestHandler(HttpContext.Request.Query, totalCount).CalculatePageCount();
 
         return Ok(new
         {
@@ -143,15 +122,9 @@ public class ProjectsController(AppDbContext dbContext, IMessageQueue messageQue
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetOne(int id)
     {
-        var project = await dbContext.Projects
-            .Include(p => p.CreatedBy)
-            .Include(p => p.Category)
-            .Include(p => p.Client)
-            .Where(p => p.Id == id)
-            .FirstOrDefaultAsync();
+        var project = await projectService.GetByIdAsync(id);
         if (project == null) return NotFound();
 
-        var currentUser = HttpContext.GetCurrentUser()!;
         return Ok(project);
     }
 
