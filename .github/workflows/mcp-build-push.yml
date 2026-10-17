@@ -1,0 +1,52 @@
+name: MCP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/server/**'
+      - '.github/workflows/mcp-build-push.yml'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: src/server
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.CR_USERNAME }}
+          password: ${{ secrets.CR_PAT }}
+
+      - name: Run containers
+        run: |
+          docker compose -p rest-api up -d postgres rustfs
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose -p rest-api logs --no-color
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal
+
+      - name: Push MCP image
+        run: make build push
+        working-directory: src/server/Mcp

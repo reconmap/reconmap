@@ -5,3 +5,7 @@ data
 docs/Makefile
 logs/**
 tests
+**/bin
+**/obj
+**/.idea
+*.user

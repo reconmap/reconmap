@@ -41,6 +41,21 @@ The MCP tools and resources do not query the database themselves. They call the 
 
 The MCP server is a standard .NET 10 Console application located in the `src/server/Mcp` directory.
 
+## Running with Docker
+
+The MCP server has its own image, `ghcr.io/reconmap/mcp`, built from `src/server/Mcp/docker/Dockerfile` (the build context is `src/server`, because the project references the API project) and pushed by the `mcp-build-push` GitHub workflow. In Docker Compose it is the `mcp` service of the `app` profile:
+
+```sh
+docker compose --profile app up -d mcp
+```
+
+It listens on port `5520` (`http://localhost:5520/mcp`) and reuses `config-ngapi.json` and the same database, Redis, Keycloak and OPA settings as the API. Settings:
+
+- `MCP_PUBLIC_URL` (`.env`): public URL of the endpoint, passed as `Mcp:PublicUrl`. Set it when the server is behind a proxy or another hostname. Defaults to `http://localhost:5520/mcp`.
+- `Keycloak:RequireHttpsMetadata`: the JWT handler requires HTTPS Keycloak metadata outside the Development environment. The Compose service sets this to `false` because the bundled Keycloak uses plain HTTP. Remove it when Keycloak is served over HTTPS. The REST API honours the same setting.
+
+The container runs as a non-root user. Build or push it by hand with `make build push` in `src/server/Mcp`.
+
 ## Authentication and authorization
 
 Every request to `/mcp` must carry `Authorization: Bearer <token>`. Two kinds of token are accepted, the same ones as the REST API:

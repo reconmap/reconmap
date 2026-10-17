@@ -8,6 +8,14 @@ Unlike traditional console-based MCP servers, this server runs as an **ASP.NET C
 
 ## Usage
 
+### Running with Docker
+
+```bash
+docker compose --profile app up -d mcp
+```
+
+The server listens on `http://localhost:5520/mcp`. See [MCP Server](../../../docs/pages/development/mcp-server.md#running-with-docker).
+
 ### Running Locally
 
 To start the MCP server locally:

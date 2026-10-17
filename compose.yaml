@@ -122,6 +122,30 @@ services:
       rustfs:
         condition: service_started
 
+  mcp:
+    profiles: [ "app" ]
+    image: ghcr.io/reconmap/mcp:latest
+    build:
+      context: ./src/server
+      dockerfile: Mcp/docker/Dockerfile
+    volumes:
+      - "./config-ngapi.json:/app/appsettings.json:ro"
+    ports:
+      - "5520:5520"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=5520
+      - ConnectionStrings__PostgreSqlConnection=Host=postgres;Port=5432;Database=reconmap;Username=${POSTGRES_RECONMAP_USER};Password=${POSTGRES_RECONMAP_PASSWORD}
+      - Redis__Password=${REDIS_PASSWORD}
+      - Keycloak__ClientSecret=${KEYCLOAK_API_CLIENT_SECRET}
+      - Opa__ServerUrl=${OPA_SERVER_URL}
+      # The bundled Keycloak is served over plain HTTP; remove when it sits behind HTTPS.
+      - Keycloak__RequireHttpsMetadata=false
+      - Mcp__PublicUrl=${MCP_PUBLIC_URL:-http://localhost:5520/mcp}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   runner:
     profiles: [ 'runner' ]
     image: ghcr.io/reconmap/runner:latest
