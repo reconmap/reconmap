@@ -999,6 +999,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#shared-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared services
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1006,6 +1017,45 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-with-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running with Docker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-and-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication and authorization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication and authorization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oauth-login-for-mcp-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAuth login for MCP clients
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3060,6 +3110,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#shared-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared services
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3067,6 +3128,45 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-with-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running with Docker
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-and-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication and authorization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication and authorization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oauth-login-for-mcp-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAuth login for MCP clients
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3154,6 +3254,12 @@
 <li><code>ListProjects</code>: Retrieves a list of active Reconmap projects.</li>
 <li><code>GetProjectDetails</code>: Gets the detailed metadata and description of a specific project by its ID.</li>
 </ul>
+<p>The server also exposes these Prompts (reusable templates a client can offer to the user). Both take a <code>projectId</code>, require read access to that project, and point the model at the project's resources:</p>
+<ul>
+<li><code>triage_vulnerabilities</code>: prioritise a project's vulnerabilities, spot duplicates and propose a remediation order.</li>
+<li><code>executive_summary</code>: draft a short, non-technical summary of a project's security posture.</li>
+</ul>
+<p>Prompts live in <code>Mcp/Prompts/</code>, tools in <code>Mcp/Tools/</code> and resources in <code>Mcp/Resources/</code>, with one class per entity (<code>ProjectTools</code>, <code>ProjectResources</code>, <code>TaskResources</code>, <code>VulnerabilityResources</code>, <code>RunnerResources</code>).</p>
 <p>In addition, the server exposes the following Resources (data sources):</p>
 <ul>
 <li><code>reconmap://projects</code></li>
@@ -3161,8 +3267,79 @@
 <li><code>reconmap://vulnerabilities</code></li>
 <li><code>reconmap://runners</code></li>
 </ul>
+<p>And these parameterized resource templates (<code>{id}</code> is a numeric ID):</p>
+<ul>
+<li><code>reconmap://projects/{id}</code>: one project.</li>
+<li><code>reconmap://projects/{id}/vulnerabilities</code>: the vulnerabilities of one project.</li>
+<li><code>reconmap://vulnerabilities/{id}</code>: one vulnerability, with its full details.</li>
+</ul>
+<p>Templates check access to the project they belong to, so a user outside the project gets <code>Access denied.</code>. A missing ID fails with <code>Project not found.</code> or <code>Vulnerability not found.</code>.</p>
+<h2 id="shared-services">Shared services</h2>
+<p>The MCP tools and resources do not query the database themselves. They call the same application services as the REST controllers (<code>IProjectService</code>, <code>ITaskService</code>, <code>IVulnerabilityService</code> and <code>IRunnerService</code>, in <code>src/server/Api/Application/Services</code>). Filtering and lookup logic lives in those services. When you add a tool or resource, add or extend a service and call it from both the controller and the MCP class. The MCP layer only applies access scoping (<code>McpAccessGuard</code>) and shapes the output.</p>
 <h2 id="requirements">Requirements</h2>
-<p>The MCP server is a standard .NET 10 Console application located in the <code>src/api/McpServer</code> directory.</p>
+<p>The MCP server is a standard .NET 10 Console application located in the <code>src/server/Mcp</code> directory.</p>
+<h2 id="running-with-docker">Running with Docker</h2>
+<p>The MCP server has its own image, <code>ghcr.io/reconmap/mcp</code>, built from <code>src/server/Mcp/docker/Dockerfile</code> (the build context is <code>src/server</code>, because the project references the API project) and pushed by the <code>mcp-build-push</code> GitHub workflow. In Docker Compose it is the <code>mcp</code> service of the <code>app</code> profile:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>app<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>mcp
+</span></code></pre></div>
+<p>It listens on port <code>5520</code> (<code>http://localhost:5520/mcp</code>) and reuses <code>config-ngapi.json</code> and the same database, Redis, Keycloak and OPA settings as the API. Settings:</p>
+<ul>
+<li><code>MCP_PUBLIC_URL</code> (<code>.env</code>): public URL of the endpoint, passed as <code>Mcp:PublicUrl</code>. Set it when the server is behind a proxy or another hostname. Defaults to <code>http://localhost:5520/mcp</code>.</li>
+<li><code>Keycloak:RequireHttpsMetadata</code>: the JWT handler requires HTTPS Keycloak metadata outside the Development environment. The Compose service sets this to <code>false</code> because the bundled Keycloak uses plain HTTP. Remove it when Keycloak is served over HTTPS. The REST API honours the same setting.</li>
+</ul>
+<p>The container runs as a non-root user. Build or push it by hand with <code>make build push</code> in <code>src/server/Mcp</code>.</p>
+<h2 id="authentication-and-authorization">Authentication and authorization</h2>
+<p>Every request to <code>/mcp</code> must carry <code>Authorization: Bearer &lt;token&gt;</code>. Two kinds of token are accepted, the same ones as the REST API:</p>
+<ul>
+<li>A <strong>Reconmap API token</strong> (created from the user's profile). Tokens with the <code>read-only</code> scope are fine here because the server only exposes read operations.</li>
+<li>A <strong>Keycloak access token</strong> (JWT) for the Reconmap realm, normally obtained through the OAuth flow described below.</li>
+</ul>
+<p>Requests without a valid token get <code>401 Unauthorized</code>.</p>
+<h3 id="oauth-login-for-mcp-clients">OAuth login for MCP clients</h3>
+<p>The server implements the OAuth discovery part of the <a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization">MCP authorization specification</a>, with Keycloak as the authorization server:</p>
+<ol>
+<li>A client calls <code>/mcp</code> without a token and gets <code>401</code> with <code>WWW-Authenticate: Bearer resource_metadata="…/.well-known/oauth-protected-resource/mcp"</code>.</li>
+<li>The client reads that document (served by the MCP server), which lists the Keycloak realm (<code>Keycloak:ValidIssuer</code>) as the authorization server.</li>
+<li>The client reads the Keycloak metadata, uses its client ID (<code>mcp-client</code>, see below), sends the user to the Keycloak login page (authorization code with PKCE), and receives an access token.</li>
+<li>The client calls <code>/mcp</code> again with <code>Authorization: Bearer &lt;access token&gt;</code>.</li>
+</ol>
+<p>The MCP Inspector and other OAuth-capable clients do all of this by themselves: just connect without any header and sign in when the browser opens. Users sign in with their normal Reconmap account and get that account's permissions.</p>
+<p>Configuration:</p>
+<ul>
+<li><code>Keycloak:ValidIssuer</code> must be an issuer URL the client can reach, for example <code>http://localhost:8080/realms/reconmap</code>.</li>
+<li><code>Mcp:PublicUrl</code> (optional) is the public URL of the MCP endpoint, for example <code>https://mcp.example.com/mcp</code>. By default it is derived from the request, which is wrong behind a reverse proxy that changes the host or scheme.</li>
+<li><code>Mcp:AllowedOrigins</code> lists the browser origins allowed to call the MCP server (CORS). Browser-based clients run the OAuth discovery from the browser, so their origin must be listed. <code>Cors:AllowedOrigins</code> and the MCP Inspector defaults (<code>http://localhost:6274</code>, <code>http://127.0.0.1:6274</code>) are always included.</li>
+<li>Keycloak rejects anonymous dynamic client registration by default (the <em>Trusted Hosts</em> policy answers <code>Host not trusted</code>), so clients cannot register themselves. Use the pre-registered public client <strong><code>mcp-client</code></strong> instead: in the MCP Inspector open the OAuth settings and set <strong>Client ID</strong> to <code>mcp-client</code> (no secret). It requires PKCE and allows the redirect URIs of the MCP Inspector (<code>http://localhost:6274</code> and <code>http://127.0.0.1:6274</code>) VS Code and OpenCode. Add the redirect URI of any other client to it in Keycloak (Clients → <code>mcp-client</code>). The client is part of <code>infra/keycloak/realm.json</code>, which is only imported into a new realm: on an existing installation, create an equivalent public client by hand (standard flow on, PKCE method <code>S256</code>, the redirect URIs above, default client scopes <code>roles</code>, <code>profile</code> and <code>email</code>; some clients such as OpenCode also request <code>offline_access</code>, so keep that scope on the client and give users the <code>offline_access</code> realm role, otherwise the login fails with <code>Offline tokens not allowed for the user or client</code>).</li>
+</ul>
+<p>Access follows the same rules as the REST API:</p>
+<ul>
+<li>Administrators and superusers can read everything.</li>
+<li>Users and clients only see data in projects they are a member of. Lists of projects, tasks and vulnerabilities are filtered accordingly, and reading a single project is checked against the OPA policy (<code>policy/authz.rego</code>).</li>
+<li>Runners are infrastructure data and are only available to administrators and superusers.</li>
+<li>A denied call fails with <code>Access denied.</code></li>
+</ul>
+<p>The server needs the same configuration as the API (<code>Keycloak</code>, <code>Opa</code>, <code>Redis</code> and database settings in <code>appsettings.json</code>), and browser access is limited to the origins in <code>Cors:AllowedOrigins</code>.</p>
+<p>For OpenCode, add to <code>opencode.json</code>, then run <code>opencode mcp auth reconmap</code> (or just start OpenCode and use the server; it opens the browser for the Keycloak login):</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"mcp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">"reconmap"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"remote"</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:5000/mcp"</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">"oauth"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mcp-client"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>If your client does not support OAuth, send an API token instead. With the MCP Inspector, add a custom <code>Authorization</code> header with the value <code>Bearer &lt;your-api-token&gt;</code>. AI clients usually accept a header, for example:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">"reconmap"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:5000/mcp"</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"Authorization"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer &lt;your-api-token&gt;"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</span></code></pre></div>
 <h2 id="how-to-use-it">How to use it</h2>
 <p>The MCP Server has been configured to use the <strong>Streamable HTTP (SSE)</strong> transport instead of <code>stdio</code> to completely bypass any MSBuild or console output issues. It runs as a standalone ASP.NET Core web application.</p>
 <h3 id="running-locally-for-development">Running locally for Development</h3>
@@ -3170,15 +3347,16 @@
 <li>Ensure you have the .NET 10 SDK installed.</li>
 <li>Build and run the project: </li>
 </ol>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>src/api
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>dotnet<span class="w"> </span>run<span class="w"> </span>--project<span class="w"> </span>McpServer/McpServer.csproj
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>src/server
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>dotnet<span class="w"> </span>run<span class="w"> </span>--project<span class="w"> </span>Mcp/Mcp.csproj
 </span></code></pre></div>
 <p>By default, the server will start on port <code>5000</code> (e.g. <code>http://localhost:5000</code>).</p>
 <h3 id="using-the-mcp-inspector">Using the MCP Inspector</h3>
 <p>The <a href="https://github.com/modelcontextprotocol/inspector">MCP Inspector</a> is an official interactive developer tool that allows you to test and debug your MCP server locally without needing to connect it to a full AI client. </p>
 <p>To launch the MCP Inspector and connect it to your running Reconmap MCP Server, execute this command from a separate terminal:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>npx<span class="w"> </span>@modelcontextprotocol/inspector<span class="w"> </span>sse<span class="w"> </span>http://localhost:5000/mcp
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>npx<span class="w"> </span>@modelcontextprotocol/inspector<span class="w"> </span>http://localhost:5000/mcp
 </span></code></pre></div>
+<p>The Inspector detects the transport from the URL (<code>/mcp</code> means Streamable HTTP). Do not put a transport name such as <code>sse</code> before the URL: the Inspector treats it as a command to spawn, which fails with <code>spawn sse ENOENT</code>. If you prefer the web UI, run <code>npx @modelcontextprotocol/inspector</code> with no arguments, choose <strong>Streamable HTTP</strong> as the transport, and enter <code>http://localhost:5000/mcp</code>.</p>
 <p>This will start a local web interface where you can:
 - View all available Resources (like <code>reconmap://projects</code>).
 - See all registered Tools (like <code>ListProjects</code>).
@@ -3186,17 +3364,17 @@
 <h3 id="connecting-an-ai-client">Connecting an AI Client</h3>
 <p>To connect an AI assistant (such as Claude Desktop or VS Code Copilot) to the Reconmap MCP Server, you need to configure it to connect via Server-Sent Events (SSE) to the HTTP endpoint.</p>
 <p>Example <code>mcp.json</code> (or <code>claude_desktop_config.json</code>) configuration:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">"ReconmapMCP"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node"</span><span class="p">,</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="s2">"path/to/some-sse-proxy.js"</span><span class="p">,</span><span class="w"> </span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="s2">"http://localhost:5000/mcp"</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="p">]</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">"ReconmapMCP"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node"</span><span class="p">,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="s2">"path/to/some-sse-proxy.js"</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="s2">"http://localhost:5000/mcp"</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="p">]</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><em>Note: Some clients natively support SSE URLs directly. If your client requires a command, you might need a simple proxy script. Please check your specific AI client's documentation on how to configure SSE endpoints.</em></p>
 
@@ -3219,7 +3397,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 11, 2026 11:21:55 UTC">October 11, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 17, 2026 20:33:10 UTC">October 17, 2026</span>
   </span>
 
     
