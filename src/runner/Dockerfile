@@ -14,9 +14,14 @@ RUN go build -o /build/reconmapd ./cmd/reconmapd
 
 FROM kalilinux/kali-rolling
 
-LABEL org.opencontainers.image.source=https://github.com/reconmap/reconmap
-LABEL org.opencontainers.image.description="reconmap/runner"
-LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.vendor="Netfoe" \
+    org.opencontainers.image.authors="Santiago Lizardo" \
+    org.opencontainers.image.title="Reconmap Runner" \
+    org.opencontainers.image.description="Reconmap runner (reconmapd): receives tasks from the API and executes security tools" \
+    org.opencontainers.image.licenses="MIT" \
+    org.opencontainers.image.url="https://reconmap.com" \
+    org.opencontainers.image.source="https://github.com/reconmap/reconmap/tree/main/src/runner" \
+    org.opencontainers.image.documentation="https://reconmap.com"
 
 WORKDIR /app
 

@@ -19,9 +19,9 @@ LABEL org.opencontainers.image.vendor="Netfoe" \
     org.opencontainers.image.title="Reconmap MCP Server" \
     org.opencontainers.image.description="Model Context Protocol server for Reconmap" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.url="https://github.com/reconmap/reconmap" \
-    org.opencontainers.image.source="https://github.com/reconmap/reconmap" \
-    org.opencontainers.image.documentation="https://docs.reconmap.com"
+    org.opencontainers.image.url="https://reconmap.com" \
+    org.opencontainers.image.source="https://github.com/reconmap/reconmap/tree/main/src/server/Mcp" \
+    org.opencontainers.image.documentation="https://reconmap.com"
 
 ENV ASPNETCORE_HTTP_PORTS=5520
 EXPOSE 5520

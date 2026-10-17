@@ -8,16 +8,16 @@ RUN dotnet publish -o /build/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 
-EXPOSE 5510
-
 LABEL org.opencontainers.image.vendor="Netfoe" \
     org.opencontainers.image.authors="Santiago Lizardo" \
-    org.opencontainers.image.title="Reconmap NextGen API" \
-    org.opencontainers.image.description="Rest API for Reconmap" \
+    org.opencontainers.image.title="Reconmap API" \
+    org.opencontainers.image.description="REST API for Reconmap" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.url="https://github.com/reconmap/reconmap" \
-    org.opencontainers.image.source="https://github.com/reconmap/rest-api" \
-    org.opencontainers.image.documentation="https://github.com/reconmap/documentation"
+    org.opencontainers.image.url="https://reconmap.com" \
+    org.opencontainers.image.source="https://github.com/reconmap/reconmap/tree/main/src/server/Api" \
+    org.opencontainers.image.documentation="https://reconmap.com"
+
+EXPOSE 5510
 
 WORKDIR /app
 RUN mkdir -p /seed/attachments

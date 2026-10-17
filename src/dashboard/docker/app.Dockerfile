@@ -17,15 +17,14 @@ RUN npm ci && \
 
 FROM nginx:stable
 
-LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.vendor="Netfoe" \
     org.opencontainers.image.authors="Santiago Lizardo" \
-    org.opencontainers.image.title="Reconmap UI" \
-    org.opencontainers.image.description="Reconmap Dashboard" \
+    org.opencontainers.image.title="Reconmap Dashboard" \
+    org.opencontainers.image.description="Web dashboard (React) for Reconmap, served by nginx" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.url="https://github.com/reconmap/reconmap" \
-    org.opencontainers.image.source="https://github.com/reconmap/reconmap" \
-    org.opencontainers.image.documentation="https://github.com/reconmap/documentation"
+    org.opencontainers.image.url="https://reconmap.com" \
+    org.opencontainers.image.source="https://github.com/reconmap/reconmap/tree/main/src/dashboard" \
+    org.opencontainers.image.documentation="https://reconmap.com"
 
 RUN sed -i '/^user\s\+/d' /etc/nginx/nginx.conf
 
