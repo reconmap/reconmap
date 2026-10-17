@@ -56,8 +56,8 @@ namespace Tests.McpServer
             var tools = new ReconmapTools(new ProjectService(context), new FakeGuard(null));
             var result = await tools.ListProjects();
 
-            Assert.Contains("Internal Penetration Test", result);
-            Assert.Contains("Project 5", result);
+            Assert.Contains(result, r => r.Name == "Internal Penetration Test");
+            Assert.Contains(result, r => r.Name == "Project 5");
         }
 
         [Fact]
@@ -67,8 +67,8 @@ namespace Tests.McpServer
             var tools = new ReconmapTools(new ProjectService(context), new FakeGuard([5]));
             var result = await tools.ListProjects();
 
-            Assert.Contains("Project 5", result);
-            Assert.DoesNotContain("Internal Penetration Test", result);
+            Assert.Contains(result, r => r.Name == "Project 5");
+            Assert.DoesNotContain(result, r => r.Name == "Internal Penetration Test");
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Tests.McpServer
             var tools = new ReconmapTools(new ProjectService(context), new FakeGuard([5]));
             var result = await tools.GetProjectDetails(5);
 
-            Assert.Contains("Project 5", result);
+            Assert.Equal("Project 5", result.Name);
         }
 
         [Fact]

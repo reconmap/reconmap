@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using ModelContextProtocol;
 using ModelContextProtocol.Server;
 using Reconmap.Api.Application.Services;
@@ -12,23 +11,24 @@ namespace Reconmap.McpServer.Tools;
 /// </summary>
 public class ReconmapTools(IProjectService projectService, McpAccessGuard guard)
 {
-    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    public record ProjectSummary(int Id, string Name, string Visibility, bool Archived);
 
-    [McpServerTool(ReadOnly = true)]
+    public record ProjectDetails(int Id, string Name, string? Description, string Visibility, bool Archived);
+
+    [McpServerTool(ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false, UseStructuredContent = true)]
     [Description("Gets a list of the Reconmap projects the current user can access.")]
-    public async Task<string> ListProjects()
+    public async Task<IReadOnlyList<ProjectSummary>> ListProjects()
     {
         var visibleIds = await guard.VisibleProjectIdsAsync();
 
         var page = await projectService.GetManyAsync(new ProjectFilter(VisibleProjectIds: visibleIds), Paging.Unbounded);
 
-        var projects = page.Data.Select(p => new { p.Id, p.Name, p.Visibility, p.Archived });
-        return JsonSerializer.Serialize(projects, JsonOptions);
+        return page.Data.Select(p => new ProjectSummary(p.Id, p.Name, p.Visibility, p.Archived)).ToList();
     }
 
-    [McpServerTool(ReadOnly = true)]
+    [McpServerTool(ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false, UseStructuredContent = true)]
     [Description("Gets details about a specific project by its ID.")]
-    public async Task<string> GetProjectDetails(
+    public async Task<ProjectDetails> GetProjectDetails(
         [Description("The ID of the project to retrieve.")] int projectId)
     {
         await guard.RequireReadAsync("projects", projectId, projectId);
@@ -37,6 +37,6 @@ public class ReconmapTools(IProjectService projectService, McpAccessGuard guard)
         if (p == null)
             throw new McpException("Project not found.");
 
-        return JsonSerializer.Serialize(new { p.Id, p.Name, p.Description, p.Visibility, p.Archived }, JsonOptions);
+        return new ProjectDetails(p.Id, p.Name, p.Description, p.Visibility, p.Archived);
     }
 }
