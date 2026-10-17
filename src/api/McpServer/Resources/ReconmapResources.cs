@@ -1,57 +1,73 @@
 using System.Text.Json;
-using ModelContextProtocol.Server;
-using System.Threading.Tasks;
-using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using ModelContextProtocol.Server;
+using Reconmap.Api.Infrastructure.Persistence;
+using Reconmap.McpServer.Security;
 
 namespace Reconmap.McpServer.Resources;
 
 /// <summary>
-/// Reconmap MCP resources for exposing entity data.
+/// Reconmap MCP resources for exposing entity data. Every read is scoped to what the authenticated user may access.
 /// </summary>
-public class ReconmapResources
+public class ReconmapResources(AppDbContext dbContext, McpAccessGuard guard)
 {
-    private readonly AppDbContext _dbContext;
-
-    public ReconmapResources(AppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
     [McpServerResource(UriTemplate = "reconmap://projects", Name = "Reconmap Projects", MimeType = "application/json")]
     public async Task<string> GetProjects()
     {
-        var projects = await _dbContext.Projects
+        var visibleIds = await guard.VisibleProjectIdsAsync();
+
+        var query = dbContext.Projects.AsNoTracking();
+        if (visibleIds != null)
+            query = query.Where(p => visibleIds.Contains(p.Id));
+
+        var projects = await query
             .Select(p => new { p.Id, p.Name, p.Visibility, p.Archived })
             .ToListAsync();
-        return JsonSerializer.Serialize(projects, new JsonSerializerOptions { WriteIndented = true });
+        return JsonSerializer.Serialize(projects, JsonOptions);
     }
 
     [McpServerResource(UriTemplate = "reconmap://tasks", Name = "Reconmap Tasks", MimeType = "application/json")]
     public async Task<string> GetTasks()
     {
-        var tasks = await _dbContext.Tasks
+        var visibleIds = await guard.VisibleProjectIdsAsync();
+
+        var query = dbContext.Tasks.AsNoTracking();
+        if (visibleIds != null)
+            query = query.Where(t => visibleIds.Contains(t.ProjectId));
+
+        var tasks = await query
             .Select(t => new { t.Id, t.ProjectId, t.Summary, t.Priority, t.Status })
             .ToListAsync();
-        return JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true });
+        return JsonSerializer.Serialize(tasks, JsonOptions);
     }
 
     [McpServerResource(UriTemplate = "reconmap://vulnerabilities", Name = "Reconmap Vulnerabilities", MimeType = "application/json")]
     public async Task<string> GetVulnerabilities()
     {
-        var vulnerabilities = await _dbContext.Vulnerabilities
+        var visibleIds = await guard.VisibleProjectIdsAsync();
+
+        var query = dbContext.Vulnerabilities.AsNoTracking();
+        if (visibleIds != null)
+            query = query.Where(v => v.ProjectId.HasValue && visibleIds.Contains(v.ProjectId.Value));
+
+        var vulnerabilities = await query
             .Select(f => new { f.Id, f.ProjectId, f.Summary, f.Risk, f.Status })
             .ToListAsync();
-        return JsonSerializer.Serialize(vulnerabilities, new JsonSerializerOptions { WriteIndented = true });
+        return JsonSerializer.Serialize(vulnerabilities, JsonOptions);
     }
 
     [McpServerResource(UriTemplate = "reconmap://runners", Name = "Reconmap Runners", MimeType = "application/json")]
     public async Task<string> GetRunners()
     {
-        var runners = await _dbContext.Runners
+        // Runners are infrastructure, not project data: administrators and superusers only (same as the OPA policy).
+        guard.RequirePrivileged();
+
+        var runners = await dbContext.Runners
+            .AsNoTracking()
             .Select(a => new { a.Id, a.Name, a.Ip, a.Active })
             .ToListAsync();
-        return JsonSerializer.Serialize(runners, new JsonSerializerOptions { WriteIndented = true });
+        return JsonSerializer.Serialize(runners, JsonOptions);
     }
 }
