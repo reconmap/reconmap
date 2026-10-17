@@ -18,6 +18,14 @@ In addition, the server exposes the following Resources (data sources):
 * `reconmap://vulnerabilities`
 * `reconmap://runners`
 
+And these parameterized resource templates (`{id}` is a numeric ID):
+
+* `reconmap://projects/{id}`: one project.
+* `reconmap://projects/{id}/vulnerabilities`: the vulnerabilities of one project.
+* `reconmap://vulnerabilities/{id}`: one vulnerability, with its full details.
+
+Templates check access to the project they belong to, so a user outside the project gets `Access denied.`. A missing ID fails with `Project not found.` or `Vulnerability not found.`.
+
 ## Shared services
 
 The MCP tools and resources do not query the database themselves. They call the same application services as the REST controllers (`IProjectService`, `ITaskService`, `IVulnerabilityService` and `IRunnerService`, in `src/api/src/Application/Services`). Filtering and lookup logic lives in those services. When you add a tool or resource, add or extend a service and call it from both the controller and the MCP class. The MCP layer only applies access scoping (`McpAccessGuard`) and shapes the output.

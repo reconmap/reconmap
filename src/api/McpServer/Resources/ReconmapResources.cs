@@ -1,4 +1,6 @@
+using System.ComponentModel;
 using System.Text.Json;
+using ModelContextProtocol;
 using ModelContextProtocol.Server;
 using Reconmap.Api.Application.Services;
 using Reconmap.McpServer.Security;
@@ -58,5 +60,43 @@ public class ReconmapResources(
         var runners = (await runnerService.GetManyAsync())
             .Select(a => new { a.Id, a.Name, a.Ip, a.Active });
         return JsonSerializer.Serialize(runners, JsonOptions);
+    }
+
+    [McpServerResource(UriTemplate = "reconmap://projects/{id}", Name = "Reconmap Project", MimeType = "application/json")]
+    [Description("A single project by its ID.")]
+    public async Task<string> GetProject(int id)
+    {
+        await guard.RequireReadAsync("projects", id, id);
+
+        var p = await projectService.GetByIdAsync(id) ?? throw new McpException("Project not found.");
+
+        return JsonSerializer.Serialize(new { p.Id, p.Name, p.Description, p.Visibility, p.Archived }, JsonOptions);
+    }
+
+    [McpServerResource(UriTemplate = "reconmap://projects/{id}/vulnerabilities", Name = "Reconmap Project Vulnerabilities", MimeType = "application/json")]
+    [Description("The vulnerabilities of a single project.")]
+    public async Task<string> GetProjectVulnerabilities(int id)
+    {
+        await guard.RequireReadAsync("projects", id, id);
+
+        var page = await vulnerabilityService.GetManyAsync(new VulnerabilityFilter(ProjectId: id), Paging.Unbounded);
+
+        var vulnerabilities = page.Data.Select(v => new { v.Id, v.ProjectId, v.Summary, v.Risk, v.Status });
+        return JsonSerializer.Serialize(vulnerabilities, JsonOptions);
+    }
+
+    [McpServerResource(UriTemplate = "reconmap://vulnerabilities/{id}", Name = "Reconmap Vulnerability", MimeType = "application/json")]
+    [Description("A single vulnerability by its ID.")]
+    public async Task<string> GetVulnerability(int id)
+    {
+        var v = await vulnerabilityService.GetByIdAsync(id) ?? throw new McpException("Vulnerability not found.");
+
+        await guard.RequireReadAsync("vulnerabilities", v.ProjectId, v.Id);
+
+        return JsonSerializer.Serialize(new
+        {
+            v.Id, v.ProjectId, v.AssetId, v.Summary, v.Description, v.Risk, v.Status, v.Substatus,
+            v.CvssScore, v.CvssVector, v.ProofOfConcept, v.Impact, v.Remediation
+        }, JsonOptions);
     }
 }

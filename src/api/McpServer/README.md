@@ -98,6 +98,6 @@ If your client does not support OAuth, send an API token instead. With the MCP I
 
 The MCP server shares the same `AppDbContext` and Entity Framework schema as the main Reconmap API project. 
 
-- **Resources**: Configured in `Resources/ReconmapResources.cs`. Exposes entity endpoints like `reconmap://projects`.
+- **Resources**: Configured in `Resources/ReconmapResources.cs`. Exposes entity endpoints like `reconmap://projects` and templates like `reconmap://projects/{id}`.
 - **Tools**: Configured in `Tools/ReconmapTools.cs`. Exposes executable functions.
 - **Database**: Database configurations are automatically loaded from `src/api/src/appsettings.json` and `appsettings.Development.json` during build. Ensure your `launchSettings.json` or `ASPNETCORE_ENVIRONMENT` environment variable is set to `Development` for local testing.
