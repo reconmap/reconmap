@@ -2,3 +2,4 @@ tags
 *.log
 .venv
 node_modules
+*.bkp

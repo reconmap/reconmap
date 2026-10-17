@@ -28,4 +28,4 @@ The last part of this architecture is Rabbitmq, a message queue and broker. This
 
 ![Reconmap architecture](reconmap-high-level-architecture.png)
 
-_The diagram above was created from code using [draw.io](https://www.drawio.com/). See the source [here](../../diagrams/reconmap-high-level-architecture.drawio)._
+_The diagram above was created from code using [draw.io](https://www.drawio.com/). See the source [here](https://github.com/reconmap/reconmap/blob/main/docs/diagrams/reconmap-high-level-architecture.drawio)._
