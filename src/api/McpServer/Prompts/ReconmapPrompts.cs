@@ -15,14 +15,15 @@ public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guar
     [McpServerPrompt(Name = "triage_vulnerabilities")]
     [Description("Triage the vulnerabilities of a project: prioritise them and propose next steps.")]
     public async Task<string> TriageVulnerabilities(
-        [Description("The ID of the project to triage.")] int projectId)
+        [Description("Required. The numeric ID of the project to triage, e.g. 1.")] string projectId)
     {
-        var name = await ProjectNameAsync(projectId);
+        var id = ParseProjectId(projectId);
+        var name = await ProjectNameAsync(id);
 
         return $$"""
-                Triage the vulnerabilities of the Reconmap project "{{name}}" (ID {{projectId}}).
+                Triage the vulnerabilities of the Reconmap project "{{name}}" (ID {{id}}).
 
-                Read the resource reconmap://projects/{{projectId}}/vulnerabilities, then fetch the details of the
+                Read the resource reconmap://projects/{{id}}/vulnerabilities, then fetch the details of the
                 most severe ones with reconmap://vulnerabilities/{id}.
 
                 Produce:
@@ -36,14 +37,15 @@ public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guar
     [McpServerPrompt(Name = "executive_summary")]
     [Description("Draft an executive summary of a project's security posture for a non-technical audience.")]
     public async Task<string> ExecutiveSummary(
-        [Description("The ID of the project to summarise.")] int projectId)
+        [Description("Required. The numeric ID of the project to summarise, e.g. 1.")] string projectId)
     {
-        var name = await ProjectNameAsync(projectId);
+        var id = ParseProjectId(projectId);
+        var name = await ProjectNameAsync(id);
 
         return $$"""
-                Draft an executive summary for the Reconmap project "{{name}}" (ID {{projectId}}).
+                Draft an executive summary for the Reconmap project "{{name}}" (ID {{id}}).
 
-                Read reconmap://projects/{{projectId}} and reconmap://projects/{{projectId}}/vulnerabilities.
+                Read reconmap://projects/{{id}} and reconmap://projects/{{id}}/vulnerabilities.
 
                 Write for a non-technical reader, in under 300 words:
                 - Overall security posture in one or two sentences.
@@ -52,6 +54,14 @@ public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guar
                 Avoid jargon and do not include proof-of-concept details.
                 """;
     }
+
+    // MCP prompt arguments are always strings on the wire, so an int parameter fails to bind.
+    private static int ParseProjectId(string projectId)
+        => int.TryParse(projectId, out var id)
+            ? id
+            : throw new McpException(string.IsNullOrWhiteSpace(projectId)
+                ? "The projectId argument is required: pass the numeric ID of the project, e.g. 1."
+                : $"Invalid projectId '{projectId}': pass the numeric ID of the project, e.g. 1.");
 
     private async Task<string> ProjectNameAsync(int projectId)
     {

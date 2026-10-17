@@ -40,7 +40,7 @@ namespace Tests.McpServer
         [Fact]
         public async Task TriageVulnerabilities_Member_NamesProjectAndResource()
         {
-            var text = await Create([5]).TriageVulnerabilities(5);
+            var text = await Create([5]).TriageVulnerabilities("5");
 
             Assert.Contains("Project 5", text);
             Assert.Contains("reconmap://projects/5/vulnerabilities", text);
@@ -49,7 +49,7 @@ namespace Tests.McpServer
         [Fact]
         public async Task ExecutiveSummary_Member_NamesProject()
         {
-            var text = await Create([5]).ExecutiveSummary(5);
+            var text = await Create([5]).ExecutiveSummary("5");
 
             Assert.Contains("Project 5", text);
         }
@@ -59,14 +59,28 @@ namespace Tests.McpServer
         {
             var prompts = Create([5]);
 
-            await Assert.ThrowsAsync<McpException>(() => prompts.TriageVulnerabilities(1));
-            await Assert.ThrowsAsync<McpException>(() => prompts.ExecutiveSummary(1));
+            await Assert.ThrowsAsync<McpException>(() => prompts.TriageVulnerabilities("1"));
+            await Assert.ThrowsAsync<McpException>(() => prompts.ExecutiveSummary("1"));
+        }
+
+        [Fact]
+        public async Task Prompts_NonNumericProjectId_Throws()
+        {
+            await Assert.ThrowsAsync<McpException>(() => Create(null).TriageVulnerabilities("abc"));
+        }
+
+        [Fact]
+        public async Task Prompts_MissingProjectId_ExplainsItIsRequired()
+        {
+            var ex = await Assert.ThrowsAsync<McpException>(() => Create(null).TriageVulnerabilities(""));
+
+            Assert.Contains("required", ex.Message);
         }
 
         [Fact]
         public async Task Prompts_UnknownProject_Throws()
         {
-            await Assert.ThrowsAsync<McpException>(() => Create(null).ExecutiveSummary(999));
+            await Assert.ThrowsAsync<McpException>(() => Create(null).ExecutiveSummary("999"));
         }
     }
 }

@@ -1135,7 +1135,8 @@
         "https://vscode.dev/redirect",
         "http://127.0.0.1:33418",
         "http://127.0.0.1:33418/",
-        "http://127.0.0.1:19876/mcp/oauth/callback"
+        "http://127.0.0.1:19876/mcp/oauth/callback",
+        "http://127.0.0.1/callback"
       ],
       "webOrigins": [
         "http://127.0.0.1:6274",
