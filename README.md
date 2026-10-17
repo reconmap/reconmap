@@ -40,7 +40,7 @@ Prefer not to install anything? Try the [live demo](https://reconmap.com/overvie
 | Component | Stack | Path |
 |---|---|---|
 | Dashboard | React | [`src/dashboard`](src/dashboard) |
-| API | C# / .NET 10 | [`src/api`](src/api) |
+| API | C# / .NET 10 | [`src/server`](src/server) |
 | Runner (`reconmapd`) | Go | [`src/runner`](src/runner) |
 | CLI (`rmap`) | Go | [`src/cli`](src/cli) |
 

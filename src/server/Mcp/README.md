@@ -13,8 +13,8 @@ Unlike traditional console-based MCP servers, this server runs as an **ASP.NET C
 To start the MCP server locally:
 
 ```bash
-cd src/api
-dotnet run --project McpServer/McpServer.csproj
+cd src/server
+dotnet run --project Mcp/Mcp.csproj
 ```
 
 The server will start and listen on port `5000` by default (e.g., `http://localhost:5000`).
@@ -101,4 +101,4 @@ The MCP server shares the same `AppDbContext` and Entity Framework schema as the
 - **Resources**: Configured in `Resources/`, one class per entity (`ProjectResources`, `TaskResources`, `VulnerabilityResources`, `RunnerResources`). Exposes entity endpoints like `reconmap://projects` and templates like `reconmap://projects/{id}`.
 - **Tools**: Configured in `Tools/` (`ProjectTools`). Exposes executable functions.
 - **Prompts**: Configured in `Prompts/ReconmapPrompts.cs`. Exposes `triage_vulnerabilities` and `executive_summary`, both taking a `projectId`.
-- **Database**: Database configurations are automatically loaded from `src/api/src/appsettings.json` and `appsettings.Development.json` during build. Ensure your `launchSettings.json` or `ASPNETCORE_ENVIRONMENT` environment variable is set to `Development` for local testing.
+- **Database**: Database configurations are automatically loaded from `src/server/Api/appsettings.json` and `appsettings.Development.json` during build. Ensure your `launchSettings.json` or `ASPNETCORE_ENVIRONMENT` environment variable is set to `Development` for local testing.

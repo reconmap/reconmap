@@ -34,7 +34,7 @@ jobs:
               - 'src/cli/**'
               - 'src/shared-lib/**'
             csharp:
-              - 'src/api/**'
+              - 'src/server/**'
             web:
               - 'src/dashboard/**'
 

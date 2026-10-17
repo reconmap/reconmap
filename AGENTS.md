@@ -6,7 +6,7 @@ Welcome, AI Assistant! This repository is the central hub for **Reconmap**, an o
 
 This is the main orchestration repository. It contains:
 1. **Core Applications**: The `src/` directory contains the main software components:
-   - `src/api/`: The C# REST API (.NET 10).
+   - `src/server/`: The C# servers (.NET 10): `Api/` (REST API) and `Mcp/` (MCP server), each with a sibling `*.Tests/` project.
    - `src/dashboard/`: The React web frontend.
 2. **Deployment Configurations**: Docker Compose (`compose.yaml`) and Kubernetes resources (`infra/k8s/`).
 3. **Command Line Tools**: The `src/` directory also contains Go-based tools:

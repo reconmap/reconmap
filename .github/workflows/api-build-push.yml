@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/api/**'
+      - 'src/server/**'
       - '.github/workflows/api-build-push.yml'
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: src/api
+        working-directory: src/server
 
     steps:
       - uses: actions/checkout@v7
@@ -49,4 +49,4 @@ jobs:
 
       - name: Push NGAPI image
         run: make build push
-        working-directory: src/api/src
+        working-directory: src/server/Api

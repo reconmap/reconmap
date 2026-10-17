@@ -10,7 +10,7 @@ using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Reconmap.Api.Domain.Entities;
 
-namespace Tests.McpServer
+namespace Mcp.Tests
 {
     public class ProjectToolsTests
     {

@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\App.csproj" />
-    <ProjectReference Include="..\McpServer\McpServer.csproj" />
+    <ProjectReference Include="..\Api\Api.csproj" />
+    <ProjectReference Include="..\Mcp\Mcp.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Code/">
+    <Project Path="Api/Api.csproj" />
+    <Project Path="Api.Tests/Api.Tests.csproj" />
+    <Project Path="Mcp/Mcp.csproj" />
+    <Project Path="Mcp.Tests/Mcp.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Other files/">
+    <File Path="../../compose.yaml" />
+  </Folder>
+</Solution>

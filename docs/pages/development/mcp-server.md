@@ -16,7 +16,7 @@ The server also exposes these Prompts (reusable templates a client can offer to 
 - `triage_vulnerabilities`: prioritise a project's vulnerabilities, spot duplicates and propose a remediation order.
 - `executive_summary`: draft a short, non-technical summary of a project's security posture.
 
-Prompts live in `McpServer/Prompts/`, tools in `McpServer/Tools/` and resources in `McpServer/Resources/`, with one class per entity (`ProjectTools`, `ProjectResources`, `TaskResources`, `VulnerabilityResources`, `RunnerResources`).
+Prompts live in `Mcp/Prompts/`, tools in `Mcp/Tools/` and resources in `Mcp/Resources/`, with one class per entity (`ProjectTools`, `ProjectResources`, `TaskResources`, `VulnerabilityResources`, `RunnerResources`).
 
 In addition, the server exposes the following Resources (data sources):
 
@@ -35,11 +35,11 @@ Templates check access to the project they belong to, so a user outside the proj
 
 ## Shared services
 
-The MCP tools and resources do not query the database themselves. They call the same application services as the REST controllers (`IProjectService`, `ITaskService`, `IVulnerabilityService` and `IRunnerService`, in `src/api/src/Application/Services`). Filtering and lookup logic lives in those services. When you add a tool or resource, add or extend a service and call it from both the controller and the MCP class. The MCP layer only applies access scoping (`McpAccessGuard`) and shapes the output.
+The MCP tools and resources do not query the database themselves. They call the same application services as the REST controllers (`IProjectService`, `ITaskService`, `IVulnerabilityService` and `IRunnerService`, in `src/server/Api/Application/Services`). Filtering and lookup logic lives in those services. When you add a tool or resource, add or extend a service and call it from both the controller and the MCP class. The MCP layer only applies access scoping (`McpAccessGuard`) and shapes the output.
 
 ## Requirements
 
-The MCP server is a standard .NET 10 Console application located in the `src/api/McpServer` directory.
+The MCP server is a standard .NET 10 Console application located in the `src/server/Mcp` directory.
 
 ## Authentication and authorization
 
@@ -114,8 +114,8 @@ The MCP Server has been configured to use the **Streamable HTTP (SSE)** transpor
 2. Build and run the project: 
 
 ```bash
-cd src/api
-dotnet run --project McpServer/McpServer.csproj
+cd src/server
+dotnet run --project Mcp/Mcp.csproj
 ```
 
 By default, the server will start on port `5000` (e.g. `http://localhost:5000`).

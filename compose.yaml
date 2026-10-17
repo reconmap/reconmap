@@ -101,7 +101,7 @@ services:
     profiles: [ "app" ]
     image: ghcr.io/reconmap/ng-api:latest
     build:
-      context: ./src/api/src
+      context: ./src/server/Api
       dockerfile: docker/Dockerfile
     volumes:
       - "./config-ngapi.json:/app/appsettings.json"

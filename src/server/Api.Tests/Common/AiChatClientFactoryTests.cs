@@ -1,7 +1,7 @@
 using Reconmap.Api.Application.Services;
 using Reconmap.Api.Common;
 
-namespace Tests.Common;
+namespace Api.Tests.Common;
 
 public class AiChatClientFactoryTests
 {

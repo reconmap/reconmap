@@ -7,7 +7,7 @@ using Reconmap.McpServer.Prompts;
 using Reconmap.McpServer.Security;
 using Xunit;
 
-namespace Tests.McpServer
+namespace Mcp.Tests
 {
     public class ReconmapPromptsTests
     {

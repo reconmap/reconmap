@@ -8,7 +8,7 @@ using Reconmap.McpServer.Resources;
 using Reconmap.McpServer.Security;
 using Xunit;
 
-namespace Tests.McpServer
+namespace Mcp.Tests
 {
     public class ResourcesTests
     {
