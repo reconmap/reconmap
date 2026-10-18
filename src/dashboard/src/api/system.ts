@@ -33,6 +33,55 @@ interface SystemHealth {
     mcpServer: McpStatus;
 }
 
+interface AiUsageTotals {
+    calls: number;
+    failedCalls: number;
+    inputTokens: number;
+    outputTokens: number;
+    estimatedCost: number;
+    averageLatencyMs: number;
+    p95LatencyMs: number;
+}
+
+interface AiUsageBreakdownRow {
+    key: string;
+    calls: number;
+    inputTokens: number;
+    outputTokens: number;
+    estimatedCost: number;
+}
+
+interface AiUsageProjectRow extends Omit<AiUsageBreakdownRow, "key"> {
+    projectId: number | null;
+    projectName: string | null;
+}
+
+interface AiUsageUserRow extends Omit<AiUsageBreakdownRow, "key"> {
+    userId: number | null;
+}
+
+interface AiUsageDailyRow extends Omit<AiUsageBreakdownRow, "key"> {
+    date: string;
+}
+
+interface AiUsageSummary {
+    totals: AiUsageTotals;
+    byFeature: AiUsageBreakdownRow[];
+    byModel: AiUsageBreakdownRow[];
+    byProject: AiUsageProjectRow[];
+    byUser: AiUsageUserRow[];
+    daily: AiUsageDailyRow[];
+}
+
+interface SystemUsage {
+    from: string;
+    to: string;
+    attachments: { totalCount: number; totalFileSize: number };
+    redis: { available: boolean; usedMemoryBytes: number; maxMemoryBytes: number; keyCount: number };
+    queues: { name: string; messages: number; consumers: number }[];
+    ai: AiUsageSummary;
+}
+
 const useExportablesQuery = () => {
     return useQuery({
         queryKey: ["system-exportables"],
@@ -47,10 +96,10 @@ const useSystemHealthQuery = () => {
     });
 };
 
-const useSystemUsageQuery = () => {
+const useSystemUsageQuery = (rangeDays: number) => {
     return useQuery({
-        queryKey: ["system-usage"],
-        queryFn: () => requestSystemUsage().then((res) => res.json()),
+        queryKey: ["system-usage", rangeDays],
+        queryFn: (): Promise<SystemUsage> => requestSystemUsage(rangeDays).then((res) => res.json()),
     });
 };
 
@@ -145,7 +194,7 @@ const useSystemAiSettingsUpdateMutation = () => {
     });
 };
 
-export type { McpStatus, ServiceStatus, SystemHealth };
+export type { AiUsageBreakdownRow, AiUsageSummary, McpStatus, ServiceStatus, SystemHealth, SystemUsage };
 
 export {
     useExportablesQuery,

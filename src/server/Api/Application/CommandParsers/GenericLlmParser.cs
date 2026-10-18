@@ -29,7 +29,7 @@ public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmen
             output = output[..10000] + "... [truncated]";
         }
 
-        var aiResult = aiService.ParseCommandOutputAsync(toolName, output).GetAwaiter().GetResult();
+        var aiResult = aiService.ParseCommandOutputAsync(toolName, output, job.ProjectId, job.UserId).GetAwaiter().GetResult();
 
         foreach (var aiAsset in aiResult.Assets)
         {

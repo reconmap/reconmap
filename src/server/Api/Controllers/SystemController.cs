@@ -196,9 +196,13 @@ public class SystemController(
     }
 
     [HttpGet("usage")]
-    public async Task<IActionResult> GetUsage()
+    public async Task<IActionResult> GetUsage([FromQuery] DateTime? from, [FromQuery] DateTime? to)
     {
-        var data = await service.GetUsageAsync();
+        var end = (to ?? DateTime.UtcNow).ToUniversalTime();
+        var start = (from ?? end.AddDays(-30)).ToUniversalTime();
+        if (start >= end) return BadRequest(new { message = "'from' must be earlier than 'to'." });
+
+        var data = await service.GetUsageAsync(start, end);
         return Ok(data);
     }
 

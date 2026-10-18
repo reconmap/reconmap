@@ -21,7 +21,9 @@ public static class RedisExtensions
                 EndPoints = { { settings.Host, settings.Port } },
                 User = settings.User,
                 Password = settings.Password,
-                AbortOnConnectFail = false
+                AbortOnConnectFail = false,
+                // Required by the system usage page, which reads INFO memory. The API issues no other admin commands.
+                AllowAdmin = true
             };
 
             return ConnectionMultiplexer.Connect(options);

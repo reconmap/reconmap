@@ -10,6 +10,7 @@ public static class RabbitMQExtensions
         services.Configure<RabbitMQSettings>(config.GetSection("RabbitMQ"));
         services.AddSingleton<RabbitMQMessageQueue>();
         services.AddSingleton<IMessageQueue>(sp => sp.GetRequiredService<RabbitMQMessageQueue>());
+        services.AddSingleton<IQueueInspector>(sp => sp.GetRequiredService<RabbitMQMessageQueue>());
         return services;
     }
 }

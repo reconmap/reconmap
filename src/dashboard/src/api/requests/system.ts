@@ -8,8 +8,9 @@ const requestSystemHealth = () => {
     return secureApiFetch("/system/health", { method: "GET" });
 };
 
-const requestSystemUsage = () => {
-    return secureApiFetch("/system/usage", { method: "GET" });
+const requestSystemUsage = (rangeDays: number) => {
+    const from = new Date(Date.now() - rangeDays * 24 * 60 * 60 * 1000).toISOString();
+    return secureApiFetch(`/system/usage?from=${encodeURIComponent(from)}`, { method: "GET" });
 };
 
 const requestSystemMailSettings = () => {

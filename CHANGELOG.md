@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `GET /api/system/usage` now returns a typed camelCase response and accepts optional `from` and `to` query parameters. **Breaking:** `attachments.total_count` / `total_file_size` are now `attachments.totalCount` / `totalFileSize`, and `queueLengths` is replaced by `queues` (RabbitMQ queue depth) plus `redis` and `ai`. The old `queueLengths` read Redis lists (`email:queue`, `tasks:queue`, `notifications:queue`) that the API never wrote to, so they were always empty.
+- The "Client queries cached" row moved from the usage table to its own "Client cache" section on the System usage page.
 - The dashboard "API health" widget is now the "System health" widget (widget key `system-health`, replacing `api-health`; previously saved layouts that contain the old widget no longer show it). It lists the API, database, key-value, message queue, MCP server, SSE and attachments status, with response times, and links to the System health page. The System health page shows the same information.
 - `GET /api/system/health` now checks the message queue for real (it was hardcoded as reachable), runs checks concurrently, and returns `latencyMs` for the database, key-value and message queue servers.
 - Dashboard loading states are now consistent: pages keep their headings and actions while only the data region loads, tables show skeleton rows under their headers, dashboard widgets keep their card, and the spinner is a compact inline indicator instead of a page-sized one.
@@ -22,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- System usage page: AI usage and cost. Every call to the configured AI provider is now recorded in a new `ai_usage` table (provider, model, feature, project, user, input and output tokens, latency, success, estimated cost). **System → Usage** shows calls, error rate, tokens, estimated cost and latency (average and p95) for the last 7, 30 or 90 days, tokens and cost per day, and breakdowns by feature, model, project and user. Estimated cost uses the new optional **Input price** and **Output price** (USD per 1M tokens) AI settings; without them only tokens are tracked. **Existing databases must create the `ai_usage` table**, see [System monitoring](docs/pages/admin-manual/system-monitoring.md).
+- System usage page: Redis memory and key count, and RabbitMQ queue depth (messages waiting and consumers) for every queue the API uses.
 - MCP server: anonymous `GET /health` endpoint (database and Redis checks). The REST API probes it through the new optional `Mcp:HealthUrl` setting (`MCP_HEALTH_URL` in Docker Compose) and reports `mcpServer` in `GET /api/system/health`, shown on the System health page and dashboard widget.
 - Dashboard: the **Configure** tab has a **Save and close** button next to **Save**. It saves the selected widgets and switches back to the **View** tab. **Save** keeps you on the Configure tab, as before.
 - MCP server: Docker image `ghcr.io/reconmap/mcp` (built and pushed by the new `mcp-build-push` workflow) and an `mcp` service in Docker Compose (`app` profile, port `5520`). New optional `MCP_PUBLIC_URL` and `Keycloak:RequireHttpsMetadata` settings; the latter overrides the default of requiring HTTPS Keycloak metadata outside Development, for both the REST API and the MCP server. See [MCP Server](docs/pages/development/mcp-server.md).

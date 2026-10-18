@@ -38,7 +38,8 @@ public class ToolRecommendationService(IAiChatClientFactory clientFactory, ILogg
 
     private async Task<ToolRecommendationResponse?> GetAiRecommendationsAsync(ToolRecommendationRequest request)
     {
-        var context = await clientFactory.CreateAsync();
+        var context = await clientFactory.CreateAsync(
+            new AiUsageContext(AiFeatures.ToolRecommendation, request.ProjectId == 0 ? null : request.ProjectId));
 
         var allCommands = CommandDiscovery.GetAll();
         var catalog = allCommands.Select(c => new {

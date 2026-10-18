@@ -100,6 +100,7 @@ services.AddDataProtection()
     .SetApplicationName("Reconmap");
 
 services.AddScoped<IAiService, AiService>();
+services.AddSingleton<IAiUsageRecorder, AiUsageRecorder>();
 services.AddScoped<IAiChatClientFactory, AiChatClientFactory>();
 services.AddScoped<IToolRecommendationService, ToolRecommendationService>();
 services.AddHttpClient();

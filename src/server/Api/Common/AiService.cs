@@ -43,19 +43,19 @@ public class AiVulnerability
 
 public interface IAiService
 {
-    Task<string> GenerateRemediationAsync(string vulnerabilitySummary);
-    Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output);
-    Task<string> EnrichAssetAsync(string assetName, string assetType);
-    Task<string> TriageVulnerabilityAsync(string summary, string description);
+    Task<string> GenerateRemediationAsync(string vulnerabilitySummary, int? projectId = null, int? userId = null);
+    Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, int? projectId = null, int? userId = null);
+    Task<string> EnrichAssetAsync(string assetName, string assetType, int? projectId = null, int? userId = null);
+    Task<string> TriageVulnerabilityAsync(string summary, string description, int? projectId = null, int? userId = null);
 }
 
 public sealed class AiService(IAiChatClientFactory clientFactory) : IAiService
 {
-    public async Task<string> GenerateRemediationAsync(string summary)
+    public async Task<string> GenerateRemediationAsync(string summary, int? projectId = null, int? userId = null)
     {
         var prompt = $"Write instructions on how to remediate this vulnerability: {summary}";
 
-        var context = await clientFactory.CreateAsync();
+        var context = await clientFactory.CreateAsync(new AiUsageContext(AiFeatures.Remediation, projectId, userId));
         var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
@@ -67,7 +67,7 @@ public sealed class AiService(IAiChatClientFactory clientFactory) : IAiService
         return response.Text;
     }
 
-    public async Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output)
+    public async Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, int? projectId = null, int? userId = null)
     {
         var prompt = $@"
 You are a cybersecurity expert. Parse the following command output from the tool '{toolName}' into a structured JSON format.
@@ -96,7 +96,7 @@ Command Output:
 {output}
 ";
 
-        var context = await clientFactory.CreateAsync();
+        var context = await clientFactory.CreateAsync(new AiUsageContext(AiFeatures.CommandParsing, projectId, userId));
         var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
@@ -128,7 +128,7 @@ Command Output:
         }
     }
 
-    public async Task<string> EnrichAssetAsync(string assetName, string assetType)
+    public async Task<string> EnrichAssetAsync(string assetName, string assetType, int? projectId = null, int? userId = null)
     {
         var prompt = $@"You are an autonomous penetration testing agent. Given the following asset, produce a concise tactical plan:
 
@@ -142,7 +142,7 @@ Provide:
 
 Be concise and actionable. Format as markdown.";
 
-        var context = await clientFactory.CreateAsync();
+        var context = await clientFactory.CreateAsync(new AiUsageContext(AiFeatures.AssetEnrichment, projectId, userId));
         var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
@@ -154,7 +154,7 @@ Be concise and actionable. Format as markdown.";
         return response.Text;
     }
 
-    public async Task<string> TriageVulnerabilityAsync(string summary, string description)
+    public async Task<string> TriageVulnerabilityAsync(string summary, string description, int? projectId = null, int? userId = null)
     {
         var details = string.IsNullOrWhiteSpace(description) ? summary : $"{summary}\n\n{description}";
         var prompt = $@"You are a penetration testing triage agent. Rapidly assess the following vulnerability finding:
@@ -170,7 +170,7 @@ Provide a brief structured triage report with:
 
 Be concise. Format as markdown.";
 
-        var context = await clientFactory.CreateAsync();
+        var context = await clientFactory.CreateAsync(new AiUsageContext(AiFeatures.Triage, projectId, userId));
         var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions

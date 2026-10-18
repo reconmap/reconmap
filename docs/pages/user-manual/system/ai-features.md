@@ -112,6 +112,14 @@ When using the **Generic LLM** output parser for a command, Reconmap passes the 
 
 ---
 
+## Usage and cost tracking
+
+Every AI call is recorded (provider, model, feature, project, user, token counts, latency and estimated cost) and summarised on **System → Usage**. To get a cost estimate, enter the provider's prices per one million input and output tokens in **System → AI Settings**. Without prices, only token counts are shown. See [System monitoring](../../admin-manual/system-monitoring.md) for the full list of metrics.
+
+Provider definitions in `ai-providers.json` can offer the same two price fields by including the `inputPricePerMTok` and `outputPricePerMTok` keys (text fields). The bundled providers already do.
+
+---
+
 ## Privacy and data handling
 
 When using Ollama, all inference happens on your own infrastructure — no data is sent to external services.

@@ -10,16 +10,19 @@ public sealed record AiChatClientContext(IChatClient Client, int MaxOutputTokens
 
 public interface IAiChatClientFactory
 {
-    Task<AiChatClientContext> CreateAsync(CancellationToken cancellationToken = default);
+    Task<AiChatClientContext> CreateAsync(AiUsageContext? usage = null, CancellationToken cancellationToken = default);
 }
 
-public sealed class AiChatClientFactory(IAiSettingsService settingsService) : IAiChatClientFactory
+public sealed class AiChatClientFactory(IAiSettingsService settingsService, IAiUsageRecorder? usageRecorder = null)
+    : IAiChatClientFactory
 {
-    public async Task<AiChatClientContext> CreateAsync(CancellationToken cancellationToken = default)
+    public async Task<AiChatClientContext> CreateAsync(
+        AiUsageContext? usage = null,
+        CancellationToken cancellationToken = default)
     {
         var settings = await settingsService.GetRuntimeSettingsAsync(cancellationToken);
         var provider = settings.Provider;
-        var client = provider.Adapter.ToLowerInvariant() switch
+        IChatClient client = provider.Adapter.ToLowerInvariant() switch
         {
             "ollama" => new OllamaApiClient(
                 new Uri(GetRequired(settings, "baseUrl")),
@@ -43,8 +46,41 @@ public sealed class AiChatClientFactory(IAiSettingsService settingsService) : IA
                 $"AI provider '{provider.Id}' uses unsupported adapter '{provider.Adapter}'.")
         };
 
+        if (usageRecorder != null)
+        {
+            var target = new AiUsageTarget(
+                provider.Id,
+                GetModelName(settings),
+                GetPrice(settings, "inputPricePerMTok"),
+                GetPrice(settings, "outputPricePerMTok"));
+            client = new UsageRecordingChatClient(
+                client,
+                usageRecorder,
+                target,
+                usage ?? new AiUsageContext(AiFeatures.Other));
+        }
+
         return new AiChatClientContext(client, settings.MaxOutputTokens);
     }
+
+    private static string GetModelName(AiRuntimeSettings settings)
+    {
+        foreach (var key in new[] { "model", "deployment" })
+        {
+            if (settings.Values.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value))
+                return value;
+        }
+
+        return "unknown";
+    }
+
+    private static decimal GetPrice(AiRuntimeSettings settings, string key) =>
+        settings.Values.TryGetValue(key, out var value) &&
+        decimal.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture,
+            out var price) &&
+        price >= 0
+            ? price
+            : 0m;
 
     private static string GetRequired(AiRuntimeSettings settings, string key)
     {

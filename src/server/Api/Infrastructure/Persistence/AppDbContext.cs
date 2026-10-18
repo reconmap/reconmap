@@ -31,6 +31,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public DbSet<AiSettings> AiSettings { get; set; }
     public DbSet<AiProviderSetting> AiProviderSettings { get; set; }
+    public DbSet<AiUsage> AiUsages { get; set; }
 
     public DbSet<CustomField> CustomFields { get; set; }
 

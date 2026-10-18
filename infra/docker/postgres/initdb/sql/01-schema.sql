@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS user_api_token CASCADE;
 DROP TABLE IF EXISTS runner CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
 DROP TABLE IF EXISTS note CASCADE;
+DROP TABLE IF EXISTS ai_usage CASCADE;
 DROP TABLE IF EXISTS ai_provider_settings CASCADE;
 DROP TABLE IF EXISTS ai_settings CASCADE;
 DROP TABLE IF EXISTS mail_settings CASCADE;
@@ -372,6 +373,24 @@ CREATE TABLE ai_provider_settings
     updated_at    TIMESTAMPTZ NULL DEFAULT NULL,
     PRIMARY KEY (provider_id, setting_key)
 );
+
+CREATE TABLE ai_usage
+(
+    id             SERIAL PRIMARY KEY,
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    provider       VARCHAR(50) NOT NULL,
+    model          VARCHAR(200) NOT NULL,
+    feature        VARCHAR(50) NOT NULL,
+    project_id     INTEGER NULL,
+    user_id        INTEGER NULL,
+    input_tokens   BIGINT NOT NULL DEFAULT 0,
+    output_tokens  BIGINT NOT NULL DEFAULT 0,
+    latency_ms     BIGINT NOT NULL DEFAULT 0,
+    success        BOOLEAN NOT NULL DEFAULT TRUE,
+    estimated_cost NUMERIC(14, 6) NOT NULL DEFAULT 0
+);
+
+CREATE INDEX ai_usage_created_at_idx ON ai_usage (created_at);
 
 -- 23. note
 CREATE TABLE note

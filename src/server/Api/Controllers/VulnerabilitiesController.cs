@@ -127,7 +127,8 @@ public class VulnerabilitiesController(
         var vulnerability = await _dbContext.Vulnerabilities.FindAsync(id);
 
         vulnerability.Remediation =
-            await aiService.GenerateRemediationAsync(vulnerability.Summary);
+            await aiService.GenerateRemediationAsync(
+                vulnerability.Summary, vulnerability.ProjectId, HttpContext.GetCurrentUser()?.Id);
         _dbContext.Vulnerabilities.Update(vulnerability);
         await _dbContext.SaveChangesAsync();
 
@@ -162,7 +163,9 @@ public class VulnerabilitiesController(
 
         var triage = await aiService.TriageVulnerabilityAsync(
             vulnerability.Summary,
-            vulnerability.Description ?? string.Empty);
+            vulnerability.Description ?? string.Empty,
+            vulnerability.ProjectId,
+            HttpContext.GetCurrentUser()?.Id);
 
         return Ok(new { triage });
     }

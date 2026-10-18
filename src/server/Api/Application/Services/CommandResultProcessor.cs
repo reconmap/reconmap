@@ -90,7 +90,8 @@ public class CommandResultProcessor(
                     {
                         try
                         {
-                            vulnerability.Remediation = await aiService.GenerateRemediationAsync(vulnerability.Summary);
+                            vulnerability.Remediation = await aiService.GenerateRemediationAsync(
+                                vulnerability.Summary, job.ProjectId, job.UserId);
                         }
                         catch (Exception ex)
                         {
@@ -103,7 +104,9 @@ public class CommandResultProcessor(
                     {
                         vulnerability.AiTriage = await aiService.TriageVulnerabilityAsync(
                             vulnerability.Summary,
-                            vulnerability.Description ?? string.Empty);
+                            vulnerability.Description ?? string.Empty,
+                            job.ProjectId,
+                            job.UserId);
                     }
                     catch (Exception ex)
                     {

@@ -1,4 +1,5 @@
 using Reconmap.Api.Common;
+using Reconmap.Api.Common.Extensions;
 using Reconmap.Api.Domain.AuditActions;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
@@ -93,7 +94,8 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
         var asset = await dbContext.Assets.FindAsync(id);
         if (asset == null) return NotFound();
 
-        var recommendation = await aiService.EnrichAssetAsync(asset.Name, asset.Type);
+        var recommendation = await aiService.EnrichAssetAsync(
+            asset.Name, asset.Type, asset.ProjectId, HttpContext.GetCurrentUser()?.Id);
 
         return Ok(new { recommendation });
     }

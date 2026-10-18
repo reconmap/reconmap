@@ -7,7 +7,7 @@ using RabbitMQ.Client.Events;
 
 namespace Reconmap.Api.Infrastructure.Messaging;
 
-public class RabbitMQMessageQueue : IMessageQueue, IAsyncDisposable
+public class RabbitMQMessageQueue : IMessageQueue, IQueueInspector, IAsyncDisposable
 {
     private readonly ILogger<RabbitMQMessageQueue> _logger;
     private readonly RabbitMQSettings _settings;
@@ -57,6 +57,31 @@ public class RabbitMQMessageQueue : IMessageQueue, IAsyncDisposable
 
         var properties = new BasicProperties { Persistent = true };
         await _channel.BasicPublishAsync(exchange: string.Empty, routingKey: queueName, mandatory: false, basicProperties: properties, body: body);
+    }
+
+    public async Task<IReadOnlyList<QueueStats>> GetQueueStatsAsync(
+        IEnumerable<string> queueNames,
+        CancellationToken cancellationToken = default)
+    {
+        await EnsureConnectionAsync();
+
+        var stats = new List<QueueStats>();
+        foreach (var queueName in queueNames)
+        {
+            // A passive declare of a missing queue closes the channel, so each queue gets its own.
+            await using var channel = await _connection!.CreateChannelAsync(cancellationToken: cancellationToken);
+            try
+            {
+                var queue = await channel.QueueDeclarePassiveAsync(queueName, cancellationToken);
+                stats.Add(new QueueStats(queueName, queue.MessageCount, queue.ConsumerCount));
+            }
+            catch (RabbitMQ.Client.Exceptions.OperationInterruptedException)
+            {
+                stats.Add(new QueueStats(queueName, 0, 0));
+            }
+        }
+
+        return stats;
     }
 
     public async Task SubscribeAsync<T>(string queueName, Func<T, Task> handler, CancellationToken cancellationToken)

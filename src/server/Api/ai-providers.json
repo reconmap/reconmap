@@ -22,6 +22,20 @@
             "Required": true,
             "DefaultValue": "llama3.2",
             "Placeholder": ""
+          },
+          {
+            "Key": "inputPricePerMTok",
+            "Label": "Input price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          },
+          {
+            "Key": "outputPricePerMTok",
+            "Label": "Output price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
           }
         ]
       },
@@ -50,6 +64,20 @@
             "Required": true,
             "DefaultValue": "gpt-4o",
             "Placeholder": "gpt-4o"
+          },
+          {
+            "Key": "inputPricePerMTok",
+            "Label": "Input price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          },
+          {
+            "Key": "outputPricePerMTok",
+            "Label": "Output price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
           }
         ]
       },
@@ -72,6 +100,20 @@
             "Required": true,
             "DefaultValue": "meta-llama/llama-3.1-70b-instruct",
             "Placeholder": "meta-llama/llama-3.1-70b-instruct"
+          },
+          {
+            "Key": "inputPricePerMTok",
+            "Label": "Input price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          },
+          {
+            "Key": "outputPricePerMTok",
+            "Label": "Output price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
           }
         ]
       },
@@ -93,6 +135,20 @@
             "Type": "text",
             "Required": true,
             "Placeholder": "Model ID exactly as listed by the provider"
+          },
+          {
+            "Key": "inputPricePerMTok",
+            "Label": "Input price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          },
+          {
+            "Key": "outputPricePerMTok",
+            "Label": "Output price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
           }
         ]
       }
