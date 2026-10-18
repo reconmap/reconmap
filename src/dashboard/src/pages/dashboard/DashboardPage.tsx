@@ -62,6 +62,27 @@ const DashboardPage = () => {
     }));
   };
 
+  const allowedWidgetKeys = Object.keys(Widgets).filter(
+    (key) =>
+      !Widgets[key].hasOwnProperty("permissions") ||
+      PermissionsService.isAllowed(Widgets[key].permissions, user.permissions),
+  );
+  const isChecked = (key) =>
+    dashboardConfig.hasOwnProperty(key) && !!dashboardConfig[key].visible;
+  const allSelected = allowedWidgetKeys.every(isChecked);
+  const noneSelected = !allowedWidgetKeys.some(isChecked);
+
+  const setAllWidgets = (visible) => {
+    setFormHasChanged(true);
+    setDashboardConfig((prev) => {
+      const next = { ...prev };
+      allowedWidgetKeys.forEach((key) => {
+        next[key] = { ...next[key], visible };
+      });
+      return next;
+    });
+  };
+
   const onSave = (ev, loggedInUser, closeAfterSave = false) => {
     const preferences = {
       ...initialiseUserPreferences(loggedInUser),
@@ -110,36 +131,42 @@ const DashboardPage = () => {
         )}
         {1 === tabIndex && (
           <div>
-            <h4>Select which widgets to present in your dashboard</h4>
-            <br />
-            <div className="field">
-              {Object.keys(Widgets).map((widgetKey) => {
-                const widget = Widgets[widgetKey];
-                if (
-                  !widget.hasOwnProperty("permissions") ||
-                  PermissionsService.isAllowed(
-                    widget.permissions,
-                    user.permissions,
-                  )
-                ) {
-                  return (
+            <p className="mb-3">
+              {t("Select which widgets to present in your dashboard")}
+            </p>
+            <div className="buttons mb-3">
+              <SecondaryButton
+                onClick={() => setAllWidgets(true)}
+                disabled={allSelected}
+              >
+                {t("Select all")}
+              </SecondaryButton>
+              <SecondaryButton
+                onClick={() => setAllWidgets(false)}
+                disabled={noneSelected}
+              >
+                {t("Unselect all")}
+              </SecondaryButton>
+            </div>
+            <div className="fixed-grid has-1-cols has-2-cols-tablet has-3-cols-desktop mb-4">
+              <div className="grid is-gap-2">
+                {allowedWidgetKeys.map((widgetKey) => (
+                  <div key={widgetKey} className="cell box p-3 m-0">
                     <NativeCheckbox
-                      key={widgetKey}
                       name={widgetKey}
-                      checked={
-                        dashboardConfig.hasOwnProperty(widgetKey) &&
-                        dashboardConfig[widgetKey].visible
-                      }
+                      checked={isChecked(widgetKey)}
                       onChange={onWidgetChange}
                     >
-                      {Widgets[widgetKey].title}.{" "}
-                      <em>{Widgets[widgetKey].description}</em>
+                      <strong>{Widgets[widgetKey].title}</strong>
+                      {Widgets[widgetKey].description && (
+                        <span className="is-block has-text-grey is-size-7">
+                          {Widgets[widgetKey].description}
+                        </span>
+                      )}
                     </NativeCheckbox>
-                  );
-                } else {
-                  return <></>;
-                }
-              })}
+                  </div>
+                ))}
+              </div>
             </div>
             <PrimaryButton
               disabled={!formHasChanged}

@@ -86,3 +86,17 @@ it("Save and close stores the selection and returns to the View tab", async () =
     screen.queryByRole("button", { name: "Save and close" }),
   ).not.toBeInTheDocument();
 });
+
+it("Select all and Unselect all toggle every widget", () => {
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Configure" }));
+
+  fireEvent.click(screen.getByRole("button", { name: "Unselect all" }));
+  screen
+    .getAllByRole("checkbox")
+    .forEach((box) => expect(box).not.toBeChecked());
+  expect(screen.getByRole("button", { name: "Save" })).toBeEnabled();
+
+  fireEvent.click(screen.getByRole("button", { name: "Select all" }));
+  screen.getAllByRole("checkbox").forEach((box) => expect(box).toBeChecked());
+});

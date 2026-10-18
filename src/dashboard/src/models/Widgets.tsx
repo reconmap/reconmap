@@ -33,6 +33,7 @@ const Widgets = {
     },
     "vulnerability-by-risk-stats": {
         title: "Vulnerability by risk",
+        description: "It charts vulnerabilities grouped by risk level.",
         visible: true,
         component: <VulnerabilitiesByRiskStatsWidget />,
     },
@@ -45,17 +46,20 @@ const Widgets = {
 
     "vulnerability-by-category-stats": {
         title: "Vulnerability by category",
+        description: "It charts vulnerabilities grouped by category.",
         visible: true,
         component: <VulnerabilitiesByCategoryStatsWidget />,
     },
     "recent-activity": {
         title: "Recent activity",
+        description: "It shows the latest actions performed by users across the system.",
         visible: true,
         component: <RecentActivityWidget />,
         permissions: "system.*",
     },
     "user-activity-stats": {
         title: "User activity over time",
+        description: "It charts user activity over time.",
         visible: true,
         component: <UserActivityStatsWidget />,
         permissions: "system.*",

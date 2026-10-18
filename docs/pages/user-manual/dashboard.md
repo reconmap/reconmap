@@ -9,7 +9,7 @@ The Reconmap dashboard is what welcomes the user after logging in. The dashboard
 
 Each user has its own view of the dashboard as they can select which of all available widgets to show on load.
 
-To choose the widgets, open the **Configure** tab. Tick the widgets you want to see and click:
+To choose the widgets, open the **Configure** tab. Each widget has its own row with its description. Tick the widgets you want to see (use **Select all** or **Unselect all** to change every widget at once) and click:
 
 - **Save** to store your selection and stay on the Configure tab.
 - **Save and close** to store your selection and go back to the **View** tab.
