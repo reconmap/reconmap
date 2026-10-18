@@ -4,7 +4,7 @@ import PaginationV2 from "components/layout/PaginationV2";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
-import useDocumentTitle from "hooks/useDocumentTitle";
+import PageTitle from "components/ui/PageTitle";
 import { useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
@@ -58,12 +58,11 @@ const ProjectsListPage = () => {
         updateUrl({ page: pageNumber + 1 });
     };
 
-    useDocumentTitle("Projects");
-
     if (isLoading) return <Loading />;
 
     return (
         <div>
+            <PageTitle>Projects</PageTitle>
             <div className="heading">
                 <Breadcrumb />
                 <PaginationV2 page={apiPageNumber} total={projects.pageCount} onPageChange={onPageChange} />
@@ -74,7 +73,7 @@ const ProjectsListPage = () => {
                     </RestrictedComponent>
                 </div>
             </div>
-            <Title title={`Projects (${projects.totalCount})`} />
+            <Title title={`Projects (${projects.totalCount})`} documentTitle="none" />
 
             <details>
                 <summary>Filters</summary>
