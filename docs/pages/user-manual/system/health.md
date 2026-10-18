@@ -16,5 +16,8 @@ This view provides information about:
 - RabbitMQ (message broker) status.
 - Redis (cache) status.
 - Storage availability.
+- MCP server status (shown as "Not configured" when the administrator has not set `Mcp:HealthUrl`).
+
+Services that are checked directly (database, Redis, message queue and MCP) also show their response time in milliseconds.
 
 If any of these services are down, certain application features might not work as expected.

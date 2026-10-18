@@ -2,15 +2,18 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Reconmap.Api.Application.Services;
 using Reconmap.Api.Infrastructure.Authentication;
+using Reconmap.Api.Infrastructure.Http;
 using Reconmap.Api.Infrastructure.Keycloak;
 using Reconmap.Api.Infrastructure.Persistence;
 using Reconmap.Api.Infrastructure.Redis;
 using Reconmap.Api.Infrastructure.Security;
 using Reconmap.McpServer.Security;
+using StackExchange.Redis;
 using ModelContextProtocol.AspNetCore;
 using ModelContextProtocol.AspNetCore.Authentication;
 using ModelContextProtocol.Authentication;
@@ -27,6 +30,10 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 var services = builder.Services;
 
 services.AddDatabase(builder.Configuration);
+
+services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>(name: "database")
+    .AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>(), name: "redis");
 
 // Authentication: same schemes as the REST API (Keycloak JWT bearer and Reconmap API tokens).
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -117,6 +124,10 @@ app.UseCors(McpCorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<DbUserResolverMiddleware>();
+
+// Anonymous, like the REST API's /health, so the REST API and orchestrators can probe it.
+app.MapHealthChecks("/health", new HealthCheckOptions { ResponseWriter = HealthCheckResponseWriter.WriteAsync })
+    .AllowAnonymous();
 
 // Map the MCP endpoint at /mcp (the SDK's default pattern is "/", which the docs do not use)
 app.MapMcp("/mcp");

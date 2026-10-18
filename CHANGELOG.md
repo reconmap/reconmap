@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The dashboard "API health" widget is now the "System health" widget (widget key `system-health`, replacing `api-health`; previously saved layouts that contain the old widget no longer show it). It lists the API, database, key-value, message queue, MCP server, SSE and attachments status, with response times, and links to the System health page. The System health page shows the same information.
+- `GET /api/system/health` now checks the message queue for real (it was hardcoded as reachable), runs checks concurrently, and returns `latencyMs` for the database, key-value and message queue servers.
 - Dashboard loading states are now consistent: pages keep their headings and actions while only the data region loads, tables show skeleton rows under their headers, dashboard widgets keep their card, and the spinner is a compact inline indicator instead of a page-sized one.
 - Restructured the C# servers: `src/api/src` is now `src/server/Api`, `src/api/McpServer` is now `src/server/Mcp`, and the single `src/api/tests` project is split into `src/server/Api.Tests` and `src/server/Mcp.Tests`. The solution file is `src/server/Reconmap.slnx`. Run `dotnet test` from `src/server`. No change to the Docker image or runtime behaviour.
 - The MCP server no longer queries the database directly: its tools and resources call the same application services (`IProjectService`, `ITaskService`, `IVulnerabilityService`, `IRunnerService`) as the REST API controllers, so the list and lookup logic lives in one place. No change to API or MCP output.
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- MCP server: anonymous `GET /health` endpoint (database and Redis checks). The REST API probes it through the new optional `Mcp:HealthUrl` setting (`MCP_HEALTH_URL` in Docker Compose) and reports `mcpServer` in `GET /api/system/health`, shown on the System health page and dashboard widget.
 - Dashboard: the **Configure** tab has a **Save and close** button next to **Save**. It saves the selected widgets and switches back to the **View** tab. **Save** keeps you on the Configure tab, as before.
 - MCP server: Docker image `ghcr.io/reconmap/mcp` (built and pushed by the new `mcp-build-push` workflow) and an `mcp` service in Docker Compose (`app` profile, port `5520`). New optional `MCP_PUBLIC_URL` and `Keycloak:RequireHttpsMetadata` settings; the latter overrides the default of requiring HTTPS Keycloak metadata outside Development, for both the REST API and the MCP server. See [MCP Server](docs/pages/development/mcp-server.md).
 - MCP server: prompts `triage_vulnerabilities` and `executive_summary` (each takes a `projectId` and requires read access to the project). Tools and resources are now split into one class per entity.

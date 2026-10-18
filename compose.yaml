@@ -116,6 +116,7 @@ services:
       - Keycloak__ClientSecret=${KEYCLOAK_API_CLIENT_SECRET}
       - Storage__S3__SecretKey=${RUSTFS_SECRET_KEY}
       - Opa__ServerUrl=${OPA_SERVER_URL}
+      - Mcp__HealthUrl=${MCP_HEALTH_URL:-http://mcp:5520/health}
     depends_on:
       postgres:
         condition: service_healthy

@@ -14,6 +14,25 @@ import {
     requestSystemUsage,
 } from "./requests/system";
 
+interface ServiceStatus {
+    reachable: boolean;
+    latencyMs: number;
+}
+
+interface McpStatus {
+    configured: boolean;
+    reachable: boolean;
+    latencyMs: number | null;
+}
+
+interface SystemHealth {
+    attachmentsDirectory: boolean;
+    databaseServer: ServiceStatus;
+    keyValueServer: ServiceStatus;
+    messageQueueServer: ServiceStatus;
+    mcpServer: McpStatus;
+}
+
 const useExportablesQuery = () => {
     return useQuery({
         queryKey: ["system-exportables"],
@@ -24,7 +43,7 @@ const useExportablesQuery = () => {
 const useSystemHealthQuery = () => {
     return useQuery({
         queryKey: ["system-health"],
-        queryFn: () => requestSystemHealth().then((res) => res.json()),
+        queryFn: (): Promise<SystemHealth> => requestSystemHealth().then((res) => res.json()),
     });
 };
 
@@ -125,6 +144,8 @@ const useSystemAiSettingsUpdateMutation = () => {
         },
     });
 };
+
+export type { McpStatus, ServiceStatus, SystemHealth };
 
 export {
     useExportablesQuery,

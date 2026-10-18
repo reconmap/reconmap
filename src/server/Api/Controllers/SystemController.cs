@@ -3,7 +3,9 @@ using Reconmap.Api.Common.Messaging;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using StackExchange.Redis;
 
 namespace Reconmap.Api.Controllers;
@@ -56,7 +58,9 @@ public class SystemController(
     SystemUsageService service,
     IMailSettingsService mailSettingsService,
     IAiSettingsService aiSettingsService,
-    IAttachmentStorage attachmentStorage)
+    IAttachmentStorage attachmentStorage,
+    HealthCheckService healthCheckService,
+    McpHealthProbe mcpHealthProbe)
     : ControllerBase
 {
     [HttpGet("custom-fields")]
@@ -99,21 +103,21 @@ public class SystemController(
     [HttpGet("health")]
     public async Task<IActionResult> GetStatus()
     {
-        // Check writing to attachments directory
-        var attachmentsWritable = await CheckStorageWritableAsync();
+        var attachmentsWritable = CheckStorageWritableAsync();
+        var database = MeasureAsync(CheckDatabaseAsync);
+        var redisServer = MeasureAsync(CheckRedisAsync);
+        var messageQueue = MeasureAsync(CheckMessageQueueAsync);
+        var mcp = mcpHealthProbe.CheckAsync();
 
-        // Check PostgreSQL connection (Npgsql)
-        var dbReachable = await CheckDatabaseAsync();
-
-        // Check Redis availability
-        var redisReachable = await CheckRedisAsync();
+        await Task.WhenAll(attachmentsWritable, database, redisServer, messageQueue, mcp);
 
         var result = new
         {
-            attachmentsDirectory = attachmentsWritable,
-            databaseServer = new { reachable = dbReachable },
-            keyValueServer = new { reachable = redisReachable },
-            messageQueueServer = new { reachable = true } // RabbitMQ
+            attachmentsDirectory = attachmentsWritable.Result,
+            databaseServer = database.Result,
+            keyValueServer = redisServer.Result,
+            messageQueueServer = messageQueue.Result,
+            mcpServer = mcp.Result
         };
 
         return Ok(result);
@@ -161,6 +165,19 @@ public class SystemController(
             logger.LogWarning(ex, "Database test query failed.");
             return false;
         }
+    }
+
+    private static async Task<ServiceStatus> MeasureAsync(Func<Task<bool>> check)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        var reachable = await check();
+        return new ServiceStatus(reachable, stopwatch.ElapsedMilliseconds);
+    }
+
+    private async Task<bool> CheckMessageQueueAsync()
+    {
+        var report = await healthCheckService.CheckHealthAsync(r => r.Name == "rabbitmq");
+        return report.Status == HealthStatus.Healthy;
     }
 
     private async Task<bool> CheckRedisAsync()
@@ -220,3 +237,5 @@ public class SystemController(
         }
     }
 }
+
+public sealed record ServiceStatus(bool Reachable, long LatencyMs);

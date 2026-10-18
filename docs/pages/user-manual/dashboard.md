@@ -26,7 +26,7 @@ Available widgets:
 | Vulnerability by category | Vulnerabilities grouped by categories (error reporting, data validation, configuration, denial of service, etc...) |
 | Recent activity           | Extract of audit log                                                                                               |
 | User activitiy over time  | Chart of activity over time                                                                                        |
-| API health                | Presents information about the status of the API                                                                   |
+| System health             | Presents the status of the API, its backing services (database, Redis, message queue, storage) and the MCP server   |
 | Recent vulnerabilities    | Shows the most recently reported vulnerabilities                                                                   |
 | Runners                    | Shows the status of registered security runners                                                                     |
 | Top vulnerable assets     | Shows assets with the highest count of active vulnerabilities                                                      |

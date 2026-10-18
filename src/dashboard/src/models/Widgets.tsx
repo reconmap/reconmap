@@ -1,5 +1,4 @@
 import ActiveProjectsWidget from "pages/dashboard/widgets/ActiveProjectsWidget";
-import ApiHealthWidget from "pages/dashboard/widgets/ApiHealthWidget";
 import DiscussionsWidget from "pages/dashboard/widgets/DiscussionsWidget";
 import MyTasksWidget from "pages/dashboard/widgets/MyTasksWidget";
 import RecentActivityWidget from "pages/dashboard/widgets/RecentActivityWidget";
@@ -8,6 +7,7 @@ import ReleasesWidget from "pages/dashboard/widgets/ReleasesWidget";
 import UserActivityStatsWidget from "pages/dashboard/widgets/UserActivityStatsWidget";
 import VulnerabilitiesByCategoryStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget";
 import VulnerabilitiesByRiskStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByRiskStatsWidget";
+import SystemHealthWidget from "pages/dashboard/widgets/SystemHealthWidget";
 import RunnersWidget from "pages/dashboard/widgets/RunnersWidget";
 import TopVulnerableAssetsWidget from "pages/dashboard/widgets/TopVulnerableAssetsWidget";
 
@@ -59,11 +59,11 @@ const Widgets = {
         component: <UserActivityStatsWidget />,
         permissions: "system.*",
     },
-    "api-health": {
-        title: "API health",
+    "system-health": {
+        title: "System health",
         visible: true,
-        component: <ApiHealthWidget />,
-        description: "It presents information about the health of the API server.",
+        component: <SystemHealthWidget />,
+        description: "It presents the health of the API, its backing services and the MCP server.",
         permissions: "system.*",
     },
     "recent-vulnerabilities": {

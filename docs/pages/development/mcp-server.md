@@ -52,7 +52,10 @@ docker compose --profile app up -d mcp
 It listens on port `5520` (`http://localhost:5520/mcp`) and reuses `config-ngapi.json` and the same database, Redis, Keycloak and OPA settings as the API. Settings:
 
 - `MCP_PUBLIC_URL` (`.env`): public URL of the endpoint, passed as `Mcp:PublicUrl`. Set it when the server is behind a proxy or another hostname. Defaults to `http://localhost:5520/mcp`.
+- `MCP_HEALTH_URL` (`.env`): URL the REST API probes to report MCP status on the System health page and dashboard widget, passed to the API as `Mcp:HealthUrl`. Defaults to `http://mcp:5520/health`.
 - `Keycloak:RequireHttpsMetadata`: the JWT handler requires HTTPS Keycloak metadata outside the Development environment. The Compose service sets this to `false` because the bundled Keycloak uses plain HTTP. Remove it when Keycloak is served over HTTPS. The REST API honours the same setting.
+
+The server exposes an anonymous `GET /health` endpoint (ASP.NET Core health checks for the database and Redis) that returns `{ "status": "Healthy", "checks": [...] }`, with HTTP 503 when a check fails.
 
 The container runs as a non-root user. Build or push it by hand with `make build push` in `src/server/Mcp`.
 
