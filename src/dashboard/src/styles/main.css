@@ -166,3 +166,21 @@ details {
 .sidemenu-content-column {
     min-width: 0;
 }
+
+input[type="checkbox"] {
+    accent-color: var(--bulma-primary);
+    cursor: pointer;
+    height: 1.1em;
+    transition: box-shadow 0.15s ease;
+    width: 1.1em;
+}
+
+input[type="checkbox"]:focus-visible {
+    box-shadow: var(--bulma-focus-shadow-size) var(--bulma-primary);
+    outline: none;
+}
+
+input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
