@@ -9,7 +9,7 @@ import { Link } from "react-router";
 
 const NotificationsBadge = () => {
     const { data: notifications, refetch, isLoading } = useNotificationsQuery({ status: "unread" });
-    const { value, toggle } = useToggle(false);
+    const { value, toggle, setToggle } = useToggle(false);
 
     const onMessageHandler = () => {
         refetch();
@@ -28,7 +28,7 @@ const NotificationsBadge = () => {
     }
 
     return (
-        <div className={`dropdown ${value ? "is-active" : ""}`}>
+        <div className={`dropdown ${value ? "is-active" : ""}`} onMouseLeave={() => setToggle(false)}>
             <div className="dropdown-trigger">
                 <NativeButton
                     pr={null !== notifications && notifications.length > 0 ? 1 : 2}

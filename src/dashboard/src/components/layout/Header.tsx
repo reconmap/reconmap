@@ -52,6 +52,7 @@ const Header = () => {
                             <div
                                 key={menuLink.name}
                                 className={`navbar-item has-dropdown ${activeMenu === menuLink.name ? "is-active" : ""}`}
+                                onMouseLeave={() => setActiveMenu(null)}
                             >
                                 <button
                                     type="button"

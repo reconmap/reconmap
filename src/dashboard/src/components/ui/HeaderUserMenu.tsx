@@ -10,10 +10,10 @@ const HeaderUserMenu = () => {
     const [t] = useTranslation();
     const { user, logout } = useContext(AuthContext);
 
-    const { value, toggle } = useToggle(false);
+    const { value, toggle, setToggle } = useToggle(false);
 
     return (
-        <div className={`dropdown ${value ? "is-active" : ""}`}>
+        <div className={`dropdown ${value ? "is-active" : ""}`} onMouseLeave={() => setToggle(false)}>
             <div className="dropdown-trigger">
                 <button
                     className="button"
