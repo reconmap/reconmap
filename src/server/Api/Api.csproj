@@ -7,7 +7,7 @@
         <RootNamespace>Reconmap.Api</RootNamespace>
         <AssemblyName>App</AssemblyName>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <NoWarn>1591</NoWarn>
+        <NoWarn>1591;1573</NoWarn>
     </PropertyGroup>
 
 
