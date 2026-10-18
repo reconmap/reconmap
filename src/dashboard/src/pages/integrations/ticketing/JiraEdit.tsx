@@ -2,7 +2,7 @@ import { useJiraIntegrationQuery, useUpdateJiraIntegrationMutation } from "api/j
 import JiraForm from "components/integrations/ticketing/JiraForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
 
@@ -10,16 +10,11 @@ const JiraIntegrationEditPage = () => {
     const [t] = useTranslation();
     const navigate = useNavigate();
     const { integrationId } = useParams() as any;
-    const [integration, setIntegration] = useState({});
 
     const { data: dbIntegration, isLoading } = useJiraIntegrationQuery(parseInt(integrationId));
+    const [integrationEdits, setIntegration] = useState<any>(null);
+    const integration = integrationEdits ?? dbIntegration;
     const updateMutation = useUpdateJiraIntegrationMutation();
-
-    useEffect(() => {
-        if (dbIntegration) {
-            setIntegration(dbIntegration);
-        }
-    }, [dbIntegration]);
 
     const onFormSubmit = (ev) => {
         ev.preventDefault();
@@ -31,7 +26,7 @@ const JiraIntegrationEditPage = () => {
         });
     };
 
-    if (isLoading) return <div>{t("Loading...")}</div>;
+    if (isLoading || !integration) return <div>{t("Loading...")}</div>;
 
     return (
         <div>

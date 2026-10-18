@@ -5,7 +5,7 @@ import PrimaryButton from "components/ui/buttons/Primary";
 import Title from "components/ui/Title";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import Loading from "components/ui/Loading";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Breadcrumb from "components/ui/Breadcrumb";
 
 const defaultFormState = {
@@ -28,37 +28,34 @@ const defaultFormState = {
 const MailSettingsPage = () => {
     const { data, isLoading } = useSystemMailSettingsQuery();
     const updateMutation = useSystemMailSettingsUpdateMutation();
-    const [formState, setFormState] = useState(defaultFormState);
+    const [formEdits, setFormState] = useState<any>(null);
 
-    useEffect(() => {
-        if (!data) {
-            return;
-        }
-
-        setFormState({
-            smtpHost: data.smtpHost ?? "",
-            smtpPort: String(data.smtpPort ?? 587),
-            smtpUsername: data.smtpUsername ?? "",
-            smtpPassword: "",
-            clearSmtpPassword: false,
-            smtpFromEmail: data.smtpFromEmail ?? "",
-            smtpFromName: data.smtpFromName ?? "",
-            smtpUseSsl: data.smtpUseSsl ?? true,
-            imapHost: data.imapHost ?? "",
-            imapPort: String(data.imapPort ?? 993),
-            imapUsername: data.imapUsername ?? "",
-            imapPassword: "",
-            clearImapPassword: false,
-            imapUseSsl: data.imapUseSsl ?? true,
-        });
-    }, [data]);
+    const savedFormState = data
+        ? {
+              smtpHost: data.smtpHost ?? "",
+              smtpPort: String(data.smtpPort ?? 587),
+              smtpUsername: data.smtpUsername ?? "",
+              smtpPassword: "",
+              clearSmtpPassword: false,
+              smtpFromEmail: data.smtpFromEmail ?? "",
+              smtpFromName: data.smtpFromName ?? "",
+              smtpUseSsl: data.smtpUseSsl ?? true,
+              imapHost: data.imapHost ?? "",
+              imapPort: String(data.imapPort ?? 993),
+              imapUsername: data.imapUsername ?? "",
+              imapPassword: "",
+              clearImapPassword: false,
+              imapUseSsl: data.imapUseSsl ?? true,
+          }
+        : defaultFormState;
+    const formState = formEdits ?? savedFormState;
 
     const updateField = (ev) => {
         const { name, type, checked, value } = ev.target;
-        setFormState((currentState) => ({
-            ...currentState,
+        setFormState({
+            ...formState,
             [name]: type === "checkbox" ? checked : value,
-        }));
+        });
     };
 
     const handleSubmit = async (ev) => {

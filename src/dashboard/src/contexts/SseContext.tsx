@@ -32,7 +32,6 @@ const SseProvider = ({ children }: any) => {
                 console.debug("reconmap-sse: closing due to logout");
                 connection.close();
             }
-            setConnection(null);
             return;
         }
 
@@ -67,7 +66,10 @@ const SseProvider = ({ children }: any) => {
         };
     }, [user]);
 
-    return <SseContext.Provider value={{ connection }}>{children}</SseContext.Provider>;
+    // A connection left over from a previous session is closed by the effect above, so hide it once logged out.
+    const activeConnection = user?.access_token ? connection : null;
+
+    return <SseContext.Provider value={{ connection: activeConnection }}>{children}</SseContext.Provider>;
 };
 
 export const useSseMessage = (onMessageHandler) => {

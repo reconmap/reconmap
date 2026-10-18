@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useUserQuery, useUserUpdateMutation } from "api/users";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -14,29 +14,25 @@ import { initialiseUserPreferences } from "services/userPreferences";
 const EditUserPage = () => {
     const navigate = useNavigate();
     const { userId } = useParams() as any;
-    const [clientUser, setClientUser] = useState<any>(null);
-    const [preferences, setPreferences] = useState<any>(null);
-
     const { user: currentUser } = useAuth() as any;
     const { setTheme } = useTheme();
     const { i18n } = useTranslation();
 
     const { data: user } = useUserQuery(userId);
+    const [userEdits, setClientUser] = useState<any>(null);
+    const [preferencesEdits, setPreferences] = useState<any>(null);
     const updateUserMutation = useUserUpdateMutation(userId);
+
+    const clientUser = userEdits ?? user;
+    const savedPreferences = user && {
+        language: user.locale || "en",
+        theme: initialiseUserPreferences(user)["dashboard.theme"],
+        timezone: user.timezone || "UTC",
+    };
+    const preferences = preferencesEdits ?? savedPreferences;
 
     // Preferences belong to the user they describe: only that user can change them.
     const isOwner = currentUser?.id === user?.id;
-
-    useEffect(() => {
-        if (user) {
-            setClientUser(user);
-            setPreferences({
-                language: user.locale || "en",
-                theme: initialiseUserPreferences(user)["dashboard.theme"],
-                timezone: user.timezone || "UTC",
-            });
-        }
-    }, [user]);
 
     const onPreferencesChange = (ev) => {
         setPreferences({ ...preferences, [ev.target.name]: ev.target.value });

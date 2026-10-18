@@ -5,7 +5,6 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import useDocumentTitle from "hooks/useDocumentTitle";
-import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
@@ -18,8 +17,9 @@ const ProjectsListPage = () => {
     pageNumber = pageNumber !== null ? parseInt(pageNumber) : 1;
     const apiPageNumber = pageNumber - 1;
 
-    const [statusFilter, setStatusFilter] = useState(query.get("status") ?? "active");
-    const [isTemplateFilter, setIsTemplateFilter] = useState(query.get("isTemplate") ?? "false");
+    // The URL is the source of truth for the filters; changing them navigates.
+    const statusFilter = query.get("status") ?? "active";
+    const isTemplateFilter = query.get("isTemplate") ?? "false";
 
     const projectsParams: any = { limit: 10, status: statusFilter, page: apiPageNumber };
     if (isTemplateFilter !== "") {
@@ -47,25 +47,16 @@ const ProjectsListPage = () => {
     };
 
     const onStatusFilterChange = (ev) => {
-        const newValue = ev.target.value;
-        setStatusFilter(newValue);
-        updateUrl({ status: newValue, page: 1 });
+        updateUrl({ status: ev.target.value, page: 1 });
     };
 
     const onIsTemplateFilterChange = (ev) => {
-        const newValue = ev.target.value;
-        setIsTemplateFilter(newValue);
-        updateUrl({ isTemplate: newValue, page: 1 });
+        updateUrl({ isTemplate: ev.target.value, page: 1 });
     };
 
     const onPageChange = (pageNumber) => {
         updateUrl({ page: pageNumber + 1 });
     };
-
-    useEffect(() => {
-        setStatusFilter(query.get("status") ?? "active");
-        setIsTemplateFilter(query.get("isTemplate") ?? "false");
-    }, [query]);
 
     useDocumentTitle("Projects");
 

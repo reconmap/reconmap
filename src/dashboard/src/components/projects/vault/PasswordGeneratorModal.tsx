@@ -8,22 +8,34 @@ import SecondaryButton from "components/ui/buttons/Secondary";
 import { useTranslation } from "react-i18next";
 import CssIcon from "components/ui/CssIcon";
 
-const PasswordGeneratorModal = ({ isOpen, onClose, onSelectPassword }: any) => {
+// The parent mounts this component only while it is open, so each opening starts with a fresh password.
+const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
     const [t] = useTranslation();
     const dialogRef = useRef<any>(null);
     const [passwordConfig, setPasswordConfig] = useState(defaultPasswordConfiguration);
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState(() => {
+        try {
+            return generatePassword(defaultPasswordConfiguration);
+        } catch {
+            return "";
+        }
+    });
+
+    const regeneratePassword = (config) => {
+        try {
+            setPassword(generatePassword(config));
+        } catch {
+            // Ignore validation/range errors during typing
+        }
+    };
 
     useEffect(() => {
         const dialog = dialogRef.current;
         if (!dialog) return;
 
-        if (isOpen) {
-            dialog.showModal();
-        } else {
-            dialog.close();
-        }
-    }, [isOpen]);
+        dialog.showModal();
+        return () => dialog.close();
+    }, []);
 
     const updatePassword = (ev) => {
         let value = ev.target.value;
@@ -34,27 +46,13 @@ const PasswordGeneratorModal = ({ isOpen, onClose, onSelectPassword }: any) => {
         ) {
             value = ev.target.checked;
         }
-        setPasswordConfig({ ...passwordConfig, [ev.target.name]: value });
+        const newConfig = { ...passwordConfig, [ev.target.name]: value };
+        setPasswordConfig(newConfig);
+        regeneratePassword(newConfig);
     };
 
-    useEffect(() => {
-        if (isOpen) {
-            try {
-                const newPassword = generatePassword(passwordConfig);
-                setPassword(newPassword);
-            } catch {
-                // Ignore validation/range errors during typing
-            }
-        }
-    }, [passwordConfig, isOpen]);
-
     const handleGenerate = () => {
-        try {
-            const newPassword = generatePassword(passwordConfig);
-            setPassword(newPassword);
-        } catch {
-            // Handled or ignored
-        }
+        regeneratePassword(passwordConfig);
     };
 
     const handleSelect = () => {

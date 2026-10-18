@@ -1,19 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useProjectQuery } from "api/projects";
 import { requestProjectPut } from "api/requests/projects";
-import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import ProjectForm from "components/projects/Form";
+import { useState } from "react";
 
 const ProjectEdit = () => {
     const navigate = useNavigate();
     const { projectId } = useParams() as any;
     const { data: serverProject, isLoading: isProjectLoading } = useProjectQuery(projectId);
-    const [clientProject, setClientProject] = useState<any>(null);
+    const [projectEdits, setClientProject] = useState<any>(null);
+    const clientProject = projectEdits ?? serverProject;
     const queryClient = useQueryClient();
 
     const onFormSubmit = async (ev) => {
@@ -25,10 +26,6 @@ const ProjectEdit = () => {
 
         navigate(`/projects/${projectId}`);
     };
-
-    useEffect(() => {
-        setClientProject(serverProject);
-    }, [serverProject]);
 
     if (isProjectLoading || !clientProject) {
         return <Loading />;

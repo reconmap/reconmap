@@ -4,7 +4,7 @@ import WebhookForm from "components/integrations/webhooks/Form";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 
@@ -13,13 +13,8 @@ const WebhookEditPage = () => {
     const navigate = useNavigate();
     const { webhookId } = useParams() as any;
     const { data: webhookData, isLoading } = useWebhookQuery(parseInt(webhookId));
-    const [webhook, setWebhook] = useState<any>(null);
-
-    useEffect(() => {
-        if (webhookData) {
-            setWebhook(webhookData);
-        }
-    }, [webhookData]);
+    const [webhookEdits, setWebhook] = useState<any>(null);
+    const webhook = webhookEdits ?? webhookData;
 
     const onFormSubmit = (ev) => {
         ev.preventDefault();

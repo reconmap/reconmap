@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import "./MarkdownEditor.css";
 
@@ -73,13 +73,15 @@ const onImagePasted = async (ev) => {
 };
 
 const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...options }: any) => {
-    const [markdown, setMarkdown] = useState(value || "");
     const [mode, setMode] = useState("edit"); // "edit" or "preview"
+    const [draft, setDraft] = useState<{ source: string; text: string } | null>(null);
     const textareaRef = useRef<any>(null);
 
-    useEffect(() => {
-        setMarkdown(value || "");
-    }, [value]);
+    // The text the user has typed is kept only while the `value` prop it was typed against is unchanged,
+    // so a new `value` from the parent always wins.
+    const sourceValue = value || "";
+    const markdown = draft && draft.source === sourceValue ? draft.text : sourceValue;
+    const setMarkdown = (text) => setDraft({ source: sourceValue, text });
 
     const emitFormChange = (nextValue) => {
         if (typeof onFormChange !== "function") {
@@ -249,9 +251,8 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                     value={markdown}
                     onPaste={onEditorPaste}
                     onChange={(ev) => {
-                        const nextValue = ev.target.value;
-                        setMarkdown(nextValue);
-                        emitFormChange(nextValue);
+                        setMarkdown(ev.target.value);
+                        emitFormChange(ev.target.value);
                     }}
                     {...options}
                 />

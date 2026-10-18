@@ -144,13 +144,14 @@ const VaultItemEdit = () => {
                             </tbody>
                         </table>
                     </form>
-                    <PasswordGeneratorModal
-                        isOpen={isGeneratorOpen}
-                        onClose={() => setIsGeneratorOpen(false)}
-                        onSelectPassword={(pwd) => {
-                            setVaultItem({ ...item, value: pwd });
-                        }}
-                    />
+                    {isGeneratorOpen && (
+                        <PasswordGeneratorModal
+                            onClose={() => setIsGeneratorOpen(false)}
+                            onSelectPassword={(pwd) => {
+                                setVaultItem({ ...item, value: pwd });
+                            }}
+                        />
+                    )}
                 </>
             )}
             {(item.name === "" || item.name === undefined) && (

@@ -160,13 +160,14 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
 
                 <PrimaryButton type="submit">Add</PrimaryButton>
             </details>
-            <PasswordGeneratorModal
-                isOpen={isGeneratorOpen}
-                onClose={() => setIsGeneratorOpen(false)}
-                onSelectPassword={(pwd) => {
-                    setVaultItem({ ...vaultItem, value: pwd });
-                }}
-            />
+            {isGeneratorOpen && (
+                <PasswordGeneratorModal
+                    onClose={() => setIsGeneratorOpen(false)}
+                    onSelectPassword={(pwd) => {
+                        setVaultItem({ ...vaultItem, value: pwd });
+                    }}
+                />
+            )}
         </form>
     );
 };

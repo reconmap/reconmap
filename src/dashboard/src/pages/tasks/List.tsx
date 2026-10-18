@@ -28,9 +28,7 @@ const TasksListPage = () => {
         navigate(`/tasks/create`);
     };
 
-    const reloadTasks = useCallback(() => {
-        setTableModel((tableModel) => ({ ...tableModel, tasks: null }));
-
+    const fetchTasks = useCallback(() => {
         const queryParams = new URLSearchParams();
         queryParams.set("orderColumn", tableModel.sortBy.column);
         queryParams.set("orderDirection", tableModel.sortBy.order);
@@ -49,7 +47,12 @@ const TasksListPage = () => {
             .then((data) => {
                 setTableModel((tableModel) => ({ ...tableModel, tasks: data }));
             });
-    }, [setTableModel, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
+    }, [tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
+
+    const reloadTasks = useCallback(() => {
+        setTableModel((tableModel) => ({ ...tableModel, tasks: null }));
+        fetchTasks();
+    }, [fetchTasks]);
 
     const onStatusSelectChange = (ev) => {
         const newStatus = ev.target.value;
@@ -78,8 +81,8 @@ const TasksListPage = () => {
     };
 
     useEffect(() => {
-        reloadTasks();
-    }, [reloadTasks, tableModel.filters]);
+        fetchTasks();
+    }, [fetchTasks]);
 
     return (
         <>

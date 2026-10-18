@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useVulnerabilityQuery } from "api/vulnerabilities";
 import { normalizeVulnerabilityForSave } from "api/requests/vulnerabilities";
-import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPut } from "utilities/requests";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -9,6 +8,7 @@ import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import VulnerabilityForm from "components/vulnerabilities/Form";
+import { useState } from "react";
 
 const VulnerabilityEdit = () => {
     const { vulnerabilityId } = useParams() as any;
@@ -17,7 +17,8 @@ const VulnerabilityEdit = () => {
     const queryClient = useQueryClient();
 
     const { data: serverVulnerability } = useVulnerabilityQuery(vulnerabilityId);
-    const [clientVulnerability, setClientVulnerability] = useState<any>(null);
+    const [vulnerabilityEdits, setClientVulnerability] = useState<any>(null);
+    const clientVulnerability = vulnerabilityEdits ?? serverVulnerability;
 
     const onFormSubmit = async (ev) => {
         ev.preventDefault();
@@ -37,10 +38,6 @@ const VulnerabilityEdit = () => {
                 errorToast(err.message);
             });
     };
-
-    useEffect(() => {
-        if (serverVulnerability) setClientVulnerability(serverVulnerability);
-    }, [serverVulnerability]);
 
     return (
         <div>

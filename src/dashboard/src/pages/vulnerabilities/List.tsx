@@ -44,12 +44,7 @@ const VulnerabilitiesList = () => {
         navigate(url);
     };
 
-    const reloadVulnerabilities = useCallback(() => {
-        setTableModel((tableModel) => ({
-            ...tableModel,
-            vulnerabilities: null,
-        }));
-
+    const fetchVulnerabilities = useCallback(() => {
         const queryParams = new URLSearchParams();
         queryParams.set("isTemplate", "false");
         queryParams.set("page", String(apiPageNumber));
@@ -71,7 +66,15 @@ const VulnerabilitiesList = () => {
                     vulnerabilities: data.data,
                 }));
             });
-    }, [setTableModel, apiPageNumber, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
+    }, [apiPageNumber, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
+
+    const reloadVulnerabilities = useCallback(() => {
+        setTableModel((tableModel) => ({
+            ...tableModel,
+            vulnerabilities: null,
+        }));
+        fetchVulnerabilities();
+    }, [fetchVulnerabilities]);
 
     const onDeleteButtonClick = () => {
         vulnerabilitiesDeleteMutation.mutate(tableModel.selection as any, {
@@ -91,8 +94,8 @@ const VulnerabilitiesList = () => {
     };
 
     useEffect(() => {
-        reloadVulnerabilities();
-    }, [reloadVulnerabilities, tableModel.filters]);
+        fetchVulnerabilities();
+    }, [fetchVulnerabilities]);
 
     return (
         <>

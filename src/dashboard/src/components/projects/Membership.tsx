@@ -7,7 +7,7 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import Loading from "components/ui/Loading";
 import NativeTable from "components/ui/tables/NativeTable";
 import Title from "components/ui/Title";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Link, useParams } from "react-router";
 import UserAvatar from "../badges/UserAvatar";
 import Breadcrumb from "../ui/Breadcrumb";
@@ -19,7 +19,6 @@ const ProjectMembership = () => {
     const { data: users } = useUsersQuery();
     const { data: members, isLoading, refetch } = useProjectUsersQuery(projectId);
     const { data: savedProject } = useProjectQuery(projectId);
-    const [availableUsers, setAvailableUsers] = useState<any[]>([]);
 
     const handleOnClick = (ev) => {
         ev.preventDefault();
@@ -36,12 +35,12 @@ const ProjectMembership = () => {
         });
     };
 
-    useEffect(() => {
-        if (members && users && users.length > 0) {
-            const memberIds = members.reduce((list, user) => [...list, user.userId], []);
+    const availableUsers = useMemo(() => {
+        if (!members || !users || users.length === 0) return [];
 
-            setAvailableUsers(users.filter((user) => !memberIds.includes(user.id)));
-        }
+        const memberIds = members.reduce((list, user) => [...list, user.userId], []);
+
+        return users.filter((user) => !memberIds.includes(user.id));
     }, [members, users]);
 
     if (isLoading) return <Loading />;

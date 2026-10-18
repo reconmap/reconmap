@@ -5,7 +5,7 @@ import PrimaryButton from "components/ui/buttons/Primary";
 import Title from "components/ui/Title";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import Loading from "components/ui/Loading";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Breadcrumb from "components/ui/Breadcrumb";
 import NativeSelect from "components/forms/NativeSelect";
 
@@ -28,31 +28,32 @@ export const buildSettingsPayload = (provider, providerValues, clearedSecrets) =
     return settings;
 };
 
+const buildAiForm = (data) => {
+    const values = {};
+    for (const provider of data?.providers ?? []) {
+        values[provider.id] = { ...(data.values?.[provider.id] ?? {}) };
+        for (const field of provider.fields) {
+            values[provider.id][field.key] ??= field.defaultValue ?? "";
+            if (field.type === "secret") values[provider.id][field.key] = "";
+        }
+    }
+
+    return {
+        providerId: data?.provider ?? "",
+        maxOutputTokens: String(data?.maxOutputTokens ?? 4000),
+        values,
+        clearedSecrets: {},
+    };
+};
+
 const AiSettingsPage = () => {
     const { data, isLoading } = useSystemAiSettingsQuery();
     const updateMutation = useSystemAiSettingsUpdateMutation();
-    const [providerId, setProviderId] = useState("");
-    const [maxOutputTokens, setMaxOutputTokens] = useState("4000");
-    const [values, setValues] = useState({});
-    const [clearedSecrets, setClearedSecrets] = useState({});
+    const [edits, setEdits] = useState<any>(null);
 
-    useEffect(() => {
-        if (!data) return;
-
-        const initialValues = {};
-        for (const provider of data.providers) {
-            initialValues[provider.id] = { ...(data.values?.[provider.id] ?? {}) };
-            for (const field of provider.fields) {
-                initialValues[provider.id][field.key] ??= field.defaultValue ?? "";
-                if (field.type === "secret") initialValues[provider.id][field.key] = "";
-            }
-        }
-
-        setProviderId(data.provider);
-        setMaxOutputTokens(String(data.maxOutputTokens ?? 4000));
-        setValues(initialValues);
-        setClearedSecrets({});
-    }, [data]);
+    // Until the user edits the form, it shows the saved settings.
+    const { providerId, maxOutputTokens, values, clearedSecrets } = edits ?? buildAiForm(data);
+    const updateForm = (update) => setEdits((current) => update(current ?? buildAiForm(data)));
 
     const provider = useMemo(
         () => data?.providers.find((candidate) => candidate.id === providerId),
@@ -60,17 +61,20 @@ const AiSettingsPage = () => {
     );
 
     const updateSetting = (key, value) => {
-        setValues((current) => ({
-            ...current,
-            [providerId]: {
-                ...current[providerId],
-                [key]: value,
+        updateForm((form) => ({
+            ...form,
+            values: {
+                ...form.values,
+                [providerId]: {
+                    ...form.values[providerId],
+                    [key]: value,
+                },
             },
         }));
     };
 
     const toggleClearSecret = (key, checked) => {
-        setClearedSecrets((current) => ({ ...current, [key]: checked }));
+        updateForm((form) => ({ ...form, clearedSecrets: { ...form.clearedSecrets, [key]: checked } }));
         if (checked) updateSetting(key, "");
     };
 
@@ -87,16 +91,19 @@ const AiSettingsPage = () => {
         try {
             await updateMutation.mutateAsync(payload);
             actionCompletedToast("AI settings saved");
-            setValues((current) => ({
-                ...current,
-                [provider.id]: {
-                    ...current[provider.id],
-                    ...Object.fromEntries(
-                        provider.fields.filter((field) => field.type === "secret").map((field) => [field.key, ""]),
-                    ),
+            updateForm((form) => ({
+                ...form,
+                values: {
+                    ...form.values,
+                    [provider.id]: {
+                        ...form.values[provider.id],
+                        ...Object.fromEntries(
+                            provider.fields.filter((field) => field.type === "secret").map((field) => [field.key, ""]),
+                        ),
+                    },
                 },
+                clearedSecrets: {},
             }));
-            setClearedSecrets({});
         } catch (error) {
             errorToast((error as any).message ?? "Unable to save AI settings");
         }
@@ -122,8 +129,7 @@ const AiSettingsPage = () => {
                             name="provider"
                             value={providerId}
                             onChange={(event) => {
-                                setProviderId(event.target.value);
-                                setClearedSecrets({});
+                                updateForm((form) => ({ ...form, providerId: event.target.value, clearedSecrets: {} }));
                             }}
                         >
                             {data.providers.map((item) => (
@@ -144,7 +150,7 @@ const AiSettingsPage = () => {
                             required
                             name="maxOutputTokens"
                             value={maxOutputTokens}
-                            onChange={(event) => setMaxOutputTokens(event.target.value)}
+                            onChange={(event) => updateForm((form) => ({ ...form, maxOutputTokens: event.target.value }))}
                         />
                     }
                 />

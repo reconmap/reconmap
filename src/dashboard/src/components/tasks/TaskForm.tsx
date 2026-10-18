@@ -19,10 +19,9 @@ const TaskForm = ({ isEditForm = false, forTemplate = false, onFormSubmit, task,
 
     useEffect(() => {
         if (!isLoadingProjects && projects.data.length && task.projectId === "") {
-            const newProjectId = projects.data[0].id;
-            setTask((prevTask) => ({ ...prevTask, projectId: newProjectId }));
+            setTask({ ...task, projectId: projects.data[0].id });
         }
-    }, [task.projectId, projects, setTask]);
+    }, [task, isLoadingProjects, projects, setTask]);
 
     return (
         <form onSubmit={onFormSubmit}>

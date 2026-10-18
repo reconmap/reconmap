@@ -1,19 +1,20 @@
 import { useOrganisationQuery, useOrganisationsQueriesInvalidation } from "api/clients";
 import { requestOrganisationPut } from "api/requests/organisations";
-import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import ClientForm from "components/clients/Form";
+import { useState } from "react";
 
 const EditClientPage = () => {
     const navigate = useNavigate();
     const { clientId } = useParams() as any;
 
-    const { data: serverClient, isLoading } = useOrganisationQuery(clientId);
-    const [clientClient, setClientClient] = useState<any>(null);
+    const { data: serverClient } = useOrganisationQuery(clientId);
+    const [clientEdits, setClientClient] = useState<any>(null);
+    const clientClient = clientEdits ?? serverClient;
     const organisationsQueryInvalidation = useOrganisationsQueriesInvalidation();
 
     const onFormSubmit = (ev) => {
@@ -25,10 +26,6 @@ const EditClientPage = () => {
             navigate(`/organisations/${clientId}`);
         });
     };
-
-    useEffect(() => {
-        if (!isLoading) setClientClient(serverClient);
-    }, [isLoading, serverClient]);
 
     return (
         <div>

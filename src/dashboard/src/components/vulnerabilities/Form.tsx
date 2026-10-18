@@ -63,14 +63,14 @@ const VulnerabilityForm = ({
             let targetProjectId = parseInt(vulnerability.projectId);
             if (!targetProjectId || targetProjectId === 0) {
                 targetProjectId = projects.data[0].id;
-                setVulnerability(v => ({
-                    ...v,
+                setVulnerability({
+                    ...vulnerability,
                     projectId: targetProjectId,
                     assetId: 0,
-                }));
+                });
             }
         }
-    }, [projects, vulnerability?.projectId, vulnerability?.isTemplate]);
+    }, [projects, vulnerability]);
     const { data: categories } = useVulnerabilityCategoriesQuery({
         parentsOnly: false,
     });

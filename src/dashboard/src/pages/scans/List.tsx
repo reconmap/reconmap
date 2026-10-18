@@ -4,7 +4,7 @@ import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeSelect from "components/forms/NativeSelect";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import AttachmentsDropzone from "components/attachments/Dropzone";
 import ScheduledRuns from "components/commands/ScheduledRuns";
@@ -12,20 +12,17 @@ import ScanTargetForm from "components/scans/ScanTargetForm";
 
 const ScansPage = ({ mode }: any) => {
     const [t] = useTranslation();
-    const [selectedProjectId, setSelectedProjectId] = useState<any>(null);
+    const [chosenProjectId, setChosenProjectId] = useState<any>(null);
 
     const { data: projects, isLoading: isProjectsLoading } = useProjectsQuery({ isTemplate: false, status: "active" });
 
-    useEffect(() => {
-        if (projects?.data?.length > 0 && !selectedProjectId) {
-            setSelectedProjectId(projects.data[0].id);
-        }
-    }, [projects, selectedProjectId]);
+    // Until the user picks a project, default to the first active one.
+    const selectedProjectId = chosenProjectId || projects?.data?.[0]?.id;
 
     if (isProjectsLoading) return <Loading />;
 
     const onProjectChange = (ev) => {
-        setSelectedProjectId(parseInt(ev.target.value) || null);
+        setChosenProjectId(parseInt(ev.target.value) || null);
     };
 
     const getTitle = () => {

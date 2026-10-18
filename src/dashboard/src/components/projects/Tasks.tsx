@@ -12,9 +12,7 @@ const ProjectTasks = ({ project }: any) => {
 
     const [tableModel, setTableModel] = useState<any>(new TaskTableModel(false, false));
 
-    const reloadTasks = useCallback(() => {
-        setTableModel((tableModel) => ({ ...tableModel, tasks: null }));
-
+    const fetchTasks = useCallback(() => {
         const queryParams = new URLSearchParams();
         queryParams.set("projectId", project.id);
         queryParams.set("orderColumn", tableModel.sortBy.column);
@@ -35,7 +33,12 @@ const ProjectTasks = ({ project }: any) => {
             .then((data) => {
                 setTableModel((tableModel) => ({ ...tableModel, tasks: data }));
             });
-    }, [setTableModel, project.id, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order, isTemplate]);
+    }, [project.id, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order, isTemplate]);
+
+    const reloadTasks = useCallback(() => {
+        setTableModel((tableModel) => ({ ...tableModel, tasks: null }));
+        fetchTasks();
+    }, [fetchTasks]);
 
     const onAddTaskClick = (ev) => {
         ev.preventDefault();
@@ -43,8 +46,8 @@ const ProjectTasks = ({ project }: any) => {
     };
 
     useEffect(() => {
-        reloadTasks();
-    }, [reloadTasks, tableModel.filters]);
+        fetchTasks();
+    }, [fetchTasks]);
 
     return (
         <section>

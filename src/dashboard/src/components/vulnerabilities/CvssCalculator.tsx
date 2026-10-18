@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 
 const AV_OPTIONS = [
     { value: "N", label: "Network (AV:N)" },
@@ -81,34 +80,8 @@ const parseCvss4Vector = (vector) => {
 
 const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }: any) => {
     const vector = vulnerability.cvssVector || "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N";
-    const values = parseCvss4Vector(vector);
-
-    const [av, setAv] = useState(values.av);
-    const [ac, setAc] = useState(values.ac);
-    const [at, setAt] = useState(values.at);
-    const [pr, setPr] = useState(values.pr);
-    const [ui, setUi] = useState(values.ui);
-    const [vc, setVc] = useState(values.vc);
-    const [vi, setVi] = useState(values.vi);
-    const [va, setVa] = useState(values.va);
-    const [sc, setSc] = useState(values.sc);
-    const [si, setSi] = useState(values.si);
-    const [sa, setSa] = useState(values.sa);
-
-    useEffect(() => {
-        const parsed = parseCvss4Vector(vulnerability.cvssVector);
-        setAv(parsed.av);
-        setAc(parsed.ac);
-        setAt(parsed.at);
-        setPr(parsed.pr);
-        setUi(parsed.ui);
-        setVc(parsed.vc);
-        setVi(parsed.vi);
-        setVa(parsed.va);
-        setSc(parsed.sc);
-        setSi(parsed.si);
-        setSa(parsed.sa);
-    }, [vulnerability.cvssVector]);
+    // The vector is the single source of truth: each metric is read from it, and changes write back to it.
+    const { av, ac, at, pr, ui, vc, vi, va, sc, si, sa } = parseCvss4Vector(vector);
 
     const updateCvss = (newAv, newAc, newAt, newPr, newUi, newVc, newVi, newVa, newSc, newSi, newSa) => {
         const score = calculateCvss4Score(newAv, newAc, newAt, newPr, newUi, newVc, newVi, newVa, newSc, newSi, newSa);
@@ -126,7 +99,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-av">Attack Vector (AV)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-av" value={av}onChange={val => { setAv(val.target.value); updateCvss(val.target.value, ac, at, pr, ui, vc, vi, va, sc, si, sa); }}>
+                    <select id="cvss4-av" value={av}onChange={val => { updateCvss(val.target.value, ac, at, pr, ui, vc, vi, va, sc, si, sa); }}>
                         {AV_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -134,7 +107,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-ac">Attack Complexity (AC)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-ac" value={ac}onChange={val => { setAc(val.target.value); updateCvss(av, val.target.value, at, pr, ui, vc, vi, va, sc, si, sa); }}>
+                    <select id="cvss4-ac" value={ac}onChange={val => { updateCvss(av, val.target.value, at, pr, ui, vc, vi, va, sc, si, sa); }}>
                         {AC_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -142,7 +115,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-at">Attack Requirements (AT)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-at" value={at}onChange={val => { setAt(val.target.value); updateCvss(av, ac, val.target.value, pr, ui, vc, vi, va, sc, si, sa); }}>
+                    <select id="cvss4-at" value={at}onChange={val => { updateCvss(av, ac, val.target.value, pr, ui, vc, vi, va, sc, si, sa); }}>
                         {AT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -150,7 +123,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-pr">Privileges Required (PR)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-pr" value={pr}onChange={val => { setPr(val.target.value); updateCvss(av, ac, at, val.target.value, ui, vc, vi, va, sc, si, sa); }}>
+                    <select id="cvss4-pr" value={pr}onChange={val => { updateCvss(av, ac, at, val.target.value, ui, vc, vi, va, sc, si, sa); }}>
                         {PR_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -158,7 +131,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-ui">User Interaction (UI)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-ui" value={ui}onChange={val => { setUi(val.target.value); updateCvss(av, ac, at, pr, val.target.value, vc, vi, va, sc, si, sa); }}>
+                    <select id="cvss4-ui" value={ui}onChange={val => { updateCvss(av, ac, at, pr, val.target.value, vc, vi, va, sc, si, sa); }}>
                         {UI_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -168,7 +141,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-vc">Confidentiality (VC)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-vc" value={vc}onChange={val => { setVc(val.target.value); updateCvss(av, ac, at, pr, ui, val.target.value, vi, va, sc, si, sa); }}>
+                    <select id="cvss4-vc" value={vc}onChange={val => { updateCvss(av, ac, at, pr, ui, val.target.value, vi, va, sc, si, sa); }}>
                         {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -176,7 +149,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-vi">Integrity (VI)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-vi" value={vi}onChange={val => { setVi(val.target.value); updateCvss(av, ac, at, pr, ui, vc, val.target.value, va, sc, si, sa); }}>
+                    <select id="cvss4-vi" value={vi}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, val.target.value, va, sc, si, sa); }}>
                         {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -184,7 +157,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-va">Availability (VA)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-va" value={va}onChange={val => { setVa(val.target.value); updateCvss(av, ac, at, pr, ui, vc, vi, val.target.value, sc, si, sa); }}>
+                    <select id="cvss4-va" value={va}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, val.target.value, sc, si, sa); }}>
                         {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -194,7 +167,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-sc">Confidentiality (SC)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-sc" value={sc}onChange={val => { setSc(val.target.value); updateCvss(av, ac, at, pr, ui, vc, vi, va, val.target.value, si, sa); }}>
+                    <select id="cvss4-sc" value={sc}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, val.target.value, si, sa); }}>
                         {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -202,7 +175,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-si">Integrity (SI)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-si" value={si}onChange={val => { setSi(val.target.value); updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, val.target.value, sa); }}>
+                    <select id="cvss4-si" value={si}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, val.target.value, sa); }}>
                         {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
@@ -210,7 +183,7 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
             <div className="field">
                 <label className="label" htmlFor="cvss4-sa">Availability (SA)</label>
                 <div className="select is-fullwidth">
-                    <select id="cvss4-sa" value={sa}onChange={val => { setSa(val.target.value); updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, si, val.target.value); }}>
+                    <select id="cvss4-sa" value={sa}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, si, val.target.value); }}>
                         {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                 </div>
