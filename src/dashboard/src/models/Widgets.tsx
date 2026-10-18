@@ -15,19 +15,19 @@ import TopVulnerableAssetsWidget from "pages/dashboard/widgets/TopVulnerableAsse
 const Widgets = {
     "discussions": {
         title: "Community discussions",
-        description: "Recent community discussions",
+        description: "It shows the latest Reconmap community discussions.",
         visible: true,
         component: <DiscussionsWidget />,
     },
     "releases": {
         title: "Reconmap releases",
-        description: "Recent Reconmap releases",
+        description: "It shows the latest Reconmap releases.",
         visible: true,
         component: <ReleasesWidget />,
     },
     "my-tasks": {
         title: "My tasks",
-        description: "It shows a list of all open tasks assigned to you.",
+        description: "It shows up to five tasks assigned to you in non-archived projects.",
         visible: true,
         component: <MyTasksWidget />,
     },
@@ -41,7 +41,7 @@ const Widgets = {
         title: "Active projects",
         visible: true,
         component: <ActiveProjectsWidget />,
-        description: "It shows a list of all non-archived projects.",
+        description: "It shows up to five active projects.",
     },
 
     "vulnerability-by-category-stats": {
@@ -52,14 +52,14 @@ const Widgets = {
     },
     "recent-activity": {
         title: "Recent activity",
-        description: "It shows the latest actions performed by users across the system.",
+        description: "It shows the ten latest actions performed by users across the system.",
         visible: true,
         component: <RecentActivityWidget />,
         permissions: "system.*",
     },
     "user-activity-stats": {
         title: "User activity over time",
-        description: "It charts user activity over time.",
+        description: "It charts the number of user actions recorded per day.",
         visible: true,
         component: <UserActivityStatsWidget />,
         permissions: "system.*",
@@ -68,33 +68,33 @@ const Widgets = {
         title: "System health",
         visible: true,
         component: <SystemHealthWidget />,
-        description: "It presents the health of the API, its backing services and the MCP server.",
+        description: "It shows the health of the API, its backing services and the MCP server.",
         permissions: "system.*",
     },
     "system-usage": {
         title: "System usage",
         visible: true,
         component: <SystemUsageWidget />,
-        description: "It summarises AI usage and cost, attachments storage, key-value server memory and message queue depth.",
+        description: "It shows AI usage and cost, attachments storage, key-value server memory and message queue depth.",
         permissions: "system.*",
     },
     "recent-vulnerabilities": {
         title: "Recent vulnerabilities",
         visible: true,
         component: <RecentVulnerabilitiesWidget />,
-        description: "It shows the most recently reported vulnerabilities.",
+        description: "It shows the five most recently reported vulnerabilities.",
     },
     "runners": {
         title: "Runners",
         visible: true,
         component: <RunnersWidget />,
-        description: "It shows the status of security runners.",
+        description: "It shows each registered runner with its operating system, IP and whether it is online.",
     },
     "top-vulnerable-assets": {
         title: "Top vulnerable assets",
         visible: true,
         component: <TopVulnerableAssetsWidget />,
-        description: "It shows assets with the highest count of active vulnerabilities.",
+        description: "It shows the five assets with the most vulnerabilities, based on the 100 latest non-template vulnerabilities.",
     },
 };
 
