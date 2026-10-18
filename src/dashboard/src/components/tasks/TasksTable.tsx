@@ -90,7 +90,7 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
         },
         {
             style: { width: "15%", textAlign: "right" },
-            header: () => (reloadCallback ? <ReloadButton onClick={reloadCallback} /> : ""),
+            header: reloadCallback ? <ReloadButton onClick={reloadCallback} /> : "",
             cell: (task) => (
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                     <LinkButton href={`/tasks/${task.id}/edit`}>Edit</LinkButton>

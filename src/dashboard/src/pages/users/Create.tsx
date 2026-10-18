@@ -17,7 +17,8 @@ const CreateUserPage = () => {
     const handleCreate = async (ev) => {
         ev.preventDefault();
 
-        await createUserApi(userData).then((resp) => {
+        try {
+            const resp = await createUserApi(userData);
             if (resp.ok) {
                 navigate("/users/");
                 actionCompletedToast(`The user "${userData.firstName} ${userData.lastName}" has been created.`);
@@ -25,7 +26,9 @@ const CreateUserPage = () => {
             } else {
                 errorToast("Unable to create user: " + resp.status);
             }
-        });
+        } catch (err: any) {
+            errorToast("Unable to create user: " + (err?.message ?? "Unknown error"));
+        }
     };
 
     return (
