@@ -1,6 +1,6 @@
 import { useVulnerabilitiesQuery } from "api/vulnerabilities";
 import VulnerabilityBadge from "components/badges/VulnerabilityBadge";
-import Loading from "components/ui/Loading";
+import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import DashboardWidget from "./Widget";
 
@@ -16,12 +16,11 @@ const RecentVulnerabilitiesWidget = () => {
         orderDirection: "desc",
     });
 
-    if (isLoading) return <Loading />;
-    if (isError) return <p>Error loading vulnerabilities: {error.message}</p>;
+    if (isError) return <DashboardWidget title="Recent vulnerabilities"><p className="has-text-danger">Error loading vulnerabilities: {error.message}</p></DashboardWidget>;
 
     return (
         <DashboardWidget title="Recent vulnerabilities">
-            {vulnerabilities.data.length === 0 ? (
+            {!isLoading && vulnerabilities.data.length === 0 ? (
                 <p>No vulnerabilities to show.</p>
             ) : (
                 <table className="table is-fullwidth">
@@ -32,7 +31,8 @@ const RecentVulnerabilitiesWidget = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {vulnerabilities.data.map((vulnerability) => (
+                        {isLoading && <LoadingTableRow numColumns={2} numRows={5} />}
+                        {vulnerabilities?.data.map((vulnerability) => (
                             <tr key={vulnerability.id}>
                                 <td>
                                     <VulnerabilityBadge key={vulnerability.id} vulnerability={vulnerability} />

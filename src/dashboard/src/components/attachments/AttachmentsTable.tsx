@@ -3,7 +3,6 @@ import { requestAttachment } from "api/requests/attachments";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import SecondaryButton from "components/ui/buttons/Secondary";
 import FileSizeSpan from "components/ui/FileSizeSpan";
-import Loading from "components/ui/Loading";
 import ModalDialog from "components/ui/ModalDialog";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -56,10 +55,6 @@ const AttachmentsTable = ({ attachments }: any) => {
             return mimeType;
         }
     };
-
-    if (!attachments) {
-        return <Loading />;
-    }
 
     const columns = [
         {

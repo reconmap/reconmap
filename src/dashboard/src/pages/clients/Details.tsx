@@ -15,10 +15,10 @@ import NativeSelect from "components/forms/NativeSelect";
 import NativeTabs from "components/forms/NativeTabs";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import ProjectsTable from "components/projects/Table";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import EmptyField from "components/ui/EmptyField";
 import ExternalLink from "components/ui/ExternalLink";
-import Loading from "components/ui/Loading";
 import MailLink from "components/ui/MailLink";
 import TelephoneLink from "components/ui/TelephoneLink";
 import TimestampsSection from "components/ui/TimestampsSection";
@@ -45,9 +45,7 @@ const ContactTypes = {
 const ClientProjectsTab = ({ clientId }: any) => {
     const { data: projects, isLoading } = useProjectsQuery({ clientId: clientId });
 
-    if (isLoading) return <Loading />;
-
-    if (projects.data.length === 0) {
+    if (!isLoading && projects.data.length === 0) {
         return (
             <div>
                 This client has no projects. You can see all projects and their clients <Link to="/projects">here</Link>
@@ -58,7 +56,7 @@ const ClientProjectsTab = ({ clientId }: any) => {
 
     return (
         <div>
-            <ProjectsTable projects={projects.data} showClientColumn={false} />
+            <ProjectsTable projects={isLoading ? null : projects.data} showClientColumn={false} />
         </div>
     );
 };
@@ -141,7 +139,7 @@ const ClientDetails = () => {
     }, [client]);
 
     if (isClientLoading) {
-        return <Loading />;
+        return <PageSkeleton />;
     }
 
     return (

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useUserQuery, useUserUpdateMutation } from "api/users";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import UserForm from "components/users/Form";
@@ -64,7 +64,7 @@ const EditUserPage = () => {
         );
     };
 
-    if (!clientUser || !preferences) return <Loading />;
+    if (!clientUser || !preferences) return <PageSkeleton />;
 
     return (
         <div>

@@ -2,7 +2,7 @@ import { requestCommandOutputPost } from "api/commands";
 import { useProjectsQuery } from "api/projects";
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeSelect from "components/forms/NativeSelect";
-import Loading from "components/ui/Loading";
+import Skeleton from "components/ui/Skeleton";
 import Title from "components/ui/Title";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,8 +18,6 @@ const ScansPage = ({ mode }: any) => {
 
     // Until the user picks a project, default to the first active one.
     const selectedProjectId = chosenProjectId || projects?.data?.[0]?.id;
-
-    if (isProjectsLoading) return <Loading />;
 
     const onProjectChange = (ev) => {
         setChosenProjectId(parseInt(ev.target.value) || null);
@@ -46,8 +44,8 @@ const ScansPage = ({ mode }: any) => {
                     <HorizontalLabelledField
                         label={t("Project")}
                         control={
-                            <NativeSelect onChange={onProjectChange} value={selectedProjectId || ""}>
-                                <option value="">{t("(select project)")}</option>
+                            <NativeSelect onChange={onProjectChange} value={selectedProjectId || ""} disabled={isProjectsLoading}>
+                                <option value="">{isProjectsLoading ? t("Loading...") : t("(select project)")}</option>
                                 {projects?.data.map((project) => (
                                     <option key={project.id} value={project.id}>
                                         {project.name}
@@ -59,7 +57,9 @@ const ScansPage = ({ mode }: any) => {
 
                     <div className="mt-4">
                         <label className="label">{t("Scan file")}</label>
-                        {selectedProjectId ? (
+                        {isProjectsLoading ? (
+                            <Skeleton height="8rem" />
+                        ) : selectedProjectId ? (
                             <AttachmentsDropzone
                                 uploadFn={requestCommandOutputPost}
                                 fileFieldName="resultFile"

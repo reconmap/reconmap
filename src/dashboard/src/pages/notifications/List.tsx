@@ -4,7 +4,6 @@ import { requestNotificationsPatch, requestPartialNotificationUpdate, requestNot
 import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Loading from "components/ui/Loading";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import Title from "components/ui/Title";
 import Tag from "components/ui/Tag";
@@ -58,8 +57,6 @@ const NotificationsList = () => {
         });
     };
 
-    if (isLoading) return <Loading />;
-
     const columns = [
         {
             header: (
@@ -67,7 +64,7 @@ const NotificationsList = () => {
                     type="checkbox"
                     onChange={(e) => {
                         if (e.target.checked) {
-                            setSelectedIds(notifications.map(n => n.id));
+                            setSelectedIds((notifications ?? []).map(n => n.id));
                         } else {
                             setSelectedIds([]);
                         }
@@ -151,7 +148,7 @@ const NotificationsList = () => {
 
             <NativeTable
                 columns={columns}
-                rows={notifications}
+                rows={isLoading ? null : notifications}
                 rowId={(notification) => notification.id}
                 emptyRowsMessage="No notifications available."
             ></NativeTable>

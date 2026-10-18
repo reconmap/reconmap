@@ -1,4 +1,5 @@
 import { useJiraIntegrationQuery, useUpdateJiraIntegrationMutation } from "api/jira";
+import PageSkeleton from "components/ui/PageSkeleton";
 import JiraForm from "components/integrations/ticketing/JiraForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
@@ -26,7 +27,7 @@ const JiraIntegrationEditPage = () => {
         });
     };
 
-    if (isLoading || !integration) return <div>{t("Loading...")}</div>;
+    if (isLoading || !integration) return <PageSkeleton />;
 
     return (
         <div>

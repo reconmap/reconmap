@@ -4,11 +4,11 @@ import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import NativeTextArea from "components/forms/NativeTextArea";
-import Loading from "components/ui/Loading";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPost } from "utilities/requests";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Title from "components/ui/Title";
 import PrimaryButton from "components/ui/buttons/Primary";
@@ -57,7 +57,7 @@ const SendReport = () => {
         setRecipientsGroup(ev.target.value);
     };
 
-    if (isProjectLoading) return <Loading />;
+    if (isProjectLoading) return <PageSkeleton />;
 
     return (
         <div>

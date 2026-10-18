@@ -1,6 +1,6 @@
 import { useDeleteVulnerabilityCategoryMutation, useVulnerabilityCategoriesQuery } from "api/vulnerabilities";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Loading from "components/ui/Loading";
+import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResults from "components/ui/NoResults";
 import Title from "components/ui/Title";
 import CreateButton from "components/ui/buttons/Create";
@@ -55,8 +55,6 @@ const VulnerabilityCategoriesPage = () => {
         deleteVulnerabilityCategoryMutation.mutate(templateId);
     };
 
-    if (isLoading) return <Loading />;
-
     return (
         <>
             <div className="heading">
@@ -90,7 +88,9 @@ const VulnerabilityCategoriesPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {null === categories || categories.length === 0 ? (
+                    {isLoading ? (
+                        <LoadingTableRow numColumns={3} />
+                    ) : !categories || categories.length === 0 ? (
                         <tr>
                             <td colSpan={3}>
                                 <NoResults />

@@ -1,5 +1,6 @@
 import { useVulnerabilitiesStatsQuery } from "api/vulnerabilities";
 import { Cell, Pie, PieChart } from "recharts";
+import Skeleton from "components/ui/Skeleton";
 import DashboardWidget from "./Widget";
 
 const RADIAN = Math.PI / 180;
@@ -29,12 +30,13 @@ const VulnerabilitiesByRiskStatsWidget = ({ projectId = null }: any) => {
     if (null !== projectId) params["projectId"] = projectId;
     const { data: vulnerabilitiesByRiskStats, isLoading, error, isError } = useVulnerabilitiesStatsQuery(params);
 
-    if (isLoading) return <p>Loading&hellip;</p>;
-    if (isError) return <p>Error loading vulnerabilities stats: {error.message}</p>;
+    if (isError) return <DashboardWidget title="Vulnerabilities by risk"><p className="has-text-danger">Error loading vulnerabilities stats: {error.message}</p></DashboardWidget>;
 
     return (
         <DashboardWidget title="Vulnerabilities by risk">
-            {vulnerabilitiesByRiskStats && vulnerabilitiesByRiskStats.length > 0 ? (
+            {isLoading ? (
+                <Skeleton width="200px" height="200px" style={{ borderRadius: "50%", margin: "1rem" }} />
+            ) : vulnerabilitiesByRiskStats && vulnerabilitiesByRiskStats.length > 0 ? (
                 <PieChart width={400} height={320}>
                     <Pie
                         data={vulnerabilitiesByRiskStats}

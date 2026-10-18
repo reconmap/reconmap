@@ -13,8 +13,8 @@ import { t } from "i18next";
 import VulnerabilityStatuses from "models/VulnerabilityStatuses";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import DeleteButton from "components/ui/buttons/Delete";
 import { actionCompletedToast } from "components/ui/toast";
@@ -66,7 +66,7 @@ const VulnerabilityDetails = () => {
             .catch((err) => console.error(err));
     };
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <PageSkeleton />;
 
     return (
         <div>

@@ -5,7 +5,7 @@ import ReportModalDialog from "components/reports/templates/ModalDialog";
 import Breadcrumb from "components/ui/Breadcrumb";
 import EmptyField from "components/ui/EmptyField";
 import ExternalLink from "components/ui/ExternalLink";
-import Loading from "components/ui/Loading";
+import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResults from "components/ui/NoResults";
 import Title from "components/ui/Title";
 import CreateButton from "components/ui/buttons/Create";
@@ -83,9 +83,7 @@ const ReportTemplatesList = () => {
                 if you want to find out which variables are available to your report templates.
             </div>
 
-            {isLoading ? (
-                <Loading />
-            ) : (
+            {(
                 <table className="table is-fullwidth">
                     <thead>
                         <tr>
@@ -98,7 +96,9 @@ const ReportTemplatesList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {templates.length === 0 ? (
+                        {isLoading ? (
+                            <LoadingTableRow numColumns={6} />
+                        ) : templates.length === 0 ? (
                             <tr>
                                 <td colSpan={3}>
                                     <NoResults />

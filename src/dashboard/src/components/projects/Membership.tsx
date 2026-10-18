@@ -4,7 +4,6 @@ import { useUsersQuery } from "api/users";
 import UserRoleBadge from "components/badges/UserRoleBadge";
 import NativeSelect from "components/forms/NativeSelect";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
-import Loading from "components/ui/Loading";
 import NativeTable from "components/ui/tables/NativeTable";
 import Title from "components/ui/Title";
 import { useMemo } from "react";
@@ -42,8 +41,6 @@ const ProjectMembership = () => {
 
         return users.filter((user) => !memberIds.includes(user.id));
     }, [members, users]);
-
-    if (isLoading) return <Loading />;
 
     const columns = [
         {
@@ -95,7 +92,7 @@ const ProjectMembership = () => {
                 <div>All users have been added to the project.</div>
             )}
 
-            <NativeTable rows={members} rowId={member => member.id} columns={columns}>
+            <NativeTable rows={isLoading ? null : members} rowId={member => member.id} columns={columns}>
 
             </NativeTable>
         </div>

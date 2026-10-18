@@ -1,12 +1,18 @@
-import Loading from "../Loading";
+import Skeleton from "../Skeleton";
 
-const LoadingTableRow = ({ numColumns }: any) => {
+const LoadingTableRow = ({ numColumns, numRows = 5 }: any) => {
     return (
-        <tr>
-            <td colSpan={numColumns} style={{ padding: "20px" }}>
-                <Loading />
-            </td>
-        </tr>
+        <>
+            {Array.from({ length: numRows }, (_, rowIndex) => (
+                <tr key={rowIndex} aria-busy="true">
+                    {Array.from({ length: numColumns }, (_, columnIndex) => (
+                        <td key={columnIndex}>
+                            <Skeleton width={columnIndex === 0 ? "80%" : "60%"} />
+                        </td>
+                    ))}
+                </tr>
+            ))}
+        </>
     );
 };
 

@@ -4,7 +4,7 @@ import NoteModalDialog from "components/notes/ModalDialog";
 import CreateButton from "components/ui/buttons/Create";
 import useBoolean from "hooks/useBoolean";
 import NotesTable from "../notes/Table";
-import Loading from "../ui/Loading";
+import Skeleton from "../ui/Skeleton";
 
 const ProjectNotesTab = ({ project }: any) => {
     const { data: notes, isLoading, refetch } = useNotesQuery({ parentType: "project", parentId: project.id });
@@ -22,10 +22,6 @@ const ProjectNotesTab = ({ project }: any) => {
         refetch();
     };
 
-    if (isLoading) {
-        return <Loading />;
-    }
-
     return (
         <section>
             <h4 className="title is-4">Project comments</h4>
@@ -40,7 +36,13 @@ const ProjectNotesTab = ({ project }: any) => {
                 <CreateButton onClick={openDialog}>Add comment&hellip;</CreateButton>
             </RestrictedComponent>
 
-            <NotesTable notes={notes} onDeleteButtonClick={onDeleteButtonClick} />
+            {isLoading ? (
+                <div className="mt-5">
+                    <Skeleton height="5rem" />
+                </div>
+            ) : (
+                <NotesTable notes={notes} onDeleteButtonClick={onDeleteButtonClick} />
+            )}
         </section>
     );
 };

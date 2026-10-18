@@ -1,5 +1,5 @@
 import { useRunnersQuery } from "api/runners";
-import Loading from "components/ui/Loading";
+import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import DashboardWidget from "./Widget";
 import { Link } from "react-router";
 
@@ -14,12 +14,11 @@ const pingedRecently = (lastPingAt) => {
 const RunnersWidget = () => {
     const { data: runners, isLoading, isError, error } = useRunnersQuery();
 
-    if (isLoading) return <Loading />;
-    if (isError) return <p className="has-text-danger">Error loading runners: {error.message}</p>;
+    if (isError) return <DashboardWidget title="Runners"><p className="has-text-danger">Error loading runners: {error.message}</p></DashboardWidget>;
 
     return (
         <DashboardWidget title="Runners">
-            {runners && runners.length > 0 ? (
+            {isLoading || (runners && runners.length > 0) ? (
                 <table className="table is-fullwidth is-striped">
                     <thead>
                         <tr>
@@ -29,7 +28,8 @@ const RunnersWidget = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {runners.map((runner) => (
+                        {isLoading && <LoadingTableRow numColumns={3} numRows={3} />}
+                        {runners?.map((runner) => (
                             <tr key={runner.id}>
                                 <td>
                                     <Link to={`/runners/${runner.id}`}><strong>{runner.name}</strong></Link>

@@ -1,6 +1,5 @@
 import { useReportsQuery } from "api/reports";
 import CreateButton from "components/ui/buttons/Create";
-import Loading from "components/ui/Loading";
 import { useSseMessage } from "contexts/SseContext";
 import useBoolean from "hooks/useBoolean";
 import ReportVersionModalDialog from "./ModalDialog";
@@ -19,8 +18,6 @@ const ReportRevisions = ({ projectId }: any) => {
         refetchReports();
         closeAddDialog();
     };
-
-    if (!reports) return <Loading />;
 
     return (
         <>

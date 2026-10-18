@@ -4,11 +4,11 @@ const defaultCellRenderer = (column, row) => {
     return row[column.property] ?? "-";
 };
 
-const NativeTable = ({ caption = undefined, columns = [], rows = [], rowId = () => { }, emptyRowsMessage = 'No results available.' }: any) => {
+const NativeTable = ({ caption = undefined, columns = [], rows = [], rowId = () => { }, emptyRowsMessage = 'No results available.', isLoading = false }: any) => {
     const enabledColumns = columns.filter((column) => column.enabled === undefined || column.enabled);
     const numColumns = enabledColumns.length;
 
-    const rowsAreLoading = undefined === rows || null === rows;
+    const rowsAreLoading = isLoading || undefined === rows || null === rows;
     const rowsAreEmpty = !rowsAreLoading && 0 === rows.length;
 
     return (

@@ -2,9 +2,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSystemUsageQuery } from "api/system";
 import NativeButton from "components/forms/NativeButton";
 import FileSizeSpan from "components/ui/FileSizeSpan";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { useTranslation } from "react-i18next";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 
 const SystemUsagePage = () => {
@@ -20,7 +20,7 @@ const SystemUsagePage = () => {
         queryClient.invalidateQueries();
     };
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <PageSkeleton />;
 
     return (
         <div>

@@ -1,17 +1,17 @@
 import { useReleasesQuery } from "api/community";
 import ExternalLink from "components/ui/ExternalLink";
-import Loading from "components/ui/Loading";
+import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import DashboardWidget from "./Widget";
 
 const ReleasesWidget = () => {
     const { data: releases, isLoading, isError } = useReleasesQuery();
 
-    if (isLoading || isError) return <Loading />;
-
     return (
         <DashboardWidget title="Reconmap releases">
-            {releases.length === 0 ? (
+            {isError ? (
+                <p className="has-text-danger">Unable to load data.</p>
+            ) : !isLoading && releases.length === 0 ? (
                 <p>You don't have any assigned tasks.</p>
             ) : (
                 <table className="table is-fullwidth">
@@ -23,7 +23,8 @@ const ReleasesWidget = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {releases.map((task) => (
+                        {isLoading && <LoadingTableRow numColumns={3} numRows={3} />}
+                        {releases?.map((task) => (
                             <tr key={task.id}>
                                 <td>
                                     <RelativeDateFormatter date={task.published_at} />

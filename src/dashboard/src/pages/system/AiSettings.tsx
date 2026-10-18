@@ -4,8 +4,8 @@ import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/Primary";
 import Title from "components/ui/Title";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
-import Loading from "components/ui/Loading";
 import { useMemo, useState } from "react";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import NativeSelect from "components/forms/NativeSelect";
 
@@ -109,7 +109,7 @@ const AiSettingsPage = () => {
         }
     };
 
-    if (isLoading || !data || !provider) return <Loading />;
+    if (isLoading || !data || !provider) return <PageSkeleton />;
 
     return (
         <div>

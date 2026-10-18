@@ -1,5 +1,6 @@
 import { useRunnerQuery } from "api/runners";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PrimaryButton from "components/ui/buttons/Primary";
 import CommandTerminal from "components/ui/CommandTerminal";
@@ -8,7 +9,6 @@ import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import Title from "components/ui/Title";
 import { useState } from "react";
 import { useParams } from "react-router";
-import Loading from "components/ui/Loading";
 import { useAuth } from "contexts/AuthContext";
 import { hasRunnerTerminalAccess } from "services/auth";
 
@@ -46,7 +46,7 @@ const RunnerDetailsPage = () => {
         setTerminalVisibility(false);
     };
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <PageSkeleton />;
 
     return (
         <div>

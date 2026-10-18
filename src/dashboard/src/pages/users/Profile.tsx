@@ -8,9 +8,9 @@ import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import NativeTabs from "components/forms/NativeTabs";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import BooleanText from "components/ui/BooleanText";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import EmptyField from "components/ui/EmptyField";
-import Loading from "components/ui/Loading";
 import TimestampsSection from "components/ui/TimestampsSection";
 import Title from "components/ui/Title";
 import DeleteButton from "components/ui/buttons/Delete";
@@ -26,7 +26,7 @@ const UserProfile = () => {
 
     const { userId } = useParams() as any;
     const { data: user, isLoading, isError, error } = useUserQuery(userId);
-    const { data: auditLog, isLoadingUserActivity } = useUserActivity(userId) as any;
+    const { data: auditLog } = useUserActivity(userId) as any;
     const userDeleteMutation = useUserDeleteMutation();
 
     const [tabIndex, tabIndexSetter] = useState(0);
@@ -59,7 +59,7 @@ const UserProfile = () => {
         return <>{error.message}</>;
     }
 
-    if (isLoading) return <Loading />;
+    if (isLoading) return <PageSkeleton />;
 
     return (
         <>
@@ -131,11 +131,7 @@ const UserProfile = () => {
                             <h4>
                                 Activity (<Link to="/auditlog">view full audit log</Link>)
                             </h4>
-                            {!isLoadingUserActivity ? (
-                                <AuditLogsTable auditLog={auditLog} hideUserColumns="true" />
-                            ) : (
-                                <Loading />
-                            )}
+                            <AuditLogsTable auditLog={auditLog ?? null} hideUserColumns="true" />
                         </div>
                     )}
                 </div>

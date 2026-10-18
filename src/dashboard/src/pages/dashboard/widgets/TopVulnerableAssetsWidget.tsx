@@ -1,5 +1,5 @@
 import { useVulnerabilitiesQuery } from "api/vulnerabilities";
-import Loading from "components/ui/Loading";
+import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import DashboardWidget from "./Widget";
 import { Link } from "react-router";
 
@@ -14,8 +14,7 @@ const TopVulnerableAssetsWidget = () => {
         limit: 100,
     });
 
-    if (isLoading) return <Loading />;
-    if (isError) return <p className="has-text-danger">Error loading vulnerabilities: {error.message}</p>;
+    if (isError) return <DashboardWidget title="Top vulnerable assets"><p className="has-text-danger">Error loading vulnerabilities: {error.message}</p></DashboardWidget>;
 
     const assetCountsMap: any = {};
     if (vulnerabilities && vulnerabilities.data) {
@@ -52,7 +51,7 @@ const TopVulnerableAssetsWidget = () => {
 
     return (
         <DashboardWidget title="Top vulnerable assets">
-            {sortedAssets.length > 0 ? (
+            {isLoading || sortedAssets.length > 0 ? (
                 <table className="table is-fullwidth is-striped">
                     <thead>
                         <tr>
@@ -63,6 +62,7 @@ const TopVulnerableAssetsWidget = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        {isLoading && <LoadingTableRow numColumns={4} numRows={5} />}
                         {sortedAssets.map((asset) => (
                             <tr key={asset.id}>
                                 <td>

@@ -6,9 +6,9 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { requestEntity } from "utilities/requests";
 import Badge from "components/badges/Badge";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import DeleteButton from "components/ui/buttons/Delete";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";
 
@@ -65,7 +65,7 @@ const AssetView = () => {
         fetchVulnerabilities();
     }, [fetchVulnerabilities, tableModel.filters]);
 
-    if (!asset) return <Loading />;
+    if (!asset) return <PageSkeleton />;
 
     return (
         <div>

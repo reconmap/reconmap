@@ -9,7 +9,6 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import useBoolean from "hooks/useBoolean";
 import { Link, useSearchParams } from "react-router";
-import Loading from "../ui/Loading";
 
 const ProjectAssets = ({ project }: any) => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -112,19 +111,13 @@ const ProjectAssets = ({ project }: any) => {
                     <CreateButton onClick={openAddAssetDialog}>Add asset&hellip;</CreateButton>
                 </RestrictedComponent>
             )}
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <>
-                    {(assets as any).pageCount > 1 && (
-                        <center>
-                            <PaginationV2 page={pageNumber - 1} total={assets!.pageCount} onPageChange={onPageChange} />
-                        </center>
-                    )}
-                    <NativeTable rows={assets!.data} rowId={(asset) => asset.id} columns={columns}>
-                    </NativeTable>
-                </>
+            {(assets as any)?.pageCount > 1 && (
+                <center>
+                    <PaginationV2 page={pageNumber - 1} total={assets!.pageCount} onPageChange={onPageChange} />
+                </center>
             )}
+            <NativeTable rows={isLoading ? null : assets!.data} rowId={(asset) => asset.id} columns={columns}>
+            </NativeTable>
         </section>
     );
 };

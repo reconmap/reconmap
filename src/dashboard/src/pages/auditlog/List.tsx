@@ -1,6 +1,5 @@
 import { useAuditLogQuery } from "api/auditlog";
 import PaginationV2 from "components/layout/PaginationV2";
-import Loading from "components/ui/Loading";
 import { useNavigate, useSearchParams } from "react-router";
 import { downloadFromApi } from "services/api";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -25,19 +24,17 @@ const AuditLogList = () => {
         downloadFromApi("/system/data?entities=audit_log");
     };
 
-    if (isLoading) return <Loading />;
-
     return (
         <>
             <div className="heading">
                 <Breadcrumb>
                     <div>System</div>
                 </Breadcrumb>
-                <PaginationV2 page={apiPageNumber} total={auditLog.pageCount} onPageChange={onPageChange} />
+                <PaginationV2 page={apiPageNumber} total={auditLog?.pageCount ?? 0} onPageChange={onPageChange} />
                 <ExportButton onClick={onExportClick} />
             </div>
-            <Title type="System" title={`Audit log (${auditLog.totalCount})`} />
-            <AuditLogsTable auditLog={auditLog.data} />
+            <Title type="System" title={isLoading ? "Audit log" : `Audit log (${auditLog.totalCount})`} />
+            <AuditLogsTable auditLog={isLoading ? null : auditLog.data} />
         </>
     );
 };

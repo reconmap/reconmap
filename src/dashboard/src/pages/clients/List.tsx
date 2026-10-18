@@ -3,7 +3,6 @@ import ClientLink from "components/clients/Link";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
 import ExternalLink from "components/ui/ExternalLink";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import ExportButton from "components/ui/buttons/ExportButton";
@@ -18,8 +17,6 @@ const ClientsList = () => {
 
     const { data: organisations, isLoading, isError, error } = useOrganisationsQuery({});
     const deleteOrganisationMutation = useDeleteOrganisationMutation();
-
-    if (isLoading) return <Loading />;
 
     if (isError)
         return (
@@ -70,13 +67,13 @@ const ClientsList = () => {
                     <LinkButton href={ClientsUrls.Create}>{t("Add organisation")}</LinkButton>
                     <ExportButton
                         entity="organisations"
-                        disabled={organisations === null || organisations?.length === 0}
+                        disabled={!organisations?.length}
                     />
                 </NativeButtonGroup>
             </div>
             <Title title={t("Organisations")} />
 
-            <NativeTable columns={columns} rows={organisations} rowId={(org) => org.id}></NativeTable>
+            <NativeTable columns={columns} rows={isLoading ? null : organisations} rowId={(org) => org.id}></NativeTable>
         </>
     );
 };

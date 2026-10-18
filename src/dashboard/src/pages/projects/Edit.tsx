@@ -2,8 +2,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useProjectQuery } from "api/projects";
 import { requestProjectPut } from "api/requests/projects";
 import { Link, useNavigate, useParams } from "react-router";
+import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import ProjectForm from "components/projects/Form";
@@ -28,7 +28,7 @@ const ProjectEdit = () => {
     };
 
     if (isProjectLoading || !clientProject) {
-        return <Loading />;
+        return <PageSkeleton />;
     }
 
     return (

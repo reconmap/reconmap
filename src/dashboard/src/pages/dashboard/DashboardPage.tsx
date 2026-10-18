@@ -3,7 +3,6 @@ import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeTabs from "components/forms/NativeTabs";
 import PrimaryButton from "components/ui/buttons/Primary";
 import SecondaryButton from "components/ui/buttons/Secondary";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
 import { useAuth } from "contexts/AuthContext";
@@ -85,8 +84,6 @@ const DashboardPage = () => {
         setFormHasChanged(false);
       });
   };
-
-  if (dashboardConfig === null) return <Loading />;
 
   return (
     <div>

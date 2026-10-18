@@ -2,7 +2,6 @@ import { useProjectsQuery } from "api/projects";
 import NativeSelect from "components/forms/NativeSelect";
 import PaginationV2 from "components/layout/PaginationV2";
 import RestrictedComponent from "components/logic/RestrictedComponent";
-import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import PageTitle from "components/ui/PageTitle";
 import { useNavigate, useSearchParams } from "react-router";
@@ -58,14 +57,12 @@ const ProjectsListPage = () => {
         updateUrl({ page: pageNumber + 1 });
     };
 
-    if (isLoading) return <Loading />;
-
     return (
         <div>
             <PageTitle>Projects</PageTitle>
             <div className="heading">
                 <Breadcrumb />
-                <PaginationV2 page={apiPageNumber} total={projects.pageCount} onPageChange={onPageChange} />
+                <PaginationV2 page={apiPageNumber} total={projects?.pageCount ?? 0} onPageChange={onPageChange} />
 
                 <div>
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
@@ -73,7 +70,7 @@ const ProjectsListPage = () => {
                     </RestrictedComponent>
                 </div>
             </div>
-            <Title title={`Projects (${projects.totalCount})`} documentTitle="none" />
+            <Title title={isLoading ? "Projects" : `Projects (${projects.totalCount})`} documentTitle="none" />
 
             <details>
                 <summary>Filters</summary>
@@ -97,7 +94,7 @@ const ProjectsListPage = () => {
                 </div>
             </details>
 
-            <ProjectsTable projects={projects.data} />
+            <ProjectsTable projects={isLoading ? null : projects.data} />
         </div>
     );
 };
