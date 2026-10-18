@@ -27,6 +27,7 @@ Available widgets:
 | Recent activity           | Extract of audit log                                                                                               |
 | User activitiy over time  | Chart of activity over time                                                                                        |
 | System health             | Presents the status of the API, its backing services (database, Redis, message queue, storage) and the MCP server   |
+| System usage              | Summarises AI calls, tokens and estimated cost (last 30 days), attachments storage, Redis memory and queue depth    |
 | Recent vulnerabilities    | Shows the most recently reported vulnerabilities                                                                   |
 | Runners                    | Shows the status of registered security runners                                                                     |
 | Top vulnerable assets     | Shows assets with the highest count of active vulnerabilities                                                      |

@@ -38,6 +38,8 @@ Go to `System -> Usage` to see:
 - **Message queues** (RabbitMQ): messages waiting and consumers for the `tasks`, `notifications`, `vulnerabilities`, `webhooks`, `report-generation` and `report-emails` queues. A queue with messages waiting and no consumers means the service that processes it is not running. Unacknowledged messages are not included.
 - **Client cache**: the number of API responses cached by your browser, with a button to discard them.
 
+The **System usage** dashboard widget shows a summary of this page for the last 30 days (AI calls, tokens and estimated cost, attachments, Redis memory and messages waiting in queues) and links to it. It requires the `system.*` permission.
+
 The data comes from `GET /api/system/usage?from=<timestamp>&to=<timestamp>`. `from` defaults to 30 days before `to`, and `to` defaults to now.
 
 #### AI usage and cost

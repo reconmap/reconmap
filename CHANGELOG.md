@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Dashboard: new "System usage" widget (widget key `system-usage`, requires `system.*`) showing AI calls, tokens and estimated cost for the last 30 days, attachments count and size, key-value server memory and messages waiting in queues, with a link to the System usage page.
 - System usage page: AI usage and cost. Every call to the configured AI provider is now recorded in a new `ai_usage` table (provider, model, feature, project, user, input and output tokens, latency, success, estimated cost). **System → Usage** shows calls, error rate, tokens, estimated cost and latency (average and p95) for the last 7, 30 or 90 days, tokens and cost per day, and breakdowns by feature, model, project and user. Estimated cost uses the new optional **Input price** and **Output price** (USD per 1M tokens) AI settings; without them only tokens are tracked. **Existing databases must create the `ai_usage` table**, see [System monitoring](docs/pages/admin-manual/system-monitoring.md).
 - System usage page: Redis memory and key count, and RabbitMQ queue depth (messages waiting and consumers) for every queue the API uses.
 - MCP server: anonymous `GET /health` endpoint (database and Redis checks). The REST API probes it through the new optional `Mcp:HealthUrl` setting (`MCP_HEALTH_URL` in Docker Compose) and reports `mcpServer` in `GET /api/system/health`, shown on the System health page and dashboard widget.

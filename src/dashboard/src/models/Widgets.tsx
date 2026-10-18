@@ -8,6 +8,7 @@ import UserActivityStatsWidget from "pages/dashboard/widgets/UserActivityStatsWi
 import VulnerabilitiesByCategoryStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget";
 import VulnerabilitiesByRiskStatsWidget from "pages/dashboard/widgets/VulnerabilitiesByRiskStatsWidget";
 import SystemHealthWidget from "pages/dashboard/widgets/SystemHealthWidget";
+import SystemUsageWidget from "pages/dashboard/widgets/SystemUsageWidget";
 import RunnersWidget from "pages/dashboard/widgets/RunnersWidget";
 import TopVulnerableAssetsWidget from "pages/dashboard/widgets/TopVulnerableAssetsWidget";
 
@@ -64,6 +65,13 @@ const Widgets = {
         visible: true,
         component: <SystemHealthWidget />,
         description: "It presents the health of the API, its backing services and the MCP server.",
+        permissions: "system.*",
+    },
+    "system-usage": {
+        title: "System usage",
+        visible: true,
+        component: <SystemUsageWidget />,
+        description: "It summarises AI usage and cost, attachments storage, key-value server memory and message queue depth.",
         permissions: "system.*",
     },
     "recent-vulnerabilities": {
