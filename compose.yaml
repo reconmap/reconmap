@@ -7,6 +7,18 @@ volumes:
   rustfs_data:
   rustfs_logs:
 
+# Probes /health using bash's /dev/tcp: the ASP.NET images ship neither curl nor wget.
+# Each service sets HEALTH_PORT in its environment.
+x-dotnet-healthcheck: &dotnet-healthcheck
+  test:
+    - CMD-SHELL
+    - |
+      bash -c 'exec 3<>/dev/tcp/127.0.0.1/$$HEALTH_PORT && printf "GET /health HTTP/1.0\r\nHost: localhost\r\n\r\n" >&3 && read -r status <&3 && [[ $$status == *" 200 "* ]]'
+  interval: 10s
+  timeout: 5s
+  retries: 10
+  start_period: 20s
+
 services:
   redis:
     image: redis:8.8-alpine
@@ -16,6 +28,13 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    environment:
+      REDISCLI_AUTH: ${REDIS_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:4.3-alpine
@@ -25,6 +44,12 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
 
   postgres:
     image: postgres:18.6-alpine
@@ -93,8 +118,15 @@ services:
       - ./config-ui.json:/usr/share/nginx/html/config.json:ro
     ports:
       - "5500:5500"
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://127.0.0.1:5500/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     depends_on:
       keycloak:
+        condition: service_healthy
+      ngapi:
         condition: service_healthy
 
   ngapi:
@@ -117,10 +149,20 @@ services:
       - Storage__S3__SecretKey=${RUSTFS_SECRET_KEY}
       - Opa__ServerUrl=${OPA_SERVER_URL}
       - Mcp__HealthUrl=${MCP_HEALTH_URL:-http://mcp:5520/health}
+      - HEALTH_PORT=5510
+    healthcheck: *dotnet-healthcheck
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
       rustfs:
+        condition: service_started
+      opa:
         condition: service_started
 
   mcp:
@@ -143,9 +185,17 @@ services:
       # The bundled Keycloak is served over plain HTTP; remove when it sits behind HTTPS.
       - Keycloak__RequireHttpsMetadata=false
       - Mcp__PublicUrl=${MCP_PUBLIC_URL:-http://localhost:5520/mcp}
+      - HEALTH_PORT=5520
+    healthcheck: *dotnet-healthcheck
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      opa:
+        condition: service_started
 
   runner:
     profiles: [ 'runner' ]
@@ -160,6 +210,9 @@ services:
       RMAP_KEYCLOAK_DEBUG: "false"
       RMAP_KEYCLOAK_SKIP_TLS_VERIFY: "true"
       RMAP_REDIS_PASSWORD: "${REDIS_PASSWORD}"
+    depends_on:
+      redis:
+        condition: service_healthy
 
   rustfs:
     image: rustfs/rustfs:1.0.1
