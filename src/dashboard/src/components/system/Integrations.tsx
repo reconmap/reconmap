@@ -42,7 +42,7 @@ const SystemIntegrationsPage = () => {
             <NativeTable
                 columns={columns}
                 rows={integrations}
-                rowId={(_, index) => index}
+                rowId={(integration) => integration.name}
                 isLoading={isLoading}
             ></NativeTable>
         </div>

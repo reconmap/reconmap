@@ -10,7 +10,7 @@ const ActiveProjectsWidget = () => {
 
     return (
         <DashboardWidget title="Active projects">
-            <NativeTable rows={isLoading ? null : projects.data} rowId={(project) => project.id} columns={[
+            <NativeTable<any> rows={isLoading ? null : projects.data} rowId={(project) => project.id} columns={[
                 {
                     header: "Name",
                     cell: (project) => <ProjectBadge key={project.id} project={project} />,
