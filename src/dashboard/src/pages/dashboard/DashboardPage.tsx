@@ -2,6 +2,7 @@ import { requestUserPatch } from "api/requests/users";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeTabs from "components/forms/NativeTabs";
 import PrimaryButton from "components/ui/buttons/Primary";
+import SecondaryButton from "components/ui/buttons/Secondary";
 import Loading from "components/ui/Loading";
 import Title from "components/ui/Title";
 import { actionCompletedToast } from "components/ui/toast";
@@ -15,126 +16,151 @@ import widgetIsVisible from "services/widgets";
 import WelcomeWidget from "./widgets/WelcomeWidget";
 
 const InitialiseWidgetConfig = () => {
-    return Object.keys(Widgets).reduce((acc, key) => {
-        acc[key] = { visible: true };
-        return acc;
-    }, {});
+  return Object.keys(Widgets).reduce((acc, key) => {
+    acc[key] = { visible: true };
+    return acc;
+  }, {});
 };
 
 const filterWidgets = (user) => {
-    return Object.keys(Widgets)
-        .map((widgetKey) => {
-            const widget = Widgets[widgetKey];
-            if (
-                (!widget.hasOwnProperty("permissions") ||
-                    PermissionsService.isAllowed(widget.permissions, user.permissions)) &&
-                widgetIsVisible(user.preferences["dashboard.widgets"], widgetKey)
-            ) {
-                return React.cloneElement(widget.component, { key: widgetKey });
-            }
-            return null;
-        })
-        .filter((widget) => widget !== null);
+  return Object.keys(Widgets)
+    .map((widgetKey) => {
+      const widget = Widgets[widgetKey];
+      if (
+        (!widget.hasOwnProperty("permissions") ||
+          PermissionsService.isAllowed(widget.permissions, user.permissions)) &&
+        widgetIsVisible(user.preferences["dashboard.widgets"], widgetKey)
+      ) {
+        return React.cloneElement(widget.component, { key: widgetKey });
+      }
+      return null;
+    })
+    .filter((widget) => widget !== null);
 };
 
 const DashboardPage = () => {
-    const { user: authUser } = useAuth() as any;
-    const [t] = useTranslation("app");
+  const { user: authUser } = useAuth() as any;
+  const [t] = useTranslation("app");
 
-    const user = useMemo(
-        () => ({ ...authUser, preferences: initialiseUserPreferences(authUser) }),
-        [authUser],
-    );
-    const [dashboardConfig, setDashboardConfig] = useState(
-        user?.preferences?.["dashboard.widgets"] || InitialiseWidgetConfig(),
-    );
-    const [visibleWidgets, setVisibleWidgets] = useState(filterWidgets(user));
+  const user = useMemo(
+    () => ({ ...authUser, preferences: initialiseUserPreferences(authUser) }),
+    [authUser],
+  );
+  const [dashboardConfig, setDashboardConfig] = useState(
+    user?.preferences?.["dashboard.widgets"] || InitialiseWidgetConfig(),
+  );
+  const [visibleWidgets, setVisibleWidgets] = useState(filterWidgets(user));
 
-    const [tabIndex, tabIndexSetter] = useState(0);
+  const [tabIndex, tabIndexSetter] = useState(0);
 
-    const [formHasChanged, setFormHasChanged] = useState(false);
+  const [formHasChanged, setFormHasChanged] = useState(false);
 
-    const onWidgetChange = (ev) => {
-        setFormHasChanged(true);
-        setDashboardConfig((prev) => ({
-            ...prev,
-            [ev.target.name]: { ...prev[ev.target.name], visible: ev.target.checked },
-        }));
+  const onWidgetChange = (ev) => {
+    setFormHasChanged(true);
+    setDashboardConfig((prev) => ({
+      ...prev,
+      [ev.target.name]: { ...prev[ev.target.name], visible: ev.target.checked },
+    }));
+  };
+
+  const onSave = (ev, loggedInUser, closeAfterSave = false) => {
+    const preferences = {
+      ...initialiseUserPreferences(loggedInUser),
+      "dashboard.widgets": dashboardConfig,
     };
+    const updatedUser = { ...loggedInUser, preferences };
 
-    const onSave = (ev, loggedInUser) => {
-        const preferences = {
-            ...initialiseUserPreferences(loggedInUser),
-            "dashboard.widgets": dashboardConfig,
-        };
-        const updatedUser = { ...loggedInUser, preferences };
+    requestUserPatch(updatedUser.id, { preferences })
+      .then(() => {
+        setVisibleWidgets(filterWidgets(updatedUser));
 
-        requestUserPatch(updatedUser.id, { preferences })
-            .then(() => {
-                setVisibleWidgets(filterWidgets(updatedUser));
+        actionCompletedToast("Your preferences have been saved.");
 
-                actionCompletedToast("Your preferences have been saved.");
-            })
-            .catch((err) => console.error(err))
-            .finally(() => {
-                setFormHasChanged(false);
-            });
-    };
+        if (closeAfterSave) {
+          tabIndexSetter(0);
+        }
+      })
+      .catch((err) => console.error(err))
+      .finally(() => {
+        setFormHasChanged(false);
+      });
+  };
 
-    if (dashboardConfig === null) return <Loading />;
+  if (dashboardConfig === null) return <Loading />;
 
-    return (
-        <div>
-            <Title type={t("Home")} title={t("Dashboard")} documentTitle="single" />
-            <div>
-                <NativeTabs labels={[t("View"), t("Configure")]} tabIndex={tabIndex} tabIndexSetter={tabIndexSetter} />
+  return (
+    <div>
+      <Title type={t("Home")} title={t("Dashboard")} documentTitle="single" />
+      <div>
+        <NativeTabs
+          labels={[t("View"), t("Configure")]}
+          tabIndex={tabIndex}
+          tabIndexSetter={tabIndexSetter}
+        />
 
-                {0 === tabIndex && (
-                    <div>
-                        <div className="fixed-grid has-3-cols">
-                            <div className="grid">
-                                {visibleWidgets.length === 0 ? <WelcomeWidget /> : visibleWidgets}
-                            </div>
-                        </div>
-                    </div>
+        {0 === tabIndex && (
+          <div>
+            <div className="fixed-grid has-3-cols">
+              <div className="grid">
+                {visibleWidgets.length === 0 ? (
+                  <WelcomeWidget />
+                ) : (
+                  visibleWidgets
                 )}
-                {1 === tabIndex && (
-                    <div>
-                        <h4>Select which widgets to present in your dashboard</h4>
-                        <br />
-                        <div className="field">
-                            {Object.keys(Widgets).map((widgetKey) => {
-                                const widget = Widgets[widgetKey];
-                                if (
-                                    !widget.hasOwnProperty("permissions") ||
-                                    PermissionsService.isAllowed(widget.permissions, user.permissions)
-                                ) {
-                                    return (
-                                        <NativeCheckbox
-                                            key={widgetKey}
-                                            name={widgetKey}
-                                            checked={
-                                                dashboardConfig.hasOwnProperty(widgetKey) &&
-                                                dashboardConfig[widgetKey].visible
-                                            }
-                                            onChange={onWidgetChange}
-                                        >
-                                            {Widgets[widgetKey].title}. <em>{Widgets[widgetKey].description}</em>
-                                        </NativeCheckbox>
-                                    );
-                                } else {
-                                    return <></>;
-                                }
-                            })}
-                        </div>
-                        <PrimaryButton disabled={!formHasChanged} onClick={(ev) => onSave(ev, user)}>
-                            {t("Save")}
-                        </PrimaryButton>
-                    </div>
-                )}
+              </div>
             </div>
-        </div>
-    );
+          </div>
+        )}
+        {1 === tabIndex && (
+          <div>
+            <h4>Select which widgets to present in your dashboard</h4>
+            <br />
+            <div className="field">
+              {Object.keys(Widgets).map((widgetKey) => {
+                const widget = Widgets[widgetKey];
+                if (
+                  !widget.hasOwnProperty("permissions") ||
+                  PermissionsService.isAllowed(
+                    widget.permissions,
+                    user.permissions,
+                  )
+                ) {
+                  return (
+                    <NativeCheckbox
+                      key={widgetKey}
+                      name={widgetKey}
+                      checked={
+                        dashboardConfig.hasOwnProperty(widgetKey) &&
+                        dashboardConfig[widgetKey].visible
+                      }
+                      onChange={onWidgetChange}
+                    >
+                      {Widgets[widgetKey].title}.{" "}
+                      <em>{Widgets[widgetKey].description}</em>
+                    </NativeCheckbox>
+                  );
+                } else {
+                  return <></>;
+                }
+              })}
+            </div>
+            <PrimaryButton
+              disabled={!formHasChanged}
+              onClick={(ev) => onSave(ev, user)}
+            >
+              {t("Save")}
+            </PrimaryButton>{" "}
+            <SecondaryButton
+              disabled={!formHasChanged}
+              onClick={(ev) => onSave(ev, user, true)}
+            >
+              {t("Save and close")}
+            </SecondaryButton>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default DashboardPage;

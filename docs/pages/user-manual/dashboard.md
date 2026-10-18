@@ -9,6 +9,11 @@ The Reconmap dashboard is what welcomes the user after logging in. The dashboard
 
 Each user has its own view of the dashboard as they can select which of all available widgets to show on load.
 
+To choose the widgets, open the **Configure** tab. Tick the widgets you want to see and click:
+
+- **Save** to store your selection and stay on the Configure tab.
+- **Save and close** to store your selection and go back to the **View** tab.
+
 The left sidebar used in multi-section views (for example Project, Settings, and Library pages) can be collapsed and expanded with the chevron toggle button at the top of the menu. The last selected state is remembered for your browser.
 
 Available widgets:

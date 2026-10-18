@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Dashboard: the **Configure** tab has a **Save and close** button next to **Save**. It saves the selected widgets and switches back to the **View** tab. **Save** keeps you on the Configure tab, as before.
 - MCP server: Docker image `ghcr.io/reconmap/mcp` (built and pushed by the new `mcp-build-push` workflow) and an `mcp` service in Docker Compose (`app` profile, port `5520`). New optional `MCP_PUBLIC_URL` and `Keycloak:RequireHttpsMetadata` settings; the latter overrides the default of requiring HTTPS Keycloak metadata outside Development, for both the REST API and the MCP server. See [MCP Server](docs/pages/development/mcp-server.md).
 - MCP server: prompts `triage_vulnerabilities` and `executive_summary` (each takes a `projectId` and requires read access to the project). Tools and resources are now split into one class per entity.
 - MCP server: parameterized resource templates `reconmap://projects/{id}`, `reconmap://projects/{id}/vulnerabilities` and `reconmap://vulnerabilities/{id}`, with the same project-membership and OPA checks as the tools. See [MCP Server](docs/pages/development/mcp-server.md).
