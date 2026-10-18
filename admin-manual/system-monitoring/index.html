@@ -837,6 +837,40 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="System usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ai-usage-and-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI usage and cost
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AI usage and cost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upgrading-an-existing-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading an existing installation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -3012,6 +3046,40 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="System usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ai-usage-and-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI usage and cost
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AI usage and cost">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upgrading-an-existing-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrading an existing installation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -3056,12 +3124,48 @@
 <p>The same information is shown by the <strong>System health</strong> dashboard widget, which links to this view.</p>
 <p>The REST API checks the MCP server by calling the URL in the <code>Mcp:HealthUrl</code> setting (environment variable <code>Mcp__HealthUrl</code>; Docker Compose sets it from <code>MCP_HEALTH_URL</code>, defaulting to <code>http://mcp:5520/health</code>). If the setting is empty, the MCP server is reported as "Not configured". A probe times out after 2 seconds.</p>
 <h3 id="system-usage">System usage</h3>
-<p>The system usage view shows you high-level statistics about your Reconmap instance.</p>
+<p>The system usage view shows what your instance consumes: LLM tokens and estimated cost, storage, the key-value server and the message queues.</p>
 <p><img alt="System usage" src="/images/screenshots/system-usage.png" /></p>
-<p>Go to <code>System -&gt; Usage</code> to see:
-- Total number of users, projects, and vulnerabilities.
-- Database size and storage usage.
-- Active sessions and recent activity.</p>
+<p>Go to <code>System -&gt; Usage</code> to see:</p>
+<ul>
+<li><strong>AI usage</strong> for a selectable time range (last 7, 30 or 90 days): number of calls, error rate, input and output tokens, average tokens per call, estimated cost, average and 95th percentile latency, tokens and cost per day, and breakdowns by feature (remediation, triage, asset enrichment, command parsing, tool recommendation), by provider and model, by project and by user (the top 10 of each).</li>
+<li><strong>Storage</strong>: number of attachments and their total size.</li>
+<li><strong>Key-value server</strong> (Redis): memory used (and the configured <code>maxmemory</code>, if any) and number of keys.</li>
+<li><strong>Message queues</strong> (RabbitMQ): messages waiting and consumers for the <code>tasks</code>, <code>notifications</code>, <code>vulnerabilities</code>, <code>webhooks</code>, <code>report-generation</code> and <code>report-emails</code> queues. A queue with messages waiting and no consumers means the service that processes it is not running. Unacknowledged messages are not included.</li>
+<li><strong>Client cache</strong>: the number of API responses cached by your browser, with a button to discard them.</li>
+</ul>
+<p>The <strong>System usage</strong> dashboard widget shows a summary of this page for the last 30 days (AI calls, tokens and estimated cost, attachments, Redis memory and messages waiting in queues) and links to it. It requires the <code>system.*</code> permission.</p>
+<p>The data comes from <code>GET /api/system/usage?from=&lt;timestamp&gt;&amp;to=&lt;timestamp&gt;</code>. <code>from</code> defaults to 30 days before <code>to</code>, and <code>to</code> defaults to now.</p>
+<h4 id="ai-usage-and-cost">AI usage and cost</h4>
+<p>Every call to the configured AI provider is recorded in the <code>ai_usage</code> table with the provider, model, feature, project, user, input and output tokens, latency, whether it succeeded, and the estimated cost. Calls that fail are recorded with zero tokens. Prompts and responses are never stored.</p>
+<p>Token counts are whatever the provider reports. If a provider does not report usage (some self-hosted models), the call is counted with zero tokens.</p>
+<p>The estimated cost is computed when the call is made from the prices you set under <code>System -&gt; AI settings</code>:</p>
+<ul>
+<li><strong>Input price (USD per 1M tokens)</strong></li>
+<li><strong>Output price (USD per 1M tokens)</strong></li>
+</ul>
+<p>Leave them empty to track tokens only (the default, and the right choice for Ollama). Changing a price affects only later calls, so past costs stay as they were charged at the time. Copy the prices from your provider's price list; the figure is an estimate and may differ from the provider's invoice.</p>
+<h5 id="upgrading-an-existing-installation">Upgrading an existing installation</h5>
+<p>New installations create the <code>ai_usage</code> table automatically. The database initialisation script only runs on an empty database, so existing installations must create it once:</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ai_usage</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">(</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">id</span><span class="w">             </span><span class="nb">SERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">created_at</span><span class="w">     </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">provider</span><span class="w">       </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">model</span><span class="w">          </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">feature</span><span class="w">        </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="n">project_id</span><span class="w">     </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="n">user_id</span><span class="w">        </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="n">input_tokens</span><span class="w">   </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="n">output_tokens</span><span class="w">  </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="n">latency_ms</span><span class="w">     </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="n">success</span><span class="w">        </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">TRUE</span><span class="p">,</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="n">estimated_cost</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">);</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">ai_usage_created_at_idx</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">ai_usage</span><span class="w"> </span><span class="p">(</span><span class="n">created_at</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Until the table exists, AI calls keep working (recording failures are logged as warnings) but the usage page cannot load.</p>
 
 
 
@@ -3082,7 +3186,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 18, 2026 17:09:59 UTC">October 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 18, 2026 18:01:02 UTC">October 18, 2026</span>
   </span>
 
     
