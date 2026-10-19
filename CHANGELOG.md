@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking (API):** `POST /api/commands/recommend` now takes an `objective` and returns `{ strategy, recommendations: [{ order, commandId, commandName, usageId, executablePath, arguments, rationale }] }` with fully resolved arguments (previously `recommendedArguments` could contain unreplaced placeholders). The dashboard no longer calls it; it creates scans through `POST /api/scans`.
 - The dashboard "User activity over time" line chart is now a "User activity" heatmap: a GitHub-style calendar of user actions per day over the last 20 weeks, with a tooltip per day.
 - `GET /api/system/usage` now returns a typed camelCase response and accepts optional `from` and `to` query parameters. **Breaking:** `attachments.total_count` / `total_file_size` are now `attachments.totalCount` / `totalFileSize`, and `queueLengths` is replaced by `queues` (RabbitMQ queue depth) plus `redis` and `ai`. The old `queueLengths` read Redis lists (`email:queue`, `tasks:queue`, `notifications:queue`) that the API never wrote to, so they were always empty.
 - The "Client queries cached" row moved from the usage table to its own "Client cache" section on the System usage page.
@@ -25,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Run scan: scans are now stored on the server (new `scan_run` and `scan_run_task` tables, `GET/POST /api/scans`, `GET /api/scans/{id}`, `POST /api/scans/tasks/{id}/status`). Starting a scan opens its page, which shows each tool's exact command, rationale, status and error; it keeps running if you navigate away and is listed under the new **Scan history** page and the **Recent scans** list on **Run scan**. **Existing installations must create the new tables**, see [Upgrading a Reconmap instance](docs/pages/admin-manual/upgrading-instance.md).
+- Runner: reports scan task progress (running, succeeded, failed) to the API and uploads command output (stdout or output file) to `POST /api/commands/outputs` so findings and assets are parsed into the project. Upgrade runners together with the API.
 - Dashboard: the Configure tab now lists each widget in its own row with the description below the title, and has Select all / Unselect all buttons.
 - Dashboard: new "System usage" widget (widget key `system-usage`, requires `system.*`) showing AI calls, tokens and estimated cost for the last 30 days, attachments count and size, key-value server memory and messages waiting in queues, with a link to the System usage page.
 - System usage page: AI usage and cost. Every call to the configured AI provider is now recorded in a new `ai_usage` table (provider, model, feature, project, user, input and output tokens, latency, success, estimated cost). **System → Usage** shows calls, error rate, tokens, estimated cost and latency (average and p95) for the last 7, 30 or 90 days, tokens and cost per day, and breakdowns by feature, model, project and user. Estimated cost uses the new optional **Input price** and **Output price** (USD per 1M tokens) AI settings; without them only tokens are tracked. **Existing databases must create the `ai_usage` table**, see [System monitoring](docs/pages/admin-manual/system-monitoring.md).
@@ -40,6 +43,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Command output processing failed for every upload with `ReflectionTypeLoadException` (`Azure.AI.OpenAI` ... `cannot reduce access`): parser discovery threw when any loaded assembly could not be fully loaded. It now skips the types that cannot load.
+- Uploading a command output failed with `404 Command not found`, and `GET /api/commands/{id}/usages/{usageId}` returned an empty `commandId`: usage definitions are rebuilt on every access, so the owning command id set at startup was lost. The lookup now sets it on the returned usage.
+- Run scan queued every recommended tool with the literal arguments `{}`, so the runner tried to execute a program called `{}` and failed. The API now returns resolved commands (executable and arguments), the dashboard schedules exactly those, and the runner refuses to run any command line that still contains a `{{{placeholder}}}`.
+- Run scan ignored the chosen objective and replaced placeholders with wrong sample values (for example scanning `localhost`). Tools are now selected per objective and target type, host/URL/domain placeholders are derived from the target, and tools recommended by the AI that are not in the catalog or do not apply to the target are discarded.
+- Run scan did not report failures: HTTP errors when queuing were swallowed. The dashboard now shows the server's message when a scan cannot be started.
+- Runner: command lines with quoted arguments were split on every space.
 - Audit log: failed requests, such as a delete of an entity that does not exist, were recorded as successful actions. Only successful requests are audited now.
 - Audit log: creating a vulnerability, task, organisation or user recorded the entry before the row had an ID, so the context stored `"id": 0`. The entry now includes the new ID.
 - Dashboard: hiding the "Reconmap releases" or "Community discussions" widget hid the other one, because their components were swapped.

@@ -46,6 +46,7 @@ export const UsersUrls = {
 export const ScansUrls = {
     List: "/scans",
     RunOnce: "/scans/run-once",
+    Runs: "/scans/runs",
     RunOnSchedule: "/scans/run-on-schedule",
     RunFromUrl: "/scans/run-from-url",
     Schedules: "/scans/schedules",

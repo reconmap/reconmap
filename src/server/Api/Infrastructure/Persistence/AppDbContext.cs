@@ -11,6 +11,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public DbSet<AuditEntry> AuditEntries { get; set; }
     public DbSet<CommandSchedule> CommandSchedules { get; set; }
+    public DbSet<ScanRun> ScanRuns { get; set; }
+    public DbSet<ScanRunTask> ScanRunTasks { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectTask> Tasks { get; set; }
     public DbSet<Vulnerability> Vulnerabilities { get; set; }

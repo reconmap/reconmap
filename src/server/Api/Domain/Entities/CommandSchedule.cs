@@ -31,6 +31,8 @@ public class CommandSchedule : TimestampedEntity
     [MaxLength(1000)]
     public string? ArgumentValues { get; set; }
 
+    public int? ScanRunTaskId { get; set; }
+
     [Required]
     [MaxLength(60)]
     public string CronExpression { get; set; } = null!;

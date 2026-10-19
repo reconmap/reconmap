@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS ai_settings CASCADE;
 DROP TABLE IF EXISTS mail_settings CASCADE;
 DROP TABLE IF EXISTS custom_field CASCADE;
 DROP TABLE IF EXISTS report CASCADE;
+DROP TABLE IF EXISTS scan_run_task CASCADE;
+DROP TABLE IF EXISTS scan_run CASCADE;
 DROP TABLE IF EXISTS command_schedule CASCADE;
 DROP TABLE IF EXISTS task CASCADE;
 DROP TABLE IF EXISTS vulnerability CASCADE;
@@ -302,7 +304,43 @@ CREATE TABLE command_schedule
     command_usage_id      VARCHAR(100)  NULL,
     argument_values VARCHAR(1000) NULL,
     cron_expression VARCHAR(60)   NOT NULL,
+    scan_run_task_id INT NULL,
     FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE SET NULL
+);
+
+-- 17b. scan_run
+CREATE TABLE scan_run
+(
+    id              SERIAL PRIMARY KEY,
+    project_id      INT           NOT NULL,
+    created_by_uid  INT           NOT NULL,
+    target          VARCHAR(500)  NOT NULL,
+    target_type     VARCHAR(30)   NOT NULL,
+    objective       VARCHAR(100)  NOT NULL,
+    strategy        TEXT          NULL,
+    status          VARCHAR(20)   NOT NULL DEFAULT 'queued',
+    created_at      TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMPTZ   NULL,
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
+);
+
+-- 17c. scan_run_task
+CREATE TABLE scan_run_task
+(
+    id               SERIAL PRIMARY KEY,
+    scan_run_id      INT           NOT NULL,
+    position         INT           NOT NULL,
+    command_id       VARCHAR(100)  NOT NULL,
+    command_name     VARCHAR(200)  NOT NULL,
+    command_usage_id VARCHAR(100)  NOT NULL,
+    executable_path  VARCHAR(500)  NULL,
+    arguments        VARCHAR(1000) NULL,
+    rationale        TEXT          NULL,
+    status           VARCHAR(20)   NOT NULL DEFAULT 'queued',
+    error            TEXT          NULL,
+    started_at       TIMESTAMPTZ   NULL,
+    finished_at      TIMESTAMPTZ   NULL,
+    FOREIGN KEY (scan_run_id) REFERENCES scan_run(id) ON DELETE CASCADE
 );
 
 -- 18. report
@@ -528,6 +566,7 @@ CREATE TRIGGER update_vulnerability_category_updated_at BEFORE UPDATE ON vulnera
 CREATE TRIGGER update_vulnerability_updated_at BEFORE UPDATE ON vulnerability FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_task_updated_at BEFORE UPDATE ON task FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_command_schedule_updated_at BEFORE UPDATE ON command_schedule FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_scan_run_updated_at BEFORE UPDATE ON scan_run FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_custom_field_updated_at BEFORE UPDATE ON custom_field FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_mail_settings_updated_at BEFORE UPDATE ON mail_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_ai_settings_updated_at BEFORE UPDATE ON ai_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

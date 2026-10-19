@@ -8,4 +8,5 @@ type CommandSchedule struct {
 	CommandUsageId string `json:"commandUsageId"`
 	ArgumentValues string `json:"argumentValues"`
 	CronExpression string `json:"cronExpression"`
+	ScanRunTaskId  int    `json:"scanRunTaskId"`
 }

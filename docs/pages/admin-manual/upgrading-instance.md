@@ -15,6 +15,51 @@ docker-compose down # Stop and remove any containers
 docker-compose up -d # Build containers and start them
 ```
 
+#### Scan runs tables
+
+The scan history feature stores scans in the `scan_run` and `scan_run_task` tables and links scheduled commands to them through a new `command_schedule.scan_run_task_id` column. The database initialisation script only runs on an empty database, so existing installations must apply this once:
+
+```sql
+ALTER TABLE command_schedule ADD COLUMN scan_run_task_id INT NULL;
+
+CREATE TABLE scan_run
+(
+    id              SERIAL PRIMARY KEY,
+    project_id      INT           NOT NULL,
+    created_by_uid  INT           NOT NULL,
+    target          VARCHAR(500)  NOT NULL,
+    target_type     VARCHAR(30)   NOT NULL,
+    objective       VARCHAR(100)  NOT NULL,
+    strategy        TEXT          NULL,
+    status          VARCHAR(20)   NOT NULL DEFAULT 'queued',
+    created_at      TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMPTZ   NULL,
+    FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
+);
+
+CREATE TABLE scan_run_task
+(
+    id               SERIAL PRIMARY KEY,
+    scan_run_id      INT           NOT NULL,
+    position         INT           NOT NULL,
+    command_id       VARCHAR(100)  NOT NULL,
+    command_name     VARCHAR(200)  NOT NULL,
+    command_usage_id VARCHAR(100)  NOT NULL,
+    executable_path  VARCHAR(500)  NULL,
+    arguments        VARCHAR(1000) NULL,
+    rationale        TEXT          NULL,
+    status           VARCHAR(20)   NOT NULL DEFAULT 'queued',
+    error            TEXT          NULL,
+    started_at       TIMESTAMPTZ   NULL,
+    finished_at      TIMESTAMPTZ   NULL,
+    FOREIGN KEY (scan_run_id) REFERENCES scan_run(id) ON DELETE CASCADE
+);
+
+CREATE TRIGGER update_scan_run_updated_at BEFORE UPDATE ON scan_run FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+```
+
+Runners must be upgraded together with the API: older runners do not report scan progress or upload command output.
+
 ### Destructive upgrade
 
 **CAUTION:** This method will destroy all existing data. Do not proceed with these instructions unless you don't mind losing everything that exists in the Reconmap database.

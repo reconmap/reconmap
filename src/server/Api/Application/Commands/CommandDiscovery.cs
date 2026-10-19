@@ -58,8 +58,16 @@ public static class CommandDiscovery
 
     public static CommandUsageDefinition? FindUsageById(string usageId)
     {
-        return PredefinedCommands.Value
-            .SelectMany(c => c.Usages)
-            .FirstOrDefault(u => u.Id.Equals(usageId, StringComparison.OrdinalIgnoreCase));
+        // Usages are rebuilt on every access, so the owning command id must be set on the instance we return.
+        foreach (var command in PredefinedCommands.Value)
+        {
+            var usage = command.Usages.FirstOrDefault(u => u.Id.Equals(usageId, StringComparison.OrdinalIgnoreCase));
+            if (usage == null) continue;
+
+            usage.CommandId = command.Id;
+            return usage;
+        }
+
+        return null;
     }
 }

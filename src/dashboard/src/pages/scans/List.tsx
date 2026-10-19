@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import AttachmentsDropzone from "components/attachments/Dropzone";
 import ScheduledRuns from "components/commands/ScheduledRuns";
 import ScanTargetForm from "components/scans/ScanTargetForm";
+import ScanRunsList from "components/scans/ScanRunsList";
 
 const ScansPage = ({ mode }: any) => {
     const [t] = useTranslation();
@@ -26,6 +27,7 @@ const ScansPage = ({ mode }: any) => {
     const getTitle = () => {
         switch (mode) {
             case "once": return t("Run scan");
+            case "runs": return t("Scan history");
             case "schedules": return t("Scheduled scans");
             case "import": return t("Import scan");
             default: return t("Scans");
@@ -82,6 +84,19 @@ const ScansPage = ({ mode }: any) => {
             {mode === "once" && (
                 <article className="mt-4 content">
                     <ScanTargetForm />
+                </article>
+            )}
+
+            {mode === "once" && (
+                <section className="mt-5 content">
+                    <h3 className="title is-5">{t("Recent scans")}</h3>
+                    <ScanRunsList limit={5} />
+                </section>
+            )}
+
+            {mode === "runs" && (
+                <article className="mt-4 content">
+                    <ScanRunsList limit={50} />
                 </article>
             )}
         </div>

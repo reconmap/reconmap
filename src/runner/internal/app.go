@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strings"
 	"time"
+	"unicode"
 
 	"fmt"
 	"log"
@@ -35,6 +36,11 @@ type App struct {
 	Logger            *zap.SugaredLogger
 	Executor          sharedio.Executor
 	activeScheduleIds map[int]uuid.UUID
+
+	// API calls made while running a schedule; replaceable in tests.
+	reportTaskStatus func(apiBaseUri, accessToken string, taskId int, status, errorMessage string) error
+	getUsage         func(apiBaseUri, usageId string) (*models.CommandUsage, error)
+	uploadOutput     func(apiBaseUri, accessToken, usageId string, projectId int, fileName string, content []byte) error
 }
 
 var logger = logging.GetLoggerInstance()
@@ -49,6 +55,9 @@ func NewApp() App {
 		Logger:            logging.GetLoggerInstance(),
 		Executor:          &sharedio.DefaultExecutor{},
 		activeScheduleIds: make(map[int]uuid.UUID),
+		reportTaskStatus:  api.ReportScanTaskStatus,
+		getUsage:          api.GetCommandUsageById,
+		uploadOutput:      api.UploadCommandOutput,
 	}
 }
 
@@ -115,6 +124,129 @@ func (app *App) deleteSchedule(apiBaseUri string, accessToken string, commandId 
 	return nil
 }
 
+// splitCommandLine splits a command line into arguments, honouring single and double quotes.
+func splitCommandLine(commandLine string) []string {
+	var args []string
+	var current strings.Builder
+	var quote rune
+	inArg := false
+
+	for _, r := range commandLine {
+		switch {
+		case quote != 0:
+			if r == quote {
+				quote = 0
+			} else {
+				current.WriteRune(r)
+			}
+		case r == '"' || r == '\'':
+			quote = r
+			inArg = true
+		case unicode.IsSpace(r):
+			if inArg {
+				args = append(args, current.String())
+				current.Reset()
+				inArg = false
+			}
+		default:
+			current.WriteRune(r)
+			inArg = true
+		}
+	}
+	if inArg {
+		args = append(args, current.String())
+	}
+
+	return args
+}
+
+// runSchedule executes a scheduled command, reports progress for scan tasks,
+// uploads the command output to the API and removes "once" schedules afterwards.
+func (app *App) runSchedule(cSchedule models.CommandSchedule, restApiUrl string, accessToken string) {
+	app.Logger.Infof("running command on schedule: %s (%s)", cSchedule.CronExpression, cSchedule.ArgumentValues)
+
+	if err := app.executeSchedule(cSchedule, restApiUrl, accessToken); err != nil {
+		app.Logger.Errorf("command execution failed with '%s'", err)
+		app.reportStatus(cSchedule, restApiUrl, accessToken, api.ScanTaskFailed, err.Error())
+	} else {
+		app.reportStatus(cSchedule, restApiUrl, accessToken, api.ScanTaskSucceeded, "")
+	}
+
+	if cSchedule.CronExpression == "once" {
+		err := app.deleteSchedule(restApiUrl, accessToken, cSchedule.CommandId, cSchedule.ID)
+		if err != nil {
+			app.Logger.Errorf("unable to delete once schedule %d from API: %v", cSchedule.ID, err)
+		} else {
+			app.Logger.Infof("successfully deleted once schedule %d from API", cSchedule.ID)
+		}
+	}
+}
+
+func (app *App) reportStatus(cSchedule models.CommandSchedule, restApiUrl string, accessToken string, status string, errorMessage string) {
+	if cSchedule.ScanRunTaskId == 0 {
+		return
+	}
+	if err := app.reportTaskStatus(restApiUrl, accessToken, cSchedule.ScanRunTaskId, status, errorMessage); err != nil {
+		app.Logger.Errorf("unable to report status of scan task %d: %v", cSchedule.ScanRunTaskId, err)
+	}
+}
+
+func (app *App) executeSchedule(cSchedule models.CommandSchedule, restApiUrl string, accessToken string) error {
+	// A command line with unreplaced placeholders (e.g. "{{{Host}}}") or no executable must never be run.
+	if strings.Contains(cSchedule.ArgumentValues, "{{{") {
+		return fmt.Errorf("command line has unresolved placeholders: %s", cSchedule.ArgumentValues)
+	}
+	parts := splitCommandLine(cSchedule.ArgumentValues)
+	if len(parts) == 0 {
+		return fmt.Errorf("schedule %d has no command to run", cSchedule.ID)
+	}
+
+	app.reportStatus(cSchedule, restApiUrl, accessToken, api.ScanTaskRunning, "")
+
+	stdout, stderr, err := app.Executor.Execute(parts[0], parts[1:]...)
+	if err != nil {
+		return err
+	}
+	app.Logger.Debug(string(stdout))
+	app.Logger.Debug(string(stderr))
+
+	return app.uploadScheduleOutput(cSchedule, restApiUrl, accessToken, stdout)
+}
+
+func (app *App) uploadScheduleOutput(cSchedule models.CommandSchedule, restApiUrl string, accessToken string, stdout []byte) error {
+	if cSchedule.CommandUsageId == "" || cSchedule.ProjectId == 0 {
+		return nil
+	}
+
+	usage, err := app.getUsage(restApiUrl, cSchedule.CommandUsageId)
+	if err != nil {
+		return fmt.Errorf("unable to look up command usage %s: %w", cSchedule.CommandUsageId, err)
+	}
+
+	var content []byte
+	fileName := usage.OutputFilename
+	switch usage.OutputCapturingMode {
+	case "stdout":
+		content = stdout
+		if fileName == "" {
+			fileName = usage.ID + ".out"
+		}
+	case "file":
+		content, err = os.ReadFile(usage.OutputFilename)
+		if err != nil {
+			return fmt.Errorf("unable to read command output file: %w", err)
+		}
+	default:
+		return nil
+	}
+
+	if err := app.uploadOutput(restApiUrl, accessToken, usage.ID, cSchedule.ProjectId, fileName, content); err != nil {
+		return fmt.Errorf("unable to upload command output: %w", err)
+	}
+
+	return nil
+}
+
 func (app *App) reconcileSchedules(s gocron.Scheduler, schedules *models.CommandSchedules, restApiUrl string, accessToken string) {
 	seenIds := make(map[int]bool)
 
@@ -134,25 +266,7 @@ func (app *App) reconcileSchedules(s gocron.Scheduler, schedules *models.Command
 
 		cSchedule := commandSchedule
 		j, err := s.NewJob(jobDef, gocron.NewTask(func() {
-			app.Logger.Infof("running command on schedule: %s (%s)", cSchedule.CronExpression, cSchedule.ArgumentValues)
-			parts := strings.Split(cSchedule.ArgumentValues, " ")
-			stdout, stderr, err := app.Executor.Execute(parts[0], strings.Fields(strings.Join(parts[1:], " "))...)
-			if err != nil {
-				app.Logger.Errorf("command execution failed with '%s'", err)
-			} else {
-				outStr, errStr := string(stdout), string(stderr)
-				app.Logger.Debug(outStr)
-				app.Logger.Debug(errStr)
-			}
-
-			if cSchedule.CronExpression == "once" {
-				err := app.deleteSchedule(restApiUrl, accessToken, cSchedule.CommandId, cSchedule.ID)
-				if err != nil {
-					app.Logger.Errorf("unable to delete once schedule %d from API: %v", cSchedule.ID, err)
-				} else {
-					app.Logger.Infof("successfully deleted once schedule %d from API", cSchedule.ID)
-				}
-			}
+			app.runSchedule(cSchedule, restApiUrl, accessToken)
 		}))
 
 		if err != nil {

@@ -1,37 +1,43 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import React from "react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import ScanTargetForm from "./ScanTargetForm";
 import { ensureUrlAsset } from "services/scans/url";
-import { requestToolRecommendation } from "api/requests/recommendations";
+import { requestScanRunPost } from "api/requests/scans";
 import { useProjectsQuery } from "api/projects";
+import { errorToast } from "components/ui/toast";
 
-// Mock translation
+const navigate = vi.fn();
+vi.mock("react-router", () => ({
+    useNavigate: () => navigate,
+}));
+
+vi.mock("@tanstack/react-query", () => ({
+    useQueryClient: () => ({ invalidateQueries: vi.fn().mockResolvedValue(undefined) }),
+}));
+
 vi.mock("react-i18next", () => ({
     useTranslation: () => ({
         t: (key) => key
     }),
 }));
 
-// Mock projects query
 vi.mock("api/projects.js", () => ({
     useProjectsQuery: vi.fn(),
 }));
 
-// Mock recommendations request
-vi.mock("api/requests/recommendations.js", () => ({
-    requestToolRecommendation: vi.fn(),
+vi.mock("api/requests/scans.js", () => ({
+    requestScanRunPost: vi.fn(),
 }));
 
-// Mock ensureUrlAsset service
 vi.mock("services/scans/url", () => ({
     ensureUrlAsset: vi.fn(),
 }));
 
-// Mock RecommendationResults
-vi.mock("./RecommendationResults.jsx", () => ({
-    default: () => <div data-testid="recommendation-results">Mocked Results</div>,
+vi.mock("components/ui/toast", () => ({
+    errorToast: vi.fn(),
 }));
+
+const PLACEHOLDER = "e.g. https://example.com, 192.168.1.1, example.com";
 
 describe("ScanTargetForm", () => {
     const mockProjects = {
@@ -41,11 +47,23 @@ describe("ScanTargetForm", () => {
         ],
     };
 
+    const fillAndSubmit = (projectId: string, target: string, objective?: string) => {
+        const comboboxes = screen.getAllByRole("combobox");
+        fireEvent.change(comboboxes[0], { target: { value: projectId } });
+        if (objective) fireEvent.change(comboboxes[1], { target: { value: objective } });
+        fireEvent.change(screen.getByPlaceholderText(PLACEHOLDER), { target: { value: target } });
+        fireEvent.click(screen.getByRole("button", { name: "Start scan" }));
+    };
+
     beforeEach(() => {
         vi.clearAllMocks();
         (vi.mocked(useProjectsQuery) as any).mockReturnValue({
             data: mockProjects,
             isLoading: false,
+        });
+        (vi.mocked(requestScanRunPost) as any).mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ id: 99 }),
         });
     });
 
@@ -57,66 +75,49 @@ describe("ScanTargetForm", () => {
         expect(screen.getByRole("button", { name: "Start scan" })).toBeInTheDocument();
     });
 
-    it("submits the scan request and calls ensureUrlAsset if the target is a URL", async () => {
-        (vi.mocked(requestToolRecommendation) as any).mockResolvedValue({
-            json: () => Promise.resolve({ recommendations: [] }),
-        });
+    it("creates a scan run with the chosen objective, registers URL assets and opens the run page", async () => {
         vi.mocked(ensureUrlAsset).mockResolvedValue({} as any);
 
         render(<ScanTargetForm />);
-
-        // Select project (first combobox)
-        const comboboxes = screen.getAllByRole("combobox");
-        fireEvent.change(comboboxes[0], { target: { value: "1" } });
-
-        // Input target URL
-        const targetInput = screen.getByPlaceholderText("e.g. https://example.com, 192.168.1.1, example.com");
-        fireEvent.change(targetInput, {
-            target: { value: "https://target-url.com" },
-        });
-
-        // Click start scan
-        fireEvent.click(screen.getByRole("button", { name: "Start scan" }));
+        fillAndSubmit("1", "https://target-url.com", "Web scan");
 
         await waitFor(() => {
             expect(ensureUrlAsset).toHaveBeenCalledWith(1, "https://target-url.com");
-            expect(requestToolRecommendation).toHaveBeenCalledWith({
+            expect(requestScanRunPost).toHaveBeenCalledWith({
                 target: "https://target-url.com",
                 targetType: "url",
-                objective: "Full reconnaissance",
+                objective: "Web scan",
                 projectId: 1,
             });
+            expect(navigate).toHaveBeenCalledWith("/scans/runs/99");
         });
     });
 
-    it("submits the scan request and does NOT call ensureUrlAsset if target is not a URL", async () => {
-        (vi.mocked(requestToolRecommendation) as any).mockResolvedValue({
-            json: () => Promise.resolve({ recommendations: [] }),
-        });
-
+    it("does NOT call ensureUrlAsset if target is not a URL", async () => {
         render(<ScanTargetForm />);
-
-        // Select project (first combobox)
-        const comboboxes = screen.getAllByRole("combobox");
-        fireEvent.change(comboboxes[0], { target: { value: "2" } });
-
-        // Input target IP
-        const targetInput = screen.getByPlaceholderText("e.g. https://example.com, 192.168.1.1, example.com");
-        fireEvent.change(targetInput, {
-            target: { value: "192.168.1.1" },
-        });
-
-        // Click start scan
-        fireEvent.click(screen.getByRole("button", { name: "Start scan" }));
+        fillAndSubmit("2", "192.168.1.1");
 
         await waitFor(() => {
             expect(ensureUrlAsset).not.toHaveBeenCalled();
-            expect(requestToolRecommendation).toHaveBeenCalledWith({
+            expect(requestScanRunPost).toHaveBeenCalledWith({
                 target: "192.168.1.1",
                 targetType: "ip",
                 objective: "Full reconnaissance",
                 projectId: 2,
             });
         });
+    });
+
+    it("shows the server message and stays on the page when the scan cannot be started", async () => {
+        (vi.mocked(requestScanRunPost) as any).mockResolvedValue({
+            ok: false,
+            json: () => Promise.resolve({ message: "No tool supports this objective" }),
+        });
+
+        render(<ScanTargetForm />);
+        fillAndSubmit("1", "192.168.1.1", "Code audit");
+
+        await waitFor(() => expect(errorToast).toHaveBeenCalledWith("No tool supports this objective"));
+        expect(navigate).not.toHaveBeenCalled();
     });
 });

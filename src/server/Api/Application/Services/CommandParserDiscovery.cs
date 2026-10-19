@@ -31,7 +31,7 @@ public static class CommandParserDiscovery
 
         var types = AppDomain.CurrentDomain
             .GetAssemblies()
-            .SelectMany(a => a.GetTypes())
+            .SelectMany(LoadTypes)
             .Where(t =>
                 parserType.IsAssignableFrom(t) &&
                 !t.IsAbstract &&
@@ -45,6 +45,24 @@ public static class CommandParserDiscovery
         }
 
         return map;
+    }
+
+    // Some loaded assemblies cannot be fully loaded (e.g. mismatched third-party package versions);
+    // that must not stop parser discovery, so keep whatever types did load.
+    private static IEnumerable<Type> LoadTypes(System.Reflection.Assembly assembly)
+    {
+        try
+        {
+            return assembly.GetTypes();
+        }
+        catch (System.Reflection.ReflectionTypeLoadException ex)
+        {
+            return ex.Types.Where(t => t != null)!;
+        }
+        catch
+        {
+            return Type.EmptyTypes;
+        }
     }
 
     internal static IEnumerable<string> InferNames(string className)

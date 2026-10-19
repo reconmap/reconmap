@@ -74,7 +74,8 @@ Reconmap automates scanning by analyzing target inputs (URL, domain, IP, hostnam
 
 - **Target Analysis**: When entering a target on the **Run scan** page, the AI identifies the target type and scope.
 - **Ordered Tool Recommendations**: The AI parses the system command catalog and recommends matching tools (e.g. Subfinder, Nmap, Testssl, Trivy, Bandit) in an optimal execution order, along with a written strategy and rationale.
-- **Queued Job Execution**: Instead of forcing manual command entry, the user queues the generated execution plan directly into RabbitMQ to run in parallel or sequence.
+- **Validated plans**: Only tools from the command catalog that apply to the target type are accepted from the model, and Reconmap fills in the command arguments itself. If the AI is unavailable or returns nothing usable, a rule-based plan for the chosen objective is used.
+- **Tracked execution**: The plan becomes a scan whose tool-by-tool progress is kept on the server and listed under **Scan history**.
 
 ### Automatic vulnerability triage (background)
 

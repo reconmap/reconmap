@@ -29,3 +29,7 @@ Click a runner's name to open its details page. It shows every detail the runner
 Empty values are shown as `(empty)`, which usually means the runner has not reported that detail yet.
 
 Users with the `administrator` or `superuser` role can also open a terminal on the runner from the details page. See [Runner terminal security](../admin-manual/runner-terminal-security.md) before enabling this in production.
+
+### Running scans
+
+Runners poll the API for scheduled commands. For scans started from **Run scan**, a runner executes the stored command line, reports each task as running, succeeded or failed, and then uploads the command output (standard output, or the usage's output file from the runner's working directory) to Reconmap so it is parsed into the scan's project. The runner needs the scanning tools (for example `nmap`, `testssl`, `shcheck.py`) installed and on its `PATH`; a missing tool shows up as a failed task with the error. Tools that write to a file use a fixed name in the working directory, so avoid running two scans that use the same file name at the same time.

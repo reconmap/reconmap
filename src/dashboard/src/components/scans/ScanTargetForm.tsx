@@ -3,9 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useProjectsQuery } from 'api/projects.js';
 import NativeSelect from 'components/forms/NativeSelect.jsx';
 import HorizontalLabelledField from 'components/forms/HorizontalLabelledField.jsx';
-import { requestToolRecommendation } from 'api/requests/recommendations.js';
+import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
+import { requestScanRunPost } from 'api/requests/scans.js';
 import { ensureUrlAsset } from 'services/scans/url';
-import RecommendationResults from './RecommendationResults.jsx';
+import { errorToast } from 'components/ui/toast';
+import { ScansUrls } from 'AppUrls';
 
 const detectTargetType = (target) => {
     if (/^https?:\/\//i.test(target)) return "url";
@@ -21,15 +24,13 @@ const ScanTargetForm = () => {
     const [objective, setObjective] = useState("Full reconnaissance");
     const [projectId, setProjectId] = useState("");
     const [analyzing, setAnalyzing] = useState(false);
-    const [recommendations, setRecommendations] = useState<any>(null);
-    const [queuedMessage, setQueuedMessage] = useState("");
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const { data: projects } = useProjectsQuery({ isTemplate: false, status: "active" });
 
     const handleTargetChange = (e) => {
         setTarget(e.target.value);
-        setRecommendations(null);
-        setQueuedMessage("");
     };
 
     const targetType = target ? detectTargetType(target) : "";
@@ -37,21 +38,27 @@ const ScanTargetForm = () => {
     const onAnalyze = async () => {
         if (!target || !projectId) return;
         setAnalyzing(true);
-        setRecommendations(null);
-        setQueuedMessage("");
         try {
             if (targetType === "url") {
                 await ensureUrlAsset(parseInt(projectId, 10), target);
             }
-            const data = await requestToolRecommendation({
+            const resp = await requestScanRunPost({
                 target,
                 targetType,
                 objective,
                 projectId: parseInt(projectId, 10)
             });
-            setRecommendations(await data.json());
-        } catch (e) {
+            if (!resp.ok) {
+                const body = await resp.json().catch(() => null);
+                throw new Error(body?.message || t("The scan could not be started."));
+            }
+            const run = await resp.json();
+            await queryClient.invalidateQueries({ queryKey: ["scans"] });
+            // The scan lives on the server from here on: follow it on its own page.
+            navigate(`${ScansUrls.Runs}/${run.id}`);
+        } catch (e: any) {
             console.error(e);
+            errorToast(e?.message || t("The scan could not be started."));
         } finally {
             setAnalyzing(false);
         }
@@ -118,20 +125,6 @@ const ScanTargetForm = () => {
                     </button>
                 </div>
             </div>
-
-            {queuedMessage && (
-                <div className="notification is-success is-light mt-4">
-                    {queuedMessage}
-                </div>
-            )}
-
-            {recommendations && (
-                <RecommendationResults 
-                    recommendations={recommendations} 
-                    projectId={parseInt(projectId, 10)}
-                    onQueued={() => setQueuedMessage(t("Successfully queued tool(s)."))}
-                />
-            )}
         </div>
     );
 };

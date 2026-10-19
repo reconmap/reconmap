@@ -16,7 +16,7 @@ public class ShcheckCommand : ICommand
         {
             Id = "shcheck-headers",
             Description = "Scan target web server for security headers.",
-            ExecutablePath = "shcheck",
+            ExecutablePath = "shcheck.py",
             Arguments = "-j {{{URL|||https://localhost}}}",
             OutputCapturingMode = "stdout",
             OutputParser = "shcheck"

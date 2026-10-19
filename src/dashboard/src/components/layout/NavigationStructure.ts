@@ -69,6 +69,12 @@ export const getNavigationStructure = (t) => [
             },
             {
                 type: "menu",
+                name: t("Scan history"),
+                url: ScansUrls.Runs,
+                permissions: "commands.*",
+            },
+            {
+                type: "menu",
                 name: t("View scheduled scans"),
                 url: ScansUrls.Schedules,
                 permissions: "commands.*",
