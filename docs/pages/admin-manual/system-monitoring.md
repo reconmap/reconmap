@@ -26,6 +26,8 @@ The REST API checks the MCP server by calling the URL in the `Mcp:HealthUrl` set
 
 ### System usage
 
+The page is organised in tabs: **AI usage**, **Storage**, **Infrastructure** (key-value server and message queues) and **Client cache**.
+
 The system usage view shows what your instance consumes: LLM tokens and estimated cost, storage, the key-value server and the message queues.
 
 ![System usage](/images/screenshots/system-usage.png)

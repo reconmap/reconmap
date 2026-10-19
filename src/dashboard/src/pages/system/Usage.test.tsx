@@ -69,6 +69,7 @@ describe("SystemUsagePage", () => {
         usageQuery.mockReturnValue(usage(filledAi));
 
         renderPage();
+        fireEvent.click(screen.getByRole("button", { name: "Infrastructure" }));
 
         expect(screen.getByText("42")).toBeInTheDocument();
         expect(screen.getByText("tasks")).toBeInTheDocument();
