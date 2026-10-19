@@ -58,8 +58,8 @@ const Widgets = {
         permissions: "system.*",
     },
     "user-activity-stats": {
-        title: "User activity over time",
-        description: "It charts the number of user actions recorded per day.",
+        title: "User activity",
+        description: "Heatmap of user actions recorded per day over the last 20 weeks.",
         visible: true,
         component: <UserActivityStatsWidget />,
         permissions: "system.*",

@@ -25,7 +25,7 @@ Available widgets:
 | Active projects           | Shows a list of all non-archived projects                                                                          |
 | Vulnerability by category | Vulnerabilities grouped by categories (error reporting, data validation, configuration, denial of service, etc...) |
 | Recent activity           | Extract of audit log                                                                                               |
-| User activitiy over time  | Chart of activity over time                                                                                        |
+| User activity             | Heatmap of user actions per day over the last 20 weeks                                                             |
 | System health             | Presents the status of the API, its backing services (database, Redis, message queue, storage) and the MCP server   |
 | System usage              | Summarises AI calls, tokens and estimated cost (last 30 days), attachments storage, Redis memory and queue depth    |
 | Recent vulnerabilities    | Shows the most recently reported vulnerabilities                                                                   |

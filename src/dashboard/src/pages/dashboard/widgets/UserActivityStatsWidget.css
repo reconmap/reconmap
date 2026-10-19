@@ -1,0 +1,56 @@
+.activity-heatmap {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.activity-heatmap-cell,
+.activity-heatmap-swatch {
+    --heat-base: var(--color-accent-1);
+}
+
+.activity-heatmap-cell.level-0,
+.activity-heatmap-swatch.level-0 {
+    fill: var(--bulma-border-weak);
+    background-color: var(--bulma-border-weak);
+}
+
+.activity-heatmap-cell.level-1,
+.activity-heatmap-swatch.level-1 {
+    fill: color-mix(in srgb, var(--heat-base) 25%, transparent);
+    background-color: color-mix(in srgb, var(--heat-base) 25%, transparent);
+}
+
+.activity-heatmap-cell.level-2,
+.activity-heatmap-swatch.level-2 {
+    fill: color-mix(in srgb, var(--heat-base) 50%, transparent);
+    background-color: color-mix(in srgb, var(--heat-base) 50%, transparent);
+}
+
+.activity-heatmap-cell.level-3,
+.activity-heatmap-swatch.level-3 {
+    fill: color-mix(in srgb, var(--heat-base) 75%, transparent);
+    background-color: color-mix(in srgb, var(--heat-base) 75%, transparent);
+}
+
+.activity-heatmap-cell.level-4,
+.activity-heatmap-swatch.level-4 {
+    fill: var(--heat-base);
+    background-color: var(--heat-base);
+}
+
+.activity-heatmap-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--bulma-text-weak);
+}
+
+.activity-heatmap-swatch {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 3px;
+}

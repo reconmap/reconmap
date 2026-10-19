@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The dashboard "User activity over time" line chart is now a "User activity" heatmap: a GitHub-style calendar of user actions per day over the last 20 weeks, with a tooltip per day.
 - `GET /api/system/usage` now returns a typed camelCase response and accepts optional `from` and `to` query parameters. **Breaking:** `attachments.total_count` / `total_file_size` are now `attachments.totalCount` / `totalFileSize`, and `queueLengths` is replaced by `queues` (RabbitMQ queue depth) plus `redis` and `ai`. The old `queueLengths` read Redis lists (`email:queue`, `tasks:queue`, `notifications:queue`) that the API never wrote to, so they were always empty.
 - The "Client queries cached" row moved from the usage table to its own "Client cache" section on the System usage page.
 - The dashboard "API health" widget is now the "System health" widget (widget key `system-health`, replacing `api-health`; previously saved layouts that contain the old widget no longer show it). It lists the API, database, key-value, message queue, MCP server, SSE and attachments status, with response times, and links to the System health page. The System health page shows the same information.
