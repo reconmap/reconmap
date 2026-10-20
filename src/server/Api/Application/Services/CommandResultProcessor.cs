@@ -51,16 +51,20 @@ public class CommandResultProcessor(
                     db.ChangeTracker.Clear();
                 }
 
-                var notification = new Notification
+                // Jobs without a user (e.g. runner uploads) have nobody to notify
+                if (job.UserId is int toUserId)
                 {
-                    ToUserId = job.UserId,
-                    Title = "New assets found",
-                    Content =
-                        $"A total of '{numHosts}' new assets have been found by the '{commandUsage.OutputParser}' command",
-                    Status = "unread"
-                };
-                db.Notifications.Add(notification);
-                await db.SaveChangesAsync(stoppingToken);
+                    var notification = new Notification
+                    {
+                        ToUserId = toUserId,
+                        Title = "New assets found",
+                        Content =
+                            $"A total of '{numHosts}' new assets have been found by the '{commandUsage.OutputParser}' command",
+                        Status = "unread"
+                    };
+                    db.Notifications.Add(notification);
+                    await db.SaveChangesAsync(stoppingToken);
+                }
             }
 
             var numVulnerabilitiesAdded = 0;
@@ -129,15 +133,18 @@ public class CommandResultProcessor(
 
                 if (numVulnerabilitiesAdded > 0)
                 {
-                    var notification = new Notification
+                    if (job.UserId is int vulnerabilitiesToUserId)
                     {
-                        ToUserId = job.UserId,
-                        Title = "New vulnerabilities found",
-                        Content =
-                            $"A total of '{numVulnerabilitiesAdded}' new vulnerabilities have been found by the '{commandUsage.OutputParser}' command",
-                        Status = "unread"
-                    };
-                    db.Notifications.Add(notification);
+                        var notification = new Notification
+                        {
+                            ToUserId = vulnerabilitiesToUserId,
+                            Title = "New vulnerabilities found",
+                            Content =
+                                $"A total of '{numVulnerabilitiesAdded}' new vulnerabilities have been found by the '{commandUsage.OutputParser}' command",
+                            Status = "unread"
+                        };
+                        db.Notifications.Add(notification);
+                    }
                     await db.SaveChangesAsync(stoppingToken);
                 }
             }

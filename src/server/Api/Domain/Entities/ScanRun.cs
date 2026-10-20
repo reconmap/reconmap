@@ -21,7 +21,7 @@ public class ScanRun : TimestampedEntity
 
     public int ProjectId { get; set; }
 
-    public int CreatedByUid { get; set; }
+    public int? CreatedByUid { get; set; }
 
     [MaxLength(500)] public string Target { get; set; } = string.Empty;
 

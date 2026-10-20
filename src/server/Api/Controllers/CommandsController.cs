@@ -20,7 +20,7 @@ public class CommandProcessorJob
 {
     public string CommandUsageId { get; set; } = string.Empty;
     public int ProjectId { get; set; }
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     public string FilePath { get; set; } = string.Empty;
 }
 
@@ -105,7 +105,7 @@ public class CommandsController(
         var command = CommandDiscovery.FindById(usage.CommandId);
         if (command == null) return NotFound("Command not found");
 
-        int userId = 0;
+        int? userId = null;
         try
         {
             userId = HttpContext.GetCurrentUser()!.Id;

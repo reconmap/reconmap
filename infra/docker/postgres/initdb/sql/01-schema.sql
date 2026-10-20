@@ -46,7 +46,7 @@ CREATE TABLE attachment
 (
     id               SERIAL PRIMARY KEY,
     created_at  TIMESTAMPTZ             NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by_uid    INT                                                                             NOT NULL,
+    created_by_uid    INT                                                                             NULL,
     updated_at  TIMESTAMPTZ             NULL,
     parent_type      VARCHAR(20) NOT NULL,
     parent_id        INT                                                                             NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE organisation
     id                       SERIAL PRIMARY KEY,
     created_at                TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at                TIMESTAMPTZ                         NULL,
-    created_by_uid INT                        NOT NULL,
+    created_by_uid INT                        NULL,
     kind                     VARCHAR(20) NOT NULL,
     name                     VARCHAR(80)                         NOT NULL UNIQUE,
     address                  VARCHAR(400)                        NULL,
@@ -90,7 +90,7 @@ CREATE TABLE project
     id                    SERIAL PRIMARY KEY,
     created_at             TIMESTAMPTZ                NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at             TIMESTAMPTZ                NULL,
-    created_by_uid           INT                        NOT NULL,
+    created_by_uid           INT                        NULL,
     service_provider_id   INT                        NULL,
     client_id             INT                        NULL,
     category_id           INT                        NULL,
@@ -242,7 +242,7 @@ CREATE TABLE vulnerability
     id                     SERIAL PRIMARY KEY,
     created_at              TIMESTAMPTZ                                                                                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at              TIMESTAMPTZ                                                                                        NULL,
-    created_by_uid            INT                                                                                       NOT NULL,
+    created_by_uid            INT                                                                                       NULL,
     is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
     external_id            VARCHAR(50)                                                                                        NULL,
     project_id             INT                                                                                       NULL,
@@ -277,7 +277,7 @@ CREATE TABLE task
 (
     id                SERIAL PRIMARY KEY,
     project_id        INT                                        NOT NULL,
-    created_by_uid       INT                                        NOT NULL,
+    created_by_uid       INT                                        NULL,
     assigned_to_uid      INT                                        NULL,
     created_at         TIMESTAMPTZ                                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at         TIMESTAMPTZ                                         NULL,
@@ -296,7 +296,7 @@ CREATE TABLE task
 CREATE TABLE command_schedule
 (
     id              SERIAL PRIMARY KEY,
-    created_by_uid     INT  NOT NULL,
+    created_by_uid     INT  NULL,
     project_id INT DEFAULT NULL,
     created_at       TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMPTZ   NULL,
@@ -313,7 +313,7 @@ CREATE TABLE scan_run
 (
     id              SERIAL PRIMARY KEY,
     project_id      INT           NOT NULL,
-    created_by_uid  INT           NOT NULL,
+    created_by_uid  INT           NULL,
     target          VARCHAR(500)  NOT NULL,
     target_type     VARCHAR(30)   NOT NULL,
     objective       VARCHAR(100)  NOT NULL,
@@ -348,7 +348,7 @@ CREATE TABLE report
 (
     id                  SERIAL PRIMARY KEY,
     project_id          INT NULL,
-    created_by_uid    INT NOT NULL,
+    created_by_uid    INT NULL,
     created_at           TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_template         BOOLEAN      NOT NULL DEFAULT FALSE,
     version_name        VARCHAR(50)  NOT NULL,
@@ -435,7 +435,7 @@ CREATE TABLE note
 (
     id          SERIAL PRIMARY KEY,
     created_at   TIMESTAMPTZ                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by_uid     INT                      NOT NULL,
+    created_by_uid     INT                      NULL,
     parent_type VARCHAR(20) NOT NULL,
     parent_id   INT                      NOT NULL,
     visibility  VARCHAR(20)        NOT NULL DEFAULT 'private',

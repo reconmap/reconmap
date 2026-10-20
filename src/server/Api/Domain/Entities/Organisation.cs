@@ -8,7 +8,7 @@ public class Organisation : TimestampedEntity
 {
     [Key] public int Id { get; set; }
 
-    public int CreatedByUid { get; set; }
+    public int? CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public UserInfo? CreatedBy { get; set; }
 

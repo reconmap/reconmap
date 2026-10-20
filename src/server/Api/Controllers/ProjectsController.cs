@@ -27,7 +27,7 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
         dbContext.Projects.Add(project);
         await dbContext.SaveChangesAsync();
 
-        var projectUser = new ProjectMember { ProjectId = project.Id, UserId = project.CreatedByUid };
+        var projectUser = new ProjectMember { ProjectId = project.Id, UserId = project.CreatedByUid!.Value };
         dbContext.ProjectMembers.Add(projectUser);
         await dbContext.SaveChangesAsync();
 

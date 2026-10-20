@@ -20,6 +20,8 @@ public class OpaActionFilter(OpaAuthorizationService opaService, AppDbContext db
         {
             if (isServiceAccount)
             {
+                // In-memory placeholder for the OPA input only. It is not a database user,
+                // so it must never be persisted; audit entries map Id 0 to a NULL actor.
                 user = new User
                 {
                     Id = 0,

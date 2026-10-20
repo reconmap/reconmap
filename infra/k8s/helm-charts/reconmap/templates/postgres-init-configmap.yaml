@@ -71,7 +71,7 @@ data:
     (
         id               SERIAL PRIMARY KEY,
         created_at  TIMESTAMPTZ             NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        created_by_uid    INT                                                                             NOT NULL,
+        created_by_uid    INT                                                                             NULL,
         updated_at  TIMESTAMPTZ             NULL,
         parent_type      VARCHAR(20) NOT NULL,
         parent_id        INT                                                                             NOT NULL,
@@ -89,7 +89,7 @@ data:
         id                       SERIAL PRIMARY KEY,
         created_at                TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at                TIMESTAMPTZ                         NULL,
-        created_by_uid INT                        NOT NULL,
+        created_by_uid INT                        NULL,
         kind                     VARCHAR(20) NOT NULL,
         name                     VARCHAR(80)                         NOT NULL UNIQUE,
         address                  VARCHAR(400)                        NULL,
@@ -115,7 +115,7 @@ data:
         id                    SERIAL PRIMARY KEY,
         created_at             TIMESTAMPTZ                NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at             TIMESTAMPTZ                NULL,
-        created_by_uid           INT                        NOT NULL,
+        created_by_uid           INT                        NULL,
         service_provider_id   INT                        NULL,
         client_id             INT                        NULL,
         category_id           INT                        NULL,
@@ -267,7 +267,7 @@ data:
         id                     SERIAL PRIMARY KEY,
         created_at              TIMESTAMPTZ                                                                                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at              TIMESTAMPTZ                                                                                        NULL,
-        created_by_uid            INT                                                                                       NOT NULL,
+        created_by_uid            INT                                                                                       NULL,
         is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
         external_id            VARCHAR(50)                                                                                        NULL,
         project_id             INT                                                                                       NULL,
@@ -301,7 +301,7 @@ data:
     (
         id                SERIAL PRIMARY KEY,
         project_id        INT                                        NOT NULL,
-        created_by_uid       INT                                        NOT NULL,
+        created_by_uid       INT                                        NULL,
         assigned_to_uid      INT                                        NULL,
         created_at         TIMESTAMPTZ                                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at         TIMESTAMPTZ                                         NULL,
@@ -320,7 +320,7 @@ data:
     CREATE TABLE command_schedule
     (
         id              SERIAL PRIMARY KEY,
-        created_by_uid     INT  NOT NULL,
+        created_by_uid     INT  NULL,
         project_id INT DEFAULT NULL,
         created_at       TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at       TIMESTAMPTZ   NULL,
@@ -337,7 +337,7 @@ data:
     (
         id              SERIAL PRIMARY KEY,
         project_id      INT           NOT NULL,
-        created_by_uid  INT           NOT NULL,
+        created_by_uid  INT           NULL,
         target          VARCHAR(500)  NOT NULL,
         target_type     VARCHAR(30)   NOT NULL,
         objective       VARCHAR(100)  NOT NULL,
@@ -372,7 +372,7 @@ data:
     (
         id                  SERIAL PRIMARY KEY,
         project_id          INT NULL,
-        created_by_uid    INT NOT NULL,
+        created_by_uid    INT NULL,
         created_at           TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
         is_template         BOOLEAN      NOT NULL DEFAULT FALSE,
         version_name        VARCHAR(50)  NOT NULL,
@@ -441,7 +441,7 @@ data:
     (
         id          SERIAL PRIMARY KEY,
         created_at   TIMESTAMPTZ                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        created_by_uid     INT                      NOT NULL,
+        created_by_uid     INT                      NULL,
         parent_type VARCHAR(20) NOT NULL,
         parent_id   INT                      NOT NULL,
         visibility  VARCHAR(20)        NOT NULL DEFAULT 'private',
@@ -582,13 +582,10 @@ data:
     CREATE TRIGGER update_notification_updated_at BEFORE UPDATE ON notification FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
   02-default-data.sql: |
     INSERT INTO "user" (id, subject_id, role)
-VALUES (0, 'NULL', 'administrator');
-
-    INSERT INTO "user" (id, subject_id, role)
 VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
 
     INSERT INTO audit_log (created_by_uid, client_ip, action, object)
-    VALUES (0, '\x7f000001'::bytea, 'Initialised', 'System');
+    VALUES (NULL, '\x7f000001'::bytea, 'Initialised', 'System');
 
     INSERT INTO vulnerability_category (id, parent_id, name, description)
     VALUES (1, NULL, 'General', 'General categories.'),

@@ -84,7 +84,7 @@ public class ReportsController(
             ReportId = report.Id,
             ProjectId = report.ProjectId.Value,
             ReportTemplateId = reportRequest.ReportTemplateId,
-            CreatedByUserId = report.CreatedByUid
+            CreatedByUserId = report.CreatedByUid!.Value
         });
 
         return AcceptedAtAction(nameof(GetMany), new { id = report.Id }, report);

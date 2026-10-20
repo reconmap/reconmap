@@ -14,7 +14,7 @@ public class Attachment : TimestampedEntity
 
     public int ParentId { get; set; }
 
-    public int CreatedByUid { get; set; }
+    public int? CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))] public User? CreatedBy { get; set; }
 

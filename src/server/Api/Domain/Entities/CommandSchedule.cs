@@ -8,7 +8,7 @@ public class CommandSchedule : TimestampedEntity
 {
     [Key]public int Id { get; set; }
 
-    public int CreatedByUid { get; set; }
+    public int? CreatedByUid { get; set; }
 
     [ForeignKey(nameof(CreatedByUid))]
     public User? CreatedBy { get; set; }
