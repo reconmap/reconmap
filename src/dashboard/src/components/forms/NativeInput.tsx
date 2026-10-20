@@ -5,4 +5,6 @@ const NativeInput = forwardRef<any, any>(({ children: _children, ...props }: any
     return <input className={`input ${styles.native}`} ref={ref} {...props} />;
 });
 
+NativeInput.displayName = "NativeInput";
+
 export default NativeInput;

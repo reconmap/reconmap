@@ -58,4 +58,6 @@ const SearchResultsPage = React.memo(() => {
     );
 });
 
+SearchResultsPage.displayName = "SearchResultsPage";
+
 export default SearchResultsPage;
