@@ -64,7 +64,7 @@ const AttachmentsTable = ({ attachments }: any) => {
         {
             header: "Mimetype",
             cell: (attachment) => (
-                <span title={safeResolveMime(attachment.fileMimetype)}>{attachment.fileMimetype}</span>
+                <span title={safeResolveMime(attachment.fileMimeType)}>{attachment.fileMimeType}</span>
             ),
         },
         {
