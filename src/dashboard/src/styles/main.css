@@ -63,17 +63,17 @@ button.navbar-link {
     color: var(--bulma-tabs-link-hover-color);
 }
 
-.tabs li.is-active button {
-    border-bottom-color: var(--bulma-tabs-link-active-border-bottom-color);
-    color: var(--bulma-tabs-link-active-color);
-}
-
 .tabs.is-toggle button {
     border-color: var(--bulma-tabs-toggle-link-border-color);
     border-style: var(--bulma-tabs-toggle-link-border-style);
     border-width: var(--bulma-tabs-toggle-link-border-width);
     margin-bottom: 0;
     position: relative;
+}
+
+.tabs li.is-active button {
+    border-bottom-color: var(--bulma-tabs-link-active-border-bottom-color);
+    color: var(--bulma-tabs-link-active-color);
 }
 
 .tabs.is-toggle button:hover {

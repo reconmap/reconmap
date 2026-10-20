@@ -87,6 +87,7 @@ const VaultItemEdit = () => {
                                     <td>
                                         <NativeSelect
                                             name="type"
+                                            aria-label="Type"
                                             onChange={onVaultItemFormChange}
                                             value={item.type || ""}
                                             required
@@ -101,17 +102,19 @@ const VaultItemEdit = () => {
                                         <NativeInput
                                             type="text"
                                             name="name"
+                                            aria-label="Name"
                                             onChange={onVaultItemFormChange}
                                             value={item.name || ""}
                                             required
                                         />
                                     </td>
-                                    <td>
+                                    <td aria-label="Value">
                                         <div className="field has-addons" style={{ marginBottom: 0 }}>
                                             <div className="control is-expanded">
                                                 <NativeInput
                                                     type="text"
                                                     name="value"
+                                                    aria-label="Value"
                                                     onChange={onVaultItemFormChange}
                                                     value={item.value || ""}
                                                     required
@@ -123,6 +126,7 @@ const VaultItemEdit = () => {
                                                     className="button is-info"
                                                     onClick={() => setIsGeneratorOpen(true)}
                                                     title="Generate Password"
+                                                    aria-label="Generate Password"
                                                 >
                                                     <CssIcon name="key" />
                                                 </button>

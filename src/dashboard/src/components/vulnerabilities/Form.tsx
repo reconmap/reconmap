@@ -70,7 +70,7 @@ const VulnerabilityForm = ({
                 });
             }
         }
-    }, [projects, vulnerability]);
+    }, [projects, vulnerability, setVulnerability]);
     const { data: categories } = useVulnerabilityCategoriesQuery({
         parentsOnly: false,
     });

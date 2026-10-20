@@ -1,4 +1,5 @@
 import { useAuditLogStatsQuery } from "api/auditlog";
+import { useId, useState } from "react";
 import DashboardWidget from "./Widget";
 import "./UserActivityStatsWidget.css";
 
@@ -40,8 +41,10 @@ const buildCalendar = (stats: DailySummary[], today: Date) => {
 
 const UserActivityStatsWidget = () => {
     const { data: auditLogStats } = useAuditLogStatsQuery();
+    const [today] = useState(() => new Date());
+    const titleId = useId();
 
-    const days = auditLogStats && auditLogStats.length > 0 ? buildCalendar(auditLogStats, new Date()) : [];
+    const days = auditLogStats && auditLogStats.length > 0 ? buildCalendar(auditLogStats, today) : [];
     const max = Math.max(0, ...days.map((d) => d.total));
     const width = WEEKS * (CELL + GAP) - GAP;
     const height = 7 * (CELL + GAP) - GAP;
@@ -50,7 +53,8 @@ const UserActivityStatsWidget = () => {
         <DashboardWidget title="User activity (last 20 weeks)">
             {max > 0 ? (
                 <>
-                    <svg className="activity-heatmap" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Daily user activity heatmap">
+                    <svg className="activity-heatmap" viewBox={`0 0 ${width} ${height}`} aria-labelledby={titleId}>
+                        <title id={titleId}>Daily user activity heatmap</title>
                         {days.map((d) => (
                             <rect
                                 key={d.key}

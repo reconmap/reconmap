@@ -243,6 +243,7 @@ const ClientDetails = () => {
                                                         <td>
                                                             <NativeSelect
                                                                 name="kind"
+                                                                aria-label="Type"
                                                                 onChange={onContactFormChange}
                                                                 value={contact.kind || ""}
                                                                 required

@@ -1,4 +1,4 @@
-import { invalidateVaultQueries } from "api/vault";
+import { useInvalidateVaultQueries } from "api/vault";
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -14,7 +14,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
     const defaultSecret = { ...Vault, projectId: projectId };
     const [vaultItem, setVaultItem] = useState(defaultSecret);
     const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
-    const invalidateQueries = invalidateVaultQueries();
+    const invalidateQueries = useInvalidateVaultQueries();
 
     const onVaultItemFormChange = (ev) => {
         const value = ev.target.type === "checkbox" ? ev.target.checked : ev.target.value;

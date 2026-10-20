@@ -66,13 +66,13 @@ const TopVulnerableAssetsWidget = () => {
                         {sortedAssets.map((asset) => (
                             <tr key={asset.id}>
                                 <td>
-                                    <Link to={`/assets/${asset.id}`}><strong>{asset.name}</strong></Link>
+                                    <Link to={`/assets/${asset.id}`} className="has-text-weight-bold">{asset.name}</Link>
                                 </td>
                                 <td>
                                     <span className="tag is-light">{asset.type}</span>
                                 </td>
                                 <td className="has-text-centered">
-                                    <span className="tag is-danger is-light"><strong>{asset.total}</strong></span>
+                                    <span className="tag is-danger is-light has-text-weight-bold">{asset.total}</span>
                                 </td>
                                 <td>
                                     <div className="tags" style={{ gap: "4px", marginBottom: 0 }}>

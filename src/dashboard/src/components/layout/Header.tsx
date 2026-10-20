@@ -31,6 +31,7 @@ const Header = () => {
                     type="button"
                     className={`navbar-burger ${isActive ? "is-active" : ""}`}
                     data-target="appMenu"
+                    aria-label="Toggle navigation menu"
                     aria-expanded={isActive}
                     aria-controls="appMenu"
                     onClick={toggleNavBarMenu}

@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 
-export const invalidateVaultQueries = () => {
+export const useInvalidateVaultQueries = () => {
     const queryClient = useQueryClient();
 
     return () => {

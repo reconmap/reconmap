@@ -13,12 +13,14 @@ const ModalDialog = ({ title, children, visible, onModalClose, style = {} }: any
     }, [visible]);
 
     return (
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <dialog
             ref={htmlRef}
             className="html-dialog"
             onClose={onModalClose}
             // The dialog has no padding of its own (the content wrapper does), so a click whose target is
-            // the dialog element itself can only have landed on the backdrop.
+            // the dialog element itself can only have landed on the backdrop. Escape already closes the dialog
+            // from the keyboard, so this pointer-only shortcut has no keyboard equivalent to provide.
             onClick={(ev) => ev.target === ev.currentTarget && ev.currentTarget.close()}
             style={style}
         >

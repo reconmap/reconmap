@@ -1,5 +1,5 @@
 // useTheme.ts
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
 
@@ -22,9 +22,9 @@ export function useTheme(): { theme: Theme; toggleTheme: () => void; setTheme: (
     };
 
     // Explicitly set the theme
-    const setTheme = (newTheme: Theme) => {
+    const setTheme = useCallback((newTheme: Theme) => {
         setThemeState(newTheme);
-    };
+    }, []);
 
     return { theme, toggleTheme, setTheme };
 }

@@ -26,7 +26,7 @@ function useAuth() {
         }
         setTheme(user.preferences["dashboard.theme"]);
         i18n.changeLanguage(user.locale || "en");
-    }, [user]);
+    }, [user, setTheme, i18n]);
 
     return { user, logout };
 }

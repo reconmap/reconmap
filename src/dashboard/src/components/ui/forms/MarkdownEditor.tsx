@@ -183,6 +183,7 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                         className="button is-small is-dark"
                         onClick={() => handleFormat("bold")}
                         title="Bold"
+                        aria-label="Bold"
                     >
                         <i className="fas fa-bold"></i>
                     </button>
@@ -191,6 +192,7 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                         className="button is-small is-dark"
                         onClick={() => handleFormat("italic")}
                         title="Italic"
+                        aria-label="Italic"
                     >
                         <i className="fas fa-italic"></i>
                     </button>
@@ -199,6 +201,7 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                         className="button is-small is-dark"
                         onClick={() => handleFormat("header")}
                         title="Heading"
+                        aria-label="Heading"
                     >
                         <i className="fas fa-heading"></i>
                     </button>
@@ -207,6 +210,7 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                         className="button is-small is-dark"
                         onClick={() => handleFormat("link")}
                         title="Link"
+                        aria-label="Link"
                     >
                         <i className="fas fa-link"></i>
                     </button>
@@ -215,6 +219,7 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                         className="button is-small is-dark"
                         onClick={() => handleFormat("code")}
                         title="Code"
+                        aria-label="Code"
                     >
                         <i className="fas fa-code"></i>
                     </button>
@@ -223,6 +228,7 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                         className="button is-small is-dark"
                         onClick={() => handleFormat("list")}
                         title="Bullet List"
+                        aria-label="Bullet List"
                     >
                         <i className="fas fa-list"></i>
                     </button>

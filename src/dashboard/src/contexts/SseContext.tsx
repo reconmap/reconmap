@@ -25,17 +25,25 @@ export const SseContext = createContext<any>({ connection: null });
 const SseProvider = ({ children }: any) => {
     const { user } = useContext(AuthContext);
     const [connection, setConnection] = useState<any>(null);
+    // Mirrors the connection state so the effect below can read the latest value without re-running on every change.
+    const connectionRef = useRef<any>(null);
 
     useEffect(() => {
+        connectionRef.current = connection;
+    }, [connection]);
+
+    useEffect(() => {
+        const currentConnection = connectionRef.current;
+
         if (!user?.access_token) {
-            if (connection && connection.readyState !== EventSource.CLOSED) {
+            if (currentConnection && currentConnection.readyState !== EventSource.CLOSED) {
                 console.debug("reconmap-sse: closing due to logout");
-                connection.close();
+                currentConnection.close();
             }
             return;
         }
 
-        if (connection && connection.readyState <= EventSource.OPEN) return;
+        if (currentConnection && currentConnection.readyState <= EventSource.OPEN) return;
 
         let isMounted = true;
         let es: EventSource | null = null;
