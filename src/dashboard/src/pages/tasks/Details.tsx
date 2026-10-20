@@ -27,6 +27,7 @@ import TaskStatuses from "models/TaskStatuses";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import DeleteButton from "components/ui/buttons/Delete";
+import TaskPriorityFormatter from "components/tasks/TaskPriorityFormatter";
 import TaskStatusFormatter from "components/tasks/TaskStatusFormatter";
 
 const TaskDetailsPage = () => {
@@ -157,7 +158,7 @@ const TaskDetailsPage = () => {
 
                                             <dl>
                                                 <dt>{t("Priority")}</dt>
-                                                <dd>{task.priority}</dd>
+                                                <dd><TaskPriorityFormatter task={task} /></dd>
 
                                                 {task.durationEstimate && <>
                                                     <dt>{t("Duration estimate")}</dt>

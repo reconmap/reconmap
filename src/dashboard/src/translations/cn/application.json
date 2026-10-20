@@ -6,5 +6,10 @@
     "Reports": "报表",
     "Users": "用户",
     "Settings": "设置",
-    "System": "系统"
+    "System": "系统",
+    "Highest": "最高",
+    "High": "高",
+    "Medium": "中",
+    "Low": "低",
+    "Lowest": "最低"
 }

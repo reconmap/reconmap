@@ -8,6 +8,7 @@ import NativeTable from "components/ui/tables/NativeTable";
 import LinkButton from "../ui/buttons/Link";
 import UserLink from "../users/Link";
 import TaskBadge from "./TaskBadge";
+import TaskPriorityFormatter from "./TaskPriorityFormatter";
 import TaskStatusFormatter from "./TaskStatusFormatter";
 
 const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallback = null }: any) => {
@@ -69,7 +70,7 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
         },
         {
             header: "Priority",
-            cell: (task) => task.priority,
+            cell: (task) => <TaskPriorityFormatter task={task} />,
         },
         {
             header: "Assignee",
