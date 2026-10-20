@@ -28,6 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The attachments table "Uploaded by" column and file mimetype now show the values the API returns. The attachment list also includes each file's creator, which was previously missing.
 - Dashboard: when the API answers `401 Unauthorized`, the dashboard now clears the stored OIDC session and restarts login through the OIDC client (`signinRedirect`) instead of reloading the context path. Concurrent 401s trigger a single redirect, and a repeat 401 within 10 seconds of a redirect no longer redirects again, which prevents redirect loops.
 
+### Removed
+
+- **Breaking (dashboard languages):** Portuguese and German translations are removed. Users whose language is set to `pt` or `de` fall back to English, and the language selector no longer offers them. Keycloak's `supportedLocales` no longer includes `pt`. Existing Keycloak realms must remove `pt` from their supported locales, and users with `pt` as their locale must pick another language. Unused translation strings have also been removed from the remaining languages.
+
 ### Added
 
 - Run scan: scans are now stored on the server (new `scan_run` and `scan_run_task` tables, `GET/POST /api/scans`, `GET /api/scans/{id}`, `POST /api/scans/tasks/{id}/status`). Starting a scan opens its page, which shows each tool's exact command, rationale, status and error; it keeps running if you navigate away and is listed under the new **Scan history** page and the **Recent scans** list on **Run scan**. **Existing installations must create the new tables**, see [Upgrading a Reconmap instance](docs/pages/admin-manual/upgrading-instance.md).

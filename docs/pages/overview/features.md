@@ -34,6 +34,6 @@ nav_order: 1
 - [API token authentication](/user-manual/system/api-tokens/): to easily integrate Reconmap with external tools and scripts without a JWT.
 - Extensible via plugins
 - Unicode and UTF8 support
-- Internationalisation (I18n) and localisation (L10n). Languages supported: English, Spanish, French, Portuguese, and others.
+- Internationalisation (I18n) and localisation (L10n). Languages supported: English, Spanish, French and Chinese.
 - Free and open source
 - And more!

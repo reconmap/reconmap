@@ -2074,7 +2074,6 @@
   },
   "internationalizationEnabled": true,
   "supportedLocales": [
-    "pt",
     "en",
     "fr",
     "es"

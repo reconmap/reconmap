@@ -10,11 +10,6 @@ import APP_TRANSLATIONS_ES from "translations/es/application.json";
 import COMMON_TRANSLATIONS_ES from "translations/es/common.json";
 import APP_TRANSLATIONS_FR from "translations/fr/application.json";
 import COMMON_TRANSLATIONS_FR from "translations/fr/common.json";
-import APP_TRANSLATIONS_PT from "translations/pt/application.json";
-import COMMON_TRANSLATIONS_PT from "translations/pt/common.json";
-import APP_TRANSLATIONS_DE from "translations/de/application.json";
-import COMMON_TRANSLATIONS_DE from "translations/de/common.json";
-
 
 i18next
     .use(I18nextBrowserLanguageDetector)
@@ -33,10 +28,6 @@ i18next
                 app: APP_TRANSLATIONS_ES,
                 common: COMMON_TRANSLATIONS_ES,
             },
-            pt: {
-                app: APP_TRANSLATIONS_PT,
-                common: COMMON_TRANSLATIONS_PT,
-            },
             cn: {
                 app: APP_TRANSLATIONS_CN,
                 common: COMMON_TRANSLATIONS_CN,
@@ -45,9 +36,5 @@ i18next
                 app: APP_TRANSLATIONS_FR,
                 common: COMMON_TRANSLATIONS_FR,
             },
-            de: {
-                app: APP_TRANSLATIONS_DE,
-                common: COMMON_TRANSLATIONS_DE,
-            }
         },
     });
