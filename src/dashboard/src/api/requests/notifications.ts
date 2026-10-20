@@ -1,11 +1,8 @@
-import { requestEntities, requestEntityDelete, requestEntitiesDelete, requestEntityPatch, requestEntityPut } from "utilities/requests";
+import { requestEntities, requestEntityDelete, requestEntitiesDelete, requestEntityPatch } from "utilities/requests";
 
 const API_BASE_URL = "/notifications";
 
 const requestNotifications = async (params: any) => requestEntities(API_BASE_URL, params);
-
-export const requestNotificationPut = (notificationId: number, data: any) =>
-    requestEntityPut(`${API_BASE_URL}/${notificationId}`, data);
 
 export const requestPartialNotificationUpdate = (notificationId: number, data: any) =>
     requestEntityPatch(`${API_BASE_URL}/${notificationId}`, data);

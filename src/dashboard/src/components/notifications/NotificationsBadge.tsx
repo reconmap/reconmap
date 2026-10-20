@@ -1,5 +1,5 @@
-import { useNotificationsQuery } from "api/notifications";
-import { requestNotificationPut } from "api/requests/notifications";
+import { useQueryClient } from "@tanstack/react-query";
+import { notificationsKey, useMarkNotificationMutation, useNotificationsQuery } from "api/notifications";
 import NativeButton from "components/forms/NativeButton";
 import CssIcon from "components/ui/CssIcon";
 import Tag from "components/ui/Tag";
@@ -8,19 +8,19 @@ import useToggle from "hooks/useToggle";
 import { Link } from "react-router";
 
 const NotificationsBadge = () => {
-    const { data: notifications, refetch, isLoading } = useNotificationsQuery({ status: "unread" });
+    const queryClient = useQueryClient();
+    const { data: notifications, isLoading } = useNotificationsQuery({ status: "unread" });
+    const markNotificationMutation = useMarkNotificationMutation();
     const { value, toggle, setToggle } = useToggle(false);
 
     const onMessageHandler = () => {
-        refetch();
+        queryClient.invalidateQueries({ queryKey: notificationsKey });
     };
 
     useSseMessage(onMessageHandler);
 
     const markAsRead = (notification) => {
-        requestNotificationPut(notification.id, { status: "read" }).then(() => {
-            refetch();
-        });
+        markNotificationMutation.mutate({ id: notification.id, status: "read" });
     };
 
     if (isLoading) {

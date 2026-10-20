@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Notifications state was out of sync between the header bell and the Notifications page: marking notifications as read (one, selected or from the bell) only refreshed the component that made the change, so the unread count stayed stale elsewhere. All notification writes now invalidate the shared notifications cache, and new notifications received over SSE refresh the page as well.
 - Command output processing failed for every upload with `ReflectionTypeLoadException` (`Azure.AI.OpenAI` ... `cannot reduce access`): parser discovery threw when any loaded assembly could not be fully loaded. It now skips the types that cannot load.
 - Uploading a command output failed with `404 Command not found`, and `GET /api/commands/{id}/usages/{usageId}` returned an empty `commandId`: usage definitions are rebuilt on every access, so the owning command id set at startup was lost. The lookup now sets it on the returned usage.
 - Run scan queued every recommended tool with the literal arguments `{}`, so the runner tried to execute a program called `{}` and failed. The API now returns resolved commands (executable and arguments), the dashboard schedules exactly those, and the runner refuses to run any command line that still contains a `{{{placeholder}}}`.

@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { useDeleteNotificationMutation, useNotificationsQuery } from "api/notifications";
-import { requestNotificationsPatch, requestPartialNotificationUpdate, requestNotificationsDelete } from "api/requests/notifications";
+import {
+    useBulkDeleteNotificationsMutation,
+    useBulkUpdateNotificationsMutation,
+    useDeleteNotificationMutation,
+    useMarkNotificationMutation,
+    useNotificationsQuery,
+} from "api/notifications";
 import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -12,49 +17,43 @@ import NativeTable from "components/ui/tables/NativeTable";
 import { actionCompletedToast } from "components/ui/toast";
 
 const NotificationsList = () => {
-    const { data: notifications, refetch, isLoading } = useNotificationsQuery({});
+    const { data: notifications, isLoading } = useNotificationsQuery({});
     const deleteNotificatioMutation = useDeleteNotificationMutation();
+    const markNotificationMutation = useMarkNotificationMutation();
+    const bulkUpdateMutation = useBulkUpdateNotificationsMutation();
+    const bulkDeleteMutation = useBulkDeleteNotificationsMutation();
     const [selectedIds, setSelectedIds] = useState<any[]>([]);
 
-
-
     const markSelectedAsRead = () => {
-        requestNotificationsPatch({
-            ids: selectedIds,
-            status: 'read'
-        }).then(() => {
-            refetch();
-            setSelectedIds([]);
-            actionCompletedToast("Selected notifications marked as read");
+        bulkUpdateMutation.mutate({ ids: selectedIds, status: "read" }, {
+            onSuccess: () => {
+                setSelectedIds([]);
+                actionCompletedToast("Selected notifications marked as read");
+            },
         });
     };
 
     const markSelectedAsUnread = () => {
-        requestNotificationsPatch({
-            ids: selectedIds,
-            status: 'unread'
-        }).then(() => {
-            refetch();
-            setSelectedIds([]);
-            actionCompletedToast("Selected notifications marked as unread");
+        bulkUpdateMutation.mutate({ ids: selectedIds, status: "unread" }, {
+            onSuccess: () => {
+                setSelectedIds([]);
+                actionCompletedToast("Selected notifications marked as unread");
+            },
         });
     };
 
     const deleteSelected = () => {
         if (!confirm("Are you sure you want to delete the selected notifications?")) return;
-        requestNotificationsDelete({
-            ids: selectedIds
-        }).then(() => {
-            refetch();
-            setSelectedIds([]);
-            actionCompletedToast("Selected notifications deleted");
+        bulkDeleteMutation.mutate({ ids: selectedIds }, {
+            onSuccess: () => {
+                setSelectedIds([]);
+                actionCompletedToast("Selected notifications deleted");
+            },
         });
     };
 
     const markNotificationAsRead = (notification) => {
-        requestPartialNotificationUpdate(notification.id, { status: "read" }).then(() => {
-            refetch();
-        });
+        markNotificationMutation.mutate({ id: notification.id, status: "read" });
     };
 
     const columns = [
