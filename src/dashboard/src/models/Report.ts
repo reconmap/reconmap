@@ -1,7 +1,7 @@
 interface ReportInterface {
     id?: number;
     projectId?: number;
-    generatedByUid?: number;
+    createdById?: number;
     is_template?: boolean;
     createdAt?: string;
     versionName?: string;
@@ -14,7 +14,7 @@ interface ReportInterface {
 const Report: ReportInterface = {
     id: undefined,
     projectId: undefined,
-    generatedByUid: undefined,
+    createdById: undefined,
     is_template: false,
     createdAt: undefined,
     versionName: undefined,

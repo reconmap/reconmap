@@ -1,6 +1,6 @@
 interface ProjectInterface {
     id?: number;
-    createdByUid?: number;
+    createdById?: number;
     service_provider_id?: number;
     client_id?: number;
     name?: string;

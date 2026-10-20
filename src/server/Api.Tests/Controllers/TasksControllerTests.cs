@@ -62,15 +62,15 @@ public class TasksControllerTests
     {
         using var db = CreateDbContext();
         db.Tasks.AddRange(
-            new ProjectTask { ProjectId = 1, Summary = "Mine", AssignedToUid = 7, Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "Theirs", AssignedToUid = 8, Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = 1, Summary = "Mine", AssignedToId = 7, Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = 1, Summary = "Theirs", AssignedToId = 8, Priority = "low", Status = "todo" },
             new ProjectTask { ProjectId = 1, Summary = "Unassigned", Priority = "low", Status = "todo" }
         );
         await db.SaveChangesAsync();
 
         var controller = new TasksController(db, new TaskService(db));
 
-        var result = await controller.GetMany(null, null, null, null, null, assignedToUid: 7);
+        var result = await controller.GetMany(null, null, null, null, null, assignedToId: 7);
 
         var ok = Assert.IsType<OkObjectResult>(result);
         var tasks = Assert.IsAssignableFrom<IEnumerable<ProjectTask>>(ok.Value).ToList();

@@ -77,7 +77,7 @@ public class CommandResultProcessor(
                     vulnerability.Risk ??= "medium";
                     vulnerability.Risk = "medium"; // @todo convert non-conventional risks
 
-                    vulnerability.CreatedByUid = job.UserId;
+                    vulnerability.CreatedById = job.UserId;
                     if (vulnerability.Asset != null)
                     {
                         vulnerability.AssetId = await GetAssetId(db, vulnerability.Asset);

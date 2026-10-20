@@ -71,7 +71,7 @@ data:
     (
         id               SERIAL PRIMARY KEY,
         created_at  TIMESTAMPTZ             NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        created_by_uid    INT                                                                             NULL,
+        created_by_id    INT                                                                             NULL,
         updated_at  TIMESTAMPTZ             NULL,
         parent_type      VARCHAR(20) NOT NULL,
         parent_id        INT                                                                             NOT NULL,
@@ -80,7 +80,7 @@ data:
         file_size        INT                                                                             NOT NULL,
         file_mimetype    VARCHAR(200)                                                                             NULL,
         file_hash        VARCHAR(128)                                                                           NOT NULL,
-        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+        FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
     );
 
     -- 3. organisation
@@ -89,14 +89,14 @@ data:
         id                       SERIAL PRIMARY KEY,
         created_at                TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at                TIMESTAMPTZ                         NULL,
-        created_by_uid INT                        NULL,
+        created_by_id INT                        NULL,
         kind                     VARCHAR(20) NOT NULL,
         name                     VARCHAR(80)                         NOT NULL UNIQUE,
         address                  VARCHAR(400)                        NULL,
         url                      VARCHAR(255)                        NULL,
         logo_attachment_id       INT                        NULL,
         small_logo_attachment_id INT                        NULL,
-        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+        FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
         FOREIGN KEY (logo_attachment_id) REFERENCES attachment (id) ON DELETE SET NULL,
         FOREIGN KEY (small_logo_attachment_id) REFERENCES attachment (id) ON DELETE SET NULL
     );
@@ -115,7 +115,7 @@ data:
         id                    SERIAL PRIMARY KEY,
         created_at             TIMESTAMPTZ                NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at             TIMESTAMPTZ                NULL,
-        created_by_uid           INT                        NULL,
+        created_by_id           INT                        NULL,
         service_provider_id   INT                        NULL,
         client_id             INT                        NULL,
         category_id           INT                        NULL,
@@ -128,7 +128,7 @@ data:
         archived              BOOLEAN                    NOT NULL DEFAULT FALSE,
         archived_at            TIMESTAMPTZ                NULL,
         external_id           VARCHAR(40)                NULL,
-        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+        FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
         CONSTRAINT project_fk_client_id FOREIGN KEY (client_id) REFERENCES organisation (id) ON DELETE SET NULL,
         CONSTRAINT project_fk_category_id FOREIGN KEY (category_id) REFERENCES project_category (id) ON DELETE SET NULL
     );
@@ -191,13 +191,13 @@ data:
     (
         id         SERIAL PRIMARY KEY,
         created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        created_by_uid INT NULL,
+        created_by_id INT NULL,
         user_agent VARCHAR(250) NULL,
         client_ip  BYTEA NOT NULL,
         action     VARCHAR(200) NOT NULL,
         object     VARCHAR(200) NOT NULL,
         context    JSONB         NULL,
-        CONSTRAINT audit_log_fk_user_id FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE CASCADE
+        CONSTRAINT audit_log_fk_user_id FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE CASCADE
     );
 
     -- 11. vault
@@ -206,7 +206,7 @@ data:
         id              SERIAL PRIMARY KEY,
         created_at       TIMESTAMPTZ                            NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at       TIMESTAMPTZ                            NULL,
-        owner_uid       INT                           NOT NULL,
+        owner_id       INT                           NOT NULL,
         project_id      INT                           NULL,
         type            VARCHAR(20) NOT NULL,
         name            VARCHAR(200)                           NOT NULL,
@@ -217,7 +217,7 @@ data:
         tag             BYTEA                             NOT NULL,
         note            VARCHAR(1000)                          NULL,
         UNIQUE (project_id, name),
-        FOREIGN KEY (owner_uid) REFERENCES "user" (id) ON DELETE CASCADE,
+        FOREIGN KEY (owner_id) REFERENCES "user" (id) ON DELETE CASCADE,
         FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
     );
 
@@ -267,7 +267,7 @@ data:
         id                     SERIAL PRIMARY KEY,
         created_at              TIMESTAMPTZ                                                                                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at              TIMESTAMPTZ                                                                                        NULL,
-        created_by_uid            INT                                                                                       NULL,
+        created_by_id            INT                                                                                       NULL,
         is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
         external_id            VARCHAR(50)                                                                                        NULL,
         project_id             INT                                                                                       NULL,
@@ -290,7 +290,7 @@ data:
         tags                   JSONB                                                                                               NULL,
         custom_fields          JSONB                                                                                               NULL,
         UNIQUE (project_id, asset_id, summary),
-        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+        FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
         CONSTRAINT vulnerability_fk_project_id FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
         FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE SET NULL,
         FOREIGN KEY (category_id) REFERENCES vulnerability_category (id) ON DELETE SET NULL
@@ -301,8 +301,8 @@ data:
     (
         id                SERIAL PRIMARY KEY,
         project_id        INT                                        NOT NULL,
-        created_by_uid       INT                                        NULL,
-        assigned_to_uid      INT                                        NULL,
+        created_by_id       INT                                        NULL,
+        assigned_to_id      INT                                        NULL,
         created_at         TIMESTAMPTZ                                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at         TIMESTAMPTZ                                         NULL,
         priority          VARCHAR(20) NOT NULL,
@@ -312,15 +312,15 @@ data:
         duration_estimate SMALLINT                                   NULL,
         due_date          DATE                                                NULL,
         FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
-        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
-        FOREIGN KEY (assigned_to_uid) REFERENCES "user" (id) ON DELETE SET NULL
+        FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
+        FOREIGN KEY (assigned_to_id) REFERENCES "user" (id) ON DELETE SET NULL
     );
 
     -- 17. command_schedule
     CREATE TABLE command_schedule
     (
         id              SERIAL PRIMARY KEY,
-        created_by_uid     INT  NULL,
+        created_by_id     INT  NULL,
         project_id INT DEFAULT NULL,
         created_at       TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at       TIMESTAMPTZ   NULL,
@@ -337,7 +337,7 @@ data:
     (
         id              SERIAL PRIMARY KEY,
         project_id      INT           NOT NULL,
-        created_by_uid  INT           NULL,
+        created_by_id  INT           NULL,
         target          VARCHAR(500)  NOT NULL,
         target_type     VARCHAR(30)   NOT NULL,
         objective       VARCHAR(100)  NOT NULL,
@@ -372,13 +372,13 @@ data:
     (
         id                  SERIAL PRIMARY KEY,
         project_id          INT NULL,
-        created_by_uid    INT NULL,
+        created_by_id    INT NULL,
         created_at           TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
         is_template         BOOLEAN      NOT NULL DEFAULT FALSE,
         version_name        VARCHAR(50)  NOT NULL,
         version_description VARCHAR(300) NOT NULL,
         FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
-        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+        FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
     );
 
     -- 19. custom_field
@@ -441,12 +441,12 @@ data:
     (
         id          SERIAL PRIMARY KEY,
         created_at   TIMESTAMPTZ                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        created_by_uid     INT                      NULL,
+        created_by_id     INT                      NULL,
         parent_type VARCHAR(20) NOT NULL,
         parent_id   INT                      NOT NULL,
         visibility  VARCHAR(20)        NOT NULL DEFAULT 'private',
         content     TEXT                              NOT NULL,
-        FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+        FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
     );
 
     -- 24. notification
@@ -498,13 +498,13 @@ data:
     CREATE VIEW user_info AS SELECT id, subject_id, role, short_bio FROM "user";
 
     CREATE VIEW project_template AS
-    SELECT id, created_at, updated_at, created_by_uid, name, description, category_id
+    SELECT id, created_at, updated_at, created_by_id, name, description, category_id
     FROM project
     WHERE is_template = TRUE;
 
     CREATE VIEW vulnerability_template AS
     SELECT id,
-           created_by_uid,
+           created_by_id,
            category_id,
            created_at,
            updated_at,
@@ -584,7 +584,7 @@ data:
     INSERT INTO "user" (id, subject_id, role)
 VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
 
-    INSERT INTO audit_log (created_by_uid, client_ip, action, object)
+    INSERT INTO audit_log (created_by_id, client_ip, action, object)
     VALUES (NULL, '\x7f000001'::bytea, 'Initialised', 'System');
 
     INSERT INTO vulnerability_category (id, parent_id, name, description)
@@ -602,28 +602,28 @@ VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
            (12, 1, 'Session Management', 'Related to the identification of authenticated users.'),
            (13, 1, 'Timing', 'Related to race conditions, locking, or order of operations.');
 
-    INSERT INTO organisation (created_by_uid, kind, name, url)
+    INSERT INTO organisation (created_by_id, kind, name, url)
     VALUES (1, 'service_provider', 'Reconmap', 'https://reconmap.com');
 
     INSERT INTO contact (organisation_id, name, email)
     VALUES (currval(pg_get_serial_sequence('organisation', 'id')), 'Contributors', 'no-reply@reconmap.com');
 
-    INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+    INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
     VALUES (NULL, 1, TRUE, 'Report template (Word)', 'Default report template in Word format');
 
-    INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+    INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
     VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.docx', 'default-report-template.docx', 0, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '');
 
-    INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+    INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
     VALUES (NULL, 1, TRUE, 'Report template (MD)', 'Default report template in Markdown format');
 
-    INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+    INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
     VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.md', 'default-report-template.md', 0, 'text/markdown', '');
 
-    INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+    INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
     VALUES (NULL, 1, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
 
-    INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+    INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
     VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.typ', 'default-report-template.typ', 0, 'text/typst', '');
 
     INSERT INTO project_category (name, description)
@@ -644,10 +644,10 @@ VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
            ('Penetration testing',
             'Also known as pentesting, which entails simulating a cyberattack against the organization\’s information and technology assets to check for exploitable vulnerabilities. This service constitutes a form of ethical hacking that can be very effective at uncovering the vulnerabilities that may be successfully targeted by hackers ');
 
-    INSERT INTO project (created_by_uid, name, description, engagement_end_date)
+    INSERT INTO project (created_by_id, name, description, engagement_end_date)
     VALUES (1, 'Onboarding to Reconmap', 'Project to ensure all Reconmap''s onboarding tasks are done in order.', CURRENT_DATE);
 
-    INSERT INTO task (created_by_uid, assigned_to_uid, project_id, summary, description, priority)
+    INSERT INTO task (created_by_id, assigned_to_id, project_id, summary, description, priority)
     VALUES (1, 1, 1, '1. Update your organisation details', '[Follow this link](/settings/organisation)', 'medium'),
            (1, 1, 1, '2. Update your preferences', '[Follow this link](/users/1/edit)', 'medium'),
            (1, 1, 1, '3. Invite your team', '[Follow this link](/users/create)', 'medium'),

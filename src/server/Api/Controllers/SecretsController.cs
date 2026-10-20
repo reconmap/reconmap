@@ -59,7 +59,7 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
         var take = Math.Min(limit ?? 100, 500);
         var page = await dbContext.Secrets.AsNoTracking()
             .Where(s => accessScope.IsPrivileged ||
-                (s.OwnerUid == accessScope.UserId ||
+                (s.OwnerId == accessScope.UserId ||
                  (s.ProjectId.HasValue && memberProjectIds.Contains(s.ProjectId.Value))))
             .OrderByDescending(s => s.CreatedAt).Take(take).ToListAsync();
         return Ok(page);

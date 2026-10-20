@@ -6,7 +6,7 @@ properties:
   project_id:
     type: integer
     nullable: true
-  created_by_uid:
+  created_by_id:
     type: integer
   created_at:
     type: string
@@ -18,7 +18,7 @@ properties:
   version_description:
     type: string
 required:
-- created_by_uid
+- created_by_id
 - created_at
 - version_name
 - version_description

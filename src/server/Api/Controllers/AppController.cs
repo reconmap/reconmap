@@ -16,7 +16,7 @@ public abstract class AppController(AppDbContext dbContext) : ControllerBase
         {
             ClientIp = remoteIpAddress?.ToString(),
             UserAgent = userAgent,
-            CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+            CreatedById = HttpContext.GetCurrentUser()!.Id,
             Action = action,
             Object = obj,
             Context = context != null ? JsonSerializer.Serialize(context) : null

@@ -208,7 +208,7 @@ const ClientDetails = () => {
                                         <dl>
                                             <dt>Created by</dt>
                                             <dd>
-                                                <UserLink userId={client.createdByUid}>
+                                                <UserLink userId={client.createdById}>
                                                     {client.createdBy?.fullName}
                                                 </UserLink>
                                             </dd>

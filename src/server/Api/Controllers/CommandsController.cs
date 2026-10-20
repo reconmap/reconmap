@@ -124,7 +124,7 @@ public class CommandsController(
 
         var attachment = new Attachment
         {
-            CreatedByUid = userId,
+            CreatedById = userId,
             ParentType = "command",
             ParentId = 0,
             ClientFileName = resultFile.FileName,

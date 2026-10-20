@@ -75,7 +75,7 @@ public class ScanRunsController(AppDbContext dbContext, IToolRecommendationServi
         var run = new ScanRun
         {
             ProjectId = request.ProjectId,
-            CreatedByUid = userId,
+            CreatedById = userId,
             Target = target,
             TargetType = request.TargetType.ToLowerInvariant(),
             Objective = request.Objective,
@@ -104,7 +104,7 @@ public class ScanRunsController(AppDbContext dbContext, IToolRecommendationServi
         {
             dbContext.CommandSchedules.Add(new CommandSchedule
             {
-                CreatedByUid = userId,
+                CreatedById = userId,
                 CommandId = task.CommandId,
                 CommandUsageId = task.CommandUsageId,
                 ProjectId = run.ProjectId,

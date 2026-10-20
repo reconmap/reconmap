@@ -17,7 +17,7 @@ public class TasksController(AppDbContext dbContext, ITaskService taskService) :
     [Audit(AuditActions.Created, "Task")]
     public async Task<IActionResult> CreateOne(ProjectTask task)
     {
-        task.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        task.CreatedById = HttpContext.GetCurrentUser()!.Id;
         dbContext.Tasks.Add(task);
         await dbContext.SaveChangesAsync();
 
@@ -49,11 +49,11 @@ public class TasksController(AppDbContext dbContext, ITaskService taskService) :
         [FromQuery] string? priority,
         [FromQuery] string? status,
         [FromQuery] string? keywords,
-        [FromQuery] int? assignedToUid = null,
+        [FromQuery] int? assignedToId = null,
         [FromQuery] int? projectIsArchived = null)
     {
         var tasks = await taskService.GetManyAsync(new TaskFilter(
-            limit, projectId, priority, status, keywords, assignedToUid, projectIsArchived));
+            limit, projectId, priority, status, keywords, assignedToId, projectIsArchived));
         return Ok(tasks);
     }
 

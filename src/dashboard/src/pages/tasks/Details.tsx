@@ -58,13 +58,13 @@ const TaskDetailsPage = () => {
     };
 
     const onAssigneeChange = (ev) => {
-        const assigneeUid = ev.target.value;
+        const assigneeId = ev.target.value;
 
         // The API's PUT endpoint replaces the whole task and validates required fields,
         // so send the full task with the new numeric assignee instead of a partial body.
         requestTaskPatch(task.id, {
             ...task,
-            assignedToUid: "" === assigneeUid ? null : Number(assigneeUid),
+            assignedToId: "" === assigneeId ? null : Number(assigneeId),
         })
             .then(() => {
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
@@ -176,7 +176,7 @@ const TaskDetailsPage = () => {
                                             <dl>
                                                 <dt>{t("Created by")}</dt>
                                                 <dd>
-                                                    <UserLink userId={task.createdByUid}>
+                                                    <UserLink userId={task.createdById}>
                                                         {task.createdBy?.fullName}
                                                     </UserLink>
                                                 </dd>
@@ -188,7 +188,7 @@ const TaskDetailsPage = () => {
                                                             {users && (
                                                                 <NativeSelect
                                                                     onChange={onAssigneeChange}
-                                                                    defaultValue={task.assignedToUid}
+                                                                    defaultValue={task.assignedToId}
                                                                 >
                                                                     <option value="">(nobody)</option>
                                                                     {users.map((user, index) => (

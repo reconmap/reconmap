@@ -27,7 +27,7 @@ public class VulnerabilitiesController(
     [Audit(AuditActions.Created, "Vulnerability")]
     public async Task<IActionResult> CreateOne(Vulnerability vulnerability)
     {
-        vulnerability.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        vulnerability.CreatedById = HttpContext.GetCurrentUser()!.Id;
         _dbContext.Vulnerabilities.Add(vulnerability);
         await _dbContext.SaveChangesAsync();
 

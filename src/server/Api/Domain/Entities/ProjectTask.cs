@@ -10,13 +10,13 @@ public class ProjectTask : TimestampedEntity
 
     [Required] public int ProjectId { get; set; }
 
-    public int? CreatedByUid { get; set; }
+    public int? CreatedById { get; set; }
 
-    [ForeignKey(nameof(CreatedByUid))] public UserInfo? CreatedBy { get; set; }
+    [ForeignKey(nameof(CreatedById))] public UserInfo? CreatedBy { get; set; }
 
-    public int? AssignedToUid { get; set; }
+    public int? AssignedToId { get; set; }
 
-    [ForeignKey(nameof(AssignedToUid))] public UserInfo? AssignedTo { get; set; }
+    [ForeignKey(nameof(AssignedToId))] public UserInfo? AssignedTo { get; set; }
 
     [Required] public string? Priority { get; set; }
 

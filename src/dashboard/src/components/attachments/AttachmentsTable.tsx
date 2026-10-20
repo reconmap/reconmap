@@ -64,7 +64,7 @@ const AttachmentsTable = ({ attachments }: any) => {
         {
             header: "Mimetype",
             cell: (attachment) => (
-                <span title={safeResolveMime(attachment.fileMimeType)}>{attachment.fileMimeType}</span>
+                <span title={safeResolveMime(attachment.fileMimetype)}>{attachment.fileMimetype}</span>
             ),
         },
         {
@@ -77,7 +77,7 @@ const AttachmentsTable = ({ attachments }: any) => {
         },
         {
             header: "Uploaded by",
-            cell: (attachment) => <UserLink userId={attachment.submitterUid}>{attachment.submitterName}</UserLink>,
+            cell: (attachment) => <UserLink userId={attachment.createdById}>{attachment.createdBy?.fullName}</UserLink>,
         },
         {
             header: "Filename",

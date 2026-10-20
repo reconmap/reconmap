@@ -3,7 +3,7 @@ properties:
   id:
     type: integer
     nullable: true
-  created_by_uid:
+  created_by_id:
     type: integer
   created_at:
     type: string
@@ -19,6 +19,6 @@ properties:
   cron_expression:
     type: string
 required:
-- created_by_uid
+- created_by_id
 - created_at
 - cron_expression

@@ -26,7 +26,7 @@ CREATE TABLE scan_run
 (
     id              SERIAL PRIMARY KEY,
     project_id      INT           NOT NULL,
-    created_by_uid  INT           NOT NULL,
+    created_by_id  INT           NOT NULL,
     target          VARCHAR(500)  NOT NULL,
     target_type     VARCHAR(30)   NOT NULL,
     objective       VARCHAR(100)  NOT NULL,
@@ -59,6 +59,24 @@ CREATE TRIGGER update_scan_run_updated_at BEFORE UPDATE ON scan_run FOR EACH ROW
 ```
 
 Runners must be upgraded together with the API: older runners do not report scan progress or upload command output.
+
+#### User foreign key columns renamed to `_id`
+
+The `*_uid` user foreign key columns are now named `*_id`. The database initialisation script only runs on an empty database, so existing installations must rename them once before starting the new version. If you already created the `scan_run` table from an earlier version of the scan runs SQL above, also run `ALTER TABLE scan_run RENAME COLUMN created_by_uid TO created_by_id;`.
+
+```sql
+ALTER TABLE attachment RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE organisation RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE project RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE audit_log RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE vault RENAME COLUMN owner_uid TO owner_id;
+ALTER TABLE vulnerability RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE task RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE task RENAME COLUMN assigned_to_uid TO assigned_to_id;
+ALTER TABLE command_schedule RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE report RENAME COLUMN created_by_uid TO created_by_id;
+ALTER TABLE note RENAME COLUMN created_by_uid TO created_by_id;
+```
 
 ### Destructive upgrade
 

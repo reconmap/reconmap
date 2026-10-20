@@ -46,7 +46,7 @@ CREATE TABLE attachment
 (
     id               SERIAL PRIMARY KEY,
     created_at  TIMESTAMPTZ             NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by_uid    INT                                                                             NULL,
+    created_by_id    INT                                                                             NULL,
     updated_at  TIMESTAMPTZ             NULL,
     parent_type      VARCHAR(20) NOT NULL,
     parent_id        INT                                                                             NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE attachment
     file_size        INT                                                                             NOT NULL,
     file_mimetype    VARCHAR(200)                                                                             NULL,
     file_hash        VARCHAR(128)                                                                           NOT NULL,
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+    FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
 );
 
 -- 3. organisation
@@ -64,14 +64,14 @@ CREATE TABLE organisation
     id                       SERIAL PRIMARY KEY,
     created_at                TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at                TIMESTAMPTZ                         NULL,
-    created_by_uid INT                        NULL,
+    created_by_id INT                        NULL,
     kind                     VARCHAR(20) NOT NULL,
     name                     VARCHAR(80)                         NOT NULL UNIQUE,
     address                  VARCHAR(400)                        NULL,
     url                      VARCHAR(255)                        NULL,
     logo_attachment_id       INT                        NULL,
     small_logo_attachment_id INT                        NULL,
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+    FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
     FOREIGN KEY (logo_attachment_id) REFERENCES attachment (id) ON DELETE SET NULL,
     FOREIGN KEY (small_logo_attachment_id) REFERENCES attachment (id) ON DELETE SET NULL
 );
@@ -90,7 +90,7 @@ CREATE TABLE project
     id                    SERIAL PRIMARY KEY,
     created_at             TIMESTAMPTZ                NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at             TIMESTAMPTZ                NULL,
-    created_by_uid           INT                        NULL,
+    created_by_id           INT                        NULL,
     service_provider_id   INT                        NULL,
     client_id             INT                        NULL,
     category_id           INT                        NULL,
@@ -103,7 +103,7 @@ CREATE TABLE project
     archived              BOOLEAN                    NOT NULL DEFAULT FALSE,
     archived_at            TIMESTAMPTZ                NULL,
     external_id           VARCHAR(40)                NULL,
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+    FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
     CONSTRAINT project_fk_client_id FOREIGN KEY (client_id) REFERENCES organisation (id) ON DELETE SET NULL,
     CONSTRAINT project_fk_category_id FOREIGN KEY (category_id) REFERENCES project_category (id) ON DELETE SET NULL
 );
@@ -166,13 +166,13 @@ CREATE TABLE audit_log
 (
     id         SERIAL PRIMARY KEY,
     created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by_uid INT NULL,
+    created_by_id INT NULL,
     user_agent VARCHAR(250) NULL,
     client_ip  BYTEA NOT NULL,
     action     VARCHAR(200) NOT NULL,
     object     VARCHAR(200) NOT NULL,
     context    JSONB         NULL,
-    CONSTRAINT audit_log_fk_user_id FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE CASCADE
+    CONSTRAINT audit_log_fk_user_id FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE CASCADE
 );
 
 -- 11. vault
@@ -181,7 +181,7 @@ CREATE TABLE vault
     id              SERIAL PRIMARY KEY,
     created_at       TIMESTAMPTZ                            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMPTZ                            NULL,
-    owner_uid       INT                           NOT NULL,
+    owner_id       INT                           NOT NULL,
     project_id      INT                           NULL,
     type            VARCHAR(20) NOT NULL,
     name            VARCHAR(200)                           NOT NULL,
@@ -192,7 +192,7 @@ CREATE TABLE vault
     tag             BYTEA                             NOT NULL,
     note            VARCHAR(1000)                          NULL,
     UNIQUE (project_id, name),
-    FOREIGN KEY (owner_uid) REFERENCES "user" (id) ON DELETE CASCADE,
+    FOREIGN KEY (owner_id) REFERENCES "user" (id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
 );
 
@@ -242,7 +242,7 @@ CREATE TABLE vulnerability
     id                     SERIAL PRIMARY KEY,
     created_at              TIMESTAMPTZ                                                                                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at              TIMESTAMPTZ                                                                                        NULL,
-    created_by_uid            INT                                                                                       NULL,
+    created_by_id            INT                                                                                       NULL,
     is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
     external_id            VARCHAR(50)                                                                                        NULL,
     project_id             INT                                                                                       NULL,
@@ -266,7 +266,7 @@ CREATE TABLE vulnerability
     custom_fields          JSONB                                                                                               NULL,
     ai_triage              TEXT                                                                                               NULL,
     UNIQUE (project_id, asset_id, summary),
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
+    FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
     CONSTRAINT vulnerability_fk_project_id FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
     FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE SET NULL,
     FOREIGN KEY (category_id) REFERENCES vulnerability_category (id) ON DELETE SET NULL
@@ -277,8 +277,8 @@ CREATE TABLE task
 (
     id                SERIAL PRIMARY KEY,
     project_id        INT                                        NOT NULL,
-    created_by_uid       INT                                        NULL,
-    assigned_to_uid      INT                                        NULL,
+    created_by_id       INT                                        NULL,
+    assigned_to_id      INT                                        NULL,
     created_at         TIMESTAMPTZ                                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at         TIMESTAMPTZ                                         NULL,
     priority          VARCHAR(20) NOT NULL,
@@ -288,15 +288,15 @@ CREATE TABLE task
     duration_estimate SMALLINT                                   NULL,
     due_date          DATE                                                NULL,
     FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION,
-    FOREIGN KEY (assigned_to_uid) REFERENCES "user" (id) ON DELETE SET NULL
+    FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
+    FOREIGN KEY (assigned_to_id) REFERENCES "user" (id) ON DELETE SET NULL
 );
 
 -- 17. command_schedule
 CREATE TABLE command_schedule
 (
     id              SERIAL PRIMARY KEY,
-    created_by_uid     INT  NULL,
+    created_by_id     INT  NULL,
     project_id INT DEFAULT NULL,
     created_at       TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMPTZ   NULL,
@@ -313,7 +313,7 @@ CREATE TABLE scan_run
 (
     id              SERIAL PRIMARY KEY,
     project_id      INT           NOT NULL,
-    created_by_uid  INT           NULL,
+    created_by_id  INT           NULL,
     target          VARCHAR(500)  NOT NULL,
     target_type     VARCHAR(30)   NOT NULL,
     objective       VARCHAR(100)  NOT NULL,
@@ -348,13 +348,13 @@ CREATE TABLE report
 (
     id                  SERIAL PRIMARY KEY,
     project_id          INT NULL,
-    created_by_uid    INT NULL,
+    created_by_id    INT NULL,
     created_at           TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_template         BOOLEAN      NOT NULL DEFAULT FALSE,
     version_name        VARCHAR(50)  NOT NULL,
     version_description VARCHAR(300) NOT NULL,
     FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+    FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
 );
 
 -- 19. custom_field
@@ -435,12 +435,12 @@ CREATE TABLE note
 (
     id          SERIAL PRIMARY KEY,
     created_at   TIMESTAMPTZ                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by_uid     INT                      NULL,
+    created_by_id     INT                      NULL,
     parent_type VARCHAR(20) NOT NULL,
     parent_id   INT                      NOT NULL,
     visibility  VARCHAR(20)        NOT NULL DEFAULT 'private',
     content     TEXT                              NOT NULL,
-    FOREIGN KEY (created_by_uid) REFERENCES "user" (id) ON DELETE NO ACTION
+    FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
 );
 
 -- 24. notification
@@ -492,13 +492,13 @@ CREATE TABLE user_api_token
 CREATE VIEW user_info AS SELECT id, subject_id, role, short_bio FROM "user";
 
 CREATE VIEW project_template AS
-SELECT id, created_at, updated_at, created_by_uid, name, description, category_id
+SELECT id, created_at, updated_at, created_by_id, name, description, category_id
 FROM project
 WHERE is_template = TRUE;
 
 CREATE VIEW vulnerability_template AS
 SELECT id,
-       created_by_uid,
+       created_by_id,
        category_id,
        created_at,
        updated_at,

@@ -10,9 +10,9 @@ public class Report : CreationTimestampedEntity
 
     public int? ProjectId { get; set; }
 
-    public int? CreatedByUid { get; set; }
+    public int? CreatedById { get; set; }
 
-    [ForeignKey(nameof(CreatedByUid))] public User? CreatedBy { get; set; }
+    [ForeignKey(nameof(CreatedById))] public User? CreatedBy { get; set; }
 
 
     public bool IsTemplate { get; set; }

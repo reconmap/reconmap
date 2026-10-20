@@ -4,7 +4,7 @@ package models
 type Client struct {
 
 	ID int `json:"id"`
-	CreatorUid int `json:"creator_uid"`
+	CreatedById int `json:"createdById"`
 	Kind string `json:"kind"`
 	InsertTs string `json:"insert_ts"`
 	UpdateTs string `json:"update_ts"`

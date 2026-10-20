@@ -26,7 +26,7 @@ public class RunnersController(AppDbContext dbContext, IRunnerService runnerServ
             return BadRequest(ModelState);
 
         runner.ClientId = Guid.NewGuid().ToString();
-        //runner.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        //runner.CreatedById = HttpContext.GetCurrentUser()!.Id;
         dbContext.Runners.Add(runner);
         await dbContext.SaveChangesAsync();
 

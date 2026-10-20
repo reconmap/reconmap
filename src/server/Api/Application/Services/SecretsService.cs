@@ -24,7 +24,7 @@ public sealed class SecretsService(AppDbContext db) : ISecretsService
         var (iv, tag, cypher) = _encryptor.Encrypt(value, password);
         var secret = new Secret
         {
-            OwnerUid = ownerId,
+            OwnerId = ownerId,
             Value = cypher,
             Iv = iv,
             Tag = tag,

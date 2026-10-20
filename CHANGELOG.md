@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking (database and API):** User foreign key columns now use the `_id` suffix instead of `_uid`: `created_by_uid` → `created_by_id` (in most tables), `owner_uid` → `owner_id` (`vault`) and `assigned_to_uid` → `assigned_to_id` (`task`). The matching JSON fields are renamed too (for example `createdByUid` → `createdById`, `assignedToUid` → `assignedToId`, and the `assignedToUid` query parameter on `GET /api/tasks` → `assignedToId`). Existing databases must rename the columns before running this version; see [Upgrading a Reconmap instance](docs/pages/admin-manual/upgrading-instance.md).
 - **Breaking (database):** Records created by the system rather than a user now have a `NULL` `created_by_uid` instead of pointing at a fake user with id `0`. The `created_by_uid` columns are nullable, the placeholder user row is no longer inserted, and the `Initialised` audit entry has a `NULL` actor. Fresh installations are unaffected. Existing databases are not migrated: they must be recreated, or altered by hand (drop the `NOT NULL` on each `created_by_uid` column and delete the user row with id `0`) before running this version.
 - **Breaking (API):** `POST /api/commands/recommend` now takes an `objective` and returns `{ strategy, recommendations: [{ order, commandId, commandName, usageId, executablePath, arguments, rationale }] }` with fully resolved arguments (previously `recommendedArguments` could contain unreplaced placeholders). The dashboard no longer calls it; it creates scans through `POST /api/scans`.
 - The dashboard "User activity over time" line chart is now a "User activity" heatmap: a GitHub-style calendar of user actions per day over the last 20 weeks, with a tooltip per day.
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switched the Docker Compose Open Policy Agent image from `openpolicyagent/opa:1.20.2-istio` to the standard `openpolicyagent/opa:1.21.2`, since the API queries OPA over HTTP and does not need the Istio variant. The policy tests in CI use the same image.
 - Updated the Docker Compose RustFS (S3-compatible object storage) image from `rustfs/rustfs:1.0.0-beta.8` to `rustfs/rustfs:1.0.1`.
 - Dashboard: migrated routing from React Router v7 (`react-router-dom`) to React Router v8 data mode. The router is now created with `createBrowserRouter` and rendered with `RouterProvider`, and `react-router-dom` is replaced by `react-router`. This has no visible effect on URLs or pages.
+- The attachments table "Uploaded by" column and file mimetype now show the values the API returns. The attachment list also includes each file's creator, which was previously missing.
 - Dashboard: when the API answers `401 Unauthorized`, the dashboard now clears the stored OIDC session and restarts login through the OIDC client (`signinRedirect`) instead of reloading the context path. Concurrent 401s trigger a single redirect, and a repeat 401 within 10 seconds of a redirect no longer redirects again, which prevents redirect loops.
 
 ### Added

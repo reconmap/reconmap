@@ -8,7 +8,7 @@ public class Secret : TimestampedEntity
 {
     [Key] public int Id { get; set; }
 
-    [Required] public int OwnerUid { get; set; }
+    [Required] public int OwnerId { get; set; }
 
     public int? ProjectId { get; set; }
 

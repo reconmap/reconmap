@@ -2,7 +2,7 @@ interface AttachmentInterface {
     id?: number;
     parentType: string | undefined;
     parentId: number | undefined;
-    submitterUid: number | undefined;
+    createdById: number | undefined;
     clientFileName: string | undefined;
     fileName: string | undefined;
     fileSize: number | undefined;
@@ -18,7 +18,7 @@ const Attachment: AttachmentInterface = {
 
     parentType: undefined,
     parentId: undefined,
-    submitterUid: undefined,
+    createdById: undefined,
     clientFileName: undefined,
     fileName: undefined,
     fileSize: undefined,

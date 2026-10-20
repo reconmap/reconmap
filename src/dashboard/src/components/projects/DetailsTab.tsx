@@ -85,7 +85,7 @@ const ProjectDetailsTab = ({ project }: any) => {
 
                     <dt>Created by</dt>
                     <dd>
-                        <UserLink userId={project.createdByUid}>{project.createdBy?.fullName}</UserLink>
+                        <UserLink userId={project.createdById}>{project.createdBy?.fullName}</UserLink>
                     </dd>
                 </dl>
 

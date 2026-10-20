@@ -5,9 +5,9 @@ properties:
     nullable: true
   project_id:
     type: integer
-  created_by_uid:
+  created_by_id:
     type: integer
-  assigned_to_uid:
+  assigned_to_id:
     type: integer
     nullable: true
   created_at:
@@ -43,7 +43,7 @@ properties:
     nullable: true
 required:
 - project_id
-- created_by_uid
+- created_by_id
 - created_at
 - priority
 - summary

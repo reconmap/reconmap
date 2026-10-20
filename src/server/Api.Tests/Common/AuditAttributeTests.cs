@@ -65,7 +65,7 @@ public class AuditAttributeTests
         var auditService = serviceProvider.ServiceProvider.GetRequiredService<IAuditService>();
         var recordingAuditService = Assert.IsType<RecordingAuditService>(auditService);
         var entry = Assert.Single(recordingAuditService.Entries);
-        Assert.Equal(42, entry.CreatedByUid);
+        Assert.Equal(42, entry.CreatedById);
         Assert.Equal("create", entry.Action);
         Assert.Equal("project", entry.Object);
         Assert.Equal("127.0.0.1", entry.ClientIp);
@@ -74,7 +74,7 @@ public class AuditAttributeTests
     }
 
     [Fact]
-    public async Task OnActionExecutionAsync_NullCurrentUser_SetsCreatedByUidToNull()
+    public async Task OnActionExecutionAsync_NullCurrentUser_SetsCreatedByIdToNull()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -122,7 +122,7 @@ public class AuditAttributeTests
         var auditService = serviceProvider.ServiceProvider.GetRequiredService<IAuditService>();
         var recordingAuditService = Assert.IsType<RecordingAuditService>(auditService);
         var entry = Assert.Single(recordingAuditService.Entries);
-        Assert.Null(entry.CreatedByUid);
+        Assert.Null(entry.CreatedById);
         Assert.Equal("create", entry.Action);
         Assert.Equal("project", entry.Object);
     }

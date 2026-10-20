@@ -2,7 +2,7 @@ interface VaultInterface {
     id?: number;
     createdAt?: string;
     updatedAt?: string;
-    owner_uid?: number;
+    owner_id?: number;
     project_id?: number;
     type: string | undefined;
     name?: string;
@@ -19,7 +19,7 @@ const Vault: VaultInterface = {
     id: undefined,
     createdAt: undefined,
     updatedAt: undefined,
-    owner_uid: undefined,
+    owner_id: undefined,
     project_id: undefined,
     type: "password",
     name: undefined,

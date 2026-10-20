@@ -12,7 +12,7 @@ public sealed record TaskFilter(
     string? Priority = null,
     string? Status = null,
     string? Keywords = null,
-    int? AssignedToUid = null,
+    int? AssignedToId = null,
     int? ProjectIsArchived = null,
     IReadOnlyCollection<int>? VisibleProjectIds = null);
 
@@ -39,8 +39,8 @@ public sealed class TaskService(AppDbContext db) : ITaskService
             q = q.Where(t => filter.VisibleProjectIds.Contains(t.ProjectId));
         if (filter.ProjectId != null)
             q = q.Where(t => t.ProjectId == filter.ProjectId);
-        if (filter.AssignedToUid != null)
-            q = q.Where(t => t.AssignedToUid == filter.AssignedToUid);
+        if (filter.AssignedToId != null)
+            q = q.Where(t => t.AssignedToId == filter.AssignedToId);
         if (filter.ProjectIsArchived != null)
         {
             var archivedProjectIds = db.Projects.Where(p => p.Archived).Select(p => p.Id);

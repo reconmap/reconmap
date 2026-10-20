@@ -285,7 +285,7 @@ public sealed class ReportGenerationProcessor(
                 {
                     ParentType = "report",
                     ParentId = report.Id,
-                    CreatedByUid = report.CreatedByUid,
+                    CreatedById = report.CreatedById,
                     FileName = reportFileName,
                     FileMimeType = templateAttachment.FileMimeType,
                     ClientFileName = clientFileName,

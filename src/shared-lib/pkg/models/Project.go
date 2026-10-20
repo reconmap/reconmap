@@ -4,7 +4,7 @@ package models
 type Project struct {
 
 	ID int `json:"id"`
-	CreatorUid int `json:"creator_uid"`
+	CreatedById int `json:"createdById"`
 	ServiceProviderId int `json:"service_provider_id"`
 	ClientId int `json:"client_id"`
 	Name string `json:"name"`

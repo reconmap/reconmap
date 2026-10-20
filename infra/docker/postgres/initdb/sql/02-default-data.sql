@@ -1,7 +1,7 @@
 INSERT INTO "user" (id, subject_id, role)
 VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
 
-INSERT INTO audit_log (created_by_uid, client_ip, action, object)
+INSERT INTO audit_log (created_by_id, client_ip, action, object)
 VALUES (NULL, '\x7f000001'::bytea, 'Initialised', 'System');
 
 INSERT INTO vulnerability_category (id, parent_id, name, description)
@@ -19,28 +19,28 @@ VALUES (1, NULL, 'General', 'General categories.'),
        (12, 1, 'Session Management', 'Related to the identification of authenticated users.'),
        (13, 1, 'Timing', 'Related to race conditions, locking, or order of operations.');
 
-INSERT INTO organisation (created_by_uid, kind, name, url)
+INSERT INTO organisation (created_by_id, kind, name, url)
 VALUES (1, 'service_provider', 'Reconmap', 'https://reconmap.com');
 
 INSERT INTO contact (organisation_id, name, email)
 VALUES (currval(pg_get_serial_sequence('organisation', 'id')), 'Contributors', 'no-reply@reconmap.com');
 
-INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
 VALUES (NULL, 1, TRUE, 'Report template (Word)', 'Default report template in Word format');
 
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
 VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.docx', 'default-report-template.docx', 0, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '');
 
-INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
 VALUES (NULL, 1, TRUE, 'Report template (MD)', 'Default report template in Markdown format');
 
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
 VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.md', 'default-report-template.md', 0, 'text/markdown', '');
 
-INSERT INTO report (project_id, created_by_uid, is_template, version_name, version_description)
+INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
 VALUES (NULL, 1, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
 
-INSERT INTO attachment (parent_type, parent_id, created_by_uid, client_file_name, file_name, file_size, file_mimetype, file_hash)
+INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
 VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.typ', 'default-report-template.typ', 0, 'text/typst', '');
 
 INSERT INTO project_category (name, description)
@@ -61,10 +61,10 @@ VALUES ('Managed security monitoring',
        ('Penetration testing',
         'Also known as pentesting, which entails simulating a cyberattack against the organization\’s information and technology assets to check for exploitable vulnerabilities. This service constitutes a form of ethical hacking that can be very effective at uncovering the vulnerabilities that may be successfully targeted by hackers ');
 
-INSERT INTO project (created_by_uid, name, description, engagement_end_date)
+INSERT INTO project (created_by_id, name, description, engagement_end_date)
 VALUES (1, 'Onboarding to Reconmap', 'Project to ensure all Reconmap''s onboarding tasks are done in order.', CURRENT_DATE);
 
-INSERT INTO task (created_by_uid, assigned_to_uid, project_id, summary, description, priority)
+INSERT INTO task (created_by_id, assigned_to_id, project_id, summary, description, priority)
 VALUES (1, 1, 1, '1. Update your organisation details', '[Follow this link](/settings/organisation)', 'medium'),
        (1, 1, 1, '2. Update your preferences', '[Follow this link](/users/preferences)', 'medium'),
        (1, 1, 1, '3. Invite your team', '[Follow this link](/users/create)', 'medium'),

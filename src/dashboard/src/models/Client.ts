@@ -1,6 +1,6 @@
 interface ClientInterface {
     id?: number;
-    createdByUid?: number;
+    createdById?: number;
     kind: string | undefined;
     createdAt?: string;
     updatedAt?: string;

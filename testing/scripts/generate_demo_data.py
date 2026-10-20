@@ -45,7 +45,7 @@ def generate_demo_data(num_projects=20):
             "SubjectId": str(uuid.uuid4())
         })
     data["users"] = users
-    uids = [u["Id"] for u in users]
+    user_ids = [u["Id"] for u in users]
 
     # 2. Organisations
     num_orgs = 15
@@ -56,7 +56,7 @@ def generate_demo_data(num_projects=20):
             "Id": oid, "Name": f"{fake.company()} {i}",
             "Kind": "service_provider" if i <= 2 else "client",
             "Address": fake.address(), "Url": fake.url(),
-            "CreatedByUid": random.choice(uids)
+            "CreatedById": random.choice(user_ids)
         })
     data["organisations"] = organisations
     client_oids = [o["Id"] for o in organisations if o["Kind"] == "client"]
@@ -92,14 +92,14 @@ def generate_demo_data(num_projects=20):
         cid = COMMAND_OFFSET + i + 1
         commands.append({
             "Id": cid, "Name": name, "Description": f"Security tool {name}",
-            "CreatedByUid": random.choice(uids)
+            "CreatedById": random.choice(user_ids)
         })
         for j in range(1, 3):
             usages.append({
                 "Id": USAGE_OFFSET + (i * 2) + j, "CommandId": cid,
                 "Name": f"{name} scan {j}", "Description": f"Standard {name} scan",
                 "ExecutablePath": name, "Arguments": "-v {{Host}}",
-                "OutputCapturingMode": "stdout", "CreatedByUid": random.choice(uids)
+                "OutputCapturingMode": "stdout", "CreatedById": random.choice(user_ids)
             })
     data["commands"] = commands
     data["command_usages"] = usages
@@ -129,10 +129,10 @@ def generate_demo_data(num_projects=20):
     
     for i in range(1, num_projects + 1):
         pid = PROJ_OFFSET + i
-        creator = random.choice(uids)
+        creator = random.choice(user_ids)
         projects.append({
             "Id": pid, "Name": f"Engagement {fake.word().capitalize()} {i}",
-            "Description": fake.text(max_nb_chars=300), "CreatedByUid": creator,
+            "Description": fake.text(max_nb_chars=300), "CreatedById": creator,
             "ClientId": random.choice(client_oids), "ServiceProviderId": random.choice(sp_oids),
             "CategoryId": random.choice(p_cat_ids), "IsTemplate": False,
             "Visibility": "private", "EngagementStartDate": fake.date_this_year().isoformat(),
@@ -143,7 +143,7 @@ def generate_demo_data(num_projects=20):
         # Vault items for project
         for v in range(1, 3):
             vault.append({
-                "Id": VAULT_OFFSET + (i * 10) + v, "OwnerUid": creator, "ProjectId": pid,
+                "Id": VAULT_OFFSET + (i * 10) + v, "OwnerId": creator, "ProjectId": pid,
                 "Type": "password", "Name": f"Credential {v} for Project {i}",
                 "Value": base64.b64encode(b"secret_value").decode(),
                 "Iv": base64.b64encode(b"123456789012").decode(),
@@ -166,14 +166,14 @@ def generate_demo_data(num_projects=20):
             vid = VULN_OFFSET + (i * 20) + v
             vulns.append({
                 "Id": vid, "ProjectId": pid, "TargetId": random.choice(p_targets),
-                "CreatedByUid": creator, "CategoryId": random.choice(v_cat_ids),
+                "CreatedById": creator, "CategoryId": random.choice(v_cat_ids),
                 "Summary": f"{fake.sentence(nb_words=4)} {vid}", "Description": fake.text(),
                 "Risk": random.choice(risks), "Status": random.choice(statuses),
                 "IsTemplate": False, "Visibility": "private"
             })
             # Document for vulnerability
             docs.append({
-                "Id": DOC_OFFSET + (i * 50) + v, "CreatedByUid": creator,
+                "Id": DOC_OFFSET + (i * 50) + v, "CreatedById": creator,
                 "ParentType": "vulnerability", "ParentId": vid, "Title": "Evidence",
                 "Content": "PoC screenshot and logs go here."
             })
@@ -181,14 +181,14 @@ def generate_demo_data(num_projects=20):
         # Tasks
         for t in range(1, 6):
             tasks.append({
-                "Id": TASK_OFFSET + (i * 20) + t, "ProjectId": pid, "CreatedByUid": creator,
-                "AssignedToUid": random.choice(uids), "Priority": "medium", "Status": "todo",
+                "Id": TASK_OFFSET + (i * 20) + t, "ProjectId": pid, "CreatedById": creator,
+                "AssignedToId": random.choice(user_ids), "Priority": "medium", "Status": "todo",
                 "Summary": f"Task {t} for Project {i}", "Description": fake.sentence()
             })
 
         # Audit logs for project creation
         audit.append({
-            "Id": AUDIT_OFFSET + i, "CreatedByUid": creator, "ClientIp": "127.0.0.1",
+            "Id": AUDIT_OFFSET + i, "CreatedById": creator, "ClientIp": "127.0.0.1",
             "Action": "Created", "Object": "Project", "Context": json.dumps({"Id": pid})
         })
 

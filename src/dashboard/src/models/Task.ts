@@ -1,8 +1,8 @@
 interface TaskInterface {
     id?: number;
     projectId?: number;
-    createdByUid?: number;
-    assignedToUid?: number;
+    createdById?: number;
+    assignedToId?: number;
     createdAt?: string;
     updatedAt?: string;
     priority: string | undefined;

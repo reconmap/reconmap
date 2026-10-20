@@ -17,7 +17,7 @@ public class NotesController(AppDbContext dbContext, IRequestAccessScope accessS
     public async Task<IActionResult> CreateOne(Note note)
     {
         if (!await accessScope.CanAccessParentAsync(note.ParentType!, note.ParentId)) return NotFound();
-        note.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        note.CreatedById = HttpContext.GetCurrentUser()!.Id;
         dbContext.Notes.Add(note);
         await dbContext.SaveChangesAsync();
 

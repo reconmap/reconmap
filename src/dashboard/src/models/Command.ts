@@ -1,6 +1,6 @@
 interface CommandInterface {
     id?: number;
-    createdByUid?: number;
+    createdById?: number;
     name?: string;
     description?: string;
     more_info_url?: string;

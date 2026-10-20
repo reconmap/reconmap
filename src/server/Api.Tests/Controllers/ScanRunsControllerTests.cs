@@ -63,7 +63,7 @@ public class ScanRunsControllerTests
         Assert.IsType<CreatedResult>(result);
         var run = await db.ScanRuns.Include(r => r.Tasks).SingleAsync();
         Assert.Equal("example.com", run.Target);
-        Assert.Equal(5, run.CreatedByUid);
+        Assert.Equal(5, run.CreatedById);
         Assert.Equal(2, run.Tasks.Count);
 
         var schedules = await db.CommandSchedules.OrderBy(s => s.ScanRunTaskId).ToListAsync();

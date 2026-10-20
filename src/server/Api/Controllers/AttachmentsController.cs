@@ -24,6 +24,7 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
     {
         if (!await accessScope.CanAccessParentAsync(parentType, parentId)) return NotFound();
         var q = dbContext.Attachments.AsNoTracking()
+            .Include(a => a.CreatedBy)
             .Where(a => a.ParentType == parentType && a.ParentId == parentId)
             .OrderByDescending(a => a.CreatedAt);
 
@@ -92,7 +93,7 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
 
             var attachment = new Attachment
             {
-                CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+                CreatedById = HttpContext.GetCurrentUser()!.Id,
                 ParentType = parentType,
                 ParentId = parentId,
                 ClientFileName = file.FileName,

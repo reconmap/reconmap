@@ -5,7 +5,7 @@ properties:
     nullable: true
   command_id:
     type: integer
-  created_by_uid:
+  created_by_id:
     type: integer
   created_at:
     type: string
@@ -41,5 +41,5 @@ properties:
     nullable: true
 required:
 - command_id
-- created_by_uid
+- created_by_id
 - created_at

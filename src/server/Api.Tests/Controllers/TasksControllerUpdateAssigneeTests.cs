@@ -21,16 +21,16 @@ public class TasksControllerUpdateAssigneeTests
     }
 
     [Fact]
-    public async Task UpdateOne_ClearsAssigneeWhenBodySendsNullAssignedToUid()
+    public async Task UpdateOne_ClearsAssigneeWhenBodySendsNullAssignedToId()
     {
         using var db = CreateDbContext();
-        db.Tasks.Add(new ProjectTask { Id = 1, ProjectId = 1, CreatedByUid = 1, Summary = "Assigned", Priority = "low", Status = "todo", AssignedToUid = 7 });
+        db.Tasks.Add(new ProjectTask { Id = 1, ProjectId = 1, CreatedById = 1, Summary = "Assigned", Priority = "low", Status = "todo", AssignedToId = 7 });
         await db.SaveChangesAsync();
 
         // Shaped like the body the task details page sends: the full task, with a nested assignedTo object.
         const string body = """
             {
-              "id": 1, "projectId": 1, "createdByUid": 1, "assignedToUid": null,
+              "id": 1, "projectId": 1, "createdById": 1, "assignedToId": null,
               "assignedTo": { "id": 7, "fullName": "Someone" },
               "priority": "low", "summary": "Assigned", "status": "todo"
             }
@@ -45,6 +45,6 @@ public class TasksControllerUpdateAssigneeTests
 
         Assert.IsType<OkObjectResult>(result);
         var stored = await db.Tasks.AsNoTracking().SingleAsync(t => t.Id == 1);
-        Assert.Null(stored.AssignedToUid);
+        Assert.Null(stored.AssignedToId);
     }
 }

@@ -8,7 +8,7 @@ properties:
   updated_at:
     type: string
     nullable: true
-  created_by_uid:
+  created_by_id:
     type: integer
   kind:
     type: string
@@ -31,6 +31,6 @@ properties:
     nullable: true
 required:
 - created_at
-- created_by_uid
+- created_by_id
 - kind
 - name

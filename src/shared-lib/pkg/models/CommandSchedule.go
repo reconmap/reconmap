@@ -2,7 +2,7 @@ package models
 
 type CommandSchedule struct {
 	ID             int    `json:"id"`
-	CreatorUid     int    `json:"createdByUid"`
+	CreatedById     int    `json:"createdById"`
 	CommandId      string `json:"commandId"`
 	ProjectId      int    `json:"projectId"`
 	CommandUsageId string `json:"commandUsageId"`

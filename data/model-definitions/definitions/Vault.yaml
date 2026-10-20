@@ -8,7 +8,7 @@ properties:
   updated_at:
     type: string
     nullable: true
-  owner_uid:
+  owner_id:
     type: integer
   project_id:
     type: integer
@@ -39,7 +39,7 @@ properties:
     nullable: true
 required:
 - created_at
-- owner_uid
+- owner_id
 - type
 - name
 - value

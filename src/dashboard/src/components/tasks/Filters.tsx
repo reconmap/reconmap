@@ -41,7 +41,7 @@ const TaskFilters = ({ tableModel, tableModelSetter: setTableModel }: any) => {
                         </NativeSelect>
                     </div>
                     <div className="control">
-                        <NativeSelect name="assigneeUid" onChange={onFilterChange}>
+                        <NativeSelect name="assigneeId" onChange={onFilterChange}>
                             <option value="">Assignee = (anybody)</option>
                             {!isLoadingUsers &&
                                 users.map((user) => (

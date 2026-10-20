@@ -28,7 +28,7 @@ describe("MyTasksWidget", () => {
 
         renderWidget();
 
-        expect(mockUseTasksQuery).toHaveBeenCalledWith({ assignedToUid: 7, limit: 5, projectIsArchived: 0 });
+        expect(mockUseTasksQuery).toHaveBeenCalledWith({ assignedToId: 7, limit: 5, projectIsArchived: 0 });
     });
 
     it("renders the fetched tasks", () => {

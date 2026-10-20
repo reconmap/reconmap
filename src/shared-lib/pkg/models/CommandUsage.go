@@ -3,7 +3,7 @@ package models
 type CommandUsage struct {
 	ID                  string `json:"id"`
 	CommandId           string `json:"commandId"`
-	CreatorUid          int    `json:"createdByUid"`
+	CreatedById          int    `json:"createdById"`
 	Description         string `json:"description"`
 	ExecutablePath      string `json:"executablePath"`
 	Arguments           string `json:"arguments"`

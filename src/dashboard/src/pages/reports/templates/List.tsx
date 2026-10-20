@@ -124,9 +124,9 @@ const ReportTemplatesList = () => {
                                     </td>
                                     <td>
                                         <DeleteIconButton
-                                            disabled={template.createdByUid === 0}
+                                            disabled={template.createdById === 0}
                                             title={
-                                                template.createdByUid === 0 ? "System templates cannot be deleted" : ""
+                                                template.createdById === 0 ? "System templates cannot be deleted" : ""
                                             }
                                             onClick={(ev) => deleteTemplate(ev, template.id)}
                                         />

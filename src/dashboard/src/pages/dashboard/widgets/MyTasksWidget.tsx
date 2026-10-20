@@ -19,7 +19,7 @@ const columns = [
 
 const MyTasksWidget = () => {
     const { user } = useContext(AuthContext);
-    const { data: tasks, isLoading, isError, error } = useTasksQuery({ assignedToUid: user.id, limit: 5, projectIsArchived: 0 });
+    const { data: tasks, isLoading, isError, error } = useTasksQuery({ assignedToId: user.id, limit: 5, projectIsArchived: 0 });
 
     if (isError) return <DashboardWidget title="My tasks"><p className="has-text-danger">Error loading tasks: {error.message}</p></DashboardWidget>;
 

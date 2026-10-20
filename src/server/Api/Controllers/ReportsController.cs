@@ -68,7 +68,7 @@ public class ReportsController(
 
         var report = new Report
         {
-            CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+            CreatedById = HttpContext.GetCurrentUser()!.Id,
             ProjectId = reportRequest.ProjectId,
             VersionName = reportRequest.VersionName,
             VersionDescription = reportRequest.VersionDescription,
@@ -84,7 +84,7 @@ public class ReportsController(
             ReportId = report.Id,
             ProjectId = report.ProjectId.Value,
             ReportTemplateId = reportRequest.ReportTemplateId,
-            CreatedByUserId = report.CreatedByUid!.Value
+            CreatedByUserId = report.CreatedById!.Value
         });
 
         return AcceptedAtAction(nameof(GetMany), new { id = report.Id }, report);
@@ -124,7 +124,7 @@ public class ReportsController(
 
         var report = new Report
         {
-            CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+            CreatedById = HttpContext.GetCurrentUser()!.Id,
             ProjectId = null,
             VersionName = templateDto.VersionName.Trim(),
             VersionDescription = templateDto.VersionDescription?.Trim() ?? string.Empty,
@@ -142,7 +142,7 @@ public class ReportsController(
 
         var attachment = new Reconmap.Api.Domain.Entities.Attachment
         {
-            CreatedByUid = HttpContext.GetCurrentUser()!.Id,
+            CreatedById = HttpContext.GetCurrentUser()!.Id,
             ParentType = "report",
             ParentId = report.Id,
             ClientFileName = templateDto.ResultFile.FileName,
@@ -244,7 +244,7 @@ public class ReportsController(
                 // report fields
                 r.Id,
                 r.ProjectId,
-                r.CreatedByUid,
+                r.CreatedById,
                 r.CreatedAt,
                 r.IsTemplate,
                 r.VersionName,

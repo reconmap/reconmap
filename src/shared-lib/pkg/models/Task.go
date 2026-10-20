@@ -5,8 +5,8 @@ type Task struct {
 
 	ID int `json:"id"`
 	ProjectId int `json:"project_id"`
-	CreatorUid int `json:"creator_uid"`
-	AssigneeUid int `json:"assignee_uid"`
+	CreatedById int `json:"createdById"`
+	AssignedToId int `json:"assignedToId"`
 	InsertTs string `json:"insert_ts"`
 	UpdateTs string `json:"update_ts"`
 	Priority string `json:"priority"`

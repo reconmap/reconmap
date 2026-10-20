@@ -5,7 +5,7 @@ properties:
     nullable: true
   created_at:
     type: string
-  created_by_uid:
+  created_by_id:
     type: integer
   parent_type:
     type: string
@@ -24,7 +24,7 @@ properties:
     type: string
 required:
 - created_at
-- created_by_uid
+- created_by_id
 - parent_type
 - parent_id
 - content

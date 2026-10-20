@@ -35,10 +35,10 @@ namespace Mcp.Tests
             context.Database.EnsureCreated();
 
             context.Set<UserInfo>().Add(new UserInfo { Id = 1 });
-            context.Projects.Add(new Project { Id = 1, CreatedByUid = 1, Name = "Project 1", Visibility = "public" });
-            context.Projects.Add(new Project { Id = 5, CreatedByUid = 1, Name = "Project 5", Visibility = "private" });
-            context.Vulnerabilities.Add(new Vulnerability { Id = 10, CreatedByUid = 1, ProjectId = 1, Summary = "XSS in login", Risk = "high" });
-            context.Vulnerabilities.Add(new Vulnerability { Id = 11, CreatedByUid = 1, ProjectId = 5, Summary = "SQLi in search", Risk = "critical" });
+            context.Projects.Add(new Project { Id = 1, CreatedById = 1, Name = "Project 1", Visibility = "public" });
+            context.Projects.Add(new Project { Id = 5, CreatedById = 1, Name = "Project 5", Visibility = "private" });
+            context.Vulnerabilities.Add(new Vulnerability { Id = 10, CreatedById = 1, ProjectId = 1, Summary = "XSS in login", Risk = "high" });
+            context.Vulnerabilities.Add(new Vulnerability { Id = 11, CreatedById = 1, ProjectId = 5, Summary = "SQLi in search", Risk = "critical" });
             context.SaveChanges();
 
             return context;

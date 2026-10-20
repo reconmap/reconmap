@@ -26,9 +26,9 @@ public class RequestAccessScopeTests
         await db.SaveChangesAsync();
         var scope = CreateScope(db, 10, UserRole.User);
 
-        Assert.True(await scope.CanAccessSecretAsync(new Secret { OwnerUid = 10, ProjectId = null }));
-        Assert.True(await scope.CanAccessSecretAsync(new Secret { OwnerUid = 99, ProjectId = 100 }));
-        Assert.False(await scope.CanAccessSecretAsync(new Secret { OwnerUid = 99, ProjectId = 200 }));
+        Assert.True(await scope.CanAccessSecretAsync(new Secret { OwnerId = 10, ProjectId = null }));
+        Assert.True(await scope.CanAccessSecretAsync(new Secret { OwnerId = 99, ProjectId = 100 }));
+        Assert.False(await scope.CanAccessSecretAsync(new Secret { OwnerId = 99, ProjectId = 200 }));
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class RequestAccessScopeTests
         var scope = CreateScope(db, 10, UserRole.Client);
 
         Assert.False(scope.CanAccessVault);
-        Assert.False(await scope.CanAccessSecretAsync(new Secret { OwnerUid = 10, ProjectId = 100 }));
+        Assert.False(await scope.CanAccessSecretAsync(new Secret { OwnerId = 10, ProjectId = 100 }));
     }
 
     [Fact]

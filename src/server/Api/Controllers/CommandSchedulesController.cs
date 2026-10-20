@@ -122,7 +122,7 @@ public class CommandSchedulesController(AppDbContext dbContext)
             return BadRequest(ModelState);
 
         commandSchedule.CommandId = commandId;
-        commandSchedule.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        commandSchedule.CreatedById = HttpContext.GetCurrentUser()!.Id;
         dbContext.CommandSchedules.Add(commandSchedule);
         await dbContext.SaveChangesAsync();
 

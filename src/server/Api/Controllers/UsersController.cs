@@ -75,7 +75,7 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
         var take = Math.Min(limit ?? 100, maxLimit);
 
         var q = dbContext.AuditEntries.AsNoTracking()
-            .Where(e => e.CreatedByUid == id)
+            .Where(e => e.CreatedById == id)
             .OrderByDescending(a => a.CreatedAt);
 
         var page = await q.Take(take).ToListAsync();

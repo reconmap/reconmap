@@ -16,7 +16,7 @@ public class OrganisationsController(AppDbContext dbContext)
     [Audit(AuditActions.Created, "Organisation")]
     public async Task<IActionResult> CreateOne([FromForm] Organisation entity)
     {
-        entity.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        entity.CreatedById = HttpContext.GetCurrentUser()!.Id;
         dbContext.Organisations.Add(entity);
         await dbContext.SaveChangesAsync();
 

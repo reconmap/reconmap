@@ -75,8 +75,8 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
             header: "Assignee",
             cell: (task) => (
                 <>
-                    {task.assignedToUid ? (
-                        <UserLink userId={task.assignedToUid}>{task.assignedTo?.fullName}</UserLink>
+                    {task.assignedToId ? (
+                        <UserLink userId={task.assignedToId}>{task.assignedTo?.fullName}</UserLink>
                     ) : (
                         "(nobody)"
                     )}

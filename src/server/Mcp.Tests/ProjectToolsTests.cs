@@ -42,8 +42,8 @@ namespace Mcp.Tests
             context.Database.EnsureCreated();
 
             context.Set<UserInfo>().Add(new UserInfo { Id = 1 });
-            context.Projects.Add(new Project { Id = 1, CreatedByUid = 1, Name = "Internal Penetration Test", Visibility = "public" });
-            context.Projects.Add(new Project { Id = 5, CreatedByUid = 1, Name = "Project 5", Description = "Test description", Visibility = "private" });
+            context.Projects.Add(new Project { Id = 1, CreatedById = 1, Name = "Internal Penetration Test", Visibility = "public" });
+            context.Projects.Add(new Project { Id = 5, CreatedById = 1, Name = "Project 5", Description = "Test description", Visibility = "private" });
             context.SaveChanges();
 
             return context;

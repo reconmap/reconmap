@@ -23,11 +23,11 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        project.CreatedByUid = HttpContext.GetCurrentUser()!.Id;
+        project.CreatedById = HttpContext.GetCurrentUser()!.Id;
         dbContext.Projects.Add(project);
         await dbContext.SaveChangesAsync();
 
-        var projectUser = new ProjectMember { ProjectId = project.Id, UserId = project.CreatedByUid!.Value };
+        var projectUser = new ProjectMember { ProjectId = project.Id, UserId = project.CreatedById!.Value };
         dbContext.ProjectMembers.Add(projectUser);
         await dbContext.SaveChangesAsync();
 
