@@ -7,6 +7,14 @@ import UserRoles from "../../models/UserRoles";
 import PrimaryButton from "../ui/buttons/Primary";
 import UserPreferences from "./Preferences";
 
+// Plain ASCII letters, spaces, apostrophes, periods and hyphens only
+const PERSON_NAME_PATTERN = "[A-Za-z .'\\-]*";
+const PERSON_NAME_TITLE = "Only letters, spaces, apostrophes, periods and hyphens are allowed";
+
+// Plain ASCII letters, digits, periods, underscores and hyphens only
+const USERNAME_PATTERN = "[A-Za-z0-9._\\-]*";
+const USERNAME_TITLE = "Only letters, numbers, periods, underscores and hyphens are allowed";
+
 const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isOwner = false, preferences, onPreferencesChange }: any) => {
     const onFormChange = (ev) => {
         const target = ev.target;
@@ -30,6 +38,8 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                             name="firstName"
                             value={user.firstName || ""}
                             onChange={onFormChange}
+                            pattern={PERSON_NAME_PATTERN}
+                            title={PERSON_NAME_TITLE}
                             required
                         />
                     }
@@ -44,6 +54,8 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                             name="lastName"
                             value={user.lastName || ""}
                             onChange={onFormChange}
+                            pattern={PERSON_NAME_PATTERN}
+                            title={PERSON_NAME_TITLE}
                         />
                     }
                 />
@@ -71,6 +83,8 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                             id="username"
                             value={user.username || ""}
                             onChange={onFormChange}
+                            pattern={USERNAME_PATTERN}
+                            title={USERNAME_TITLE}
                             autoFocus
                             required
                         />

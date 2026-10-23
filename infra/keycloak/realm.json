@@ -595,8 +595,8 @@
       "username": "admin",
       "enabled": true,
       "email": "admin@localhost",
-      "firstName": "(n/a)",
-      "lastName": "(n/a)",
+      "firstName": "Admin",
+      "lastName": "User",
       "credentials": [
         {
           "type": "password",
