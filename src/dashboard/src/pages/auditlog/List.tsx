@@ -14,7 +14,7 @@ const AuditLogList = () => {
     pageNumber = pageNumber !== null ? parseInt(pageNumber) : 1;
     const apiPageNumber = pageNumber - 1;
 
-    const { data: auditLog, isLoading } = useAuditLogQuery({ page: apiPageNumber });
+    const { data: auditLog, isLoading } = useAuditLogQuery({ page: pageNumber });
 
     const onPageChange = (pageNumber) => {
         navigate(`/auditlog?page=${pageNumber + 1}`);

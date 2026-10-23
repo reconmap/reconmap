@@ -2,6 +2,7 @@ using Reconmap.Api.Common;
 using Reconmap.Api.Controllers;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +48,49 @@ public class AssetsControllerTests
         var saved = await db.Assets.SingleAsync();
         Assert.Equal(12, saved.ProjectId);
         Assert.Equal("https://example.com", saved.Name);
+    }
+
+    [Fact]
+    public async Task GetMany_WithLimit_ReturnsRequestedPageAndHeaders()
+    {
+        using var db = CreateDbContext();
+        for (var i = 1; i <= 5; i++)
+        {
+            db.Assets.Add(new Asset { ProjectId = 7, Name = $"asset-{i}", Type = "host" });
+        }
+        await db.SaveChangesAsync();
+
+        var controller = new AssetsController(db, new FakeAiService());
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+        controller.HttpContext.Request.QueryString = new QueryString("?limit=2&page=3");
+
+        var result = await controller.GetMany(7);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        var assets = Assert.IsAssignableFrom<IEnumerable<Asset>>(ok.Value);
+        Assert.Single(assets);
+        Assert.Equal("5", controller.Response.Headers["X-Total-Count"]);
+        Assert.Equal("3", controller.Response.Headers["X-Page-Count"]);
+    }
+
+    [Fact]
+    public async Task GetMany_WithoutLimit_ReturnsAllAssets()
+    {
+        using var db = CreateDbContext();
+        for (var i = 1; i <= 25; i++)
+        {
+            db.Assets.Add(new Asset { ProjectId = 7, Name = $"asset-{i}", Type = "host" });
+        }
+        await db.SaveChangesAsync();
+
+        var controller = new AssetsController(db, new FakeAiService());
+        controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
+
+        var result = await controller.GetMany(7);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(25, Assert.IsAssignableFrom<IEnumerable<Asset>>(ok.Value).Count());
+        Assert.False(controller.Response.Headers.ContainsKey("X-Total-Count"));
     }
 
     [Fact]

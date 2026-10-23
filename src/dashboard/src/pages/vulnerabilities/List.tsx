@@ -47,7 +47,7 @@ const VulnerabilitiesList = () => {
     const fetchVulnerabilities = useCallback(() => {
         const queryParams = new URLSearchParams();
         queryParams.set("isTemplate", "false");
-        queryParams.set("page", String(apiPageNumber));
+        queryParams.set("page", String(pageNumber));
         queryParams.set("orderColumn", tableModel.sortBy.column);
         queryParams.set("orderDirection", tableModel.sortBy.order);
         Object.keys(tableModel.filters).forEach(
@@ -66,7 +66,7 @@ const VulnerabilitiesList = () => {
                     vulnerabilities: data.data,
                 }));
             });
-    }, [apiPageNumber, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
+    }, [pageNumber, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
 
     const reloadVulnerabilities = useCallback(() => {
         setTableModel((tableModel) => ({

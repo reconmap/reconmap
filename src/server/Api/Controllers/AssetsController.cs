@@ -40,7 +40,21 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
             .Where(a => a.ProjectId == projectId)
             .OrderByDescending(a => a.CreatedAt);
 
-        var assets = await q.ToListAsync();
+        if (!HttpContext.Request.Query.ContainsKey("limit"))
+        {
+            return Ok(await q.ToListAsync());
+        }
+
+        var totalCount = await q.CountAsync();
+        var pagination = new PaginationRequestHandler(HttpContext.Request.Query, totalCount);
+
+        var assets = await q
+            .Skip(pagination.CalculateOffset())
+            .Take(pagination.GetResultsPerPage())
+            .ToListAsync();
+
+        Response.Headers["X-Total-Count"] = totalCount.ToString();
+        Response.Headers["X-Page-Count"] = pagination.CalculatePageCount().ToString();
         return Ok(assets);
     }
 

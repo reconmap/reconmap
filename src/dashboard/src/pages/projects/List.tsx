@@ -20,7 +20,7 @@ const ProjectsListPage = () => {
     const statusFilter = query.get("status") ?? "active";
     const isTemplateFilter = query.get("isTemplate") ?? "false";
 
-    const projectsParams: any = { limit: 10, status: statusFilter, page: apiPageNumber };
+    const projectsParams: any = { limit: 10, status: statusFilter, page: pageNumber };
     if (isTemplateFilter !== "") {
         projectsParams.isTemplate = isTemplateFilter === "true";
     }

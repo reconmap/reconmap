@@ -19,7 +19,7 @@ const ProjectAssets = ({ project }: any) => {
         data: assets,
         isLoading,
         refetch,
-    } = useAssetsQuery({ limit: 5, projectId: project.id, page: pageNumber - 1 });
+    } = useAssetsQuery({ limit: 5, projectId: project.id, page: pageNumber });
     const deleteAssetMutation = useDeleteAssetMutation();
 
     const onDeleteButtonClick = (ev, assetId) => {
