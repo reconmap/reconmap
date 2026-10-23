@@ -1,4 +1,5 @@
 using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common;
 using Reconmap.Api.Common.Messaging;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
@@ -58,6 +59,7 @@ public class SystemController(
     SystemUsageService service,
     IMailSettingsService mailSettingsService,
     IAiSettingsService aiSettingsService,
+    IAiModelCatalogService aiModelCatalogService,
     IAttachmentStorage attachmentStorage,
     HealthCheckService healthCheckService,
     McpHealthProbe mcpHealthProbe)
@@ -234,6 +236,27 @@ public class SystemController(
         {
             var settings = await aiSettingsService.UpdateAsync(request);
             return Ok(settings);
+        }
+        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException)
+        {
+            return BadRequest(new { message = exception.Message });
+        }
+    }
+
+    /// <summary>
+    /// Returns the models the configured provider account can use. The provider API key stays on the
+    /// server; the dashboard only ever receives model metadata.
+    /// </summary>
+    [HttpGet("ai-providers/{providerId}/models")]
+    public async Task<IActionResult> GetAiProviderModels(
+        string providerId,
+        [FromQuery] string? capability,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var catalog = await aiModelCatalogService.GetModelsAsync(providerId, capability, cancellationToken);
+            return Ok(catalog);
         }
         catch (Exception exception) when (exception is ArgumentException or InvalidOperationException)
         {

@@ -1,1 +1,12 @@
-{}
+{
+    "Select a model": "Select a model",
+    "Loading models…": "Loading models…",
+    "Refresh models": "Refresh models",
+    "Live catalog: {{count}} models": "Live catalog: {{count}} models",
+    "Live discovery unavailable — showing the verified fallback catalog.": "Live discovery unavailable — showing the verified fallback catalog.",
+    "No chat-capable models are available for this account.": "No chat-capable models are available for this account.",
+    "Unable to load the model catalog.": "Unable to load the model catalog.",
+    "The previously selected model is no longer available. Select a model.": "The previously selected model is no longer available. Select a model.",
+    "Search models": "Search models",
+    "No matching models.": "No matching models."
+}

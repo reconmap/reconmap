@@ -1,6 +1,7 @@
 import { useSystemAiSettingsQuery, useSystemAiSettingsUpdateMutation } from "api/system";
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
+import AiModelSelect from "components/system/AiModelSelect";
 import PrimaryButton from "components/ui/buttons/Primary";
 import Title from "components/ui/Title";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
@@ -159,6 +160,23 @@ const AiSettingsPage = () => {
                 <h2 className="title is-5">{provider.name}</h2>
 
                 {provider.fields.map((field) => {
+                    if (field.type === "model") {
+                        return (
+                            <HorizontalLabelledField
+                                key={field.key}
+                                label={field.label}
+                                control={
+                                    <AiModelSelect
+                                        providerId={provider.id}
+                                        field={field}
+                                        value={values[provider.id]?.[field.key] ?? ""}
+                                        onChange={(value) => updateSetting(field.key, value)}
+                                    />
+                                }
+                            />
+                        );
+                    }
+
                     const isSecret = field.type === "secret";
                     const isCleared = clearedSecrets[field.key] ?? false;
                     return (

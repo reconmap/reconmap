@@ -1,0 +1,75 @@
+.wrapper {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.trigger {
+    width: 100%;
+    padding-right: 2rem;
+    text-align: left;
+    cursor: pointer;
+}
+
+.trigger:disabled {
+    cursor: not-allowed;
+}
+
+.chevron {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.panel {
+    position: absolute;
+    z-index: 40;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 2px;
+    padding: 0.35rem;
+    background-color: var(--bulma-scheme-main);
+    border: 1px solid var(--bulma-border);
+    border-radius: var(--bulma-radius, 4px);
+    box-shadow: 0 8px 16px rgba(10, 10, 10, 0.16);
+    max-height: 20rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.search {
+    margin-bottom: 0.35rem;
+}
+
+.list {
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.option {
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--bulma-radius, 4px);
+    cursor: pointer;
+    color: var(--bulma-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.option[aria-selected="true"] {
+    font-weight: 600;
+}
+
+.active {
+    background-color: var(--bulma-scheme-main-bis);
+}
+
+.empty {
+    padding: 0.4rem 0.6rem;
+    color: var(--bulma-text-weak);
+}

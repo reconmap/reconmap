@@ -77,5 +77,15 @@
     "Users": "Utilisateurs",
     "View": "Voir",
     "Visibility": "Visibilité",
-    "Vulnerabilities": "Vulnérabilités"
+    "Vulnerabilities": "Vulnérabilités",
+    "Select a model": "Sélectionnez un modèle",
+    "Loading models…": "Chargement des modèles…",
+    "Refresh models": "Actualiser les modèles",
+    "Live catalog: {{count}} models": "Catalogue en direct : {{count}} modèles",
+    "Live discovery unavailable — showing the verified fallback catalog.": "Découverte en direct indisponible — affichage du catalogue de secours vérifié.",
+    "No chat-capable models are available for this account.": "Aucun modèle de chat n'est disponible pour ce compte.",
+    "Unable to load the model catalog.": "Impossible de charger le catalogue de modèles.",
+    "The previously selected model is no longer available. Select a model.": "Le modèle précédemment sélectionné n'est plus disponible. Sélectionnez un modèle.",
+    "Search models": "Rechercher des modèles",
+    "No matching models.": "Aucun modèle correspondant."
 }

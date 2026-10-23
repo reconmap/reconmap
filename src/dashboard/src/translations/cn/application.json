@@ -11,5 +11,15 @@
     "High": "高",
     "Medium": "中",
     "Low": "低",
-    "Lowest": "最低"
+    "Lowest": "最低",
+    "Select a model": "选择模型",
+    "Loading models…": "正在加载模型…",
+    "Refresh models": "刷新模型",
+    "Live catalog: {{count}} models": "实时目录：{{count}} 个模型",
+    "Live discovery unavailable — showing the verified fallback catalog.": "实时目录不可用，正在显示已验证的备用目录。",
+    "No chat-capable models are available for this account.": "此账户没有可用的聊天模型。",
+    "Unable to load the model catalog.": "无法加载模型目录。",
+    "The previously selected model is no longer available. Select a model.": "先前选择的模型已不可用，请重新选择模型。",
+    "Search models": "搜索模型",
+    "No matching models.": "没有匹配的模型。"
 }

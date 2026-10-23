@@ -99,6 +99,25 @@ public class AiSettingsServiceTests
         Assert.Empty(db.AiProviderSettings);
     }
 
+    [Fact]
+    public async Task GetProviderRuntimeSettingsAsync_ResolvesASpecificProviderRegardlessOfSelection()
+    {
+        await using var db = CreateDbContext();
+        var service = CreateService(db);
+        await service.UpdateAsync(new AiSettingsUpdateRequest
+        {
+            Provider = "Router",
+            Settings = new Dictionary<string, string?> { ["apiKey"] = "router-key", ["model"] = "one" }
+        });
+
+        var runtime = await service.GetProviderRuntimeSettingsAsync("Router");
+
+        Assert.Equal("Router", runtime.Provider.Id);
+        Assert.Equal("router-key", runtime.Values["apiKey"]);
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => service.GetProviderRuntimeSettingsAsync("Unknown"));
+    }
+
     private static AppDbContext CreateDbContext()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()

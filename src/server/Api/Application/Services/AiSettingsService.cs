@@ -43,11 +43,23 @@ public sealed record AiRuntimeSettings(
     int MaxOutputTokens,
     IReadOnlyDictionary<string, string> Values);
 
+public sealed record AiProviderRuntimeSettings(
+    AiProviderDefinition Provider,
+    IReadOnlyDictionary<string, string> Values);
+
 public interface IAiSettingsService
 {
     Task<AiSettingsResponse> GetAsync(CancellationToken cancellationToken = default);
     Task<AiSettingsResponse> UpdateAsync(AiSettingsUpdateRequest request, CancellationToken cancellationToken = default);
     Task<AiRuntimeSettings> GetRuntimeSettingsAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Resolves the values for a specific provider regardless of which one is currently selected.
+    /// Used by server-side capabilities such as model discovery, where the key must stay on the server.
+    /// </summary>
+    Task<AiProviderRuntimeSettings> GetProviderRuntimeSettingsAsync(
+        string providerId,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed class AiSettingsService(
@@ -133,7 +145,19 @@ public sealed class AiSettingsService(
     public async Task<AiRuntimeSettings> GetRuntimeSettingsAsync(CancellationToken cancellationToken = default)
     {
         var global = await db.AiSettings.AsNoTracking().SingleOrDefaultAsync(s => s.Id == 1, cancellationToken);
-        var provider = catalog.GetProvider(global?.Provider ?? catalog.DefaultProvider);
+        var providerSettings = await GetProviderRuntimeSettingsAsync(
+            global?.Provider ?? catalog.DefaultProvider, cancellationToken);
+        return new AiRuntimeSettings(
+            providerSettings.Provider,
+            global?.MaxOutputTokens ?? 4000,
+            providerSettings.Values);
+    }
+
+    public async Task<AiProviderRuntimeSettings> GetProviderRuntimeSettingsAsync(
+        string providerId,
+        CancellationToken cancellationToken = default)
+    {
+        var provider = catalog.GetProvider(providerId);
         var stored = await db.AiProviderSettings.AsNoTracking()
             .Where(s => s.ProviderId == provider.Id)
             .ToDictionaryAsync(s => s.SettingKey, StringComparer.OrdinalIgnoreCase, cancellationToken);
@@ -148,7 +172,7 @@ public sealed class AiSettingsService(
         }
 
         ValidateSettings(provider, stored);
-        return new AiRuntimeSettings(provider, global?.MaxOutputTokens ?? 4000, values);
+        return new AiProviderRuntimeSettings(provider, values);
     }
 
     private AiSettingsResponse BuildResponse(AiSettings? global, IReadOnlyCollection<AiProviderSetting> stored)
