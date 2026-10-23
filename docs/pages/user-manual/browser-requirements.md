@@ -4,9 +4,7 @@ parent: User manual
 tags: [compatibility]
 ---
 
-Reconmap is compatible with all recent versions of modern web browsers across all major operating systems. However, for optimal **security**, **performance**, and **supportability**, we recommend using the latest **stable**[^stable] release of [Mozilla Firefox](https://www.mozilla.org/en-GB/firefox/new/) or [Google Chrome](https://www.google.com/intl/en_uk/chrome/).
-
-While other browsers may function correctly, they may not offer the best experience or full compatibility.
+Reconmap supports only the **latest two stable**[^stable] versions of [Mozilla Firefox](https://www.mozilla.org/en-GB/firefox/new/), [Google Chrome](https://www.google.com/intl/en_uk/chrome/) and [Apple Safari](https://www.apple.com/safari/), on all major operating systems. The dashboard is built for these browsers, so older versions, and other browsers, may not work correctly and are not supported.
 
 We regularly test Reconmap on the latest versions of Google Chrome and Mozilla Firefox to ensure consistent performance.
 

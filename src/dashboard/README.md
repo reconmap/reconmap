@@ -10,6 +10,10 @@ The Reconmap Dashboard allows users to interact with the Reconmap API to create 
 - Make
 - [Reconmap API](../api)
 
+## Supported browsers
+
+Only the latest two versions of Chrome, Firefox and Safari are supported (see the `browserslist` entry in `package.json` and the [browser requirements](../../docs/pages/user-manual/browser-requirements.md)).
+
 ## Running instructions
 
 ```sh
