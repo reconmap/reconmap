@@ -1,7 +1,5 @@
 import { requestSessionPost } from "api/requests/session";
 import HeaderLogo from "components/layout/HeaderLogo";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Toaster } from "react-hot-toast";
@@ -12,8 +10,6 @@ import "translations/i18n";
 import { memoryStore } from "utilities/memoryStore";
 import App from "./App";
 import "./styles/main.css";
-
-TimeAgo.addDefaultLocale(en);
 
 const rootContainer = document.getElementById("root");
 const appRoot = ReactDOM.createRoot(rootContainer!);

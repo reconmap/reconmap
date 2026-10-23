@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The dashboard formats relative dates ("5 minutes ago") with the native `Intl.RelativeTimeFormat` instead of the `react-time-ago` and `javascript-time-ago` libraries, reducing the bundle size.
 - Browser support: only the latest two versions of Chrome, Firefox and Safari are supported. The dashboard build targets (`browserslist`) and the [browser requirements](docs/pages/user-manual/browser-requirements.md) page were updated accordingly.
 - The dashboard shows a colour icon next to each task priority in the tasks table and on the task details page: 🔵 Lowest, 🟢 Low, 🟡 Medium, 🟠 High, 🔴 Highest. The priority names are translated (Spanish, French and Chinese).
 - **Breaking (database and API):** User foreign key columns now use the `_id` suffix instead of `_uid`: `created_by_uid` → `created_by_id` (in most tables), `owner_uid` → `owner_id` (`vault`) and `assigned_to_uid` → `assigned_to_id` (`task`). The matching JSON fields are renamed too (for example `createdByUid` → `createdById`, `assignedToUid` → `assignedToId`, and the `assignedToUid` query parameter on `GET /api/tasks` → `assignedToId`). Existing databases must rename the columns before running this version; see [Upgrading a Reconmap instance](docs/pages/admin-manual/upgrading-instance.md).

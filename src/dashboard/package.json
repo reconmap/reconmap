@@ -13,7 +13,6 @@
     "http-status-codes": "^2.3.0",
     "i18next": "^26.5.3",
     "i18next-browser-languagedetector": "^8.2.1",
-    "javascript-time-ago": "^2.6.4",
     "oidc-client-ts": "^3.5.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
@@ -22,7 +21,6 @@
     "react-markdown": "^10.1.0",
     "react-oidc-context": "^3.3.1",
     "react-router": "^8.5.0",
-    "react-time-ago": "^7.4.4",
     "recharts": "^3.10.1",
     "remark-gfm": "^4.0.1",
     "ua-parser-js": "^2.0.10"
