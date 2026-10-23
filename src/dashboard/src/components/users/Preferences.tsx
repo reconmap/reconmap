@@ -1,12 +1,10 @@
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeSelect from "components/forms/NativeSelect";
 import EmptyField from "components/ui/EmptyField";
-import CountriesTimezones from "countries-and-timezones";
 import { ThemeList } from "models/themes";
 import { LanguageList } from "translations/LanguageList";
 
-const timezones = CountriesTimezones.getAllTimezones();
-const timezoneKeys = Object.keys(timezones).sort();
+const timezones = Intl.supportedValuesOf("timeZone");
 
 const languageName = (id) => LanguageList.find((lang) => lang.id === id)?.name ?? id;
 const themeName = (id) => ThemeList.find((theme) => theme.id === id)?.name ?? id;
@@ -63,9 +61,9 @@ const UserPreferences = ({ isOwner, values, onChange }: any) => {
                 htmlFor="timezone"
                 control={
                     <NativeSelect id="timezone" name="timezone" value={values.timezone} onChange={onChange}>
-                        {timezoneKeys.map((key) => (
-                            <option key={key} value={timezones[key].name}>
-                                {timezones[key].name}
+                        {timezones.map((timezone) => (
+                            <option key={timezone} value={timezone}>
+                                {timezone}
                             </option>
                         ))}
                     </NativeSelect>

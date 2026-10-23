@@ -7,7 +7,6 @@
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
     "bulma": "^1.0.4",
-    "countries-and-timezones": "^3.11.0",
     "cronstrue": "^3.36.0",
     "friendly-mimes": "^3.0.1",
     "http-status-codes": "^2.3.0",
