@@ -7,6 +7,7 @@ import {
     requestRecentSearches,
     requestSystemMailSettings,
     requestSystemMailSettingsPut,
+    requestSystemAiProviderModels,
     requestSystemAiSettings,
     requestSystemAiSettingsPut,
     requestSystemHealth,
@@ -117,6 +118,42 @@ const useSystemAiSettingsQuery = () => {
     });
 };
 
+interface AiModelDescriptor {
+    id: string;
+    name: string | null;
+    contextWindow: number | null;
+    inputModalities: string[];
+    reasoningEfforts: string[];
+}
+
+interface AiModelCatalog {
+    providerId: string;
+    capability: string;
+    source: "live" | "verified-fallback";
+    degraded: boolean;
+    message: string | null;
+    models: AiModelDescriptor[];
+}
+
+const useSystemAiProviderModelsQuery = (providerId: string | undefined, capability?: string) => {
+    return useQuery<AiModelCatalog>({
+        queryKey: ["system-ai-provider-models", providerId, capability ?? "chat"],
+        queryFn: async () => {
+            const response = await requestSystemAiProviderModels(providerId!, capability);
+            const payload = await response.json().catch(() => null);
+            if (!response.ok) {
+                throw new Error(payload?.message ?? "Unable to load the model catalog.");
+            }
+
+            return payload;
+        },
+        enabled: Boolean(providerId),
+        // Model catalogs change rarely; keep the server-side key boundary and cache the metadata.
+        staleTime: 5 * 60 * 1000,
+        retry: false,
+    });
+};
+
 const useSystemCustomFieldsQuery = () => {
     return useQuery({
         queryKey: ["system-custom-fields"],
@@ -194,7 +231,7 @@ const useSystemAiSettingsUpdateMutation = () => {
     });
 };
 
-export type { AiUsageBreakdownRow, AiUsageSummary, McpStatus, ServiceStatus, SystemHealth, SystemUsage };
+export type { AiModelCatalog, AiModelDescriptor, AiUsageBreakdownRow, AiUsageSummary, McpStatus, ServiceStatus, SystemHealth, SystemUsage };
 
 export {
     useExportablesQuery,
@@ -208,5 +245,6 @@ export {
     useSystemMailSettingsUpdateMutation,
     useSystemAiSettingsQuery,
     useSystemAiSettingsUpdateMutation,
+    useSystemAiProviderModelsQuery,
     useSystemUsageQuery,
 };

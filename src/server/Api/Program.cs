@@ -96,6 +96,7 @@ services.AddScoped<IMailSettingsService, MailSettingsService>();
 services.Configure<AiProviderCatalogOptions>(builder.Configuration.GetSection("AiProviders"));
 services.AddSingleton<IAiProviderCatalog, AiProviderCatalog>();
 services.AddScoped<IAiSettingsService, AiSettingsService>();
+services.AddScoped<IAiModelCatalogService, AiModelCatalogService>();
 services.AddDataProtection()
     .SetApplicationName("Reconmap");
 

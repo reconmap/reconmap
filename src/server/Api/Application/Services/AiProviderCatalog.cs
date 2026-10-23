@@ -15,6 +15,12 @@ public sealed class AiProviderDefinition
     public string Adapter { get; set; } = string.Empty;
     public string? Endpoint { get; set; }
     public List<AiProviderFieldDefinition> Fields { get; set; } = [];
+
+    /// <summary>
+    /// Small, verified model list used when live discovery is unavailable. It never replaces a
+    /// successful live catalog; it only keeps a fresh installation usable during an outage.
+    /// </summary>
+    public List<AiProviderModelDefinition> VerifiedModels { get; set; } = [];
 }
 
 public sealed class AiProviderFieldDefinition
@@ -25,6 +31,18 @@ public sealed class AiProviderFieldDefinition
     public bool Required { get; set; }
     public string? DefaultValue { get; set; }
     public string? Placeholder { get; set; }
+
+    /// <summary>Required for <c>model</c> fields; selects the discovery capability filter.</summary>
+    public string? Capability { get; set; }
+}
+
+public sealed class AiProviderModelDefinition
+{
+    public string Id { get; set; } = string.Empty;
+    public string? Name { get; set; }
+    public int? ContextWindow { get; set; }
+    public List<string> InputModalities { get; set; } = [];
+    public List<string> ReasoningEfforts { get; set; } = [];
 }
 
 public interface IAiProviderCatalog
@@ -39,7 +57,9 @@ public sealed class AiProviderCatalog : IAiProviderCatalog
     private static readonly HashSet<string> SupportedAdapters =
         new(StringComparer.OrdinalIgnoreCase) { "ollama", "azure-openai", "openai-compatible" };
     private static readonly HashSet<string> SupportedFieldTypes =
-        new(StringComparer.OrdinalIgnoreCase) { "text", "url", "secret" };
+        new(StringComparer.OrdinalIgnoreCase) { "text", "url", "secret", "model" };
+    private static readonly HashSet<string> SupportedCapabilities =
+        new(StringComparer.OrdinalIgnoreCase) { "chat", "embedding", "image", "video", "rerank" };
     private readonly Dictionary<string, AiProviderDefinition> _providers;
 
     public AiProviderCatalog(IOptions<AiProviderCatalogOptions> options)
@@ -72,11 +92,33 @@ public sealed class AiProviderCatalog : IAiProviderCatalog
                     throw new InvalidOperationException($"AI provider '{provider.Id}' field '{field.Key}' has unsupported type '{field.Type}'.");
                 if (field.Type.Equals("secret", StringComparison.OrdinalIgnoreCase) && field.DefaultValue != null)
                     throw new InvalidOperationException($"Secret field '{provider.Id}.{field.Key}' cannot have a default value.");
+                if (field.Type.Equals("model", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrWhiteSpace(field.Capability) || !SupportedCapabilities.Contains(field.Capability))
+                        throw new InvalidOperationException(
+                            $"AI provider '{provider.Id}' model field '{field.Key}' requires a supported capability.");
+                    if (string.IsNullOrWhiteSpace(provider.Endpoint))
+                        throw new InvalidOperationException(
+                            $"AI provider '{provider.Id}' model field '{field.Key}' requires a provider endpoint.");
+                }
                 if (field.Type.Equals("url", StringComparison.OrdinalIgnoreCase) &&
                     field.DefaultValue != null &&
                     !Uri.TryCreate(field.DefaultValue, UriKind.Absolute, out _))
                     throw new InvalidOperationException(
                         $"AI provider '{provider.Id}' field '{field.Key}' has an invalid default URL.");
+            }
+
+            var modelIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var model in provider.VerifiedModels)
+            {
+                if (string.IsNullOrWhiteSpace(model.Id))
+                    throw new InvalidOperationException($"AI provider '{provider.Id}' has a verified model without an id.");
+                if (!modelIds.Add(model.Id))
+                    throw new InvalidOperationException(
+                        $"AI provider '{provider.Id}' has duplicate verified model '{model.Id}'.");
+                if (model.ContextWindow is <= 0)
+                    throw new InvalidOperationException(
+                        $"AI provider '{provider.Id}' verified model '{model.Id}' has an invalid context window.");
             }
         }
 

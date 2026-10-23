@@ -10,6 +10,51 @@ AI features are powered by whichever model you configure under **System → AI S
 - **Azure OpenAI** — use a cloud-hosted deployment
 - **OpenRouter** — access hundreds of models via a single API key
 - **AnonRouter** — an OpenAI-compatible router reached with a single API key; requires both an API key and a model identifier
+- **OrcaRouter Cyber Inference** — an OpenAI-compatible gateway for authorised security work; the model list is discovered live from your account
+
+### OrcaRouter Cyber Inference
+
+[OrcaRouter](https://www.orcarouter.ai) is an OpenAI-compatible AI gateway that routes many providers
+behind one endpoint. Its **Cyber Inference** provider is aimed at security teams that hold a business-verified
+OrcaRouter account and run **authorised, scoped** security engagements — the kind of work general-purpose
+gateways often refuse or silently downgrade.
+
+- Provider page: <https://www.orcarouter.ai/cyber>
+- Cyber model catalog: <https://www.orcarouter.ai/models?tier=cyber>
+
+Configure it under **System → AI Settings**:
+
+| Setting | Value |
+| --- | --- |
+| Provider | `OrcaRouter Cyber Inference` |
+| API key | your `sk-orca-…` key from <https://www.orcarouter.ai/console> |
+| Model | chosen from the live catalog (see below) |
+
+Model choices, in order of preference:
+
+1. **`orcarouter/auto`** (default) — automatic routing; works with any OrcaRouter key and needs no model decision.
+2. **Cyber models for business-verified security teams** — `orca/orcacyber-ultra-1.0` (OrcaCyber Ultra,
+   security code scanning and multi-step reasoning over large codebases) and `orca/orcacyber-zero-1.5`
+   (OrcaCyber Zero, driven by the OrcaCyber harness). These unlock against accounts that have completed
+   business verification, which is what lets OrcaRouter serve authorised red-team and blue-team workloads.
+3. **`orcarouter/fusion`** — general-purpose fallback when a routing default is preferred.
+
+Red teams use the cyber models for authorised offensive engagements; blue teams can point the same endpoint
+at the gateway's controls and defences. Model availability is always governed by the account: the settings
+page lists only what your key can actually use.
+
+#### Live model discovery
+
+The model control is a dropdown populated from OrcaRouter's catalog
+(`GET https://api.orcarouter.ai/v1/models`) using the API key you saved. The key stays on the Reconmap API
+server — the dashboard only receives model metadata. For each AI entry point the list is filtered by
+capability, and models without a compatible endpoint type are excluded rather than shown as a guess.
+
+If the catalog cannot be reached, the page says so and offers a small verified fallback list
+(`orcarouter/auto`, `orcarouter/fusion`, `deepseek/deepseek-v4-pro`, `orca/orcacyber-ultra-1.0`,
+`orca/orcacyber-zero-1.5`, `orca/orcacyber-zero-1.0`) containing models confirmed in the live catalog.
+Live discovery always wins when it succeeds. A saved model that is no longer
+offered by the catalog is cleared and must be re-selected before saving.
 
 ### Recommended: Ollama with a security-focused model
 
@@ -58,11 +103,14 @@ For example:
 }
 ```
 
-Supported field types are `text`, `url`, and `secret`. Secret fields are
-write-only in the settings API and encrypted at rest. Provider and field IDs
-must remain stable because they identify stored settings. Providers requiring
-a protocol other than Ollama, Azure OpenAI, or an OpenAI-compatible API need a
-corresponding API adapter.
+Supported field types are `text`, `url`, `secret`, and `model`. Secret fields are
+write-only in the settings API and encrypted at rest. A `model` field renders as a
+dropdown populated from the provider's `GET <Endpoint>/models` endpoint instead of
+free text; it requires a `Capability` (`chat`, `embedding`, `image`, `video` or
+`rerank`) and should ship a small `VerifiedModels` list used only when live discovery
+is unavailable. Provider and field IDs must remain stable because they identify
+stored settings. Providers requiring a protocol other than Ollama, Azure OpenAI, or
+an OpenAI-compatible API need a corresponding API adapter.
 
 ---
 
@@ -125,4 +173,4 @@ Provider definitions in `ai-providers.json` can offer the same two price fields 
 
 When using Ollama, all inference happens on your own infrastructure — no data is sent to external services.
 
-When using Azure OpenAI, OpenRouter or AnonRouter, tool output, vulnerability descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.
+When using Azure OpenAI, OpenRouter, AnonRouter or OrcaRouter, tool output, vulnerability descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.

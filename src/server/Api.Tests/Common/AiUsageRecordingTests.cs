@@ -155,5 +155,10 @@ public class AiUsageRecordingTests
         public Task<AiSettingsResponse> UpdateAsync(
             AiSettingsUpdateRequest request,
             CancellationToken cancellationToken = default) => throw new NotSupportedException();
+
+        public Task<AiProviderRuntimeSettings> GetProviderRuntimeSettingsAsync(
+            string providerId,
+            CancellationToken cancellationToken = default) =>
+            Task.FromResult(new AiProviderRuntimeSettings(settings.Provider, settings.Values));
     }
 }

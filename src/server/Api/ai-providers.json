@@ -151,6 +151,71 @@
             "Placeholder": "0 (leave empty to track tokens only)"
           }
         ]
+      },
+      {
+        "Id": "OrcaRouter",
+        "Name": "OrcaRouter Cyber Inference",
+        "Adapter": "openai-compatible",
+        "Endpoint": "https://api.orcarouter.ai/v1",
+        "Fields": [
+          {
+            "Key": "apiKey",
+            "Label": "API key",
+            "Type": "secret",
+            "Required": true,
+            "Placeholder": "sk-orca-…"
+          },
+          {
+            "Key": "model",
+            "Label": "Model",
+            "Type": "model",
+            "Capability": "chat",
+            "Required": true,
+            "DefaultValue": "orcarouter/auto",
+            "Placeholder": "orcarouter/auto"
+          },
+          {
+            "Key": "inputPricePerMTok",
+            "Label": "Input price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          },
+          {
+            "Key": "outputPricePerMTok",
+            "Label": "Output price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          }
+        ],
+        "VerifiedModels": [
+          {
+            "Id": "orcarouter/auto",
+            "Name": "OrcaRouter Auto (default)",
+            "InputModalities": ["text"]
+          },
+          {
+            "Id": "orcarouter/fusion",
+            "Name": "OrcaRouter Fusion (general fallback)",
+            "InputModalities": ["text"]
+          },
+          {
+            "Id": "deepseek/deepseek-v4-pro",
+            "Name": "DeepSeek V4 Pro",
+            "InputModalities": ["text"]
+          },
+          {
+            "Id": "orca/orcacyber-ultra-1.0",
+            "Name": "OrcaCyber Ultra (cyber, business-verified accounts)",
+            "InputModalities": ["text"]
+          },
+          {
+            "Id": "orca/orcacyber-zero-1.5",
+            "Name": "OrcaCyber Zero (cyber, business-verified accounts)",
+            "InputModalities": ["text"]
+          }
+        ]
       }
     ]
   }

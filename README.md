@@ -20,7 +20,7 @@ Give it a target. Reconmap plans the scan, runs the tools, triages the findings 
 - **Writes the fix.** Generate remediation steps per vulnerability, or suggest next commands per asset.
 - **Reports.** Export to Word, Markdown or HTML.
 - **Scales across engagements.** Many projects, many people, SSO through Keycloak.
-- **Bring your own model.** Ollama for fully local inference, or Azure OpenAI, OpenRouter and other OpenAI-compatible endpoints.
+- **Bring your own model.** Ollama for fully local inference, or Azure OpenAI, OpenRouter, AnonRouter, [OrcaRouter](https://www.orcarouter.ai) and other OpenAI-compatible endpoints.
 - **MCP server.** Let your AI assistant query and drive Reconmap.
 
 ## Quickstart

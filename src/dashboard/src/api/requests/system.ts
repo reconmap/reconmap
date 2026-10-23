@@ -41,6 +41,14 @@ const requestSystemAiSettingsPut = (data: any) => {
     });
 };
 
+const requestSystemAiProviderModels = (providerId: string, capability?: string) => {
+    const query = capability ? `?capability=${encodeURIComponent(capability)}` : "";
+    return secureApiFetch(
+        `/system/ai-providers/${encodeURIComponent(providerId)}/models${query}`,
+        { method: "GET" },
+    );
+};
+
 const requestCustomFields = () => {
     return secureApiFetch("/system/custom-fields", { method: "GET" });
 };
@@ -75,6 +83,7 @@ export {
     requestRecentSearches,
     requestSystemMailSettings,
     requestSystemMailSettingsPut,
+    requestSystemAiProviderModels,
     requestSystemAiSettings,
     requestSystemAiSettingsPut,
     requestSystemHealth,

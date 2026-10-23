@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **OrcaRouter Cyber Inference** AI provider. Configure an `sk-orca-…` API key under **System → AI Settings** and pick a model from a dropdown populated live from OrcaRouter's `/v1/models` catalog (default `orcarouter/auto`, cyber models for business-verified accounts, `orcarouter/fusion` as the general fallback). The API key stays on the server; the dashboard receives only model metadata. If the catalog is unreachable the page labels a small verified fallback list, and a saved model that is no longer offered is cleared before saving.
+
 ### Changed
 
 - The dashboard shows a colour icon next to each task priority in the tasks table and on the task details page: 🔵 Lowest, 🟢 Low, 🟡 Medium, 🟠 High, 🔴 Highest. The priority names are translated (Spanish, French and Chinese).
