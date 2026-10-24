@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPut } from "utilities/requests";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import VulnerabilityForm from "components/vulnerabilities/Form";
 import { useState } from "react";
@@ -46,7 +46,7 @@ const VulnerabilityEdit = () => {
                     <Link to="/vulnerabilities">Vulnerabilities</Link>
                 </Breadcrumb>
             </div>
-            <Title title="Vulnerability details" />
+            <PageTitleHeader title="Vulnerability details" />
             {!clientVulnerability ? (
                 <Loading />
             ) : (

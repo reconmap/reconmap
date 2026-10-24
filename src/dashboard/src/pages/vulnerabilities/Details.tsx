@@ -15,7 +15,7 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/Delete";
 import { actionCompletedToast } from "components/ui/toast";
 import VulnerabilitiesNotesTab from "components/vulnerabilities/NotesTab";
@@ -103,9 +103,9 @@ const VulnerabilityDetails = () => {
                 </div>
             </div>
             <article>
-                <Title
-                    type="Vulnerability"
-                    title={
+                <PageTitleHeader
+                    title={vulnerability.summary}
+                    header={
                         vulnerability.externalId ? (
                             <>
                                 <strong>{vulnerability.externalId.toUpperCase()}</strong>
@@ -115,6 +115,7 @@ const VulnerabilityDetails = () => {
                             vulnerability.summary
                         )
                     }
+                    subHeader="Vulnerability"
                 />
                 <Tag>{vulnerability.visibility}</Tag> <Tags values={vulnerability.tags} />
                 <div>

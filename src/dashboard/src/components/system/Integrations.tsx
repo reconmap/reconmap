@@ -1,7 +1,7 @@
 import { useSystemIntegrationsQuery } from "api/system";
 import ExternalLink from "components/ui/ExternalLink";
 import NativeTable from "components/ui/tables/NativeTable";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useTranslation } from "react-i18next";
 import Breadcrumb from "../ui/Breadcrumb";
 
@@ -37,7 +37,7 @@ const SystemIntegrationsPage = () => {
                     <div>System</div>
                 </Breadcrumb>
             </div>
-            <Title title={t("Command output parsers")} />
+            <PageTitleHeader title={t("Command output parsers")} />
 
             <NativeTable
                 columns={columns}

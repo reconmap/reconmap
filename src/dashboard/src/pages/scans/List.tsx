@@ -3,7 +3,7 @@ import { useProjectsQuery } from "api/projects";
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeSelect from "components/forms/NativeSelect";
 import Skeleton from "components/ui/Skeleton";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import AttachmentsDropzone from "components/attachments/Dropzone";
@@ -39,7 +39,7 @@ const ScansPage = ({ mode }: any) => {
 
     return (
         <div>
-            <Title title={getTitle()} />
+            <PageTitleHeader title={getTitle()} />
 
             {mode === "import" && (
                 <div className="content">

@@ -8,7 +8,7 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
@@ -43,7 +43,7 @@ const IntegrationsList = () => {
             <section className="section">
                 <div className="level">
                     <div className="level-left">
-                        <Title title={t("Jira Integrations")} />
+                        <PageTitleHeader title={t("Jira Integrations")} />
                     </div>
                     <div className="level-right">
                         <NativeButtonGroup>
@@ -88,7 +88,7 @@ const IntegrationsList = () => {
             <section className="section">
                 <div className="level">
                     <div className="level-left">
-                        <Title title={t("Azure DevOps Integrations")} />
+                        <PageTitleHeader title={t("Azure DevOps Integrations")} />
                     </div>
                     <div className="level-right">
                         <NativeButtonGroup>

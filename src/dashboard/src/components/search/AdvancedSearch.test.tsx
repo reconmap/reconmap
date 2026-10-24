@@ -9,7 +9,6 @@ vi.mock("react-i18next", () => ({
 
 vi.mock("api/system", () => ({ useRecentSearchesQuery: vi.fn() }));
 vi.mock("components/ui/Breadcrumb", () => ({ default: () => <div data-testid="breadcrumb" /> }));
-vi.mock("components/ui/Title", () => ({ default: ({ title }) => <div data-testid="title">{title}</div> }));
 
 const SearchResultsProbe = () => {
     const { keywords } = useParams();

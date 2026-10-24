@@ -1,7 +1,7 @@
 import { useSystemHealthQuery } from "api/system";
 import HealthStatus, { toHealthState } from "components/system/HealthStatus";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { SseContext } from "contexts/SseContext";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,7 @@ const SystemHealthPage = () => {
                     <div>System</div>
                 </Breadcrumb>
             </div>
-            <Title title={t("System health")} />
+            <PageTitleHeader title={t("System health")} />
 
             {!isLoading && health && (
                 <table className="table">

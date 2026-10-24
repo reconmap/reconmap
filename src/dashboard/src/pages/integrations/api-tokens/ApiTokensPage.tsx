@@ -1,7 +1,7 @@
 import { useUserApiTokenDeleteMutation, useUserApiTokensQuery } from "api/user-api-tokens-hooks";
 import DeleteButton from "components/ui/buttons/Delete";
 import NativeTable from "components/ui/tables/NativeTable";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ApiTokenForm from "../../../components/integrations/api-tokens/ApiTokenForm";
@@ -54,7 +54,7 @@ const ApiTokensPage = () => {
                 </Breadcrumb>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Title title="API Tokens" />
+                <PageTitleHeader title="API Tokens" />
                 {!showForm && <PrimaryButton onClick={() => setShowForm(true)}>{t("Create token")}</PrimaryButton>}
             </div>
 

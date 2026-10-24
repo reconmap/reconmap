@@ -2,7 +2,7 @@ import { useSystemMailSettingsQuery, useSystemMailSettingsUpdateMutation } from 
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/Primary";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useState } from "react";
 import PageSkeleton from "components/ui/PageSkeleton";
@@ -107,7 +107,7 @@ const MailSettingsPage = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title="Mail settings" />
+            <PageTitleHeader title="Mail settings" />
 
             <form onSubmit={handleSubmit}>
                 <h2 className="title is-5">SMTP</h2>

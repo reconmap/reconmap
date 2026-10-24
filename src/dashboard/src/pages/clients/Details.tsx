@@ -22,7 +22,7 @@ import ExternalLink from "components/ui/ExternalLink";
 import MailLink from "components/ui/MailLink";
 import TelephoneLink from "components/ui/TelephoneLink";
 import TimestampsSection from "components/ui/TimestampsSection";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/Delete";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
@@ -160,7 +160,7 @@ const ClientDetails = () => {
             </div>
             <article>
                 <div>
-                    <Title type={OrganisationTypes[client.kind]} title={client.name} />
+                    <PageTitleHeader title={client.name} subHeader={OrganisationTypes[client.kind]} />
                 </div>
 
                 <div>

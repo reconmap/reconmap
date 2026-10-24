@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useUserQuery, useUserUpdateMutation } from "api/users";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import UserForm from "components/users/Form";
 import { useAuth } from "contexts/AuthContext";
@@ -77,7 +77,7 @@ const EditUserPage = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title="User details" />
+            <PageTitleHeader title="User details" />
 
             <UserForm
                 isEdit={true}

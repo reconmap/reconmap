@@ -3,7 +3,7 @@ import { requestTasksDelete, requestTasksPatch } from "api/requests/tasks";
 import NativeSelect from "components/forms/NativeSelect";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import DeleteButton from "components/ui/buttons/Delete";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -107,7 +107,7 @@ const TasksListPage = () => {
                     </RestrictedComponent>
                 </div>
             </div>
-            <Title title={t("Tasks")} />
+            <PageTitleHeader title={t("Tasks")} />
 
             <div>
                 <TaskFilters tableModel={tableModel} tableModelSetter={setTableModel} />

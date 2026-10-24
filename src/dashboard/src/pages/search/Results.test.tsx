@@ -7,7 +7,6 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("components/ui/Breadcrumb.jsx", () => ({ default: () => <div data-testid="breadcrumb" /> }));
-vi.mock("components/ui/Title", () => ({ default: ({ title }) => <div data-testid="title">{title}</div> }));
 
 vi.mock("components/search/ProjectsSearchResults.jsx", () => ({ default: () => <div data-testid="projects-search" /> }));
 vi.mock("components/search/ProjectTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="project-templates-search" /> }));
@@ -16,7 +15,7 @@ vi.mock("components/search/VulnerabilitiesSearchResults.jsx", () => ({ default: 
 vi.mock("components/search/VulnerabilityTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="vulnerability-templates-search" /> }));
 
 it("renders search results page with keywords", async () => {
-    const { getByTestId, getByText } = render(
+    const { getByRole, getByText } = render(
         <MemoryRouter initialEntries={["/search/my-test-query"]}>
             <Routes>
                 <Route path="/search/:keywords" element={<SearchResultsPage />} />
@@ -24,12 +23,12 @@ it("renders search results page with keywords", async () => {
         </MemoryRouter>,
     );
 
-    expect(getByTestId("title").textContent).toBe("my-test-query");
+    expect(getByRole("heading", { level: 1 }).textContent).toBe("my-test-query");
     expect(getByText("Advanced search")).toBeInTheDocument();
 });
 
 it("shows keywords containing a percent sign without decoding them twice", () => {
-    const { getByTestId } = render(
+    const { getByRole } = render(
         <MemoryRouter initialEntries={["/search/" + encodeURIComponent("100% off")]}>
             <Routes>
                 <Route path="/search/:keywords" element={<SearchResultsPage />} />
@@ -37,5 +36,5 @@ it("shows keywords containing a percent sign without decoding them twice", () =>
         </MemoryRouter>,
     );
 
-    expect(getByTestId("title").textContent).toBe("100% off");
+    expect(getByRole("heading", { level: 1 }).textContent).toBe("100% off");
 });

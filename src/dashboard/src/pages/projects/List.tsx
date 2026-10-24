@@ -2,8 +2,7 @@ import { useProjectsQuery } from "api/projects";
 import NativeSelect from "components/forms/NativeSelect";
 import PaginationV2 from "components/layout/PaginationV2";
 import RestrictedComponent from "components/logic/RestrictedComponent";
-import Title from "components/ui/Title";
-import PageTitle from "components/ui/PageTitle";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
@@ -59,7 +58,6 @@ const ProjectsListPage = () => {
 
     return (
         <div>
-            <PageTitle>Projects</PageTitle>
             <div className="heading">
                 <Breadcrumb />
                 <PaginationV2 page={apiPageNumber} total={projects?.pageCount ?? 0} onPageChange={onPageChange} />
@@ -70,7 +68,7 @@ const ProjectsListPage = () => {
                     </RestrictedComponent>
                 </div>
             </div>
-            <Title title={isLoading ? "Projects" : `Projects (${projects.totalCount})`} documentTitle="none" />
+            <PageTitleHeader title="Projects" header={isLoading ? "Projects" : `Projects (${projects.totalCount})`} />
 
             <details>
                 <summary>Filters</summary>

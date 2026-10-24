@@ -4,7 +4,7 @@ import defaultVulnerability from "models/Vulnerability";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import VulnerabilityForm from "components/vulnerabilities/Form";
 
 const VulnerabilityCreate = () => {
@@ -49,7 +49,7 @@ const VulnerabilityCreate = () => {
                     <Link to="/vulnerabilities">Vulnerabilities</Link>
                 </Breadcrumb>
             </div>
-            <Title title="New vulnerability details" />
+            <PageTitleHeader title="New vulnerability details" />
 
             <VulnerabilityForm
                 vulnerability={vulnerability}

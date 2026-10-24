@@ -16,7 +16,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import LinkButton from "components/ui/buttons/Link";
 import SecondaryButton from "components/ui/buttons/Secondary";
 import Loading from "components/ui/Loading";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import ProjectAttachmentsTab from "components/projects/AttachmentsTab";
 import ProjectDetailsTab from "components/projects/DetailsTab";
 import ProjectNotesTab from "components/projects/NotesTab";
@@ -112,7 +112,7 @@ const ProjectDetails = () => {
                 <Loading />
             ) : (
                 <>
-                    <Title type="Project" title={project.name} />
+                    <PageTitleHeader title={project.name} subHeader="Project" />
 
                     <NativeTabs
                         labels={[

@@ -10,7 +10,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import PrimaryButton from "components/ui/buttons/Primary";
 
 const SendReport = () => {
@@ -69,7 +69,7 @@ const SendReport = () => {
                 </Breadcrumb>
             </div>
             <form onSubmit={handleSend}>
-                <Title title="Send report" />
+                <PageTitleHeader title="Send report" />
                 <HorizontalLabelledField
                     label="Revision"
                     htmlFor="reportId"

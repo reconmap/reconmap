@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useReportsQuery } from "api/reports";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import ReportsTable from "components/reports/Table";
 import { useSseMessage } from "contexts/SseContext";
 
@@ -18,7 +18,7 @@ const ReportsList = () => {
             <div className="heading">
                 <Breadcrumb />
             </div>
-            <Title title="Reports" />
+            <PageTitleHeader title="Reports" />
             <ReportsTable reports={isLoading ? null : reports} includeProjectColumn={true} />
         </>
     );

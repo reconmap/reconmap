@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "../ui/Breadcrumb";
-import Title from "../ui/Title";
+import PageTitleHeader from "../ui/PageTitleHeader";
 import styles from "./AdvancedSearch.module.css";
 
 const entityList = {
@@ -74,7 +74,7 @@ const AdvancedSearch = () => {
                 <Breadcrumb />
             </div>
 
-            <Title title={t("Search form")} type={t("Advanced search")} documentTitle="single" />
+            <PageTitleHeader title={t("Search form")} subHeader={t("Advanced search")} />
 
             <div className={styles.layout}>
                 <form className="box" onSubmit={onFormSubmit}>

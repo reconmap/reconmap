@@ -4,7 +4,7 @@ import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import PaginationV2 from "components/layout/PaginationV2";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/Delete";
 import { actionCompletedToast } from "components/ui/toast";
 import { useCallback, useEffect, useState } from "react";
@@ -113,7 +113,7 @@ const VulnerabilitiesList = () => {
                     </NativeButtonGroup>
                 </div>
             </div>
-            <Title title={`Vulnerabilities (${totalCount})`} />
+            <PageTitleHeader title={`Vulnerabilities (${totalCount})`} />
             <VulnerabilityFilters tableModel={tableModel} tableModelSetter={setTableModel} />
             <VulnerabilitiesTable
                 tableModel={tableModel}

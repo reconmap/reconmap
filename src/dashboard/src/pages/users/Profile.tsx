@@ -1,7 +1,6 @@
 import { enableMfaApi, resetPassword } from "api/requests/users";
 import { useUserActivity, useUserDeleteMutation, useUserQuery } from "api/users";
 import AuditLogsTable from "components/auditlog/AuditLogsTable";
-import UserAvatar from "components/badges/UserAvatar";
 import UserRoleBadge from "components/badges/UserRoleBadge";
 import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
@@ -12,7 +11,7 @@ import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import EmptyField from "components/ui/EmptyField";
 import TimestampsSection from "components/ui/TimestampsSection";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/Delete";
 import LinkButton from "components/ui/buttons/Link";
 import { actionCompletedToast } from "components/ui/toast";
@@ -78,11 +77,7 @@ const UserProfile = () => {
                 </NativeButtonGroup>
             </div>
             <div>
-                <Title
-                    type="User profile"
-                    title={user.fullName}
-                    icon={user.email ? <UserAvatar /> : null}
-                />
+                <PageTitleHeader title={user.fullName} subHeader="User profile" />
 
                 <NativeTabs labels={["Details", "Activity"]} tabIndex={tabIndex} tabIndexSetter={tabIndexSetter} />
 

@@ -1,10 +1,10 @@
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import ImportForm from "components/system/ImportForm";
 
 const ImportPage = () => {
     return (
         <div>
-            <Title type="System" title="Data Import" />
+            <PageTitleHeader title="Data Import" subHeader="System" />
 
             <ImportForm />
         </div>

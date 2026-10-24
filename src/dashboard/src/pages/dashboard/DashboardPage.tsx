@@ -3,7 +3,7 @@ import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeTabs from "components/forms/NativeTabs";
 import PrimaryButton from "components/ui/buttons/Primary";
 import SecondaryButton from "components/ui/buttons/Secondary";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import { useAuth } from "contexts/AuthContext";
 import Widgets from "models/Widgets";
@@ -108,7 +108,7 @@ const DashboardPage = () => {
 
   return (
     <div>
-      <Title type={t("Home")} title={t("Dashboard")} documentTitle="single" />
+      <PageTitleHeader title={t("Dashboard")} subHeader={t("Home")} />
       <div>
         <NativeTabs
           labels={[t("View"), t("Configure")]}

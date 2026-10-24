@@ -2,7 +2,7 @@ import { useDeleteVulnerabilityCategoryMutation, useVulnerabilityCategoriesQuery
 import Breadcrumb from "components/ui/Breadcrumb";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResults from "components/ui/NoResults";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import CreateButton from "components/ui/buttons/Create";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
@@ -77,7 +77,7 @@ const VulnerabilityCategoriesPage = () => {
                 )}
                 <CreateButton onClick={onAddClick}>Add vulnerability category&hellip;</CreateButton>
             </div>
-            <Title title="Vulnerability categories" />
+            <PageTitleHeader title="Vulnerability categories" />
 
             <table className="table is-fullwidth">
                 <thead>

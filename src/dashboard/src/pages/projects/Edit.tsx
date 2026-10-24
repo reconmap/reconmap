@@ -4,7 +4,7 @@ import { requestProjectPut } from "api/requests/projects";
 import { Link, useNavigate, useParams } from "react-router";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import ProjectForm from "components/projects/Form";
 import { useState } from "react";
@@ -39,7 +39,7 @@ const ProjectEdit = () => {
                     <Link to={`/projects/${serverProject.id}`}>{serverProject.name}</Link>
                 </Breadcrumb>
             </div>
-            <Title title="Project details" />
+            <PageTitleHeader title="Project details" />
 
             <ProjectForm
                 isEdit={true}

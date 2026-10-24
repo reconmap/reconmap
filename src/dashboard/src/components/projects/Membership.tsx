@@ -5,7 +5,7 @@ import UserRoleBadge from "components/badges/UserRoleBadge";
 import NativeSelect from "components/forms/NativeSelect";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useMemo } from "react";
 import { Link, useParams } from "react-router";
 import UserAvatar from "../badges/UserAvatar";
@@ -71,7 +71,7 @@ const ProjectMembership = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title="Project membership" />
+            <PageTitleHeader title="Project membership" />
 
             {availableUsers.length > 0 ? (
                 <form>

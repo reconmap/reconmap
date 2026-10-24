@@ -6,7 +6,7 @@ import PrimaryButton from "components/ui/buttons/Primary";
 import CommandTerminal from "components/ui/CommandTerminal";
 import EmptyField from "components/ui/EmptyField";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useAuth } from "contexts/AuthContext";
@@ -53,7 +53,7 @@ const RunnerDetailsPage = () => {
             <div className="heading">
                 <Breadcrumb current={runner.name} />
             </div>
-            <Title type="Runner" title={runner.name} />
+            <PageTitleHeader title={runner.name} subHeader="Runner" />
 
             <p className="mb-4">
                 <span className={`tag ${pingedRecently(runner.lastPingAt) ? "is-success" : "is-warning"}`}>

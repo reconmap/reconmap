@@ -7,7 +7,7 @@ import EmptyField from "components/ui/EmptyField";
 import ExternalLink from "components/ui/ExternalLink";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResults from "components/ui/NoResults";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import CreateButton from "components/ui/buttons/Create";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import SecondaryButton from "components/ui/buttons/Secondary";
@@ -68,7 +68,7 @@ const ReportTemplatesList = () => {
                 />
                 <CreateButton onClick={openAddReportTemplateDialog}>Add report template&hellip;</CreateButton>
             </div>
-            <Title title="Report templates" />
+            <PageTitleHeader title="Report templates" />
 
             <div {...({ status: "info" } as any)}>
                 Needing some inspiration? Have a look at hundred of penetration test reports available at&nbsp;

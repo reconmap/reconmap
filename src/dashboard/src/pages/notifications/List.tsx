@@ -10,7 +10,7 @@ import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import Tag from "components/ui/Tag";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -143,7 +143,7 @@ const NotificationsList = () => {
                     </NativeButton>
                 </NativeButtonGroup>
             </div>
-            <Title title="Notifications" />
+            <PageTitleHeader title="Notifications" />
 
             <NativeTable
                 columns={columns}

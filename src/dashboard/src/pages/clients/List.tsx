@@ -3,7 +3,7 @@ import ClientLink from "components/clients/Link";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
 import ExternalLink from "components/ui/ExternalLink";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import ExportButton from "components/ui/buttons/ExportButton";
 import LinkButton from "components/ui/buttons/Link";
@@ -71,7 +71,7 @@ const ClientsList = () => {
                     />
                 </NativeButtonGroup>
             </div>
-            <Title title={t("Organisations")} />
+            <PageTitleHeader title={t("Organisations")} />
 
             <NativeTable columns={columns} rows={isLoading ? null : organisations} rowId={(org) => org.id}></NativeTable>
         </>

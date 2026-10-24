@@ -2,7 +2,7 @@ import { useJiraIntegrationQuery, useUpdateJiraIntegrationMutation } from "api/j
 import PageSkeleton from "components/ui/PageSkeleton";
 import JiraForm from "components/integrations/ticketing/JiraForm";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
@@ -37,7 +37,7 @@ const JiraIntegrationEditPage = () => {
                     <div>{t("Jira")}</div>
                 </Breadcrumb>
             </div>
-            <Title title={t("Edit Jira integration")} />
+            <PageTitleHeader title={t("Edit Jira integration")} />
 
             <div className="columns">
                 <div className="column is-two-thirds">

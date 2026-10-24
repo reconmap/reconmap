@@ -6,7 +6,7 @@ import CreateButton from "components/ui/buttons/Create";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
 import NativeTable from "components/ui/tables/NativeTable";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
@@ -62,7 +62,7 @@ const WebhooksList = () => {
                     <CreateButton onClick={handleCreate}>{t("Create webhook")}</CreateButton>
                 </NativeButtonGroup>
             </div>
-            <Title title={t("Webhooks")} />
+            <PageTitleHeader title={t("Webhooks")} />
 
             <NativeTable
                 columns={columns}

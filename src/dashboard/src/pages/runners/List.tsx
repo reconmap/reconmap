@@ -4,7 +4,7 @@ import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import NativeTable from "components/ui/tables/NativeTable";
 import { useNavigate, Link } from "react-router";
 import { RunnersUrls } from "AppUrls";
@@ -116,7 +116,7 @@ const RunnersListPage = () => {
                 <CreateButton onClick={() => navigate(RunnersUrls.Create)}>Add runner</CreateButton>
             </NativeButtonGroup>
         </div>
-        <Title title="Runners" />
+        <PageTitleHeader title="Runners" />
 
         <NativeTable columns={columns} rows={isLoading ? null : runners} rowId={(runner) => runner.id}></NativeTable>
     </>

@@ -3,7 +3,7 @@ import { requestOrganisationPut } from "api/requests/organisations";
 import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import ClientForm from "components/clients/Form";
 import { useState } from "react";
@@ -35,7 +35,7 @@ const EditClientPage = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title="Client details" />
+            <PageTitleHeader title="Client details" />
 
             {!clientClient ? (
                 <Loading />

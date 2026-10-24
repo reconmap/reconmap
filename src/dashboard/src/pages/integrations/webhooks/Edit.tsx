@@ -2,7 +2,7 @@ import { requestWebhookPut } from "api/requests/webhooks";
 import { useWebhookQuery } from "api/webhooks";
 import WebhookForm from "components/integrations/webhooks/Form";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -36,7 +36,7 @@ const WebhookEditPage = () => {
             <div className="heading">
                 <Breadcrumb />
             </div>
-            <Title title={t("Edit webhook")} />
+            <PageTitleHeader title={t("Edit webhook")} />
             <WebhookForm
                 isEdit={true}
                 webhook={webhook}

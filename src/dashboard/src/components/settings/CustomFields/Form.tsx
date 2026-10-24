@@ -9,7 +9,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import PrimaryButton from "components/ui/buttons/Primary";
 import NativeTable from "components/ui/tables/NativeTable";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 
 const CustomFieldsPage = () => {
     const { data: customFields } = useSystemCustomFieldsQuery();
@@ -52,7 +52,7 @@ const CustomFieldsPage = () => {
 
     return (
         <>
-            <Title type="System" title="Custom fields" documentTitle="single" />
+            <PageTitleHeader title="Custom fields" subHeader="System" />
 
             <form onSubmit={onAddCustomFieldSubmit}>
                 <input type="hidden" name="config" value="{}" />

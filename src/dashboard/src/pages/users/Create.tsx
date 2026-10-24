@@ -5,7 +5,7 @@ import UserRoles from "models/UserRoles";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import UserForm from "components/users/Form";
 
@@ -39,7 +39,7 @@ const CreateUserPage = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title="New user details" />
+            <PageTitleHeader title="New user details" />
 
             <UserForm user={userData} userSetter={setUserData} onFormSubmit={handleCreate} />
         </div>

@@ -1,7 +1,7 @@
 import { useCreateAzureDevopsIntegrationMutation } from "api/azure-devops";
 import AzureDevopsForm from "components/integrations/ticketing/AzureDevopsForm";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
@@ -31,7 +31,7 @@ const AzureDevopsIntegrationCreatePage = () => {
                     <div>{t("Azure DevOps")}</div>
                 </Breadcrumb>
             </div>
-            <Title title={t("Create Azure DevOps integration")} />
+            <PageTitleHeader title={t("Create Azure DevOps integration")} />
 
             <div className="columns">
                 <div className="column is-two-thirds">

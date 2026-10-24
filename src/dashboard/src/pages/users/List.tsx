@@ -12,7 +12,7 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/Link";
 import ExportMenuItem from "components/ui/menuitems/ExportMenuItem";
 import NativeTable from "components/ui/tables/NativeTable";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
 import UserLink from "components/users/Link";
@@ -126,7 +126,7 @@ const UsersList = () => {
                 </NativeButtonGroup>
             </div>
 
-            <Title title="Users" />
+            <PageTitleHeader title="Users" />
 
             <NativeTable
                 columns={columns}

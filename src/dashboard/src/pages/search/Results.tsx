@@ -6,7 +6,7 @@ import VulnerabilitiesSearchResults from "components/search/VulnerabilitiesSearc
 import VulnerabilityTemplatesSearchResults from "components/search/VulnerabilityTemplatesSearchResults";
 import Breadcrumb from "components/ui/Breadcrumb";
 import LinkButton from "components/ui/buttons/Link";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useSearchParams } from "react-router";
@@ -33,7 +33,7 @@ const SearchResultsPage = React.memo(() => {
                     <LinkButton href={SearchUrls.AdvancedSearch}>{t("Advanced search")}</LinkButton>
                 </div>
             </div>
-            <Title type={t("Search results")} title={keywords} />
+            <PageTitleHeader title={keywords} subHeader={t("Search results")} />
 
             {emptyResults.length > 0 && (
                 <div {...({ status: "warning" } as any)}>No results were found for: {[...new Set([...emptyResults])].join(", ")}</div>

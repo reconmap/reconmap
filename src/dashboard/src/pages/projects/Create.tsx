@@ -6,7 +6,7 @@ import Project from "models/Project";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import ProjectForm from "components/projects/Form";
 
 const ProjectCreate = () => {
@@ -39,7 +39,7 @@ const ProjectCreate = () => {
                     <Link to="/projects">Projects</Link>
                 </Breadcrumb>
             </div>
-            <Title title="New project details" />
+            <PageTitleHeader title="New project details" />
 
             <ProjectForm project={newProject} projectSetter={setNewProject} onFormSubmit={handleCreate} />
         </div>

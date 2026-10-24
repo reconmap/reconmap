@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import TaskForm from "components/tasks/TaskForm";
 
 const TaskCreationPage = () => {
@@ -47,7 +47,7 @@ const TaskCreationPage = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title="New task details" />
+            <PageTitleHeader title="New task details" />
 
             <TaskForm onFormSubmit={onFormSubmit} task={newTask} forTemplate={forTemplate} taskSetter={setNewTask} />
         </div>

@@ -4,7 +4,7 @@ import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useState } from "react";
 
@@ -37,7 +37,7 @@ const RunnerCreatePage = () => {
             <div className="heading">
                 <Breadcrumb current="Add runner" />
             </div>
-            <Title title="Add runner" />
+            <PageTitleHeader title="Add runner" />
 
             <form onSubmit={onSubmit}>
                 <HorizontalLabelledField label="Name" control={<NativeInput type="text" name="name" placeholder="Name" required />} />

@@ -9,7 +9,7 @@ import Badge from "components/badges/Badge";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import DeleteButton from "components/ui/buttons/Delete";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";
 
 const AssetView = () => {
@@ -81,7 +81,7 @@ const AssetView = () => {
             </div>
             <article>
                 <div className="content">
-                    <Title type="Asset" title={asset.name} />
+                    <PageTitleHeader title={asset.name} subHeader="Asset" />
 
                     <div className="grid grid-two">
                         <div>

@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { requestOrganisationPost } from "api/requests/organisations";
 import ClientForm from "components/clients/Form";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { StatusCodes } from "http-status-codes";
 import Client from "models/Client";
@@ -43,7 +43,7 @@ const ClientCreate = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title={t("New organisation")} />
+            <PageTitleHeader title={t("New organisation")} />
 
             <ClientForm onFormSubmit={onFormSubmit} client={newClient} clientSetter={setNewClient} />
         </div>

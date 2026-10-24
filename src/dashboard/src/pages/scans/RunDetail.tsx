@@ -3,7 +3,7 @@ import { isScanRunActive } from "api/requests/scans";
 import ScanStatusTag from "components/scans/ScanStatusTag";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import Skeleton from "components/ui/Skeleton";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
 import { ScansUrls } from "AppUrls";
@@ -16,7 +16,7 @@ const ScanRunDetailPage = () => {
     if (isLoading) {
         return (
             <div>
-                <Title title={t("Scan")} />
+                <PageTitleHeader title={t("Scan")} />
                 <Skeleton height="8rem" />
             </div>
         );
@@ -25,7 +25,7 @@ const ScanRunDetailPage = () => {
     if (isError || !run) {
         return (
             <div>
-                <Title title={t("Scan")} />
+                <PageTitleHeader title={t("Scan")} />
                 <div className="notification is-danger is-light">{t("The scan could not be loaded.")}</div>
             </div>
         );
@@ -33,7 +33,7 @@ const ScanRunDetailPage = () => {
 
     return (
         <div>
-            <Title title={run.target} type={t("Scan")} />
+            <PageTitleHeader title={run.target} subHeader={t("Scan")} />
 
             <div className="content">
                 <p>

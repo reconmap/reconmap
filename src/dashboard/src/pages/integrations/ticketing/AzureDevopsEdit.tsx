@@ -1,7 +1,7 @@
 import { useAzureDevopsIntegrationQuery, useUpdateAzureDevopsIntegrationMutation } from "api/azure-devops";
 import AzureDevopsForm from "components/integrations/ticketing/AzureDevopsForm";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
@@ -36,7 +36,7 @@ const AzureDevopsIntegrationEditPage = () => {
                     <div>{t("Azure DevOps")}</div>
                 </Breadcrumb>
             </div>
-            <Title title={t("Edit Azure DevOps integration")} />
+            <PageTitleHeader title={t("Edit Azure DevOps integration")} />
 
             <div className="columns">
                 <div className="column is-two-thirds">

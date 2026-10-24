@@ -6,7 +6,7 @@ import NativeTabs from "components/forms/NativeTabs";
 import Breadcrumb from "components/ui/Breadcrumb";
 import FileSizeSpan from "components/ui/FileSizeSpan";
 import PageSkeleton from "components/ui/PageSkeleton";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
@@ -101,7 +101,7 @@ const SystemUsagePage = () => {
       <div className="heading">
         <Breadcrumb />
       </div>
-      <Title type="System" title={t("System usage")} />
+      <PageTitleHeader title={t("System usage")} subHeader="System" />
 
       <NativeTabs
         labels={[

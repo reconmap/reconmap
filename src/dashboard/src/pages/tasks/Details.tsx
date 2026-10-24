@@ -13,7 +13,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import EmptyField from "components/ui/EmptyField";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import TimestampsSection from "components/ui/TimestampsSection";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import LinkButton from "components/ui/buttons/Link";
 import { actionCompletedToast } from "components/ui/toast";
 import UserLink from "components/users/Link";
@@ -134,7 +134,7 @@ const TaskDetailsPage = () => {
                 <Loading />
             ) : (
                 <article>
-                    <Title type="Task" title={task.summary} />
+                    <PageTitleHeader title={task.summary} subHeader="Task" />
 
                     <div>
                         <NativeTabs

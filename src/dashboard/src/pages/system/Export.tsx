@@ -1,10 +1,10 @@
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import ExportForm from "components/system/ExportForm";
 
 const ExportPage = () => {
     return (
         <div>
-            <Title type="System" title="Data Export" />
+            <PageTitleHeader title="Data Export" subHeader="System" />
 
             <ExportForm />
         </div>

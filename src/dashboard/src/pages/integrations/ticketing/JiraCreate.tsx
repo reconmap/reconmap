@@ -1,7 +1,7 @@
 import { useCreateJiraIntegrationMutation } from "api/jira";
 import JiraForm from "components/integrations/ticketing/JiraForm";
 import Breadcrumb from "components/ui/Breadcrumb";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
@@ -31,7 +31,7 @@ const JiraIntegrationCreatePage = () => {
                     <div>{t("Jira")}</div>
                 </Breadcrumb>
             </div>
-            <Title title={t("Create Jira integration")} />
+            <PageTitleHeader title={t("Create Jira integration")} />
 
             <div className="columns">
                 <div className="column is-two-thirds">

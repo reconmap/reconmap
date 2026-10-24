@@ -6,7 +6,7 @@ import { t } from "i18next";
 import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
-import Title from "components/ui/Title";
+import PageTitleHeader from "components/ui/PageTitleHeader";
 import TaskForm from "components/tasks/TaskForm";
 import { useState } from "react";
 
@@ -36,7 +36,7 @@ const EditTaskPage = () => {
                 </Breadcrumb>
             </div>
 
-            <Title title="Task details" />
+            <PageTitleHeader title="Task details" />
 
             {!clientTask ? (
                 <Loading />
