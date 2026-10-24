@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The dashboard timezone list comes from the native `Intl.supportedValuesOf("timeZone")` instead of the `countries-and-timezones` library, reducing the bundle size.
 - The dashboard formats relative dates ("5 minutes ago") with the native `Intl.RelativeTimeFormat` instead of the `react-time-ago` and `javascript-time-ago` libraries, reducing the bundle size.
+- The advanced search page groups the form and the recent searches into boxes, lays the entity checkboxes out in a row, and explains when no entity is selected. Keywords are URL-encoded on submit, matching the header search box.
 - Browser support: only the latest two versions of Chrome, Firefox and Safari are supported. The dashboard build targets (`browserslist`) and the [browser requirements](docs/pages/user-manual/browser-requirements.md) page were updated accordingly.
 - The dashboard shows a colour icon next to each task priority in the tasks table and on the task details page: 🔵 Lowest, 🟢 Low, 🟡 Medium, 🟠 High, 🔴 Highest. The priority names are translated (Spanish, French and Chinese).
 - **Breaking (database and API):** User foreign key columns now use the `_id` suffix instead of `_uid`: `created_by_uid` → `created_by_id` (in most tables), `owner_uid` → `owner_id` (`vault`) and `assigned_to_uid` → `assigned_to_id` (`task`). The matching JSON fields are renamed too (for example `createdByUid` → `createdById`, `assignedToUid` → `assignedToId`, and the `assignedToUid` query parameter on `GET /api/tasks` → `assignedToId`). Existing databases must rename the columns before running this version; see [Upgrading a Reconmap instance](docs/pages/admin-manual/upgrading-instance.md).
@@ -55,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The advanced search page's "Recent searches" section showed nothing when the list was empty, and a failed request crashed the page. It now shows a message for the empty and error states, and each recent search links to an encoded results URL.
 - Notifications state was out of sync between the header bell and the Notifications page: marking notifications as read (one, selected or from the bell) only refreshed the component that made the change, so the unread count stayed stale elsewhere. All notification writes now invalidate the shared notifications cache, and new notifications received over SSE refresh the page as well.
 - Command output processing failed for every upload with `ReflectionTypeLoadException` (`Azure.AI.OpenAI` ... `cannot reduce access`): parser discovery threw when any loaded assembly could not be fully loaded. It now skips the types that cannot load.
 - Uploading a command output failed with `404 Command not found`, and `GET /api/commands/{id}/usages/{usageId}` returned an empty `commandId`: usage definitions are rebuilt on every access, so the owning command id set at startup was lost. The lookup now sets it on the returned usage.

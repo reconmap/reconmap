@@ -77,5 +77,16 @@
     "Users": "Utilisateurs",
     "View": "Voir",
     "Visibility": "Visibilité",
-    "Vulnerabilities": "Vulnérabilités"
+    "Vulnerabilities": "Vulnérabilités",
+    "Advanced search": "Recherche avancée",
+    "Search form": "Formulaire de recherche",
+    "Keywords": "Mots-clés",
+    "Keywords...": "Mots-clés...",
+    "Search in": "Rechercher dans",
+    "Select at least one type to search in.": "Sélectionnez au moins un type dans lequel rechercher.",
+    "Recent searches": "Recherches récentes",
+    "No recent searches yet. Your searches will appear here.": "Aucune recherche récente pour le moment. Vos recherches apparaîtront ici.",
+    "Could not load recent searches.": "Impossible de charger les recherches récentes.",
+    "Vulnerability templates": "Modèles de vulnérabilités",
+    "Project templates": "Modèles de projets"
 }

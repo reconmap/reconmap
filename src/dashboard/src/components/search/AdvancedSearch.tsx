@@ -5,9 +5,11 @@ import NativeInput from "components/forms/NativeInput";
 import Loading from "components/ui/Loading";
 import { SearchUrls } from "AppUrls";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "../ui/Breadcrumb";
 import Title from "../ui/Title";
+import styles from "./AdvancedSearch.module.css";
 
 const entityList = {
     tasks: "Tasks",
@@ -18,16 +20,17 @@ const entityList = {
 };
 
 const AdvancedSearch = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
 
     const [keywords, setKeywords] = useState("");
     const [entities, setEntities] = useState(Object.keys(entityList));
-    const { data: recentSearches, isLoading: isLoadingRecentSearches } = useRecentSearchesQuery();
+    const { data: recentSearches, isLoading, isError } = useRecentSearchesQuery();
 
     const onFormSubmit = (ev) => {
         ev.preventDefault();
 
-        navigate(`/search/${keywords.trim()}?entities=` + entities.join(","));
+        navigate(`/search/${encodeURIComponent(keywords.trim())}?entities=${entities.join(",")}`);
     };
 
     const onKeywordsChange = (ev) => {
@@ -41,27 +44,58 @@ const AdvancedSearch = () => {
         setEntities(target.checked ? [...entities, value] : entities.filter((entity) => entity !== value));
     };
 
+    const renderRecentSearches = () => {
+        if (isLoading) {
+            return <Loading />;
+        }
+
+        if (isError) {
+            return <p className="has-text-danger" role="alert">{t("Could not load recent searches.")}</p>;
+        }
+
+        if (!recentSearches?.length) {
+            return <p className="has-text-grey">{t("No recent searches yet. Your searches will appear here.")}</p>;
+        }
+
+        return (
+            <ul>
+                {recentSearches.map((search: string) => (
+                    <li key={search}>
+                        <Link to={SearchUrls.KeywordsSearch.replace(":keywords", encodeURIComponent(search))}>{search}</Link>
+                    </li>
+                ))}
+            </ul>
+        );
+    };
+
     return (
         <>
             <div className="heading">
                 <Breadcrumb />
             </div>
 
-            <Title title="Search form" type="Advanced search" documentTitle="single" />
+            <Title title={t("Search form")} type={t("Advanced search")} documentTitle="single" />
 
-            <div className="columns">
-                <div className="column is-three-quarters">
-                    <form onSubmit={onFormSubmit}>
+            <div className={styles.layout}>
+                <form className="box" onSubmit={onFormSubmit}>
+                    <div className="field">
+                        <label className="label" htmlFor="keywords">
+                            {t("Keywords")}
+                        </label>
                         <NativeInput
+                            id="keywords"
                             type="search"
                             name="keywords"
                             value={keywords}
                             onChange={onKeywordsChange}
-                            placeholder="Keywords..."
+                            placeholder={t("Keywords...")}
                             autoFocus
                             required
                         />
+                    </div>
 
+                    <fieldset className={styles.entities}>
+                        <legend className="label">{t("Search in")}</legend>
                         {Object.keys(entityList).map((objectKey) => (
                             <NativeCheckbox
                                 key={objectKey}
@@ -69,37 +103,28 @@ const AdvancedSearch = () => {
                                 value={objectKey}
                                 onChange={onFormInputChange}
                             >
-                                {entityList[objectKey]}
+                                {t(entityList[objectKey])}
                             </NativeCheckbox>
                         ))}
+                    </fieldset>
 
-                        <NativeButton type="submit" disabled={keywords.trim().length === 0 || entities.length === 0}>
-                            Search
-                        </NativeButton>
-                    </form>
-                </div>
-                <div className="column">
-                    <h4 className="is-size-4">Recent searches</h4>
-                    {isLoadingRecentSearches ? (
-                        <Loading />
-                    ) : (
-                        <>
-                            {recentSearches === null ? (
-                                <>No searches.</>
-                            ) : (
-                                <ol>
-                                    {recentSearches.map((search, index) => (
-                                        <li key={index}>
-                                            <Link to={SearchUrls.KeywordsSearch.replace(":keywords", search)}>
-                                                {search}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ol>
-                            )}
-                        </>
+                    {entities.length === 0 && (
+                        <p className="help is-danger">{t("Select at least one type to search in.")}</p>
                     )}
-                </div>
+
+                    <div className={styles.actions}>
+                        <NativeButton type="submit" disabled={keywords.trim().length === 0 || entities.length === 0}>
+                            {t("Search")}
+                        </NativeButton>
+                    </div>
+                </form>
+
+                <section className="box" aria-labelledby="recent-searches-heading">
+                    <h2 id="recent-searches-heading" className="title is-5">
+                        {t("Recent searches")}
+                    </h2>
+                    {renderRecentSearches()}
+                </section>
             </div>
         </>
     );

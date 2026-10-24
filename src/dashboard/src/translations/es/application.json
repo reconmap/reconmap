@@ -79,5 +79,16 @@
     "Visibility": "Visibilidad",
     "Vulnerabilities": "Vulnerabilidades",
     "Tags": "Etiquetas",
-    "Content": "Contenido"
+    "Content": "Contenido",
+    "Advanced search": "Búsqueda avanzada",
+    "Search form": "Formulario de búsqueda",
+    "Keywords": "Palabras clave",
+    "Keywords...": "Palabras clave...",
+    "Search in": "Buscar en",
+    "Select at least one type to search in.": "Selecciona al menos un tipo en el que buscar.",
+    "Recent searches": "Búsquedas recientes",
+    "No recent searches yet. Your searches will appear here.": "Aún no hay búsquedas recientes. Tus búsquedas aparecerán aquí.",
+    "Could not load recent searches.": "No se pudieron cargar las búsquedas recientes.",
+    "Vulnerability templates": "Plantillas de vulnerabilidades",
+    "Project templates": "Plantillas de proyectos"
 }

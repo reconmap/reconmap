@@ -11,5 +11,17 @@
     "High": "高",
     "Medium": "中",
     "Low": "低",
-    "Lowest": "最低"
+    "Lowest": "最低",
+    "Search": "搜索",
+    "Advanced search": "高级搜索",
+    "Search form": "搜索表单",
+    "Keywords": "关键词",
+    "Keywords...": "关键词...",
+    "Search in": "搜索范围",
+    "Select at least one type to search in.": "请至少选择一个搜索范围。",
+    "Recent searches": "最近搜索",
+    "No recent searches yet. Your searches will appear here.": "暂无最近搜索，您的搜索记录将显示在这里。",
+    "Could not load recent searches.": "无法加载最近搜索。",
+    "Vulnerability templates": "脆弱点模板",
+    "Project templates": "项目工程模板"
 }
