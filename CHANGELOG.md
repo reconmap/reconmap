@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Demo data generator (`testing/scripts/generate_demo_data.py`) produces data that resembles a real engagement: real vulnerability and project categories, realistic findings with CVSS scores, assets, tasks, reports, notes, members, runners, scan runs and their tasks, command schedules, webhooks, notifications, and audit log entries. Pass `--seed` for reproducible output.
+- Data import (`POST /api/system/data`) accepts `project_members`, `notes`, `notifications`, `reports`, `runners`, `scan_runs` (with nested `Tasks`), `command_schedules` and `webhooks`.
 - Run scan: scans are now stored on the server (new `scan_run` and `scan_run_task` tables, `GET/POST /api/scans`, `GET /api/scans/{id}`, `POST /api/scans/tasks/{id}/status`). Starting a scan opens its page, which shows each tool's exact command, rationale, status and error; it keeps running if you navigate away and is listed under the new **Scan history** page and the **Recent scans** list on **Run scan**. **Existing installations must create the new tables**, see [Upgrading a Reconmap instance](docs/pages/admin-manual/upgrading-instance.md).
 - Runner: reports scan task progress (running, succeeded, failed) to the API and uploads command output (stdout or output file) to `POST /api/commands/outputs` so findings and assets are parsed into the project. Upgrade runners together with the API.
 - Dashboard: the Configure tab now lists each widget in its own row with the description below the title, and has Select all / Unselect all buttons.
@@ -56,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Demo data generator: the generated import no longer fails with `Unknown entity` errors for `targets`, `documents`, `jira_integrations` and `azure_devops_integrations`. Assets replace targets, and the generator now references the categories seeded by the database.
 - The advanced search page's "Recent searches" section showed nothing when the list was empty, and a failed request crashed the page. It now shows a message for the empty and error states, and each recent search links to an encoded results URL.
 - Notifications state was out of sync between the header bell and the Notifications page: marking notifications as read (one, selected or from the bell) only refreshed the component that made the change, so the unread count stayed stale elsewhere. All notification writes now invalidate the shared notifications cache, and new notifications received over SSE refresh the page as well.
 - Command output processing failed for every upload with `ReflectionTypeLoadException` (`Azure.AI.OpenAI` ... `cannot reduce access`): parser discovery threw when any loaded assembly could not be fully loaded. It now skips the types that cannot load.

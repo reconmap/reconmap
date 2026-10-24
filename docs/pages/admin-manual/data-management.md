@@ -27,6 +27,29 @@ You can restore data from a previously generated export file or migrate data bet
 
 Go to `System -> Import data` to upload a Reconmap JSON export file.
 
+The file is a JSON object whose keys are entity names and whose values are arrays of records. Records use the same property names as the export. Entities are imported in the order they appear in the file, so list parents (for example `projects`) before their children (`tasks`, `assets`, `vulnerabilities`). Accepted entity names:
+
+- `users`, `organisations`, `project_categories`, `vulnerability_categories`, `custom_fields`
+- `projects`, `project_templates`, `project_members`, `tasks`, `assets`
+- `vulnerabilities`, `vulnerability_templates`, `notes`, `reports`
+- `runners`, `scan_runs` (with nested `Tasks`), `command_schedules`
+- `notifications`, `webhooks`, `audit_log`
+
+`commands` and `command_usages` are accepted but ignored, because commands are built into the server. Any other name is reported as `Unknown entity`.
+
+#### Generating demo data
+
+`testing/scripts/generate_demo_data.py` generates a realistic dataset for demos and testing:
+
+```bash
+python3 testing/scripts/generate_demo_data.py 20 --seed 42 > demo.json
+curl -X POST http://localhost:5510/api/system/data \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "importFile=@demo.json;type=application/json"
+```
+
+The first argument is the number of projects (default 20). Run it against a freshly initialised database: the generator references the categories and the `Reconmap` organisation seeded by the database, and it uses ids that start at 1000 for each table. Importing the same file twice fails on unique names. Vault secrets and integrations are not generated.
+
 ### Audit log
 
 The audit log is a permanent record of all administrative and user actions within the platform.

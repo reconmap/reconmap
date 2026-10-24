@@ -1,209 +1,750 @@
+#!/usr/bin/env python3
+"""Generates realistic demo data for the Reconmap system data importer.
+
+The output is a JSON object keyed by entity name, ordered so that parents are
+imported before children. Keys and values follow the entity shapes in
+src/server/Api/Domain/Entities, so the file can be posted to
+POST /api/system/data as-is.
+
+Vulnerability and project categories are not generated. They are seeded by
+infra/docker/postgres/initdb/sql/02-default-data.sql with unique names, so the
+generated data references their ids instead. The seeded organisation (id 1,
+"Reconmap") and admin user (id 1) are reused as well.
+
+Usage: generate_demo_data.py [projects] [--seed N]
+"""
+import argparse
 import json
 import random
 import uuid
-import base64
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
 from faker import Faker
 
 fake = Faker()
 
-def generate_demo_data(num_projects=20):
-    data = {}
-    
-    # Offsets to avoid ID collisions
-    USER_OFFSET = 10000
-    ORG_OFFSET = 20000
-    VULN_CAT_OFFSET = 30000
-    PROJ_CAT_OFFSET = 40000
-    PROJ_OFFSET = 50000
-    TARGET_OFFSET = 100000
-    VULN_OFFSET = 200000
-    TASK_OFFSET = 300000
-    COMMAND_OFFSET = 400000
-    USAGE_OFFSET = 410000
-    DOC_OFFSET = 500000
-    VAULT_OFFSET = 600000
-    CUSTOM_FIELD_OFFSET = 700000
-    INTEGRATION_OFFSET = 800000
-    AUDIT_OFFSET = 900000
+# Ids of the rows seeded by infra/docker/postgres/initdb/sql/02-default-data.sql.
+SEED_ADMIN_ID = 1
+SEED_SERVICE_PROVIDER_ID = 1
+SEED_PROJECT_CATEGORY_IDS = list(range(1, 9))
+SEED_VULN_CATEGORY_IDS = {
+    "General": 1,
+    "Access Controls": 2,
+    "Auditing and Logging": 3,
+    "Authentication": 4,
+    "Configuration": 5,
+    "Cryptography": 6,
+    "Data Exposure": 7,
+    "Data Validation": 8,
+    "Denial of Service": 9,
+    "Error Reporting": 10,
+    "Patching": 11,
+    "Session Management": 12,
+    "Timing": 13,
+}
 
-    # 1. Users
-    num_users = 50
+ENGAGEMENTS = [
+    "External Network Penetration Test",
+    "Web Application Security Assessment",
+    "Internal Infrastructure Review",
+    "Cloud Configuration Review",
+    "Mobile Application Security Test",
+    "API Security Assessment",
+    "Red Team Exercise",
+    "Wireless Security Assessment",
+]
+
+TASK_SUMMARIES = [
+    "Confirm scope and rules of engagement",
+    "Passive reconnaissance and OSINT",
+    "Enumerate subdomains and DNS records",
+    "Port scan in-scope hosts",
+    "Review TLS configuration",
+    "Test authentication and session handling",
+    "Check access controls on core resources",
+    "Test input validation on forms and APIs",
+    "Review security headers and cookies",
+    "Draft executive summary",
+    "Peer review of findings",
+    "Retest remediated findings",
+]
+
+# Summary, category, CVSS score, CVSS vector, description, impact, remediation, remediation complexity, proof of concept.
+FINDINGS = [
+    ("SQL injection in product search parameter", "Data Validation", 9.8,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+     "The q parameter of the product search endpoint is concatenated into a SQL query without parameterisation. "
+     "A single quote returns a database error, and boolean payloads change the result set.",
+     "An unauthenticated attacker can read or modify arbitrary database content, and may escalate to operating "
+     "system access depending on database privileges.",
+     "Use parameterised queries for every database call that includes user input. Restrict the database account "
+     "to the privileges the application needs.",
+     "medium", "GET /search?q=' OR '1'='1 returns the full product catalogue, including hidden items."),
+    ("Default credentials on administrative interface", "Authentication", 9.8,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+     "The administration console accepts the vendor default username and password. The login succeeded with the "
+     "documented defaults.",
+     "Full administrative control of the platform, including user management and configuration.",
+     "Force a password change on first login, remove default accounts, and restrict the console to a management "
+     "network.",
+     "low", "POST /admin/login with admin:admin returns a 302 redirect to /admin/dashboard."),
+    ("Unrestricted file upload allows server-side script execution", "Data Validation", 9.9,
+     "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+     "The avatar upload accepts arbitrary file extensions and stores files in a web-accessible directory. "
+     "Uploaded PHP files are executed when requested.",
+     "An authenticated user can run arbitrary code on the web server.",
+     "Validate file types on the server, store uploads outside the web root, and serve them with a non-executable "
+     "content type.",
+     "medium", "Uploaded shell.php was requested from /uploads/shell.php and returned command output."),
+    ("Subdomain takeover via dangling CNAME record", "Configuration", 7.1,
+     "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:H/A:N",
+     "A CNAME record points to a deprovisioned cloud storage bucket. Anyone can claim the bucket and serve content "
+     "under the company's domain.",
+     "Attackers can host phishing pages or steal session cookies scoped to the parent domain.",
+     "Remove DNS records that point to unused resources, and audit DNS zones on a regular schedule.",
+     "low", "dig CNAME assets.example.com returned a NoSuchBucket error from the storage provider."),
+    ("Broken object-level authorisation on invoice endpoint", "Access Controls", 6.5,
+     "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+     "The invoice API returns any invoice when given its numeric id, without checking that it belongs to the "
+     "caller's organisation.",
+     "Authenticated users can read invoices belonging to other customers.",
+     "Check ownership of each requested object against the authenticated user's organisation on the server side.",
+     "medium", "GET /api/invoices/1042 with a token from another tenant returned the invoice."),
+    ("Reflected cross-site scripting in error page", "Data Validation", 6.1,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+     "The requested path is echoed into the 404 page without encoding, so script tags in the URL execute in the "
+     "victim's browser.",
+     "Attackers can run script in the context of a victim who follows a crafted link.",
+     "Encode all output rendered in HTML, and apply a restrictive Content-Security-Policy.",
+     "low", "GET /<script>alert(document.domain)</script> rendered the script unencoded."),
+    ("Session cookie missing Secure and HttpOnly flags", "Session Management", 5.3,
+     "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+     "The session cookie is set without the Secure and HttpOnly attributes, so it is sent over plain HTTP and is "
+     "readable from JavaScript.",
+     "Session tokens can be intercepted on unencrypted connections or stolen through script injection.",
+     "Set the Secure, HttpOnly, and SameSite attributes on all session cookies.",
+     "low", "Set-Cookie: session=... returned without Secure or HttpOnly flags."),
+    ("Weak TLS protocol versions enabled", "Cryptography", 5.9,
+     "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+     "The HTTPS endpoint accepts TLS 1.0 and TLS 1.1, which are deprecated and vulnerable to known downgrade and "
+     "cipher attacks.",
+     "Encrypted traffic may be exposed to a network attacker who can force a weak protocol version.",
+     "Disable TLS 1.0 and 1.1, and allow only modern cipher suites with forward secrecy.",
+     "low", "testssl reported TLS 1.0 and TLS 1.1 as offered on port 443."),
+    ("Missing rate limiting on login endpoint", "Authentication", 5.3,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+     "The login endpoint accepts unlimited password attempts from a single address, with no lockout or delay.",
+     "Weak or leaked passwords can be guessed by automated attacks.",
+     "Apply rate limits per account and per source address, and add progressive delays after repeated failures.",
+     "medium", "250 login attempts in 60 seconds were all processed without throttling."),
+    ("Directory listing enabled on static assets", "Data Exposure", 5.3,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+     "The web server returns a directory index for the /static/ path, exposing file names and internal build "
+     "artefacts.",
+     "Attackers can discover unlinked files and backups that may contain sensitive information.",
+     "Disable directory indexing in the web server configuration.",
+     "low", "GET /static/ returned an index page listing 37 files."),
+    ("Verbose stack traces disclosed on application errors", "Error Reporting", 3.7,
+     "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+     "Unhandled exceptions return full stack traces, framework versions, and internal file paths to the client.",
+     "Detailed errors help attackers map the application and choose targeted exploits.",
+     "Return generic error messages to clients, and log details server-side only.",
+     "low", "Sending a malformed JSON body returned a stack trace with /srv/app/src paths."),
+    ("Clickjacking possible due to missing frame protections", "Configuration", 4.3,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+     "Responses do not include X-Frame-Options or a frame-ancestors directive, so pages can be embedded in a "
+     "malicious site.",
+     "Users can be tricked into clicking actions on the application while it is hidden in a frame.",
+     "Send X-Frame-Options: DENY, or use a Content-Security-Policy frame-ancestors directive.",
+     "low", "The sensitive settings page loaded inside an iframe on an attacker-controlled page."),
+    ("Race condition in coupon redemption", "Timing", 6.5,
+     "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:H/A:N",
+     "Sending concurrent redemption requests for a single-use coupon applies the discount more than once.",
+     "Customers can obtain discounts beyond the intended limit.",
+     "Enforce single use with a database constraint or a transactional update that checks the remaining uses.",
+     "medium", "Twenty parallel redemption requests for coupon SPRING24 all returned success."),
+    ("Denial of service through unbounded GraphQL query depth", "Denial of Service", 7.5,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+     "The GraphQL endpoint accepts deeply nested queries without a depth or complexity limit, which exhausts server "
+     "CPU and memory.",
+     "A single unauthenticated request can make the API unresponsive.",
+     "Set maximum query depth and complexity limits, and enforce a request timeout.",
+     "medium", "A query nested 60 levels deep raised CPU usage to 100% for 40 seconds."),
+    ("Authentication failures are not logged", "Auditing and Logging", 3.1,
+     "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+     "Failed login attempts do not produce log entries, so brute-force activity cannot be detected or investigated.",
+     "Ongoing attacks against user accounts go unnoticed.",
+     "Log authentication successes and failures with the source address and timestamp, and forward the logs to a "
+     "central system.",
+     "low", "No log entries were written after 50 failed logins in the application log."),
+    ("Hardcoded API key in public JavaScript bundle", "Data Exposure", 7.5,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+     "A third-party API key with write scope is embedded in the minified frontend bundle served to every visitor.",
+     "Anyone can use the key to access the third-party service under the company's account.",
+     "Revoke the key, rotate it, and move it to a server-side secret store. Restrict key scopes to the minimum "
+     "needed.",
+     "low", "The key was found by searching main.8f2a1c.js for the prefix sk_live_."),
+    ("Outdated OpenSSH version exposed on SSH service", "Patching", 5.3,
+     "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
+     "The SSH banner reports OpenSSH 7.4, which is several years behind the current release and has known "
+     "vulnerabilities.",
+     "Vulnerable service versions may be exploited if a matching flaw is available.",
+     "Upgrade OpenSSH to a supported release, and enable automatic security updates.",
+     "medium", "Banner grab on port 22 returned SSH-2.0-OpenSSH_7.4."),
+    ("Sensitive backup file exposed", "Data Exposure", 7.5,
+     "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+     "A database backup named backup.sql.gz is reachable from the web root without authentication.",
+     "The backup contains customer records and password hashes.",
+     "Remove the backup from the web root, and store backups in private storage with access controls.",
+     "low", "GET /backup.sql.gz returned a 200 response with a 48 MB archive."),
+    ("Security headers missing on responses", "Configuration", 3.1,
+     "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+     "Responses lack Content-Security-Policy, Strict-Transport-Security, and X-Content-Type-Options headers.",
+     "The absence of these headers weakens defences against script injection and protocol downgrade attacks.",
+     "Add the missing headers at the reverse proxy, and verify them with a scanner after each release.",
+     "low", "shcheck reported 3 missing security headers on https://app.example.com/."),
+]
+
+RUN_TOOLS = [
+    {
+        "command_id": "subfinder", "command_name": "Subfinder", "usage_id": "subfinder-subdomains",
+        "executable": "subfinder", "arguments": "-d {target} -o reconmap-subfinder-output.jsonl -oJ -nW",
+        "target_type": "hostname", "rationale": "Enumerate subdomains from passive sources to widen the attack surface.",
+    },
+    {
+        "command_id": "nmap", "command_name": "Nmap", "usage_id": "nmap-tcp-syn",
+        "executable": "nmap", "arguments": "-oX - {target}",
+        "target_type": "hostname", "rationale": "Identify open TCP services on in-scope hosts.",
+    },
+    {
+        "command_id": "testssl", "command_name": "Testssl", "usage_id": "testssl-scan",
+        "executable": "testssl", "arguments": "--jsonfile testssl-output.json {target}",
+        "target_type": "hostname", "rationale": "Check TLS protocols, ciphers, and certificate configuration.",
+    },
+    {
+        "command_id": "shcheck", "command_name": "Shcheck", "usage_id": "shcheck-headers",
+        "executable": "shcheck.py", "arguments": "-j {target}",
+        "target_type": "url", "rationale": "Check for missing or weak security headers on the web application.",
+    },
+]
+
+USER_AGENTS = [
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/130.0.0.0 Safari/537.36",
+]
+
+SCHEDULE_CRONS = ["0 2 * * 1", "30 6 * * *", "0 0 1 * *"]
+
+ACTIONS = [
+    ("Created", "Project"), ("Updated", "Project"), ("Created", "Vulnerability"),
+    ("Updated", "Vulnerability"), ("Created", "Task"), ("Updated", "Task"),
+    ("Created", "Asset"), ("Exported", "System Data"),
+]
+
+
+class IdSequence:
+    """Hands out ids for one table, starting above the seed data so imports never collide with it."""
+
+    def __init__(self, start=1000):
+        self._next = start
+
+    def next(self):
+        value = self._next
+        self._next += 1
+        return value
+
+
+def utc_now():
+    return datetime.now(timezone.utc)
+
+
+def iso(dt):
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def risk_for_score(score):
+    if score >= 9.0:
+        return "critical"
+    if score >= 7.0:
+        return "high"
+    if score >= 4.0:
+        return "medium"
+    return "low"
+
+
+def remediation_priority_for(risk):
+    return {"critical": "high", "high": "high", "medium": "medium", "low": "low"}[risk]
+
+
+def run_status(task_statuses):
+    """Mirrors ScanRun.RecomputeStatus in the server."""
+    if not task_statuses:
+        return "queued"
+    if any(s in ("queued", "running") for s in task_statuses):
+        return "running" if any(s != "queued" for s in task_statuses) else "queued"
+    failed = task_statuses.count("failed")
+    if failed == 0:
+        return "succeeded"
+    if failed == len(task_statuses):
+        return "failed"
+    return "partial"
+
+
+def unique_name(name, used):
+    candidate = name
+    suffix = 2
+    while candidate in used:
+        candidate = f"{name} ({suffix})"
+        suffix += 1
+    used.add(candidate)
+    return candidate
+
+
+def generate_users(count, ids):
     users = []
-    roles = ["administrator", "superuser", "user", "client"]
     used_usernames = set()
-    for i in range(1, num_users + 1):
-        uid = USER_OFFSET + i
+    for _ in range(count):
         username = fake.user_name()
         while username in used_usernames:
-            username = fake.user_name() + str(random.randint(1, 1000))
+            username = f"{fake.user_name()}{random.randint(1, 999)}"
         used_usernames.add(username)
         users.append({
-            "Id": uid, "FirstName": fake.first_name(), "LastName": fake.last_name(),
-            "Email": f"{username}@example.com", "Username": username,
-            "Role": random.choice(roles), "Active": True, "TimeZone": "UTC",
-            "SubjectId": str(uuid.uuid4())
+            "Id": ids.next(),
+            "SubjectId": str(uuid.uuid4()),
+            "Role": random.choices(["administrator", "superuser", "user", "client"], weights=[1, 3, 20, 4])[0],
+            "ShortBio": fake.sentence(nb_words=12),
+            "Username": username,
+            "Email": f"{username}@example.com",
+            "FirstName": fake.first_name(),
+            "LastName": fake.last_name(),
+            "TimeZone": "UTC",
+            "Active": True,
         })
-    data["users"] = users
-    user_ids = [u["Id"] for u in users]
+    return users
 
-    # 2. Organisations
-    num_orgs = 15
-    organisations = []
-    for i in range(1, num_orgs + 1):
-        oid = ORG_OFFSET + i
-        organisations.append({
-            "Id": oid, "Name": f"{fake.company()} {i}",
-            "Kind": "service_provider" if i <= 2 else "client",
-            "Address": fake.address(), "Url": fake.url(),
-            "CreatedById": random.choice(user_ids)
+
+def generate_clients(count, ids):
+    clients = []
+    used_names = set()
+    for _ in range(count):
+        clients.append({
+            "Id": ids.next(),
+            "Kind": "client",
+            "Name": unique_name(fake.company(), used_names)[:80],
+            "Address": fake.address().replace("\n", ", ")[:400],
+            "Url": fake.url()[:255],
+            "CreatedById": SEED_ADMIN_ID,
         })
-    data["organisations"] = organisations
-    client_oids = [o["Id"] for o in organisations if o["Kind"] == "client"]
-    sp_oids = [o["Id"] for o in organisations if o["Kind"] == "service_provider"]
+    return clients
 
-    # 3. Categories
-    num_cats = 10
-    v_cats = []
-    p_cats = []
-    for i in range(1, num_cats + 1):
-        v_cats.append({"Id": VULN_CAT_OFFSET + i, "Name": f"Vuln Cat {fake.word().capitalize()} {i}", "Description": fake.sentence()})
-        p_cats.append({"Id": PROJ_CAT_OFFSET + i, "Name": f"Proj Cat {fake.word().capitalize()} {i}", "Description": fake.sentence()})
-    data["vulnerability_categories"] = v_cats
-    data["project_categories"] = p_cats
-    v_cat_ids = [c["Id"] for c in v_cats]
-    p_cat_ids = [c["Id"] for c in p_cats]
 
-    # 4. Custom Fields
-    c_fields = []
-    for i in range(1, 5):
-        c_fields.append({
-            "Id": CUSTOM_FIELD_OFFSET + i, "ParentType": "vulnerability",
-            "Name": f"custom_field_{i}", "Label": f"External Ref {i}",
-            "Kind": random.choice(["text", "integer"]), "Config": "{}"
-        })
-    data["custom_fields"] = c_fields
+def generate_custom_fields():
+    return [
+        {"Id": 1000, "ParentType": "vulnerability", "Name": "cve_id", "Label": "CVE ID", "Kind": "text", "Config": "{}"},
+        {"Id": 1001, "ParentType": "vulnerability", "Name": "cwe_id", "Label": "CWE ID", "Kind": "text", "Config": "{}"},
+        {"Id": 1002, "ParentType": "vulnerability", "Name": "ticket_reference", "Label": "Ticket reference",
+         "Kind": "text", "Config": "{}"},
+        {"Id": 1003, "ParentType": "vulnerability", "Name": "affected_instances", "Label": "Affected instances",
+         "Kind": "integer", "Config": "{}"},
+    ]
 
-    # 5. Commands & Usages
-    commands = []
-    usages = []
-    cmd_names = ["nmap", "gobuster", "nikto", "sqlmap", "ffuf"]
-    for i, name in enumerate(cmd_names):
-        cid = COMMAND_OFFSET + i + 1
-        commands.append({
-            "Id": cid, "Name": name, "Description": f"Security tool {name}",
-            "CreatedById": random.choice(user_ids)
-        })
-        for j in range(1, 3):
-            usages.append({
-                "Id": USAGE_OFFSET + (i * 2) + j, "CommandId": cid,
-                "Name": f"{name} scan {j}", "Description": f"Standard {name} scan",
-                "ExecutablePath": name, "Arguments": "-v {{Host}}",
-                "OutputCapturingMode": "stdout", "CreatedById": random.choice(user_ids)
-            })
-    data["commands"] = commands
-    data["command_usages"] = usages
 
-    # 6. Integrations
-    data["jira_integrations"] = [{
-        "Id": INTEGRATION_OFFSET + 1, "Name": "Corporate Jira", "Url": "https://jira.example.com",
-        "Email": "admin@example.com", "ApiToken": "token123", "ProjectKey": "SEC", "IsEnabled": True
-    }]
-    data["azure_devops_integrations"] = [{
-        "Id": INTEGRATION_OFFSET + 2, "Name": "DevOps Board", "Url": "https://dev.azure.com/org",
-        "ProjectName": "Main", "PersonalAccessToken": "pat123", "IsEnabled": True
-    }]
-
-    # 7. Projects & Dependencies
+def generate_projects(count, clients, staff_ids, ids):
     projects = []
-    targets = []
-    vulns = []
-    tasks = []
-    docs = []
-    vault = []
-    audit = []
-    
-    asset_kinds = ['hostname', 'ip_address', 'port', 'cidr_range', 'url', 'binary', 'path', 'file']
-    risks = ["low", "medium", "high", "critical"]
-    statuses = ["open", "confirmed", "resolved", "closed"]
-    
-    for i in range(1, num_projects + 1):
-        pid = PROJ_OFFSET + i
-        creator = random.choice(user_ids)
+    used_names = set()
+    today = utc_now().date()
+    for _ in range(count):
+        client = random.choice(clients)
+        start = today + timedelta(days=random.randint(-400, 60))
+        end = start + timedelta(days=random.randint(7, 45))
+        archived = end < today
+        engagement = random.choice(ENGAGEMENTS)
         projects.append({
-            "Id": pid, "Name": f"Engagement {fake.word().capitalize()} {i}",
-            "Description": fake.text(max_nb_chars=300), "CreatedById": creator,
-            "ClientId": random.choice(client_oids), "ServiceProviderId": random.choice(sp_oids),
-            "CategoryId": random.choice(p_cat_ids), "IsTemplate": False,
-            "Visibility": "private", "EngagementStartDate": fake.date_this_year().isoformat(),
-            "EngagementEndDate": (datetime.now() + timedelta(days=30)).date().isoformat(),
-            "Archived": False
+            "Id": ids.next(),
+            "Name": unique_name(f"{client['Name']} {engagement}", used_names)[:200],
+            "Description": fake.paragraph(nb_sentences=3),
+            "CreatedById": random.choice(staff_ids),
+            "ServiceProviderId": SEED_SERVICE_PROVIDER_ID,
+            "ClientId": client["Id"],
+            "CategoryId": random.choice(SEED_PROJECT_CATEGORY_IDS),
+            "IsTemplate": False,
+            "Visibility": random.choice(["private", "private", "public"]),
+            "EngagementStartDate": start.isoformat(),
+            "EngagementEndDate": end.isoformat(),
+            "Archived": archived,
+            "ArchivedAt": iso(datetime.combine(end, datetime.min.time(), tzinfo=timezone.utc)) if archived else None,
+            "_archived": archived,
+            "_start": start,
+            "_end": end,
         })
-        
-        # Vault items for project
-        for v in range(1, 3):
-            vault.append({
-                "Id": VAULT_OFFSET + (i * 10) + v, "OwnerId": creator, "ProjectId": pid,
-                "Type": "password", "Name": f"Credential {v} for Project {i}",
-                "Value": base64.b64encode(b"secret_value").decode(),
-                "Iv": base64.b64encode(b"123456789012").decode(),
-                "Tag": base64.b64encode(b"1234567890123456").decode(),
-                "Note": "Auto-generated"
-            })
+    return projects
 
-        # Assets
-        p_targets = []
-        for t in range(1, 4):
-            tid = TARGET_OFFSET + (i * 10) + t
-            targets.append({
-                "Id": tid, "ProjectId": pid, "Name": fake.domain_name(),
-                "Kind": random.choice(asset_kinds), "Tags": "[]"
-            })
-            p_targets.append(tid)
 
-        # Vulnerabilities
-        for v in range(1, 6):
-            vid = VULN_OFFSET + (i * 20) + v
-            vulns.append({
-                "Id": vid, "ProjectId": pid, "TargetId": random.choice(p_targets),
-                "CreatedById": creator, "CategoryId": random.choice(v_cat_ids),
-                "Summary": f"{fake.sentence(nb_words=4)} {vid}", "Description": fake.text(),
-                "Risk": random.choice(risks), "Status": random.choice(statuses),
-                "IsTemplate": False, "Visibility": "private"
-            })
-            # Document for vulnerability
-            docs.append({
-                "Id": DOC_OFFSET + (i * 50) + v, "CreatedById": creator,
-                "ParentType": "vulnerability", "ParentId": vid, "Title": "Evidence",
-                "Content": "PoC screenshot and logs go here."
-            })
+def generate_members(project, staff_ids, ids):
+    members = []
+    for user_id in random.sample(staff_ids, k=min(len(staff_ids), random.randint(2, 4))):
+        members.append({"Id": ids.next(), "ProjectId": project["Id"], "UserId": user_id})
+    return members
 
-        # Tasks
-        for t in range(1, 6):
-            tasks.append({
-                "Id": TASK_OFFSET + (i * 20) + t, "ProjectId": pid, "CreatedById": creator,
-                "AssignedToId": random.choice(user_ids), "Priority": "medium", "Status": "todo",
-                "Summary": f"Task {t} for Project {i}", "Description": fake.sentence()
-            })
 
-        # Audit logs for project creation
-        audit.append({
-            "Id": AUDIT_OFFSET + i, "CreatedById": creator, "ClientIp": "127.0.0.1",
-            "Action": "Created", "Object": "Project", "Context": json.dumps({"Id": pid})
+def generate_assets(project, ids):
+    domain = fake.domain_name()
+    tags_pool = [["production"], ["staging"], ["internal"], ["legacy"], ["external"]]
+    candidates = [
+        ("hostname", f"app.{domain}"),
+        ("hostname", f"api.{domain}"),
+        ("hostname", f"vpn.{domain}"),
+        ("hostname", f"mail.{domain}"),
+        ("url", f"https://app.{domain}/login"),
+        ("url", f"https://api.{domain}/v1/"),
+        ("ip_address", fake.ipv4_public()),
+        ("ip_address", fake.ipv4_private()),
+        ("cidr_range", f"10.{random.randint(0, 255)}.{random.randint(0, 255)}.0/24"),
+        ("port", f"{random.choice([22, 443, 3306, 8080])}/tcp"),
+        ("path", "/var/www/html/config"),
+    ]
+    assets = []
+    for asset_type, name in random.sample(candidates, k=random.randint(4, 8)):
+        assets.append({
+            "Id": ids.next(),
+            "ProjectId": project["Id"],
+            "Name": name,
+            "Type": asset_type,
+            "Tags": json.dumps(random.choice(tags_pool)),
         })
+    return assets, domain
 
-    data["projects"] = projects
-    data["targets"] = targets
-    data["vulnerabilities"] = vulns
-    data["tasks"] = tasks
-    data["documents"] = docs
-    data["vault"] = vault
-    data["audit_log"] = audit
 
-    return data
+def generate_tasks(project, members, ids):
+    tasks = []
+    for summary in random.sample(TASK_SUMMARIES, k=random.randint(4, 8)):
+        if project["_archived"]:
+            status = "done"
+        else:
+            status = random.choices(["todo", "doing", "done"], weights=[3, 2, 2])[0]
+        tasks.append({
+            "Id": ids.next(),
+            "ProjectId": project["Id"],
+            "CreatedById": project["CreatedById"],
+            "AssignedToId": random.choice(members)["UserId"],
+            "Priority": random.choice(["highest", "high", "medium", "low", "lowest"]),
+            "Summary": summary,
+            "Description": fake.sentence(nb_words=12),
+            "Status": status,
+            "DurationEstimate": random.randint(1, 16),
+            "DueDate": (project["_start"] + timedelta(days=random.randint(3, 30))).isoformat(),
+        })
+    return tasks
+
+
+def finding_row(finding, project_id, asset_id, created_by_id, ids, archived=False, is_template=False):
+    summary, category, score, vector, description, impact, remediation, complexity, poc = finding
+    risk = risk_for_score(score)
+    if is_template:
+        status, substatus = "open", "reported"
+    elif archived:
+        status, substatus = random.choice([("resolved", "remediated"), ("resolved", "mitigated"),
+                                           ("closed", "rejected"), ("closed", "remediated")])
+    else:
+        status, substatus = random.choice([("open", "reported"), ("open", "unresolved"),
+                                           ("confirmed", "exploited"), ("confirmed", "unexploited")])
+    return {
+        "Id": ids.next(),
+        "CreatedById": created_by_id,
+        "IsTemplate": is_template,
+        "ProjectId": project_id,
+        "AssetId": asset_id,
+        "CategoryId": SEED_VULN_CATEGORY_IDS[category],
+        "Summary": summary,
+        "Description": description,
+        "Visibility": "private",
+        "Risk": risk,
+        "ProofOfConcept": poc,
+        "Impact": impact,
+        "Remediation": remediation,
+        "RemediationComplexity": complexity,
+        "RemediationPriority": remediation_priority_for(risk),
+        "CvssVector": vector,
+        "CvssScore": score,
+        "Status": status,
+        "Substatus": substatus,
+        "Tags": json.dumps(random.sample(["web", "network", "owasp-top-10", "quick-win", "cloud"], k=2)),
+    }
+
+
+def generate_vulnerabilities(project, assets, ids):
+    vulns = []
+    for finding in random.sample(FINDINGS, k=random.randint(3, 10)):
+        asset = random.choice(assets) if assets and random.random() < 0.8 else None
+        vulns.append(finding_row(finding, project["Id"], asset["Id"] if asset else None,
+                                 project["CreatedById"], ids, archived=project["_archived"]))
+    return vulns
+
+
+def generate_reports(projects, ids):
+    return [
+        {
+            "Id": ids.next(),
+            "ProjectId": project["Id"],
+            "CreatedById": project["CreatedById"],
+            "IsTemplate": False,
+            "VersionName": random.choice(["v1.0 draft", "v1.1 review", "Final"]),
+            "VersionDescription": fake.sentence(nb_words=8),
+        }
+        for project in projects
+    ]
+
+
+def generate_scan_runs(project, domain, members, ids, task_ids):
+    runs = []
+    for _ in range(random.randint(0, 2)):
+        target_type = random.choice(["hostname", "url"])
+        target = f"app.{domain}" if target_type == "hostname" else f"https://app.{domain}/"
+        tools = [t for t in RUN_TOOLS if t["target_type"] == target_type]
+        chosen = random.sample(tools, k=min(len(tools), random.randint(1, 3)))
+        state = random.choices(["finished", "running", "queued"], weights=[6, 2, 1])[0]
+        run_id = ids.next()
+        run_tasks = []
+        for position, tool in enumerate(chosen):
+            if state == "queued":
+                status, started, finished, error = "queued", None, None, None
+            elif state == "running" and position == 0:
+                status, started, finished, error = "succeeded", utc_now() - timedelta(minutes=12), utc_now() - timedelta(minutes=6), None
+            elif state == "running" and position == 1:
+                status, started, finished, error = "running", utc_now() - timedelta(minutes=5), None, None
+            elif state == "running":
+                status, started, finished, error = "queued", None, None, None
+            else:
+                failed = random.random() < 0.2
+                status = "failed" if failed else "succeeded"
+                started = utc_now() - timedelta(days=random.randint(1, 20), minutes=random.randint(0, 600))
+                finished = started + timedelta(minutes=random.randint(1, 25))
+                error = "Process exited with code 1: target unreachable" if failed else None
+            run_tasks.append({
+                "Id": task_ids.next(),
+                "ScanRunId": run_id,
+                "Position": position,
+                "CommandId": tool["command_id"],
+                "CommandName": tool["command_name"],
+                "CommandUsageId": tool["usage_id"],
+                "ExecutablePath": tool["executable"],
+                "Arguments": tool["arguments"].format(target=target),
+                "Rationale": tool["rationale"],
+                "Status": status,
+                "Error": error,
+                "StartedAt": iso(started) if started else None,
+                "FinishedAt": iso(finished) if finished else None,
+            })
+        runs.append({
+            "Id": run_id,
+            "ProjectId": project["Id"],
+            "CreatedById": random.choice(members)["UserId"],
+            "Target": target,
+            "TargetType": target_type,
+            "Objective": random.choice(["Discover attack surface", "Identify exposed services",
+                                        "Check security headers", "Verify TLS configuration"]),
+            "Strategy": fake.sentence(nb_words=14),
+            "Status": run_status([t["Status"] for t in run_tasks]),
+            "Tasks": run_tasks,
+        })
+    return runs
+
+
+def generate_runners(count, ids):
+    runners = []
+    oses = ["Ubuntu 24.04 LTS", "Debian 12", "Fedora 41"]
+    cpus = ["Intel(R) Xeon(R) CPU E5-2680 v4", "AMD EPYC 7452", "Intel(R) Core(TM) i7-1260P"]
+    for i in range(count):
+        active = random.random() < 0.8
+        last_ping = utc_now() - timedelta(seconds=random.randint(5, 60)) if active else utc_now() - timedelta(days=random.randint(1, 9))
+        runners.append({
+            "Id": ids.next(),
+            "Name": f"runner-{['eu-west', 'us-east', 'office'][i % 3]}-{i + 1}",
+            "ClientId": str(uuid.uuid4()),
+            "LastBootAt": iso(last_ping - timedelta(days=random.randint(1, 30))),
+            "LastPingAt": iso(last_ping),
+            "Active": active,
+            "Version": random.choice(["1.4.2", "1.4.3", "1.5.0"]),
+            "Hostname": f"scanner-{i + 1:02d}.internal",
+            "Arch": "amd64",
+            "Cpu": random.choice(cpus),
+            "Memory": random.choice(["8 GB", "16 GB", "32 GB"]),
+            "Os": random.choice(oses),
+            "Ip": fake.ipv4_private(),
+            "ListenAddr": "0.0.0.0:8443",
+        })
+    return runners
+
+
+def generate_notes(vulns, projects, users, ids):
+    notes = []
+    for vuln in random.sample(vulns, k=len(vulns) // 3):
+        notes.append({
+            "Id": ids.next(),
+            "CreatedById": random.choice(users)["Id"],
+            "ParentType": "vulnerability",
+            "ParentId": vuln["Id"],
+            "Visibility": "private",
+            "Content": fake.paragraph(nb_sentences=2),
+        })
+    for project in projects:
+        notes.append({
+            "Id": ids.next(),
+            "CreatedById": project["CreatedById"],
+            "ParentType": "project",
+            "ParentId": project["Id"],
+            "Visibility": "private",
+            "Content": fake.paragraph(nb_sentences=2),
+        })
+    return notes
+
+
+def generate_notifications(users, projects, ids):
+    titles = ["Task assigned to you", "Vulnerability status changed", "Scan completed", "Report generated"]
+    notifications = []
+    for user in random.sample(users, k=len(users) // 2):
+        for _ in range(random.randint(1, 3)):
+            project = random.choice(projects)
+            notifications.append({
+                "Id": ids.next(),
+                "ToUserId": user["Id"],
+                "Title": random.choice(titles),
+                "Content": f"Activity in project {project['Name']}.",
+                "Status": random.choice(["unread", "read"]),
+            })
+    return notifications
+
+
+def generate_command_schedules(projects, ids):
+    schedules = []
+    for project, cron in zip([p for p in projects if not p["_archived"]], SCHEDULE_CRONS * 2):
+        tool = random.choice(RUN_TOOLS)
+        schedules.append({
+            "Id": ids.next(),
+            "CreatedById": project["CreatedById"],
+            "CommandId": tool["command_id"],
+            "CommandUsageId": tool["usage_id"],
+            "ProjectId": project["Id"],
+            "ArgumentValues": tool["arguments"].format(target=f"app.{fake.domain_name()}"),
+            "CronExpression": cron,
+        })
+    return schedules
+
+
+def generate_webhooks(ids):
+    return [
+        {"Id": ids.next(), "Name": "Chat notifications", "Url": "https://hooks.example.com/services/T0000/B0000/XXXX",
+         "Secret": fake.sha1(), "IsEnabled": True, "Events": "project.created,vulnerability.created"},
+        {"Id": ids.next(), "Name": "Ticketing sync", "Url": "https://tickets.example.com/api/reconmap",
+         "Secret": None, "IsEnabled": False, "Events": "vulnerability.created"},
+    ]
+
+
+def generate_audit_log(projects, vulns, users, count, ids):
+    entries = []
+    for _ in range(count):
+        action, obj = random.choice(ACTIONS)
+        if obj == "Project":
+            object_id = random.choice(projects)["Id"]
+        elif obj == "Vulnerability" and vulns:
+            object_id = random.choice(vulns)["Id"]
+        else:
+            object_id = random.randint(1000, 1999)
+        entries.append({
+            "Id": ids.next(),
+            "CreatedById": random.choice(users)["Id"],
+            "UserAgent": random.choice(USER_AGENTS),
+            "ClientIp": fake.ipv4_private(),
+            "Action": action,
+            "Object": obj,
+            "Context": json.dumps({"Id": object_id}),
+        })
+    return entries
+
+
+def generate_demo_data(num_projects=20, seed=None):
+    if seed is not None:
+        random.seed(seed)
+        Faker.seed(seed)
+
+    user_ids = IdSequence()
+    client_ids = IdSequence()
+    project_ids = IdSequence()
+    member_ids = IdSequence()
+    asset_ids = IdSequence()
+    task_ids = IdSequence()
+    vuln_ids = IdSequence()
+    note_ids = IdSequence()
+    report_ids = IdSequence()
+    runner_ids = IdSequence()
+    scan_ids = IdSequence()
+    scan_task_ids = IdSequence()
+    schedule_ids = IdSequence()
+    notification_ids = IdSequence()
+    webhook_ids = IdSequence()
+    audit_ids = IdSequence()
+
+    users = generate_users(40, user_ids)
+    staff = [u for u in users if u["Role"] != "client"]
+    staff_ids = [u["Id"] for u in staff] + [SEED_ADMIN_ID]
+    clients = generate_clients(12, client_ids)
+    custom_fields = generate_custom_fields()
+
+    projects = generate_projects(num_projects, clients, staff_ids, project_ids)
+
+    members, tasks, assets, vulns, scans = [], [], [], [], []
+    for project in projects:
+        project_members = generate_members(project, staff_ids, member_ids)
+        members.extend(project_members)
+        tasks.extend(generate_tasks(project, project_members, task_ids))
+        project_assets, domain = generate_assets(project, asset_ids)
+        assets.extend(project_assets)
+        vulns.extend(generate_vulnerabilities(project, project_assets, vuln_ids))
+        scans.extend(generate_scan_runs(project, domain, project_members, scan_ids, scan_task_ids))
+
+    templates = [finding_row(finding, None, None, SEED_ADMIN_ID, vuln_ids, is_template=True)
+                 for finding in random.sample(FINDINGS, k=6)]
+
+    reports = generate_reports(projects, report_ids)
+    runners = generate_runners(4, runner_ids)
+    schedules = generate_command_schedules(projects, schedule_ids)
+    notes = generate_notes(vulns, projects, users, note_ids)
+    notifications = generate_notifications(users, projects, notification_ids)
+    webhooks = generate_webhooks(webhook_ids)
+    audit = generate_audit_log(projects, vulns, users, num_projects * 5, audit_ids)
+
+    # Strip the helper keys used during generation, so only entity fields are emitted.
+    for project in projects:
+        for key in [k for k in project if k.startswith("_")]:
+            del project[key]
+
+    # Order matters: the importer saves each entity in turn, so parents come first.
+    return {
+        "users": users,
+        "organisations": clients,
+        "custom_fields": custom_fields,
+        "projects": projects,
+        "project_members": members,
+        "tasks": tasks,
+        "assets": assets,
+        "vulnerabilities": vulns,
+        "vulnerability_templates": templates,
+        "notes": notes,
+        "reports": reports,
+        "runners": runners,
+        "scan_runs": scans,
+        "command_schedules": schedules,
+        "notifications": notifications,
+        "webhooks": webhooks,
+        "audit_log": audit,
+    }
+
 
 if __name__ == "__main__":
-    import sys
-    num = 20
-    if len(sys.argv) > 1: num = int(sys.argv[1])
-    print(json.dumps(generate_demo_data(num), indent=2))
+    parser = argparse.ArgumentParser(description="Generate Reconmap demo data as importer-ready JSON.")
+    parser.add_argument("projects", nargs="?", type=int, default=20, help="number of projects to generate")
+    parser.add_argument("--seed", type=int, default=None, help="random seed for reproducible output")
+    args = parser.parse_args()
+    print(json.dumps(generate_demo_data(args.projects, args.seed), indent=2))

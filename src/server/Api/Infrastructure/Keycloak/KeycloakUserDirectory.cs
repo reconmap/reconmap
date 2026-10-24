@@ -78,17 +78,25 @@ public sealed class KeycloakUserDirectory(
 
         using var session = OpenSession();
 
-        var credentials = await session.Users.GetUsersCredentialsByUserIdAsync(Keycloak.Realm, subjectId, cancellationToken: ct);
-        var mfaEnabled = credentials.Any(c => c.Type == "otp");
+        try
+        {
+            var credentials = await session.Users.GetUsersCredentialsByUserIdAsync(Keycloak.Realm, subjectId, cancellationToken: ct);
+            var mfaEnabled = credentials.Any(c => c.Type == "otp");
 
-        var events = await session.Realms.GetEventsAsync(Keycloak.Realm, type: ["LOGIN"], user: subjectId, max: 1, cancellationToken: ct);
-        var lastLogin = events.FirstOrDefault()?.Time is long millis
-            ? DateTimeOffset.FromUnixTimeMilliseconds(millis).UtcDateTime
-            : (DateTime?)null;
+            var events = await session.Realms.GetEventsAsync(Keycloak.Realm, type: ["LOGIN"], user: subjectId, max: 1, cancellationToken: ct);
+            var lastLogin = events.FirstOrDefault()?.Time is long millis
+                ? DateTimeOffset.FromUnixTimeMilliseconds(millis).UtcDateTime
+                : (DateTime?)null;
 
-        var info = new KeycloakLoginInfo(mfaEnabled, lastLogin);
-        await cache.SetAsync(LoginKey(subjectId), info, CacheTtl);
-        return info;
+            var info = new KeycloakLoginInfo(mfaEnabled, lastLogin);
+            await cache.SetAsync(LoginKey(subjectId), info, CacheTtl);
+            return info;
+        }
+        catch (FS.Keycloak.RestApiClient.Client.ApiException e) when (e.ErrorCode == 404)
+        {
+            // Users created by the system data import have no Keycloak account, so the listing must not fail for them.
+            return new KeycloakLoginInfo(false, null);
+        }
     }
 
     public async Task<string> CreateAsync(KeycloakUserInput input, CancellationToken ct = default)

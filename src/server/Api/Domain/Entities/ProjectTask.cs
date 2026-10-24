@@ -31,6 +31,7 @@ public class ProjectTask : TimestampedEntity
 
     public int? DurationEstimate { get; set; }
 
+    [Column(TypeName = "date")]
     public DateTime? DueDate { get; set; }
 }
 

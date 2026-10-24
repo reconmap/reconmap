@@ -48,12 +48,14 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
             try
             {
                 var result = await ImportEntity(entityName.ToLowerInvariant(), element, cancellationToken);
-                response.Results.Add(result);
                 await _db.SaveChangesAsync(cancellationToken);
+                response.Results.Add(result);
             }
             catch (Exception ex)
             {
-                response.Errors.Add(ex.Message);
+                // A failed save leaves the failed entities tracked, which would make every later entity fail too.
+                _db.ChangeTracker.Clear();
+                response.Errors.Add($"{entityName}: {GetRootExceptionMessage(ex)}");
             }
 
         return Ok(response);
@@ -83,6 +85,14 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
                 cancellationToken),
             "vulnerability_categories" => await ImportAsync(element, _db.VulnerabilityCategories, cancellationToken),
             "project_categories" => await ImportAsync(element, _db.ProjectCategories, cancellationToken),
+            "project_members" => await ImportAsync(element, _db.ProjectMembers, cancellationToken),
+            "notes" => await ImportAsync(element, _db.Notes, cancellationToken),
+            "notifications" => await ImportAsync(element, _db.Notifications, cancellationToken),
+            "reports" => await ImportAsync(element, _db.Reports, cancellationToken),
+            "runners" => await ImportAsync(element, _db.Runners, cancellationToken),
+            "scan_runs" => await ImportAsync(element, _db.ScanRuns, cancellationToken),
+            "command_schedules" => await ImportAsync(element, _db.CommandSchedules, cancellationToken),
+            "webhooks" => await ImportAsync(element, _db.Webhooks, cancellationToken),
             _ => throw new InvalidOperationException($"Unknown entity: {entityName}")
         };
         result.Name = entityName;
