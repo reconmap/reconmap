@@ -7,6 +7,7 @@ import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useState } from "react";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
+import { useTranslation } from "react-i18next";
 
 const defaultFormState = {
     smtpHost: "",
@@ -26,6 +27,7 @@ const defaultFormState = {
 };
 
 const MailSettingsPage = () => {
+    const [t] = useTranslation();
     const { data, isLoading } = useSystemMailSettingsQuery();
     const updateMutation = useSystemMailSettingsUpdateMutation();
     const [formEdits, setFormState] = useState<any>(null);
@@ -107,7 +109,7 @@ const MailSettingsPage = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="Mail settings" />
+            <PageTitleHeader title={t("Mail settings")} />
 
             <form onSubmit={handleSubmit}>
                 <h2 className="title is-5">SMTP</h2>

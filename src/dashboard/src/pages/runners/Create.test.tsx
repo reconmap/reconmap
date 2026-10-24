@@ -16,8 +16,8 @@ it("renders the add runner form with a breadcrumb linking back to runners", () =
         </MemoryRouter>,
     );
 
-    expect(container.querySelector("nav.breadcrumb")?.textContent).toContain("Add runner");
-    expect(screen.getByRole("heading", { level: 1, name: "Add runner" })).not.toBeNull();
+    expect(container.querySelector("nav.breadcrumb")?.textContent).toContain("New runner");
+    expect(screen.getByRole("heading", { level: 1, name: "New runner" })).not.toBeNull();
     expect(container.querySelector("form input[name='name']")).not.toBeNull();
     expect(container.querySelector("form input[name='hostname']")).not.toBeNull();
     expect(container.querySelector("form input[name='listenAddr']")).not.toBeNull();

@@ -51,7 +51,7 @@ const ProjectVulnerabilities = ({ project }: any) => {
                 <hr />
                 {!project.archived && (
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                        <CreateButton onClick={handleCreateVulnerability}>Add new vulnerability</CreateButton>
+                        <CreateButton onClick={handleCreateVulnerability}>New vulnerability</CreateButton>
                     </RestrictedComponent>
                 )}
             </div>

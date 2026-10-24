@@ -10,8 +10,10 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import PrimaryButton from "components/ui/buttons/Primary";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
+import { useTranslation } from "react-i18next";
 
 const CustomFieldsPage = () => {
+    const [t] = useTranslation();
     const { data: customFields } = useSystemCustomFieldsQuery();
 
     const deleteCustomFieldMutation = useSystemCustomFieldDeletionMutation();
@@ -52,7 +54,7 @@ const CustomFieldsPage = () => {
 
     return (
         <>
-            <PageTitleHeader title="Custom fields" subHeader="System" />
+            <PageTitleHeader title={t("Custom fields")} subHeader={t("System")} />
 
             <form onSubmit={onAddCustomFieldSubmit}>
                 <input type="hidden" name="config" value="{}" />
@@ -82,7 +84,7 @@ const CustomFieldsPage = () => {
                 />
 
                 <hr />
-                <HorizontalLabelledField control={<PrimaryButton type="submit">Add</PrimaryButton>} />
+                <HorizontalLabelledField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
             </form>
 
             <NativeTable rows={customFields} rowId={(customField) => customField.id} columns={columns}>

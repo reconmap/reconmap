@@ -47,7 +47,7 @@ const IntegrationsList = () => {
                     </div>
                     <div className="level-right">
                         <NativeButtonGroup>
-                            <CreateButton onClick={() => navigate("/integrations/jira/create")}>{t("Add Jira integration")}</CreateButton>
+                            <CreateButton onClick={() => navigate("/integrations/jira/create")}>{t("New Jira integration")}</CreateButton>
                         </NativeButtonGroup>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ const IntegrationsList = () => {
                     </div>
                     <div className="level-right">
                         <NativeButtonGroup>
-                            <CreateButton onClick={() => navigate("/integrations/azure-devops/create")}>{t("Add Azure DevOps integration")}</CreateButton>
+                            <CreateButton onClick={() => navigate("/integrations/azure-devops/create")}>{t("New Azure DevOps integration")}</CreateButton>
                         </NativeButtonGroup>
                     </div>
                 </div>

@@ -11,8 +11,10 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import DeleteButton from "components/ui/buttons/Delete";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";
+import { useTranslation } from "react-i18next";
 
 const AssetView = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const { assetId } = useParams() as any;
     const { data: asset } = useAssetQuery(assetId);
@@ -81,7 +83,7 @@ const AssetView = () => {
             </div>
             <article>
                 <div className="content">
-                    <PageTitleHeader title={asset.name} subHeader="Asset" />
+                    <PageTitleHeader title={asset.name} subHeader={t("Asset")} />
 
                     <div className="grid grid-two">
                         <div>

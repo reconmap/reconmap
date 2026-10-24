@@ -54,8 +54,8 @@ const ApiTokensPage = () => {
                 </Breadcrumb>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <PageTitleHeader title="API Tokens" />
-                {!showForm && <PrimaryButton onClick={() => setShowForm(true)}>{t("Create token")}</PrimaryButton>}
+                <PageTitleHeader title={t("API Tokens")} />
+                {!showForm && <PrimaryButton onClick={() => setShowForm(true)}>{t("New API token")}</PrimaryButton>}
             </div>
 
             {showForm && (

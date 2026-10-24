@@ -30,13 +30,13 @@ export const getNavigationStructure = (t) => [
                 type: "menu",
                 name: t("Projects"),
                 url: ProjectsUrls.List,
-                children: [{ name: t("Create"), url: ProjectsUrls.Create, permissions: "projects.create" }]
+                children: [{ name: t("New"), url: ProjectsUrls.Create, permissions: "projects.create" }]
             },
             {
                 type: "menu",
                 name: t("Tasks"),
                 url: TasksUrls.List,
-                children: [{ name: t("Create"), url: TasksUrls.Create, permissions: "tasks.create" }]
+                children: [{ name: t("New"), url: TasksUrls.Create, permissions: "tasks.create" }]
             },
             {
                 type: "menu",
@@ -44,7 +44,7 @@ export const getNavigationStructure = (t) => [
                 url: VulnerabilitiesUrls.List,
                 permissions: "vulnerabilities.*",
                 children: [
-                    { name: t("Create"), url: VulnerabilitiesUrls.Create, permissions: "vulnerabilities.*" },
+                    { name: t("New"), url: VulnerabilitiesUrls.Create, permissions: "vulnerabilities.*" },
                     { name: t("Categories"), url: VulnerabilitiesUrls.Categories, permissions: "vulnerabilities.*" },
                 ]
             },
@@ -116,7 +116,7 @@ export const getNavigationStructure = (t) => [
         title: t("Application settings and administration"),
         url: "/settings",
         items: [
-            { type: "menu", name: t("Users"), url: UsersUrls.List, children: [{ name: t("Create"), url: UsersUrls.Create }] },
+            { type: "menu", name: t("Users"), url: UsersUrls.List, children: [{ name: t("New"), url: UsersUrls.Create }] },
             { type: "menu", name: t("Organisations"), url: ClientsUrls.List },
             { type: "divider" },
             { type: "menu", name: t("Runners"), url: RunnersUrls.List },

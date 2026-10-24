@@ -158,7 +158,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <PrimaryButton type="submit">Add</PrimaryButton>
+                <PrimaryButton type="submit">Save</PrimaryButton>
             </details>
             {isGeneratorOpen && (
                 <PasswordGeneratorModal

@@ -8,8 +8,10 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import UserForm from "components/users/Form";
+import { useTranslation } from "react-i18next";
 
 const CreateUserPage = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const [userData, setUserData] = useState({ ...defaultUser, role: UserRoles[0].id });
     const queryClient = useQueryClient();
@@ -39,7 +41,7 @@ const CreateUserPage = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="New user details" />
+            <PageTitleHeader title={t("New user")} />
 
             <UserForm user={userData} userSetter={setUserData} onFormSubmit={handleCreate} />
         </div>

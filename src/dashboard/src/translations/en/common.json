@@ -1,6 +1,6 @@
 {
     "ui": {
-        "button.create": "Create",
+        "button.new": "New",
         "button.delete": "Delete"
     }
 }

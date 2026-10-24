@@ -4,7 +4,7 @@ parent: Vulnerabilities
 grand_parent: User manual
 ---
 
-To create a new vulnerability, click on the **Create vulnerability** button on the vulnerabilities list page or within the project details view.
+To create a new vulnerability, click on the **New vulnerability** button on the vulnerabilities list page or within the project details view.
 
 ![Create vulnerability](/images/screenshots/vulnerability-create.png)
 

@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import NativeSelect from "components/forms/NativeSelect";
+import { useTranslation } from "react-i18next";
 
 export const buildSettingsPayload = (provider, providerValues, clearedSecrets) => {
     const settings = {};
@@ -47,6 +48,7 @@ const buildAiForm = (data) => {
 };
 
 const AiSettingsPage = () => {
+    const [t] = useTranslation();
     const { data, isLoading } = useSystemAiSettingsQuery();
     const updateMutation = useSystemAiSettingsUpdateMutation();
     const [edits, setEdits] = useState<any>(null);
@@ -119,7 +121,7 @@ const AiSettingsPage = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="AI settings" />
+            <PageTitleHeader title={t("AI settings")} />
 
             <form onSubmit={handleSubmit}>
                 <HorizontalLabelledField

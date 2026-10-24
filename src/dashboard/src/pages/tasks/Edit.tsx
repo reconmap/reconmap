@@ -36,13 +36,12 @@ const EditTaskPage = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="Task details" />
+            <PageTitleHeader title={t("Edit task")} />
 
             {!clientTask ? (
                 <Loading />
             ) : (
                 <TaskForm
-                    isEditForm={true}
                     forTemplate={clientTask.project_is_template === 1}
                     onFormSubmit={onFormSubmit}
                     task={clientTask}

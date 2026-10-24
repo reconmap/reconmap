@@ -13,7 +13,7 @@ const convertValue = (value) => {
     return value;
 };
 
-const ProjectForm = ({ isEdit = false, project, projectSetter: setProject, onFormSubmit }: any) => {
+const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) => {
     const { data: clients, isLoading: isLoadingClients } = useOrganisationsQuery({ kind: "client" });
     const { data: serviceProviders } = useOrganisationsQuery({ kind: "service_provider" });
     const { data: categories, isLoading: isLoadingCategories } = useProjectCategoriesQuery();
@@ -202,7 +202,7 @@ const ProjectForm = ({ isEdit = false, project, projectSetter: setProject, onFor
                 )}
             </fieldset>
 
-            <PrimaryButton type="submit">{isEdit ? "Update" : "Create"}</PrimaryButton>
+            <PrimaryButton type="submit">Save</PrimaryButton>
         </form>
     );
 };

@@ -8,8 +8,10 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import ProjectForm from "components/projects/Form";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ProjectEdit = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const { projectId } = useParams() as any;
     const { data: serverProject, isLoading: isProjectLoading } = useProjectQuery(projectId);
@@ -39,10 +41,9 @@ const ProjectEdit = () => {
                     <Link to={`/projects/${serverProject.id}`}>{serverProject.name}</Link>
                 </Breadcrumb>
             </div>
-            <PageTitleHeader title="Project details" />
+            <PageTitleHeader title={t("Edit project")} />
 
             <ProjectForm
-                isEdit={true}
                 project={clientProject}
                 projectSetter={setClientProject}
                 onFormSubmit={onFormSubmit}

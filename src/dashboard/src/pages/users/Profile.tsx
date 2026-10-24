@@ -19,8 +19,10 @@ import { errorToast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const UserProfile = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
 
     const { userId } = useParams() as any;
@@ -77,7 +79,7 @@ const UserProfile = () => {
                 </NativeButtonGroup>
             </div>
             <div>
-                <PageTitleHeader title={user.fullName} subHeader="User profile" />
+                <PageTitleHeader title={user.fullName} subHeader={t("User profile")} />
 
                 <NativeTabs labels={["Details", "Activity"]} tabIndex={tabIndex} tabIndexSetter={tabIndexSetter} />
 

@@ -4,8 +4,10 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import ReportsTable from "components/reports/Table";
 import { useSseMessage } from "contexts/SseContext";
+import { useTranslation } from "react-i18next";
 
 const ReportsList = () => {
+    const [t] = useTranslation();
     const queryClient = useQueryClient();
     const { data: reports, isLoading } = useReportsQuery({ isTemplate: false });
 
@@ -18,7 +20,7 @@ const ReportsList = () => {
             <div className="heading">
                 <Breadcrumb />
             </div>
-            <PageTitleHeader title="Reports" />
+            <PageTitleHeader title={t("Reports")} />
             <ReportsTable reports={isLoading ? null : reports} includeProjectColumn={true} />
         </>
     );

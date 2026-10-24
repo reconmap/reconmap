@@ -7,8 +7,10 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const RunnerCreatePage = () => {
+    const [t] = useTranslation();
     const queryClient = useQueryClient();
     const [runnerCredentials, setRunnerCredentials] = useState<any>(null);
 
@@ -35,9 +37,9 @@ const RunnerCreatePage = () => {
     return (
         <>
             <div className="heading">
-                <Breadcrumb current="Add runner" />
+                <Breadcrumb current="New runner" />
             </div>
-            <PageTitleHeader title="Add runner" />
+            <PageTitleHeader title={t("New runner")} />
 
             <form onSubmit={onSubmit}>
                 <HorizontalLabelledField label="Name" control={<NativeInput type="text" name="name" placeholder="Name" required />} />
@@ -46,7 +48,7 @@ const RunnerCreatePage = () => {
 
                 <HorizontalLabelledField label="Listen Address" control={<NativeInput type="text" name="listenAddr" placeholder="Listen Address" required />} />
 
-                <NativeButton type="submit" className="button is-primary">Add new runner</NativeButton>
+                <NativeButton type="submit" className="button is-primary">Save</NativeButton>
             </form>
 
             {runnerCredentials && (

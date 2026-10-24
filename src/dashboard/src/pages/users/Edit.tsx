@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { initialiseUserPreferences } from "services/userPreferences";
 
 const EditUserPage = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const { userId } = useParams() as any;
     const { user: currentUser } = useAuth() as any;
@@ -77,7 +78,7 @@ const EditUserPage = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="User details" />
+            <PageTitleHeader title={t("Edit user")} />
 
             <UserForm
                 isEdit={true}

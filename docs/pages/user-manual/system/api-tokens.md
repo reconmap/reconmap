@@ -16,13 +16,13 @@ You can manage your API tokens by navigating to **System > API tokens** in the d
 
 ### Creating a Token
 
-1. Click the **Create token** button.
+1. Click the **New API token** button.
 2. Provide a descriptive **Name** for the token.
 3. Set the **Expiration** period in days.
 4. Select the **Scope**:
    - **Full scope**: Full access to all resources allowed by your user role.
    - **Read-only**: Restricted to `GET`, `HEAD`, and `OPTIONS` requests.
-5. Click **Create**.
+5. Click **Save**.
 6. **Important**: Copy the generated token immediately. It will only be shown once for security reasons.
 
 ### Revoking a Token

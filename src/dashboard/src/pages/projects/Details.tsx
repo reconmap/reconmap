@@ -112,7 +112,7 @@ const ProjectDetails = () => {
                 <Loading />
             ) : (
                 <>
-                    <PageTitleHeader title={project.name} subHeader="Project" />
+                    <PageTitleHeader title={project.name} subHeader={t("Project")} />
 
                     <NativeTabs
                         labels={[

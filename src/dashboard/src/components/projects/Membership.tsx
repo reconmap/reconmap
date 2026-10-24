@@ -12,8 +12,10 @@ import UserAvatar from "../badges/UserAvatar";
 import Breadcrumb from "../ui/Breadcrumb";
 import PrimaryButton from "../ui/buttons/Primary";
 import UserLink from "../users/Link";
+import { useTranslation } from "react-i18next";
 
 const ProjectMembership = () => {
+    const [t] = useTranslation();
     const { projectId } = useParams() as any;
     const { data: users } = useUsersQuery();
     const { data: members, isLoading, refetch } = useProjectUsersQuery(projectId);
@@ -71,7 +73,7 @@ const ProjectMembership = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="Project membership" />
+            <PageTitleHeader title={t("Project membership")} subHeader={t("Project")} />
 
             {availableUsers.length > 0 ? (
                 <form>

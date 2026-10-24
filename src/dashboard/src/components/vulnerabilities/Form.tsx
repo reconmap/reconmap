@@ -47,7 +47,6 @@ const tryParseTags = (tags) => {
 };
 
 const VulnerabilityForm = ({
-    isEditForm = false,
     vulnerability,
     vulnerabilitySetter: setVulnerability,
     onFormSubmit,
@@ -423,7 +422,7 @@ const VulnerabilityForm = ({
 
             {customFields && <DynamicForm fields={customFields} />}
 
-            <Primary type="submit">{isEditForm ? "Save" : "Add"}</Primary>
+            <Primary type="submit">Save</Primary>
 
             {/* CVSS Dialog */}
             <dialog

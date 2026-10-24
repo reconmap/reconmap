@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../ui/buttons/Primary";
 
-const ClientForm = ({ isEditForm = false, onFormSubmit, client, clientSetter: setClient }: any) => {
+const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
     const [t] = useTranslation();
 
     const [logo, setLogo] = useState<any>(null);
@@ -122,7 +122,7 @@ const ClientForm = ({ isEditForm = false, onFormSubmit, client, clientSetter: se
                     </div>
                 </label>
 
-                <PrimaryButton type="submit">{isEditForm ? "Save" : "Add"}</PrimaryButton>
+                <PrimaryButton type="submit">Save</PrimaryButton>
             </fieldset>
         </form>
     );

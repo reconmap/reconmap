@@ -5,7 +5,7 @@ import NativeInput from "components/forms/NativeInput";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../../ui/buttons/Primary";
 
-const WebhookForm = ({ isEdit = false, webhook, webhookSetter: setWebhook, onFormSubmit }: any) => {
+const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) => {
     const [t] = useTranslation();
 
     const onFormChange = (ev) => {
@@ -93,7 +93,7 @@ const WebhookForm = ({ isEdit = false, webhook, webhookSetter: setWebhook, onFor
                 label=""
                 control={
                     <div className="control">
-                        <PrimaryButton type="submit">{isEdit ? t("Update") : t("Create")}</PrimaryButton>
+                        <PrimaryButton type="submit">{t("Save")}</PrimaryButton>
                     </div>
                 }
             />

@@ -108,7 +108,7 @@ const ProjectAssets = ({ project }: any) => {
                         onSubmit={onAssetFormSaved}
                         onCancel={closeAddAssetDialog}
                     />
-                    <CreateButton onClick={openAddAssetDialog}>Add asset&hellip;</CreateButton>
+                    <CreateButton onClick={openAddAssetDialog}>New asset&hellip;</CreateButton>
                 </RestrictedComponent>
             )}
             {(assets as any)?.pageCount > 1 && (

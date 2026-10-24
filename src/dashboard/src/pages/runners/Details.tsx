@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useParams } from "react-router";
 import { useAuth } from "contexts/AuthContext";
 import { hasRunnerTerminalAccess } from "services/auth";
+import { useTranslation } from "react-i18next";
 
 const pingedRecently = (lastPingAt) => {
     if (!lastPingAt) return false;
@@ -31,6 +32,7 @@ const DateValue = ({ value }: any) => {
 const FieldValue = ({ value }: any) => (value === null || value === undefined || value === "" ? <EmptyField /> : value);
 
 const RunnerDetailsPage = () => {
+    const [t] = useTranslation();
     const { runnerId } = useParams() as any;
     const { user } = useAuth();
     const terminalAllowed = hasRunnerTerminalAccess(user);
@@ -53,7 +55,7 @@ const RunnerDetailsPage = () => {
             <div className="heading">
                 <Breadcrumb current={runner.name} />
             </div>
-            <PageTitleHeader title={runner.name} subHeader="Runner" />
+            <PageTitleHeader title={runner.name} subHeader={t("Runner")} />
 
             <p className="mb-4">
                 <span className={`tag ${pingedRecently(runner.lastPingAt) ? "is-success" : "is-warning"}`}>

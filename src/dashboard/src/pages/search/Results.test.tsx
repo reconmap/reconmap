@@ -23,7 +23,7 @@ it("renders search results page with keywords", async () => {
         </MemoryRouter>,
     );
 
-    expect(getByRole("heading", { level: 1 }).textContent).toBe("my-test-query");
+    expect(getByRole("heading", { level: 1 }).textContent).toBe('Results for "my-test-query"');
     expect(getByText("Advanced search")).toBeInTheDocument();
 });
 
@@ -36,5 +36,5 @@ it("shows keywords containing a percent sign without decoding them twice", () =>
         </MemoryRouter>,
     );
 
-    expect(getByRole("heading", { level: 1 }).textContent).toBe("100% off");
+    expect(getByRole("heading", { level: 1 }).textContent).toBe('Results for "100% off"');
 });

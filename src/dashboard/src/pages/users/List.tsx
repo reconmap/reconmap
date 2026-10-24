@@ -19,8 +19,10 @@ import UserLink from "components/users/Link";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const UsersList = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const { user: loggedInUser } = useContext(AuthContext);
     const { data: users, isLoading } = useUsersQuery();
@@ -112,7 +114,7 @@ const UsersList = () => {
             <div className="heading">
                 <Breadcrumb />
                 <NativeButtonGroup>
-                    <CreateButton onClick={handleCreate}>Create user</CreateButton>
+                    <CreateButton onClick={handleCreate}>New user</CreateButton>
                     <RestrictedComponent roles={["administrator"]}>
                         <DeleteButton onClick={handleBulkDelete} disabled={selectedUsers.length === 0}>
                             Delete selected
@@ -126,7 +128,7 @@ const UsersList = () => {
                 </NativeButtonGroup>
             </div>
 
-            <PageTitleHeader title="Users" />
+            <PageTitleHeader title={t("Users")} />
 
             <NativeTable
                 columns={columns}

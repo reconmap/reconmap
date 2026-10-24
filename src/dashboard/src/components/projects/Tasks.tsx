@@ -68,7 +68,7 @@ const ProjectTasks = ({ project }: any) => {
                 )}
                 {!project.archived && (
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                        <CreateButton onClick={onAddTaskClick}>Add task</CreateButton>
+                        <CreateButton onClick={onAddTaskClick}>New task</CreateButton>
                     </RestrictedComponent>
                 )}
             </h4>

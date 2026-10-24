@@ -6,8 +6,10 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import ExportButton from "components/ui/buttons/Export";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import AuditLogsTable from "components/auditlog/AuditLogsTable";
+import { useTranslation } from "react-i18next";
 
 const AuditLogList = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const [query] = useSearchParams();
     let pageNumber: any = query.get("page");
@@ -33,7 +35,7 @@ const AuditLogList = () => {
                 <PaginationV2 page={apiPageNumber} total={auditLog?.pageCount ?? 0} onPageChange={onPageChange} />
                 <ExportButton onClick={onExportClick} />
             </div>
-            <PageTitleHeader title={isLoading ? "Audit log" : `Audit log (${auditLog.totalCount})`} subHeader="System" />
+            <PageTitleHeader title={t("Audit log")} header={isLoading ? t("Audit log") : `${t("Audit log")} (${auditLog.totalCount})`} subHeader={t("System")} />
             <AuditLogsTable auditLog={isLoading ? null : auditLog.data} />
         </>
     );

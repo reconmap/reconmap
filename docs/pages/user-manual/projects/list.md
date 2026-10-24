@@ -10,7 +10,7 @@ The **projects** view provides an overview of all active engagements and securit
 
 From the projects list you can:
 
-- Create a new project by clicking the **Create project** button.
+- Create a new project by clicking the **New project** button.
 - View project details by clicking on the project name.
 - Filter projects by name, client, or category.
 - Archived projects can be found in the system tools section or by using the search.

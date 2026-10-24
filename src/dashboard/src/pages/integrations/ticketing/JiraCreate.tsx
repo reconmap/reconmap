@@ -31,7 +31,7 @@ const JiraIntegrationCreatePage = () => {
                     <div>{t("Jira")}</div>
                 </Breadcrumb>
             </div>
-            <PageTitleHeader title={t("Create Jira integration")} />
+            <PageTitleHeader title={t("New Jira integration")} />
 
             <div className="columns">
                 <div className="column is-two-thirds">

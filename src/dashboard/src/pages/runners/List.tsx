@@ -8,6 +8,7 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import NativeTable from "components/ui/tables/NativeTable";
 import { useNavigate, Link } from "react-router";
 import { RunnersUrls } from "AppUrls";
+import { useTranslation } from "react-i18next";
 
 const pingedRecently = (lastPingAt) => {
     if (!lastPingAt) return false;
@@ -18,6 +19,7 @@ const pingedRecently = (lastPingAt) => {
 }
 
 const RunnersListPage = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const { data: runners, isLoading, isFetching, refetch } = useRunnersQuery();
 
@@ -113,10 +115,10 @@ const RunnersListPage = () => {
             <Breadcrumb />
             <NativeButtonGroup>
                 <NativeButton onClick={() => refetch()} disabled={isFetching}>Refresh</NativeButton>
-                <CreateButton onClick={() => navigate(RunnersUrls.Create)}>Add runner</CreateButton>
+                <CreateButton onClick={() => navigate(RunnersUrls.Create)}>New runner</CreateButton>
             </NativeButtonGroup>
         </div>
-        <PageTitleHeader title="Runners" />
+        <PageTitleHeader title={t("Runners")} />
 
         <NativeTable columns={columns} rows={isLoading ? null : runners} rowId={(runner) => runner.id}></NativeTable>
     </>

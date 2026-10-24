@@ -33,7 +33,7 @@ const ProjectNotesTab = ({ project }: any) => {
                     onClose={onNoteFormSaved}
                     onCancel={closeDialog}
                 />
-                <CreateButton onClick={openDialog}>Add comment&hellip;</CreateButton>
+                <CreateButton onClick={openDialog}>New comment&hellip;</CreateButton>
             </RestrictedComponent>
 
             {isLoading ? (

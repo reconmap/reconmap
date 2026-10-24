@@ -27,5 +27,5 @@ it("renders with or without a name", async () => {
             </QueryClientProvider>
         </MemoryRouter>,
     );
-    expect(container.innerHTML).toMatch(/Create user<\/button>/);
+    expect(container.innerHTML).toMatch(/New user<\/button>/);
 });

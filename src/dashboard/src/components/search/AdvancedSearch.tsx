@@ -74,7 +74,7 @@ const AdvancedSearch = () => {
                 <Breadcrumb />
             </div>
 
-            <PageTitleHeader title={t("Search form")} subHeader={t("Advanced search")} />
+            <PageTitleHeader title={t("Advanced search")} />
 
             <div className={styles.layout}>
                 <form className="box" onSubmit={onFormSubmit}>

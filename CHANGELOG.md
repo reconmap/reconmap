@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Dashboard page titles and headers are more consistent: create pages are titled "New …" and edit pages "Edit …" (replacing "… details"), list and export/import headings use sentence case, the browser tab title is the same as the page heading, the page heading comes before the section label, the vulnerability title includes its external ID, the search results heading reads `Results for "…"`, and the not-found page has a top-level heading. Page titles and headers are now translatable.
+- Dashboard buttons and navigation menu items use "New …" instead of "Create" or "Add" (for example "New task", "New Jira integration" and "New from template"). Form submit buttons read "Save" on both create and edit pages, replacing "Create", "Add" and "Update".
 - The dashboard timezone list comes from the native `Intl.supportedValuesOf("timeZone")` instead of the `countries-and-timezones` library, reducing the bundle size.
 - The dashboard formats relative dates ("5 minutes ago") with the native `Intl.RelativeTimeFormat` instead of the `react-time-ago` and `javascript-time-ago` libraries, reducing the bundle size.
 - The advanced search page groups the form and the recent searches into boxes, lays the entity checkboxes out in a row, and explains when no entity is selected. Keywords are URL-encoded on submit, matching the header search box.

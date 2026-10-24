@@ -4,7 +4,7 @@ import PrimaryButton from "./Primary";
 const CreateButton = ({ onClick, children }: any) => {
     const [t] = useTranslation("common");
 
-    return <PrimaryButton onClick={onClick}>{children || t("ui.button.create")}</PrimaryButton>;
+    return <PrimaryButton onClick={onClick}>{children || t("ui.button.new")}</PrimaryButton>;
 };
 
 export default CreateButton;

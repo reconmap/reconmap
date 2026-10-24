@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { TaskPriorityList } from "../../models/TaskPriority";
 import PrimaryButton from "../ui/buttons/Primary";
 
-const TaskForm = ({ isEditForm = false, forTemplate = false, onFormSubmit, task, taskSetter: setTask }: any) => {
+const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask }: any) => {
     const { data: projects, isLoading: isLoadingProjects } = useProjectsQuery({ isTemplate: forTemplate });
 
     const onFormChange = (ev) => {
@@ -141,7 +141,7 @@ const TaskForm = ({ isEditForm = false, forTemplate = false, onFormSubmit, task,
                 />
             )}
 
-            <PrimaryButton type="submit">{isEditForm ? "Save" : "Create"}</PrimaryButton>
+            <PrimaryButton type="submit">Save</PrimaryButton>
         </form>
     );
 };

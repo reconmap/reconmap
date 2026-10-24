@@ -134,7 +134,7 @@ const TaskDetailsPage = () => {
                 <Loading />
             ) : (
                 <article>
-                    <PageTitleHeader title={task.summary} subHeader="Task" />
+                    <PageTitleHeader title={task.summary} subHeader={t("Task")} />
 
                     <div>
                         <NativeTabs

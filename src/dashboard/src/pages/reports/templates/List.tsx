@@ -14,8 +14,10 @@ import SecondaryButton from "components/ui/buttons/Secondary";
 import { resolveMime } from "friendly-mimes";
 import useBoolean from "hooks/useBoolean";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const ReportTemplatesList = () => {
+    const [t] = useTranslation();
     const { data: templates, isLoading, refetch: refetchTemplates } = useReportsTemplatesQuery(undefined as any);
     const deleteReportMutation = useDeleteReportMutation();
 
@@ -66,9 +68,9 @@ const ReportTemplatesList = () => {
                     onSubmit={onReportTemplateFormSaved}
                     onCancel={closeAddReportTemplateDialog}
                 />
-                <CreateButton onClick={openAddReportTemplateDialog}>Add report template&hellip;</CreateButton>
+                <CreateButton onClick={openAddReportTemplateDialog}>New report template&hellip;</CreateButton>
             </div>
-            <PageTitleHeader title="Report templates" />
+            <PageTitleHeader title={t("Report templates")} />
 
             <div {...({ status: "info" } as any)}>
                 Needing some inspiration? Have a look at hundred of penetration test reports available at&nbsp;

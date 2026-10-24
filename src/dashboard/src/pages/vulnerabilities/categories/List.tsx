@@ -11,8 +11,10 @@ import { useState } from "react";
 import { Link } from "react-router";
 import VulnerabilityCategoryAddModalDialog from "components/vulnerabilities/categories/AddModalDialog";
 import VulnerabilityCategoryEditModalDialog from "components/vulnerabilities/categories/EditModalDialog";
+import { useTranslation } from "react-i18next";
 
 const VulnerabilityCategoriesPage = () => {
+    const [t] = useTranslation();
     const { data: categories, isLoading, refetch } = useVulnerabilityCategoriesQuery({ parentsOnly: false });
     const deleteVulnerabilityCategoryMutation = useDeleteVulnerabilityCategoryMutation();
 
@@ -75,9 +77,9 @@ const VulnerabilityCategoriesPage = () => {
                         onCancel={closeEditCategoryDialog}
                     />
                 )}
-                <CreateButton onClick={onAddClick}>Add vulnerability category&hellip;</CreateButton>
+                <CreateButton onClick={onAddClick}>New vulnerability category&hellip;</CreateButton>
             </div>
-            <PageTitleHeader title="Vulnerability categories" />
+            <PageTitleHeader title={t("Vulnerability categories")} />
 
             <table className="table is-fullwidth">
                 <thead>

@@ -12,8 +12,10 @@ import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import PrimaryButton from "components/ui/buttons/Primary";
+import { useTranslation } from "react-i18next";
 
 const SendReport = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const { projectId } = useParams() as any;
     const { data: project, isLoading: isProjectLoading } = useProjectQuery(projectId);
@@ -69,7 +71,7 @@ const SendReport = () => {
                 </Breadcrumb>
             </div>
             <form onSubmit={handleSend}>
-                <PageTitleHeader title="Send report" />
+                <PageTitleHeader title={t("Send report")} />
                 <HorizontalLabelledField
                     label="Revision"
                     htmlFor="reportId"

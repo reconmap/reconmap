@@ -38,7 +38,6 @@ const WebhookEditPage = () => {
             </div>
             <PageTitleHeader title={t("Edit webhook")} />
             <WebhookForm
-                isEdit={true}
                 webhook={webhook}
                 webhookSetter={setWebhook}
                 onFormSubmit={onFormSubmit}

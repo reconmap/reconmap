@@ -41,7 +41,7 @@ const JiraIntegrationEditPage = () => {
 
             <div className="columns">
                 <div className="column is-two-thirds">
-                    <JiraForm isEdit={true} integration={integration} integrationSetter={setIntegration} onFormSubmit={onFormSubmit} />
+                    <JiraForm integration={integration} integrationSetter={setIntegration} onFormSubmit={onFormSubmit} />
                 </div>
             </div>
         </div>

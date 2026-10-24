@@ -13,8 +13,10 @@ import CreateButton from "components/ui/buttons/Create";
 import VulnerabilityFilters from "components/vulnerabilities/Filters";
 import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";
 import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
+import { useTranslation } from "react-i18next";
 
 const VulnerabilitiesList = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const [query] = useSearchParams();
     let pageNumber: any = query.get("page");
@@ -104,7 +106,7 @@ const VulnerabilitiesList = () => {
                 <PaginationV2 page={apiPageNumber} total={numberPages} onPageChange={onPageChange} />
                 <div>
                     <NativeButtonGroup>
-                        <CreateButton onClick={onAddVulnerabilityClick}>Add vulnerability</CreateButton>
+                        <CreateButton onClick={onAddVulnerabilityClick}>New vulnerability</CreateButton>
                         <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                             <DeleteButton onClick={onDeleteButtonClick} disabled={!tableModel.selection.length}>
                                 Delete selected
@@ -113,7 +115,7 @@ const VulnerabilitiesList = () => {
                     </NativeButtonGroup>
                 </div>
             </div>
-            <PageTitleHeader title={`Vulnerabilities (${totalCount})`} />
+            <PageTitleHeader title={t("Vulnerabilities")} header={`${t("Vulnerabilities")} (${totalCount})`} />
             <VulnerabilityFilters tableModel={tableModel} tableModelSetter={setTableModel} />
             <VulnerabilitiesTable
                 tableModel={tableModel}

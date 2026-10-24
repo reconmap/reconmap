@@ -4,7 +4,7 @@ parent: Projects
 grand_parent: User manual
 ---
 
-To create a new project, click on the **Create project** button on the projects list page.
+To create a new project, click on the **New project** button on the projects list page.
 
 ![Create project](/images/screenshots/project-create.png)
 

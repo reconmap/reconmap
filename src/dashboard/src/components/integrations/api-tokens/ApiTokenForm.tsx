@@ -25,7 +25,7 @@ const ApiTokenForm = ({ onSuccess, onCancel }: any) => {
 
     return (
         <form onSubmit={onSubmit}>
-            <h3>{t("Create API Token")}</h3>
+            <h3>{t("New API token")}</h3>
             <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '5px' }}>{t("Token name")}</label>
                 <NativeInput
@@ -54,7 +54,7 @@ const ApiTokenForm = ({ onSuccess, onCancel }: any) => {
                 </NativeSelect>
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-                <PrimaryButton type="submit" disabled={createMutation.isPending}>{t("Create")}</PrimaryButton>
+                <PrimaryButton type="submit" disabled={createMutation.isPending}>{t("Save")}</PrimaryButton>
                 <SecondaryButton type="button" onClick={onCancel}>{t("Cancel")}</SecondaryButton>
             </div>
         </form>

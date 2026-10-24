@@ -28,7 +28,7 @@ const WebhookCreatePage = () => {
             <div className="heading">
                 <Breadcrumb />
             </div>
-            <PageTitleHeader title={t("Create webhook")} />
+            <PageTitleHeader title={t("New webhook")} />
             <WebhookForm
                 webhook={webhook}
                 webhookSetter={setWebhook}

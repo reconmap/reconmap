@@ -29,7 +29,7 @@ it("renders the header, breadcrumbs and actions", () => {
     expect(container.querySelector("nav.breadcrumb")).not.toBeNull();
     expect(screen.getByRole("heading", { level: 1, name: "Runners" })).not.toBeNull();
     expect(screen.getByRole("button", { name: "Refresh" })).not.toBeNull();
-    expect(screen.getByRole("button", { name: "Add runner" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "New runner" })).not.toBeNull();
 });
 
 it("refetches the runners when Refresh is clicked", () => {

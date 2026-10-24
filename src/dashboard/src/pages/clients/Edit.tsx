@@ -7,8 +7,10 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import ClientForm from "components/clients/Form";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const EditClientPage = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const { clientId } = useParams() as any;
 
@@ -35,13 +37,12 @@ const EditClientPage = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="Client details" />
+            <PageTitleHeader title={t("Edit organisation")} />
 
             {!clientClient ? (
                 <Loading />
             ) : (
                 <ClientForm
-                    isEditForm={true}
                     onFormSubmit={onFormSubmit}
                     client={clientClient}
                     clientSetter={setClientClient}

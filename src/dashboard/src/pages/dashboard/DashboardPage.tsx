@@ -108,7 +108,7 @@ const DashboardPage = () => {
 
   return (
     <div>
-      <PageTitleHeader title={t("Dashboard")} subHeader={t("Home")} />
+      <PageTitleHeader title={t("Dashboard")} />
       <div>
         <NativeTabs
           labels={[t("View"), t("Configure")]}

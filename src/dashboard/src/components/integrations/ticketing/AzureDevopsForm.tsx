@@ -5,7 +5,7 @@ import NativeInput from "components/forms/NativeInput";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../../ui/buttons/Primary";
 
-const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIntegration, onFormSubmit }: any) => {
+const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFormSubmit }: any) => {
     const [t] = useTranslation();
 
     const onFormChange = (ev) => {
@@ -93,7 +93,7 @@ const AzureDevopsForm = ({ isEdit = false, integration, integrationSetter: setIn
                 label=""
                 control={
                     <div className="control">
-                        <PrimaryButton type="submit">{isEdit ? t("Update") : t("Create")}</PrimaryButton>
+                        <PrimaryButton type="submit">{t("Save")}</PrimaryButton>
                     </div>
                 }
             />

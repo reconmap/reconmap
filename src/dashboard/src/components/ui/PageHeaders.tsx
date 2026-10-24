@@ -7,7 +7,7 @@ interface PageHeadersProps {
 
 const PageHeaders = ({ header, subHeader }: PageHeadersProps) => (
     <div className="mb-5">
-        {subHeader && <h2 className="subtitle">{subHeader}</h2>}
+        {subHeader && <p className="subtitle">{subHeader}</p>}
         <h1 className="title">{header}</h1>
     </div>
 );

@@ -59,7 +59,7 @@ const WebhooksList = () => {
             <div className="heading">
                 <Breadcrumb />
                 <NativeButtonGroup>
-                    <CreateButton onClick={handleCreate}>{t("Create webhook")}</CreateButton>
+                    <CreateButton onClick={handleCreate}>{t("New webhook")}</CreateButton>
                 </NativeButtonGroup>
             </div>
             <PageTitleHeader title={t("Webhooks")} />

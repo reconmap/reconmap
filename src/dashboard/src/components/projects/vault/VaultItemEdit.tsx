@@ -142,7 +142,7 @@ const VaultItemEdit = () => {
                                         />
                                     </td>
                                     <td>
-                                        <NativeButton type="submit">Update</NativeButton>
+                                        <NativeButton type="submit">Save</NativeButton>
                                     </td>
                                 </tr>
                             </tbody>

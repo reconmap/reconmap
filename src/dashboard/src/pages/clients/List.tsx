@@ -64,7 +64,7 @@ const ClientsList = () => {
                 <Breadcrumb />
 
                 <NativeButtonGroup>
-                    <LinkButton href={ClientsUrls.Create}>{t("Add organisation")}</LinkButton>
+                    <LinkButton href={ClientsUrls.Create}>{t("New organisation")}</LinkButton>
                     <ExportButton
                         entity="organisations"
                         disabled={!organisations?.length}

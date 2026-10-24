@@ -7,8 +7,10 @@ import { useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/Create";
 import ProjectsTable from "components/projects/Table";
+import { useTranslation } from "react-i18next";
 
 const ProjectsListPage = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const [query] = useSearchParams();
     let pageNumber: any = query.get("page");
@@ -64,11 +66,11 @@ const ProjectsListPage = () => {
 
                 <div>
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                        <CreateButton onClick={handleCreateProject}>Create project</CreateButton>
+                        <CreateButton onClick={handleCreateProject}>New project</CreateButton>
                     </RestrictedComponent>
                 </div>
             </div>
-            <PageTitleHeader title="Projects" header={isLoading ? "Projects" : `Projects (${projects.totalCount})`} />
+            <PageTitleHeader title={t("Projects")} header={isLoading ? t("Projects") : `${t("Projects")} (${projects.totalCount})`} />
 
             <details>
                 <summary>Filters</summary>

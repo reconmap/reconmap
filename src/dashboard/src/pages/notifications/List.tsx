@@ -15,8 +15,10 @@ import Tag from "components/ui/Tag";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import { actionCompletedToast } from "components/ui/toast";
+import { useTranslation } from "react-i18next";
 
 const NotificationsList = () => {
+    const [t] = useTranslation();
     const { data: notifications, isLoading } = useNotificationsQuery({});
     const deleteNotificatioMutation = useDeleteNotificationMutation();
     const markNotificationMutation = useMarkNotificationMutation();
@@ -143,7 +145,7 @@ const NotificationsList = () => {
                     </NativeButton>
                 </NativeButtonGroup>
             </div>
-            <PageTitleHeader title="Notifications" />
+            <PageTitleHeader title={t("Notifications")} />
 
             <NativeTable
                 columns={columns}

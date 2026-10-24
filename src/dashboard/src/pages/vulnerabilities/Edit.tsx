@@ -9,8 +9,10 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import VulnerabilityForm from "components/vulnerabilities/Form";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const VulnerabilityEdit = () => {
+    const [t] = useTranslation();
     const { vulnerabilityId } = useParams() as any;
 
     const navigate = useNavigate();
@@ -46,12 +48,11 @@ const VulnerabilityEdit = () => {
                     <Link to="/vulnerabilities">Vulnerabilities</Link>
                 </Breadcrumb>
             </div>
-            <PageTitleHeader title="Vulnerability details" />
+            <PageTitleHeader title={t("Edit vulnerability")} />
             {!clientVulnerability ? (
                 <Loading />
             ) : (
                 <VulnerabilityForm
-                    isEditForm={true}
                     vulnerability={clientVulnerability}
                     vulnerabilitySetter={setClientVulnerability}
                     onFormSubmit={onFormSubmit}

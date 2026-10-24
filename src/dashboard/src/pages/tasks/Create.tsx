@@ -47,7 +47,7 @@ const TaskCreationPage = () => {
                 </Breadcrumb>
             </div>
 
-            <PageTitleHeader title="New task details" />
+            <PageTitleHeader title={t("New task")} />
 
             <TaskForm onFormSubmit={onFormSubmit} task={newTask} forTemplate={forTemplate} taskSetter={setNewTask} />
         </div>

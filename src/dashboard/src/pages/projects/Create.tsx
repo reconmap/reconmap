@@ -8,8 +8,10 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import ProjectForm from "components/projects/Form";
+import { useTranslation } from "react-i18next";
 
 const ProjectCreate = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const [query] = useSearchParams();
     const isTemplate = "true" === query.get("isTemplate");
@@ -39,7 +41,7 @@ const ProjectCreate = () => {
                     <Link to="/projects">Projects</Link>
                 </Breadcrumb>
             </div>
-            <PageTitleHeader title="New project details" />
+            <PageTitleHeader title={t("New project")} />
 
             <ProjectForm project={newProject} projectSetter={setNewProject} onFormSubmit={handleCreate} />
         </div>

@@ -16,12 +16,12 @@ Webhook configuration is restricted to users with the `administrator` or `superu
 ### Configuring a Webhook
 
 1. Go to **Settings > Integrations**.
-2. Click on **Create webhook**.
+2. Click on **New webhook**.
 3. Provide a **Name** for the webhook.
 4. Enter the **URL** where the notification should be sent.
 5. (Optional) Enter a **Secret** to sign the requests.
 6. Specify the **Events** you want to subscribe to (e.g., `project.created`, `vulnerability.created`, or `*` for all events).
-7. Ensure **Is enabled** is checked and click **Create**.
+7. Ensure **Is enabled** is checked and click **Save**.
 
 ## Jira Integration
 
@@ -30,13 +30,13 @@ The Jira integration allows you to automatically push new vulnerabilities to you
 ### Configuring Jira
 
 1. Go to **Settings > Integrations**.
-2. Click on **Add Jira integration**.
+2. Click on **New Jira integration**.
 3. Provide a **Name** for the integration.
 4. Enter your **Jira URL** (e.g., `https://your-domain.atlassian.net`).
 5. Enter the **Email** associated with your Jira account.
 6. Enter your Jira **API Token**.
 7. Enter the **Project Key** of the Jira project where issues should be created.
-8. Click **Create**.
+8. Click **Save**.
 
 Once configured and enabled, every time a new vulnerability is created in Reconmap, it will be automatically sent to your Jira project.
 
@@ -47,12 +47,12 @@ The Azure DevOps integration allows you to automatically push new vulnerabilitie
 ### Configuring Azure DevOps
 
 1. Go to **Settings > Integrations**.
-2. Click on **Add Azure DevOps integration**.
+2. Click on **New Azure DevOps integration**.
 3. Provide a **Name** for the integration.
 4. Enter your Azure DevOps **Organization URL** (e.g., `https://dev.azure.com/your-organization`).
 5. Enter the **Project name** of the Azure DevOps project where work items should be created.
 6. Enter your Azure DevOps **Personal Access Token**.
-7. Click **Create**.
+7. Click **Save**.
 
 Once configured and enabled, every time a new vulnerability is created in Reconmap, it will be automatically sent to your Azure DevOps project.
 

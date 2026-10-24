@@ -31,7 +31,7 @@ const AzureDevopsIntegrationCreatePage = () => {
                     <div>{t("Azure DevOps")}</div>
                 </Breadcrumb>
             </div>
-            <PageTitleHeader title={t("Create Azure DevOps integration")} />
+            <PageTitleHeader title={t("New Azure DevOps integration")} />
 
             <div className="columns">
                 <div className="column is-two-thirds">

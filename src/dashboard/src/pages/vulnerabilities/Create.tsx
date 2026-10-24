@@ -6,8 +6,10 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import VulnerabilityForm from "components/vulnerabilities/Form";
+import { useTranslation } from "react-i18next";
 
 const VulnerabilityCreate = () => {
+    const [t] = useTranslation();
     const navigate = useNavigate();
     const [query] = useSearchParams();
     const urlProjectId = query.get("projectId") || 0;
@@ -49,7 +51,7 @@ const VulnerabilityCreate = () => {
                     <Link to="/vulnerabilities">Vulnerabilities</Link>
                 </Breadcrumb>
             </div>
-            <PageTitleHeader title="New vulnerability details" />
+            <PageTitleHeader title={t("New vulnerability")} />
 
             <VulnerabilityForm
                 vulnerability={vulnerability}

@@ -33,7 +33,7 @@ const SearchResultsPage = React.memo(() => {
                     <LinkButton href={SearchUrls.AdvancedSearch}>{t("Advanced search")}</LinkButton>
                 </div>
             </div>
-            <PageTitleHeader title={keywords} subHeader={t("Search results")} />
+            <PageTitleHeader title={`${t("Search results")}: ${keywords}`} header={`${t("Results for")} "${keywords}"`} subHeader={t("Search")} />
 
             {emptyResults.length > 0 && (
                 <div {...({ status: "warning" } as any)}>No results were found for: {[...new Set([...emptyResults])].join(", ")}</div>

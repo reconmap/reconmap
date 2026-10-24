@@ -144,7 +144,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                 label=""
                 control={
                     <div className="control">
-                        <PrimaryButton type="submit">{isEdit ? "Update" : "Create"}</PrimaryButton>
+                        <PrimaryButton type="submit">Save</PrimaryButton>
                     </div>
                 }
             />

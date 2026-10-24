@@ -101,7 +101,7 @@ const SystemUsagePage = () => {
       <div className="heading">
         <Breadcrumb />
       </div>
-      <PageTitleHeader title={t("System usage")} subHeader="System" />
+      <PageTitleHeader title={t("System usage")} subHeader={t("System")} />
 
       <NativeTabs
         labels={[

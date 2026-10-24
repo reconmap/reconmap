@@ -13,7 +13,7 @@ Use the **Refresh** button to reload the list on demand, without reloading the p
 
 ## Adding a runner
 
-Click **Add runner** on the list page to open the **Add runner** page. Enter a name, the hostname, and the listen address, then submit the form. To return to the list, click **Runners** in the breadcrumb.
+Click **New runner** on the list page to open the **New runner** page. Enter a name, the hostname, and the listen address, then submit the form. To return to the list, click **Runners** in the breadcrumb.
 
 When the runner is created, its client ID and client secret are displayed on that page. They are only shown once, so copy them before leaving the page. Use them to configure the runner.
 

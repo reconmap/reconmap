@@ -81,7 +81,7 @@ const VulnerabilityDetails = () => {
 
                         {vulnerability.isTemplate ? (
                             <LinkButton onClick={() => cloneVulnerability(vulnerability.id)}>
-                                Create from template
+                                New from template
                             </LinkButton>
                         ) : null}
 
@@ -104,7 +104,7 @@ const VulnerabilityDetails = () => {
             </div>
             <article>
                 <PageTitleHeader
-                    title={vulnerability.summary}
+                    title={vulnerability.externalId ? `${vulnerability.externalId.toUpperCase()} ${vulnerability.summary}` : vulnerability.summary}
                     header={
                         vulnerability.externalId ? (
                             <>
@@ -115,7 +115,7 @@ const VulnerabilityDetails = () => {
                             vulnerability.summary
                         )
                     }
-                    subHeader="Vulnerability"
+                    subHeader={t("Vulnerability")}
                 />
                 <Tag>{vulnerability.visibility}</Tag> <Tags values={vulnerability.tags} />
                 <div>
