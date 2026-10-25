@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Users can leave comments on tasks. The task details page has a **Comments** tab, using the same comments panel as projects and vulnerabilities, and the API accepts `parentType: "task"` on `POST /api/comments` and `GET /api/comments`.
 - The audit log records comment creation as well as deletion.
 - Spanish and French translations for the comments panel.
 

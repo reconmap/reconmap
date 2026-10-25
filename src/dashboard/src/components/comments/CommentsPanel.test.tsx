@@ -62,6 +62,24 @@ describe("CommentsPanel", () => {
         );
     });
 
+    it("creates a comment for a task", () => {
+        render(
+            <MemoryRouter>
+                <AuthContext.Provider value={{ user: { id: 10, role: "user" } }}>
+                    <CommentsPanel parentType="task" parentId={12} />
+                </AuthContext.Provider>
+            </MemoryRouter>
+        );
+
+        fireEvent.change(screen.getByLabelText("Comment"), { target: { value: "Retest after patch." } });
+        fireEvent.click(screen.getByRole("button", { name: "Add comment" }));
+
+        expect(mockCreate).toHaveBeenCalledWith(
+            { parentType: "task", parentId: 12, content: "Retest after patch." },
+            expect.any(Object)
+        );
+    });
+
     it("lets the author delete their own comment", () => {
         mockComments = [comment({ createdById: 10 })];
         vi.spyOn(window, "confirm").mockReturnValue(true);

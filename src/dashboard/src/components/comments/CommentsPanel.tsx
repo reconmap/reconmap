@@ -13,7 +13,7 @@ const COMMENTING_ROLES = ["administrator", "superuser", "user"];
 const MODERATING_ROLES = ["administrator", "superuser"];
 
 interface CommentsPanelProps {
-    parentType: "project" | "vulnerability";
+    parentType: "project" | "task" | "vulnerability";
     parentId: number;
 }
 

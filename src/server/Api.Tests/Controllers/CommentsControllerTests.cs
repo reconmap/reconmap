@@ -68,6 +68,31 @@ public class CommentsControllerTests
     }
 
     [Fact]
+    public async Task CreateOne_ForTask_StoresCommentUnderTaskParent()
+    {
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 7, SubjectId = "subject-7" });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, new FakeAccessScope(7), currentUserId: 7);
+        var request = new CommentsController.CreateCommentRequest
+        {
+            ParentType = CommentParentType.Task,
+            ParentId = 4,
+            Content = "Blocked on the client's firewall change."
+        };
+
+        var result = await controller.CreateOne(request);
+
+        var created = Assert.IsType<CreatedResult>(result);
+        var response = Assert.IsType<CommentsController.CommentResponse>(created.Value);
+        Assert.Equal("task", response.ParentType);
+        Assert.Equal(4, response.ParentId);
+        var stored = await db.Comments.SingleAsync();
+        Assert.Equal("task", stored.ParentType);
+        Assert.Equal(4, stored.ParentId);
+    }
+
+    [Fact]
     public async Task CreateOne_WithoutParentAccess_ReturnsNotFoundAndStoresNothing()
     {
         using var db = CreateDbContext();

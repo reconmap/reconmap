@@ -4,6 +4,7 @@ import { requestProject } from "api/requests/projects";
 import { requestTaskPatch } from "api/requests/tasks";
 import { useDeleteTaskMutation, useTaskQuery } from "api/tasks";
 import { useUsersQuery } from "api/users";
+import CommentsPanel from "components/comments/CommentsPanel";
 import AttachmentsTable from "components/attachments/AttachmentsTable";
 import AttachmentsDropzone from "components/attachments/Dropzone";
 import NativeButton from "components/forms/NativeButton";
@@ -138,7 +139,7 @@ const TaskDetailsPage = () => {
 
                     <div>
                         <NativeTabs
-                            labels={[t("Details"), t("Attachments")]}
+                            labels={[t("Details"), t("Comments"), t("Attachments")]}
                             tabIndex={tabIndex}
                             tabIndexSetter={tabIndexSetter}
                         />
@@ -221,6 +222,11 @@ const TaskDetailsPage = () => {
                                 </div>
                             )}
                             {1 === tabIndex && (
+                                <div>
+                                    <CommentsPanel parentType="task" parentId={task.id} />
+                                </div>
+                            )}
+                            {2 === tabIndex && (
                                 <div>
                                     <AttachmentsDropzone parentType={parentType} parentId={parentId} />
 
