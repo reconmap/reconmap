@@ -1,8 +1,8 @@
 import { requestUserPatch } from "api/requests/users";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeTabs from "components/forms/NativeTabs";
-import PrimaryButton from "components/ui/buttons/Primary";
-import SecondaryButton from "components/ui/buttons/Secondary";
+import PrimaryButton from "components/ui/buttons/PrimaryButton";
+import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast } from "components/ui/toast";
 import { useAuth } from "contexts/AuthContext";
@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import PermissionsService from "services/permissions";
 import { initialiseUserPreferences } from "services/userPreferences";
 import widgetIsVisible from "services/widgets";
-import WelcomeWidget from "./widgets/WelcomeWidget";
+import WelcomeWidget from "components/dashboard/widgets/WelcomeWidget";
 
 const InitialiseWidgetConfig = () => {
   return Object.keys(Widgets).reduce((acc, key) => {

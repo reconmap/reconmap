@@ -3,24 +3,24 @@ import Compose from "components/logic/Compose";
 import SseProvider from "contexts/SseContext";
 import DashboardLayout from "layouts/DashboardLayout";
 import PageNotFound from "pages/PageNotFound";
-import RunnerRoutes from "pages/runners/Routes";
-import ClientsRoutes from "pages/clients/Routes";
-import DashboardRoutes from "pages/dashboard/Routes";
-import IntegrationsRoutes from "pages/integrations/Routes";
-import NotificationsRoutes from "pages/notifications/Routes";
-import ProjectsRoutes from "pages/projects/Routes";
-import ReportsRoutes from "pages/reports/Routes";
-import ReportTemplatesRoutes from "pages/reports/templates/Routes";
-import ScansRoutes from "pages/scans/Routes";
-import SearchRoutes from "pages/search/Routes";
-import SettingsRoutes from "pages/settings/Routes";
-import SupportRoutes from "pages/support/Routes";
-import SystemRoutes from "pages/system/Routes";
-import AssetRoutes from "pages/asset/Routes";
-import TasksRoutes from "pages/tasks/Routes";
-import ToolsRoutes from "pages/tools/Routes";
-import UsersRoutes from "pages/users/Routes";
-import VulnerabilitiesRoutes from "pages/vulnerabilities/Routes";
+import RunnerRoutes from "pages/runners/RunnerRoutes";
+import ClientRoutes from "pages/clients/ClientRoutes";
+import DashboardRoutes from "pages/dashboard/DashboardRoutes";
+import IntegrationRoutes from "pages/integrations/IntegrationRoutes";
+import NotificationRoutes from "pages/notifications/NotificationRoutes";
+import ProjectRoutes from "pages/projects/ProjectRoutes";
+import ReportRoutes from "pages/reports/ReportRoutes";
+import ReportTemplateRoutes from "pages/reports/templates/ReportTemplateRoutes";
+import ScanRoutes from "pages/scans/ScanRoutes";
+import SearchRoutes from "pages/search/SearchRoutes";
+import SettingsRoutes from "pages/settings/SettingsRoutes";
+import SupportRoutes from "pages/support/SupportRoutes";
+import SystemRoutes from "pages/system/SystemRoutes";
+import AssetRoutes from "pages/asset/AssetRoutes";
+import TaskRoutes from "pages/tasks/TaskRoutes";
+import ToolsRoutes from "pages/tools/ToolsRoutes";
+import UserRoutes from "pages/users/UserRoutes";
+import VulnerabilityRoutes from "pages/vulnerabilities/VulnerabilityRoutes";
 import { createBrowserRouter, Outlet, type RouteObject } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Configuration from "./Configuration";
@@ -49,23 +49,23 @@ const routes: RouteObject[] = [
                 element: <DashboardLayout />,
                 children: [
                     ...DashboardRoutes,
-                    ...ClientsRoutes,
-                    ...ProjectsRoutes,
-                    ...ReportTemplatesRoutes,
-                    ...ReportsRoutes,
-                    ...ScansRoutes,
-                    ...NotificationsRoutes,
+                    ...ClientRoutes,
+                    ...ProjectRoutes,
+                    ...ReportTemplateRoutes,
+                    ...ReportRoutes,
+                    ...ScanRoutes,
+                    ...NotificationRoutes,
                     ...SearchRoutes,
                     ...SettingsRoutes,
                     ...SupportRoutes,
                     ...SystemRoutes,
                     ...AssetRoutes,
-                    ...TasksRoutes,
+                    ...TaskRoutes,
                     ...ToolsRoutes,
                     ...RunnerRoutes,
-                    ...UsersRoutes,
-                    ...VulnerabilitiesRoutes,
-                    ...IntegrationsRoutes,
+                    ...UserRoutes,
+                    ...VulnerabilityRoutes,
+                    ...IntegrationRoutes,
                     { path: "*", element: <PageNotFound /> },
                 ],
             },

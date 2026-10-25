@@ -4,8 +4,8 @@ import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import PrimaryButton from "../../ui/buttons/Primary";
-import SecondaryButton from "../../ui/buttons/Secondary";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
+import SecondaryButton from "../../ui/buttons/SecondaryButton";
 
 const ApiTokenForm = ({ onSuccess, onCancel }: any) => {
     const [t] = useTranslation();

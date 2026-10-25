@@ -5,7 +5,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import { useEffect } from "react";
 import { TaskPriorityList } from "../../models/TaskPriority";
-import PrimaryButton from "../ui/buttons/Primary";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask }: any) => {
     const { data: projects, isLoading: isLoadingProjects } = useProjectsQuery({ isTemplate: forTemplate });

@@ -1,6 +1,6 @@
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
-import UserLink from "components/users/Link";
+import UserLink from "components/users/UserLink";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import styles from "./CommentCard.module.css";

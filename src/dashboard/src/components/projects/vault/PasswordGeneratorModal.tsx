@@ -3,8 +3,8 @@ import { defaultPasswordConfiguration, generatePassword } from "services/passwor
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
-import PrimaryButton from "components/ui/buttons/Primary";
-import SecondaryButton from "components/ui/buttons/Secondary";
+import PrimaryButton from "components/ui/buttons/PrimaryButton";
+import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import { useTranslation } from "react-i18next";
 import CssIcon from "components/ui/CssIcon";
 

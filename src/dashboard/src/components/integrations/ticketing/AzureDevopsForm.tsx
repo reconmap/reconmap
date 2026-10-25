@@ -3,7 +3,7 @@ import LabelledField from "components/forms/LabelledField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import { useTranslation } from "react-i18next";
-import PrimaryButton from "../../ui/buttons/Primary";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 
 const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFormSubmit }: any) => {
     const [t] = useTranslation();

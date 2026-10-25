@@ -2,7 +2,7 @@ import { useExportablesQuery } from "api/system";
 import NativeSelect from "components/forms/NativeSelect";
 import { useState } from "react";
 import { downloadFromApi } from "services/api";
-import PrimaryButton from "../ui/buttons/Primary";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 const ExportForm = () => {
     const { data: exportables } = useExportablesQuery();

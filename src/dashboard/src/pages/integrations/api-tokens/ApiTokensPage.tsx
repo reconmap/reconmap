@@ -1,12 +1,12 @@
 import { useUserApiTokenDeleteMutation, useUserApiTokensQuery } from "api/user-api-tokens-hooks";
-import DeleteButton from "components/ui/buttons/Delete";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ApiTokenForm from "../../../components/integrations/api-tokens/ApiTokenForm";
 import Breadcrumb from "../../../components/ui/Breadcrumb";
-import PrimaryButton from "../../../components/ui/buttons/Primary";
+import PrimaryButton from "../../../components/ui/buttons/PrimaryButton";
 
 const ApiTokensPage = () => {
     const { data: tokens, isLoading } = useUserApiTokensQuery();

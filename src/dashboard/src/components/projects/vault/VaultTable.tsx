@@ -1,7 +1,7 @@
 import { requestSecretDelete } from "api/requests/vault";
 import { useInvalidateVaultQueries } from "api/vault";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
-import LinkButton from "components/ui/buttons/Link";
+import LinkButton from "components/ui/buttons/LinkButton";
 import ExternalLink from "components/ui/ExternalLink";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";

@@ -1,7 +1,7 @@
 import { NewComment, useCommentsQuery, useCreateCommentMutation, useDeleteCommentMutation } from "api/comments";
 import NativeTextArea from "components/forms/NativeTextArea";
 import RestrictedComponent from "components/logic/RestrictedComponent";
-import PrimaryButton from "components/ui/buttons/Primary";
+import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import Skeleton from "components/ui/Skeleton";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { AuthContext } from "contexts/AuthContext";

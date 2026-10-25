@@ -6,8 +6,8 @@ import AscendingSortLink from "components/ui/AscendingSortLink";
 import DescendingSortLink from "components/ui/DescendingSortLink";
 import Tags from "components/ui/Tags";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
-import PrimaryButton from "components/ui/buttons/Primary";
-import ReloadButton from "components/ui/buttons/Reload";
+import PrimaryButton from "components/ui/buttons/PrimaryButton";
+import ReloadButton from "components/ui/buttons/ReloadButton";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
 import { actionCompletedToast } from "components/ui/toast";
@@ -16,9 +16,9 @@ import { requestEntityPost } from "utilities/requests";
 import CvssScore from "../badges/CvssScore";
 import RiskBadge from "../badges/RiskBadge";
 import VulnerabilityBadge from "../badges/VulnerabilityBadge";
-import LinkButton from "../ui/buttons/Link";
-import VulnerabilityStatusBadge from "./StatusBadge";
-import VulnerabilityCategorySpan from "./categories/Span";
+import LinkButton from "../ui/buttons/LinkButton";
+import VulnerabilityStatusBadge from "./VulnerabilityStatusBadge";
+import VulnerabilityCategorySpan from "./categories/VulnerabilityCategorySpan";
 
 const VulnerabilitiesTable = ({
     tableModel,

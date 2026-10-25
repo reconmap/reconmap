@@ -176,6 +176,22 @@ Before adding a dependency:
 * Remove unused code regularly
 * Prefer clarity over cleverness
 
+#### Pages vs components
+
+* `src/pages/` holds only routable views and their `*Routes.tsx` route tables.
+  Every view file must be referenced by a route.
+* `src/components/` holds reusable UI, including dashboard widgets. Components never import from `pages/`.
+* Layouts live in `src/layouts/`, contexts in `src/contexts/`, and hooks in `src/hooks/`.
+
+#### Naming
+
+* A file's name matches the name of its default export (`ProjectsTable.tsx` exports `ProjectsTable`).
+* Routed views are named `<Feature><Action>Page.tsx`, for example `ProjectsListPage`, `ProjectCreatePage`,
+  `ProjectDetailsPage` and `ProjectEditPage`. Use `Create` (not `Creation`) and `Details` (not `Detail`).
+* Route tables are named `<Feature>Routes.tsx`.
+* Avoid generic file names such as `Form.tsx`, `List.tsx`, `Table.tsx` or `Link.tsx`. Prefix them with the feature
+  they belong to (`UserForm.tsx`, `UserLink.tsx`).
+
 ---
 
 ## 🚫 Anti-Goals

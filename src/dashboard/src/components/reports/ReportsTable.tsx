@@ -1,0 +1,96 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteReportMutation } from "api/reports";
+import { requestAttachment } from "api/requests/attachments";
+import ProjectBadge from "components/projects/ProjectBadge";
+import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import SecondaryButton from "components/ui/buttons/SecondaryButton";
+import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
+import NativeTable from "components/ui/tables/NativeTable";
+import { useNavigate } from "react-router";
+
+const ReportsTable = ({ reports, updateReports, includeProjectColumn = false }: any) => {
+    const navigate = useNavigate();
+
+    const deleteReportMutation = useDeleteReportMutation();
+    const queryclient = useQueryClient();
+
+    const onDeleteClick = (reportId) => {
+        deleteReportMutation.mutate(
+            reportId,
+            {
+                onSuccess: () => {
+                    updateReports();
+                    queryclient.invalidateQueries({ queryKey: ["reports"] });
+                },
+            }
+        );
+    }
+
+    const handleDownload = (reportId) => {
+        requestAttachment(reportId).then(({ blob, filename }) => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename!;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    };
+
+    const handleSendByEmail = (projectId) => {
+        navigate(`/projects/${projectId}/report/send`);
+    };
+
+    const columns = [
+        {
+            header: 'Name (Description)',
+            cell: (report) => `${report.versionName} (${report.versionDescription})`,
+        },
+        ...(includeProjectColumn ? [{
+            header: 'Project',
+            cell: (report) => <ProjectBadge project={{ id: report.projectId, name: report.project?.name }} />,
+        }] : []),
+        {
+            header: 'Datetime',
+            cell: (report) => <RelativeDateFormatter date={report.createdAt} />,
+        },
+        {
+            header: 'Downloads',
+            cell: (report) => {
+                const isGenerating = !report.attachmentId;
+                return isGenerating ? (
+                    <span className="text-secondary" style={{ fontStyle: 'italic' }}>Generating...</span>
+                ) : (
+                    <SecondaryButton onClick={() => handleDownload(report.attachmentId)}>
+                        {report.clientFileName?.split(".").pop().toUpperCase()}
+                    </SecondaryButton>
+                );
+            }
+        },
+        {
+            header: '',
+            cell: (report) => {
+                const isGenerating = !report.attachmentId;
+                return (
+                    <>
+                        <SecondaryButton
+                            disabled={isGenerating}
+                            onClick={() => handleSendByEmail(report.projectId)}
+                        >
+                            Send by email
+                        </SecondaryButton>
+
+                        <DeleteIconButton onClick={() => onDeleteClick(report.id)} />
+                    </>
+                );
+            }
+        }
+    ];
+
+    return (
+        <NativeTable rows={reports} rowId={(report) => report.id} columns={columns}>
+        </NativeTable>
+    );
+};
+
+export default ReportsTable;

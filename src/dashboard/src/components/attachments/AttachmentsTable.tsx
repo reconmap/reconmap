@@ -1,12 +1,12 @@
 import { useAttachmentDeleteMutation } from "api/attachments";
 import { requestAttachment } from "api/requests/attachments";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
-import SecondaryButton from "components/ui/buttons/Secondary";
+import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import FileSizeSpan from "components/ui/FileSizeSpan";
 import ModalDialog from "components/ui/ModalDialog";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";
-import UserLink from "components/users/Link";
+import UserLink from "components/users/UserLink";
 import { resolveMime } from "friendly-mimes";
 import { useState } from "react";
 

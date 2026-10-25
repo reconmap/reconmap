@@ -2,7 +2,7 @@ import { useInvalidateVaultQueries } from "api/vault";
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
-import PrimaryButton from "components/ui/buttons/Primary";
+import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import Vault from "models/Vault";
 import { useState } from "react";

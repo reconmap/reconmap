@@ -1,0 +1,34 @@
+import { useTasksQuery } from "api/tasks";
+import TaskBadge from "components/tasks/TaskBadge";
+import TaskStatusFormatter from "components/tasks/TaskStatusFormatter";
+import NativeTable from "components/ui/tables/NativeTable";
+import { AuthContext } from "contexts/AuthContext";
+import { useContext } from "react";
+import DashboardWidget from "./DashboardWidget";
+
+const columns = [
+    {
+        header: 'Summary',
+        cell: task => <TaskBadge task={task} />
+    },
+    {
+        header: 'Status',
+        cell: task => <TaskStatusFormatter task={task} />
+    }
+];
+
+const MyTasksWidget = () => {
+    const { user } = useContext(AuthContext);
+    const { data: tasks, isLoading, isError, error } = useTasksQuery({ assignedToId: user.id, limit: 5, projectIsArchived: 0 });
+
+    if (isError) return <DashboardWidget title="My tasks"><p className="has-text-danger">Error loading tasks: {error.message}</p></DashboardWidget>;
+
+    return (
+        <DashboardWidget title="My tasks">
+            <NativeTable rows={isLoading ? null : tasks} rowId={task => task.id} columns={columns} emptyRowsMessage="You don't have any assigned tasks.">
+            </NativeTable>
+        </DashboardWidget >
+    );
+};
+
+export default MyTasksWidget;

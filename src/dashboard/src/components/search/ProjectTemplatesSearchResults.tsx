@@ -1,4 +1,4 @@
-import ProjectsTable from 'components/projects/Table';
+import ProjectsTable from 'components/projects/ProjectsTable';
 import { useEffect, useState } from 'react';
 import { requestEntities } from 'utilities/requests.js';
 

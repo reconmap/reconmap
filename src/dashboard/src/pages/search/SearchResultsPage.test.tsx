@@ -1,0 +1,40 @@
+import { render } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router";
+import SearchResultsPage from "./SearchResultsPage";
+
+vi.mock("react-i18next", () => ({
+    useTranslation: () => [(key) => key],
+}));
+
+vi.mock("components/ui/Breadcrumb.jsx", () => ({ default: () => <div data-testid="breadcrumb" /> }));
+
+vi.mock("components/search/ProjectsSearchResults.jsx", () => ({ default: () => <div data-testid="projects-search" /> }));
+vi.mock("components/search/ProjectTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="project-templates-search" /> }));
+vi.mock("components/search/TasksSearchResults.jsx", () => ({ default: () => <div data-testid="tasks-search" /> }));
+vi.mock("components/search/VulnerabilitiesSearchResults.jsx", () => ({ default: () => <div data-testid="vulnerabilities-search" /> }));
+vi.mock("components/search/VulnerabilityTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="vulnerability-templates-search" /> }));
+
+it("renders search results page with keywords", async () => {
+    const { getByRole, getByText } = render(
+        <MemoryRouter initialEntries={["/search/my-test-query"]}>
+            <Routes>
+                <Route path="/search/:keywords" element={<SearchResultsPage />} />
+            </Routes>
+        </MemoryRouter>,
+    );
+
+    expect(getByRole("heading", { level: 1 }).textContent).toBe('Results for "my-test-query"');
+    expect(getByText("Advanced search")).toBeInTheDocument();
+});
+
+it("shows keywords containing a percent sign without decoding them twice", () => {
+    const { getByRole } = render(
+        <MemoryRouter initialEntries={["/search/" + encodeURIComponent("100% off")]}>
+            <Routes>
+                <Route path="/search/:keywords" element={<SearchResultsPage />} />
+            </Routes>
+        </MemoryRouter>,
+    );
+
+    expect(getByRole("heading", { level: 1 }).textContent).toBe('Results for "100% off"');
+});

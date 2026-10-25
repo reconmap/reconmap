@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import NotificationsBadge from "../notifications/NotificationsBadge";
-import SearchBox from "../search/Box";
+import SearchBox from "../search/SearchBox";
 import HeaderUserMenu from "../ui/HeaderUserMenu";
 import HeaderLogo from "./HeaderLogo";
 import { getNavigationStructure } from "./NavigationStructure";

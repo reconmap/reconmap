@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import NativeInput from "components/forms/NativeInput";
 import { useRef, useState } from "react";
 import { requestEntityPost } from "utilities/requests";
-import PrimaryButton from "../ui/buttons/Primary";
+import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 const ImportForm = () => {
     const importFileRef = useRef<any>(null);

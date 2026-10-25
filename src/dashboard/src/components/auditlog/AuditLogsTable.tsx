@@ -4,7 +4,7 @@ import EmptyField from "components/ui/EmptyField";
 import Ipv4Link from "components/ui/Ipv4Link";
 import NativeTable from "components/ui/tables/NativeTable";
 import UserAgentLabel from "components/ui/UserAgentLabel";
-import UserLink from "components/users/Link";
+import UserLink from "components/users/UserLink";
 
 const AuditLogsTable = ({ auditLog, hideUserColumns = false }: any) => {
     const isLoading = auditLog === null || auditLog === undefined;
