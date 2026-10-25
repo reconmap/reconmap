@@ -1,27 +1,16 @@
 import { NewComment, useCommentsQuery, useCreateCommentMutation, useDeleteCommentMutation } from "api/comments";
 import NativeTextArea from "components/forms/NativeTextArea";
 import RestrictedComponent from "components/logic/RestrictedComponent";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import PrimaryButton from "components/ui/buttons/Primary";
-import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import Skeleton from "components/ui/Skeleton";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
-import UserLink from "components/users/Link";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import ReactMarkdown from "react-markdown";
+import CommentCard, { Comment } from "./CommentCard";
 
 const COMMENTING_ROLES = ["administrator", "superuser", "user"];
 const MODERATING_ROLES = ["administrator", "superuser"];
-
-interface Comment {
-    id: number;
-    content: string;
-    createdById?: number;
-    createdBy?: { fullName?: string };
-    createdAt?: string;
-}
 
 interface CommentsPanelProps {
     parentType: "project" | "vulnerability";
@@ -90,22 +79,12 @@ const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
                 <p className="has-text-grey">{t("No comments yet.")}</p>
             ) : (
                 comments.map((comment: Comment) => (
-                    <article key={comment.id} className="box has-background-dark has-text-white">
-                        <div className="is-flex is-justify-content-space-between is-align-items-flex-start">
-                            <div className="content has-text-white">
-                                <ReactMarkdown>{comment.content}</ReactMarkdown>
-                            </div>
-                            {canDelete(comment) && (
-                                <DeleteIconButton aria-label={t("Delete comment")} onClick={() => onDeleteClick(comment)} />
-                            )}
-                        </div>
-                        <p className="is-size-7 has-text-grey-light">
-                            {t("Posted by")}{" "}
-                            <UserLink userId={comment.createdById}>{comment.createdBy?.fullName}</UserLink>
-                            {" · "}
-                            <RelativeDateFormatter date={comment.createdAt} />
-                        </p>
-                    </article>
+                    <CommentCard
+                        key={comment.id}
+                        comment={comment}
+                        canDelete={canDelete(comment)}
+                        onDelete={() => onDeleteClick(comment)}
+                    />
                 ))
             )}
         </section>

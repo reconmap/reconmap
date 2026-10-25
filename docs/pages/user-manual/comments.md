@@ -13,7 +13,7 @@ Anyone who can access a project or vulnerability can read its comments. Comments
 2. Write your comment in the box.
 3. Select **Add comment**.
 
-Comments are listed newest first, with their author and the time they were posted. Clients can read comments but cannot add them.
+Comments are listed newest first. Each one is shown as a card with its author and the time it was posted above the rendered Markdown. Clients can read comments but cannot add them.
 
 ## Deleting a comment
 

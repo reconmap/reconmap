@@ -1,0 +1,35 @@
+.card {
+    background-color: var(--bulma-scheme-main-bis);
+    border: 1px solid var(--bulma-border);
+    border-left: 3px solid var(--bulma-primary);
+    border-radius: var(--bulma-radius-medium);
+    padding: 1rem 1.25rem;
+}
+
+.card:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.meta {
+    color: var(--bulma-text-weak);
+    font-size: 0.875rem;
+}
+
+/* The user link is a flex block by default, which would push the time onto its own line. */
+.meta a {
+    display: inline;
+    padding: 0;
+    font-size: inherit;
+}
+
+.body {
+    overflow-wrap: anywhere;
+}
