@@ -90,5 +90,18 @@
     "No recent searches yet. Your searches will appear here.": "Aún no hay búsquedas recientes. Tus búsquedas aparecerán aquí.",
     "Could not load recent searches.": "No se pudieron cargar las búsquedas recientes.",
     "Vulnerability templates": "Plantillas de vulnerabilidades",
-    "Project templates": "Plantillas de proyectos"
+    "Project templates": "Plantillas de proyectos",
+    "Add comment": "Añadir comentario",
+    "Are you sure you want to delete this comment?": "¿Seguro que quieres eliminar este comentario?",
+    "Comment": "Comentario",
+    "Comment added.": "Comentario añadido.",
+    "Comment deleted.": "Comentario eliminado.",
+    "Could not add the comment.": "No se pudo añadir el comentario.",
+    "Could not delete the comment.": "No se pudo eliminar el comentario.",
+    "No comments yet.": "Todavía no hay comentarios.",
+    "Posted by": "Publicado por",
+    "Remediation": "Remediación",
+    "Triage": "Triaje",
+    "Write a comment…": "Escribe un comentario…",
+    "Delete comment": "Eliminar comentario"
 }

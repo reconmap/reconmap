@@ -11,15 +11,11 @@ properties:
     type: string
     enum:
     - project
+    - task
     - vulnerability
+    - report
   parent_id:
     type: integer
-  visibility:
-    type: string
-    enum:
-    - private
-    - public
-    default: private
   content:
     type: string
 required:

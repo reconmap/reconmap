@@ -14,7 +14,7 @@ From the vulnerability details view, you can:
 - Change the risk level (none, low, medium, high, critical).
 - Update the vulnerability status (open, confirmed, resolved, closed).
 - View and manage assets affected by this vulnerability.
-- Add notes and attachments as evidence.
+- Add comments and attachments as evidence.
 - View vulnerability history and audit logs.
 - Map the vulnerability to CVE IDs.
 

@@ -578,27 +578,25 @@ def generate_runners(count, ids):
     return runners
 
 
-def generate_notes(vulns, projects, users, ids):
-    notes = []
+def generate_comments(vulns, projects, users, ids):
+    comments = []
     for vuln in random.sample(vulns, k=len(vulns) // 3):
-        notes.append({
+        comments.append({
             "Id": ids.next(),
             "CreatedById": random.choice(users)["Id"],
             "ParentType": "vulnerability",
             "ParentId": vuln["Id"],
-            "Visibility": "private",
             "Content": fake.paragraph(nb_sentences=2),
         })
     for project in projects:
-        notes.append({
+        comments.append({
             "Id": ids.next(),
             "CreatedById": project["CreatedById"],
             "ParentType": "project",
             "ParentId": project["Id"],
-            "Visibility": "private",
             "Content": fake.paragraph(nb_sentences=2),
         })
-    return notes
+    return comments
 
 
 def generate_notifications(users, projects, ids):
@@ -676,7 +674,7 @@ def generate_demo_data(num_projects=20, seed=None):
     asset_ids = IdSequence()
     task_ids = IdSequence()
     vuln_ids = IdSequence()
-    note_ids = IdSequence()
+    comment_ids = IdSequence()
     report_ids = IdSequence()
     runner_ids = IdSequence()
     scan_ids = IdSequence()
@@ -710,7 +708,7 @@ def generate_demo_data(num_projects=20, seed=None):
     reports = generate_reports(projects, report_ids)
     runners = generate_runners(4, runner_ids)
     schedules = generate_command_schedules(projects, schedule_ids)
-    notes = generate_notes(vulns, projects, users, note_ids)
+    comments = generate_comments(vulns, projects, users, comment_ids)
     notifications = generate_notifications(users, projects, notification_ids)
     webhooks = generate_webhooks(webhook_ids)
     audit = generate_audit_log(projects, vulns, users, num_projects * 5, audit_ids)
@@ -731,7 +729,7 @@ def generate_demo_data(num_projects=20, seed=None):
         "assets": assets,
         "vulnerabilities": vulns,
         "vulnerability_templates": templates,
-        "notes": notes,
+        "comments": comments,
         "reports": reports,
         "runners": runners,
         "scan_runs": scans,

@@ -21,7 +21,7 @@ OPA grants only explicitly named endpoint capabilities; it never treats a missin
 - Users and clients can access project data only in projects where they are members.
 - Users can access vault secrets they own or secrets associated with one of their projects. Clients cannot access the vault.
 - Notifications are visible and mutable only by their recipient.
-- Attachments and notes must resolve through a project, task, vulnerability, or non-template report in a member project. Unscoped attachment parents are administrator-only.
+- Attachments and comments must resolve through a project, task, vulnerability, or non-template report in a member project. Unscoped attachment parents are administrator-only.
 - Jira/Azure DevOps integration configuration and system data import/export are administrator-only. Integration API tokens and personal access tokens are never included in API responses.
 
 The last part of this architecture is Rabbitmq, a message queue and broker. This queue handles heavy or asynchronous background tasks like sending report emails and generating reports asynchronously.

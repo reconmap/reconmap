@@ -24,10 +24,10 @@ components:
       $ref: ./definitions/Contact.yaml
     CustomField:
       $ref: ./definitions/CustomField.yaml
+    Comment:
+      $ref: ./definitions/Comment.yaml
     Document:
       $ref: ./definitions/Document.yaml
-    Note:
-      $ref: ./definitions/Note.yaml
     Notification:
       $ref: ./definitions/Notification.yaml
     Organisation:

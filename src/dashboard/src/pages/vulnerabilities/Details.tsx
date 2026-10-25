@@ -18,7 +18,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/Delete";
 import { actionCompletedToast } from "components/ui/toast";
-import VulnerabilitiesNotesTab from "components/vulnerabilities/NotesTab";
+import CommentsPanel from "components/comments/CommentsPanel";
 import VulnerabilityDescriptionPanel from "components/vulnerabilities/VulnerabilityDescriptionPanel";
 import VulnerabilityRemediationPanel from "components/vulnerabilities/VulnerabilityRemediationPanel";
 import VulnerabilityTriagePanel from "components/vulnerabilities/VulnerabilityTriagePanel";
@@ -120,7 +120,7 @@ const VulnerabilityDetails = () => {
                 <Tag>{vulnerability.visibility}</Tag> <Tags values={vulnerability.tags} />
                 <div>
                     <NativeTabs
-                        labels={["Description", "Triage", "Remediation", "Comments", "Attachments"]}
+                        labels={[t("Description"), t("Triage"), t("Remediation"), t("Comments"), t("Attachments")]}
                         tabIndex={tabIndex}
                         tabIndexSetter={tabIndexSetter}
                     />
@@ -142,7 +142,7 @@ const VulnerabilityDetails = () => {
                         )}
                         {3 === tabIndex && (
                             <div>
-                                <VulnerabilitiesNotesTab vulnerability={vulnerability} />
+                                <CommentsPanel parentType="vulnerability" parentId={vulnerability.id} />
                             </div>
                         )}
                         {4 === tabIndex && (

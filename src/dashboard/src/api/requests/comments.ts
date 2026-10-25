@@ -1,7 +1,7 @@
 import secureApiFetch from "services/api";
 import { requestEntityPost } from "utilities/requests";
 
-const API_BASE_URL = "/notes";
+const API_BASE_URL = "/comments";
 
 const requestComments = async (params: any) => {
     return (

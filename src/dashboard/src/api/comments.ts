@@ -1,31 +1,48 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { requestCommentDelete, requestCommentPost, requestComments } from "./requests/comments";
 
-const useNotesQuery = (params: any) => {
+export interface NewComment {
+    parentType: string;
+    parentId: number;
+    content: string;
+}
+
+const useCommentsQuery = (params: { parentType: string; parentId: number }) => {
     return useQuery({
         queryKey: ["comments", params],
         queryFn: () => requestComments(params),
     });
 };
 
-const useDeleteCommentMutation = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (commentId: number) => requestCommentDelete(commentId).then((res) => res.json()),
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["comments"] });
-        },
-    });
-};
-
 const useCreateCommentMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (comment: any) => requestCommentPost(comment).then((res) => res.json()),
-        onSettled: () => {
+        mutationFn: async (comment: NewComment) => {
+            const resp = await requestCommentPost(comment);
+            if (!resp.ok) {
+                throw new Error(`Failed to create comment. Status code: ${resp.status}`);
+            }
+            return resp.json();
+        },
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["comments"] });
         },
     });
 };
 
-export { useCreateCommentMutation, useDeleteCommentMutation, useNotesQuery };
+const useDeleteCommentMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (commentId: number) => {
+            const resp = await requestCommentDelete(commentId);
+            if (!resp.ok) {
+                throw new Error(`Failed to delete comment. Status code: ${resp.status}`);
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["comments"] });
+        },
+    });
+};
+
+export { useCommentsQuery, useCreateCommentMutation, useDeleteCommentMutation };

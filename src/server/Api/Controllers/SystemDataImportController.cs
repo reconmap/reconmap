@@ -86,7 +86,7 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
             "vulnerability_categories" => await ImportAsync(element, _db.VulnerabilityCategories, cancellationToken),
             "project_categories" => await ImportAsync(element, _db.ProjectCategories, cancellationToken),
             "project_members" => await ImportAsync(element, _db.ProjectMembers, cancellationToken),
-            "notes" => await ImportAsync(element, _db.Notes, cancellationToken),
+            "comments" or "notes" => await ImportAsync(element, _db.Comments, cancellationToken),
             "notifications" => await ImportAsync(element, _db.Notifications, cancellationToken),
             "reports" => await ImportAsync(element, _db.Reports, cancellationToken),
             "runners" => await ImportAsync(element, _db.Runners, cancellationToken),

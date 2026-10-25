@@ -11,7 +11,7 @@ test_user_and_client_can_read_scoped_collections if {
 	data.reconmap.authz.allow with input as {
 		"user": {"role": "client", "member_project_ids": []},
 		"resource": {},
-		"resource_type": "notes",
+		"resource_type": "comments",
 		"method": "GET",
 	}
 }
@@ -27,7 +27,7 @@ test_user_and_client_can_modify_unscoped_attachments_and_notes if {
 	data.reconmap.authz.allow with input as {
 		"user": {"role": "client", "member_project_ids": []},
 		"resource": {},
-		"resource_type": "notes",
+		"resource_type": "comments",
 		"method": "DELETE",
 	}
 }

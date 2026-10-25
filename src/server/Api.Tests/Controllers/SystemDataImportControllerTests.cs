@@ -76,7 +76,7 @@ public class SystemDataImportControllerTests
     }
 
     [Fact]
-    public async Task ImportData_ImportsNotesMembersNotificationsWebhooksAndSchedules()
+    public async Task ImportData_ImportsCommentsMembersNotificationsWebhooksAndSchedules()
     {
         using var db = CreateDbContext();
         var controller = new SystemDataImportController(db);
@@ -84,7 +84,7 @@ public class SystemDataImportControllerTests
         var json = """
         {
           "project_members": [{ "Id": 1000, "ProjectId": 1000, "UserId": 1000 }],
-          "notes": [{ "Id": 1000, "CreatedById": 1000, "ParentType": "project", "ParentId": 1000, "Visibility": "private", "Content": "Kickoff done." }],
+          "comments": [{ "Id": 1000, "CreatedById": 1000, "ParentType": "project", "ParentId": 1000, "Content": "Kickoff done." }],
           "notifications": [{ "Id": 1000, "ToUserId": 1000, "Title": "Scan completed", "Content": "Done.", "Status": "unread" }],
           "webhooks": [{ "Id": 1000, "Name": "Chat", "Url": "https://hooks.example.com/x", "IsEnabled": true, "Events": "project.created" }],
           "command_schedules": [{ "Id": 1000, "ProjectId": 1000, "CommandId": "nmap", "CommandUsageId": "nmap-tcp-syn", "CronExpression": "0 2 * * 1" }],
@@ -96,7 +96,7 @@ public class SystemDataImportControllerTests
 
         Assert.IsType<OkObjectResult>(result);
         Assert.Equal(1, await db.ProjectMembers.CountAsync());
-        Assert.Equal(1, await db.Notes.CountAsync());
+        Assert.Equal(1, await db.Comments.CountAsync());
         Assert.Equal(1, await db.Notifications.CountAsync());
         Assert.Equal(1, await db.Webhooks.CountAsync());
         Assert.Equal(1, await db.CommandSchedules.CountAsync());
@@ -119,17 +119,17 @@ public class SystemDataImportControllerTests
         using var db = CreateDbContext(databaseName);
         var controller = new SystemDataImportController(db);
 
-        // The runner id is already stored, so its save fails. The note after it must still be imported.
+        // The runner id is already stored, so its save fails. The comment after it must still be imported.
         var json = """
         {
           "runners": [{ "Id": 1000, "Name": "runner-2", "ClientId": "client-2" }],
-          "notes": [{ "Id": 1000, "CreatedById": 1, "ParentType": "project", "ParentId": 1, "Visibility": "private", "Content": "Still imported." }]
+          "comments": [{ "Id": 1000, "CreatedById": 1, "ParentType": "project", "ParentId": 1, "Content": "Still imported." }]
         }
         """;
 
         await controller.ImportData(CreateJsonFile(json), CancellationToken.None);
 
-        Assert.Equal(1, await db.Notes.CountAsync());
+        Assert.Equal(1, await db.Comments.CountAsync());
         Assert.Equal(1, await db.Runners.CountAsync());
     }
 }

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking (API):** Notes are now called comments everywhere. `/api/notes` is now `/api/comments`. `POST /api/comments` takes `{ parentType, parentId, content }`, where `parentType` is `project`, `task`, `vulnerability` or `report`, and returns the created comment with `201 Created`. `GET /api/comments` returns `400 Bad Request` for other parent types and honours `limit`. Deleting a comment is limited to its author, administrators and superusers (`403 Forbidden` otherwise).
+- **Breaking (database):** The `note` table is now `comment`, and its `visibility` column is removed. The schema is edited in place without a migration, so existing databases must be recreated with the [destructive upgrade](docs/pages/admin-manual/upgrading-instance.md). An incremental upgrade does not work for this release.
+- **Breaking (system data import):** The `notes` entity is now `comments`. Files that use `notes` are still accepted, and the `Visibility` field of older exports is ignored. Comments cannot be exported.
+- The comments panel on the project and vulnerability pages is redesigned. A composer sits at the top, comments are shown as cards with their author and relative time, and deleting asks for confirmation. Comments are added inline instead of through a modal dialog. The composer is hidden from roles that cannot comment. The vulnerability tab labels are translated.
+- The OPA authorization policy uses the `comments` resource type instead of `notes`.
+
 - Dashboard page titles and headers are more consistent: create pages are titled "New …" and edit pages "Edit …" (replacing "… details"), list and export/import headings use sentence case, the browser tab title is the same as the page heading, the page heading comes before the section label, the vulnerability title includes its external ID, the search results heading reads `Results for "…"`, and the not-found page has a top-level heading. Page titles and headers are now translatable.
 - Dashboard buttons and navigation menu items use "New …" instead of "Create" or "Add" (for example "New task", "New Jira integration" and "New from template"). Form submit buttons read "Save" on both create and edit pages, replacing "Create", "Add" and "Update".
 - The dashboard timezone list comes from the native `Intl.supportedValuesOf("timeZone")` instead of the `countries-and-timezones` library, reducing the bundle size.
@@ -37,9 +43,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Comments no longer have a public or private setting. Every comment is visible to anyone who can access the project or vulnerability it belongs to. The user manual's claim that public comments are included in pentest reports was never implemented, and it has been removed. Comments are not included in reports.
+
 - **Breaking (dashboard languages):** Portuguese and German translations are removed. Users whose language is set to `pt` or `de` fall back to English, and the language selector no longer offers them. Keycloak's `supportedLocales` no longer includes `pt`. Existing Keycloak realms must remove `pt` from their supported locales, and users with `pt` as their locale must pick another language. Unused translation strings have also been removed from the remaining languages.
 
 ### Added
+
+- The audit log records comment creation as well as deletion.
+- Spanish and French translations for the comments panel.
 
 - Demo data generator (`testing/scripts/generate_demo_data.py`) produces data that resembles a real engagement: real vulnerability and project categories, realistic findings with CVSS scores, assets, tasks, reports, notes, members, runners, scan runs and their tasks, command schedules, webhooks, notifications, and audit log entries. Pass `--seed` for reproducible output.
 - Data import (`POST /api/system/data`) accepts `project_members`, `notes`, `notifications`, `reports`, `runners`, `scan_runs` (with nested `Tasks`), `command_schedules` and `webhooks`.
@@ -59,6 +70,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The audit log now records creations and updates of projects, assets, vulnerabilities, tasks, organisations, users, secrets and reports. Previously only deletions and a few creations were recorded.
 
 ### Fixed
+
+- Vulnerability comments: the Save button was visible to every role, a success message appeared before the comment was saved, and failures were not reported.
+- Deleting a comment no longer treats the empty `204 No Content` response as an error.
+- Creating a comment no longer lets the client set the comment's own `id` or `createdAt`: the endpoint now takes a request DTO.
 
 - Demo data generator: the generated import no longer fails with `Unknown entity` errors for `targets`, `documents`, `jira_integrations` and `azure_devops_integrations`. Assets replace targets, and the generator now references the categories seeded by the database.
 - The advanced search page's "Recent searches" section showed nothing when the list was empty, and a failed request crashed the page. It now shows a message for the empty and error states, and each recent search links to an encoded results URL.

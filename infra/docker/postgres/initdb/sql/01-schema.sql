@@ -4,7 +4,7 @@ DROP VIEW IF EXISTS user_info;
 DROP TABLE IF EXISTS user_api_token CASCADE;
 DROP TABLE IF EXISTS runner CASCADE;
 DROP TABLE IF EXISTS notification CASCADE;
-DROP TABLE IF EXISTS note CASCADE;
+DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS ai_usage CASCADE;
 DROP TABLE IF EXISTS ai_provider_settings CASCADE;
 DROP TABLE IF EXISTS ai_settings CASCADE;
@@ -430,18 +430,19 @@ CREATE TABLE ai_usage
 
 CREATE INDEX ai_usage_created_at_idx ON ai_usage (created_at);
 
--- 23. note
-CREATE TABLE note
+-- 23. comment
+CREATE TABLE comment
 (
     id          SERIAL PRIMARY KEY,
     created_at   TIMESTAMPTZ                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by_id     INT                      NULL,
     parent_type VARCHAR(20) NOT NULL,
     parent_id   INT                      NOT NULL,
-    visibility  VARCHAR(20)        NOT NULL DEFAULT 'private',
     content     TEXT                              NOT NULL,
     FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
 );
+
+CREATE INDEX comment_parent_idx ON comment (parent_type, parent_id, created_at);
 
 -- 24. notification
 CREATE TABLE notification

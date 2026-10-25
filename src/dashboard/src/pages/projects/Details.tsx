@@ -19,7 +19,7 @@ import Loading from "components/ui/Loading";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import ProjectAttachmentsTab from "components/projects/AttachmentsTab";
 import ProjectDetailsTab from "components/projects/DetailsTab";
-import ProjectNotesTab from "components/projects/NotesTab";
+import CommentsPanel from "components/comments/CommentsPanel";
 import ProjectAssets from "components/projects/Assets";
 import ProjectTasks from "components/projects/Tasks";
 import ProjectVaultTab from "components/projects/vault/VaultTab";
@@ -152,7 +152,7 @@ const ProjectDetails = () => {
                         )}
                         {4 === tabIndex && (
                             <div>
-                                <ProjectNotesTab project={project} />
+                                <CommentsPanel parentType="project" parentId={project.id} />
                             </div>
                         )}
                         {5 === tabIndex && (

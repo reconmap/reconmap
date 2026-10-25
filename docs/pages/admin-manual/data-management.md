@@ -31,7 +31,7 @@ The file is a JSON object whose keys are entity names and whose values are array
 
 - `users`, `organisations`, `project_categories`, `vulnerability_categories`, `custom_fields`
 - `projects`, `project_templates`, `project_members`, `tasks`, `assets`
-- `vulnerabilities`, `vulnerability_templates`, `notes`, `reports`
+- `vulnerabilities`, `vulnerability_templates`, `comments` (older exports that use `notes` are still accepted), `reports`
 - `runners`, `scan_runs` (with nested `Tasks`), `command_schedules`
 - `notifications`, `webhooks`, `audit_log`
 

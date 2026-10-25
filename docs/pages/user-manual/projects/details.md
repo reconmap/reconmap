@@ -17,6 +17,6 @@ From the project details view, you can:
 - Generate and send penetration test reports.
 - Manage vault items (credentials) related to the project.
 - View project activity and audit logs.
-- Add notes and attachments.
+- Add comments and attachments.
 
 The project summary also shows the risk distribution of vulnerabilities reported for this project.
