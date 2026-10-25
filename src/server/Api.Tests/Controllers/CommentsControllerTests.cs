@@ -122,6 +122,17 @@ public class CommentsControllerTests
     }
 
     [Fact]
+    public async Task GetMany_WithReportParentType_ReturnsBadRequest()
+    {
+        using var db = CreateDbContext();
+        var controller = CreateController(db, new FakeAccessScope(1, isPrivileged: true), currentUserId: 1);
+
+        var result = await controller.GetMany(limit: null, parentType: "report", parentId: 1);
+
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
     public async Task GetMany_WithLimit_ReturnsAtMostLimitComments()
     {
         using var db = CreateDbContext();
