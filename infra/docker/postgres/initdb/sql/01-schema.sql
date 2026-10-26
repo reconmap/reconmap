@@ -95,7 +95,6 @@ CREATE TABLE project
     client_id             INT                        NULL,
     category_id           INT                        NULL,
     is_template           BOOLEAN                    NOT NULL DEFAULT FALSE,
-    visibility            VARCHAR(20) NOT NULL DEFAULT 'public',
     name                  VARCHAR(200)               NOT NULL UNIQUE,
     description           VARCHAR(2000)              NULL,
     engagement_start_date DATE,

@@ -16,6 +16,5 @@ When creating a project, you can specify:
 - **Category**: The type of project (e.g., Network Pentest, Web App Assessment).
 - **Service Provider**: The organisation performing the assessment.
 - **Dates**: The start and end dates for the engagement.
-- **Visibility**: Whether the project is private or public within the organisation.
 
 You can also create a project based on a template to reuse settings and tasks.

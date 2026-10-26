@@ -83,22 +83,6 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                 {!project.isTemplate && (
                     <>
                         <HorizontalLabelledField
-                            label="Visibility"
-                            htmlFor="visibility"
-                            control={
-                                <NativeSelect
-                                    id="visibility"
-                                    name="visibility"
-                                    onChange={handleFormChange}
-                                    value={project.visibility}
-                                >
-                                    <option value="public">Public</option>
-                                    <option value="private">Private</option>
-                                </NativeSelect>
-                            }
-                        />
-
-                        <HorizontalLabelledField
                             label="Service provider"
                             htmlFor="serviceProviderId"
                             control={
@@ -168,9 +152,9 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                 </label>
             </fieldset>
 
-            <fieldset>
-                <legend>Rules of engagement</legend>
-                {!project.isTemplate && (
+            {!project.isTemplate && (
+                <fieldset>
+                    <legend>Rules of engagement</legend>
                     <>
                         <HorizontalLabelledField
                             label="Start date"
@@ -199,8 +183,8 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                             }
                         />{" "}
                     </>
-                )}
-            </fieldset>
+                </fieldset>
+            )}
 
             <PrimaryButton type="submit">Save</PrimaryButton>
         </form>

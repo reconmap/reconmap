@@ -9,7 +9,6 @@ type Project struct {
 	ClientId int `json:"client_id"`
 	Name string `json:"name"`
 	Description string `json:"description"`
-	Visibility string `json:"visibility"`
 	IsTemplate bool `json:"is_template"`
 	CategoryId int `json:"category_id"`
 	EngagementStartDate string `json:"engagement_start_date"`

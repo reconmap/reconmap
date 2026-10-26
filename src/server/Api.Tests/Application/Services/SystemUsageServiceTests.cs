@@ -68,7 +68,7 @@ public class SystemUsageServiceTests
     {
         using var db = CreateDb();
         var now = DateTime.UtcNow;
-        db.Projects.Add(new Project { Id = 1, Name = "Acme", Visibility = "public" });
+        db.Projects.Add(new Project { Id = 1, Name = "Acme" });
         db.AiUsages.AddRange(
             Row(now.AddDays(-1), "triage", 100, 50, 0.5m, projectId: 1, latency: 100),
             Row(now.AddDays(-1), "triage", 200, 100, 1.0m, projectId: 1, latency: 300),

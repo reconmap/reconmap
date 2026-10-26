@@ -11,9 +11,9 @@ namespace Reconmap.McpServer.Tools;
 /// </summary>
 public class ProjectTools(IProjectService projectService, McpAccessGuard guard)
 {
-    public record ProjectSummary(int Id, string Name, string Visibility, bool Archived);
+    public record ProjectSummary(int Id, string Name, bool Archived);
 
-    public record ProjectDetails(int Id, string Name, string? Description, string Visibility, bool Archived);
+    public record ProjectDetails(int Id, string Name, string? Description, bool Archived);
 
     [McpServerTool(ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false, UseStructuredContent = true)]
     [Description("Gets a list of the Reconmap projects the current user can access.")]
@@ -23,7 +23,7 @@ public class ProjectTools(IProjectService projectService, McpAccessGuard guard)
 
         var page = await projectService.GetManyAsync(new ProjectFilter(VisibleProjectIds: visibleIds), Paging.Unbounded);
 
-        return page.Data.Select(p => new ProjectSummary(p.Id, p.Name, p.Visibility, p.Archived)).ToList();
+        return page.Data.Select(p => new ProjectSummary(p.Id, p.Name, p.Archived)).ToList();
     }
 
     [McpServerTool(ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false, UseStructuredContent = true)]
@@ -37,6 +37,6 @@ public class ProjectTools(IProjectService projectService, McpAccessGuard guard)
         if (p == null)
             throw new McpException("Project not found.");
 
-        return new ProjectDetails(p.Id, p.Name, p.Description, p.Visibility, p.Archived);
+        return new ProjectDetails(p.Id, p.Name, p.Description, p.Archived);
     }
 }

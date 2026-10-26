@@ -5,7 +5,6 @@ interface ProjectInterface {
     client_id?: number;
     name?: string;
     description?: string;
-    visibility?: string;
     is_template: boolean | undefined;
     category_id?: number;
     engagement_start_date?: string;
@@ -18,7 +17,6 @@ interface ProjectInterface {
  */
 const Project: ProjectInterface = {
     id: undefined,
-    visibility: "public",
     is_template: false,
 };
 

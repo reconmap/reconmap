@@ -28,8 +28,6 @@ public class Project : TimestampedEntity
     [Column(TypeName = "boolean")]
     public bool IsTemplate { get; set; }
 
-    [Required] public string Visibility { get; set; }
-
     [Required]
     [MaxLength(200)]
     public string Name { get; set; } = string.Empty;

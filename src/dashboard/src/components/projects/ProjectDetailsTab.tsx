@@ -4,7 +4,6 @@ import ClientLink from "components/clients/ClientLink";
 import EmptyField from "components/ui/EmptyField";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import TimestampsSection from "components/ui/TimestampsSection";
-import VisibilityLegend from "components/ui/VisibilityLegend";
 import UserLink from "components/users/UserLink";
 import VulnerabilitiesByCategoryStatsWidget from "components/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget";
 import VulnerabilitiesByRiskStatsWidget from "components/dashboard/widgets/VulnerabilitiesByRiskStatsWidget";
@@ -23,11 +22,6 @@ const ProjectDetailsTab = ({ project }: any) => {
                 <dl>
                     {!isTemplate && (
                         <>
-                            <dt>Visibility</dt>
-                            <dd>
-                                <VisibilityLegend visibility={project.visibility} />
-                            </dd>
-
                             <dt>Status</dt>
                             <dd>{project.archived ? "Archived" : "Active"}</dd>
                         </>

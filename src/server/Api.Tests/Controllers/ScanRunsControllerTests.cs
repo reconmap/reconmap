@@ -44,7 +44,7 @@ public class ScanRunsControllerTests
     private static async Task<AppDbContext> DbWithProject()
     {
         var db = CreateDbContext();
-        db.Projects.Add(new Project { Id = 1, Name = "P", Visibility = "public" });
+        db.Projects.Add(new Project { Id = 1, Name = "P" });
         await db.SaveChangesAsync();
         return db;
     }
@@ -132,7 +132,7 @@ public class ScanRunsControllerTests
     public async Task GetMany_ReturnsNewestFirstFilteredByProject()
     {
         using var db = await DbWithProject();
-        db.Projects.Add(new Project { Id = 2, Name = "Q", Visibility = "public" });
+        db.Projects.Add(new Project { Id = 2, Name = "Q" });
         db.ScanRuns.AddRange(
             new ScanRun { ProjectId = 1, Target = "a", Objective = "o" },
             new ScanRun { ProjectId = 2, Target = "b", Objective = "o" },

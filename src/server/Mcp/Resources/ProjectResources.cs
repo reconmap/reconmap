@@ -21,7 +21,7 @@ public class ProjectResources(IProjectService projectService, McpAccessGuard gua
 
         var page = await projectService.GetManyAsync(new ProjectFilter(VisibleProjectIds: visibleIds), Paging.Unbounded);
 
-        var projects = page.Data.Select(p => new { p.Id, p.Name, p.Visibility, p.Archived });
+        var projects = page.Data.Select(p => new { p.Id, p.Name, p.Archived });
         return JsonSerializer.Serialize(projects, JsonOptions);
     }
 
@@ -33,6 +33,6 @@ public class ProjectResources(IProjectService projectService, McpAccessGuard gua
 
         var p = await projectService.GetByIdAsync(id) ?? throw new McpException("Project not found.");
 
-        return JsonSerializer.Serialize(new { p.Id, p.Name, p.Description, p.Visibility, p.Archived }, JsonOptions);
+        return JsonSerializer.Serialize(new { p.Id, p.Name, p.Description, p.Archived }, JsonOptions);
     }
 }

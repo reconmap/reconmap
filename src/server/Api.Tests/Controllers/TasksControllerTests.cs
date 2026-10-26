@@ -83,8 +83,8 @@ public class TasksControllerTests
     {
         using var db = CreateDbContext();
         db.Projects.AddRange(
-            new Project { Id = 1, Name = "Active", Visibility = "private", Archived = false },
-            new Project { Id = 2, Name = "Archived", Visibility = "private", Archived = true }
+            new Project { Id = 1, Name = "Active", Archived = false },
+            new Project { Id = 2, Name = "Archived", Archived = true }
         );
         db.Tasks.AddRange(
             new ProjectTask { ProjectId = 1, Summary = "Active task", Priority = "low", Status = "todo" },

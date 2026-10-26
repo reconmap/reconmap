@@ -21,12 +21,6 @@ properties:
   description:
     type: string
     nullable: true
-  visibility:
-    type: string
-    enum:
-    - public
-    - private
-    default: public
   is_template:
     type: boolean
     default: false

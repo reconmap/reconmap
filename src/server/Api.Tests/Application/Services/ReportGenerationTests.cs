@@ -73,7 +73,7 @@ public class ReportGenerationTests
         // Arrange
         var db = CreateDbContext();
         
-        var project = new Project { Id = 1, Name = "Test Project", Visibility = "public" };
+        var project = new Project { Id = 1, Name = "Test Project" };
         db.Projects.Add(project);
         
         var attachment = new Attachment 
@@ -234,7 +234,7 @@ public class ReportGenerationTests
         // Arrange
         var db = CreateDbContext();
 
-        var project = new Project { Id = 1, Name = "Test Project", Visibility = "public" };
+        var project = new Project { Id = 1, Name = "Test Project" };
         db.Projects.Add(project);
 
         var report = new Report
