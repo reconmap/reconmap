@@ -6,8 +6,8 @@ import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
+import TargetIcon from "components/ui/TargetIcon";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
-import TargetIcon from "images/icons/target.svg?react";
 
 const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any) => {
     const defaultFormValues = {
@@ -52,7 +52,7 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
         <ModalDialog
             title={
                 <>
-                    <TargetIcon style={{ width: "24px" }} /> New report version details
+                    <TargetIcon /> New report version details
                 </>
             }
             visible={isOpen}

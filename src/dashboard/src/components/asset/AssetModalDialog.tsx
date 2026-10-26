@@ -2,8 +2,8 @@ import { requestAssetPost } from "api/requests/assets";
 import NativeButton from "components/forms/NativeButton";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
+import TargetIcon from "components/ui/TargetIcon";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
-import TargetIcon from "images/icons/target.svg?react";
 import AssetTypes from "models/AssetTypes";
 import { useState } from "react";
 import AssetForm from "./AssetForm";
@@ -39,7 +39,7 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
             title={
                 <>
                     <h4>
-                        <TargetIcon style={{ width: "20px", marginRight: "5px" }} />
+                        <TargetIcon style={{ marginRight: "5px" }} />
                         New asset details
                     </h4>
                 </>

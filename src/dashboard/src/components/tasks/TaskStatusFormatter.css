@@ -4,9 +4,13 @@ span.task-status-formatter {
   align-items: center;
   display: flex;
 
-  background-repeat: no-repeat;
-  background-image: url("../../images/icons/status-todo-doing.svg");
-  padding-left: 30px;
+  &::before {
+    content: "☐";
+    font-size: 1.4em;
+    font-weight: bold;
+    line-height: 1;
+    margin-right: 5px;
+  }
 
   img {
     width: 20px;
@@ -14,6 +18,7 @@ span.task-status-formatter {
   }
 }
 
-span.task-status-formatter-done {
-  background-image: url("../../images/icons/status-done.svg");
+span.task-status-formatter-done::before {
+  content: "☑";
+  color: #31af91;
 }
