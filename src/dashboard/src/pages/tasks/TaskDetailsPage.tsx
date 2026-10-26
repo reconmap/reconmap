@@ -85,8 +85,12 @@ const TaskDetailsPage = () => {
 
     const onStatusChange = (ev) => {
         const status = ev.target.value;
-        requestTaskPatch(task.id, { status: status })
+
+        // The API's PUT endpoint replaces the whole task and validates required fields,
+        // so send the full task with the new status instead of a partial body.
+        requestTaskPatch(task.id, { ...task, status })
             .then(() => {
+                queryClient.invalidateQueries({ queryKey: ["tasks"] });
                 actionCompletedToast("The status has been transitioned.");
             })
             .catch((err) => console.error(err));

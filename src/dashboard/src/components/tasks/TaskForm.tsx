@@ -5,6 +5,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
 import { useEffect } from "react";
 import { TaskPriorityList } from "../../models/TaskPriority";
+import TaskStatuses from "../../models/TaskStatuses";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 
 const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask }: any) => {
@@ -103,6 +104,20 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
                         {TaskPriorityList.map((priority, index) => (
                             <option key={index} value={priority.value}>
                                 {priority.name}
+                            </option>
+                        ))}
+                    </NativeSelect>
+                }
+            />
+
+            <HorizontalLabelledField
+                label="Status"
+                htmlFor="status"
+                control={
+                    <NativeSelect id="status" name="status" onChange={onFormChange} value={task.status || "todo"}>
+                        {TaskStatuses.map((status, index) => (
+                            <option key={index} value={status.id}>
+                                {status.name}
                             </option>
                         ))}
                     </NativeSelect>

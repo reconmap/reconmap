@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The task form (create and edit pages) has a **Status** dropdown with Todo, Doing and Done. New tasks default to Todo.
 - Users can leave comments on tasks. The task details page has a **Comments** tab, using the same comments panel as projects and vulnerabilities, and the API accepts `parentType: "task"` on `POST /api/comments` and `GET /api/comments`.
 - The audit log records comment creation as well as deletion.
 - Spanish and French translations for the comments panel.
@@ -75,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Task details: the status dropdown did not save changes, because it sent only the `status` field to the task API, which replaces the whole task and rejects partial bodies. It now sends the full task, and the page refreshes to show the new status.
 - Vulnerability comments: the Save button was visible to every role, a success message appeared before the comment was saved, and failures were not reported.
 - Deleting a comment no longer treats the empty `204 No Content` response as an error.
 - Creating a comment no longer lets the client set the comment's own `id` or `createdAt`: the endpoint now takes a request DTO.
