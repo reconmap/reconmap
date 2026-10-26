@@ -16,3 +16,5 @@ From the projects list you can:
 - Archived projects can be found in the system tools section or by using the search.
 
 Each project card shows its category and client, and the engagement start and end dates.
+
+The **Task progress** column shows the share of the project's tasks marked as done, as a progress bar. Projects without tasks show "No tasks", and templates show "(n/a)".

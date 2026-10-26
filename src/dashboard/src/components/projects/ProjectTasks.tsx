@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { requestEntity } from "utilities/requests";
 import TasksTable from "../tasks/TasksTable";
+import TaskProgress from "./TaskProgress";
 import CreateButton from "../ui/buttons/CreateButton";
 
 const ProjectTasks = ({ project }: any) => {
@@ -53,17 +54,13 @@ const ProjectTasks = ({ project }: any) => {
         <section>
             <h4>
                 Tasks{" "}
-                {!isTemplate && (
+                {!isTemplate && tableModel.tasks && tableModel.tasks.length > 0 && (
                     <>
                         &nbsp;
-                        <small>
-                            (
-                            {tableModel.tasks &&
-                                tableModel.tasks.reduce((total, task) => {
-                                    return task.status === "done" ? total + 1 : total;
-                                }, 0)}
-                            /{tableModel.tasks && tableModel.tasks.length} completed)
-                        </small>
+                        <TaskProgress
+                            completed={tableModel.tasks.filter((task) => task.status === "done").length}
+                            total={tableModel.tasks.length}
+                        />
                     </>
                 )}
                 {!project.archived && (

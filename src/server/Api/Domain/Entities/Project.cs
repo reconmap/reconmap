@@ -51,4 +51,9 @@ public class Project : TimestampedEntity
     [MaxLength(40)]
     public string? ExternalId { get; set; }
 
+    /// <summary>Number of tasks in the project. Not stored; filled in when projects are listed.</summary>
+    [NotMapped] public int NumTasks { get; set; }
+
+    /// <summary>Number of tasks with the <c>done</c> status. Not stored; filled in when projects are listed.</summary>
+    [NotMapped] public int NumCompletedTasks { get; set; }
 }

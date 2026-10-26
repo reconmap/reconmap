@@ -51,8 +51,35 @@ public sealed class ProjectService(AppDbContext db) : IProjectService
 
         var totalCount = await q.CountAsync(cancellationToken);
         var data = await q.Skip(paging.Offset).Take(paging.Limit).ToListAsync(cancellationToken);
+        await FillTaskCountsAsync(data, cancellationToken);
 
         return new PagedResult<Project>(data, totalCount);
+    }
+
+    private async Task FillTaskCountsAsync(List<Project> projects, CancellationToken cancellationToken)
+    {
+        if (projects.Count == 0) return;
+
+        var projectIds = projects.Select(p => p.Id).ToList();
+        var counts = await db.Tasks
+            .AsNoTracking()
+            .Where(t => projectIds.Contains(t.ProjectId))
+            .GroupBy(t => t.ProjectId)
+            .Select(g => new
+            {
+                ProjectId = g.Key,
+                NumTasks = g.Count(),
+                NumCompletedTasks = g.Count(t => t.Status == "done")
+            })
+            .ToDictionaryAsync(c => c.ProjectId, cancellationToken);
+
+        foreach (var project in projects)
+        {
+            if (!counts.TryGetValue(project.Id, out var count)) continue;
+
+            project.NumTasks = count.NumTasks;
+            project.NumCompletedTasks = count.NumCompletedTasks;
+        }
     }
 
     public Task<Project?> GetByIdAsync(int id, CancellationToken cancellationToken = default)

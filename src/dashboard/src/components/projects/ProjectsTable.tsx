@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import ClientLink from "../clients/ClientLink";
 import ProjectBadge from "./ProjectBadge";
+import TaskProgress from "./TaskProgress";
 
 const ProjectsTable = ({ projects, showClientColumn = true }: any) => {
     const navigate = useNavigate();
@@ -41,7 +42,16 @@ const ProjectsTable = ({ projects, showClientColumn = true }: any) => {
             ),
         },
         { header: "Description", className: "only-desktop", cell: (project) => project.description },
-        { header: "# Tasks", className: "only-desktop", cell: (project) => project.numTasks },
+        {
+            header: "Task progress",
+            className: "only-desktop",
+            cell: (project) => {
+                if (project.isTemplate) return <span title="Not applicable">(n/a)</span>;
+                if (project.numTasks === 0) return "No tasks";
+
+                return <TaskProgress completed={project.numCompletedTasks} total={project.numTasks} />;
+            },
+        },
         {
             header: "Category",
             cell: (project) => (project.categoryId !== null ? project.category?.name : "(undefined)"),

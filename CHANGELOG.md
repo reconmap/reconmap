@@ -53,6 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Users can leave comments on tasks. The task details page has a **Comments** tab, using the same comments panel as projects and vulnerabilities, and the API accepts `parentType: "task"` on `POST /api/comments` and `GET /api/comments`.
 - The audit log records comment creation as well as deletion.
 - Spanish and French translations for the comments panel.
+- The project tasks heading shows the completed tasks as a progress bar instead of the "(x/y completed)" text.
+- The projects list has a **Task progress** column, shown as a progress bar, instead of the **# Tasks** column, which was always empty. `GET /api/projects` returns `numTasks` and `numCompletedTasks` for each project.
 
 - Demo data generator (`testing/scripts/generate_demo_data.py`) produces data that resembles a real engagement: real vulnerability and project categories, realistic findings with CVSS scores, assets, tasks, reports, notes, members, runners, scan runs and their tasks, command schedules, webhooks, notifications, and audit log entries. Pass `--seed` for reproducible output.
 - Data import (`POST /api/system/data`) accepts `project_members`, `notes`, `notifications`, `reports`, `runners`, `scan_runs` (with nested `Tasks`), `command_schedules` and `webhooks`.
