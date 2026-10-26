@@ -234,7 +234,6 @@ const TaskDetailsPage = () => {
                                 <div>
                                     <AttachmentsDropzone parentType={parentType} parentId={parentId} />
 
-                                    <h4>Attachment list</h4>
                                     <AttachmentsTable attachments={attachments} />
                                 </div>
                             )}

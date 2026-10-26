@@ -4,6 +4,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import AssetModalDialog from "components/asset/AssetModalDialog";
 import AssetBadge from "components/asset/AssetBadge";
 import Tags from "components/ui/Tags";
+import TabToolbar from "components/ui/TabToolbar";
 import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -99,18 +100,21 @@ const ProjectAssets = ({ project }: any) => {
 
     return (
         <section>
-            <h4 className="title is-4">Assets</h4>
-            {!project.archived && (
-                <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                    <AssetModalDialog
-                        project={project}
-                        isOpen={isAddAssetDialogOpen}
-                        onSubmit={onAssetFormSaved}
-                        onCancel={closeAddAssetDialog}
-                    />
-                    <CreateButton onClick={openAddAssetDialog}>New asset&hellip;</CreateButton>
-                </RestrictedComponent>
-            )}
+            <TabToolbar
+                end={
+                    !project.archived && (
+                        <RestrictedComponent roles={["administrator", "superuser", "user"]}>
+                            <AssetModalDialog
+                                project={project}
+                                isOpen={isAddAssetDialogOpen}
+                                onSubmit={onAssetFormSaved}
+                                onCancel={closeAddAssetDialog}
+                            />
+                            <CreateButton onClick={openAddAssetDialog}>New asset&hellip;</CreateButton>
+                        </RestrictedComponent>
+                    )
+                }
+            />
             {(assets as any)?.pageCount > 1 && (
                 <center>
                     <PaginationV2 page={pageNumber - 1} total={assets!.pageCount} onPageChange={onPageChange} />

@@ -222,8 +222,6 @@ const ClientDetailsPage = () => {
 
                         {1 === tabIndex && (
                             <div>
-                                <h4 className="title is-4">Contacts</h4>
-
                                 {contacts && (
                                     <>
                                         <form onSubmit={onFormSubmit}>

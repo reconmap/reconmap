@@ -13,7 +13,6 @@ const ProjectAttachmentsTab = ({ project }: any) => {
             <RestrictedComponent roles={["administrator", "superuser", "user"]} message="(access restricted)">
                 <AttachmentsDropzone parentType={parentType} parentId={parentId} />
 
-                <h4>Attachment list</h4>
                 <AttachmentsTable attachments={attachments} />
             </RestrictedComponent>
         </section>

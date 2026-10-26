@@ -10,6 +10,7 @@ import BooleanText from "components/ui/BooleanText";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import EmptyField from "components/ui/EmptyField";
+import TabToolbar from "components/ui/TabToolbar";
 import TimestampsSection from "components/ui/TimestampsSection";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/DeleteButton";
@@ -125,9 +126,7 @@ const UserProfilePage = () => {
                     )}
                     {1 === tabIndex && (
                         <div>
-                            <h4>
-                                Activity (<Link to="/auditlog">view full audit log</Link>)
-                            </h4>
+                            <TabToolbar end={<Link to="/auditlog">view full audit log</Link>} />
                             <AuditLogsTable auditLog={auditLog ?? null} hideUserColumns="true" />
                         </div>
                     )}

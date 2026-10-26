@@ -18,7 +18,6 @@ const ProjectDetailsTab = ({ project }: any) => {
     return (
         <section className="columns">
             <div className="column is-three-quarters content">
-                <h4>Project details</h4>
                 <dl>
                     {!isTemplate && (
                         <>

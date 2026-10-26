@@ -6,6 +6,7 @@ import { requestEntity } from "utilities/requests";
 import TasksTable from "../tasks/TasksTable";
 import TaskProgress from "./TaskProgress";
 import CreateButton from "../ui/buttons/CreateButton";
+import TabToolbar from "../ui/TabToolbar";
 
 const ProjectTasks = ({ project }: any) => {
     const navigate = useNavigate();
@@ -52,23 +53,25 @@ const ProjectTasks = ({ project }: any) => {
 
     return (
         <section>
-            <h4>
-                Tasks{" "}
-                {!isTemplate && tableModel.tasks && tableModel.tasks.length > 0 && (
-                    <>
-                        &nbsp;
+            <TabToolbar
+                start={
+                    !isTemplate &&
+                    tableModel.tasks &&
+                    tableModel.tasks.length > 0 && (
                         <TaskProgress
                             completed={tableModel.tasks.filter((task) => task.status === "done").length}
                             total={tableModel.tasks.length}
                         />
-                    </>
-                )}
-                {!project.archived && (
-                    <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                        <CreateButton onClick={onAddTaskClick}>New task</CreateButton>
-                    </RestrictedComponent>
-                )}
-            </h4>
+                    )
+                }
+                end={
+                    !project.archived && (
+                        <RestrictedComponent roles={["administrator", "superuser", "user"]}>
+                            <CreateButton onClick={onAddTaskClick}>New task</CreateButton>
+                        </RestrictedComponent>
+                    )
+                }
+            />
 
             <TasksTable tableModel={tableModel} showProjectColumn={false} reloadCallback={reloadTasks} />
         </section>

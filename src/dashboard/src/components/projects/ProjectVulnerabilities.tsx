@@ -2,6 +2,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import CreateButton from "components/ui/buttons/CreateButton";
 import VulnerabilityFilters from "components/vulnerabilities/VulnerabilityFilters";
 import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
+import TabToolbar from "components/ui/TabToolbar";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { requestEntity } from "utilities/requests";
@@ -42,19 +43,20 @@ const ProjectVulnerabilities = ({ project }: any) => {
 
     return (
         <section>
-            <div>
-                <VulnerabilityFilters
-                    tableModel={tableModel}
-                    tableModelSetter={setTableModel}
-                    showProjectFilter={false}
-                />
-                <hr />
-                {!project.archived && (
-                    <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                        <CreateButton onClick={handleCreateVulnerability}>New vulnerability</CreateButton>
-                    </RestrictedComponent>
-                )}
-            </div>
+            <TabToolbar
+                end={
+                    !project.archived && (
+                        <RestrictedComponent roles={["administrator", "superuser", "user"]}>
+                            <CreateButton onClick={handleCreateVulnerability}>New vulnerability</CreateButton>
+                        </RestrictedComponent>
+                    )
+                }
+            />
+            <VulnerabilityFilters
+                tableModel={tableModel}
+                tableModelSetter={setTableModel}
+                showProjectFilter={false}
+            />
             <VulnerabilitiesTable
                 tableModel={tableModel}
                 tableModelSetter={setTableModel}
