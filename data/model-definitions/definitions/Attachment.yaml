@@ -21,7 +21,8 @@ properties:
     - organisation
     - client
   parent_id:
-    type: integer
+    type: string
+    format: uuid
   client_file_name:
     type: string
   file_name:

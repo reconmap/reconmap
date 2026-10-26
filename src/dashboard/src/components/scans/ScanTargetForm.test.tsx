@@ -42,8 +42,8 @@ const PLACEHOLDER = "e.g. https://example.com, 192.168.1.1, example.com";
 describe("ScanTargetForm", () => {
     const mockProjects = {
         data: [
-            { id: 1, name: "Project Alpha" },
-            { id: 2, name: "Project Beta" },
+            { id: "018f0000-0000-7000-8000-000000000001", name: "Project Alpha" },
+            { id: "018f0000-0000-7000-8000-000000000002", name: "Project Beta" },
         ],
     };
 
@@ -79,15 +79,15 @@ describe("ScanTargetForm", () => {
         vi.mocked(ensureUrlAsset).mockResolvedValue({} as any);
 
         render(<ScanTargetForm />);
-        fillAndSubmit("1", "https://target-url.com", "Web scan");
+        fillAndSubmit("018f0000-0000-7000-8000-000000000001", "https://target-url.com", "Web scan");
 
         await waitFor(() => {
-            expect(ensureUrlAsset).toHaveBeenCalledWith(1, "https://target-url.com");
+            expect(ensureUrlAsset).toHaveBeenCalledWith("018f0000-0000-7000-8000-000000000001", "https://target-url.com");
             expect(requestScanRunPost).toHaveBeenCalledWith({
                 target: "https://target-url.com",
                 targetType: "url",
                 objective: "Web scan",
-                projectId: 1,
+                projectId: "018f0000-0000-7000-8000-000000000001",
             });
             expect(navigate).toHaveBeenCalledWith("/scans/runs/99");
         });
@@ -95,7 +95,7 @@ describe("ScanTargetForm", () => {
 
     it("does NOT call ensureUrlAsset if target is not a URL", async () => {
         render(<ScanTargetForm />);
-        fillAndSubmit("2", "192.168.1.1");
+        fillAndSubmit("018f0000-0000-7000-8000-000000000002", "192.168.1.1");
 
         await waitFor(() => {
             expect(ensureUrlAsset).not.toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("ScanTargetForm", () => {
                 target: "192.168.1.1",
                 targetType: "ip",
                 objective: "Full reconnaissance",
-                projectId: 2,
+                projectId: "018f0000-0000-7000-8000-000000000002",
             });
         });
     });
@@ -115,7 +115,7 @@ describe("ScanTargetForm", () => {
         });
 
         render(<ScanTargetForm />);
-        fillAndSubmit("1", "192.168.1.1", "Code audit");
+        fillAndSubmit("018f0000-0000-7000-8000-000000000001", "192.168.1.1", "Code audit");
 
         await waitFor(() => expect(errorToast).toHaveBeenCalledWith("No tool supports this objective"));
         expect(navigate).not.toHaveBeenCalled();

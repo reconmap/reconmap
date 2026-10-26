@@ -20,22 +20,22 @@ public class ProjectServiceTests
     {
         using var db = CreateDbContext();
         db.Projects.AddRange(
-            new Project { Id = 1, Name = "With tasks" },
-            new Project { Id = 2, Name = "No tasks" });
+            new Project { Id = TestIds.Of(1), Name = "With tasks" },
+            new Project { Id = TestIds.Of(2), Name = "No tasks" });
         db.Tasks.AddRange(
-            new ProjectTask { Id = 1, ProjectId = 1, Summary = "a", Priority = "low", Status = "done" },
-            new ProjectTask { Id = 2, ProjectId = 1, Summary = "b", Priority = "low", Status = "todo" },
-            new ProjectTask { Id = 3, ProjectId = 1, Summary = "c", Priority = "low", Status = "done" });
+            new ProjectTask { Id = TestIds.Of(1), ProjectId = TestIds.Of(1), Summary = "a", Priority = "low", Status = "done" },
+            new ProjectTask { Id = TestIds.Of(2), ProjectId = TestIds.Of(1), Summary = "b", Priority = "low", Status = "todo" },
+            new ProjectTask { Id = TestIds.Of(3), ProjectId = TestIds.Of(1), Summary = "c", Priority = "low", Status = "done" });
         await db.SaveChangesAsync();
 
         var service = new ProjectService(db);
         var result = await service.GetManyAsync(new ProjectFilter(), new Paging(0, 10));
 
-        var withTasks = result.Data.Single(p => p.Id == 1);
+        var withTasks = result.Data.Single(p => p.Id == TestIds.Of(1));
         Assert.Equal(3, withTasks.NumTasks);
         Assert.Equal(2, withTasks.NumCompletedTasks);
 
-        var noTasks = result.Data.Single(p => p.Id == 2);
+        var noTasks = result.Data.Single(p => p.Id == TestIds.Of(2));
         Assert.Equal(0, noTasks.NumTasks);
         Assert.Equal(0, noTasks.NumCompletedTasks);
     }

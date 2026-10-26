@@ -10,7 +10,7 @@ namespace Reconmap.Api.Controllers;
 
 public class CreateScanRunRequest
 {
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
     public string Target { get; set; } = string.Empty;
     public string TargetType { get; set; } = string.Empty;
     public string Objective { get; set; } = ScanObjectives.FullReconnaissance;
@@ -28,7 +28,7 @@ public class ScanRunsController(AppDbContext dbContext, IToolRecommendationServi
     : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetMany([FromQuery] int? projectId, [FromQuery] int limit = 20)
+    public async Task<IActionResult> GetMany([FromQuery] Guid? projectId, [FromQuery] int limit = 20)
     {
         var query = dbContext.ScanRuns.Include(r => r.Tasks).AsNoTracking();
         if (projectId.HasValue) query = query.Where(r => r.ProjectId == projectId.Value);

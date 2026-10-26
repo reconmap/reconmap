@@ -19,7 +19,7 @@ namespace Reconmap.Api.Controllers;
 public class CommandProcessorJob
 {
     public string CommandUsageId { get; set; } = string.Empty;
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
     public int? UserId { get; set; }
     public string FilePath { get; set; } = string.Empty;
 }
@@ -126,7 +126,7 @@ public class CommandsController(
         {
             CreatedById = userId,
             ParentType = "command",
-            ParentId = 0,
+            ParentId = Guid.Empty,
             ClientFileName = resultFile.FileName,
             FileName = uniqueName,
             FileSize = (int)resultFile.Length,
@@ -138,7 +138,7 @@ public class CommandsController(
         await dbContext.SaveChangesAsync();
 
         if (!form.TryGetValue("projectId", out var projectIdValue) ||
-            !int.TryParse(projectIdValue, out var parsedProjectId))
+            !Guid.TryParse(projectIdValue, out var parsedProjectId))
         {
             return BadRequest("A project is required to save the findings.");
         }

@@ -7,7 +7,8 @@ properties:
     type: integer
     nullable: true
   project_id:
-    type: integer
+    type: string
+    format: uuid
   created_at:
     type: string
   updated_at:

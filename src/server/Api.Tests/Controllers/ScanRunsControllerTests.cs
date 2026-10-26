@@ -44,13 +44,13 @@ public class ScanRunsControllerTests
     private static async Task<AppDbContext> DbWithProject()
     {
         var db = CreateDbContext();
-        db.Projects.Add(new Project { Id = 1, Name = "P" });
+        db.Projects.Add(new Project { Id = TestIds.Of(1), Name = "P" });
         await db.SaveChangesAsync();
         return db;
     }
 
     private static CreateScanRunRequest NewRequest() =>
-        new() { ProjectId = 1, Target = " example.com ", TargetType = "domain", Objective = "Web scan" };
+        new() { ProjectId = TestIds.Of(1), Target = " example.com ", TargetType = "domain", Objective = "Web scan" };
 
     [Fact]
     public async Task CreateOne_StoresRunTasksAndOnceSchedulesWithRealCommandLines()
@@ -69,7 +69,7 @@ public class ScanRunsControllerTests
         var schedules = await db.CommandSchedules.OrderBy(s => s.ScanRunTaskId).ToListAsync();
         Assert.Equal(2, schedules.Count);
         Assert.All(schedules, s => Assert.Equal("once", s.CronExpression));
-        Assert.All(schedules, s => Assert.Equal(1, s.ProjectId));
+        Assert.All(schedules, s => Assert.Equal(TestIds.Of(1), s.ProjectId));
         Assert.Equal("nmap -oX - example.com", schedules[0].ArgumentValues);
         Assert.Equal("nmap-tcp-syn", schedules[0].CommandUsageId);
         Assert.Equal(run.Tasks.Select(t => (int?)t.Id).Order(), schedules.Select(s => s.ScanRunTaskId));
@@ -132,15 +132,15 @@ public class ScanRunsControllerTests
     public async Task GetMany_ReturnsNewestFirstFilteredByProject()
     {
         using var db = await DbWithProject();
-        db.Projects.Add(new Project { Id = 2, Name = "Q" });
+        db.Projects.Add(new Project { Id = TestIds.Of(2), Name = "Q" });
         db.ScanRuns.AddRange(
-            new ScanRun { ProjectId = 1, Target = "a", Objective = "o" },
-            new ScanRun { ProjectId = 2, Target = "b", Objective = "o" },
-            new ScanRun { ProjectId = 1, Target = "c", Objective = "o" });
+            new ScanRun { ProjectId = TestIds.Of(1), Target = "a", Objective = "o" },
+            new ScanRun { ProjectId = TestIds.Of(2), Target = "b", Objective = "o" },
+            new ScanRun { ProjectId = TestIds.Of(1), Target = "c", Objective = "o" });
         await db.SaveChangesAsync();
         var controller = CreateController(db, TwoTools());
 
-        var ok = Assert.IsType<OkObjectResult>(await controller.GetMany(1));
+        var ok = Assert.IsType<OkObjectResult>(await controller.GetMany(TestIds.Of(1)));
 
         Assert.Equal(["c", "a"], Assert.IsAssignableFrom<IEnumerable<ScanRun>>(ok.Value).Select(r => r.Target));
     }

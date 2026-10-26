@@ -65,6 +65,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 v => Enum.Parse<UserRole>(v, ignoreCase: true)
             );
 
+        modelBuilder.Entity<Project>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
+        modelBuilder.Entity<ProjectTask>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
+        modelBuilder.Entity<Report>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
+        modelBuilder.Entity<Vulnerability>().Property(e => e.Id).HasValueGenerator<GuidV4ValueGenerator>();
+
         modelBuilder.Entity<UserApiToken>()
             .Property(t => t.Scope)
             .HasConversion(

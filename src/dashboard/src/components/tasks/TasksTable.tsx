@@ -19,7 +19,7 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
 
     const onSelectionChange = (ev) => {
         const target = ev.target;
-        const selectionId = parseInt(target.value);
+        const selectionId = target.value;
         if (target.checked) {
             setTableModel({
                 ...tableModel,

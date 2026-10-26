@@ -51,29 +51,32 @@ public class OpaActionFilter(OpaAuthorizationService opaService, AppDbContext db
             .ToListAsync();
 
         // Extract potential resource IDs from action arguments
-        int? projectId = null;
-        if (context.ActionArguments.TryGetValue("projectId", out var pidObj) && pidObj is int pid) projectId = (int)pid;
-        int? resourceId = null;
-        if (context.ActionArguments.TryGetValue("id", out var idObj) && idObj is int id)
+        Guid? projectId = null;
+        if (context.ActionArguments.TryGetValue("projectId", out var pidObj) && pidObj is Guid pid) projectId = pid;
+        object? resourceId = null;
+        if (context.ActionArguments.TryGetValue("id", out var idObj) && idObj is int or Guid)
         {
-            resourceId = id;
+            resourceId = idObj;
             // Try to infer projectId if the resource is a child of project
-            if (controller == "projects") projectId = id;
-            else if (controller == "vulnerabilities")
+            if (idObj is Guid id)
             {
-                projectId = await dbContext.Vulnerabilities.Where(v => v.Id == id).Select(v => (int?)v.ProjectId).FirstOrDefaultAsync();
+                if (controller == "projects") projectId = id;
+                else if (controller == "vulnerabilities")
+                {
+                    projectId = await dbContext.Vulnerabilities.Where(v => v.Id == id).Select(v => v.ProjectId).FirstOrDefaultAsync();
+                }
+                else if (controller == "tasks")
+                {
+                    projectId = await dbContext.Tasks.Where(t => t.Id == id).Select(t => (Guid?)t.ProjectId).FirstOrDefaultAsync();
+                }
+                else if (controller == "reports")
+                {
+                    projectId = await dbContext.Reports.Where(r => r.Id == id && !r.IsTemplate).Select(r => r.ProjectId).FirstOrDefaultAsync();
+                }
             }
-            else if (controller == "tasks")
+            else if (idObj is int assetId && controller == "assets")
             {
-                projectId = await dbContext.Tasks.Where(t => t.Id == id).Select(t => (int?)t.ProjectId).FirstOrDefaultAsync();
-            }
-            else if (controller == "assets")
-            {
-                projectId = await dbContext.Assets.Where(a => a.Id == id).Select(a => (int?)a.ProjectId).FirstOrDefaultAsync();
-            }
-            else if (controller == "reports")
-            {
-                projectId = await dbContext.Reports.Where(r => r.Id == id && !r.IsTemplate).Select(r => r.ProjectId).FirstOrDefaultAsync();
+                projectId = await dbContext.Assets.Where(a => a.Id == assetId).Select(a => (Guid?)a.ProjectId).FirstOrDefaultAsync();
             }
         }
         else if (context.ActionArguments.Values.FirstOrDefault(v => v is Vulnerability) is Vulnerability v)

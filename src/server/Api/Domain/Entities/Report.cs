@@ -6,9 +6,9 @@ namespace Reconmap.Api.Domain.Entities;
 [Table("report")]
 public class Report : CreationTimestampedEntity
 {
-    [Key] public int Id { get; set; }
+    [Key] public Guid Id { get; set; }
 
-    public int? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     public int? CreatedById { get; set; }
 

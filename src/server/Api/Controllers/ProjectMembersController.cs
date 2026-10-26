@@ -7,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Reconmap.Api.Controllers;
 
-[Route("api/projects/{projectId:int}/members")]
+[Route("api/projects/{projectId:guid}/members")]
 [ApiController]
 public class ProjectMembersController(AppDbContext dbContext, IKeycloakUserDirectory directory) : ControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AddProjectMember(int projectId, [FromBody] JsonElement body)
+    public async Task<IActionResult> AddProjectMember(Guid projectId, [FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("userId", out var value))
             return BadRequest("Missing userId");
@@ -44,7 +44,7 @@ public class ProjectMembersController(AppDbContext dbContext, IKeycloakUserDirec
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetProjectMembers(int projectId)
+    public async Task<IActionResult> GetProjectMembers(Guid projectId)
     {
         var members = await dbContext.ProjectMembers
             .Where(pu => pu.ProjectId == projectId)

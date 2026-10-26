@@ -12,6 +12,8 @@ const useAssetsQuery = (params: any) => {
     return useQuery({
         queryKey: ["assets", params],
         queryFn: () => requestAssets(params),
+        // The API rejects a request without a project id.
+        enabled: Boolean(params?.projectId),
     });
 };
 

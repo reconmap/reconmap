@@ -12,10 +12,10 @@ public class AssetsControllerTests
 {
     private sealed class FakeAiService : IAiService
     {
-        public Task<string> GenerateRemediationAsync(string vulnerabilitySummary, int? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
-        public Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, int? projectId = null, int? userId = null) => Task.FromResult(new AiParsingResult());
-        public Task<string> EnrichAssetAsync(string assetName, string assetType, int? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
-        public Task<string> TriageVulnerabilityAsync(string summary, string description, int? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
+        public Task<string> GenerateRemediationAsync(string vulnerabilitySummary, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
+        public Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, Guid? projectId = null, int? userId = null) => Task.FromResult(new AiParsingResult());
+        public Task<string> EnrichAssetAsync(string assetName, string assetType, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
+        public Task<string> TriageVulnerabilityAsync(string summary, string description, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
     }
 
     private static AppDbContext CreateDbContext()
@@ -35,7 +35,7 @@ public class AssetsControllerTests
 
         var result = await controller.EnsureOne(new AssetsController.EnsureAssetRequest
         {
-            ProjectId = 12,
+            ProjectId = TestIds.Of(12),
             Name = "https://example.com",
             Type = "url"
         });
@@ -46,7 +46,7 @@ public class AssetsControllerTests
         Assert.Equal("url", asset.Type);
 
         var saved = await db.Assets.SingleAsync();
-        Assert.Equal(12, saved.ProjectId);
+        Assert.Equal(TestIds.Of(12), saved.ProjectId);
         Assert.Equal("https://example.com", saved.Name);
     }
 
@@ -56,7 +56,7 @@ public class AssetsControllerTests
         using var db = CreateDbContext();
         for (var i = 1; i <= 5; i++)
         {
-            db.Assets.Add(new Asset { ProjectId = 7, Name = $"asset-{i}", Type = "host" });
+            db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = $"asset-{i}", Type = "host" });
         }
         await db.SaveChangesAsync();
 
@@ -64,7 +64,7 @@ public class AssetsControllerTests
         controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
         controller.HttpContext.Request.QueryString = new QueryString("?limit=2&page=3");
 
-        var result = await controller.GetMany(7);
+        var result = await controller.GetMany(TestIds.Of(7));
 
         var ok = Assert.IsType<OkObjectResult>(result);
         var assets = Assert.IsAssignableFrom<IEnumerable<Asset>>(ok.Value);
@@ -79,14 +79,14 @@ public class AssetsControllerTests
         using var db = CreateDbContext();
         for (var i = 1; i <= 25; i++)
         {
-            db.Assets.Add(new Asset { ProjectId = 7, Name = $"asset-{i}", Type = "host" });
+            db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = $"asset-{i}", Type = "host" });
         }
         await db.SaveChangesAsync();
 
         var controller = new AssetsController(db, new FakeAiService());
         controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() };
 
-        var result = await controller.GetMany(7);
+        var result = await controller.GetMany(TestIds.Of(7));
 
         var ok = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(25, Assert.IsAssignableFrom<IEnumerable<Asset>>(ok.Value).Count());
@@ -99,7 +99,7 @@ public class AssetsControllerTests
         using var db = CreateDbContext();
         db.Assets.Add(new Asset
         {
-            ProjectId = 4,
+            ProjectId = TestIds.Of(4),
             Name = "https://example.com",
             Type = "url"
         });
@@ -109,7 +109,7 @@ public class AssetsControllerTests
 
         var result = await controller.EnsureOne(new AssetsController.EnsureAssetRequest
         {
-            ProjectId = 4,
+            ProjectId = TestIds.Of(4),
             Name = "https://example.com",
             Type = "url"
         });

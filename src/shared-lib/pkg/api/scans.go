@@ -7,7 +7,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"strconv"
 )
 
 const (
@@ -56,14 +55,14 @@ func ReportScanTaskStatus(apiBaseUri string, accessToken string, taskId int, sta
 }
 
 // UploadCommandOutput sends the output of a command to the API so it is parsed into the project.
-func UploadCommandOutput(apiBaseUri string, accessToken string, commandUsageId string, projectId int, fileName string, content []byte) error {
+func UploadCommandOutput(apiBaseUri string, accessToken string, commandUsageId string, projectId string, fileName string, content []byte) error {
 	var body bytes.Buffer
 	writer := multipart.NewWriter(&body)
 
 	if err := writer.WriteField("commandUsageId", commandUsageId); err != nil {
 		return err
 	}
-	if err := writer.WriteField("projectId", strconv.Itoa(projectId)); err != nil {
+	if err := writer.WriteField("projectId", projectId); err != nil {
 		return err
 	}
 	part, err := writer.CreateFormFile("resultFile", fileName)

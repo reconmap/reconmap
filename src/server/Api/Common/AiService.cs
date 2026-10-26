@@ -43,15 +43,15 @@ public class AiVulnerability
 
 public interface IAiService
 {
-    Task<string> GenerateRemediationAsync(string vulnerabilitySummary, int? projectId = null, int? userId = null);
-    Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, int? projectId = null, int? userId = null);
-    Task<string> EnrichAssetAsync(string assetName, string assetType, int? projectId = null, int? userId = null);
-    Task<string> TriageVulnerabilityAsync(string summary, string description, int? projectId = null, int? userId = null);
+    Task<string> GenerateRemediationAsync(string vulnerabilitySummary, Guid? projectId = null, int? userId = null);
+    Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, Guid? projectId = null, int? userId = null);
+    Task<string> EnrichAssetAsync(string assetName, string assetType, Guid? projectId = null, int? userId = null);
+    Task<string> TriageVulnerabilityAsync(string summary, string description, Guid? projectId = null, int? userId = null);
 }
 
 public sealed class AiService(IAiChatClientFactory clientFactory) : IAiService
 {
-    public async Task<string> GenerateRemediationAsync(string summary, int? projectId = null, int? userId = null)
+    public async Task<string> GenerateRemediationAsync(string summary, Guid? projectId = null, int? userId = null)
     {
         var prompt = $"Write instructions on how to remediate this vulnerability: {summary}";
 
@@ -67,7 +67,7 @@ public sealed class AiService(IAiChatClientFactory clientFactory) : IAiService
         return response.Text;
     }
 
-    public async Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, int? projectId = null, int? userId = null)
+    public async Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, Guid? projectId = null, int? userId = null)
     {
         var prompt = $@"
 You are a cybersecurity expert. Parse the following command output from the tool '{toolName}' into a structured JSON format.
@@ -128,7 +128,7 @@ Command Output:
         }
     }
 
-    public async Task<string> EnrichAssetAsync(string assetName, string assetType, int? projectId = null, int? userId = null)
+    public async Task<string> EnrichAssetAsync(string assetName, string assetType, Guid? projectId = null, int? userId = null)
     {
         var prompt = $@"You are an autonomous penetration testing agent. Given the following asset, produce a concise tactical plan:
 
@@ -154,7 +154,7 @@ Be concise and actionable. Format as markdown.";
         return response.Text;
     }
 
-    public async Task<string> TriageVulnerabilityAsync(string summary, string description, int? projectId = null, int? userId = null)
+    public async Task<string> TriageVulnerabilityAsync(string summary, string description, Guid? projectId = null, int? userId = null)
     {
         var details = string.IsNullOrWhiteSpace(description) ? summary : $"{summary}\n\n{description}";
         var prompt = $@"You are a penetration testing triage agent. Rapidly assess the following vulnerability finding:

@@ -7,7 +7,7 @@ import { Link } from "react-router";
 import { ScansUrls } from "AppUrls";
 import ScanStatusTag from "./ScanStatusTag";
 
-const ScanRunsList = ({ limit = 20, projectId }: { limit?: number; projectId?: number }) => {
+const ScanRunsList = ({ limit = 20, projectId }: { limit?: number; projectId?: string }) => {
     const { t } = useTranslation();
     const { data: runs } = useScanRunsQuery({ limit, projectId });
 

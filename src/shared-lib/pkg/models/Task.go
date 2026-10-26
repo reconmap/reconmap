@@ -3,8 +3,8 @@ package models
 
 type Task struct {
 
-	ID int `json:"id"`
-	ProjectId int `json:"project_id"`
+	ID string `json:"id"`
+	ProjectId string `json:"project_id"`
 	CreatedById int `json:"createdById"`
 	AssignedToId int `json:"assignedToId"`
 	InsertTs string `json:"insert_ts"`

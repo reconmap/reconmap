@@ -21,7 +21,7 @@ const ScansPage = ({ mode }: any) => {
     const selectedProjectId = chosenProjectId || projects?.data?.[0]?.id;
 
     const onProjectChange = (ev) => {
-        setChosenProjectId(parseInt(ev.target.value) || null);
+        setChosenProjectId(ev.target.value || null);
     };
 
     const getTitle = () => {

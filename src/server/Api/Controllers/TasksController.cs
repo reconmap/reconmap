@@ -26,9 +26,9 @@ public class TasksController(AppDbContext dbContext, ITaskService taskService) :
         return CreatedAtAction(nameof(GetOne), new { id = task.Id }, task);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:guid}")]
     [Audit(AuditActions.Updated, "Task")]
-    public async Task<IActionResult> UpdateOne(int id, ProjectTask requestModel)
+    public async Task<IActionResult> UpdateOne(Guid id, ProjectTask requestModel)
     {
         var dbModel = await dbContext.Tasks.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -45,7 +45,7 @@ public class TasksController(AppDbContext dbContext, ITaskService taskService) :
 
     [HttpGet]
     public async Task<IActionResult> GetMany([FromQuery] int? limit,
-        [FromQuery] int? projectId,
+        [FromQuery] Guid? projectId,
         [FromQuery] string? priority,
         [FromQuery] string? status,
         [FromQuery] string? keywords,
@@ -57,10 +57,10 @@ public class TasksController(AppDbContext dbContext, ITaskService taskService) :
         return Ok(tasks);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(int id)
+    public async Task<IActionResult> GetOne(Guid id)
     {
         var existing = await dbContext.Tasks
             .Include(t => t.CreatedBy)
@@ -71,9 +71,9 @@ public class TasksController(AppDbContext dbContext, ITaskService taskService) :
         return Ok(existing);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:guid}")]
     [Audit(AuditActions.Deleted, "Task")]
-    public async Task<IActionResult> DeleteOne(int id)
+    public async Task<IActionResult> DeleteOne(Guid id)
     {
         var deleteCount = await dbContext.Tasks
             .Where(n => n.Id == id)
@@ -93,7 +93,7 @@ public class TasksController(AppDbContext dbContext, ITaskService taskService) :
     {
         var ids = body.GetProperty("ids")
             .EnumerateArray()
-            .Select(e => e.GetInt32())
+            .Select(e => e.GetGuid())
             .ToList();
 
         switch (operation)

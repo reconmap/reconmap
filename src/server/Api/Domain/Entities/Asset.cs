@@ -10,7 +10,7 @@ public class Asset : TimestampedEntity
 
     public int? ParentId { get; set; }
 
-    [Required] public int ProjectId { get; set; }
+    [Required] public Guid ProjectId { get; set; }
 
     [Required]
     [MaxLength(200)]

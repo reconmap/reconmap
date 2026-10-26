@@ -1,10 +1,12 @@
 type: object
 properties:
   id:
-    type: integer
+    type: string
+    format: uuid
     nullable: true
   project_id:
-    type: integer
+    type: string
+    format: uuid
     nullable: true
   created_by_id:
     type: integer

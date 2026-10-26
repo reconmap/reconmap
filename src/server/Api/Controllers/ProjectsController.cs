@@ -40,9 +40,9 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
     }
 
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:guid}")]
     [Audit(AuditActions.Updated, "Project")]
-    public async Task<IActionResult> UpdateOne(int id, Project project)
+    public async Task<IActionResult> UpdateOne(Guid id, Project project)
     {
         var dbModel = await dbContext.Projects.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -56,9 +56,9 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
         return Ok(dbModel);
     }
 
-    [HttpPatch("{id:int}")]
+    [HttpPatch("{id:guid}")]
     [Audit(AuditActions.Updated, "Project")]
-    public async Task<IActionResult> PatchOne(int id, [FromBody] JsonElement json)
+    public async Task<IActionResult> PatchOne(Guid id, [FromBody] JsonElement json)
     {
         var updated = await dbContext.Projects
             .Where(n => n.Id == id)
@@ -117,10 +117,10 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
         return Ok(results);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(int id)
+    public async Task<IActionResult> GetOne(Guid id)
     {
         var project = await projectService.GetByIdAsync(id);
         if (project == null) return NotFound();
@@ -128,9 +128,9 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
         return Ok(project);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:guid}")]
     [Audit(AuditActions.Deleted, "Project")]
-    public async Task<IActionResult> DeleteOne(int id)
+    public async Task<IActionResult> DeleteOne(Guid id)
     {
         var deleteCount = await dbContext.Projects
             .Where(n => n.Id == id)
@@ -143,8 +143,8 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
         return NoContent();
     }
 
-    [HttpGet("{projectId:int}/secrets")]
-    public async Task<IActionResult> GetSecrets(int projectId)
+    [HttpGet("{projectId:guid}/secrets")]
+    public async Task<IActionResult> GetSecrets(Guid projectId)
     {
         var secrets = await dbContext.Secrets
             .AsNoTracking()

@@ -17,10 +17,10 @@ describe("scan url helpers", () => {
     it("requests the URL asset ensure endpoint with a trimmed URL", async () => {
         mockedRequestAssetEnsure.mockResolvedValue(new Response(null, { status: 200 }));
 
-        await ensureUrlAsset(9, "  https://example.com/path  ");
+        await ensureUrlAsset("018f0000-0000-7000-8000-000000000001", "  https://example.com/path  ");
 
         expect(mockedRequestAssetEnsure).toHaveBeenCalledWith({
-            projectId: 9,
+            projectId: "018f0000-0000-7000-8000-000000000001",
             name: "https://example.com/path",
             type: "url",
         });

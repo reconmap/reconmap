@@ -8,13 +8,13 @@ namespace Reconmap.Api.Application.Services;
 /// <param name="VisibleProjectIds">Only tasks of these projects. Null means no restriction.</param>
 public sealed record TaskFilter(
     int? Limit = null,
-    int? ProjectId = null,
+    Guid? ProjectId = null,
     string? Priority = null,
     string? Status = null,
     string? Keywords = null,
     int? AssignedToId = null,
     int? ProjectIsArchived = null,
-    IReadOnlyCollection<int>? VisibleProjectIds = null);
+    IReadOnlyCollection<Guid>? VisibleProjectIds = null);
 
 public interface ITaskService
 {

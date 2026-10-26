@@ -14,7 +14,7 @@ const MODERATING_ROLES = ["administrator", "superuser"];
 
 interface CommentsPanelProps {
     parentType: "project" | "task" | "vulnerability";
-    parentId: number;
+    parentId: string;
 }
 
 const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {

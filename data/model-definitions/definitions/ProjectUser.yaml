@@ -6,7 +6,8 @@ properties:
   created_at:
     type: string
   project_id:
-    type: integer
+    type: string
+    format: uuid
   user_id:
     type: integer
 required:

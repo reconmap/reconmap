@@ -14,6 +14,6 @@ const requestReportsTemplates = (params: any = {}) => {
 
 const requestReportPost = (params: any) => requestEntityPost('/reports', params);
 
-const requestReportDelete = (reportId: number) => requestEntityDelete(`/reports/${reportId}`);
+const requestReportDelete = (reportId: string) => requestEntityDelete(`/reports/${reportId}`);
 
 export { requestReportDelete, requestReportPost, requestReports, requestReportsTemplates };

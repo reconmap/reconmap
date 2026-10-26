@@ -19,7 +19,7 @@ public class ScanRun : TimestampedEntity
 {
     [Key] public int Id { get; set; }
 
-    public int ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     public int? CreatedById { get; set; }
 

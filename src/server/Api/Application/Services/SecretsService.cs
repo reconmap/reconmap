@@ -7,11 +7,11 @@ namespace Reconmap.Api.Application.Services;
 
 public interface ISecretsService
 {
-    Task<Secret> CreateAsync(int ownerId, string password, string name, string type, string value, string? note, int? projectId, CancellationToken cancellationToken = default);
+    Task<Secret> CreateAsync(int ownerId, string password, string name, string type, string value, string? note, Guid? projectId, CancellationToken cancellationToken = default);
     Task<Secret?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<List<Secret>> GetManyAsync(int limit, CancellationToken cancellationToken = default);
     Task<(Secret Secret, string Value)?> DecryptAsync(int id, string password, CancellationToken cancellationToken = default);
-    Task<bool> UpdateAsync(int id, string password, string name, string type, string value, string? note, int? projectId, CancellationToken cancellationToken = default);
+    Task<bool> UpdateAsync(int id, string password, string name, string type, string value, string? note, Guid? projectId, CancellationToken cancellationToken = default);
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
 }
 
@@ -19,7 +19,7 @@ public sealed class SecretsService(AppDbContext db) : ISecretsService
 {
     private readonly DataEncryptor _encryptor = new();
 
-    public async Task<Secret> CreateAsync(int ownerId, string password, string name, string type, string value, string? note, int? projectId, CancellationToken cancellationToken = default)
+    public async Task<Secret> CreateAsync(int ownerId, string password, string name, string type, string value, string? note, Guid? projectId, CancellationToken cancellationToken = default)
     {
         var (iv, tag, cypher) = _encryptor.Encrypt(value, password);
         var secret = new Secret
@@ -66,7 +66,7 @@ public sealed class SecretsService(AppDbContext db) : ISecretsService
         return (secret, value);
     }
 
-    public async Task<bool> UpdateAsync(int id, string password, string name, string type, string value, string? note, int? projectId, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateAsync(int id, string password, string name, string type, string value, string? note, Guid? projectId, CancellationToken cancellationToken = default)
     {
         var secret = await db.Secrets.FindAsync(new object[] { id }, cancellationToken);
         if (secret == null) return false;

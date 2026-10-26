@@ -23,9 +23,10 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
         var name = json.GetProperty("name").GetString()!;
         var type = json.GetProperty("type").GetString()!;
         var note = json.TryGetProperty("note", out var noteElement) ? noteElement.GetString() : null;
-        int? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
-                          projectIdElement.ValueKind == JsonValueKind.Number
-            ? projectIdElement.GetInt32()
+        Guid? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
+                          projectIdElement.ValueKind == JsonValueKind.String &&
+                          projectIdElement.TryGetGuid(out var parsedProjectId)
+            ? parsedProjectId
             : null;
 
         if (projectId.HasValue && !await accessScope.CanAccessProjectAsync(projectId))
@@ -96,9 +97,10 @@ public class SecretsController(AppDbContext dbContext, ISecretsService secretsSe
         var name = json.GetProperty("name").GetString()!;
         var type = json.GetProperty("type").GetString()!;
         var note = json.TryGetProperty("note", out var noteElement) ? noteElement.GetString() : null;
-        int? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
-                          projectIdElement.ValueKind == JsonValueKind.Number
-            ? projectIdElement.GetInt32()
+        Guid? projectId = json.TryGetProperty("projectId", out var projectIdElement) &&
+                          projectIdElement.ValueKind == JsonValueKind.String &&
+                          projectIdElement.TryGetGuid(out var parsedProjectId)
+            ? parsedProjectId
             : null;
         if (projectId.HasValue && !await accessScope.CanAccessProjectAsync(projectId)) return Forbid();
 

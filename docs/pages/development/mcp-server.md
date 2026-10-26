@@ -25,7 +25,7 @@ In addition, the server exposes the following Resources (data sources):
 * `reconmap://vulnerabilities`
 * `reconmap://runners`
 
-And these parameterized resource templates (`{id}` is a numeric ID):
+And these parameterized resource templates (`{id}` is the UUID of the project or vulnerability):
 
 * `reconmap://projects/{id}`: one project.
 * `reconmap://projects/{id}/vulnerabilities`: the vulnerabilities of one project.

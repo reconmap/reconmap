@@ -26,7 +26,7 @@ const renderPanel = (user: any) =>
     render(
         <MemoryRouter>
             <AuthContext.Provider value={{ user }}>
-                <CommentsPanel parentType="project" parentId={5} />
+                <CommentsPanel parentType="project" parentId={"018f0000-0000-7000-8000-000000000001"} />
             </AuthContext.Provider>
         </MemoryRouter>
     );
@@ -57,7 +57,7 @@ describe("CommentsPanel", () => {
         fireEvent.click(screen.getByRole("button", { name: "Add comment" }));
 
         expect(mockCreate).toHaveBeenCalledWith(
-            { parentType: "project", parentId: 5, content: "Needs retest." },
+            { parentType: "project", parentId: "018f0000-0000-7000-8000-000000000001", content: "Needs retest." },
             expect.any(Object)
         );
     });
@@ -66,7 +66,7 @@ describe("CommentsPanel", () => {
         render(
             <MemoryRouter>
                 <AuthContext.Provider value={{ user: { id: 10, role: "user" } }}>
-                    <CommentsPanel parentType="task" parentId={12} />
+                    <CommentsPanel parentType="task" parentId={"018f0000-0000-7000-8000-000000000002"} />
                 </AuthContext.Provider>
             </MemoryRouter>
         );
@@ -75,7 +75,7 @@ describe("CommentsPanel", () => {
         fireEvent.click(screen.getByRole("button", { name: "Add comment" }));
 
         expect(mockCreate).toHaveBeenCalledWith(
-            { parentType: "task", parentId: 12, content: "Retest after patch." },
+            { parentType: "task", parentId: "018f0000-0000-7000-8000-000000000002", content: "Retest after patch." },
             expect.any(Object)
         );
     });

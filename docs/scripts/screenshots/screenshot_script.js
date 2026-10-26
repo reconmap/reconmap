@@ -30,6 +30,18 @@ const path = require('path');
         await page.screenshot({ path: path.join(screenshotDir, `${name}.png`), fullPage: false });
     }
 
+    // Ids are UUIDs, so open the first item of a list instead of using a fixed id.
+    async function firstItemUrl(listUrl, prefix) {
+        await page.goto(`http://localhost:5500${listUrl}`);
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(3000);
+        const hrefs = await page.locator(`a[href^="${prefix}/"]`).evaluateAll((links) => links.map((a) => a.getAttribute('href')));
+        const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        const href = hrefs.find((h) => uuid.test(h.slice(prefix.length + 1)));
+        if (!href) throw new Error(`No item found on ${listUrl}`);
+        return href;
+    }
+
     try {
         await login();
         
@@ -38,12 +50,12 @@ const path = require('path');
         
         // Projects
         await takeScreenshot('projects', '/projects');
-        await takeScreenshot('project-details', '/projects/50013');
+        await takeScreenshot('project-details', await firstItemUrl('/projects', '/projects'));
         await takeScreenshot('project-create', '/projects/create');
         
         // Vulnerabilities
         await takeScreenshot('vulnerabilities', '/vulnerabilities');
-        await takeScreenshot('vulnerability-details', '/vulnerabilities/200263');
+        await takeScreenshot('vulnerability-details', await firstItemUrl('/vulnerabilities', '/vulnerabilities'));
         await takeScreenshot('vulnerability-create', '/vulnerabilities/create');
         await takeScreenshot('vulnerability-categories', '/vulnerabilities/categories');
         

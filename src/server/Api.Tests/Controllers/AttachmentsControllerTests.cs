@@ -30,11 +30,11 @@ public class AttachmentsControllerTests
         public bool IsPrivileged => true;
         public bool CanAccessVault => true;
         public int UserId => 1;
-        public Task<IReadOnlyList<int>> MemberProjectIdsAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult<IReadOnlyList<int>>([]);
-        public Task<bool> CanAccessProjectAsync(int? projectId, CancellationToken cancellationToken = default) => Task.FromResult(true);
+        public Task<IReadOnlyList<Guid>> MemberProjectIdsAsync(CancellationToken cancellationToken = default) =>
+            Task.FromResult<IReadOnlyList<Guid>>([]);
+        public Task<bool> CanAccessProjectAsync(Guid? projectId, CancellationToken cancellationToken = default) => Task.FromResult(true);
         public Task<bool> CanAccessSecretAsync(Reconmap.Api.Domain.Entities.Secret secret, CancellationToken cancellationToken = default) => Task.FromResult(true);
-        public Task<bool> CanAccessParentAsync(string parentType, int parentId, CancellationToken cancellationToken = default) => Task.FromResult(true);
+        public Task<bool> CanAccessParentAsync(string parentType, Guid parentId, CancellationToken cancellationToken = default) => Task.FromResult(true);
     }
 
     private static AppDbContext CreateDbContext()
@@ -68,7 +68,7 @@ public class AttachmentsControllerTests
             new Dictionary<string, Microsoft.Extensions.Primitives.StringValues>(),
             new FormFileCollection { file });
 
-        var result = await controller.CreateMany(parentId: 1, parentType: "project");
+        var result = await controller.CreateMany(parentId: TestIds.Of(1), parentType: "project");
 
         Assert.IsType<OkResult>(result);
         Assert.Equal(".php", Path.GetExtension(clientFileName));

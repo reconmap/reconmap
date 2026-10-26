@@ -30,7 +30,7 @@ const useVulnerabilitiesStatsQuery = (params: any) => {
     });
 };
 
-const useVulnerabilityQuery = (vulnerabilityId: number) => {
+const useVulnerabilityQuery = (vulnerabilityId: string) => {
     return useQuery({
         queryKey: ["vulnerabilities", vulnerabilityId],
         queryFn: () => requestVulnerability(vulnerabilityId).then((res) => res.json()),
@@ -40,7 +40,7 @@ const useVulnerabilityQuery = (vulnerabilityId: number) => {
 const useDeleteVulnerabilityMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (vulnerabilityId: number) => requestVulnerabilityDelete(vulnerabilityId),
+        mutationFn: (vulnerabilityId: string) => requestVulnerabilityDelete(vulnerabilityId),
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ["vulnerabilities"] });
         },
@@ -60,7 +60,7 @@ const useDeleteVulnerabilityCategoryMutation = () => {
 
 const useVulnerabilityTriageMutation = () => {
     return useMutation({
-        mutationFn: (vulnerabilityId: number) =>
+        mutationFn: (vulnerabilityId: string) =>
             requestVulnerabilityTriage(vulnerabilityId).then((res) => res.json()),
     });
 };

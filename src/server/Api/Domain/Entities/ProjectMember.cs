@@ -8,7 +8,7 @@ public class ProjectMember : CreationTimestampedEntity
 {
     [Key] public int Id { get; set; }
 
-    [Required] public int ProjectId { get; set; }
+    [Required] public Guid ProjectId { get; set; }
     [ForeignKey(nameof(ProjectId))] public Project Project { get; set; } = default!;
 
 

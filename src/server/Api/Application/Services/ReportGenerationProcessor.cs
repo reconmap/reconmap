@@ -135,9 +135,9 @@ public static class WordTemplateReplacer
 
 public sealed class ReportGenerationJob
 {
-    public int ReportId { get; set; }
-    public int ProjectId { get; set; }
-    public int ReportTemplateId { get; set; }
+    public Guid ReportId { get; set; }
+    public Guid ProjectId { get; set; }
+    public Guid ReportTemplateId { get; set; }
     public int CreatedByUserId { get; set; }
 }
 

@@ -8,7 +8,7 @@ const requestVulnerabilities = async (params: Record<string, any>) => {
     return (await requestEntities(`${API_BASE_URL}?` + queryParams)).json();
 };
 
-const requestVulnerabilityPatch = (vulnerabilityId: number, data: any): Promise<Response> => {
+const requestVulnerabilityPatch = (vulnerabilityId: string, data: any): Promise<Response> => {
     return secureApiFetch(`${API_BASE_URL}/${vulnerabilityId}`, {
         method: "PATCH",
         body: JSON.stringify(data),
@@ -20,7 +20,7 @@ const requestVulnerabilitiesStats = (params: any) => {
     return secureApiFetch(url, { method: "GET" });
 };
 
-const requestVulnerability = (vulnerabilityId: number) => {
+const requestVulnerability = (vulnerabilityId: string) => {
     return secureApiFetch(`/vulnerabilities/${vulnerabilityId}`, { method: "GET" });
 };
 
@@ -49,9 +49,9 @@ const requestVulnerabilityCategories = (params: any) => {
 const requestVulnerabilityCategoryDelete = (categoryId: number) =>
     requestEntityDelete(`/vulnerabilities/categories/${categoryId}`);
 
-const requestVulnerabilityDelete = (vulnerabilityId: number) => requestEntityDelete(`/vulnerabilities/${vulnerabilityId}`);
+const requestVulnerabilityDelete = (vulnerabilityId: string) => requestEntityDelete(`/vulnerabilities/${vulnerabilityId}`);
 
-export const requestVulnerabilityTriage = (vulnerabilityId: number): Promise<Response> =>
+export const requestVulnerabilityTriage = (vulnerabilityId: string): Promise<Response> =>
     secureApiFetch(`/vulnerabilities/${vulnerabilityId}/triage`, { method: 'POST' });
 
 export {

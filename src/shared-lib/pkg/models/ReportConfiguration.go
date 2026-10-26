@@ -4,7 +4,7 @@ package models
 type ReportConfiguration struct {
 
 	ID int `json:"id"`
-	ProjectId int `json:"project_id"`
+	ProjectId string `json:"project_id"`
 	IncludeToc bool `json:"include_toc"`
 	IncludeRevisionsTable bool `json:"include_revisions_table"`
 	IncludeTeamBios bool `json:"include_team_bios"`

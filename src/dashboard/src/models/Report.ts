@@ -1,6 +1,6 @@
 interface ReportInterface {
-    id?: number;
-    projectId?: number;
+    id?: string;
+    projectId?: string;
     createdById?: number;
     is_template?: boolean;
     createdAt?: string;

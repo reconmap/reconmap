@@ -10,30 +10,30 @@ import {
 
 const API_BASE_URL = "/projects";
 
-const requestProject = (projectId: number) => requestEntity(`${API_BASE_URL}/${projectId}`);
+const requestProject = (projectId: string) => requestEntity(`${API_BASE_URL}/${projectId}`);
 
 const requestProjects = async (params: Record<string, any>) => {
     const queryParams = new URLSearchParams(params).toString();
     return (await requestEntities(`/projects?` + queryParams)).json();
 };
 
-const requestProjectUsers = (projectId: number) => {
+const requestProjectUsers = (projectId: string) => {
     return secureApiFetch(`/projects/${projectId}/members`, { method: "GET" });
 };
 
-export const requestProjectMemberPost = (projectId: number, userId: number) =>
+export const requestProjectMemberPost = (projectId: string, userId: number) =>
     requestEntityPost(`/projects/${projectId}/members`, { userId });
 
-const requestProjectUserDelete = (projectId: number, userId: number) =>
+const requestProjectUserDelete = (projectId: string, userId: number) =>
     requestEntityDelete(`/projects/${projectId}/members/${userId}`);
 
-const requestProjectVault = (projectId: number) => {
+const requestProjectVault = (projectId: string) => {
     return secureApiFetch(`/projects/${projectId}/secrets`, { method: "GET" });
 };
 
 const requestProjectCategories = () => requestEntities(`${API_BASE_URL}/categories`);
 
-const requestProjectDelete = (projectId: number) => requestEntityDelete(`${API_BASE_URL}/${projectId}`);
+const requestProjectDelete = (projectId: string) => requestEntityDelete(`${API_BASE_URL}/${projectId}`);
 
 const requestProjectPost = (project: Record<string, any>) => {
     return secureApiFetch(`/projects`, {
@@ -45,10 +45,10 @@ const requestProjectPost = (project: Record<string, any>) => {
     });
 };
 
-export const requestProjectPut = (projectId: number, data: any) =>
+export const requestProjectPut = (projectId: string, data: any) =>
     requestEntityPut(`${API_BASE_URL}/${projectId}`, data);
 
-export const requestProjectPatch = (projectId: number, data: any) =>
+export const requestProjectPatch = (projectId: string, data: any) =>
     requestEntityPatch(`${API_BASE_URL}/${projectId}`, data);
 
 export {

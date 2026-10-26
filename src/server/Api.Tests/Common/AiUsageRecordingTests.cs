@@ -52,7 +52,7 @@ public class AiUsageRecordingTests
             Usage = new UsageDetails { InputTokenCount = 2000, OutputTokenCount = 1000 }
         });
         var client = new UsageRecordingChatClient(
-            inner, recorder, Target, new AiUsageContext(AiFeatures.Triage, 7, 9));
+            inner, recorder, Target, new AiUsageContext(AiFeatures.Triage, TestIds.Of(7), 9));
 
         var response = await client.GetResponseAsync("prompt");
 
@@ -61,7 +61,7 @@ public class AiUsageRecordingTests
         Assert.Equal("OpenRouter", row.Provider);
         Assert.Equal("some/model", row.Model);
         Assert.Equal(AiFeatures.Triage, row.Feature);
-        Assert.Equal(7, row.ProjectId);
+        Assert.Equal(TestIds.Of(7), row.ProjectId);
         Assert.Equal(9, row.UserId);
         Assert.Equal(2000, row.InputTokens);
         Assert.Equal(1000, row.OutputTokens);

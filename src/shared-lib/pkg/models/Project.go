@@ -3,7 +3,7 @@ package models
 
 type Project struct {
 
-	ID int `json:"id"`
+	ID string `json:"id"`
 	CreatedById int `json:"createdById"`
 	ServiceProviderId int `json:"service_provider_id"`
 	ClientId int `json:"client_id"`

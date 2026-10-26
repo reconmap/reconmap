@@ -11,16 +11,16 @@ namespace Mcp.Tests
 {
     public class ReconmapPromptsTests
     {
-        private sealed class FakeGuard(IReadOnlyList<int>? visible) : McpAccessGuard(null!, null!, null!)
+        private sealed class FakeGuard(IReadOnlyList<Guid>? visible) : McpAccessGuard(null!, null!, null!)
         {
-            public override Task RequireReadAsync(string resourceType, int? projectId, int? resourceId = null,
+            public override Task RequireReadAsync(string resourceType, Guid? projectId, Guid? resourceId = null,
                 CancellationToken ct = default)
                 => visible == null || (projectId.HasValue && visible.Contains(projectId.Value))
                     ? Task.CompletedTask
                     : throw new McpException("Access denied.");
         }
 
-        private static ReconmapPrompts Create(IReadOnlyList<int>? visible)
+        private static ReconmapPrompts Create(IReadOnlyList<Guid>? visible)
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "ReconmapMcpPromptsTestDb")
@@ -30,8 +30,8 @@ namespace Mcp.Tests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
             context.Set<UserInfo>().Add(new UserInfo { Id = 1 });
-            context.Projects.Add(new Project { Id = 1, CreatedById = 1, Name = "Project 1" });
-            context.Projects.Add(new Project { Id = 5, CreatedById = 1, Name = "Project 5" });
+            context.Projects.Add(new Project { Id = TestIds.Of(1), CreatedById = 1, Name = "Project 1" });
+            context.Projects.Add(new Project { Id = TestIds.Of(5), CreatedById = 1, Name = "Project 5" });
             context.SaveChanges();
 
             return new ReconmapPrompts(new ProjectService(context), new FakeGuard(visible));
@@ -40,16 +40,16 @@ namespace Mcp.Tests
         [Fact]
         public async Task TriageVulnerabilities_Member_NamesProjectAndResource()
         {
-            var text = await Create([5]).TriageVulnerabilities("5");
+            var text = await Create([TestIds.Of(5)]).TriageVulnerabilities(TestIds.Of(5).ToString());
 
             Assert.Contains("Project 5", text);
-            Assert.Contains("reconmap://projects/5/vulnerabilities", text);
+            Assert.Contains($"reconmap://projects/{TestIds.Of(5)}/vulnerabilities", text);
         }
 
         [Fact]
         public async Task ExecutiveSummary_Member_NamesProject()
         {
-            var text = await Create([5]).ExecutiveSummary("5");
+            var text = await Create([TestIds.Of(5)]).ExecutiveSummary(TestIds.Of(5).ToString());
 
             Assert.Contains("Project 5", text);
         }
@@ -57,14 +57,14 @@ namespace Mcp.Tests
         [Fact]
         public async Task Prompts_NonMember_AreDenied()
         {
-            var prompts = Create([5]);
+            var prompts = Create([TestIds.Of(5)]);
 
-            await Assert.ThrowsAsync<McpException>(() => prompts.TriageVulnerabilities("1"));
-            await Assert.ThrowsAsync<McpException>(() => prompts.ExecutiveSummary("1"));
+            await Assert.ThrowsAsync<McpException>(() => prompts.TriageVulnerabilities(TestIds.Of(1).ToString()));
+            await Assert.ThrowsAsync<McpException>(() => prompts.ExecutiveSummary(TestIds.Of(1).ToString()));
         }
 
         [Fact]
-        public async Task Prompts_NonNumericProjectId_Throws()
+        public async Task Prompts_InvalidProjectId_Throws()
         {
             await Assert.ThrowsAsync<McpException>(() => Create(null).TriageVulnerabilities("abc"));
         }
@@ -80,7 +80,7 @@ namespace Mcp.Tests
         [Fact]
         public async Task Prompts_UnknownProject_Throws()
         {
-            await Assert.ThrowsAsync<McpException>(() => Create(null).ExecutiveSummary("999"));
+            await Assert.ThrowsAsync<McpException>(() => Create(null).ExecutiveSummary(TestIds.Of(999).ToString()));
         }
     }
 }

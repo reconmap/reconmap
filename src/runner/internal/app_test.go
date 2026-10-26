@@ -107,8 +107,8 @@ func newScanTestApp(t *testing.T, rec *scanTestRecorder, execErr error) *App {
 	app.getUsage = func(_, id string) (*models.CommandUsage, error) {
 		return &models.CommandUsage{ID: id, OutputCapturingMode: "stdout"}, nil
 	}
-	app.uploadOutput = func(_, _, usageId string, projectId int, fileName string, content []byte) error {
-		rec.uploads = append(rec.uploads, fmt.Sprintf("%s:%d:%s", usageId, projectId, content))
+	app.uploadOutput = func(_, _, usageId string, projectId string, fileName string, content []byte) error {
+		rec.uploads = append(rec.uploads, fmt.Sprintf("%s:%s:%s", usageId, projectId, content))
 		return nil
 	}
 	return app
@@ -128,7 +128,7 @@ func TestRunScheduleExecutesResolvedCommandAndUploadsOutput(t *testing.T) {
 	server := newDeleteServer(t)
 
 	app.runSchedule(models.CommandSchedule{
-		ID: 1, CommandId: "nmap", CommandUsageId: "nmap-tcp-syn", ProjectId: 7, ScanRunTaskId: 42,
+		ID: 1, CommandId: "nmap", CommandUsageId: "nmap-tcp-syn", ProjectId: "018f0000-0000-7000-8000-000000000007", ScanRunTaskId: 42,
 		CronExpression: "once", ArgumentValues: "nmap -oX - example.com",
 	}, server.URL, "token")
 
@@ -138,7 +138,7 @@ func TestRunScheduleExecutesResolvedCommandAndUploadsOutput(t *testing.T) {
 	if len(rec.statuses) != 2 || rec.statuses[0] != "42:running:" || rec.statuses[1] != "42:succeeded:" {
 		t.Errorf("unexpected statuses: %v", rec.statuses)
 	}
-	if len(rec.uploads) != 1 || rec.uploads[0] != "nmap-tcp-syn:7:<nmaprun/>" {
+	if len(rec.uploads) != 1 || rec.uploads[0] != "nmap-tcp-syn:018f0000-0000-7000-8000-000000000007:<nmaprun/>" {
 		t.Errorf("unexpected uploads: %v", rec.uploads)
 	}
 }
@@ -167,7 +167,7 @@ func TestRunScheduleReportsExecutionFailure(t *testing.T) {
 	server := newDeleteServer(t)
 
 	app.runSchedule(models.CommandSchedule{
-		ID: 3, CommandId: "nmap", CommandUsageId: "nmap-tcp-syn", ProjectId: 7, ScanRunTaskId: 44,
+		ID: 3, CommandId: "nmap", CommandUsageId: "nmap-tcp-syn", ProjectId: "018f0000-0000-7000-8000-000000000007", ScanRunTaskId: 44,
 		CronExpression: "once", ArgumentValues: "nmap example.com",
 	}, server.URL, "token")
 

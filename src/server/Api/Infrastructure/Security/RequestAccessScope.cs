@@ -14,10 +14,10 @@ public interface IRequestAccessScope
     bool IsPrivileged { get; }
     bool CanAccessVault { get; }
     int UserId { get; }
-    Task<IReadOnlyList<int>> MemberProjectIdsAsync(CancellationToken cancellationToken = default);
-    Task<bool> CanAccessProjectAsync(int? projectId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Guid>> MemberProjectIdsAsync(CancellationToken cancellationToken = default);
+    Task<bool> CanAccessProjectAsync(Guid? projectId, CancellationToken cancellationToken = default);
     Task<bool> CanAccessSecretAsync(Secret secret, CancellationToken cancellationToken = default);
-    Task<bool> CanAccessParentAsync(string parentType, int parentId, CancellationToken cancellationToken = default);
+    Task<bool> CanAccessParentAsync(string parentType, Guid parentId, CancellationToken cancellationToken = default);
 }
 
 public sealed class RequestAccessScope(AppDbContext db, IHttpContextAccessor httpContextAccessor) : IRequestAccessScope
@@ -31,10 +31,10 @@ public sealed class RequestAccessScope(AppDbContext db, IHttpContextAccessor htt
     public bool IsPrivileged => CurrentUser.Role is UserRole.Administrator or UserRole.Superuser;
     public bool CanAccessVault => IsPrivileged || CurrentUser.Role == UserRole.User;
 
-    public async Task<IReadOnlyList<int>> MemberProjectIdsAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Guid>> MemberProjectIdsAsync(CancellationToken cancellationToken = default)
     {
         var items = httpContextAccessor.HttpContext?.Items;
-        if (items != null && items.TryGetValue(MemberProjectsKey, out var cached) && cached is List<int> projectIds)
+        if (items != null && items.TryGetValue(MemberProjectsKey, out var cached) && cached is List<Guid> projectIds)
             return projectIds;
 
         var result = await db.ProjectMembers.Where(pm => pm.UserId == UserId)
@@ -43,7 +43,7 @@ public sealed class RequestAccessScope(AppDbContext db, IHttpContextAccessor htt
         return result;
     }
 
-    public async Task<bool> CanAccessProjectAsync(int? projectId, CancellationToken cancellationToken = default)
+    public async Task<bool> CanAccessProjectAsync(Guid? projectId, CancellationToken cancellationToken = default)
     {
         if (IsPrivileged) return true;
         return projectId.HasValue && (await MemberProjectIdsAsync(cancellationToken)).Contains(projectId.Value);
@@ -57,14 +57,14 @@ public sealed class RequestAccessScope(AppDbContext db, IHttpContextAccessor htt
         return secret.OwnerId == UserId || await CanAccessProjectAsync(secret.ProjectId, cancellationToken);
     }
 
-    public async Task<bool> CanAccessParentAsync(string parentType, int parentId, CancellationToken cancellationToken = default)
+    public async Task<bool> CanAccessParentAsync(string parentType, Guid parentId, CancellationToken cancellationToken = default)
     {
         if (IsPrivileged) return true;
 
-        int? projectId = parentType.Trim().ToLowerInvariant() switch
+        Guid? projectId = parentType.Trim().ToLowerInvariant() switch
         {
             "project" => parentId,
-            "task" => await db.Tasks.Where(x => x.Id == parentId).Select(x => (int?)x.ProjectId).FirstOrDefaultAsync(cancellationToken),
+            "task" => await db.Tasks.Where(x => x.Id == parentId).Select(x => (Guid?)x.ProjectId).FirstOrDefaultAsync(cancellationToken),
             "vulnerability" => await db.Vulnerabilities.Where(x => x.Id == parentId).Select(x => x.ProjectId).FirstOrDefaultAsync(cancellationToken),
             _ => null
         };

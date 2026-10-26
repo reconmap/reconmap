@@ -46,7 +46,7 @@ public class SystemDataImportControllerTests
           "scan_runs": [
             {
               "Id": 1000,
-              "ProjectId": 1000,
+              "ProjectId": "018f0000-0000-7000-8000-000000001000",
               "Target": "app.example.com",
               "TargetType": "hostname",
               "Objective": "Discover attack surface",
@@ -83,12 +83,12 @@ public class SystemDataImportControllerTests
 
         var json = """
         {
-          "project_members": [{ "Id": 1000, "ProjectId": 1000, "UserId": 1000 }],
-          "comments": [{ "Id": 1000, "CreatedById": 1000, "ParentType": "project", "ParentId": 1000, "Content": "Kickoff done." }],
+          "project_members": [{ "Id": 1000, "ProjectId": "018f0000-0000-7000-8000-000000001000", "UserId": 1000 }],
+          "comments": [{ "Id": 1000, "CreatedById": 1000, "ParentType": "project", "ParentId": "018f0000-0000-7000-8000-000000001000", "Content": "Kickoff done." }],
           "notifications": [{ "Id": 1000, "ToUserId": 1000, "Title": "Scan completed", "Content": "Done.", "Status": "unread" }],
           "webhooks": [{ "Id": 1000, "Name": "Chat", "Url": "https://hooks.example.com/x", "IsEnabled": true, "Events": "project.created" }],
-          "command_schedules": [{ "Id": 1000, "ProjectId": 1000, "CommandId": "nmap", "CommandUsageId": "nmap-tcp-syn", "CronExpression": "0 2 * * 1" }],
-          "reports": [{ "Id": 1000, "ProjectId": 1000, "IsTemplate": false, "VersionName": "Final", "VersionDescription": "Final report" }]
+          "command_schedules": [{ "Id": 1000, "ProjectId": "018f0000-0000-7000-8000-000000001000", "CommandId": "nmap", "CommandUsageId": "nmap-tcp-syn", "CronExpression": "0 2 * * 1" }],
+          "reports": [{ "Id": "018f0000-0000-7000-8000-000000002000", "ProjectId": "018f0000-0000-7000-8000-000000001000", "IsTemplate": false, "VersionName": "Final", "VersionDescription": "Final report" }]
         }
         """;
 
@@ -123,7 +123,7 @@ public class SystemDataImportControllerTests
         var json = """
         {
           "runners": [{ "Id": 1000, "Name": "runner-2", "ClientId": "client-2" }],
-          "comments": [{ "Id": 1000, "CreatedById": 1, "ParentType": "project", "ParentId": 1, "Content": "Still imported." }]
+          "comments": [{ "Id": 1000, "CreatedById": 1, "ParentType": "project", "ParentId": "018f0000-0000-7000-8000-000000000001", "Content": "Still imported." }]
         }
         """;
 

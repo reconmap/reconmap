@@ -14,7 +14,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
 {
     public sealed class EnsureAssetRequest
     {
-        public int ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Type { get; set; }
         public int? ParentId { get; set; }
@@ -34,7 +34,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService) : Co
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMany([FromQuery] int projectId)
+    public async Task<IActionResult> GetMany([FromQuery] Guid projectId)
     {
         var q = dbContext.Assets.AsNoTracking()
             .Where(a => a.ProjectId == projectId)

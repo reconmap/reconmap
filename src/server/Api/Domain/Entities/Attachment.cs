@@ -12,7 +12,7 @@ public class Attachment : TimestampedEntity
     [MaxLength(20)]
     public string? ParentType { get; set; }
 
-    public int ParentId { get; set; }
+    public Guid ParentId { get; set; }
 
     public int? CreatedById { get; set; }
 

@@ -40,13 +40,13 @@ const ScanTargetForm = () => {
         setAnalyzing(true);
         try {
             if (targetType === "url") {
-                await ensureUrlAsset(parseInt(projectId, 10), target);
+                await ensureUrlAsset(projectId, target);
             }
             const resp = await requestScanRunPost({
                 target,
                 targetType,
                 objective,
-                projectId: parseInt(projectId, 10)
+                projectId
             });
             if (!resp.ok) {
                 const body = await resp.json().catch(() => null);

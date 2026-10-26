@@ -73,13 +73,13 @@ public class ReportGenerationTests
         // Arrange
         var db = CreateDbContext();
         
-        var project = new Project { Id = 1, Name = "Test Project" };
+        var project = new Project { Id = TestIds.Of(1), Name = "Test Project" };
         db.Projects.Add(project);
         
         var attachment = new Attachment 
         { 
             Id = 1, 
-            ParentId = 10, // template ID
+            ParentId = TestIds.Of(10), // template ID
             ParentType = "report", 
             FileName = "template.docx", 
             ClientFileName = "template.docx",
@@ -100,8 +100,8 @@ public class ReportGenerationTests
 
         var requestDto = new ReportRequestDto
         {
-            ProjectId = 1,
-            ReportTemplateId = 10,
+            ProjectId = TestIds.Of(1),
+            ReportTemplateId = TestIds.Of(10),
             VersionName = "1.0",
             VersionDescription = "Initial Draft"
         };
@@ -126,8 +126,8 @@ public class ReportGenerationTests
         
         var jobPayload = Assert.IsType<ReportGenerationJob>(publishedJob.Message);
         Assert.Equal(dbReport.Id, jobPayload.ReportId);
-        Assert.Equal(1, jobPayload.ProjectId);
-        Assert.Equal(10, jobPayload.ReportTemplateId);
+        Assert.Equal(TestIds.Of(1), jobPayload.ProjectId);
+        Assert.Equal(TestIds.Of(10), jobPayload.ReportTemplateId);
         Assert.Equal(42, jobPayload.CreatedByUserId);
     }
 
@@ -186,13 +186,13 @@ public class ReportGenerationTests
         // Arrange
         var db = CreateDbContext();
         
-        var report = new Report { Id = 101, VersionName = "Template to Delete", IsTemplate = true };
+        var report = new Report { Id = TestIds.Of(101), VersionName = "Template to Delete", IsTemplate = true };
         db.Reports.Add(report);
         
         var attachment = new Attachment
         {
             Id = 500,
-            ParentId = 101,
+            ParentId = TestIds.Of(101),
             ParentType = "report",
             FileName = "secret_report.docx",
             ClientFileName = "secret_report.docx",
@@ -212,13 +212,13 @@ public class ReportGenerationTests
         controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
 
         // Act
-        var result = await controller.DeleteOne(101);
+        var result = await controller.DeleteOne(TestIds.Of(101));
 
         // Assert
         Assert.IsType<NoContentResult>(result);
 
         // Verify database
-        var dbReport = await db.Reports.FindAsync(101);
+        var dbReport = await db.Reports.FindAsync(TestIds.Of(101));
         Assert.Null(dbReport);
 
         var dbAttachment = await db.Attachments.FindAsync(500);
@@ -234,13 +234,13 @@ public class ReportGenerationTests
         // Arrange
         var db = CreateDbContext();
 
-        var project = new Project { Id = 1, Name = "Test Project" };
+        var project = new Project { Id = TestIds.Of(1), Name = "Test Project" };
         db.Projects.Add(project);
 
         var report = new Report
         {
-            Id = 10,
-            ProjectId = 1,
+            Id = TestIds.Of(10),
+            ProjectId = TestIds.Of(1),
             VersionName = "1.0",
             VersionDescription = "Desc",
             IsTemplate = false
@@ -279,6 +279,6 @@ public class ReportGenerationTests
 
         var idProperty = projectVal.GetType().GetProperty("Id");
         Assert.NotNull(idProperty);
-        Assert.Equal(1, idProperty.GetValue(projectVal));
+        Assert.Equal(TestIds.Of(1), idProperty.GetValue(projectVal));
     }
 }

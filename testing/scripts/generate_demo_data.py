@@ -15,7 +15,9 @@ Usage: generate_demo_data.py [projects] [--seed N]
 """
 import argparse
 import json
+import os
 import random
+import time
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -254,6 +256,25 @@ class IdSequence:
         value = self._next
         self._next += 1
         return value
+
+
+class UuidV7Ids:
+    """Hands out time-ordered UUIDv7 ids, like Guid.CreateVersion7 in the server (used for projects, tasks and reports)."""
+
+    def next(self):
+        millis = time.time_ns() // 1_000_000
+        rand = int.from_bytes(os.urandom(10), "big")
+        rand_a = (rand >> 68) & 0xFFF
+        rand_b = rand & ((1 << 62) - 1)
+        value = ((millis & ((1 << 48) - 1)) << 80) | (0x7 << 76) | (rand_a << 64) | (0b10 << 62) | rand_b
+        return str(uuid.UUID(int=value))
+
+
+class UuidV4Ids:
+    """Hands out random UUIDv4 ids, which carry no creation time (used for vulnerabilities)."""
+
+    def next(self):
+        return str(uuid.uuid4())
 
 
 def utc_now():
@@ -669,13 +690,13 @@ def generate_demo_data(num_projects=20, seed=None):
 
     user_ids = IdSequence()
     client_ids = IdSequence()
-    project_ids = IdSequence()
+    project_ids = UuidV7Ids()
     member_ids = IdSequence()
     asset_ids = IdSequence()
-    task_ids = IdSequence()
-    vuln_ids = IdSequence()
+    task_ids = UuidV7Ids()
+    vuln_ids = UuidV4Ids()
     comment_ids = IdSequence()
-    report_ids = IdSequence()
+    report_ids = UuidV7Ids()
     runner_ids = IdSequence()
     scan_ids = IdSequence()
     scan_task_ids = IdSequence()

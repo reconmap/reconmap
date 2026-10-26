@@ -20,7 +20,7 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
     [HttpGet]
     public async Task<IActionResult> GetMany(
         [FromQuery] string parentType,
-        [FromQuery] int parentId)
+        [FromQuery] Guid parentId)
     {
         if (!await accessScope.CanAccessParentAsync(parentType, parentId)) return NotFound();
         var q = dbContext.Attachments.AsNoTracking()
@@ -76,7 +76,7 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
     [HttpPost]
     [DisableRequestSizeLimit]
     [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
-    public async Task<IActionResult> CreateMany([FromForm] int parentId, [FromForm] string parentType)
+    public async Task<IActionResult> CreateMany([FromForm] Guid parentId, [FromForm] string parentType)
     {
         if (!Request.Form.Files.Any())
             return BadRequest();

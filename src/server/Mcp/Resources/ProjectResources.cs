@@ -27,7 +27,7 @@ public class ProjectResources(IProjectService projectService, McpAccessGuard gua
 
     [McpServerResource(UriTemplate = "reconmap://projects/{id}", Name = "Reconmap Project", MimeType = "application/json")]
     [Description("A single project by its ID.")]
-    public async Task<string> GetProject(int id)
+    public async Task<string> GetProject(Guid id)
     {
         await guard.RequireReadAsync("projects", id, id);
 

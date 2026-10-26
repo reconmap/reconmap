@@ -1,6 +1,6 @@
 interface TaskInterface {
-    id?: number;
-    projectId?: number;
+    id?: string;
+    projectId?: string;
     createdById?: number;
     assignedToId?: number;
     createdAt?: string;

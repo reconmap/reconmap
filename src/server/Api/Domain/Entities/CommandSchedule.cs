@@ -23,7 +23,7 @@ public class CommandSchedule : TimestampedEntity
     [NotMapped]
     public CommandUsage? CommandUsage { get; set; }
 
-    public int? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     [ForeignKey(nameof(ProjectId))]
     public Project? Project { get; set; }

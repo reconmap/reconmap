@@ -3,11 +3,11 @@ import { requestCommentDelete, requestCommentPost, requestComments } from "./req
 
 export interface NewComment {
     parentType: string;
-    parentId: number;
+    parentId: string;
     content: string;
 }
 
-const useCommentsQuery = (params: { parentType: string; parentId: number }) => {
+const useCommentsQuery = (params: { parentType: string; parentId: string }) => {
     return useQuery({
         queryKey: ["comments", params],
         queryFn: () => requestComments(params),

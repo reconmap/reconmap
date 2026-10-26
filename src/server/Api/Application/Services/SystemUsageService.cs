@@ -29,7 +29,7 @@ public sealed record AiUsageBreakdownRow(
     decimal EstimatedCost);
 
 public sealed record AiUsageProjectRow(
-    int? ProjectId,
+    Guid? ProjectId,
     string? ProjectName,
     long Calls,
     long InputTokens,

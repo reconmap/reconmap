@@ -49,7 +49,7 @@ CREATE TABLE attachment
     created_by_id    INT                                                                             NULL,
     updated_at  TIMESTAMPTZ             NULL,
     parent_type      VARCHAR(20) NOT NULL,
-    parent_id        INT                                                                             NOT NULL,
+    parent_id        UUID                                                                            NOT NULL,
     client_file_name VARCHAR(200)                                                                             NOT NULL,
     file_name        VARCHAR(200)                                                                             NOT NULL,
     file_size        INT                                                                             NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE project_category
 -- 5. project
 CREATE TABLE project
 (
-    id                    SERIAL PRIMARY KEY,
+    id                    UUID PRIMARY KEY DEFAULT uuidv7(),
     created_at             TIMESTAMPTZ                NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at             TIMESTAMPTZ                NULL,
     created_by_id           INT                        NULL,
@@ -181,7 +181,7 @@ CREATE TABLE vault
     created_at       TIMESTAMPTZ                            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMPTZ                            NULL,
     owner_id       INT                           NOT NULL,
-    project_id      INT                           NULL,
+    project_id      UUID                          NULL,
     type            VARCHAR(20) NOT NULL,
     name            VARCHAR(200)                           NOT NULL,
     value           BYTEA                        NOT NULL,
@@ -200,7 +200,7 @@ CREATE TABLE project_user
 (
     id         SERIAL PRIMARY KEY,
     created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    project_id INT NOT NULL,
+    project_id UUID NOT NULL,
     user_id    INT NOT NULL,
     UNIQUE (project_id, user_id),
     FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
@@ -212,7 +212,7 @@ CREATE TABLE asset
 (
     id         SERIAL PRIMARY KEY,
     parent_id  INT NULL,
-    project_id INT NOT NULL,
+    project_id UUID NOT NULL,
     created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMPTZ  NULL,
     name       VARCHAR(200) NOT NULL,
@@ -238,13 +238,13 @@ CREATE TABLE vulnerability_category
 -- 15. vulnerability
 CREATE TABLE vulnerability
 (
-    id                     SERIAL PRIMARY KEY,
+    id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at              TIMESTAMPTZ                                                                                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at              TIMESTAMPTZ                                                                                        NULL,
     created_by_id            INT                                                                                       NULL,
     is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
     external_id            VARCHAR(50)                                                                                        NULL,
-    project_id             INT                                                                                       NULL,
+    project_id             UUID                                                                                      NULL,
     asset_id              INT                                                                                       NULL,
     category_id            INT                                                                                       NULL,
     summary                VARCHAR(500)                                                                                       NOT NULL,
@@ -271,11 +271,13 @@ CREATE TABLE vulnerability
     FOREIGN KEY (category_id) REFERENCES vulnerability_category (id) ON DELETE SET NULL
 );
 
+CREATE INDEX vulnerability_created_at_idx ON vulnerability (created_at DESC, id);
+
 -- 16. task
 CREATE TABLE task
 (
-    id                SERIAL PRIMARY KEY,
-    project_id        INT                                        NOT NULL,
+    id                UUID PRIMARY KEY DEFAULT uuidv7(),
+    project_id        UUID                                       NOT NULL,
     created_by_id       INT                                        NULL,
     assigned_to_id      INT                                        NULL,
     created_at         TIMESTAMPTZ                                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -296,7 +298,7 @@ CREATE TABLE command_schedule
 (
     id              SERIAL PRIMARY KEY,
     created_by_id     INT  NULL,
-    project_id INT DEFAULT NULL,
+    project_id UUID DEFAULT NULL,
     created_at       TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMPTZ   NULL,
     command_id      VARCHAR(100)  NULL,
@@ -311,7 +313,7 @@ CREATE TABLE command_schedule
 CREATE TABLE scan_run
 (
     id              SERIAL PRIMARY KEY,
-    project_id      INT           NOT NULL,
+    project_id      UUID          NOT NULL,
     created_by_id  INT           NULL,
     target          VARCHAR(500)  NOT NULL,
     target_type     VARCHAR(30)   NOT NULL,
@@ -345,8 +347,8 @@ CREATE TABLE scan_run_task
 -- 18. report
 CREATE TABLE report
 (
-    id                  SERIAL PRIMARY KEY,
-    project_id          INT NULL,
+    id                  UUID PRIMARY KEY DEFAULT uuidv7(),
+    project_id          UUID NULL,
     created_by_id    INT NULL,
     created_at           TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_template         BOOLEAN      NOT NULL DEFAULT FALSE,
@@ -418,7 +420,7 @@ CREATE TABLE ai_usage
     provider       VARCHAR(50) NOT NULL,
     model          VARCHAR(200) NOT NULL,
     feature        VARCHAR(50) NOT NULL,
-    project_id     INTEGER NULL,
+    project_id     UUID NULL,
     user_id        INTEGER NULL,
     input_tokens   BIGINT NOT NULL DEFAULT 0,
     output_tokens  BIGINT NOT NULL DEFAULT 0,
@@ -436,7 +438,7 @@ CREATE TABLE comment
     created_at   TIMESTAMPTZ                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by_id     INT                      NULL,
     parent_type VARCHAR(20) NOT NULL,
-    parent_id   INT                      NOT NULL,
+    parent_id   UUID                     NOT NULL,
     content     TEXT                              NOT NULL,
     FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION
 );

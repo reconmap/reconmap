@@ -10,7 +10,7 @@ namespace Reconmap.Api.Application.Services;
 
 public sealed class ReportEmailJob
 {
-    public int ReportId { get; set; }
+    public Guid ReportId { get; set; }
     public int RequestedByUserId { get; set; }
     public required List<string> Recipients { get; set; }
     public required string Subject { get; set; }

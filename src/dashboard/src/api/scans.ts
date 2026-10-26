@@ -3,7 +3,7 @@ import { isScanRunActive, requestScanRun, requestScanRuns } from "./requests/sca
 
 const POLL_INTERVAL_MS = 3000;
 
-const useScanRunsQuery = (params: { projectId?: number; limit?: number } = {}) => {
+const useScanRunsQuery = (params: { projectId?: string; limit?: number } = {}) => {
     return useQuery({
         queryKey: ["scans", params],
         queryFn: () => requestScanRuns(params),

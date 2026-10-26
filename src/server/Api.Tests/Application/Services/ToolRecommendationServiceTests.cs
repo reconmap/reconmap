@@ -41,7 +41,7 @@ public class ToolRecommendationServiceTests
         new(new FailingFactory(), NullLogger<ToolRecommendationService>.Instance);
 
     private static ToolRecommendationRequest Request(string target, string type, string objective) =>
-        new() { Target = target, TargetType = type, Objective = objective, ProjectId = 1 };
+        new() { Target = target, TargetType = type, Objective = objective, ProjectId = TestIds.Of(1) };
 
     [Fact]
     public async Task RuleBased_WebScan_ForUrl_ResolvesEveryPlaceholder()

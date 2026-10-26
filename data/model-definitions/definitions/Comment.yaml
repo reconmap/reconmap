@@ -15,7 +15,8 @@ properties:
     - vulnerability
     - report
   parent_id:
-    type: integer
+    type: string
+    format: uuid
   content:
     type: string
 required:

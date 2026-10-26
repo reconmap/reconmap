@@ -96,7 +96,7 @@ public class ToolRecommendationService(IAiChatClientFactory clientFactory, ILogg
         if (applicable.Count == 0) return null;
 
         var context = await clientFactory.CreateAsync(
-            new AiUsageContext(AiFeatures.ToolRecommendation, request.ProjectId == 0 ? null : request.ProjectId));
+            new AiUsageContext(AiFeatures.ToolRecommendation, request.ProjectId == Guid.Empty ? null : request.ProjectId));
 
         var catalog = applicable.Select(a => new
         {

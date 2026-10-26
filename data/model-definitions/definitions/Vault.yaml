@@ -11,7 +11,8 @@ properties:
   owner_id:
     type: integer
   project_id:
-    type: integer
+    type: string
+    format: uuid
     nullable: true
   type:
     type: string

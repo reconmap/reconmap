@@ -10,7 +10,7 @@ public class Secret : TimestampedEntity
 
     [Required] public int OwnerId { get; set; }
 
-    public int? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     [Required]
     [Column(TypeName = "varchar")]

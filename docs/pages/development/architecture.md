@@ -24,6 +24,19 @@ OPA grants only explicitly named endpoint capabilities; it never treats a missin
 - Attachments and comments must resolve through a project, task, vulnerability, or non-template report in a member project. Unscoped attachment parents are administrator-only.
 - Jira/Azure DevOps integration configuration and system data import/export are administrator-only. Integration API tokens and personal access tokens are never included in API responses.
 
+### Identifiers
+
+Entities that are exposed by id in URLs, API responses and the dashboard use UUIDs instead of sequential integers, so ids cannot be guessed or counted. The UUID version depends on whether the creation time may be derived from the id:
+
+| Entity | Id | Why |
+|---|---|---|
+| Projects, tasks, reports | UUIDv7 | Time-ordered, so inserts stay index-friendly and the id sorts by creation time. The creation time is not sensitive. |
+| Vulnerabilities | UUIDv4 | Random, so the id does not reveal when a finding was reported. Order lists by `created_at` (the `vulnerability_created_at_idx` index covers it, with the id as tie-breaker). |
+
+All other entities (users, organisations, assets, attachments, comments, notifications, runners and so on) keep serial integer ids. The `comment` and `attachment` tables point at their parent with a `parent_type` and a `parent_id`; the parents that exist today (projects, tasks, vulnerabilities and reports) all have UUID ids.
+
+The API generates the ids (`GuidV7ValueGenerator` and `GuidV4ValueGenerator` in `Infrastructure/Persistence`), and the database has matching defaults (`uuidv7()` and `gen_random_uuid()`) for rows inserted with SQL, such as the seed data. Routes use the `{id:guid}` constraint, so a malformed id returns `404 Not Found`. UUIDs are not a substitute for authorization: every request is still checked against OPA and the caller's project memberships.
+
 The last part of this architecture is Rabbitmq, a message queue and broker. This queue handles heavy or asynchronous background tasks like sending report emails and generating reports asynchronously.
 
 ![Reconmap architecture](reconmap-high-level-architecture.png)

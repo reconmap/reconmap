@@ -15,7 +15,7 @@ public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guar
     [McpServerPrompt(Name = "triage_vulnerabilities")]
     [Description("Triage the vulnerabilities of a project: prioritise them and propose next steps.")]
     public async Task<string> TriageVulnerabilities(
-        [Description("Required. The numeric ID of the project to triage, e.g. 1.")] string projectId)
+        [Description("Required. The ID (a UUID) of the project to triage.")] string projectId)
     {
         var id = ParseProjectId(projectId);
         var name = await ProjectNameAsync(id);
@@ -37,7 +37,7 @@ public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guar
     [McpServerPrompt(Name = "executive_summary")]
     [Description("Draft an executive summary of a project's security posture for a non-technical audience.")]
     public async Task<string> ExecutiveSummary(
-        [Description("Required. The numeric ID of the project to summarise, e.g. 1.")] string projectId)
+        [Description("Required. The ID (a UUID) of the project to summarise.")] string projectId)
     {
         var id = ParseProjectId(projectId);
         var name = await ProjectNameAsync(id);
@@ -55,15 +55,15 @@ public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guar
                 """;
     }
 
-    // MCP prompt arguments are always strings on the wire, so an int parameter fails to bind.
-    private static int ParseProjectId(string projectId)
-        => int.TryParse(projectId, out var id)
+    // MCP prompt arguments are always strings on the wire, so a Guid parameter fails to bind.
+    private static Guid ParseProjectId(string projectId)
+        => Guid.TryParse(projectId, out var id)
             ? id
             : throw new McpException(string.IsNullOrWhiteSpace(projectId)
-                ? "The projectId argument is required: pass the numeric ID of the project, e.g. 1."
-                : $"Invalid projectId '{projectId}': pass the numeric ID of the project, e.g. 1.");
+                ? "The projectId argument is required: pass the ID (a UUID) of the project."
+                : $"Invalid projectId '{projectId}': pass the ID (a UUID) of the project.");
 
-    private async Task<string> ProjectNameAsync(int projectId)
+    private async Task<string> ProjectNameAsync(Guid projectId)
     {
         await guard.RequireReadAsync("projects", projectId, projectId);
 

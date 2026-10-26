@@ -11,9 +11,9 @@ namespace Reconmap.McpServer.Tools;
 /// </summary>
 public class ProjectTools(IProjectService projectService, McpAccessGuard guard)
 {
-    public record ProjectSummary(int Id, string Name, bool Archived);
+    public record ProjectSummary(Guid Id, string Name, bool Archived);
 
-    public record ProjectDetails(int Id, string Name, string? Description, bool Archived);
+    public record ProjectDetails(Guid Id, string Name, string? Description, bool Archived);
 
     [McpServerTool(ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false, UseStructuredContent = true)]
     [Description("Gets a list of the Reconmap projects the current user can access.")]
@@ -29,7 +29,7 @@ public class ProjectTools(IProjectService projectService, McpAccessGuard guard)
     [McpServerTool(ReadOnly = true, Destructive = false, Idempotent = true, OpenWorld = false, UseStructuredContent = true)]
     [Description("Gets details about a specific project by its ID.")]
     public async Task<ProjectDetails> GetProjectDetails(
-        [Description("The ID of the project to retrieve.")] int projectId)
+        [Description("The ID of the project to retrieve.")] Guid projectId)
     {
         await guard.RequireReadAsync("projects", projectId, projectId);
 

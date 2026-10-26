@@ -3,7 +3,7 @@ interface VaultInterface {
     createdAt?: string;
     updatedAt?: string;
     owner_id?: number;
-    project_id?: number;
+    project_id?: string;
     type: string | undefined;
     name?: string;
     value?: string;

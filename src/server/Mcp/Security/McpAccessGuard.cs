@@ -20,7 +20,7 @@ public class McpAccessGuard(
     /// <summary>
     /// Returns null when the caller can see every project, otherwise the ids of the projects they may see.
     /// </summary>
-    public virtual async Task<IReadOnlyList<int>?> VisibleProjectIdsAsync(CancellationToken ct = default)
+    public virtual async Task<IReadOnlyList<Guid>?> VisibleProjectIdsAsync(CancellationToken ct = default)
     {
         RequireUser();
         return accessScope.IsPrivileged ? null : await accessScope.MemberProjectIdsAsync(ct);
@@ -29,7 +29,7 @@ public class McpAccessGuard(
     /// <summary>
     /// Throws unless OPA allows a read of the given resource type within the given project.
     /// </summary>
-    public virtual async Task RequireReadAsync(string resourceType, int? projectId, int? resourceId = null,
+    public virtual async Task RequireReadAsync(string resourceType, Guid? projectId, Guid? resourceId = null,
         CancellationToken ct = default)
     {
         var user = RequireUser();

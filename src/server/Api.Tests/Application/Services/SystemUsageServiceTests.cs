@@ -35,7 +35,7 @@ public class SystemUsageServiceTests
             NullLogger<SystemUsageService>.Instance);
 
     private static AiUsage Row(DateTime at, string feature, long input, long output, decimal cost,
-        int? projectId = null, bool success = true, long latency = 100) => new()
+        Guid? projectId = null, bool success = true, long latency = 100) => new()
     {
         CreatedAt = at,
         Provider = "P",
@@ -68,10 +68,10 @@ public class SystemUsageServiceTests
     {
         using var db = CreateDb();
         var now = DateTime.UtcNow;
-        db.Projects.Add(new Project { Id = 1, Name = "Acme" });
+        db.Projects.Add(new Project { Id = TestIds.Of(1), Name = "Acme" });
         db.AiUsages.AddRange(
-            Row(now.AddDays(-1), "triage", 100, 50, 0.5m, projectId: 1, latency: 100),
-            Row(now.AddDays(-1), "triage", 200, 100, 1.0m, projectId: 1, latency: 300),
+            Row(now.AddDays(-1), "triage", 100, 50, 0.5m, projectId: TestIds.Of(1), latency: 100),
+            Row(now.AddDays(-1), "triage", 200, 100, 1.0m, projectId: TestIds.Of(1), latency: 300),
             Row(now.AddDays(-2), "remediation", 10, 10, 0.1m, success: false, latency: 200),
             Row(now.AddDays(-40), "triage", 9999, 9999, 99m)); // out of range
         await db.SaveChangesAsync();
@@ -90,7 +90,7 @@ public class SystemUsageServiceTests
         Assert.Equal("triage", usage.Ai.ByFeature[0].Key);
         Assert.Equal(2, usage.Ai.ByFeature[0].Calls);
         var project = usage.Ai.ByProject[0];
-        Assert.Equal(1, project.ProjectId);
+        Assert.Equal(TestIds.Of(1), project.ProjectId);
         Assert.Equal("Acme", project.ProjectName);
         Assert.Equal(2, usage.Ai.Daily.Count);
     }

@@ -11,7 +11,7 @@ import { actionCompletedToast, errorToast } from "components/ui/toast";
 
 const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any) => {
     const defaultFormValues = {
-        reportTemplateId: 0,
+        reportTemplateId: "",
         versionName: "",
         versionDescription: "",
     };

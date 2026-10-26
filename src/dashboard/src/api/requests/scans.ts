@@ -20,7 +20,7 @@ export interface ScanRunTask {
 
 export interface ScanRun {
     id: number;
-    projectId: number;
+    projectId: string;
     target: string;
     targetType: string;
     objective: string;
@@ -32,7 +32,7 @@ export interface ScanRun {
 
 export const isScanRunActive = (run?: Pick<ScanRun, "status">) => run?.status === "queued" || run?.status === "running";
 
-export const requestScanRuns = (params: { projectId?: number; limit?: number } = {}): Promise<ScanRun[]> => {
+export const requestScanRuns = (params: { projectId?: string; limit?: number } = {}): Promise<ScanRun[]> => {
     const query = new URLSearchParams();
     if (params.projectId) query.set("projectId", String(params.projectId));
     if (params.limit) query.set("limit", String(params.limit));
@@ -45,5 +45,5 @@ export const requestScanRun = (id: number | string): Promise<ScanRun> =>
         return res.json();
     });
 
-export const requestScanRunPost = (data: { projectId: number; target: string; targetType: string; objective: string }) =>
+export const requestScanRunPost = (data: { projectId: string; target: string; targetType: string; objective: string }) =>
     requestEntityPost(API_BASE_URL, data);

@@ -15,11 +15,11 @@ public class CommentsControllerTests
         public bool IsPrivileged => isPrivileged;
         public bool CanAccessVault => false;
         public int UserId => userId;
-        public Task<IReadOnlyList<int>> MemberProjectIdsAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult<IReadOnlyList<int>>([]);
-        public Task<bool> CanAccessProjectAsync(int? projectId, CancellationToken cancellationToken = default) => Task.FromResult(canAccessParent);
+        public Task<IReadOnlyList<Guid>> MemberProjectIdsAsync(CancellationToken cancellationToken = default) =>
+            Task.FromResult<IReadOnlyList<Guid>>([]);
+        public Task<bool> CanAccessProjectAsync(Guid? projectId, CancellationToken cancellationToken = default) => Task.FromResult(canAccessParent);
         public Task<bool> CanAccessSecretAsync(Secret secret, CancellationToken cancellationToken = default) => Task.FromResult(false);
-        public Task<bool> CanAccessParentAsync(string parentType, int parentId, CancellationToken cancellationToken = default) => Task.FromResult(canAccessParent);
+        public Task<bool> CanAccessParentAsync(string parentType, Guid parentId, CancellationToken cancellationToken = default) => Task.FromResult(canAccessParent);
     }
 
     private static AppDbContext CreateDbContext()
@@ -52,7 +52,7 @@ public class CommentsControllerTests
         var request = new CommentsController.CreateCommentRequest
         {
             ParentType = CommentParentType.Vulnerability,
-            ParentId = 3,
+            ParentId = TestIds.Of(3),
             Content = "Confirmed on staging."
         };
 
@@ -77,7 +77,7 @@ public class CommentsControllerTests
         var request = new CommentsController.CreateCommentRequest
         {
             ParentType = CommentParentType.Task,
-            ParentId = 4,
+            ParentId = TestIds.Of(4),
             Content = "Blocked on the client's firewall change."
         };
 
@@ -86,10 +86,10 @@ public class CommentsControllerTests
         var created = Assert.IsType<CreatedResult>(result);
         var response = Assert.IsType<CommentsController.CommentResponse>(created.Value);
         Assert.Equal("task", response.ParentType);
-        Assert.Equal(4, response.ParentId);
+        Assert.Equal(TestIds.Of(4), response.ParentId);
         var stored = await db.Comments.SingleAsync();
         Assert.Equal("task", stored.ParentType);
-        Assert.Equal(4, stored.ParentId);
+        Assert.Equal(TestIds.Of(4), stored.ParentId);
     }
 
     [Fact]
@@ -100,7 +100,7 @@ public class CommentsControllerTests
         var request = new CommentsController.CreateCommentRequest
         {
             ParentType = CommentParentType.Project,
-            ParentId = 3,
+            ParentId = TestIds.Of(3),
             Content = "Not allowed."
         };
 
@@ -116,7 +116,7 @@ public class CommentsControllerTests
         using var db = CreateDbContext();
         var controller = CreateController(db, new FakeAccessScope(1, isPrivileged: true), currentUserId: 1);
 
-        var result = await controller.GetMany(limit: null, parentType: "asset", parentId: 1);
+        var result = await controller.GetMany(limit: null, parentType: "asset", parentId: TestIds.Of(1));
 
         Assert.IsType<BadRequestObjectResult>(result);
     }
@@ -127,7 +127,7 @@ public class CommentsControllerTests
         using var db = CreateDbContext();
         var controller = CreateController(db, new FakeAccessScope(1, isPrivileged: true), currentUserId: 1);
 
-        var result = await controller.GetMany(limit: null, parentType: "report", parentId: 1);
+        var result = await controller.GetMany(limit: null, parentType: "report", parentId: TestIds.Of(1));
 
         Assert.IsType<BadRequestObjectResult>(result);
     }
@@ -137,12 +137,12 @@ public class CommentsControllerTests
     {
         using var db = CreateDbContext();
         db.Comments.AddRange(
-            new Comment { ParentType = "project", ParentId = 1, Content = "old", CreatedById = 1 },
-            new Comment { ParentType = "project", ParentId = 1, Content = "new", CreatedById = 1 });
+            new Comment { ParentType = "project", ParentId = TestIds.Of(1), Content = "old", CreatedById = 1 },
+            new Comment { ParentType = "project", ParentId = TestIds.Of(1), Content = "new", CreatedById = 1 });
         await db.SaveChangesAsync();
         var controller = CreateController(db, new FakeAccessScope(1, isPrivileged: true), currentUserId: 1);
 
-        var result = await controller.GetMany(limit: 1, parentType: "Project", parentId: 1);
+        var result = await controller.GetMany(limit: 1, parentType: "Project", parentId: TestIds.Of(1));
 
         var ok = Assert.IsType<OkObjectResult>(result);
         var comments = Assert.IsAssignableFrom<IEnumerable<CommentsController.CommentResponse>>(ok.Value).ToList();
@@ -155,7 +155,7 @@ public class CommentsControllerTests
         using var db = CreateDbContext();
         var controller = CreateController(db, new FakeAccessScope(1, canAccessParent: false), currentUserId: 1);
 
-        var result = await controller.GetMany(limit: null, parentType: "project", parentId: 1);
+        var result = await controller.GetMany(limit: null, parentType: "project", parentId: TestIds.Of(1));
 
         Assert.IsType<NotFoundResult>(result);
     }
@@ -164,7 +164,7 @@ public class CommentsControllerTests
     public async Task DeleteOne_ByAuthor_DeletesComment()
     {
         using var db = CreateDbContext();
-        db.Comments.Add(new Comment { Id = 1, ParentType = "task", ParentId = 1, Content = "Mine", CreatedById = 5 });
+        db.Comments.Add(new Comment { Id = 1, ParentType = "task", ParentId = TestIds.Of(1), Content = "Mine", CreatedById = 5 });
         await db.SaveChangesAsync();
         var controller = CreateController(db, new FakeAccessScope(5), currentUserId: 5);
 
@@ -178,7 +178,7 @@ public class CommentsControllerTests
     public async Task DeleteOne_ByAnotherRegularUser_ReturnsForbidden()
     {
         using var db = CreateDbContext();
-        db.Comments.Add(new Comment { Id = 1, ParentType = "task", ParentId = 1, Content = "Not yours", CreatedById = 5 });
+        db.Comments.Add(new Comment { Id = 1, ParentType = "task", ParentId = TestIds.Of(1), Content = "Not yours", CreatedById = 5 });
         await db.SaveChangesAsync();
         var controller = CreateController(db, new FakeAccessScope(9), currentUserId: 9);
 
@@ -192,7 +192,7 @@ public class CommentsControllerTests
     public async Task DeleteOne_ByPrivilegedUser_DeletesSomeoneElsesComment()
     {
         using var db = CreateDbContext();
-        db.Comments.Add(new Comment { Id = 1, ParentType = "task", ParentId = 1, Content = "Theirs", CreatedById = 5 });
+        db.Comments.Add(new Comment { Id = 1, ParentType = "task", ParentId = TestIds.Of(1), Content = "Theirs", CreatedById = 5 });
         await db.SaveChangesAsync();
         var controller = CreateController(db, new FakeAccessScope(1, isPrivileged: true), currentUserId: 1);
 

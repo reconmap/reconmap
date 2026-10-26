@@ -6,9 +6,9 @@ namespace Reconmap.Api.Domain.Entities;
 [Table("task")]
 public class ProjectTask : TimestampedEntity
 {
-    [Key] public int Id { get; set; }
+    [Key] public Guid Id { get; set; }
 
-    [Required] public int ProjectId { get; set; }
+    [Required] public Guid ProjectId { get; set; }
 
     public int? CreatedById { get; set; }
 

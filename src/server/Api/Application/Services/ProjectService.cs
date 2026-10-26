@@ -12,12 +12,12 @@ public sealed record ProjectFilter(
     bool? IsTemplate = null,
     int? ClientId = null,
     int? MemberOfUserId = null,
-    IReadOnlyCollection<int>? VisibleProjectIds = null);
+    IReadOnlyCollection<Guid>? VisibleProjectIds = null);
 
 public interface IProjectService
 {
     Task<PagedResult<Project>> GetManyAsync(ProjectFilter filter, Paging paging, CancellationToken cancellationToken = default);
-    Task<Project?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<Project?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }
 
 public sealed class ProjectService(AppDbContext db) : IProjectService
@@ -82,7 +82,7 @@ public sealed class ProjectService(AppDbContext db) : IProjectService
         }
     }
 
-    public Task<Project?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public Task<Project?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return db.Projects
             .Include(p => p.CreatedBy)

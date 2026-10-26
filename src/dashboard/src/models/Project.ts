@@ -1,5 +1,5 @@
 interface ProjectInterface {
-    id?: number;
+    id?: string;
     createdById?: number;
     service_provider_id?: number;
     client_id?: number;

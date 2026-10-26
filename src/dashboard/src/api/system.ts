@@ -52,7 +52,7 @@ interface AiUsageBreakdownRow {
 }
 
 interface AiUsageProjectRow extends Omit<AiUsageBreakdownRow, "key"> {
-    projectId: number | null;
+    projectId: string | null;
     projectName: string | null;
 }
 

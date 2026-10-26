@@ -24,13 +24,13 @@ public class TasksControllerUpdateAssigneeTests
     public async Task UpdateOne_ClearsAssigneeWhenBodySendsNullAssignedToId()
     {
         using var db = CreateDbContext();
-        db.Tasks.Add(new ProjectTask { Id = 1, ProjectId = 1, CreatedById = 1, Summary = "Assigned", Priority = "low", Status = "todo", AssignedToId = 7 });
+        db.Tasks.Add(new ProjectTask { Id = TestIds.Of(1), ProjectId = TestIds.Of(1), CreatedById = 1, Summary = "Assigned", Priority = "low", Status = "todo", AssignedToId = 7 });
         await db.SaveChangesAsync();
 
         // Shaped like the body the task details page sends: the full task, with a nested assignedTo object.
         const string body = """
             {
-              "id": 1, "projectId": 1, "createdById": 1, "assignedToId": null,
+              "id": "00000001-0000-0000-0000-000000000000", "projectId": "00000001-0000-0000-0000-000000000000", "createdById": 1, "assignedToId": null,
               "assignedTo": { "id": 7, "fullName": "Someone" },
               "priority": "low", "summary": "Assigned", "status": "todo"
             }
@@ -41,10 +41,10 @@ public class TasksControllerUpdateAssigneeTests
         {
             ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
         };
-        var result = await controller.UpdateOne(1, requestModel);
+        var result = await controller.UpdateOne(TestIds.Of(1), requestModel);
 
         Assert.IsType<OkObjectResult>(result);
-        var stored = await db.Tasks.AsNoTracking().SingleAsync(t => t.Id == 1);
+        var stored = await db.Tasks.AsNoTracking().SingleAsync(t => t.Id == TestIds.Of(1));
         Assert.Null(stored.AssignedToId);
     }
 }

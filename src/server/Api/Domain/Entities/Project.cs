@@ -6,7 +6,7 @@ namespace Reconmap.Api.Domain.Entities;
 [Table("project")]
 public class Project : TimestampedEntity
 {
-    [Key] public int Id { get; set; }
+    [Key] public Guid Id { get; set; }
 
     public int? CreatedById { get; set; }
 

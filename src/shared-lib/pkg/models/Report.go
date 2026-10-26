@@ -3,8 +3,8 @@ package models
 
 type Report struct {
 
-	ID int `json:"id"`
-	Projectid int `json:"projectId"`
+	ID string `json:"id"`
+	Projectid string `json:"projectId"`
 	CreatedById int `json:"createdById"`
 	IsTemplate bool `json:"is_template"`
 	Insertts string `json:"insertTs"`

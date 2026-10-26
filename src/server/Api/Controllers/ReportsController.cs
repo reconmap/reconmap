@@ -19,8 +19,8 @@ namespace Reconmap.Api.Controllers;
 
 public class ReportRequestDto
 {
-    public int ProjectId { get; set; }
-    public int ReportTemplateId { get; set; }
+    public Guid ProjectId { get; set; }
+    public Guid ReportTemplateId { get; set; }
     public string VersionName { get; set; }
     public string VersionDescription { get; set; }
 }
@@ -91,7 +91,7 @@ public class ReportsController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMany([FromQuery] int? limit, [FromQuery] int? projectId)
+    public async Task<IActionResult> GetMany([FromQuery] int? limit, [FromQuery] Guid? projectId)
     {
         var results = await GetReportsInternal(limit, false, projectId);
         return Ok(results);
@@ -158,8 +158,8 @@ public class ReportsController(
         return CreatedAtAction(nameof(GetTemplates), new { id = report.Id }, report);
     }
 
-    [HttpPost("{id:int}/send")]
-    public async Task<IActionResult> Send(int id, [FromBody] ReportSendRequestDto request)
+    [HttpPost("{id:guid}/send")]
+    public async Task<IActionResult> Send(Guid id, [FromBody] ReportSendRequestDto request)
     {
         var report = await dbContext.Reports
             .AsNoTracking()
@@ -223,7 +223,7 @@ public class ReportsController(
         });
     }
 
-    private async Task<List<object>> GetReportsInternal(int? limit, bool isTemplate, int? projectId = null)
+    private async Task<List<object>> GetReportsInternal(int? limit, bool isTemplate, Guid? projectId = null)
     {
         const int maxLimit = 500;
         var take = Math.Min(limit ?? 100, maxLimit);
@@ -250,7 +250,7 @@ public class ReportsController(
                 r.VersionName,
                 r.VersionDescription,
 
-                Project = p != null ? new { Id = (int?)p.Id, Name = p.Name } : null,
+                Project = p != null ? new { Id = (Guid?)p.Id, Name = p.Name } : null,
 
                 // attachment fields
                 AttachmentId = (int?)a.Id,
@@ -330,9 +330,9 @@ public class ReportsController(
         }
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:guid}")]
     [Audit(AuditActions.Deleted, "Report")]
-    public async Task<IActionResult> DeleteOne(int id)
+    public async Task<IActionResult> DeleteOne(Guid id)
     {
         var report = await dbContext.Reports.FindAsync(id);
         if (report == null) return NotFound();

@@ -18,7 +18,7 @@ public class CommentsController(AppDbContext dbContext, IRequestAccessScope acce
     {
         [Required] public CommentParentType ParentType { get; set; }
 
-        [Required] public int ParentId { get; set; }
+        [Required] public Guid ParentId { get; set; }
 
         [Required] public string Content { get; set; } = string.Empty;
     }
@@ -26,7 +26,7 @@ public class CommentsController(AppDbContext dbContext, IRequestAccessScope acce
     public sealed record CommentResponse(
         int Id,
         string? ParentType,
-        int ParentId,
+        Guid ParentId,
         string Content,
         int? CreatedById,
         DateTime? CreatedAt,
@@ -58,7 +58,7 @@ public class CommentsController(AppDbContext dbContext, IRequestAccessScope acce
     [HttpGet]
     public async Task<IActionResult> GetMany([FromQuery] int? limit,
         [FromQuery] string parentType,
-        [FromQuery] int parentId)
+        [FromQuery] Guid parentId)
     {
         if (!Enum.TryParse<CommentParentType>(parentType, ignoreCase: true, out var type))
         {

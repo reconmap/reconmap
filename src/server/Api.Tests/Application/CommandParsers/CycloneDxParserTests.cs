@@ -83,7 +83,7 @@ public class CycloneDxParserTests
 
         var fakeStorage = new FakeAttachmentStorage(jsonContent);
         var parser = new CycloneDxParser(fakeStorage);
-        var job = new CommandProcessorJob { FilePath = "sbom.json", ProjectId = 42 };
+        var job = new CommandProcessorJob { FilePath = "sbom.json", ProjectId = TestIds.Of(42) };
 
         var result = parser.Parse(job);
 

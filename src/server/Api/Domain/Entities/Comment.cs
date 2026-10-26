@@ -14,7 +14,7 @@ public class Comment : CreationTimestampedEntity
 
     [Required] public string? ParentType { get; set; }
 
-    [Required] public int ParentId { get; set; }
+    [Required] public Guid ParentId { get; set; }
 
     [Required]
     [Column(TypeName = "text")]

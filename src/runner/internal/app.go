@@ -40,7 +40,7 @@ type App struct {
 	// API calls made while running a schedule; replaceable in tests.
 	reportTaskStatus func(apiBaseUri, accessToken string, taskId int, status, errorMessage string) error
 	getUsage         func(apiBaseUri, usageId string) (*models.CommandUsage, error)
-	uploadOutput     func(apiBaseUri, accessToken, usageId string, projectId int, fileName string, content []byte) error
+	uploadOutput     func(apiBaseUri, accessToken, usageId string, projectId string, fileName string, content []byte) error
 }
 
 var logger = logging.GetLoggerInstance()
@@ -214,7 +214,7 @@ func (app *App) executeSchedule(cSchedule models.CommandSchedule, restApiUrl str
 }
 
 func (app *App) uploadScheduleOutput(cSchedule models.CommandSchedule, restApiUrl string, accessToken string, stdout []byte) error {
-	if cSchedule.CommandUsageId == "" || cSchedule.ProjectId == 0 {
+	if cSchedule.CommandUsageId == "" || cSchedule.ProjectId == "" {
 		return nil
 	}
 

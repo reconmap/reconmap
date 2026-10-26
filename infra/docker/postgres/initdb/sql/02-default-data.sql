@@ -25,23 +25,29 @@ VALUES (1, 'service_provider', 'Reconmap', 'https://reconmap.com');
 INSERT INTO contact (organisation_id, name, email)
 VALUES (currval(pg_get_serial_sequence('organisation', 'id')), 'Contributors', 'no-reply@reconmap.com');
 
-INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
-VALUES (NULL, 1, TRUE, 'Report template (Word)', 'Default report template in Word format');
-
+WITH new_report AS (
+    INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
+    VALUES (NULL, 1, TRUE, 'Report template (Word)', 'Default report template in Word format')
+    RETURNING id)
 INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
-VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.docx', 'default-report-template.docx', 0, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '');
+SELECT 'report', id, 1, 'default-report-template.docx', 'default-report-template.docx', 0, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', ''
+FROM new_report;
 
-INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
-VALUES (NULL, 1, TRUE, 'Report template (MD)', 'Default report template in Markdown format');
-
+WITH new_report AS (
+    INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
+    VALUES (NULL, 1, TRUE, 'Report template (MD)', 'Default report template in Markdown format')
+    RETURNING id)
 INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
-VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.md', 'default-report-template.md', 0, 'text/markdown', '');
+SELECT 'report', id, 1, 'default-report-template.md', 'default-report-template.md', 0, 'text/markdown', ''
+FROM new_report;
 
-INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
-VALUES (NULL, 1, TRUE, 'Report template (Typst)', 'Default report template in Typst format');
-
+WITH new_report AS (
+    INSERT INTO report (project_id, created_by_id, is_template, version_name, version_description)
+    VALUES (NULL, 1, TRUE, 'Report template (Typst)', 'Default report template in Typst format')
+    RETURNING id)
 INSERT INTO attachment (parent_type, parent_id, created_by_id, client_file_name, file_name, file_size, file_mimetype, file_hash)
-VALUES ('report', currval(pg_get_serial_sequence('report', 'id')), 1, 'default-report-template.typ', 'default-report-template.typ', 0, 'text/typst', '');
+SELECT 'report', id, 1, 'default-report-template.typ', 'default-report-template.typ', 0, 'text/typst', ''
+FROM new_report;
 
 INSERT INTO project_category (name, description)
 VALUES ('Managed security monitoring',
@@ -61,16 +67,19 @@ VALUES ('Managed security monitoring',
        ('Penetration testing',
         'Also known as pentesting, which entails simulating a cyberattack against the organization\’s information and technology assets to check for exploitable vulnerabilities. This service constitutes a form of ethical hacking that can be very effective at uncovering the vulnerabilities that may be successfully targeted by hackers ');
 
-INSERT INTO project (created_by_id, name, description, engagement_end_date)
-VALUES (1, 'Onboarding to Reconmap', 'Project to ensure all Reconmap''s onboarding tasks are done in order.', CURRENT_DATE);
-
+WITH onboarding AS (
+    INSERT INTO project (created_by_id, name, description, engagement_end_date)
+    VALUES (1, 'Onboarding to Reconmap', 'Project to ensure all Reconmap''s onboarding tasks are done in order.', CURRENT_DATE)
+    RETURNING id)
 INSERT INTO task (created_by_id, assigned_to_id, project_id, summary, description, priority)
-VALUES (1, 1, 1, '1. Update your organisation details', '[Follow this link](/settings/organisation)', 'medium'),
-       (1, 1, 1, '2. Update your preferences', '[Follow this link](/users/preferences)', 'medium'),
-       (1, 1, 1, '3. Invite your team', '[Follow this link](/users/create)', 'medium'),
-       (1, 1, 1, '4. Create client', '[Follow this link](/clients/create)', 'medium'),
-       (1, 1, 1, '5. Create project', '[Follow this link](/projects/create)', 'medium'),
-       (1, 1, 1, '6. Archive the onboarding project', NULL, 'medium');
+SELECT 1, 1, onboarding.id, t.summary, t.description, 'medium'
+FROM onboarding,
+     (VALUES ('1. Update your organisation details', '[Follow this link](/settings/organisation)'),
+             ('2. Update your preferences', '[Follow this link](/users/preferences)'),
+             ('3. Invite your team', '[Follow this link](/users/create)'),
+             ('4. Create client', '[Follow this link](/clients/create)'),
+             ('5. Create project', '[Follow this link](/projects/create)'),
+             ('6. Archive the onboarding project', NULL)) AS t (summary, description);
 
 -- Default settings rows
 INSERT INTO mail_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING;

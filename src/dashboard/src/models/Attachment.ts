@@ -1,7 +1,7 @@
 interface AttachmentInterface {
     id?: number;
     parentType: string | undefined;
-    parentId: number | undefined;
+    parentId: string | undefined;
     createdById: number | undefined;
     clientFileName: string | undefined;
     fileName: string | undefined;

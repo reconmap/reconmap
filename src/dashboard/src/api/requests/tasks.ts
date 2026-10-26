@@ -7,9 +7,9 @@ const requestTasks = (params: any) => {
     return secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { method: "GET" });
 };
 
-const requestTask = (taskId: number) => requestEntity(`${API_BASE_URL}/${taskId}`);
+const requestTask = (taskId: string) => requestEntity(`${API_BASE_URL}/${taskId}`);
 
-const requestTaskDelete = (taskId: number) => requestEntityDelete(`${API_BASE_URL}/${taskId}`);
+const requestTaskDelete = (taskId: string) => requestEntityDelete(`${API_BASE_URL}/${taskId}`);
 
 const requestTasksDelete = (data: object) => {
     return secureApiFetch(`${API_BASE_URL}`, {
@@ -22,7 +22,7 @@ const requestTasksDelete = (data: object) => {
     });
 };
 
-const requestTaskPatch = (taskId: number, data: any) => requestEntityPut(`${API_BASE_URL}/${taskId}`, data);
+const requestTaskPatch = (taskId: string, data: any) => requestEntityPut(`${API_BASE_URL}/${taskId}`, data);
 
 const requestTasksPatch = (data: any) => {
     return secureApiFetch("/tasks", {

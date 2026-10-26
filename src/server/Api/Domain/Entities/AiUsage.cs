@@ -16,7 +16,7 @@ public class AiUsage
 
     [MaxLength(50)] public string Feature { get; set; } = string.Empty;
 
-    public int? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     public int? UserId { get; set; }
 

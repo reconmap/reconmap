@@ -41,9 +41,9 @@ public class VulnerabilitiesController(
         return CreatedAtAction(nameof(GetOne), new { id = vulnerability.Id }, vulnerability);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:guid}")]
     [Audit(AuditActions.Updated, "Vulnerability")]
-    public async Task<IActionResult> UpdateOne(int id, Vulnerability vulnerability)
+    public async Task<IActionResult> UpdateOne(Guid id, Vulnerability vulnerability)
     {
         var dbModel = await _dbContext.Vulnerabilities.FindAsync(id);
         if (dbModel == null) return NotFound();
@@ -59,7 +59,7 @@ public class VulnerabilitiesController(
 
     [HttpGet]
     public async Task<IActionResult> GetMany(
-        [FromQuery] int? projectId,
+        [FromQuery] Guid? projectId,
         [FromQuery] int? assetId,
         [FromQuery] string? status,
         [FromQuery] string? risk,
@@ -85,10 +85,10 @@ public class VulnerabilitiesController(
         });
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOne(int id)
+    public async Task<IActionResult> GetOne(Guid id)
     {
         var existing = await _dbContext.Vulnerabilities
             .Include(v => v.Project)
@@ -103,9 +103,9 @@ public class VulnerabilitiesController(
         return Ok(existing);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:guid}")]
     [Audit(AuditActions.Deleted, "Vulnerability")]
-    public async Task<IActionResult> DeleteOne(int id)
+    public async Task<IActionResult> DeleteOne(Guid id)
     {
         var deleteCount = await _dbContext.Vulnerabilities
             .Where(n => n.Id == id)
@@ -119,9 +119,9 @@ public class VulnerabilitiesController(
     }
 
     [HttpPut]
-    [Route("{id:int}/remediation")]
+    [Route("{id:guid}/remediation")]
     public async Task<IActionResult> PutRemediation(
-        int id,
+        Guid id,
         [FromServices] IAiService aiService)
     {
         var vulnerability = await _dbContext.Vulnerabilities.FindAsync(id);
@@ -149,9 +149,9 @@ public class VulnerabilitiesController(
     }
 
     [HttpPost]
-    [Route("{id:int}/triage")]
+    [Route("{id:guid}/triage")]
     public async Task<IActionResult> PostTriage(
-        int id,
+        Guid id,
         [FromServices] IAiService aiService)
     {
         var vulnerability = await _dbContext.Vulnerabilities

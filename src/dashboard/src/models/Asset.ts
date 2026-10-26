@@ -1,7 +1,7 @@
 
 interface AssetInterface {
 
-	project_id: number | undefined;
+	project_id: string | undefined;
 	parent_id?: number;
 	name: string | undefined;
 	type: string | undefined;

@@ -16,7 +16,7 @@ public static class AiFeatures
 }
 
 /// <summary>Describes who asked for an LLM call and why, so usage can be attributed.</summary>
-public sealed record AiUsageContext(string Feature, int? ProjectId = null, int? UserId = null);
+public sealed record AiUsageContext(string Feature, Guid? ProjectId = null, int? UserId = null);
 
 /// <summary>What is being called: the configured provider/model and its prices per million tokens.</summary>
 public sealed record AiUsageTarget(

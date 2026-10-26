@@ -23,9 +23,9 @@ public class TasksControllerTests
     {
         using var db = CreateDbContext();
         db.Tasks.AddRange(
-            new ProjectTask { ProjectId = 1, Summary = "Scan Internal Network", Priority = "high", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "Write report", Description = "Include the NETWORK findings", Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "Review scope", Priority = "low", Status = "done" }
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "Scan Internal Network", Priority = "high", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "Write report", Description = "Include the NETWORK findings", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "Review scope", Priority = "low", Status = "done" }
         );
         await db.SaveChangesAsync();
 
@@ -44,8 +44,8 @@ public class TasksControllerTests
     {
         using var db = CreateDbContext();
         db.Tasks.AddRange(
-            new ProjectTask { ProjectId = 1, Summary = "A", Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "B", Priority = "low", Status = "todo" }
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "A", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "B", Priority = "low", Status = "todo" }
         );
         await db.SaveChangesAsync();
 
@@ -62,9 +62,9 @@ public class TasksControllerTests
     {
         using var db = CreateDbContext();
         db.Tasks.AddRange(
-            new ProjectTask { ProjectId = 1, Summary = "Mine", AssignedToId = 7, Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "Theirs", AssignedToId = 8, Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "Unassigned", Priority = "low", Status = "todo" }
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "Mine", AssignedToId = 7, Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "Theirs", AssignedToId = 8, Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "Unassigned", Priority = "low", Status = "todo" }
         );
         await db.SaveChangesAsync();
 
@@ -83,12 +83,12 @@ public class TasksControllerTests
     {
         using var db = CreateDbContext();
         db.Projects.AddRange(
-            new Project { Id = 1, Name = "Active", Archived = false },
-            new Project { Id = 2, Name = "Archived", Archived = true }
+            new Project { Id = TestIds.Of(1), Name = "Active", Archived = false },
+            new Project { Id = TestIds.Of(2), Name = "Archived", Archived = true }
         );
         db.Tasks.AddRange(
-            new ProjectTask { ProjectId = 1, Summary = "Active task", Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 2, Summary = "Archived task", Priority = "low", Status = "todo" }
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "Active task", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(2), Summary = "Archived task", Priority = "low", Status = "todo" }
         );
         await db.SaveChangesAsync();
 
@@ -107,9 +107,9 @@ public class TasksControllerTests
     {
         using var db = CreateDbContext();
         db.Tasks.AddRange(
-            new ProjectTask { ProjectId = 1, Summary = "A", Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "B", Priority = "low", Status = "todo" },
-            new ProjectTask { ProjectId = 1, Summary = "C", Priority = "low", Status = "todo" }
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "A", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "B", Priority = "low", Status = "todo" },
+            new ProjectTask { ProjectId = TestIds.Of(1), Summary = "C", Priority = "low", Status = "todo" }
         );
         await db.SaveChangesAsync();
 
