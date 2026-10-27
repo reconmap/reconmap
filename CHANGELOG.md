@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Upload hardening: attachment uploads are now limited by the API configuration (`Storage:Uploads` in `config-ngapi.json`): 20 MB per file, 10 files per request and a file type allow-list by default, and command output uploads are limited to 10 MB. Oversized files are rejected with `413`, disallowed types with `415`. The size of uploads can no longer overflow the stored `int` size, and the MIME type of an attachment is derived from its extension instead of being echoed from the client. Existing attachments are also served with the derived type. The OpenAPI document and the Swagger UI are only served in the Development environment. See [Attachment limits](docs/pages/admin-manual/attachment-limits.md).
+
 ### Changed
 
 - **Breaking (database, API, MCP and runner):** Projects, tasks, reports and vulnerabilities now use UUIDs instead of sequential integer ids, so their ids cannot be guessed or counted. Projects, tasks and reports use time-ordered UUIDv7 ids, and vulnerabilities use random UUIDv4 ids so the id does not reveal when a finding was created. The routes (`/api/projects/{id}`, `/api/tasks/{id}`, `/api/reports/{id}`, `/api/vulnerabilities/{id}` and their sub-routes), the `projectId` filters and fields, the `parentId` of comments and attachments, the `ids` of the bulk task update and delete, the MCP tools, resources and prompts (`reconmap://projects/{id}`), the dashboard URLs, and the `projectId` the runner sends with command output all use UUIDs. A malformed id returns `404 Not Found`. All other entities (users, organisations, assets, attachments, comments, notifications, runners and so on) keep integer ids. Vulnerability lists are ordered by creation time, with the id as tie-breaker. See [Identifiers](docs/pages/development/architecture.md#identifiers).
@@ -55,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The dashboard shows the upload limits (maximum file size, number of files and allowed file types) next to the attachment and command output upload controls and validates files before uploading. The limits come from the new `GET /api/system/upload-limits` endpoint.
 - The task form (create and edit pages) has a **Status** dropdown with Todo, Doing and Done. New tasks default to Todo.
 - Users can leave comments on tasks. The task details page has a **Comments** tab, using the same comments panel as projects and vulnerabilities, and the API accepts `parentType: "task"` on `POST /api/comments` and `GET /api/comments`.
 - The audit log records comment creation as well as deletion.

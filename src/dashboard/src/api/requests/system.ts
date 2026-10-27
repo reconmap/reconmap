@@ -4,6 +4,10 @@ const requestExportables = () => {
     return secureApiFetch("/system/exportables", { method: "GET" });
 };
 
+const requestUploadLimits = () => {
+    return secureApiFetch("/system/upload-limits", { method: "GET" });
+};
+
 const requestSystemHealth = () => {
     return secureApiFetch("/system/health", { method: "GET" });
 };
@@ -79,5 +83,6 @@ export {
     requestSystemAiSettingsPut,
     requestSystemHealth,
     requestSystemIntegrations,
-    requestSystemUsage
+    requestSystemUsage,
+    requestUploadLimits
 };

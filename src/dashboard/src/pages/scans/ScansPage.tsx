@@ -65,6 +65,7 @@ const ScansPage = ({ mode }: any) => {
                             <AttachmentsDropzone
                                 uploadFn={requestCommandOutputPost}
                                 fileFieldName="resultFile"
+                                kind="commandOutput"
                                 extraParams={dropzoneExtraParams}
                                 disabled={false}
                             />

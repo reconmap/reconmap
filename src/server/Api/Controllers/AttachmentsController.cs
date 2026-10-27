@@ -7,15 +7,19 @@ using Reconmap.Api.Infrastructure.Persistence;
 using Reconmap.Api.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Reconmap.Api.Common;
+using Reconmap.Api.Infrastructure.Http;
 
 namespace Reconmap.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage attachmentStorage, IRequestAccessScope accessScope)
+public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage attachmentStorage, IRequestAccessScope accessScope, IOptions<StorageSettings> storageSettings)
     : AppController(dbContext)
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
+    private readonly UploadSettings _uploads = storageSettings.Value.Uploads;
 
     [HttpGet]
     public async Task<IActionResult> GetMany(
@@ -49,7 +53,8 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
 
         return File(
             stream,
-            attachment.FileMimeType,
+            // Never echo the client-declared type: derive it from the stored name.
+            UploadContentTypes.FromFileName(attachment.ClientFileName),
             attachment.ClientFileName,
             true // allows efficient large-file downloads
         );
@@ -74,17 +79,31 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
     }
 
     [HttpPost]
-    [DisableRequestSizeLimit]
-    [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue, ValueLengthLimit = int.MaxValue)]
+    [UploadLimits(UploadKind.Attachment)]
     public async Task<IActionResult> CreateMany([FromForm] Guid parentId, [FromForm] string parentType)
     {
-        if (!Request.Form.Files.Any())
+        var files = Request.Form.Files;
+        if (files.Count == 0)
             return BadRequest();
+        if (files.Count > _uploads.EffectiveMaxFilesPerRequest)
+            return BadRequest(new { message = $"At most {_uploads.EffectiveMaxFilesPerRequest} files can be uploaded at once." });
         if (!await accessScope.CanAccessParentAsync(parentType, parentId)) return NotFound();
 
-        foreach (var file in Request.Form.Files)
+        var allowedExtensions = _uploads.EffectiveAllowedExtensions();
+        var maxFileSize = _uploads.EffectiveMaxFileSizeBytes;
+        foreach (var file in files)
         {
-            var uniqueName = _attachmentFilePath.GenerateFileName(Path.GetExtension(file.FileName));
+            if (file.Length > maxFileSize)
+                return StatusCode(StatusCodes.Status413PayloadTooLarge,
+                    new { message = $"'{file.FileName}' exceeds the maximum file size of {maxFileSize} bytes." });
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLowerInvariant()))
+                return StatusCode(StatusCodes.Status415UnsupportedMediaType,
+                    new { message = $"'{file.FileName}' has a file type that is not allowed." });
+        }
+
+        foreach (var file in files)
+        {
+            var uniqueName = _attachmentFilePath.GenerateFileName(Path.GetExtension(file.FileName).ToLowerInvariant());
             
             await using (var stream = file.OpenReadStream())
             {
@@ -98,8 +117,8 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
                 ParentId = parentId,
                 ClientFileName = file.FileName,
                 FileName = uniqueName,
-                FileSize = (int)file.Length,
-                FileMimeType = file.ContentType,
+                FileSize = (int)file.Length, // bounded by EffectiveMaxFileSizeBytes <= int.MaxValue
+                FileMimeType = UploadContentTypes.FromFileName(file.FileName),
                 FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
             };
 

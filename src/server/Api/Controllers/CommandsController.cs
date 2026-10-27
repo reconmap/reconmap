@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Reconmap.Api.Infrastructure.Http;
 
 namespace Reconmap.Api.Controllers;
 
@@ -30,7 +32,8 @@ public class CommandsController(
     AppDbContext dbContext,
     IMessageQueue messageQueue,
     ILogger<CommandsController> logger,
-    IAttachmentStorage attachmentStorage)
+    IAttachmentStorage attachmentStorage,
+    IOptions<StorageSettings> storageSettings)
     : ControllerBase
 {
     private readonly AttachmentFilePath _attachmentFilePath = new();
@@ -91,6 +94,7 @@ public class CommandsController(
     }
 
     [HttpPost("outputs")]
+    [UploadLimits(UploadKind.CommandOutput)]
     public async Task<IActionResult> UploadOutput()
     {
         var form = await Request.ReadFormAsync();
@@ -98,6 +102,9 @@ public class CommandsController(
 
         var resultFile = form.Files["resultFile"];
         if (resultFile == null) return BadRequest("Missing resultFile");
+        if (resultFile.Length > storageSettings.Value.Uploads.EffectiveMaxCommandOutputBytes)
+            return StatusCode(StatusCodes.Status413PayloadTooLarge,
+                new { message = "The command output exceeds the maximum upload size." });
 
         var usage = CommandDiscovery.FindUsageById(commandUsageId);
         if (usage == null) return NotFound("Command usage not found");
@@ -129,8 +136,8 @@ public class CommandsController(
             ParentId = Guid.Empty,
             ClientFileName = resultFile.FileName,
             FileName = uniqueName,
-            FileSize = (int)resultFile.Length,
-            FileMimeType = resultFile.ContentType,
+            FileSize = (int)resultFile.Length, // bounded by EffectiveMaxCommandOutputBytes <= int.MaxValue
+            FileMimeType = UploadContentTypes.FromFileName(resultFile.FileName),
             FileHash = await attachmentStorage.GetFileHashAsync(uniqueName)
         };
 

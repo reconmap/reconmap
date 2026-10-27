@@ -12,6 +12,7 @@ import {
     requestSystemHealth,
     requestSystemIntegrations,
     requestSystemUsage,
+    requestUploadLimits,
 } from "./requests/system";
 
 interface ServiceStatus {
@@ -82,6 +83,13 @@ interface SystemUsage {
     ai: AiUsageSummary;
 }
 
+interface UploadLimits {
+    maxFileSizeBytes: number;
+    maxFilesPerRequest: number;
+    maxCommandOutputBytes: number;
+    allowedExtensions: string[];
+}
+
 const useExportablesQuery = () => {
     return useQuery({
         queryKey: ["system-exportables"],
@@ -93,6 +101,14 @@ const useSystemHealthQuery = () => {
     return useQuery({
         queryKey: ["system-health"],
         queryFn: (): Promise<SystemHealth> => requestSystemHealth().then((res) => res.json()),
+    });
+};
+
+const useUploadLimitsQuery = () => {
+    return useQuery({
+        queryKey: ["system-upload-limits"],
+        queryFn: (): Promise<UploadLimits> => requestUploadLimits().then((res) => res.json()),
+        staleTime: Infinity,
     });
 };
 
@@ -194,7 +210,7 @@ const useSystemAiSettingsUpdateMutation = () => {
     });
 };
 
-export type { AiUsageBreakdownRow, AiUsageSummary, McpStatus, ServiceStatus, SystemHealth, SystemUsage };
+export type { AiUsageBreakdownRow, AiUsageSummary, McpStatus, ServiceStatus, SystemHealth, SystemUsage, UploadLimits };
 
 export {
     useExportablesQuery,
@@ -209,4 +225,5 @@ export {
     useSystemAiSettingsQuery,
     useSystemAiSettingsUpdateMutation,
     useSystemUsageQuery,
+    useUploadLimitsQuery,
 };

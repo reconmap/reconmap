@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Options;
 using Reconmap.Api.Application.Services;
+using Reconmap.Api.Common;
 using Reconmap.Api.Common.Messaging;
 using Reconmap.Api.Domain.Entities;
 using Reconmap.Api.Infrastructure.Persistence;
@@ -60,9 +62,23 @@ public class SystemController(
     IAiSettingsService aiSettingsService,
     IAttachmentStorage attachmentStorage,
     HealthCheckService healthCheckService,
-    McpHealthProbe mcpHealthProbe)
+    McpHealthProbe mcpHealthProbe,
+    IOptions<StorageSettings> storageSettings)
     : ControllerBase
 {
+    [HttpGet("upload-limits")]
+    public IActionResult GetUploadLimits()
+    {
+        var uploads = storageSettings.Value.Uploads;
+        return Ok(new
+        {
+            maxFileSizeBytes = uploads.EffectiveMaxFileSizeBytes,
+            maxFilesPerRequest = uploads.EffectiveMaxFilesPerRequest,
+            maxCommandOutputBytes = uploads.EffectiveMaxCommandOutputBytes,
+            allowedExtensions = uploads.EffectiveAllowedExtensions().Order().ToArray()
+        });
+    }
+
     [HttpGet("custom-fields")]
     public async Task<IActionResult> GetAll([FromQuery] int? limit)
     {

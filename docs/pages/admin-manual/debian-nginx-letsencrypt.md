@@ -89,6 +89,10 @@ server {
     server_tokens off;
     server_name api.YOUR-SECURITY-COMPANY-DOMAIN.com;
 
+    # nginx rejects request bodies over 1m by default. Keep this at least as large as
+    # Storage:Uploads:MaxFileSizeBytes x MaxFilesPerRequest (20MB x 10 by default); see "Attachment limits".
+    client_max_body_size 201m;
+
     location / {
         proxy_pass http://127.0.0.1:5510;
         proxy_set_header    X-Forwarded-Host   $host;
