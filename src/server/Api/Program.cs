@@ -28,11 +28,8 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", false, isDevelopment)
     .AddJsonFile($"appsettings.{environmentName}.json", true, isDevelopment).Build();
 
-Console.Error.WriteLine("Reconmap API bootstrap: appsettings configuration loaded.");
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("ai-providers.json", optional: false, reloadOnChange: true);
-Console.Error.WriteLine("Reconmap API bootstrap: web host builder created.");
 builder.WebHost.ConfigureKestrel(serverOptions => { serverOptions.AddServerHeader = false; });
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
@@ -40,12 +37,6 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 var startupDiagnostics = StartupDiagnostics.Create(builder.Configuration);
-var startupDiagnosticMessage = string.Format(
-    "API startup configuration: urls={0}; databaseHost={1}; redis={2}:{3}; rabbitMqHost={4}; keycloakHost={5}; storageHost={6}",
-    startupDiagnostics.ListenerUrls, startupDiagnostics.DatabaseHost, startupDiagnostics.RedisHost,
-    startupDiagnostics.RedisPort, startupDiagnostics.RabbitMqHost, startupDiagnostics.KeycloakHost,
-    startupDiagnostics.StorageHost);
-Console.Error.WriteLine($"Reconmap API bootstrap: {startupDiagnosticMessage}");
 Log.Warning(
     "API startup configuration: urls={ListenerUrls}; databaseHost={DatabaseHost}; redis={RedisHost}:{RedisPort}; rabbitMqHost={RabbitMqHost}; keycloakHost={KeycloakHost}; storageHost={StorageHost}",
     startupDiagnostics.ListenerUrls, startupDiagnostics.DatabaseHost, startupDiagnostics.RedisHost,
@@ -146,6 +137,9 @@ services.AddHsts(options =>
     options.ExcludedHosts.Add("reconmap.com");
 });
 
+services.AddProblemDetails();
+services.AddExceptionHandler<GlobalExceptionHandler>();
+
 services.AddControllers(options =>
     {
         options.Filters.Add<Reconmap.Api.Infrastructure.Security.OpaActionFilter>();
@@ -166,22 +160,7 @@ services.AddAuthorizationBuilder()
 
 var app = builder.Build();
 _ = app.Services.GetRequiredService<IAiProviderCatalog>();
-Console.Error.WriteLine("Reconmap API bootstrap: application pipeline built; starting Kestrel.");
-app.Use(async (context, next) =>
-{
-    try
-    {
-        await next(context);
-    }
-    catch (Exception exception)
-    {
-        Console.Error.WriteLine(
-            $"Reconmap API request failure: {context.Request.Method} {context.Request.Path} threw {exception.GetType().FullName}: {exception}");
-        Log.Error(exception, "Unhandled request failure for {RequestMethod} {RequestPath}",
-            context.Request.Method, context.Request.Path);
-        throw;
-    }
-});
+app.UseExceptionHandler();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();
@@ -210,18 +189,15 @@ app.MapControllers();
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {
-    Console.Error.WriteLine("Reconmap API lifecycle: startup completed; Kestrel is accepting requests.");
     Log.Information("API startup completed; Kestrel is accepting requests.");
 });
 app.Lifetime.ApplicationStopping.Register(() =>
 {
     const string message = "API shutdown was requested while running or starting. Check Docker events, host logs, and earlier API log entries for the initiating failure.";
-    Console.Error.WriteLine($"Reconmap API lifecycle: {message}");
     Log.Warning(message);
 });
 app.Lifetime.ApplicationStopped.Register(() =>
 {
-    Console.Error.WriteLine("Reconmap API lifecycle: host has stopped.");
     Log.Warning("API host has stopped.");
 });
 
@@ -235,14 +211,12 @@ try
 }
 catch (OperationCanceledException exception) when (app.Lifetime.ApplicationStopping.IsCancellationRequested)
 {
-    Console.Error.WriteLine("Reconmap API fatal: Kestrel startup was cancelled because the host shutdown token was signalled.");
     Log.Fatal(exception,
         "API startup was cancelled because the host shutdown token was signalled. This is not a listener-address error; inspect preceding startup diagnostics and Docker/host events for the initiating failure.");
     throw;
 }
 catch (Exception exception)
 {
-    Console.Error.WriteLine($"Reconmap API fatal: startup failed with {exception.GetType().FullName}: {exception.Message}");
     Log.Fatal(exception, "API terminated during startup.");
     throw;
 }

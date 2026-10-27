@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -36,7 +37,7 @@ public class SystemDataImportControllerTests
     public async Task ImportData_ImportsRunnersScansAndNestedScanTasks()
     {
         using var db = CreateDbContext();
-        var controller = new SystemDataImportController(db);
+        var controller = new SystemDataImportController(db, NullLogger<SystemDataImportController>.Instance);
 
         var json = """
         {
@@ -79,7 +80,7 @@ public class SystemDataImportControllerTests
     public async Task ImportData_ImportsCommentsMembersNotificationsWebhooksAndSchedules()
     {
         using var db = CreateDbContext();
-        var controller = new SystemDataImportController(db);
+        var controller = new SystemDataImportController(db, NullLogger<SystemDataImportController>.Instance);
 
         var json = """
         {
@@ -110,14 +111,14 @@ public class SystemDataImportControllerTests
 
         using (var firstDb = CreateDbContext(databaseName))
         {
-            var firstImport = new SystemDataImportController(firstDb);
+            var firstImport = new SystemDataImportController(firstDb, NullLogger<SystemDataImportController>.Instance);
             await firstImport.ImportData(
                 CreateJsonFile("""{ "runners": [{ "Id": 1000, "Name": "runner-1", "ClientId": "client-1" }] }"""),
                 CancellationToken.None);
         }
 
         using var db = CreateDbContext(databaseName);
-        var controller = new SystemDataImportController(db);
+        var controller = new SystemDataImportController(db, NullLogger<SystemDataImportController>.Instance);
 
         // The runner id is already stored, so its save fails. The comment after it must still be imported.
         var json = """

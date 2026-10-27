@@ -7,7 +7,8 @@ namespace Reconmap.Api.Controllers;
 
 [ApiController]
 [Route("api/system/data")]
-public class SystemDataImportController(AppDbContext db) : AppController(db)
+public class SystemDataImportController(AppDbContext db, ILogger<SystemDataImportController> logger)
+    : AppController(db)
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -55,7 +56,8 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
             {
                 // A failed save leaves the failed entities tracked, which would make every later entity fail too.
                 _db.ChangeTracker.Clear();
-                response.Errors.Add($"{entityName}: {GetRootExceptionMessage(ex)}");
+                logger.LogError(ex, "Failed to import entity {EntityName}", entityName);
+                response.Errors.Add($"{entityName}: import failed.");
             }
 
         return Ok(response);
@@ -99,7 +101,7 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
         return result;
     }
 
-    private static async Task<ImportEntityResult> ImportAsync<TEntity>(
+    private async Task<ImportEntityResult> ImportAsync<TEntity>(
         JsonElement element,
         DbSet<TEntity> dbSet,
         CancellationToken cancellationToken)
@@ -121,19 +123,10 @@ public class SystemDataImportController(AppDbContext db) : AppController(db)
         }
         catch (Exception ex)
         {
-// Capture only the first meaningful error
-            result.Errors.Add(GetRootExceptionMessage(ex));
+            result.Errors.Add("import failed.");
         }
 
         return result;
-    }
-
-    private static string GetRootExceptionMessage(Exception ex)
-    {
-        while (ex.InnerException is not null)
-            ex = ex.InnerException;
-
-        return ex.Message;
     }
 
     private sealed class ImportResponse
