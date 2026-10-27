@@ -68,4 +68,23 @@ describe("AttachmentsDropzone", () => {
 
         expect(screen.getByRole("alert").textContent).toContain("larger than 2 KB");
     });
+
+    it("accepts dropped files", () => {
+        renderDropzone();
+
+        fireEvent.drop(screen.getByText(/Drag and drop files here/).parentElement!, { dataTransfer: { files: [new File(["x"], "dropped.pdf")] } });
+
+        expect(screen.getByText("dropped.pdf")).toBeTruthy();
+        expect(screen.getByRole("button", { name: "Upload file" })).toBeTruthy();
+    });
+
+    it("removes a file from the selection", () => {
+        const input = renderDropzone();
+        select(input, new File(["x"], "a.txt"), new File(["y"], "b.txt"));
+
+        fireEvent.click(screen.getByRole("button", { name: "Remove a.txt" }));
+
+        expect(screen.queryByText("a.txt")).toBeNull();
+        expect(screen.getByText("b.txt")).toBeTruthy();
+    });
 });

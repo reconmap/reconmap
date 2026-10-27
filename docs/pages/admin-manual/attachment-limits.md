@@ -37,6 +37,10 @@ Default allowed extensions: `.pdf .txt .md .log .csv .json .xml .yaml .yml .png 
 - The request body is capped at the per-file limit times the file count (plus 1 MB of multipart overhead) before it is read.
 - The content type of a stored or downloaded attachment is derived from the file extension. The type declared by the client is ignored, and unknown extensions are served as `application/octet-stream`.
 
+## Dashboard upload area
+
+The attachment upload area shows these limits under its prompt. Files can be dragged onto it or chosen with the file input. Selected files are listed with their size and can be removed one by one before uploading. The dashboard checks the limits before sending, but the API enforces them regardless.
+
 ## Reverse proxy
 
 A proxy in front of the API must allow at least the largest request the API accepts, or it rejects uploads before they reach the API. For nginx, set `client_max_body_size` to `MaxFileSizeBytes` x `MaxFilesPerRequest` (201m with the defaults); the [nginx example](debian-nginx-letsencrypt.md) already does. The dashboard container only serves static files and never receives uploads.

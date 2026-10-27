@@ -1,0 +1,97 @@
+.zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    background-color: var(--bulma-scheme-main-bis);
+    border: 2px dashed var(--bulma-border);
+    border-radius: var(--bulma-radius-medium);
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.zone:hover:not(.disabled),
+.zone:focus-within:not(.disabled) {
+    border-color: var(--bulma-link);
+}
+
+.active {
+    border-color: var(--bulma-link);
+    background-color: var(--bulma-link-light);
+}
+
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.prompt {
+    margin: 0;
+}
+
+.limits {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--bulma-text-weak);
+    font-size: 0.8125rem;
+}
+
+.error {
+    margin: 0.75rem 0 0;
+    color: var(--bulma-danger-text);
+    font-size: 0.875rem;
+}
+
+.files {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--bulma-border);
+    border-radius: var(--bulma-radius-medium);
+}
+
+.file {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.file:not(:last-child) {
+    border-bottom: 1px solid var(--bulma-border);
+}
+
+.fileName {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fileSize {
+    color: var(--bulma-text-weak);
+    font-size: 0.8125rem;
+}
+
+.remove {
+    padding: 0.25rem;
+    color: var(--bulma-text-weak);
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.remove:hover {
+    color: var(--bulma-danger-text);
+}
+
+.actions {
+    margin-top: 0.75rem;
+}

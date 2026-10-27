@@ -5,8 +5,8 @@ import ButtonGroup from "components/ui/buttons/ButtonGroup";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import CssIcon from "components/ui/CssIcon";
-import { useRef, useState } from "react";
-
+import { type DragEvent, useRef, useState } from "react";
+import styles from "./AttachmentsDropzone.module.css";
 
 const formatBytes = (bytes: number) => {
     const mb = bytes / (1024 * 1024);
@@ -27,6 +27,7 @@ const AttachmentsDropzone = ({
 
     const inputRef = useRef<any>(null);
     const [acceptedFiles, setAcceptedFiles] = useState<any[]>([]);
+    const [dragging, setDragging] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { data: limits } = useUploadLimitsQuery();
 
@@ -84,51 +85,102 @@ const AttachmentsDropzone = ({
             });
     };
 
+    // The native input renders its own "N files selected" label from input.files, so keep it in step with our state.
+    const syncInput = (files: File[]) => {
+        const input = inputRef.current;
+        if (!input) return;
+        if (files.length === 0) {
+            input.value = null;
+        } else if (typeof DataTransfer !== "undefined") {
+            const transfer = new DataTransfer();
+            files.forEach((file) => transfer.items.add(file));
+            input.files = transfer.files;
+        }
+    };
+
+    const removeFile = (index: number) => {
+        const remaining = acceptedFiles.filter((_, i) => i !== index);
+        setAcceptedFiles(remaining);
+        syncInput(remaining);
+    };
+
+    const clearSelection = () => {
+        syncInput([]);
+        setAcceptedFiles([]);
+        setError(null);
+    };
+
+    const onDrop = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setDragging(false);
+        if (disabled) return;
+        const dropped = Array.from(e.dataTransfer.files);
+        if (dropped.length === 0) return;
+        const files = isAttachment ? dropped : dropped.slice(0, 1);
+        onFilesSelected(files);
+        syncInput(validate(files) ? [] : files);
+    };
+
+    const zoneClass = [styles.zone, dragging && styles.active, disabled && styles.disabled].filter(Boolean).join(" ");
+
     return (
-        <div className="" style={{ border: "2px dashed #ccc", padding: "20px", textAlign: "center" }}>
-            <input
-                ref={inputRef}
-                type="file"
-                multiple={isAttachment}
-                accept={allowedExtensions?.join(",")}
-                onChange={(e) => onFilesSelected(Array.from(e.target.files!))}
-                disabled={disabled}
-            />
-            {limits && maxFileSize && (
-                <ul className="mt-2 text-sm" style={{ listStyle: "none", padding: 0 }}>
-                    <li>Maximum file size: <strong>{formatBytes(maxFileSize)}</strong></li>
-                    {isAttachment && maxFiles && <li>Files per upload: <strong>{maxFiles}</strong></li>}
-                    {allowedExtensions && <li>Allowed types: {allowedExtensions.join(", ")}</li>}
-                </ul>
-            )}
-            {error && <p role="alert" className="mt-2 text-xs" style={{ color: "var(--color-danger, #c00)" }}>{error}</p>}
-            <aside className="mt-2">
-                {acceptedFiles.length > 0 ? (
-
-                    <div className="mt-4 flex flex-wrap gap-4">
-                        {acceptedFiles.map((file) => (
-                            <div style={{ display: 'inline-block', maxWidth: '150px' }} key={file.name} className="p-2 border rounded">
-                                <CssIcon name="file" style={{ fontSize: "48px" }} />
-                                <p className="text-xs text-center text-gray-700 truncate w-full">
-                                    {file.name}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div>(upload list empty)</div>
+        <div>
+            <div
+                className={zoneClass}
+                onDragOver={(e) => { e.preventDefault(); if (!disabled) setDragging(true); }}
+                onDragLeave={() => setDragging(false)}
+                onDrop={onDrop}
+            >
+                <CssIcon name="cloud-upload-alt" style={{ fontSize: "1.75rem" }} />
+                <p className={styles.prompt}>
+                    {isAttachment ? "Drag and drop files here, or select them" : "Drag and drop a file here, or select it"}
+                </p>
+                <input
+                    ref={inputRef}
+                    type="file"
+                    aria-label={isAttachment ? "Select files to upload" : "Select file to upload"}
+                    multiple={isAttachment}
+                    accept={allowedExtensions?.join(",")}
+                    onChange={(e) => onFilesSelected(Array.from(e.target.files!))}
+                    disabled={disabled}
+                />
+                {limits && maxFileSize && (
+                    <ul className={styles.limits}>
+                        <li>Maximum file size: <strong>{formatBytes(maxFileSize)}</strong></li>
+                        {isAttachment && maxFiles && <li>Files per upload: <strong>{maxFiles}</strong></li>}
+                        {allowedExtensions && <li>Allowed types: {allowedExtensions.join(", ")}</li>}
+                    </ul>
                 )}
-            </aside>
-            <hr />
+            </div>
 
-            <ButtonGroup>
-                <PrimaryButton onClick={onUploadButtonClick} disabled={disabled || acceptedFiles.length === 0}>
-                    Upload file(s)
-                </PrimaryButton>
-                <SecondaryButton onClick={() => { inputRef.current.value = null; setAcceptedFiles([]); setError(null); }} disabled={disabled || acceptedFiles.length === 0}>
-                    Clear file selection
-                </SecondaryButton>
-            </ButtonGroup>
+            {error && <p role="alert" className={styles.error}>{error}</p>}
+
+            {acceptedFiles.length > 0 && (
+                <>
+                    <ul className={styles.files} aria-label="Files to upload">
+                        {acceptedFiles.map((file, index) => (
+                            <li key={`${file.name}-${index}`} className={styles.file}>
+                                <CssIcon name="file" />
+                                <span className={styles.fileName} title={file.name}>{file.name}</span>
+                                <span className={styles.fileSize}>{formatBytes(file.size)}</span>
+                                <button type="button" className={styles.remove} aria-label={`Remove ${file.name}`} onClick={() => removeFile(index)} disabled={disabled}>
+                                    <CssIcon name="times" />
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className={styles.actions}>
+                        <ButtonGroup>
+                            <PrimaryButton onClick={onUploadButtonClick} disabled={disabled}>
+                                {acceptedFiles.length === 1 ? "Upload file" : `Upload ${acceptedFiles.length} files`}
+                            </PrimaryButton>
+                            <SecondaryButton onClick={clearSelection} disabled={disabled}>
+                                Clear selection
+                            </SecondaryButton>
+                        </ButtonGroup>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
