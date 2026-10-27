@@ -4,7 +4,7 @@ import ClientForm from "components/clients/ClientForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
-import { StatusCodes } from "http-status-codes";
+import { HttpStatus } from "utilities/httpStatus";
 import Client from "models/Client";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,7 +25,7 @@ const ClientCreatePage = () => {
         const formData = new FormData(form);
 
         requestOrganisationPost(formData).then((resp) => {
-            if (resp.status === StatusCodes.CREATED) {
+            if (resp.status === HttpStatus.CREATED) {
                 queryClient.invalidateQueries({ queryKey: ["organisations"] });
                 actionCompletedToast(`The client "${newClient.name}" has been added.`);
                 navigate(ClientsUrls.List);

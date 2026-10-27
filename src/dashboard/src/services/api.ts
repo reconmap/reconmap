@@ -1,5 +1,6 @@
 import Configuration from "Configuration";
 import AuthService from "./auth";
+import { HttpStatus } from "utilities/httpStatus";
 
 async function secureApiFetch(url: string, init: RequestInit = {}): Promise<Response> {
     const user = AuthService.getUserInfo();
@@ -17,7 +18,7 @@ async function secureApiFetch(url: string, init: RequestInit = {}): Promise<Resp
 
     const resp = await fetch(Configuration.getDefaultApiUrl() + url, requestInit);
 
-    if (resp.status === 401) {
+    if (resp.status === HttpStatus.UNAUTHORIZED) {
         void AuthService.handleUnauthorized();
     }
 

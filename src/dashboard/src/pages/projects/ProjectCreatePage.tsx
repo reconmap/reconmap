@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { requestProjectPost } from "api/requests/projects";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
-import { StatusCodes } from "http-status-codes";
+import { HttpStatus } from "utilities/httpStatus";
 import Project from "models/Project";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
@@ -22,7 +22,7 @@ const ProjectCreatePage = () => {
         ev.preventDefault();
 
         requestProjectPost(newProject).then((resp) => {
-            if (resp.status !== StatusCodes.CREATED) {
+            if (resp.status !== HttpStatus.CREATED) {
                 errorToast("There was a problem creating the project. Please check the form and try again");
                 return;
             }

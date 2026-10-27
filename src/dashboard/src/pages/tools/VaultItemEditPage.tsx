@@ -4,6 +4,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import Vault from "models/Vault";
 import { useState } from "react";
+import { HttpStatus } from "utilities/httpStatus";
 import { useParams } from "react-router";
 import { requestEntityPost, requestEntityPut } from "utilities/requests";
 import CssIcon from "components/ui/CssIcon";
@@ -27,7 +28,7 @@ const VaultItemEditPage = () => {
         const payload = { ...item, password };
 
         requestEntityPut(`/secrets/${vaultItemId}`, payload as any).then((resp) => {
-            if (resp.status === 201) {
+            if (resp.status === HttpStatus.CREATED) {
                 setVaultItem({ ...Vault });
                 setPassword(null);
                 actionCompletedToast(`The vault item has been modified.`);

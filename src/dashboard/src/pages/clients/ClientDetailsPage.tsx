@@ -5,6 +5,7 @@ import {
     useOrganisationsQueriesInvalidation,
 } from "api/clients";
 import { useProjectsQuery } from "api/projects";
+import { HttpStatus } from "utilities/httpStatus";
 import { requestAttachment } from "api/requests/attachments";
 import { requestContactDelete } from "api/requests/contacts";
 import { requestOrganisationContactPost } from "api/requests/organisations";
@@ -93,7 +94,7 @@ const ClientDetailsPage = () => {
         ev.preventDefault();
 
         requestOrganisationContactPost(clientId, contact).then((resp) => {
-            if (resp.status === 201) {
+            if (resp.status === HttpStatus.CREATED) {
                 setContact({ ...Contact });
                 invalidateOrganisations();
                 actionCompletedToast(`The contact has been added.`);

@@ -6,6 +6,7 @@ import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import Vault from "models/Vault";
 import { useState } from "react";
+import { HttpStatus } from "utilities/httpStatus";
 import { requestEntityPost } from "utilities/requests";
 import CssIcon from "components/ui/CssIcon";
 import PasswordGeneratorModal from "./PasswordGeneratorModal";
@@ -25,7 +26,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
         ev.preventDefault();
 
         requestEntityPost("/secrets", vaultItem as any).then((resp) => {
-            if (resp.status === 201) {
+            if (resp.status === HttpStatus.CREATED) {
                 setVaultItem(defaultSecret);
                 if (onSubmit) onSubmit();
                 invalidateQueries();

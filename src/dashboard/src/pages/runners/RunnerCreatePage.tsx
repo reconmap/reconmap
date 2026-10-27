@@ -7,6 +7,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { actionCompletedToast, errorToast } from "components/ui/toast";
 import { useState } from "react";
+import { HttpStatus } from "utilities/httpStatus";
 import { useTranslation } from "react-i18next";
 
 const RunnerCreatePage = () => {
@@ -19,7 +20,7 @@ const RunnerCreatePage = () => {
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
         requestRunnerPost(data).then((response) => {
-            if (response.status === 201) {
+            if (response.status === HttpStatus.CREATED) {
                 return response.json();
             } else {
                 errorToast("Failed to add runner");
