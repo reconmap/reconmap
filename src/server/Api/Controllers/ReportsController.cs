@@ -105,7 +105,7 @@ public class ReportsController(
     {
         const int maxLimit = 500;
         var take = Math.Min(limit ?? 100, maxLimit);
-        var results = await GetReportsInternal(limit, true);
+        var results = await GetReportsInternal(take, true);
         return Ok(results);
     }
 

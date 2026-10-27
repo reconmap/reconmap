@@ -16,7 +16,7 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
 {
     [HttpPost]
     [Audit(AuditActions.Created, "User")]
-    public async Task<IActionResult> CreatOne(User user)
+    public async Task<IActionResult> CreateOne(User user)
     {
         var subjectId = await directory.CreateAsync(new KeycloakUserInput(
             user.Username,

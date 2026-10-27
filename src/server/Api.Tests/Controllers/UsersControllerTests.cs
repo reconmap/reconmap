@@ -201,7 +201,7 @@ public class UsersControllerTests
     [InlineData(UserRole.Superuser, "superuser-group")]
     [InlineData(UserRole.User, "user-group")]
     [InlineData(UserRole.Client, "client-group")]
-    public async Task CreatOne_SendsLowercaseRoleGroupToKeycloak(UserRole role, string expectedGroup)
+    public async Task CreateOne_SendsLowercaseRoleGroupToKeycloak(UserRole role, string expectedGroup)
     {
         using var keycloak = new FakeKeycloak();
         using var db = CreateDbContext();
@@ -216,7 +216,7 @@ public class UsersControllerTests
             Role = role
         };
 
-        var result = await controller.CreatOne(newUser);
+        var result = await controller.CreateOne(newUser);
 
         Assert.IsType<CreatedAtActionResult>(result);
         var create = Assert.Single(keycloak.Requests, r => r.Method == "POST" && r.Path.EndsWith("/users"));
@@ -231,7 +231,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void CreatOne_ModelValidation_AcceptsPayloadWithoutSubjectId()
+    public void CreateOne_ModelValidation_AcceptsPayloadWithoutSubjectId()
     {
         using var keycloak = new FakeKeycloak();
         using var db = CreateDbContext();

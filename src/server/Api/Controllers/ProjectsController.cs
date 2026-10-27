@@ -20,9 +20,6 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
     [Audit(AuditActions.Created, "Project")]
     public async Task<IActionResult> CreateOne([FromBody] Project project)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         project.CreatedById = HttpContext.GetCurrentUser()!.Id;
         dbContext.Projects.Add(project);
         await dbContext.SaveChangesAsync();
