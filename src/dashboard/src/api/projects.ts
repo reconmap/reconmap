@@ -11,34 +11,34 @@ import {
 const useProjectQuery = (projectId: string) => {
     return useQuery({
         queryKey: ["projects", projectId],
-        queryFn: () => requestProject(projectId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestProject(projectId, { signal }).then((res) => res.json()),
     });
 };
 
 const useProjectsQuery = (params: Record<string, any>) => {
     return useQuery({
         queryKey: ["projects", params],
-        queryFn: () => requestProjects(params),
+        queryFn: ({ signal }) => requestProjects(params, { signal }),
     });
 };
 
 const useProjectUsersQuery = (projectId: string) => {
     return useQuery({
         queryKey: ["projects", projectId, "users"],
-        queryFn: () => requestProjectUsers(projectId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestProjectUsers(projectId, { signal }).then((res) => res.json()),
     });
 };
 const useProjectVaultQuery = (projectId: string) => {
     return useQuery({
         queryKey: ["projects", projectId, "vault"],
-        queryFn: () => requestProjectVault(projectId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestProjectVault(projectId, { signal }).then((res) => res.json()),
     });
 };
 
 const useProjectCategoriesQuery = () => {
     return useQuery({
         queryKey: ["projects", "categories"],
-        queryFn: () => requestProjectCategories().then((res) => res.json()),
+        queryFn: ({ signal }) => requestProjectCategories({ signal }).then((res) => res.json()),
     });
 };
 

@@ -3,9 +3,9 @@ import { requestEntityPost } from "utilities/requests";
 
 const API_BASE_URL = "/comments";
 
-const requestComments = async (params: any) => {
+const requestComments = async (params: any, init?: RequestInit) => {
     return (
-        await secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { method: "GET" })
+        await secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { ...init, method: "GET" })
     ).json();
 };
 

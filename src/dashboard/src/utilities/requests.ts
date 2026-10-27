@@ -1,16 +1,17 @@
 import secureApiFetch from "services/api";
 
-const requestEntity = (url: string) => {
-    return secureApiFetch(url, { method: "GET" });
+const requestEntity = (url: string, init?: RequestInit) => {
+    return secureApiFetch(url, { ...init, method: "GET" });
 };
 
-const requestEntities = (url: string, params?: Record<string, string>) => {
+const requestEntities = (url: string, params?: Record<string, string>, init?: RequestInit) => {
     const fullUrl = url + (params ? "?" + new URLSearchParams(params).toString() : "");
-    return secureApiFetch(fullUrl, { method: "GET" });
+    return secureApiFetch(fullUrl, { ...init, method: "GET" });
 };
 
-const requestEntityPost = (url: string, data?: FormData | Record<string, string | number>) => {
-    const params: Record<string, string | FormData | { "Content-Type": string }> = {
+const requestEntityPost = (url: string, data?: FormData | Record<string, string | number>, init?: RequestInit) => {
+    const params: RequestInit = {
+        ...init,
         method: "POST",
     };
     if (data) {

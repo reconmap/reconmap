@@ -1,12 +1,12 @@
 import { requestEntities, requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests";
 
 
-const requestAzureDevopsIntegrations = () => {
-    return requestEntities(`/integrations/azure-devops`);
+const requestAzureDevopsIntegrations = (init?: RequestInit) => {
+    return requestEntities(`/integrations/azure-devops`, undefined, init);
 };
 
-const requestAzureDevopsIntegration = (id: number) => {
-    return requestEntity(`/integrations/azure-devops/${id}`);
+const requestAzureDevopsIntegration = (id: number, init?: RequestInit) => {
+    return requestEntity(`/integrations/azure-devops/${id}`, init);
 };
 
 const requestAzureDevopsIntegrationCreate = (data: any) => {

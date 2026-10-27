@@ -8,14 +8,14 @@ import {
 const useWebhookQuery = (webhookId: number) => {
     return useQuery({
         queryKey: ["webhooks", webhookId],
-        queryFn: () => requestWebhook(webhookId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestWebhook(webhookId, { signal }).then((res) => res.json()),
     });
 };
 
 const useWebhooksQuery = () => {
     return useQuery({
         queryKey: ["webhooks"],
-        queryFn: () => requestWebhooks(),
+        queryFn: ({ signal }) => requestWebhooks({ signal }),
     });
 };
 

@@ -3,15 +3,15 @@ import { requestEntityPost } from "utilities/requests";
 
 const API_BASE_URL = "/commands";
 
-const requestSchedules = () => {
-    return secureApiFetch(`${API_BASE_URL}/schedules`, { method: "GET" });
+const requestSchedules = (init?: RequestInit) => {
+    return secureApiFetch(`${API_BASE_URL}/schedules`, { ...init, method: "GET" });
 };
 
 export const requestCommandSchedulePost = (commandId: number, schedule: Record<string, string>) =>
     requestEntityPost(`${API_BASE_URL}/${commandId}/schedules`, schedule);
 
-const requestCommandOutputPost = (formData: FormData) => {
-    return secureApiFetch(`${API_BASE_URL}/outputs`, { method: "POST", body: formData });
+const requestCommandOutputPost = (formData: FormData, init?: RequestInit) => {
+    return secureApiFetch(`${API_BASE_URL}/outputs`, { ...init, method: "POST", body: formData });
 };
 
 const requestCommandScheduleDelete = (commandId: number | string, scheduleId: number) => {

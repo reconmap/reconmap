@@ -10,7 +10,7 @@ export interface NewComment {
 const useCommentsQuery = (params: { parentType: string; parentId: string }) => {
     return useQuery({
         queryKey: ["comments", params],
-        queryFn: () => requestComments(params),
+        queryFn: ({ signal }) => requestComments(params, { signal }),
     });
 };
 

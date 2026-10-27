@@ -4,14 +4,14 @@ import { requestTask, requestTaskDelete, requestTasks } from "./requests/tasks";
 const useTasksQuery = (params: any) => {
     return useQuery({
         queryKey: ["tasks", params],
-        queryFn: () => requestTasks(params).then((res) => res.json()),
+        queryFn: ({ signal }) => requestTasks(params, { signal }).then((res) => res.json()),
     });
 };
 
 const useTaskQuery = (taskId: string) => {
     return useQuery({
         queryKey: ["tasks", taskId],
-        queryFn: () => requestTask(taskId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestTask(taskId, { signal }).then((res) => res.json()),
     });
 };
 

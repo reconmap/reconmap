@@ -4,6 +4,7 @@ import TimestampsSection from "components/ui/TimestampsSection";
 import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import { ignoreAbortError } from "utilities/abort";
 import { requestEntity } from "utilities/requests";
 import Badge from "components/badges/Badge";
 import PageSkeleton from "components/ui/PageSkeleton";
@@ -24,7 +25,7 @@ const AssetDetailsPage = () => {
 
     const [tableModel, setTableModel] = useState(new VulnerabilityTableModel());
 
-    const fetchVulnerabilities = useCallback(() => {
+    const fetchVulnerabilities = useCallback((signal?: AbortSignal) => {
         const queryParams = new URLSearchParams();
         queryParams.set("assetId", assetId);
         queryParams.set("isTemplate", "false");
@@ -37,20 +38,24 @@ const AssetDetailsPage = () => {
                 queryParams.append(key, tableModel.filters[key]),
         );
         const url = `/vulnerabilities?${queryParams.toString()}`;
-        requestEntity(url)
+        requestEntity(url, { signal })
             .then((resp) => resp.json())
             .then((vulnerabilities) => {
                 setTableModel((tableModel) => ({ ...tableModel, vulnerabilities: vulnerabilities.data }));
-            });
+            })
+            .catch(ignoreAbortError);
     }, [tableModel.filters, tableModel.sortBy, assetId]);
 
     useEffect(() => {
         if (asset) {
-            requestEntity(`/projects/${asset.project_id}`)
+            const controller = new AbortController();
+            requestEntity(`/projects/${asset.project_id}`, { signal: controller.signal })
                 .then((resp) => resp.json())
                 .then((json) => {
                     setSavedProject(json);
-                });
+                })
+                .catch(ignoreAbortError);
+            return () => controller.abort();
         }
     }, [asset]);
 
@@ -64,7 +69,9 @@ const AssetDetailsPage = () => {
     };
 
     useEffect(() => {
-        fetchVulnerabilities();
+        const controller = new AbortController();
+        fetchVulnerabilities(controller.signal);
+        return () => controller.abort();
     }, [fetchVulnerabilities, tableModel.filters]);
 
     if (!asset) return <PageSkeleton />;
@@ -100,7 +107,7 @@ const AssetDetailsPage = () => {
                     <VulnerabilitiesTable
                         tableModel={tableModel}
                         tableModelSetter={setTableModel}
-                        reloadCallback={fetchVulnerabilities}
+                        reloadCallback={() => fetchVulnerabilities()}
                         showProjectColumn={false}
                         showSelection={false}
                     />

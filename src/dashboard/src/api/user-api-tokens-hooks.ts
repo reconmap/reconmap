@@ -9,7 +9,7 @@ import {
 export const useUserApiTokensQuery = () => {
     return useQuery({
         queryKey: ["user-api-tokens"],
-        queryFn: () => requestUserApiTokens().then((res: Response) => res.json()),
+        queryFn: ({ signal }) => requestUserApiTokens({ signal }).then((res: Response) => res.json()),
     });
 };
 

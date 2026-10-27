@@ -31,6 +31,7 @@ import { actionCompletedToast, errorToast } from "components/ui/toast";
 import UserLink from "components/users/UserLink";
 import Contact from "models/Contact";
 import OrganisationTypes from "models/OrganisationTypes";
+import { ignoreAbortError } from "utilities/abort";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
@@ -115,26 +116,37 @@ const ClientDetailsPage = () => {
             .catch((err) => console.error(err));
     };
 
-    const downloadAndDisplayLogo = (logoId, type) => {
-        requestAttachment(logoId).then(({ blob }) => {
-            const url = URL.createObjectURL(blob);
-            if (type === "small_logo") {
-                setSmallLogo(url);
-            } else {
-                setLogo(url);
-            }
-        });
+    const downloadAndDisplayLogo = (logoId, type, signal: AbortSignal, objectUrls: string[]) => {
+        requestAttachment(logoId, { signal })
+            .then(({ blob }) => {
+                const url = URL.createObjectURL(blob);
+                objectUrls.push(url);
+                if (type === "small_logo") {
+                    setSmallLogo(url);
+                } else {
+                    setLogo(url);
+                }
+            })
+            .catch(ignoreAbortError);
     };
 
     useEffect(() => {
         if (client) {
+            const controller = new AbortController();
+            const objectUrls: string[] = [];
+
             if (client.small_logo_attachment_id) {
-                downloadAndDisplayLogo(client.small_logo_attachment_id, "small_logo");
+                downloadAndDisplayLogo(client.small_logo_attachment_id, "small_logo", controller.signal, objectUrls);
             }
 
             if (client.logo_attachment_id) {
-                downloadAndDisplayLogo(client.logo_attachment_id, "logo");
+                downloadAndDisplayLogo(client.logo_attachment_id, "logo", controller.signal, objectUrls);
             }
+
+            return () => {
+                controller.abort();
+                objectUrls.forEach((url) => URL.revokeObjectURL(url));
+            };
         }
     }, [client]);
 

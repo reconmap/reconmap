@@ -24,8 +24,8 @@ async function secureApiFetch(url: string, init: RequestInit = {}): Promise<Resp
     return resp;
 }
 
-const downloadFromApi = (url: string) => {
-    secureApiFetch(url, { method: "GET" })
+const downloadFromApi = (url: string, init?: RequestInit) => {
+    return secureApiFetch(url, { ...init, method: "GET" })
         .then((resp) => {
             const contentDispositionHeader = resp.headers.get("content-disposition");
             if (!contentDispositionHeader) {

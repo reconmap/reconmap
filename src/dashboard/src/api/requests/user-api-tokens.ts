@@ -1,8 +1,8 @@
 import secureApiFetch from "services/api";
 import { CreateUserApiTokenRequest } from "../user-api-tokens";
 
-const requestUserApiTokens = () => {
-    return secureApiFetch("/user-api-tokens", { method: "GET" });
+const requestUserApiTokens = (init?: RequestInit) => {
+    return secureApiFetch("/user-api-tokens", { ...init, method: "GET" });
 };
 
 const requestUserApiTokenPost = (data: CreateUserApiTokenRequest) => {

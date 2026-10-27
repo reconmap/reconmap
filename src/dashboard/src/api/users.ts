@@ -5,21 +5,21 @@ import { deleteUser, getUser, getUsers, OwnerFields, requestUserActivity, update
 const useUserQuery = (userId: number) => {
     return useQuery({
         queryKey: ["users", userId],
-        queryFn: () => getUser(userId).then((res) => res.json()),
+        queryFn: ({ signal }) => getUser(userId, { signal }).then((res) => res.json()),
     });
 };
 
 const useUserActivity = (userId: number) => {
     return useQuery({
         queryKey: ["user", userId, "activity"],
-        queryFn: () => requestUserActivity(userId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestUserActivity(userId, { signal }).then((res) => res.json()),
     });
 };
 
 const useUsersQuery = () => {
     return useQuery({
         queryKey: ["users"],
-        queryFn: () => getUsers().then((res) => res.json()),
+        queryFn: ({ signal }) => getUsers({ signal }).then((res) => res.json()),
     });
 };
 

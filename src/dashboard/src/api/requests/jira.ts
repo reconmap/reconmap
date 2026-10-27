@@ -1,12 +1,12 @@
 import { requestEntities, requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut } from "utilities/requests";
 
 
-const requestJiraIntegrations = () => {
-    return requestEntities(`/integrations/jira`);
+const requestJiraIntegrations = (init?: RequestInit) => {
+    return requestEntities(`/integrations/jira`, undefined, init);
 };
 
-const requestJiraIntegration = (id: number) => {
-    return requestEntity(`/integrations/jira/${id}`);
+const requestJiraIntegration = (id: number, init?: RequestInit) => {
+    return requestEntity(`/integrations/jira/${id}`, init);
 };
 
 const requestJiraIntegrationCreate = (data: any) => {

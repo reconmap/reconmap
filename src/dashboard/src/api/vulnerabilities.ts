@@ -12,28 +12,28 @@ import {
 const useVulnerabilitiesQuery = (params: any) => {
     return useQuery({
         queryKey: ["vulnerabilities", params],
-        queryFn: () => requestVulnerabilities(params),
+        queryFn: ({ signal }) => requestVulnerabilities(params, { signal }),
     });
 };
 
 const useVulnerabilityCategoriesQuery = (params: any) => {
     return useQuery({
         queryKey: ["vulnerabilities", "categories", params],
-        queryFn: () => requestVulnerabilityCategories(params).then((res) => res.json()),
+        queryFn: ({ signal }) => requestVulnerabilityCategories(params, { signal }).then((res) => res.json()),
     });
 };
 
 const useVulnerabilitiesStatsQuery = (params: any) => {
     return useQuery({
         queryKey: ["vulnerabilities", "stats", params],
-        queryFn: () => requestVulnerabilitiesStats(params).then((res) => res.json()),
+        queryFn: ({ signal }) => requestVulnerabilitiesStats(params, { signal }).then((res) => res.json()),
     });
 };
 
 const useVulnerabilityQuery = (vulnerabilityId: string) => {
     return useQuery({
         queryKey: ["vulnerabilities", vulnerabilityId],
-        queryFn: () => requestVulnerability(vulnerabilityId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestVulnerability(vulnerabilityId, { signal }).then((res) => res.json()),
     });
 };
 

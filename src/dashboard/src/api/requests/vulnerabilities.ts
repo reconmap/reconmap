@@ -3,9 +3,9 @@ import { requestEntities, requestEntityDelete, requestEntityPost } from "utiliti
 
 const API_BASE_URL = "/vulnerabilities";
 
-const requestVulnerabilities = async (params: Record<string, any>) => {
+const requestVulnerabilities = async (params: Record<string, any>, init?: RequestInit) => {
     const queryParams = new URLSearchParams(params).toString();
-    return (await requestEntities(`${API_BASE_URL}?` + queryParams)).json();
+    return (await requestEntities(`${API_BASE_URL}?` + queryParams, undefined, init)).json();
 };
 
 const requestVulnerabilityPatch = (vulnerabilityId: string, data: any): Promise<Response> => {
@@ -15,13 +15,13 @@ const requestVulnerabilityPatch = (vulnerabilityId: string, data: any): Promise<
     });
 };
 
-const requestVulnerabilitiesStats = (params: any) => {
+const requestVulnerabilitiesStats = (params: any, init?: RequestInit) => {
     const url = "/vulnerabilities/stats?" + new URLSearchParams(params).toString();
-    return secureApiFetch(url, { method: "GET" });
+    return secureApiFetch(url, { ...init, method: "GET" });
 };
 
-const requestVulnerability = (vulnerabilityId: string) => {
-    return secureApiFetch(`/vulnerabilities/${vulnerabilityId}`, { method: "GET" });
+const requestVulnerability = (vulnerabilityId: string, init?: RequestInit) => {
+    return secureApiFetch(`/vulnerabilities/${vulnerabilityId}`, { ...init, method: "GET" });
 };
 
 /**
@@ -41,9 +41,9 @@ export const normalizeVulnerabilityForSave = (vulnerability: any) => {
 const requestVulnerabilityPost = (vulnerability: any) =>
     requestEntityPost(API_BASE_URL, normalizeVulnerabilityForSave(vulnerability));
 
-const requestVulnerabilityCategories = (params: any) => {
+const requestVulnerabilityCategories = (params: any, init?: RequestInit) => {
     const url = "/vulnerabilities/categories?" + new URLSearchParams(params).toString();
-    return secureApiFetch(url, { method: "GET" });
+    return secureApiFetch(url, { ...init, method: "GET" });
 };
 
 const requestVulnerabilityCategoryDelete = (categoryId: number) =>

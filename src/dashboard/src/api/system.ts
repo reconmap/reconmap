@@ -93,21 +93,21 @@ interface UploadLimits {
 const useExportablesQuery = () => {
     return useQuery({
         queryKey: ["system-exportables"],
-        queryFn: () => requestExportables().then((res) => res.json()),
+        queryFn: ({ signal }) => requestExportables({ signal }).then((res) => res.json()),
     });
 };
 
 const useSystemHealthQuery = () => {
     return useQuery({
         queryKey: ["system-health"],
-        queryFn: (): Promise<SystemHealth> => requestSystemHealth().then((res) => res.json()),
+        queryFn: ({ signal }): Promise<SystemHealth> => requestSystemHealth({ signal }).then((res) => res.json()),
     });
 };
 
 const useUploadLimitsQuery = () => {
     return useQuery({
         queryKey: ["system-upload-limits"],
-        queryFn: (): Promise<UploadLimits> => requestUploadLimits().then((res) => res.json()),
+        queryFn: ({ signal }): Promise<UploadLimits> => requestUploadLimits({ signal }).then((res) => res.json()),
         staleTime: Infinity,
     });
 };
@@ -115,42 +115,42 @@ const useUploadLimitsQuery = () => {
 const useSystemUsageQuery = (rangeDays: number) => {
     return useQuery({
         queryKey: ["system-usage", rangeDays],
-        queryFn: (): Promise<SystemUsage> => requestSystemUsage(rangeDays).then((res) => res.json()),
+        queryFn: ({ signal }): Promise<SystemUsage> => requestSystemUsage(rangeDays, { signal }).then((res) => res.json()),
     });
 };
 
 const useSystemMailSettingsQuery = () => {
     return useQuery({
         queryKey: ["system-mail-settings"],
-        queryFn: () => requestSystemMailSettings().then((res) => res.json()),
+        queryFn: ({ signal }) => requestSystemMailSettings({ signal }).then((res) => res.json()),
     });
 };
 
 const useSystemAiSettingsQuery = () => {
     return useQuery({
         queryKey: ["system-ai-settings"],
-        queryFn: () => requestSystemAiSettings().then((res) => res.json()),
+        queryFn: ({ signal }) => requestSystemAiSettings({ signal }).then((res) => res.json()),
     });
 };
 
 const useSystemCustomFieldsQuery = () => {
     return useQuery({
         queryKey: ["system-custom-fields"],
-        queryFn: () => requestCustomFields().then((res) => res.json()),
+        queryFn: ({ signal }) => requestCustomFields({ signal }).then((res) => res.json()),
     });
 };
 
 const useSystemIntegrationsQuery = () => {
     return useQuery({
         queryKey: ["system-integrations"],
-        queryFn: () => requestSystemIntegrations().then((res) => res.json()),
+        queryFn: ({ signal }) => requestSystemIntegrations({ signal }).then((res) => res.json()),
     });
 };
 
 const useRecentSearchesQuery = () => {
     return useQuery({
         queryKey: ["system-recent-searches"],
-        queryFn: () => requestRecentSearches().then((res) => res.json()),
+        queryFn: ({ signal }) => requestRecentSearches({ signal }).then((res) => res.json()),
     });
 };
 

@@ -1,4 +1,5 @@
 import { requestVulnerabilities } from "api/requests/vulnerabilities";
+import { ignoreAbortError } from "utilities/abort";
 import { useDeleteVulnerabilityMutation } from "api/vulnerabilities";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import PaginationV2 from "components/layout/PaginationV2";
@@ -46,7 +47,7 @@ const VulnerabilitiesListPage = () => {
         navigate(url);
     };
 
-    const fetchVulnerabilities = useCallback(() => {
+    const fetchVulnerabilities = useCallback((signal?: AbortSignal) => {
         const queryParams = new URLSearchParams();
         queryParams.set("isTemplate", "false");
         queryParams.set("page", String(pageNumber));
@@ -59,7 +60,7 @@ const VulnerabilitiesListPage = () => {
                 queryParams.append(key, tableModel.filters[key]),
         );
 
-        requestVulnerabilities(queryParams)
+        requestVulnerabilities(queryParams, { signal })
             .then((data) => {
                 setNumberPages(data.pageCount);
                 setTotalCount(data.totalCount);
@@ -67,7 +68,8 @@ const VulnerabilitiesListPage = () => {
                     ...tableModel,
                     vulnerabilities: data.data,
                 }));
-            });
+            })
+            .catch(ignoreAbortError);
     }, [pageNumber, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
 
     const reloadVulnerabilities = useCallback(() => {
@@ -96,7 +98,9 @@ const VulnerabilitiesListPage = () => {
     };
 
     useEffect(() => {
-        fetchVulnerabilities();
+        const controller = new AbortController();
+        fetchVulnerabilities(controller.signal);
+        return () => controller.abort();
     }, [fetchVulnerabilities]);
 
     return (

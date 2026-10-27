@@ -1,3 +1,3 @@
-export const requestReleases = () => fetch('https://api.github.com/repos/reconmap/reconmap/releases');
+export const requestReleases = (init?: RequestInit) => fetch('https://api.github.com/repos/reconmap/reconmap/releases', init);
 
-export const requestDiscussions = () => fetch('https://api.github.com/repos/reconmap/reconmap/discussions');
+export const requestDiscussions = (init?: RequestInit) => fetch('https://api.github.com/repos/reconmap/reconmap/discussions', init);

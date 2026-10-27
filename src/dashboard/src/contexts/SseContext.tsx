@@ -47,6 +47,7 @@ const SseProvider = ({ children }: any) => {
 
         let isMounted = true;
         let es: EventSource | null = null;
+        let reconnectTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
         // Delay connection to prevent React StrictMode from instantly aborting it,
         // which causes browsers to log a "CORS request did not succeed" error.
@@ -54,7 +55,7 @@ const SseProvider = ({ children }: any) => {
             if (!isMounted) return null;
             return createSseConnection(user, () => {
                 if (user?.access_token && isMounted) {
-                    setTimeout(() => setConnection(connect()), 5000);
+                    reconnectTimeoutId = setTimeout(() => setConnection(connect()), 5000);
                 }
             });
         };
@@ -67,6 +68,7 @@ const SseProvider = ({ children }: any) => {
         return () => {
             isMounted = false;
             clearTimeout(timeoutId);
+            clearTimeout(reconnectTimeoutId);
             if (es) {
                 console.debug("reconmap-sse: cleaning up connection");
                 es.close();

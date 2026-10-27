@@ -5,7 +5,8 @@ import ButtonGroup from "components/ui/buttons/ButtonGroup";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import CssIcon from "components/ui/CssIcon";
-import { type DragEvent, useRef, useState } from "react";
+import { type DragEvent, useEffect, useRef, useState } from "react";
+import { isAbortError } from "utilities/abort";
 import styles from "./AttachmentsDropzone.module.css";
 
 const formatBytes = (bytes: number) => {
@@ -26,6 +27,8 @@ const AttachmentsDropzone = ({
     const queryClient = useQueryClient();
 
     const inputRef = useRef<any>(null);
+    const uploadControllerRef = useRef<AbortController | null>(null);
+    const [uploading, setUploading] = useState(false);
     const [acceptedFiles, setAcceptedFiles] = useState<any[]>([]);
     const [dragging, setDragging] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -54,6 +57,10 @@ const AttachmentsDropzone = ({
         if (problem && inputRef.current) inputRef.current.value = null;
     };
 
+    useEffect(() => () => uploadControllerRef.current?.abort(), []);
+
+    const cancelUpload = () => uploadControllerRef.current?.abort();
+
     const onUploadButtonClick = () => {
         const formData = new FormData();
         if (parentType) formData.append("parentType", parentType);
@@ -67,7 +74,11 @@ const AttachmentsDropzone = ({
             formData.append(fileFieldName, file);
         });
 
-        uploadFn(formData)
+        const controller = new AbortController();
+        uploadControllerRef.current = controller;
+        setUploading(true);
+
+        uploadFn(formData, { signal: controller.signal })
             .then(async (res: Response) => {
                 if (!res.ok) {
                     const payload = await res.json().catch(() => null);
@@ -80,8 +91,17 @@ const AttachmentsDropzone = ({
                 if (onUploadFinished) onUploadFinished();
             })
             .catch((err: unknown) => {
+                if (isAbortError(err)) {
+                    return;
+                }
                 console.error(err);
                 setError("Upload failed.");
+            })
+            .finally(() => {
+                if (uploadControllerRef.current === controller) {
+                    uploadControllerRef.current = null;
+                    setUploading(false);
+                }
             });
     };
 
@@ -171,12 +191,16 @@ const AttachmentsDropzone = ({
                     </ul>
                     <div className={styles.actions}>
                         <ButtonGroup>
-                            <PrimaryButton onClick={onUploadButtonClick} disabled={disabled}>
+                            <PrimaryButton onClick={onUploadButtonClick} disabled={disabled || uploading}>
                                 {acceptedFiles.length === 1 ? "Upload file" : `Upload ${acceptedFiles.length} files`}
                             </PrimaryButton>
-                            <SecondaryButton onClick={clearSelection} disabled={disabled}>
-                                Clear selection
-                            </SecondaryButton>
+                            {uploading ? (
+                                <SecondaryButton onClick={cancelUpload}>Cancel upload</SecondaryButton>
+                            ) : (
+                                <SecondaryButton onClick={clearSelection} disabled={disabled}>
+                                    Clear selection
+                                </SecondaryButton>
+                            )}
                         </ButtonGroup>
                     </div>
                 </>

@@ -8,12 +8,13 @@ import {
 
 const API_BASE_URL = "/organisations";
 
-export const requestOrganisation = (organisationId: number) => requestEntity(`${API_BASE_URL}/${organisationId}`);
+export const requestOrganisation = (organisationId: number, init?: RequestInit) =>
+    requestEntity(`${API_BASE_URL}/${organisationId}`, init);
 
-export const requestOrganisations = (params: any) => requestEntities(API_BASE_URL, params);
+export const requestOrganisations = (params: any, init?: RequestInit) => requestEntities(API_BASE_URL, params, init);
 
-export const requestOrganisationContacts = (organisationId: number) =>
-    requestEntities(`${API_BASE_URL}/${organisationId}/contacts`);
+export const requestOrganisationContacts = (organisationId: number, init?: RequestInit) =>
+    requestEntities(`${API_BASE_URL}/${organisationId}/contacts`, undefined, init);
 
 export const requestOrganisationPost = (organisation: FormData) => requestEntityPost(API_BASE_URL, organisation);
 

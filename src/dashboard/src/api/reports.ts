@@ -4,14 +4,14 @@ import { requestReportDelete, requestReports, requestReportsTemplates } from "./
 const useReportsQuery = (params: any) => {
     return useQuery({
         queryKey: ["reports", params],
-        queryFn: () => requestReports(params).then((res) => res.json()),
+        queryFn: ({ signal }) => requestReports(params, { signal }).then((res) => res.json()),
     });
 };
 
 const useReportsTemplatesQuery = (params: any) => {
     return useQuery({
         queryKey: ["reports", "templates", params],
-        queryFn: () => requestReportsTemplates(params).then((res) => res.json()),
+        queryFn: ({ signal }) => requestReportsTemplates(params, { signal }).then((res) => res.json()),
     });
 };
 

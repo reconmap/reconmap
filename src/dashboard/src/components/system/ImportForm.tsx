@@ -1,14 +1,22 @@
 import { useQueryClient } from "@tanstack/react-query";
 import NativeInput from "components/forms/NativeInput";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ignoreAbortError } from "utilities/abort";
 import { requestEntityPost } from "utilities/requests";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
+import SecondaryButton from "../ui/buttons/SecondaryButton";
 
 const ImportForm = () => {
     const importFileRef = useRef<any>(null);
     const [importResponse, setImportResponse] = useState<any>(null);
     const [importButtonDisabled, setImportButtonDisabled] = useState(true);
+    const [importing, setImporting] = useState(false);
+    const importControllerRef = useRef<AbortController | null>(null);
     const queryClient = useQueryClient();
+
+    useEffect(() => () => importControllerRef.current?.abort(), []);
+
+    const cancelImport = () => importControllerRef.current?.abort();
 
     const handleUploadClick = (ev) => {
         ev.preventDefault();
@@ -16,13 +24,24 @@ const ImportForm = () => {
         const formData = new FormData();
         formData.append("importFile", importFileRef.current.files[0]);
 
-        requestEntityPost("/system/data", formData)
+        const controller = new AbortController();
+        importControllerRef.current = controller;
+        setImporting(true);
+
+        requestEntityPost("/system/data", formData, { signal: controller.signal })
             .then((resp) => resp.json())
             .then((resp) => {
                 setImportResponse(resp);
                 queryClient.invalidateQueries();
             })
-            .catch((err) => console.error(err));
+            .catch(ignoreAbortError)
+            .catch((err) => console.error(err))
+            .finally(() => {
+                if (importControllerRef.current === controller) {
+                    importControllerRef.current = null;
+                    setImporting(false);
+                }
+            });
     };
 
     const onImportFileChange = (ev) => {
@@ -56,9 +75,19 @@ const ImportForm = () => {
                     />
                 </div>
 
-                <PrimaryButton disabled={importButtonDisabled} onClick={handleUploadClick}>
+                <PrimaryButton disabled={importButtonDisabled || importing} onClick={handleUploadClick}>
                     Import
                 </PrimaryButton>
+                {importing && (
+                    <SecondaryButton
+                        onClick={(ev) => {
+                            ev.preventDefault();
+                            cancelImport();
+                        }}
+                    >
+                        Cancel import
+                    </SecondaryButton>
+                )}
             </form>
 
             {importResponse && (

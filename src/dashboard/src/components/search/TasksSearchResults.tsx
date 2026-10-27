@@ -1,14 +1,17 @@
 import { requestTasks } from "api/requests/tasks";
 import TaskTableModel from "components/tasks/TaskTableModel";
 import { useEffect, useState } from "react";
+import { ignoreAbortError } from "utilities/abort";
 import TasksTable from "../tasks/TasksTable";
 
 const TasksSearchResults = ({ keywords, emptyResultsSetter: setEmptyResults }: any) => {
     const [tableModel, setTableModel] = useState(new TaskTableModel());
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const reloadData = () => {
-            requestTasks({ keywords })
+            requestTasks({ keywords }, { signal: controller.signal })
                 .then((resp) => resp.json())
                 .then((tasks) => {
                     setTableModel((tableModel) => ({ ...tableModel, tasks: tasks }));
@@ -17,10 +20,13 @@ const TasksSearchResults = ({ keywords, emptyResultsSetter: setEmptyResults }: a
                             ? emptyResults.concat("tasks")
                             : emptyResults.filter((value) => value !== "tasks"),
                     );
-                });
+                })
+                .catch(ignoreAbortError);
         };
 
         reloadData();
+
+        return () => controller.abort();
     }, [keywords, setEmptyResults]);
 
     if (tableModel.tasks.length === 0) return <></>;

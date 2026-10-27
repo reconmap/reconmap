@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The dashboard cancels in-flight requests that are no longer needed: queries are aborted when their component unmounts or their key changes, and the search results, task and vulnerability lists, project tabs, and asset, task and client pages drop a stale response when the filter, page or route changes. Attachment uploads and the system data import show a "Cancel" button while they run and are aborted if the page is left. Client logos no longer leak object URLs.
+
 - The API handles unhandled exceptions in one place and answers with a `500` RFC 9457 problem details response that does not include the exception message. The duplicate console and Serilog request-failure logging was removed, and the system data import reports `<entity>: import failed.` instead of the underlying database error (the details are in the API log).
 - The attachment upload area accepts dragged and dropped files, highlights while a file is dragged over it, and shows the selected files as a list with their size and a button to remove each one. The upload button appears once files are selected and shows how many files will be uploaded. Limits are shown as a compact line under the prompt.
 - The "Client cache" tab on the System usage page lists the cached dashboard queries (key, status, observers and last update) in a table, with the "Invalidate all queries" button above it.

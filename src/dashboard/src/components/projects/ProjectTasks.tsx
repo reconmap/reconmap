@@ -2,6 +2,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import TaskTableModel from "components/tasks/TaskTableModel";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { ignoreAbortError } from "utilities/abort";
 import { requestEntity } from "utilities/requests";
 import TasksTable from "../tasks/TasksTable";
 import TaskProgress from "./TaskProgress";
@@ -14,7 +15,7 @@ const ProjectTasks = ({ project }: any) => {
 
     const [tableModel, setTableModel] = useState<any>(new TaskTableModel(false, false));
 
-    const fetchTasks = useCallback(() => {
+    const fetchTasks = useCallback((signal?: AbortSignal) => {
         const queryParams = new URLSearchParams();
         queryParams.set("projectId", project.id);
         queryParams.set("orderColumn", tableModel.sortBy.column);
@@ -28,13 +29,14 @@ const ProjectTasks = ({ project }: any) => {
         );
         const url = `/tasks?${queryParams.toString()}`;
 
-        requestEntity(url)
+        requestEntity(url, { signal })
             .then((resp) => {
                 return resp.json();
             })
             .then((data) => {
                 setTableModel((tableModel) => ({ ...tableModel, tasks: data }));
-            });
+            })
+            .catch(ignoreAbortError);
     }, [project.id, tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order, isTemplate]);
 
     const reloadTasks = useCallback(() => {
@@ -48,7 +50,9 @@ const ProjectTasks = ({ project }: any) => {
     };
 
     useEffect(() => {
-        fetchTasks();
+        const controller = new AbortController();
+        fetchTasks(controller.signal);
+        return () => controller.abort();
     }, [fetchTasks]);
 
     return (

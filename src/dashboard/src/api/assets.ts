@@ -4,14 +4,14 @@ import { requestAsset, requestAssetDelete, requestAssetEnsure, requestAssets } f
 const useAssetQuery = (assetId: number) => {
     return useQuery({
         queryKey: ["assets", assetId],
-        queryFn: () => requestAsset(assetId),
+        queryFn: ({ signal }) => requestAsset(assetId, { signal }),
     });
 };
 
 const useAssetsQuery = (params: any) => {
     return useQuery({
         queryKey: ["assets", params],
-        queryFn: () => requestAssets(params),
+        queryFn: ({ signal }) => requestAssets(params, { signal }),
         // The API rejects a request without a project id.
         enabled: Boolean(params?.projectId),
     });

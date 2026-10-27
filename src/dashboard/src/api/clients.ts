@@ -9,21 +9,21 @@ import {
 const useOrganisationsQuery = (params: any) => {
     return useQuery({
         queryKey: ["organisations", params],
-        queryFn: () => requestOrganisations(params).then((res) => res.json()),
+        queryFn: ({ signal }) => requestOrganisations(params, { signal }).then((res) => res.json()),
     });
 };
 
 const useOrganisationQuery = (clientId: number) => {
     return useQuery({
         queryKey: ["organisations", clientId],
-        queryFn: () => requestOrganisation(clientId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestOrganisation(clientId, { signal }).then((res) => res.json()),
     });
 };
 
 const useOrganisationContactsQuery = (clientId: number) => {
     return useQuery({
         queryKey: ["organisations", clientId, "contacts"],
-        queryFn: () => requestOrganisationContacts(clientId).then((res) => res.json()),
+        queryFn: ({ signal }) => requestOrganisationContacts(clientId, { signal }).then((res) => res.json()),
     });
 };
 

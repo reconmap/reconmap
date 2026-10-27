@@ -1,24 +1,29 @@
 import { requestVulnerabilities } from "api/requests/vulnerabilities";
 import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
 import { useEffect, useState } from "react";
+import { ignoreAbortError } from "utilities/abort";
 import VulnerabilitiesTable from "../vulnerabilities/VulnerabilitiesTable";
 
 const VulnerabilitiesSearchResults = ({ keywords, emptyResultsSetter: setEmptyResults }: any) => {
     const [tableModel, setTableModel] = useState(new VulnerabilityTableModel());
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const reloadData = () => {
-            requestVulnerabilities({ isTemplate: "false", keywords }).then((vulnerabilities) => {
+            requestVulnerabilities({ isTemplate: "false", keywords }, { signal: controller.signal }).then((vulnerabilities) => {
                 setTableModel((tableModel) => ({ ...tableModel, vulnerabilities: vulnerabilities.data }));
                 setEmptyResults((emptyResults) =>
                     0 === vulnerabilities.data.length
                         ? emptyResults.concat("vulnerabilities")
                         : emptyResults.filter((value) => value !== "vulnerabilities"),
                 );
-            });
+            }).catch(ignoreAbortError);
         };
 
         reloadData();
+
+        return () => controller.abort();
     }, [keywords, setTableModel, setEmptyResults]);
 
     if (tableModel.vulnerabilities.length === 0) return <></>;

@@ -101,6 +101,17 @@ The dashboard is a **data-heavy interface**, so clarity, speed, and predictabili
 * Do not store derived values
 * Avoid duplicate API calls (cache where appropriate)
 
+#### Cancelling requests
+
+Read requests must be cancellable so a slow, stale response never overwrites a newer one or updates an unmounted component.
+
+* Every `request*` function that reads data takes an optional `init?: RequestInit` as its last argument and forwards it to `secureApiFetch` (`requestEntity`, `requestEntities` and `requestEntityPost` do the same).
+* In `useQuery`, pass the signal TanStack provides: `queryFn: ({ signal }) => requestX(id, { signal })`. Do not do this in `useMutation`: aborting a write does not undo it on the server.
+* In a `useEffect` that fetches, create an `AbortController`, pass `controller.signal`, return `() => controller.abort()` and end the chain with `.catch(ignoreAbortError)` from `utilities/abort`.
+* Do not pass a fetch function straight to an `onClick`: the click event would be received as the `signal`. Wrap it: `onClick={() => fetchX()}`.
+* Long operations started by the user (uploads, imports) keep their controller in a ref, abort it on unmount and offer a Cancel button while they run (see `AttachmentsDropzone` and `ImportForm`).
+* WebSockets and `EventSource` do not take a signal: close them, and clear any reconnect timer, in the effect cleanup.
+
 ---
 
 ### Performance

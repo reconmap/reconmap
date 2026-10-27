@@ -4,7 +4,7 @@ import { requestSchedules, requestCommandOutputPost } from "./requests/commands"
 const useSchedulesQuery = () => {
     return useQuery({
         queryKey: ["commands", "schedules"],
-        queryFn: () => requestSchedules().then((res) => res.json()),
+        queryFn: ({ signal }) => requestSchedules({ signal }).then((res) => res.json()),
     });
 };
 

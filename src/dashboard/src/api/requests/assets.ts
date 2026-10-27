@@ -3,15 +3,15 @@ import { requestEntityPost } from "utilities/requests";
 
 const API_BASE_URL = "/assets";
 
-const requestAsset = (assetId: number) => {
-    return secureApiFetch(`${API_BASE_URL}/${assetId}`, { method: "GET" }).then((res) => res.json());
+const requestAsset = (assetId: number, init?: RequestInit) => {
+    return secureApiFetch(`${API_BASE_URL}/${assetId}`, { ...init, method: "GET" }).then((res) => res.json());
 };
 
 export const requestAssetPost = (data: any) => requestEntityPost(API_BASE_URL, data);
 export const requestAssetEnsure = (data: any) => requestEntityPost(`${API_BASE_URL}/ensure`, data);
 
-const requestAssets = async (params: any) => {
-    const resp = await secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { method: "GET" });
+const requestAssets = async (params: any, init?: RequestInit) => {
+    const resp = await secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { ...init, method: "GET" });
     const assets: { data: any; pageCount?: string | null; totalCount?: string | null } = {
         data: await resp.json(),
     };

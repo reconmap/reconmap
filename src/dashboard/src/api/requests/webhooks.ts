@@ -7,10 +7,10 @@ import secureApiFetch from "services/api";
 
 const API_BASE_URL = "/webhooks";
 
-const requestWebhook = (webhookId: number) => requestEntity(`${API_BASE_URL}/${webhookId}`);
+const requestWebhook = (webhookId: number, init?: RequestInit) => requestEntity(`${API_BASE_URL}/${webhookId}`, init);
 
-const requestWebhooks = async () => {
-    return (await secureApiFetch(API_BASE_URL, { method: "GET" })).json();
+const requestWebhooks = async (init?: RequestInit) => {
+    return (await secureApiFetch(API_BASE_URL, { ...init, method: "GET" })).json();
 };
 
 const requestWebhookDelete = (webhookId: number) => requestEntityDelete(`${API_BASE_URL}/${webhookId}`);

@@ -10,14 +10,14 @@ import {
 const useJiraIntegrationQuery = (id: number) => {
     return useQuery({
         queryKey: ["jira-integrations", id],
-        queryFn: () => requestJiraIntegration(id).then((res: Response) => res.json()),
+        queryFn: ({ signal }) => requestJiraIntegration(id, { signal }).then((res: Response) => res.json()),
     });
 };
 
 const useJiraIntegrationsQuery = () => {
     return useQuery({
         queryKey: ["jira-integrations"],
-        queryFn: () => requestJiraIntegrations().then((res: Response) => res.json()),
+        queryFn: ({ signal }) => requestJiraIntegrations({ signal }).then((res: Response) => res.json()),
     });
 };
 

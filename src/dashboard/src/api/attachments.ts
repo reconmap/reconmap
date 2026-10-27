@@ -4,7 +4,7 @@ import { requestAttachmentDelete, requestAttachments } from "./requests/attachme
 const useAttachmentsQuery = (params: any) => {
     return useQuery({
         queryKey: ["attachments", params],
-        queryFn: () => requestAttachments(params).then((res) => res.json()),
+        queryFn: ({ signal }) => requestAttachments(params, { signal }).then((res) => res.json()),
     });
 };
 

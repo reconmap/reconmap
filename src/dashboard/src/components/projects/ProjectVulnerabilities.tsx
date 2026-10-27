@@ -5,6 +5,7 @@ import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTab
 import TabToolbar from "components/ui/TabToolbar";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { ignoreAbortError } from "utilities/abort";
 import { requestEntity } from "utilities/requests";
 import VulnerabilitiesTable from "../vulnerabilities/VulnerabilitiesTable";
 
@@ -13,7 +14,7 @@ const ProjectVulnerabilities = ({ project }: any) => {
 
     const navigate = useNavigate();
 
-    const fetchVulnerabilities = useCallback(() => {
+    const fetchVulnerabilities = useCallback((signal?: AbortSignal) => {
         const queryParams = new URLSearchParams();
         queryParams.set("projectId", project.id);
         queryParams.set("isTemplate", "false");
@@ -26,11 +27,12 @@ const ProjectVulnerabilities = ({ project }: any) => {
                 queryParams.append(key, tableModel.filters[key]),
         );
         const url = `/vulnerabilities?${queryParams.toString()}`;
-        requestEntity(url)
+        requestEntity(url, { signal })
             .then((resp) => resp.json())
             .then((vulnerabilities) => {
                 setTableModel((tableModel) => ({ ...tableModel, vulnerabilities: vulnerabilities.data }));
-            });
+            })
+            .catch(ignoreAbortError);
     }, [tableModel.filters, tableModel.sortBy, project]);
 
     const handleCreateVulnerability = () => {
@@ -38,7 +40,9 @@ const ProjectVulnerabilities = ({ project }: any) => {
     };
 
     useEffect(() => {
-        fetchVulnerabilities();
+        const controller = new AbortController();
+        fetchVulnerabilities(controller.signal);
+        return () => controller.abort();
     }, [fetchVulnerabilities, tableModel.filters]);
 
     return (
@@ -60,7 +64,7 @@ const ProjectVulnerabilities = ({ project }: any) => {
             <VulnerabilitiesTable
                 tableModel={tableModel}
                 tableModelSetter={setTableModel}
-                reloadCallback={fetchVulnerabilities}
+                reloadCallback={() => fetchVulnerabilities()}
                 showProjectColumn={false}
                 showSelection={false}
             />

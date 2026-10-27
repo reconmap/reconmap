@@ -32,15 +32,15 @@ export interface ScanRun {
 
 export const isScanRunActive = (run?: Pick<ScanRun, "status">) => run?.status === "queued" || run?.status === "running";
 
-export const requestScanRuns = (params: { projectId?: string; limit?: number } = {}): Promise<ScanRun[]> => {
+export const requestScanRuns = (params: { projectId?: string; limit?: number } = {}, init?: RequestInit): Promise<ScanRun[]> => {
     const query = new URLSearchParams();
     if (params.projectId) query.set("projectId", String(params.projectId));
     if (params.limit) query.set("limit", String(params.limit));
-    return secureApiFetch(`${API_BASE_URL}?${query}`, { method: "GET" }).then((res) => res.json());
+    return secureApiFetch(`${API_BASE_URL}?${query}`, { ...init, method: "GET" }).then((res) => res.json());
 };
 
-export const requestScanRun = (id: number | string): Promise<ScanRun> =>
-    secureApiFetch(`${API_BASE_URL}/${id}`, { method: "GET" }).then((res) => {
+export const requestScanRun = (id: number | string, init?: RequestInit): Promise<ScanRun> =>
+    secureApiFetch(`${API_BASE_URL}/${id}`, { ...init, method: "GET" }).then((res) => {
         if (!res.ok) throw new Error(`Scan ${id} could not be loaded`);
         return res.json();
     });

@@ -4,14 +4,14 @@ import { requestRunner, requestRunners } from "./requests/runners";
 const useRunnersQuery = () => {
     return useQuery({
         queryKey: ["runners"],
-        queryFn: requestRunners,
+        queryFn: ({ signal }) => requestRunners({ signal }),
     });
 };
 
 export const useRunnerQuery = (runnerId: number) => {
     return useQuery({
         queryKey: ["runners", runnerId],
-        queryFn: () => requestRunner(runnerId),
+        queryFn: ({ signal }) => requestRunner(runnerId, { signal }),
     });
 };
 

@@ -8,6 +8,7 @@ import { actionCompletedToast } from "components/ui/toast";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
+import { ignoreAbortError } from "utilities/abort";
 import { requestEntity } from "utilities/requests";
 import TaskStatuses from "models/TaskStatuses";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -28,7 +29,7 @@ const TasksListPage = () => {
         navigate(`/tasks/create`);
     };
 
-    const fetchTasks = useCallback(() => {
+    const fetchTasks = useCallback((signal?: AbortSignal) => {
         const queryParams = new URLSearchParams();
         queryParams.set("orderColumn", tableModel.sortBy.column);
         queryParams.set("orderDirection", tableModel.sortBy.order);
@@ -40,13 +41,14 @@ const TasksListPage = () => {
         );
         const url = `/tasks?${queryParams.toString()}`;
 
-        requestEntity(url)
+        requestEntity(url, { signal })
             .then((resp) => {
                 return resp.json();
             })
             .then((data) => {
                 setTableModel((tableModel) => ({ ...tableModel, tasks: data }));
-            });
+            })
+            .catch(ignoreAbortError);
     }, [tableModel.filters, tableModel.sortBy.column, tableModel.sortBy.order]);
 
     const reloadTasks = useCallback(() => {
@@ -81,7 +83,9 @@ const TasksListPage = () => {
     };
 
     useEffect(() => {
-        fetchTasks();
+        const controller = new AbortController();
+        fetchTasks(controller.signal);
+        return () => controller.abort();
     }, [fetchTasks]);
 
     return (

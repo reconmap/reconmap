@@ -10,14 +10,14 @@ import {
 const useAzureDevopsIntegrationQuery = (id: number) => {
     return useQuery({
         queryKey: ["azure-devops-integrations", id],
-        queryFn: () => requestAzureDevopsIntegration(id).then((res: Response) => res.json()),
+        queryFn: ({ signal }) => requestAzureDevopsIntegration(id, { signal }).then((res: Response) => res.json()),
     });
 };
 
 const useAzureDevopsIntegrationsQuery = () => {
     return useQuery({
         queryKey: ["azure-devops-integrations"],
-        queryFn: () => requestAzureDevopsIntegrations().then((res: Response) => res.json()),
+        queryFn: ({ signal }) => requestAzureDevopsIntegrations({ signal }).then((res: Response) => res.json()),
     });
 };
 

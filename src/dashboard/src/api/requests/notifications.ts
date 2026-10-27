@@ -2,7 +2,7 @@ import { requestEntities, requestEntityDelete, requestEntitiesDelete, requestEnt
 
 const API_BASE_URL = "/notifications";
 
-const requestNotifications = async (params: any) => requestEntities(API_BASE_URL, params);
+const requestNotifications = async (params: any, init?: RequestInit) => requestEntities(API_BASE_URL, params, init);
 
 export const requestPartialNotificationUpdate = (notificationId: number, data: any) =>
     requestEntityPatch(`${API_BASE_URL}/${notificationId}`, data);

@@ -31,40 +31,43 @@ const CommandTerminal = ({ runnerIp, runnerPort, commands }: any) => {
         term.open(terminalEl.current);
 
         let retryHandle: any = null;
+        let webSocket: WebSocket | null = null;
+        let disposed = false;
 
         const connectTerminal = () => {
             const scheme = window.location.protocol === "https:" ? "wss" : "ws";
             const runnerServiceUrl = `${scheme}://${runnerIp}${runnerPort}`;
-            const webSocket = new WebSocket(`${runnerServiceUrl}/term`, [
+            const socket = new WebSocket(`${runnerServiceUrl}/term`, [
                 "reconmap-terminal",
                 `bearer.${user.access_token}`,
             ]);
-            webSocket.binaryType = "arraybuffer";
+            webSocket = socket;
+            socket.binaryType = "arraybuffer";
 
             term.onData((data) => {
-                webSocket.send(textEncoder.encode("\x00" + data));
+                socket.send(textEncoder.encode("\x00" + data));
             });
 
             term.onResize((ev) => {
-                webSocket.send(textEncoder.encode("\x01" + JSON.stringify({ cols: ev.cols, rows: ev.rows })));
+                socket.send(textEncoder.encode("\x01" + JSON.stringify({ cols: ev.cols, rows: ev.rows })));
             });
 
             term.onTitleChange((title) => {
                 setTerminalTitle(title);
             });
 
-            webSocket.onopen = () => {
+            socket.onopen = () => {
                 setTerminalTitle("Connected!");
 
                 commands.forEach((command) => {
-                    webSocket.send(textEncoder.encode("\x00" + command + "\r\n"));
+                    socket.send(textEncoder.encode("\x00" + command + "\r\n"));
                 });
 
                 fitAddon.fit();
                 term.focus();
             };
 
-            webSocket.onmessage = (ev) => {
+            socket.onmessage = (ev) => {
                 if (ev.data instanceof ArrayBuffer) {
                     term.write(arrayBufferToString(ev.data));
                 } else {
@@ -72,13 +75,14 @@ const CommandTerminal = ({ runnerIp, runnerPort, commands }: any) => {
                 }
             };
 
-            webSocket.onerror = (ev) => {
+            socket.onerror = (ev) => {
                 console.error(ev);
                 setWsError(ev);
-                webSocket.close();
+                socket.close();
             };
 
-            webSocket.onclose = () => {
+            socket.onclose = () => {
+                if (disposed) return;
                 setTerminalTitle("Disconnected");
                 clearTimeout(retryHandle);
                 retryHandle = setTimeout(connectTerminal, 1000);
@@ -88,6 +92,9 @@ const CommandTerminal = ({ runnerIp, runnerPort, commands }: any) => {
         connectTerminal();
 
         return () => {
+            disposed = true;
+            clearTimeout(retryHandle);
+            webSocket?.close();
             term.dispose();
         };
     }, [runnerIp, runnerPort, commands, terminalAllowed, user?.access_token]);

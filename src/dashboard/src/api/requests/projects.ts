@@ -10,15 +10,15 @@ import {
 
 const API_BASE_URL = "/projects";
 
-const requestProject = (projectId: string) => requestEntity(`${API_BASE_URL}/${projectId}`);
+const requestProject = (projectId: string, init?: RequestInit) => requestEntity(`${API_BASE_URL}/${projectId}`, init);
 
-const requestProjects = async (params: Record<string, any>) => {
+const requestProjects = async (params: Record<string, any>, init?: RequestInit) => {
     const queryParams = new URLSearchParams(params).toString();
-    return (await requestEntities(`/projects?` + queryParams)).json();
+    return (await requestEntities(`/projects?` + queryParams, undefined, init)).json();
 };
 
-const requestProjectUsers = (projectId: string) => {
-    return secureApiFetch(`/projects/${projectId}/members`, { method: "GET" });
+const requestProjectUsers = (projectId: string, init?: RequestInit) => {
+    return secureApiFetch(`/projects/${projectId}/members`, { ...init, method: "GET" });
 };
 
 export const requestProjectMemberPost = (projectId: string, userId: number) =>
@@ -27,11 +27,11 @@ export const requestProjectMemberPost = (projectId: string, userId: number) =>
 const requestProjectUserDelete = (projectId: string, userId: number) =>
     requestEntityDelete(`/projects/${projectId}/members/${userId}`);
 
-const requestProjectVault = (projectId: string) => {
-    return secureApiFetch(`/projects/${projectId}/secrets`, { method: "GET" });
+const requestProjectVault = (projectId: string, init?: RequestInit) => {
+    return secureApiFetch(`/projects/${projectId}/secrets`, { ...init, method: "GET" });
 };
 
-const requestProjectCategories = () => requestEntities(`${API_BASE_URL}/categories`);
+const requestProjectCategories = (init?: RequestInit) => requestEntities(`${API_BASE_URL}/categories`, undefined, init);
 
 const requestProjectDelete = (projectId: string) => requestEntityDelete(`${API_BASE_URL}/${projectId}`);
 

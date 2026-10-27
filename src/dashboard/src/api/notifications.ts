@@ -13,7 +13,7 @@ const notificationsKey = ["system-notifications"];
 const useNotificationsQuery = (params: any) => {
     return useQuery({
         queryKey: [...notificationsKey, params],
-        queryFn: () => requestNotifications(params).then((resp) => resp.json()),
+        queryFn: ({ signal }) => requestNotifications(params, { signal }).then((resp) => resp.json()),
     });
 };
 

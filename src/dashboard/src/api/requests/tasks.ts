@@ -3,11 +3,11 @@ import { requestEntity, requestEntityDelete, requestEntityPost, requestEntityPut
 
 const API_BASE_URL = "/tasks";
 
-const requestTasks = (params: any) => {
-    return secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { method: "GET" });
+const requestTasks = (params: any, init?: RequestInit) => {
+    return secureApiFetch(`${API_BASE_URL}?` + new URLSearchParams(params).toString(), { ...init, method: "GET" });
 };
 
-const requestTask = (taskId: string) => requestEntity(`${API_BASE_URL}/${taskId}`);
+const requestTask = (taskId: string, init?: RequestInit) => requestEntity(`${API_BASE_URL}/${taskId}`, init);
 
 const requestTaskDelete = (taskId: string) => requestEntityDelete(`${API_BASE_URL}/${taskId}`);
 

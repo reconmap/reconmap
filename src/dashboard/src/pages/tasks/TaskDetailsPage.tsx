@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useAttachmentsQuery } from "api/attachments";
 import { requestProject } from "api/requests/projects";
+import { ignoreAbortError } from "utilities/abort";
 import { requestTaskPatch } from "api/requests/tasks";
 import { useDeleteTaskMutation, useTaskQuery } from "api/tasks";
 import { useUsersQuery } from "api/users";
@@ -98,10 +99,13 @@ const TaskDetailsPage = () => {
 
     useEffect(() => {
         if (task) {
-            requestProject(task.projectId)
+            const controller = new AbortController();
+            requestProject(task.projectId, { signal: controller.signal })
                 .then((resp) => resp.json())
                 .then((project) => setProject(project))
+                .catch(ignoreAbortError)
                 .catch((err) => console.error(err));
+            return () => controller.abort();
         }
     }, [task]);
 

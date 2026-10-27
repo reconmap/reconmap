@@ -14,20 +14,23 @@ const createUserApi = (user: UserInterface): Promise<Response> => {
     });
 };
 
-const getUser = (userId: number): Promise<Response> => {
+const getUser = (userId: number, init?: RequestInit): Promise<Response> => {
     return secureApiFetch(`${API_PREFIX}/${userId}`, {
+        ...init,
         method: "GET",
     });
 };
 
-const requestUserActivity = (userId: number): Promise<Response> => {
+const requestUserActivity = (userId: number, init?: RequestInit): Promise<Response> => {
     return secureApiFetch(`${API_PREFIX}/${userId}/activity`, {
+        ...init,
         method: "GET",
     });
 };
 
-const getUsers = (): Promise<Response> => {
+const getUsers = (init?: RequestInit): Promise<Response> => {
     return secureApiFetch(API_PREFIX, {
+        ...init,
         method: "GET",
     });
 };

@@ -4,14 +4,14 @@ import { requestDiscussions, requestReleases } from "./requests/community";
 export const useReleasesQuery = () => {
     return useQuery({
         queryKey: ["releases"],
-        queryFn: () => requestReleases().then((res) => res.json()),
+        queryFn: ({ signal }) => requestReleases({ signal }).then((res) => res.json()),
     });
 };
 
 export const useDiscussionsQuery = () => {
     return useQuery({
         queryKey: ["discussions"],
-        queryFn: () => requestDiscussions().then((res) => res.json())
+        queryFn: ({ signal }) => requestDiscussions({ signal }).then((res) => res.json())
             .then(json => json.filter((d: any) => d.category.name === 'Announcements')
                 .sort(
                     (a: any, b: any) =>
