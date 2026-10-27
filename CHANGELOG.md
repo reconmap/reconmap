@@ -58,6 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Dashboard: the `friendly-mimes` dependency was replaced by a small built-in MIME type name lookup. Types it does not know are shown as-is.
+
 - Comments no longer have a public or private setting. Every comment is visible to anyone who can access the project or vulnerability it belongs to. The user manual's claim that public comments are included in pentest reports was never implemented, and it has been removed. Comments are not included in reports.
 
 - **Breaking (dashboard languages):** Portuguese and German translations are removed. Users whose language is set to `pt` or `de` fall back to English, and the language selector no longer offers them. Keycloak's `supportedLocales` no longer includes `pt`. Existing Keycloak realms must remove `pt` from their supported locales, and users with `pt` as their locale must pick another language. Unused translation strings have also been removed from the remaining languages.

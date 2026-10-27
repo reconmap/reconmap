@@ -11,7 +11,7 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
-import { resolveMime } from "friendly-mimes";
+import { mimeTypeName } from "utilities/mimeTypes";
 import useBoolean from "hooks/useBoolean";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -48,14 +48,6 @@ const ReportTemplatesListPage = () => {
         });
     };
 
-    const safeResolveMime = (mimeType) => {
-        try {
-            return resolveMime(mimeType)["name"];
-        } catch (err) {
-            console.error(err);
-            return mimeType;
-        }
-    };
     return (
         <>
             <div className="heading">
@@ -115,7 +107,7 @@ const ReportTemplatesListPage = () => {
                                     </td>
                                     <td>{template.clientFileName}</td>
                                     <td>
-                                        <span title={safeResolveMime(template.fileMimeType)}>
+                                        <span title={mimeTypeName(template.fileMimeType)}>
                                             {template.fileMimeType}
                                         </span>
                                     </td>

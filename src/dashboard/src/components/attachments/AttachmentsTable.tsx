@@ -7,7 +7,7 @@ import ModalDialog from "components/ui/ModalDialog";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";
 import UserLink from "components/users/UserLink";
-import { resolveMime } from "friendly-mimes";
+import { mimeTypeName } from "utilities/mimeTypes";
 import { useState } from "react";
 
 const AttachmentsTable = ({ attachments }: any) => {
@@ -47,14 +47,6 @@ const AttachmentsTable = ({ attachments }: any) => {
         deleteAttachmentMutation.mutate(attachmentId);
     };
 
-    const safeResolveMime = (mimeType) => {
-        try {
-            return resolveMime(mimeType)["name"];
-        } catch (err) {
-            console.error(err);
-            return mimeType;
-        }
-    };
 
     const columns = [
         {
@@ -64,7 +56,7 @@ const AttachmentsTable = ({ attachments }: any) => {
         {
             header: "Mimetype",
             cell: (attachment) => (
-                <span title={safeResolveMime(attachment.fileMimeType)}>{attachment.fileMimeType}</span>
+                <span title={mimeTypeName(attachment.fileMimeType)}>{attachment.fileMimeType}</span>
             ),
         },
         {
