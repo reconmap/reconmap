@@ -4,7 +4,7 @@ import NativeTabs from "components/forms/NativeTabs";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useAuth } from "contexts/AuthContext";
 import Widgets from "models/Widgets";
 import React, { useMemo, useState } from "react";
@@ -94,7 +94,7 @@ const DashboardPage = () => {
       .then(() => {
         setVisibleWidgets(filterWidgets(updatedUser));
 
-        actionCompletedToast("Your preferences have been saved.");
+        toast.success("Your preferences have been saved.");
 
         if (closeAfterSave) {
           tabIndexSetter(0);

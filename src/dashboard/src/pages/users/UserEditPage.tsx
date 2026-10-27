@@ -4,7 +4,7 @@ import { useUserQuery, useUserUpdateMutation } from "api/users";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import UserForm from "components/users/UserForm";
 import { useAuth } from "contexts/AuthContext";
 import { useTheme } from "hooks/useTheme";
@@ -59,10 +59,10 @@ const UserEditPage = () => {
                         i18n.changeLanguage(preferences.language);
                     }
                     navigate(`/users/${userId}`);
-                    actionCompletedToast(`The user "${clientUser.firstName} ${clientUser.lastName}" has been updated.`);
+                    toast.success(`The user "${clientUser.firstName} ${clientUser.lastName}" has been updated.`);
                 },
                 onError: (err) => {
-                    errorToast("Unable to update user: " + (err.message ?? "Unknown error"));
+                    toast.error("Unable to update user: " + (err.message ?? "Unknown error"));
                 },
             },
         );

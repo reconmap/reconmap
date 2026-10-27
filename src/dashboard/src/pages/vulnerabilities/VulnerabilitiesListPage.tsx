@@ -7,7 +7,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/DeleteButton";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import CreateButton from "components/ui/buttons/CreateButton";
@@ -85,7 +85,7 @@ const VulnerabilitiesListPage = () => {
             onSuccess: () => {
                 reloadVulnerabilities();
                 setTableModel({ ...tableModel, selection: [] });
-                actionCompletedToast("All selected vulnerabilities were deleted.");
+                toast.success("All selected vulnerabilities were deleted.");
             },
             onError: (err) => {
                 console.error(err);

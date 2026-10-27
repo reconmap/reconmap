@@ -3,7 +3,7 @@ import NativeTextArea from "components/forms/NativeTextArea";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import Skeleton from "components/ui/Skeleton";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -35,9 +35,9 @@ const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
         createCommentMutation.mutate(newComment, {
             onSuccess: () => {
                 setContent("");
-                actionCompletedToast(t("Comment added."));
+                toast.success(t("Comment added."));
             },
-            onError: () => errorToast(t("Could not add the comment.")),
+            onError: () => toast.error(t("Could not add the comment.")),
         });
     };
 
@@ -47,8 +47,8 @@ const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
         }
 
         deleteCommentMutation.mutate(comment.id, {
-            onSuccess: () => actionCompletedToast(t("Comment deleted.")),
-            onError: () => errorToast(t("Could not delete the comment.")),
+            onSuccess: () => toast.success(t("Comment deleted.")),
+            onError: () => toast.error(t("Could not delete the comment.")),
         });
     };
 

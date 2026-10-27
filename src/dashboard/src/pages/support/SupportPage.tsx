@@ -3,7 +3,7 @@ import { ServerIssuesUrl } from "ServerUrls";
 import NativeTextArea from "components/forms/NativeTextArea";
 import ExternalLink from "components/ui/ExternalLink";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext } from "react";
 
@@ -36,10 +36,10 @@ Keycloak URL: ${Configuration.getKeycloakConfig().url}
         navigator.clipboard
             .writeText(systemInfo)
             .then(() => {
-                actionCompletedToast("Support info copied to the clipboard");
+                toast.success("Support info copied to the clipboard");
             })
             .catch((err) => {
-                errorToast(err);
+                toast.error(err);
             });
     };
 

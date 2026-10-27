@@ -17,7 +17,7 @@ import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import TimestampsSection from "components/ui/TimestampsSection";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import LinkButton from "components/ui/buttons/LinkButton";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import UserLink from "components/users/UserLink";
 import { useAuth } from "contexts/AuthContext";
 import { useEffect, useState } from "react";
@@ -54,7 +54,7 @@ const TaskDetailsPage = () => {
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
                 navigate("/tasks");
-                actionCompletedToast("The task has been deleted.");
+                toast.success("The task has been deleted.");
             }
         });
 
@@ -71,7 +71,7 @@ const TaskDetailsPage = () => {
         })
             .then(() => {
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
-                actionCompletedToast("The assignee has been updated.");
+                toast.success("The assignee has been updated.");
             })
             .catch((err) => console.error(err));
     };
@@ -92,7 +92,7 @@ const TaskDetailsPage = () => {
         requestTaskPatch(task.id, { ...task, status })
             .then(() => {
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
-                actionCompletedToast("The status has been transitioned.");
+                toast.success("The status has been transitioned.");
             })
             .catch((err) => console.error(err));
     };

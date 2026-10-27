@@ -7,7 +7,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
 import TargetIcon from "components/ui/TargetIcon";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 
 const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any) => {
     const defaultFormValues = {
@@ -34,13 +34,13 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
                 if (resp.ok) {
                     onSubmit();
                     reportForm.reset();
-                    actionCompletedToast(`The report version "${data.versionName}" has been added.`);
+                    toast.success(`The report version "${data.versionName}" has been added.`);
                 } else {
                     throw new Error(resp.statusText);
                 }
             })
             .catch((err) => {
-                errorToast(err.message);
+                toast.error(err.message);
                 console.error(err);
             })
             .finally(() => {

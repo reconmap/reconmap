@@ -3,7 +3,7 @@ import { requestOrganisationPost } from "api/requests/organisations";
 import ClientForm from "components/clients/ClientForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { HttpStatus } from "utilities/httpStatus";
 import Client from "models/Client";
 import { useState } from "react";
@@ -27,10 +27,10 @@ const ClientCreatePage = () => {
         requestOrganisationPost(formData).then((resp) => {
             if (resp.status === HttpStatus.CREATED) {
                 queryClient.invalidateQueries({ queryKey: ["organisations"] });
-                actionCompletedToast(`The client "${newClient.name}" has been added.`);
+                toast.success(`The client "${newClient.name}" has been added.`);
                 navigate(ClientsUrls.List);
             } else {
-                errorToast("The client could not be saved. Review the form data or check the application logs.");
+                toast.error("The client could not be saved. Review the form data or check the application logs.");
             }
         });
     };

@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { requestTaskPatch } from "api/requests/tasks";
 import { useTaskQuery } from "api/tasks";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { t } from "i18next";
 import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -23,7 +23,7 @@ const TaskEditPage = () => {
         ev.preventDefault();
 
         await requestTaskPatch(taskId, clientTask);
-        actionCompletedToast(`The task "${clientTask.summary}" has been updated.`);
+        toast.success(`The task "${clientTask.summary}" has been updated.`);
         queryClient.invalidateQueries({ queryKey: ["tasks", taskId] });
         navigate(`/tasks/${taskId}`);
     };

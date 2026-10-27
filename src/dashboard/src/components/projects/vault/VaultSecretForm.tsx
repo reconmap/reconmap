@@ -3,7 +3,7 @@ import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import Vault from "models/Vault";
 import { useState } from "react";
 import { HttpStatus } from "utilities/httpStatus";
@@ -30,9 +30,9 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                 setVaultItem(defaultSecret);
                 if (onSubmit) onSubmit();
                 invalidateQueries();
-                actionCompletedToast(`The vault item has been added.`);
+                toast.success(`The vault item has been added.`);
             } else {
-                errorToast("The vault item could not be saved. Review the form data or check the application logs.");
+                toast.error("The vault item could not be saved. Review the form data or check the application logs.");
             }
         });
     };

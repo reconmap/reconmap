@@ -14,7 +14,7 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import Tag from "components/ui/Tag";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useTranslation } from "react-i18next";
 
 const NotificationsListPage = () => {
@@ -30,7 +30,7 @@ const NotificationsListPage = () => {
         bulkUpdateMutation.mutate({ ids: selectedIds, status: "read" }, {
             onSuccess: () => {
                 setSelectedIds([]);
-                actionCompletedToast("Selected notifications marked as read");
+                toast.success("Selected notifications marked as read");
             },
         });
     };
@@ -39,7 +39,7 @@ const NotificationsListPage = () => {
         bulkUpdateMutation.mutate({ ids: selectedIds, status: "unread" }, {
             onSuccess: () => {
                 setSelectedIds([]);
-                actionCompletedToast("Selected notifications marked as unread");
+                toast.success("Selected notifications marked as unread");
             },
         });
     };
@@ -49,7 +49,7 @@ const NotificationsListPage = () => {
         bulkDeleteMutation.mutate({ ids: selectedIds }, {
             onSuccess: () => {
                 setSelectedIds([]);
-                actionCompletedToast("Selected notifications deleted");
+                toast.success("Selected notifications deleted");
             },
         });
     };

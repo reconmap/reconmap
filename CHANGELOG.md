@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The dashboard shows toast notifications with its own small component instead of the `react-hot-toast` dependency. Toasts are shown with `toast.success(message)` and `toast.error(message)`, replace the former `actionCompletedToast` and `errorToast` helpers, and can be dismissed with a button. The fixed "Action completed" and "An error has occurred" headings were removed.
+
 ### Security
 
 - Upload hardening: attachment uploads are now limited by the API configuration (`Storage:Uploads` in `config-ngapi.json`): 20 MB per file, 10 files per request and a file type allow-list by default, and command output uploads are limited to 10 MB. Oversized files are rejected with `413`, disallowed types with `415`. The size of uploads can no longer overflow the stored `int` size, and the MIME type of an attachment is derived from its extension instead of being echoed from the client. Existing attachments are also served with the derived type. The OpenAPI document and the Swagger UI are only served in the Development environment. See [Attachment limits](docs/pages/admin-manual/attachment-limits.md).

@@ -2,7 +2,7 @@ import { requestWebhookPost } from "api/requests/webhooks";
 import WebhookForm from "components/integrations/webhooks/WebhookForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
@@ -17,7 +17,7 @@ const WebhookCreatePage = () => {
 
         requestWebhookPost(webhook)
             .then(() => {
-                actionCompletedToast(t("The webhook was created."));
+                toast.success(t("The webhook was created."));
                 navigate("/integrations/webhooks");
             })
             .catch((err) => console.error(err));

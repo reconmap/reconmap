@@ -35,7 +35,7 @@ vi.mock("models/Widgets", async () => {
 });
 
 vi.mock("components/ui/toast", () => ({
-  actionCompletedToast: vi.fn(),
+  toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 beforeEach(() => {

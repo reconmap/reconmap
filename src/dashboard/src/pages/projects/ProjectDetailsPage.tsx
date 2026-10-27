@@ -1,5 +1,4 @@
 import { requestEntityPost } from "utilities/requests";
-import { errorToast } from "components/ui/toast";
 import { useDeleteProjectMutation, useProjectQueriesInvalidation, useProjectQuery } from "api/projects";
 import { requestProjectPatch } from "api/requests/projects";
 import NativeButton from "components/forms/NativeButton";
@@ -9,7 +8,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import Breadcrumb from "components/ui/Breadcrumb";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { t } from "i18next";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
@@ -49,10 +48,10 @@ const ProjectDetailsPage = () => {
             onSuccess: () => {
                 projectQueriesInvalidation();
                 navigate("/projects");
-                actionCompletedToast("The project has been deleted.");
+                toast.success("The project has been deleted.");
             },
             onError: (err) => {
-                errorToast("An error occurred while deleting the project.");
+                toast.error("An error occurred while deleting the project.");
                 console.error(err);
             },
         });
@@ -67,7 +66,7 @@ const ProjectDetailsPage = () => {
     const onArchiveButtonClick = (project) => {
         requestProjectPatch(project.id, { archived: !project.archived })
             .then(() => {
-                actionCompletedToast("The project has been updated.");
+                toast.success("The project has been updated.");
                 projectQueriesInvalidation();
             })
             .catch((err) => console.error(err));

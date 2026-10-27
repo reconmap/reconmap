@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import ClientForm from "components/clients/ClientForm";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -23,7 +23,7 @@ const ClientEditPage = () => {
         ev.preventDefault();
 
         requestOrganisationPut(clientId, clientClient).then(() => {
-            actionCompletedToast(`The client "${clientClient.name}" has been updated.`);
+            toast.success(`The client "${clientClient.name}" has been updated.`);
             organisationsQueryInvalidation();
             navigate(`/organisations/${clientId}`);
         });

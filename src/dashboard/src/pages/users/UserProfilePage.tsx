@@ -15,8 +15,7 @@ import TimestampsSection from "components/ui/TimestampsSection";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import LinkButton from "components/ui/buttons/LinkButton";
-import { actionCompletedToast } from "components/ui/toast";
-import { errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
@@ -44,16 +43,16 @@ const UserProfilePage = () => {
     const enableMfa = () => {
         enableMfaApi(userId).then((res) => {
             if (!res.ok) {
-                errorToast(`MFA could not be enabled (status ${res.status})`);
+                toast.error(`MFA could not be enabled (status ${res.status})`);
                 return;
             }
-            actionCompletedToast("The user will be asked to set up 2FA at their next login");
+            toast.success("The user will be asked to set up 2FA at their next login");
         });
     };
 
     const onResetPasswordClick = () => {
         resetPassword(userId).then(() => {
-            actionCompletedToast("Password reset");
+            toast.success("Password reset");
         });
     };
 

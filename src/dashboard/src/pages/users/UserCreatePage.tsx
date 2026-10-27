@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import UserForm from "components/users/UserForm";
 import { useTranslation } from "react-i18next";
 
@@ -23,13 +23,13 @@ const UserCreatePage = () => {
             const resp = await createUserApi(userData);
             if (resp.ok) {
                 navigate("/users/");
-                actionCompletedToast(`The user "${userData.firstName} ${userData.lastName}" has been created.`);
+                toast.success(`The user "${userData.firstName} ${userData.lastName}" has been created.`);
                 queryClient.invalidateQueries({ queryKey: ["users"] });
             } else {
-                errorToast("Unable to create user: " + resp.status);
+                toast.error("Unable to create user: " + resp.status);
             }
         } catch (err: any) {
-            errorToast("Unable to create user: " + (err?.message ?? "Unknown error"));
+            toast.error("Unable to create user: " + (err?.message ?? "Unknown error"));
         }
     };
 

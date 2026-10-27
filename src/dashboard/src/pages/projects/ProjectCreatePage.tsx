@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { requestProjectPost } from "api/requests/projects";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { HttpStatus } from "utilities/httpStatus";
 import Project from "models/Project";
 import { useState } from "react";
@@ -23,12 +23,12 @@ const ProjectCreatePage = () => {
 
         requestProjectPost(newProject).then((resp) => {
             if (resp.status !== HttpStatus.CREATED) {
-                errorToast("There was a problem creating the project. Please check the form and try again");
+                toast.error("There was a problem creating the project. Please check the form and try again");
                 return;
             }
 
             queryClient.invalidateQueries({ queryKey: ["projects"] });
-            actionCompletedToast(`The project '${newProject.name}' has been created`);
+            toast.success(`The project '${newProject.name}' has been created`);
 
             navigate("/projects");
         });

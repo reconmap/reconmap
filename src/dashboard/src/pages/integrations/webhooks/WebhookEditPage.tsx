@@ -3,7 +3,7 @@ import { useWebhookQuery } from "api/webhooks";
 import WebhookForm from "components/integrations/webhooks/WebhookForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
@@ -21,7 +21,7 @@ const WebhookEditPage = () => {
 
         requestWebhookPut(parseInt(webhookId), webhook)
             .then(() => {
-                actionCompletedToast(t("The webhook was updated."));
+                toast.success(t("The webhook was updated."));
                 navigate("/integrations/webhooks");
             })
             .catch((err) => console.error(err));

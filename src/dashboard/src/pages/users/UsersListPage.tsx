@@ -13,7 +13,7 @@ import LinkButton from "components/ui/buttons/LinkButton";
 import ExportMenuItem from "components/ui/menuitems/ExportMenuItem";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
 import UserLink from "components/users/UserLink";
 import { AuthContext } from "contexts/AuthContext";
@@ -49,7 +49,7 @@ const UsersListPage = () => {
         deleteUsers(selectedUsers)
             .then(() => {
                 setSelectedUsers([]);
-                actionCompletedToast("All selected users were deleted.");
+                toast.success("All selected users were deleted.");
             })
             .catch((err) => console.error(err));
     };

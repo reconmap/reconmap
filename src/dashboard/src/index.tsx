@@ -2,7 +2,7 @@ import { requestSessionPost } from "api/requests/session";
 import HeaderLogo from "components/layout/HeaderLogo";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Toaster } from "react-hot-toast";
+import Toaster from "components/ui/Toaster";
 import { AuthProvider } from "react-oidc-context";
 import AuthService, { oidcConfig } from "services/auth";
 import { initialiseUserPreferences } from "services/userPreferences";

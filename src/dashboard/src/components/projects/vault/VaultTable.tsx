@@ -5,7 +5,7 @@ import LinkButton from "components/ui/buttons/LinkButton";
 import ExternalLink from "components/ui/ExternalLink";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 
 const VaultTable = ({ secrets, onDelete }: any) => {
     const invalidateQueries = useInvalidateVaultQueries();
@@ -14,7 +14,7 @@ const VaultTable = ({ secrets, onDelete }: any) => {
             .then(() => {
                 if (onDelete) onDelete();
                 invalidateQueries();
-                actionCompletedToast("The vault item has been deleted.");
+                toast.success("The vault item has been deleted.");
             })
             .catch((err) => console.error(err));
     };

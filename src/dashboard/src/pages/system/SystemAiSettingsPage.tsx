@@ -3,7 +3,7 @@ import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useMemo, useState } from "react";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -92,7 +92,7 @@ const SystemAiSettingsPage = () => {
 
         try {
             await updateMutation.mutateAsync(payload);
-            actionCompletedToast("AI settings saved");
+            toast.success("AI settings saved");
             updateForm((form) => ({
                 ...form,
                 values: {
@@ -107,7 +107,7 @@ const SystemAiSettingsPage = () => {
                 clearedSecrets: {},
             }));
         } catch (error) {
-            errorToast((error as any).message ?? "Unable to save AI settings");
+            toast.error((error as any).message ?? "Unable to save AI settings");
         }
     };
 

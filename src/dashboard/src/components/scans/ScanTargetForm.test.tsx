@@ -4,7 +4,7 @@ import ScanTargetForm from "./ScanTargetForm";
 import { ensureUrlAsset } from "services/scans/url";
 import { requestScanRunPost } from "api/requests/scans";
 import { useProjectsQuery } from "api/projects";
-import { errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 
 const navigate = vi.fn();
 vi.mock("react-router", () => ({
@@ -34,7 +34,7 @@ vi.mock("services/scans/url", () => ({
 }));
 
 vi.mock("components/ui/toast", () => ({
-    errorToast: vi.fn(),
+    toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 const PLACEHOLDER = "e.g. https://example.com, 192.168.1.1, example.com";
@@ -117,7 +117,7 @@ describe("ScanTargetForm", () => {
         render(<ScanTargetForm />);
         fillAndSubmit("018f0000-0000-7000-8000-000000000001", "192.168.1.1", "Code audit");
 
-        await waitFor(() => expect(errorToast).toHaveBeenCalledWith("No tool supports this objective"));
+        await waitFor(() => expect(toast.error).toHaveBeenCalledWith("No tool supports this objective"));
         expect(navigate).not.toHaveBeenCalled();
     });
 });

@@ -3,7 +3,7 @@ import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useState } from "react";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -83,7 +83,7 @@ const SystemMailSettingsPage = () => {
         updateMutation
             .mutateAsync(payload)
             .then(() => {
-                actionCompletedToast("Mail settings saved");
+                toast.success("Mail settings saved");
                 setFormState((currentState) => ({
                     ...currentState,
                     smtpPassword: "",
@@ -93,7 +93,7 @@ const SystemMailSettingsPage = () => {
                 }));
             })
             .catch((error) => {
-                errorToast(error.message ?? "Unable to save mail settings");
+                toast.error(error.message ?? "Unable to save mail settings");
             });
     };
 

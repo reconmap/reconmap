@@ -1,6 +1,5 @@
 import { requestTaskPost } from "api/requests/tasks";
-import { actionCompletedToast } from "components/ui/toast";
-import { errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import Task from "models/Task";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -31,11 +30,11 @@ const TaskCreatePage = () => {
             })
             .then(() => {
                 navigate(`/projects/${newTask.projectId}`);
-                actionCompletedToast(`The task '${newTask.summary}' has been created.`);
+                toast.success(`The task '${newTask.summary}' has been created.`);
             })
             .catch((error) => {
                 console.error("Error creating task:", error);
-                errorToast("Failed to create task. Please try again.");
+                toast.error("Failed to create task. Please try again.");
             });
     };
 

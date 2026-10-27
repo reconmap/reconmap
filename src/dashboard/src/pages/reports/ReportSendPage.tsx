@@ -4,7 +4,7 @@ import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import NativeTextArea from "components/forms/NativeTextArea";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPost } from "utilities/requests";
@@ -47,11 +47,11 @@ const ReportSendPage = () => {
                     throw new Error(payload?.message ?? "Unable to queue the report email.");
                 }
 
-                actionCompletedToast("Report email queued for background delivery");
+                toast.success("Report email queued for background delivery");
                 navigate(`/projects/${project.id}/report`);
             })
             .catch((err) => {
-                errorToast(err.message ?? "Unable to queue the report email.");
+                toast.error(err.message ?? "Unable to queue the report email.");
             });
     };
 

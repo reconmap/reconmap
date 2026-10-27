@@ -28,7 +28,7 @@ import DeleteButton from "components/ui/buttons/DeleteButton";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import UserLink from "components/users/UserLink";
 import Contact from "models/Contact";
 import OrganisationTypes from "models/OrganisationTypes";
@@ -97,9 +97,9 @@ const ClientDetailsPage = () => {
             if (resp.status === HttpStatus.CREATED) {
                 setContact({ ...Contact });
                 invalidateOrganisations();
-                actionCompletedToast(`The contact has been added.`);
+                toast.success(`The contact has been added.`);
             } else {
-                errorToast("The contact could not be saved. Review the form data or check the application logs.");
+                toast.error("The contact could not be saved. Review the form data or check the application logs.");
             }
         });
     };
@@ -108,10 +108,10 @@ const ClientDetailsPage = () => {
         requestContactDelete(clientId, contactId)
             .then((resp) => {
                 if (resp.ok) {
-                    actionCompletedToast("The contact has been deleted.");
+                    toast.success("The contact has been deleted.");
                     invalidateOrganisations();
                 } else {
-                    errorToast("Unable to delete contact");
+                    toast.error("Unable to delete contact");
                 }
             })
             .catch((err) => console.error(err));

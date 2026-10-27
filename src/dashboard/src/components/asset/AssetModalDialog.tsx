@@ -3,7 +3,7 @@ import NativeButton from "components/forms/NativeButton";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
 import TargetIcon from "components/ui/TargetIcon";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import AssetTypes from "models/AssetTypes";
 import { useState } from "react";
 import AssetForm from "./AssetForm";
@@ -22,10 +22,10 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
         requestAssetPost(asset)
             .then(() => {
                 onSubmit();
-                actionCompletedToast(`The asset "${asset.name}" has been added.`);
+                toast.success(`The asset "${asset.name}" has been added.`);
             })
             .catch((err) => {
-                errorToast(err);
+                toast.error(err);
             })
             .finally(() => {
                 setAsset(emptyAsset);

@@ -10,7 +10,7 @@ import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ReloadButton from "components/ui/buttons/ReloadButton";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useNavigate } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import CvssScore from "../badges/CvssScore";
@@ -84,7 +84,7 @@ const VulnerabilitiesTable = ({
         if (window.confirm("Do you really want to delete this vulnerability?")) {
             try {
                 await deleteVulnerabilityMutation.mutateAsync([vulnerabilityId] as any);
-                actionCompletedToast("The vulnerability has been deleted.");
+                toast.success("The vulnerability has been deleted.");
                 if (reloadCallback) {
                     reloadCallback();
                 }

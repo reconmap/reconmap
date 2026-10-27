@@ -3,7 +3,7 @@ import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useRef, useState } from "react";
 import { requestEntityPost } from "utilities/requests";
 
@@ -28,10 +28,10 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
         requestEntityPost(`/reports/templates`, formData)
             .then(() => {
                 onSubmit();
-                actionCompletedToast(`The report template "${reportTemplate.versionName}" has been added.`);
+                toast.success(`The report template "${reportTemplate.versionName}" has been added.`);
             })
             .catch((err) => {
-                errorToast(err);
+                toast.error(err);
             })
             .finally(() => {
                 setReportTemplate(emptyReportTemplate);

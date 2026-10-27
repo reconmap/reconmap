@@ -5,7 +5,7 @@ import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useState } from "react";
 import { HttpStatus } from "utilities/httpStatus";
 import { useTranslation } from "react-i18next";
@@ -23,14 +23,14 @@ const RunnerCreatePage = () => {
             if (response.status === HttpStatus.CREATED) {
                 return response.json();
             } else {
-                errorToast("Failed to add runner");
+                toast.error("Failed to add runner");
             }
         }).then((credentials) => {
             if (credentials) {
                 event.target.reset();
                 setRunnerCredentials(credentials);
                 queryClient.invalidateQueries({ queryKey: ["runners"] });
-                actionCompletedToast("The runner was added.");
+                toast.success("The runner was added.");
             }
         });
     };

@@ -1,7 +1,7 @@
 import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
-import { actionCompletedToast, errorToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import Vault from "models/Vault";
 import { useState } from "react";
 import { HttpStatus } from "utilities/httpStatus";
@@ -31,9 +31,9 @@ const VaultItemEditPage = () => {
             if (resp.status === HttpStatus.CREATED) {
                 setVaultItem({ ...Vault });
                 setPassword(null);
-                actionCompletedToast(`The vault item has been modified.`);
+                toast.success(`The vault item has been modified.`);
             } else {
-                errorToast("The vault item could not be saved. Review the form data or check the application logs.");
+                toast.error("The vault item could not be saved. Review the form data or check the application logs.");
             }
         });
     };
@@ -55,10 +55,10 @@ const VaultItemEditPage = () => {
                 newItem.value = json["value"];
                 newItem.type = json["type"];
                 setVaultItem(newItem);
-                actionCompletedToast(`The vault item "${newItem.name}" has been loaded.`);
+                toast.success(`The vault item "${newItem.name}" has been loaded.`);
             })
             .catch((err) => {
-                errorToast(err.message);
+                toast.error(err.message);
                 setPassword(null);
             });
     };

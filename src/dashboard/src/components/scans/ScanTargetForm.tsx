@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { requestScanRunPost } from 'api/requests/scans.js';
 import { ensureUrlAsset } from 'services/scans/url';
-import { errorToast } from 'components/ui/toast';
+import { toast } from "components/ui/toast";
 import { ScansUrls } from 'AppUrls';
 
 const detectTargetType = (target) => {
@@ -58,7 +58,7 @@ const ScanTargetForm = () => {
             navigate(`${ScansUrls.Runs}/${run.id}`);
         } catch (e: any) {
             console.error(e);
-            errorToast(e?.message || t("The scan could not be started."));
+            toast.error(e?.message || t("The scan could not be started."));
         } finally {
             setAnalyzing(false);
         }

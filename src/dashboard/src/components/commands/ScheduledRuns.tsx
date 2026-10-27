@@ -2,7 +2,7 @@ import { useSchedulesQuery } from "api/commands";
 import { requestCommandScheduleDelete } from "api/requests/commands";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { toString as CronExpressionToString } from "cronstrue";
 
 const ScheduledRuns = () => {
@@ -12,7 +12,7 @@ const ScheduledRuns = () => {
         requestCommandScheduleDelete(commandSchedule.commandId, commandSchedule.id)
             .then(() => {
                 fetchScheduledCommands();
-                actionCompletedToast("The scheduled command has been deleted.");
+                toast.success("The scheduled command has been deleted.");
             })
             .catch((err) => console.error(err));
     };

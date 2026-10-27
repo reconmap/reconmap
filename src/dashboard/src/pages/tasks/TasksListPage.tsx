@@ -4,7 +4,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { actionCompletedToast } from "components/ui/toast";
+import { toast } from "components/ui/toast";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
@@ -65,7 +65,7 @@ const TasksListPage = () => {
         })
             .then(reloadTasks)
             .then(() => {
-                actionCompletedToast(`All selected tasks have been transitioned to "${newStatus}".`);
+                toast.success(`All selected tasks have been transitioned to "${newStatus}".`);
                 ev.target.value = "";
             })
             .catch((err) => console.error(err));
@@ -76,7 +76,7 @@ const TasksListPage = () => {
             .then(() => {
                 reloadTasks();
                 setTableModel({ ...tableModel, selection: [] });
-                actionCompletedToast("All selected tasks were deleted.");
+                toast.success("All selected tasks were deleted.");
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
             })
             .catch((err) => console.error(err));

@@ -1,0 +1,23 @@
+.toaster {
+    position: fixed;
+    inset: auto 1rem 1rem auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    width: min(24rem, calc(100vw - 2rem));
+    pointer-events: none;
+}
+
+.toaster:popover-open {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast {
+    margin: 0;
+    pointer-events: auto;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+}
