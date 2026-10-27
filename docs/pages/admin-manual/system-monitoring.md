@@ -38,7 +38,7 @@ Go to `System -> Usage` to see:
 - **Storage**: number of attachments and their total size.
 - **Key-value server** (Redis): memory used (and the configured `maxmemory`, if any) and number of keys.
 - **Message queues** (RabbitMQ): messages waiting and consumers for the `tasks`, `notifications`, `vulnerabilities`, `webhooks`, `report-generation` and `report-emails` queues. A queue with messages waiting and no consumers means the service that processes it is not running. Unacknowledged messages are not included.
-- **Client cache**: the number of API responses cached by your browser, with a button to discard them.
+- **Client cache**: a button to discard all cached API responses, and a table of the queries cached by your browser (query key, fresh or stale status, number of observers and last update time).
 
 The **System usage** dashboard widget shows a summary of this page for the last 30 days (AI calls, tokens and estimated cost, attachments, Redis memory and messages waiting in queues) and links to it. It requires the `system.*` permission.
 

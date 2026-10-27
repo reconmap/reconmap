@@ -1,8 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { type AiUsageBreakdownRow, useSystemUsageQuery } from "api/system";
 import { SystemUrls } from "AppUrls";
-import NativeButton from "components/forms/NativeButton";
 import NativeTabs from "components/forms/NativeTabs";
+import ClientCacheTable from "components/system/ClientCacheTable";
 import Breadcrumb from "components/ui/Breadcrumb";
 import FileSizeSpan from "components/ui/FileSizeSpan";
 import PageSkeleton from "components/ui/PageSkeleton";
@@ -76,15 +75,6 @@ const SystemUsagePage = () => {
   const [rangeDays, setRangeDays] = useState(30);
   const [tabIndex, tabIndexSetter] = useState(0);
   const { data: usage, isLoading } = useSystemUsageQuery(rangeDays);
-  const queryClient = useQueryClient();
-  const activeQueries = queryClient
-    .getQueryCache()
-    .getAll()
-    .filter((q) => q.isActive());
-
-  const invalidateAllQueries = () => {
-    queryClient.invalidateQueries();
-  };
 
   if (isLoading || !usage) return <PageSkeleton />;
 
@@ -334,14 +324,7 @@ const SystemUsagePage = () => {
           </>
         )}
 
-        {3 === tabIndex && (
-          <p>
-            {activeQueries.length} active queries cached{" "}
-            <NativeButton onClick={invalidateAllQueries}>
-              Invalidate all queries
-            </NativeButton>
-          </p>
-        )}
+        {3 === tabIndex && <ClientCacheTable />}
       </div>
     </div>
   );
