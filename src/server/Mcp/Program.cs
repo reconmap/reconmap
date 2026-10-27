@@ -36,7 +36,7 @@ services.AddHealthChecks()
     .AddRedis(sp => sp.GetRequiredService<IConnectionMultiplexer>(), name: "redis");
 
 // Authentication: same schemes as the REST API (Keycloak JWT bearer and Reconmap API tokens).
-services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+services.AddHttpContextAccessor();
 services.AddRedisServices(builder.Configuration);
 services.AddSingleton<IKeycloakUserCache, RedisKeycloakUserCache>();
 services.AddSingleton<IKeycloakUserDirectory, KeycloakUserDirectory>();
@@ -82,7 +82,7 @@ services.AddAuthorizationBuilder()
 
 // Authorization: same OPA policy and project-membership scope as the REST API.
 services.AddHttpClient();
-services.AddScoped<OpaAuthorizationService>();
+services.AddOpaAuthorization(builder.Configuration);
 services.AddScoped<IRequestAccessScope, RequestAccessScope>();
 services.AddScoped<McpAccessGuard>();
 

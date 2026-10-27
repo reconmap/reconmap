@@ -78,7 +78,7 @@ foreach (var type in parserTypes)
     services.AddScoped(type);
 }
 
-services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+services.AddHttpContextAccessor();
 services.AddSingleton<Reconmap.Api.Infrastructure.Keycloak.IKeycloakUserCache, Reconmap.Api.Infrastructure.Keycloak.RedisKeycloakUserCache>();
 services.AddSingleton<Reconmap.Api.Infrastructure.Keycloak.IKeycloakUserDirectory, Reconmap.Api.Infrastructure.Keycloak.KeycloakUserDirectory>();
 
@@ -105,7 +105,7 @@ services.AddScoped<IAiChatClientFactory, AiChatClientFactory>();
 services.AddScoped<IToolRecommendationService, ToolRecommendationService>();
 services.AddHttpClient();
 services.AddSingleton<McpHealthProbe>();
-services.AddScoped<Reconmap.Api.Infrastructure.Security.OpaAuthorizationService>();
+Reconmap.Api.Infrastructure.Security.OpaServiceCollectionExtensions.AddOpaAuthorization(services, builder.Configuration);
 services.AddScoped<Reconmap.Api.Infrastructure.Security.IRequestAccessScope, Reconmap.Api.Infrastructure.Security.RequestAccessScope>();
 
 services.AddRedisServices(builder.Configuration);

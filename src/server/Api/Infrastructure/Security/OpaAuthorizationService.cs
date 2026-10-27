@@ -5,7 +5,7 @@ using Reconmap.Api.Infrastructure.Persistence;
 
 namespace Reconmap.Api.Infrastructure.Security;
 
-public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbContext, IConfiguration configuration)
+public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbContext, IHttpContextAccessor httpContextAccessor)
 {
     public async Task<bool> AuthorizeAsync(User user, string method, string resourceType, object? resourceData = null, List<Guid>? memberProjectIds = null)
     {
@@ -26,8 +26,7 @@ public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbConte
         };
 
         var content = new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, "application/json");
-        var baseUrl = configuration["Opa:ServerUrl"]?.TrimEnd('/') ?? "http://localhost:8181";
-        var response = await httpClient.PostAsync($"{baseUrl}/v1/data/reconmap/authz/allow", content);
+        using var response = await httpClient.PostAsync("v1/data/reconmap/authz/allow", content);
         
         bool isAllowed = false;
         if (response.IsSuccessStatusCode)
@@ -50,7 +49,7 @@ public class OpaAuthorizationService(HttpClient httpClient, AppDbContext dbConte
                 Object = resourceType,
                 CreatedById = user.Id == 0 ? null : user.Id,
                 Context = JsonSerializer.Serialize(new { method, resourceType, resourceData }),
-                ClientIpBinary = new byte[4] // Placeholder, you might want to inject HttpContext to get real IP
+                ClientIpBinary = httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.GetAddressBytes() ?? new byte[4]
             });
             await dbContext.SaveChangesAsync();
         }
