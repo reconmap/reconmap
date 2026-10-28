@@ -2,7 +2,10 @@
     width: 60%;
     padding: 0;
     background-color: var(--bulma-body-background-color);
-    border: 1px solid white;
+    color: var(--bulma-text);
+    border: 1px solid var(--bulma-border);
+    border-radius: var(--bulma-radius-large);
+    box-shadow: 0 0.5em 2em rgba(0, 0, 0, 0.5);
 }
 
 .html-dialog::backdrop {
@@ -11,4 +14,8 @@
 
 .html-dialog-content {
     padding: 1em;
+}
+
+.html-dialog-content hr {
+    margin: 0.5em 0 1em;
 }
