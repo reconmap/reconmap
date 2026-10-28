@@ -91,7 +91,7 @@ const VulnerabilitiesTable = ({
                     reloadCallback();
                 }
             } catch {
-                alert("An error occurred while deleting the vulnerability.");
+                toast.error("An error occurred while deleting the vulnerability.");
             }
         }
     };

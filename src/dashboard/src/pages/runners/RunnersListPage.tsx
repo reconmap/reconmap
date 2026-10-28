@@ -1,15 +1,16 @@
-import { useRunnersQuery } from "api/runners";
 import { requestRunnerDelete } from "api/requests/runners";
+import { useRunnersQuery } from "api/runners";
+import { RunnersUrls } from "AppUrls";
 import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import NativeTable from "components/ui/tables/NativeTable";
-import { useNavigate, Link } from "react-router";
-import { RunnersUrls } from "AppUrls";
+import { toast } from "components/ui/toast";
 import { useConfirm } from "components/ui/useConfirm";
 import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router";
 
 const pingedRecently = (lastPingAt) => {
     if (!lastPingAt) return false;
@@ -100,9 +101,9 @@ const RunnersListPage = () => {
                             requestRunnerDelete(runner.id).then((response) => {
                                 if (response.ok) {
                                     refetch();
-                                    alert("Runner deleted successfully");
+                                    toast.success("Runner deleted successfully");
                                 } else {
-                                    alert("Failed to delete runner");
+                                    toast.error("Failed to delete runner");
                                 }
                             });
                         }
