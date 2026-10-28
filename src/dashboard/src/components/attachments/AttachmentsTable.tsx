@@ -78,7 +78,7 @@ const AttachmentsTable = ({ attachments }: any) => {
             header: "Filename",
             cell: (attachment) => (
                 <>
-                    <SecondaryButton onClick={(ev) => onViewClick(ev, attachment.id)}>View</SecondaryButton>
+                    <SecondaryButton onClick={(ev) => onViewClick(ev, attachment.id)}>View&hellip;</SecondaryButton>
                     <SecondaryButton onClick={(ev) => onDownloadClick(ev, attachment.id)}>Download</SecondaryButton>
                     <DeleteButton display="icon" onClick={(ev) => onDeleteAttachmentClick(ev, attachment.id)} />
                 </>

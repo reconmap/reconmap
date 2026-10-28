@@ -34,7 +34,7 @@ it("renders the header, breadcrumbs and actions", () => {
     expect(container.querySelector("nav.breadcrumb")).not.toBeNull();
     expect(screen.getByRole("heading", { level: 1, name: "Runners" })).not.toBeNull();
     expect(screen.getByRole("button", { name: "Refresh" })).not.toBeNull();
-    expect(screen.getByRole("button", { name: "New runner" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "New runner…" })).not.toBeNull();
 });
 
 it("refetches the runners when Refresh is clicked", () => {
@@ -51,7 +51,7 @@ it("opens the new runner dialog when New runner is clicked", () => {
     (useRunnersQuery as any).mockReturnValue({ data: [], isLoading: false, isFetching: false, refetch: vi.fn() });
 
     renderPage();
-    fireEvent.click(screen.getByRole("button", { name: "New runner" }));
+    fireEvent.click(screen.getByRole("button", { name: "New runner…" }));
 
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
 });

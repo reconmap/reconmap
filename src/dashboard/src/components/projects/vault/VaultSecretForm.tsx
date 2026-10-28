@@ -96,7 +96,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                                     type="button"
                                     className="button is-info"
                                     onClick={() => setIsGeneratorOpen(true)}
-                                    title="Generate Password"
+                                    title="Generate Password…"
                                 >
                                     <CssIcon name="key" />
                                 </button>

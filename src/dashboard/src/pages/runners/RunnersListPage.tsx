@@ -120,7 +120,7 @@ const RunnersListPage = () => {
             <Breadcrumb />
             <NativeButtonGroup>
                 <NativeButton onClick={() => refetch()} disabled={isFetching}>Refresh</NativeButton>
-                <CreateButton onClick={() => setIsRunnerDialogOpen(true)}>New runner</CreateButton>
+                <CreateButton onClick={() => setIsRunnerDialogOpen(true)}>New runner&hellip;</CreateButton>
             </NativeButtonGroup>
         </div>
         <PageTitleHeader title={t("Runners")} />

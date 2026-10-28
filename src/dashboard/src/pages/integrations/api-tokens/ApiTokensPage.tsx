@@ -56,7 +56,7 @@ const ApiTokensPage = () => {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <PageTitleHeader title={t("API Tokens")} />
-                <PrimaryButton onClick={() => setShowForm(true)}>{t("New API token")}</PrimaryButton>
+                <PrimaryButton onClick={() => setShowForm(true)}>{t("New API token")}&hellip;</PrimaryButton>
             </div>
 
             <ModalDialog visible={showForm} onModalClose={() => setShowForm(false)} title={t("New API token")}>

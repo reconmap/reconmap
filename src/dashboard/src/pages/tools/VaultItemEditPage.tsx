@@ -126,8 +126,8 @@ const VaultItemEditPage = () => {
                                                     type="button"
                                                     className="button is-info"
                                                     onClick={() => setIsGeneratorOpen(true)}
-                                                    title="Generate Password"
-                                                    aria-label="Generate Password"
+                                                    title="Generate Password…"
+                                                    aria-label="Generate Password…"
                                                 >
                                                     <CssIcon name="key" />
                                                 </button>

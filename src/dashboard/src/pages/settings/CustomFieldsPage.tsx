@@ -44,7 +44,7 @@ const CustomFieldsPage = () => {
     return (
         <>
             <div className="heading">
-                <CreateButton onClick={() => setIsCustomFieldDialogOpen(true)}>New custom field</CreateButton>
+                <CreateButton onClick={() => setIsCustomFieldDialogOpen(true)}>New custom field&hellip;</CreateButton>
             </div>
             <PageTitleHeader title={t("Custom fields")} subHeader={t("System")} />
 
