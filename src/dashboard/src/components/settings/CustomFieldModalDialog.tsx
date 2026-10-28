@@ -23,7 +23,14 @@ const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
     };
 
     return (
-        <ModalDialog visible={isOpen} onModalClose={onClose} title="New custom field">
+        <ModalDialog visible={isOpen} onModalClose={onClose} title="New custom field"
+            footer={
+                <>
+                    <NativeButton onClick={onClose}>Cancel</NativeButton>
+                    <PrimaryButton type="submit" form="custom-field-form">Save</PrimaryButton>
+                </>
+            }
+        >
             <div>
                 <Form layout="vertical" id="custom-field-form" onSubmit={onSubmit}>
                     <input type="hidden" name="config" value="{}" />
@@ -52,11 +59,6 @@ const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
                         }
                     />
                 </Form>
-
-                <div>
-                    <NativeButton onClick={onClose}>Cancel</NativeButton>
-                    <PrimaryButton type="submit" form="custom-field-form">Save</PrimaryButton>
-                </div>
             </div>
         </ModalDialog>
     );

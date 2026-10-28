@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./ModalDialog.css";
 
-const ModalDialog = ({ title, children, visible, onModalClose, style = {} }: any) => {
+const ModalDialog = ({ title, children, footer, visible, onModalClose, style = {} }: any) => {
     const htmlRef = useRef<HTMLDialogElement>(null);
 
     useEffect(() => {
@@ -24,12 +24,11 @@ const ModalDialog = ({ title, children, visible, onModalClose, style = {} }: any
             onClick={(ev) => ev.target === ev.currentTarget && ev.currentTarget.close()}
             style={style}
         >
-            <div className="html-dialog-content">
+            <header className="html-dialog-header">
                 <h4 className="title is-4">{title}</h4>
-                <hr />
-
-                {children}
-            </div>
+            </header>
+            <div className="html-dialog-content">{children}</div>
+            {footer && <footer className="html-dialog-footer buttons is-right">{footer}</footer>}
         </dialog>
     );
 };

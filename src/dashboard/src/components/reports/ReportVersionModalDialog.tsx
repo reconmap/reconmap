@@ -58,6 +58,14 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
             }
             visible={isOpen}
             onModalClose={beforeCancelCallback}
+            footer={
+                <>
+                    <NativeButton onClick={beforeCancelCallback}>Cancel</NativeButton>
+                    <PrimaryButton form="reportVersionReportForm" type="submit">
+                        Save
+                    </PrimaryButton>
+                </>
+            }
         >
             <div>
                 <div>
@@ -110,13 +118,6 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
                                 />
                             }
                         />
-                    </div>
-
-                    <div>
-                        <NativeButton onClick={beforeCancelCallback}>Cancel</NativeButton>
-                        <PrimaryButton form="reportVersionReportForm" type="submit">
-                            Save
-                        </PrimaryButton>
                     </div>
                 </Form>
             </div>

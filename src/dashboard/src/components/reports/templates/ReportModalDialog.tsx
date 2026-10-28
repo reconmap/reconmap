@@ -44,7 +44,16 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
     };
 
     return (
-        <ModalDialog visible={isOpen} onModalClose={onCancel} title="New report template details">
+        <ModalDialog visible={isOpen} onModalClose={onCancel} title="New report template details"
+            footer={
+                <>
+                    <NativeButton onClick={onCancel}>Cancel</NativeButton>
+                    <PrimaryButton form="reportTemplateForm" type="submit">
+                        Save
+                    </PrimaryButton>
+                </>
+            }
+        >
             <div>
                 <div>
                     <Form layout="vertical" id="reportTemplateForm" onSubmit={onCreateReportFormSubmit}>
@@ -83,13 +92,6 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
                             />
                         </div>
                     </Form>
-                </div>
-
-                <div>
-                    <NativeButton onClick={onCancel}>Cancel</NativeButton>
-                    <PrimaryButton form="reportTemplateForm" type="submit">
-                        Save
-                    </PrimaryButton>
                 </div>
             </div>
         </ModalDialog>

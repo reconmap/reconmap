@@ -42,15 +42,16 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
                     New asset details
                 </>
             }
+            footer={
+                <>
+                    <NativeButton onClick={onCancel}>Cancel</NativeButton>
+                    <PrimaryButton type="submit" form="asset-form">Save</PrimaryButton>
+                </>
+            }
         >
             <div>
                 <div>
                     <AssetForm newAsset={asset} onFormSubmit={onAddAssetFormSubmit} assetSetter={setAsset} />
-                </div>
-
-                <div>
-                    <NativeButton onClick={onCancel}>Cancel</NativeButton>
-                    <PrimaryButton type="submit" form="asset-form">Save</PrimaryButton>
                 </div>
             </div>
         </ModalDialog>

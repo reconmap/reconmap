@@ -41,14 +41,27 @@ const RunnerModalDialog = ({ isOpen, onClose }: any) => {
     };
 
     return (
-        <ModalDialog visible={isOpen} onModalClose={close} title="New runner">
+        <ModalDialog
+            visible={isOpen}
+            onModalClose={close}
+            title="New runner"
+            footer={
+                runnerCredentials ? (
+                    <NativeButton onClick={close}>Close</NativeButton>
+                ) : (
+                    <>
+                        <NativeButton onClick={close}>Cancel</NativeButton>
+                        <PrimaryButton type="submit" form="runner-form">Save</PrimaryButton>
+                    </>
+                )
+            }
+        >
             {runnerCredentials ? (
                 <div>
                     <div>
                         The runner credentials are (please copy them as they are only displayed once):
                         <pre>{JSON.stringify(runnerCredentials, null, 2)}</pre>
                     </div>
-                    <NativeButton onClick={close}>Close</NativeButton>
                 </div>
             ) : (
                 <div>
@@ -59,11 +72,6 @@ const RunnerModalDialog = ({ isOpen, onClose }: any) => {
 
                         <FormField label="Listen Address" control={<NativeInput type="text" name="listenAddr" placeholder="Listen Address" required />} />
                     </Form>
-
-                    <div>
-                        <NativeButton onClick={close}>Cancel</NativeButton>
-                        <PrimaryButton type="submit" form="runner-form">Save</PrimaryButton>
-                    </div>
                 </div>
             )}
         </ModalDialog>
