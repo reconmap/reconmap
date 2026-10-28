@@ -1,20 +1,5 @@
-const HorizontalLabelledField = ({ htmlFor = undefined, label = "", control }: any) => {
-    return (
-        <div className="field is-horizontal">
-            <div className="field-label">
-                {label != "" && (
-                    <label className="label" htmlFor={htmlFor}>
-                        {label}
-                    </label>
-                )}
-            </div>
-            <div className="field-body">
-                <div className="field">
-                    <div className="control">{control}</div>
-                </div>
-            </div>
-        </div>
-    );
-};
+import FormField from "./FormField";
+
+const HorizontalLabelledField = (props: any) => <FormField {...props} layout="horizontal" />;
 
 export default HorizontalLabelledField;

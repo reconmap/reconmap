@@ -1,5 +1,6 @@
 import { useSystemCustomFieldPostMutation } from "api/system";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -24,12 +25,12 @@ const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
     return (
         <ModalDialog visible={isOpen} onModalClose={onClose} title="New custom field">
             <div>
-                <form id="custom-field-form" onSubmit={onSubmit}>
+                <Form layout="vertical" id="custom-field-form" onSubmit={onSubmit}>
                     <input type="hidden" name="config" value="{}" />
 
-                    <HorizontalLabelledField label="Name" control={<NativeInput type="text" name="name" required autoFocus />} />
+                    <FormField label="Name" control={<NativeInput type="text" name="name" required autoFocus />} />
 
-                    <HorizontalLabelledField
+                    <FormField
                         label="Type"
                         control={
                             <NativeSelect name="kind">
@@ -40,9 +41,9 @@ const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
                         }
                     />
 
-                    <HorizontalLabelledField label="Label" control={<NativeInput type="text" name="label" required />} />
+                    <FormField label="Label" control={<NativeInput type="text" name="label" required />} />
 
-                    <HorizontalLabelledField
+                    <FormField
                         label="Parent type"
                         control={
                             <NativeSelect name="parentType">
@@ -50,7 +51,7 @@ const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
                             </NativeSelect>
                         }
                     />
-                </form>
+                </Form>
 
                 <div>
                     <NativeButton onClick={onClose}>Cancel</NativeButton>

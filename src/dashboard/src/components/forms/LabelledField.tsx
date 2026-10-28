@@ -1,12 +1,5 @@
-const LabelledField = ({ htmlFor, label, control }: any) => {
-    return (
-        <div className="field">
-            <label className="label" htmlFor={htmlFor}>
-                {label}
-            </label>
-            <div className="control">{control}</div>
-        </div>
-    );
-};
+import FormField from "./FormField";
+
+const LabelledField = (props: any) => <FormField {...props} layout="vertical" />;
 
 export default LabelledField;

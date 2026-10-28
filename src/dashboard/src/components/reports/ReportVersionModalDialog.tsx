@@ -1,6 +1,7 @@
 import { useReportsTemplatesQuery } from "api/reports";
 import { requestReportPost } from "api/requests/reports";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -62,11 +63,11 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
                 <div>
                     <div></div>
                 </div>
-                <form id="reportVersionReportForm" onSubmit={onFormSubmit}>
+                <Form layout="vertical" id="reportVersionReportForm" onSubmit={onFormSubmit}>
                     <div>
                         <input type="hidden" name="projectId" value={projectId} />
                         {templates && (
-                            <HorizontalLabelledField
+                            <FormField
                                 label="Template"
                                 control={
                                     <NativeSelect
@@ -83,7 +84,7 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
                             />
                         )}
 
-                        <HorizontalLabelledField
+                        <FormField
                             label="Name"
                             control={
                                 <NativeInput
@@ -97,7 +98,7 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
                             }
                         />
 
-                        <HorizontalLabelledField
+                        <FormField
                             label="Description"
                             control={
                                 <NativeInput
@@ -117,7 +118,7 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
                             Save
                         </PrimaryButton>
                     </div>
-                </form>
+                </Form>
             </div>
         </ModalDialog>
     );

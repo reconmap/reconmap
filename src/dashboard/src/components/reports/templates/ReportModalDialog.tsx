@@ -1,4 +1,5 @@
-import LabelledField from "components/forms/LabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
@@ -46,9 +47,9 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
         <ModalDialog visible={isOpen} onClose={onCancel} title="New report template details">
             <div>
                 <div>
-                    <form id="reportTemplateForm" onSubmit={onCreateReportFormSubmit}>
+                    <Form layout="vertical" id="reportTemplateForm" onSubmit={onCreateReportFormSubmit}>
                         <div>
-                            <LabelledField
+                            <FormField
                                 label="Version name"
                                 control={
                                     <NativeInput
@@ -62,13 +63,13 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
                             />
                         </div>
                         <div>
-                            <LabelledField
+                            <FormField
                                 label="Version description"
                                 control={<NativeInput type="text" name="versionDescription" onChange={onFormChange} />}
                             />
                         </div>
                         <div>
-                            <LabelledField
+                            <FormField
                                 label="File"
                                 control={
                                     <NativeInput
@@ -81,7 +82,7 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
                                 }
                             />
                         </div>
-                    </form>
+                    </Form>
                 </div>
 
                 <div>

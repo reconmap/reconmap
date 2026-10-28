@@ -1,4 +1,5 @@
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import AssetTypes from "../../models/AssetTypes";
@@ -18,8 +19,8 @@ const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
 
     return (
         <div>
-            <form id="asset-form" onSubmit={onFormSubmit}>
-                <HorizontalLabelledField
+            <Form layout="vertical" id="asset-form" onSubmit={onFormSubmit}>
+                <FormField
                     label="Name"
                     control={
                         <NativeInput
@@ -32,12 +33,12 @@ const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label="Tags"
                     control={<NativeInput name="tags" placeholder="e.g. linux,production" onChange={onFormChange} />}
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Type"
                     control={
                         <NativeSelect name="type" onChange={onFormChange}>
@@ -49,7 +50,7 @@ const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
                         </NativeSelect>
                     }
                 />
-            </form>
+            </Form>
         </div>
     );
 };

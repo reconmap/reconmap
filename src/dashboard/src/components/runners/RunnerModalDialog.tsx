@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { requestRunnerPost } from "api/requests/runners";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeButton from "components/forms/NativeButton";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
@@ -51,13 +52,13 @@ const RunnerModalDialog = ({ isOpen, onClose }: any) => {
                 </div>
             ) : (
                 <div>
-                    <form id="runner-form" onSubmit={onSubmit}>
-                        <HorizontalLabelledField label="Name" control={<NativeInput type="text" name="name" placeholder="Name" required autoFocus />} />
+                    <Form id="runner-form" layout="vertical" onSubmit={onSubmit}>
+                        <FormField label="Name" control={<NativeInput type="text" name="name" placeholder="Name" required autoFocus />} />
 
-                        <HorizontalLabelledField label="Hostname" control={<NativeInput type="text" name="hostname" placeholder="Hostname" required />} />
+                        <FormField label="Hostname" control={<NativeInput type="text" name="hostname" placeholder="Hostname" required />} />
 
-                        <HorizontalLabelledField label="Listen Address" control={<NativeInput type="text" name="listenAddr" placeholder="Listen Address" required />} />
-                    </form>
+                        <FormField label="Listen Address" control={<NativeInput type="text" name="listenAddr" placeholder="Listen Address" required />} />
+                    </Form>
 
                     <div>
                         <NativeButton onClick={close}>Cancel</NativeButton>
