@@ -1,4 +1,5 @@
-import NativeButton from "components/forms/NativeButton";
+import FormActions from "components/forms/FormActions";
+import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import { toast } from "components/ui/toast";
@@ -143,7 +144,7 @@ const VaultItemEditPage = () => {
                                         />
                                     </td>
                                     <td>
-                                        <NativeButton type="submit">Save</NativeButton>
+                                        <PrimaryButton type="submit">Save</PrimaryButton>
                                     </td>
                                 </tr>
                             </tbody>
@@ -171,7 +172,9 @@ const VaultItemEditPage = () => {
                             autoComplete="off"
                             required
                         />
-                        <NativeButton type="submit">Unprotect</NativeButton>
+                        <FormActions>
+                            <PrimaryButton type="submit">Unprotect</PrimaryButton>
+                        </FormActions>
                     </form>
                 </>
             )}

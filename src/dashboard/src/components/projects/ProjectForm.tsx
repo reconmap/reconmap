@@ -1,6 +1,7 @@
 import { useOrganisationsQuery } from "api/clients";
 import { useProjectCategoriesQuery } from "api/projects";
 import Form from "components/forms/Form";
+import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
@@ -190,7 +191,9 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                 </fieldset>
             )}
 
-            <PrimaryButton type="submit">Save</PrimaryButton>
+            <FormActions>
+                <PrimaryButton type="submit">Save</PrimaryButton>
+            </FormActions>
         </Form>
     );
 };

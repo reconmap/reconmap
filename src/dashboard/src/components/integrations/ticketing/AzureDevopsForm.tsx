@@ -1,4 +1,5 @@
 import Form from "components/forms/Form";
+import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
@@ -88,14 +89,9 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
                 />
             </fieldset>
 
-            <FormField
-                label=""
-                control={
-                    <div className="control">
-                        <PrimaryButton type="submit">{t("Save")}</PrimaryButton>
-                    </div>
-                }
-            />
+            <FormActions>
+                <PrimaryButton type="submit">{t("Save")}</PrimaryButton>
+            </FormActions>
         </Form>
     );
 };

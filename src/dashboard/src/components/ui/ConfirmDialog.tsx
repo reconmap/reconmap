@@ -1,3 +1,5 @@
+import NativeButton from "components/forms/NativeButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import ModalDialog from "./ModalDialog";
 
 type ConfirmDialogProps = {
@@ -15,12 +17,10 @@ const ConfirmDialog = ({ title, message, visible, confirmLabel, cancelLabel, onC
         style={{ width: "30em", maxWidth: "90%" }}
             footer={
                 <>
-                    <button type="button" className="button" onClick={onCancel}>
+                    <NativeButton type="button" onClick={onCancel}>
                         {cancelLabel}
-                    </button>
-                    <button type="button" className="button is-danger" onClick={onConfirm}>
-                        {confirmLabel}
-                    </button>
+                    </NativeButton>
+                    <DeleteButton onClick={onConfirm}>{confirmLabel}</DeleteButton>
                 </>
             }
     >

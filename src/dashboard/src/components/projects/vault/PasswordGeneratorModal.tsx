@@ -53,7 +53,21 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
     };
 
     return (
-        <ModalDialog visible onModalClose={onClose} title={t("Password generator")}>
+        <ModalDialog
+            visible
+            onModalClose={onClose}
+            title={t("Password generator")}
+            footer={
+                <>
+                    <SecondaryButton type="button" onClick={onClose}>
+                        {t("Cancel")}
+                    </SecondaryButton>
+                    <PrimaryButton type="button" onClick={handleSelect} disabled={!password}>
+                        {t("Use password")}
+                    </PrimaryButton>
+                </>
+            }
+        >
             <div className="content">
                 <FormField layout="vertical"
                     label={t("Password length")}
@@ -178,14 +192,6 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     </div>
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "24px" }}>
-                    <SecondaryButton type="button" onClick={onClose}>
-                        {t("Cancel")}
-                    </SecondaryButton>
-                    <PrimaryButton type="button" onClick={handleSelect} disabled={!password}>
-                        {t("Use password")}
-                    </PrimaryButton>
-                </div>
             </div>
         </ModalDialog>
     );

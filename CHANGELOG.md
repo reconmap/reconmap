@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Form action buttons in the dashboard are presented the same way everywhere: separated from the fields by a rule, right-aligned, with Cancel first and the positive action (Save, Send, Unprotect) last. Modal dialogs, including the API token and password generator dialogs, use the dialog footer. Developers use `FormActions` from `components/forms/FormActions` for forms that are not in a modal.
 - Checkboxes in dashboard forms are presented consistently: the text sits next to the box, without a separate field label or an "Is" prefix (for example "Enabled" and "Template"), and selection checkboxes in tables have accessible labels.
 - Creating a runner, a custom field or an API token now happens in a modal dialog instead of a separate page (runners) or an inline form (custom fields, API tokens). The `/runners/create` route was removed.
 - Every delete action in the dashboard now asks for confirmation with an in-app dialog. Deleting projects, tasks, vulnerabilities, reports, report templates, assets, attachments, clients, contacts, users, project members, vault items, scheduled commands, custom fields, vulnerability categories and notifications was previously immediate. The actions that used the browser's `window.confirm` (comments, webhooks, runners, integrations, notifications and API tokens) use the same dialog. Developers use the `useConfirm()` hook from `components/ui/useConfirm`.

@@ -1,5 +1,6 @@
 import { requestAttachment } from "api/requests/attachments";
 import Form from "components/forms/Form";
+import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -144,8 +145,11 @@ const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
                     }
                 />
 
-                <PrimaryButton type="submit">Save</PrimaryButton>
             </fieldset>
+
+            <FormActions>
+                <PrimaryButton type="submit">Save</PrimaryButton>
+            </FormActions>
         </Form>
     );
 };

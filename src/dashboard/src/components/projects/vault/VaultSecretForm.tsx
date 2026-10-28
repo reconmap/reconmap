@@ -1,5 +1,6 @@
 import { useInvalidateVaultQueries } from "api/vault";
 import Form from "components/forms/Form";
+import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -160,8 +161,11 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <PrimaryButton type="submit">Save</PrimaryButton>
             </details>
+
+            <FormActions>
+                <PrimaryButton type="submit">Save</PrimaryButton>
+            </FormActions>
             {isGeneratorOpen && (
                 <PasswordGeneratorModal
                     onClose={() => setIsGeneratorOpen(false)}

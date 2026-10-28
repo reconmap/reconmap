@@ -1,6 +1,7 @@
 import { useProjectQuery } from "api/projects";
 import { useReportsQuery } from "api/reports";
 import Form from "components/forms/Form";
+import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -144,7 +145,9 @@ const ReportSendPage = () => {
                     control={<NativeTextArea id="emailBody" name="body" defaultValue={deliverySettings.body} />}
                 />
 
-                <PrimaryButton type="submit">Send</PrimaryButton>
+                <FormActions>
+                    <PrimaryButton type="submit">Send</PrimaryButton>
+                </FormActions>
             </Form>
         </div>
     );

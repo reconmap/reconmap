@@ -1,5 +1,6 @@
 import { useSystemMailSettingsQuery, useSystemMailSettingsUpdateMutation } from "api/system";
 import Form from "components/forms/Form";
+import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
@@ -242,9 +243,9 @@ const SystemMailSettingsPage = () => {
                     }
                 />
 
-                <hr />
-
-                <FormField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
+                <FormActions>
+                    <PrimaryButton type="submit">Save</PrimaryButton>
+                </FormActions>
             </Form>
         </div>
     );
