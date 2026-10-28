@@ -44,7 +44,7 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
     };
 
     return (
-        <ModalDialog visible={isOpen} onClose={onCancel} title="New report template details">
+        <ModalDialog visible={isOpen} onModalClose={onCancel} title="New report template details">
             <div>
                 <div>
                     <Form layout="vertical" id="reportTemplateForm" onSubmit={onCreateReportFormSubmit}>

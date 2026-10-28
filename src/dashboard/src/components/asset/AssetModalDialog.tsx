@@ -35,7 +35,7 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
     return (
         <ModalDialog
             visible={isOpen}
-            onClose={onCancel}
+            onModalClose={onCancel}
             title={
                 <>
                     <TargetIcon style={{ marginRight: "5px" }} />

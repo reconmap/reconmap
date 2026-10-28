@@ -19,7 +19,7 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
     const { data: templates } = useReportsTemplatesQuery({});
 
     const beforeCancelCallback = (ev) => {
-        ev.target.closest("form").reset();
+        ev.currentTarget.closest("dialog")?.querySelector("form")?.reset();
         onCancel(ev);
     };
 
@@ -57,7 +57,7 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
                 </>
             }
             visible={isOpen}
-            onClose={beforeCancelCallback}
+            onModalClose={beforeCancelCallback}
         >
             <div>
                 <div>
