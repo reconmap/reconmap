@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProjectsQuery } from 'api/projects.js';
 import NativeSelect from 'components/forms/NativeSelect.jsx';
-import HorizontalLabelledField from 'components/forms/HorizontalLabelledField.jsx';
+import FormField from "components/forms/FormField";
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { requestScanRunPost } from 'api/requests/scans.js';
@@ -66,7 +66,7 @@ const ScanTargetForm = () => {
 
     return (
         <div className="content">
-            <HorizontalLabelledField
+            <FormField layout="horizontal"
                 label={t("Project")}
                 control={
                     <NativeSelect onChange={(e) => setProjectId(e.target.value)} value={projectId}>
@@ -80,7 +80,7 @@ const ScanTargetForm = () => {
                 }
             />
 
-            <HorizontalLabelledField
+            <FormField layout="horizontal"
                 label={t("Target")}
                 control={
                     <div className="field has-addons">
@@ -102,7 +102,7 @@ const ScanTargetForm = () => {
                 }
             />
 
-            <HorizontalLabelledField
+            <FormField layout="horizontal"
                 label={t("Objective")}
                 control={
                     <NativeSelect onChange={(e) => setObjective(e.target.value)} value={objective}>

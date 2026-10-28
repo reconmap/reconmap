@@ -1,5 +1,6 @@
 import { useSystemMailSettingsQuery, useSystemMailSettingsUpdateMutation } from "api/system";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -111,15 +112,15 @@ const SystemMailSettingsPage = () => {
 
             <PageTitleHeader title={t("Mail settings")} />
 
-            <form onSubmit={handleSubmit}>
+            <Form layout="horizontal" onSubmit={handleSubmit}>
                 <h2 className="title is-5">SMTP</h2>
 
-                <HorizontalLabelledField
+                <FormField
                     label="Host"
                     control={<NativeInput type="text" name="smtpHost" value={formState.smtpHost} onChange={updateField} />}
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Port"
                     control={
                         <NativeInput
@@ -132,14 +133,14 @@ const SystemMailSettingsPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Username"
                     control={
                         <NativeInput type="text" name="smtpUsername" value={formState.smtpUsername} onChange={updateField} />
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Password"
                     control={
                         <NativeInput
@@ -152,7 +153,7 @@ const SystemMailSettingsPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label=""
                     control={
                         <label className="checkbox">
@@ -167,21 +168,21 @@ const SystemMailSettingsPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Sender email"
                     control={
                         <NativeInput type="email" name="smtpFromEmail" value={formState.smtpFromEmail} onChange={updateField} />
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Sender name"
                     control={
                         <NativeInput type="text" name="smtpFromName" value={formState.smtpFromName} onChange={updateField} />
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label=""
                     control={
                         <label className="checkbox">
@@ -195,12 +196,12 @@ const SystemMailSettingsPage = () => {
 
                 <h2 className="title is-5">IMAP</h2>
 
-                <HorizontalLabelledField
+                <FormField
                     label="Host"
                     control={<NativeInput type="text" name="imapHost" value={formState.imapHost} onChange={updateField} />}
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Port"
                     control={
                         <NativeInput
@@ -213,14 +214,14 @@ const SystemMailSettingsPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Username"
                     control={
                         <NativeInput type="text" name="imapUsername" value={formState.imapUsername} onChange={updateField} />
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Password"
                     control={
                         <NativeInput
@@ -233,7 +234,7 @@ const SystemMailSettingsPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label=""
                     control={
                         <label className="checkbox">
@@ -248,7 +249,7 @@ const SystemMailSettingsPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label=""
                     control={
                         <label className="checkbox">
@@ -260,8 +261,8 @@ const SystemMailSettingsPage = () => {
 
                 <hr />
 
-                <HorizontalLabelledField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
-            </form>
+                <FormField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
+            </Form>
         </div>
     );
 };

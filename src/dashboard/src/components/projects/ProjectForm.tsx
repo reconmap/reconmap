@@ -1,6 +1,7 @@
 import { useOrganisationsQuery } from "api/clients";
 import { useProjectCategoriesQuery } from "api/projects";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -26,11 +27,11 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
     if (!project || isLoadingClients || isLoadingCategories || !serviceProviders) return <Loading />;
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
             <fieldset>
                 <legend>Basic information</legend>
 
-                <HorizontalLabelledField
+                <FormField
                     control={
                         <NativeCheckbox
                             id="isTemplate"
@@ -43,7 +44,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Category"
                     htmlFor="categoryId"
                     control={
@@ -64,7 +65,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                 />
 
 
-                <HorizontalLabelledField
+                <FormField
                     label="Name"
                     htmlFor="name"
                     control={
@@ -82,7 +83,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
 
                 {!project.isTemplate && (
                     <>
-                        <HorizontalLabelledField
+                        <FormField
                             label="Service provider"
                             htmlFor="serviceProviderId"
                             control={
@@ -103,7 +104,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                             }
                         />
 
-                        <HorizontalLabelledField
+                        <FormField
                             label="Client"
                             htmlFor="clientId"
                             control={
@@ -124,7 +125,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                             }
                         />
 
-                        <HorizontalLabelledField
+                        <FormField
                             label="External ID"
                             htmlFor="externalId"
                             control={
@@ -140,23 +141,26 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                     </>
                 )}
 
-                <label htmlFor="projectDescription">
-                    Description
-                    <MarkdownEditor
-                        id="projectDescription"
-                        name="description"
-                        onChange={handleFormChange}
-                        value={project.description || ""}
-                        required
-                    />
-                </label>
+                <FormField
+                    htmlFor="projectDescription"
+                    label="Description"
+                    control={
+                        <MarkdownEditor
+                            id="projectDescription"
+                            name="description"
+                            onChange={handleFormChange}
+                            value={project.description || ""}
+                            required
+                        />
+                    }
+                />
             </fieldset>
 
             {!project.isTemplate && (
                 <fieldset>
                     <legend>Rules of engagement</legend>
                     <>
-                        <HorizontalLabelledField
+                        <FormField
                             label="Start date"
                             htmlFor="engagementStartDate"
                             control={
@@ -169,7 +173,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                                 />
                             }
                         />
-                        <HorizontalLabelledField
+                        <FormField
                             label="End date"
                             htmlFor="engagementEndDate"
                             control={
@@ -187,7 +191,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
             )}
 
             <PrimaryButton type="submit">Save</PrimaryButton>
-        </form>
+        </Form>
     );
 };
 

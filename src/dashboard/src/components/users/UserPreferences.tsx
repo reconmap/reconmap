@@ -1,4 +1,4 @@
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import FormField from "components/forms/FormField";
 import NativeSelect from "components/forms/NativeSelect";
 import EmptyField from "components/ui/EmptyField";
 import { ThemeList } from "models/themes";
@@ -14,12 +14,12 @@ const UserPreferences = ({ isOwner, values, onChange }: any) => {
     if (!isOwner) {
         return (
             <>
-                <HorizontalLabelledField
+                <FormField
                     label="Language"
                     control={values.language ? <span>{languageName(values.language)}</span> : <EmptyField />}
                 />
-                <HorizontalLabelledField label="Theme" control={<span>{themeName(values.theme)}</span>} />
-                <HorizontalLabelledField
+                <FormField label="Theme" control={<span>{themeName(values.theme)}</span>} />
+                <FormField
                     label="Timezone"
                     control={values.timezone ? <span>{values.timezone}</span> : <EmptyField />}
                 />
@@ -30,7 +30,7 @@ const UserPreferences = ({ isOwner, values, onChange }: any) => {
 
     return (
         <>
-            <HorizontalLabelledField
+            <FormField
                 label="Language"
                 htmlFor="language"
                 control={
@@ -43,7 +43,7 @@ const UserPreferences = ({ isOwner, values, onChange }: any) => {
                     </NativeSelect>
                 }
             />
-            <HorizontalLabelledField
+            <FormField
                 label="Theme"
                 htmlFor="theme"
                 control={
@@ -56,7 +56,7 @@ const UserPreferences = ({ isOwner, values, onChange }: any) => {
                     </NativeSelect>
                 }
             />
-            <HorizontalLabelledField
+            <FormField
                 label="Timezone"
                 htmlFor="timezone"
                 control={

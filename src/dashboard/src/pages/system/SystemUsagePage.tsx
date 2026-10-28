@@ -1,5 +1,6 @@
 import { type AiUsageBreakdownRow, useSystemUsageQuery } from "api/system";
 import { SystemUrls } from "AppUrls";
+import FormField from "components/forms/FormField";
 import NativeTabs from "components/forms/NativeTabs";
 import ClientCacheTable from "components/system/ClientCacheTable";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -107,24 +108,25 @@ const SystemUsagePage = () => {
       <div className="content">
         {0 === tabIndex && (
           <>
-            <div className="field">
-              <label className="label" htmlFor="usage-range">
-                {t("Time range")}
-              </label>
-              <div className="select">
-                <select
-                  id="usage-range"
-                  value={rangeDays}
-                  onChange={(ev) => setRangeDays(Number(ev.target.value))}
-                >
-                  {RANGE_OPTIONS.map((days) => (
-                    <option key={days} value={days}>
-                      {t("Last {{days}} days", { days })}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            <FormField
+              htmlFor="usage-range"
+              label={t("Time range")}
+              control={
+                <div className="select">
+                  <select
+                    id="usage-range"
+                    value={rangeDays}
+                    onChange={(ev) => setRangeDays(Number(ev.target.value))}
+                  >
+                    {RANGE_OPTIONS.map((days) => (
+                      <option key={days} value={days}>
+                        {t("Last {{days}} days", { days })}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              }
+            />
 
             {ai.totals.calls === 0 ? (
               <p>{t("No AI calls were recorded in this period.")}</p>

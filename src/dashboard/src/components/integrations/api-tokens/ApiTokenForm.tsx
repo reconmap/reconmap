@@ -1,5 +1,6 @@
 import { ApiTokenScope } from "api/user-api-tokens";
 import { useUserApiTokenCreateMutation } from "api/user-api-tokens-hooks";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import { useState } from "react";
@@ -25,33 +26,44 @@ const ApiTokenForm = ({ onSuccess, onCancel }: any) => {
 
     return (
         <form onSubmit={onSubmit}>
-            <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>{t("Token name")}</label>
-                <NativeInput
-                    type="text"
-                    value={name}
-                    onChange={(ev) => setName(ev.target.value)}
-                    placeholder={t("My development token")}
-                    required
-                />
-            </div>
-            <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>{t("Expiration (days)")}</label>
-                <NativeInput
-                    type="number"
-                    value={expirationDays}
-                    onChange={(ev) => setExpirationDays(parseInt(ev.target.value))}
-                    min="1"
-                    required
-                />
-            </div>
-            <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '5px' }}>{t("Scope")}</label>
-                <NativeSelect value={scope} onChange={(ev) => setScope(ev.target.value)}>
-                    <option value={ApiTokenScope.Full}>{t("Full scope")}</option>
-                    <option value={ApiTokenScope.ReadOnly}>{t("Read-only")}</option>
-                </NativeSelect>
-            </div>
+            <FormField
+                htmlFor="apiTokenName"
+                label={t("Token name")}
+                control={
+                    <NativeInput
+                        id="apiTokenName"
+                        type="text"
+                        value={name}
+                        onChange={(ev) => setName(ev.target.value)}
+                        placeholder={t("My development token")}
+                        required
+                    />
+                }
+            />
+            <FormField
+                htmlFor="apiTokenExpirationDays"
+                label={t("Expiration (days)")}
+                control={
+                    <NativeInput
+                        id="apiTokenExpirationDays"
+                        type="number"
+                        value={expirationDays}
+                        onChange={(ev) => setExpirationDays(parseInt(ev.target.value))}
+                        min="1"
+                        required
+                    />
+                }
+            />
+            <FormField
+                htmlFor="apiTokenScope"
+                label={t("Scope")}
+                control={
+                    <NativeSelect id="apiTokenScope" value={scope} onChange={(ev) => setScope(ev.target.value)}>
+                        <option value={ApiTokenScope.Full}>{t("Full scope")}</option>
+                        <option value={ApiTokenScope.ReadOnly}>{t("Read-only")}</option>
+                    </NativeSelect>
+                }
+            />
             <div style={{ display: 'flex', gap: '10px' }}>
                 <PrimaryButton type="submit" disabled={createMutation.isPending}>{t("Save")}</PrimaryButton>
                 <SecondaryButton type="button" onClick={onCancel}>{t("Cancel")}</SecondaryButton>

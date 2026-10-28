@@ -1,6 +1,7 @@
 import { useProjectQuery } from "api/projects";
 import { useReportsQuery } from "api/reports";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import NativeTextArea from "components/forms/NativeTextArea";
@@ -70,9 +71,9 @@ const ReportSendPage = () => {
                     {project && <Link to={`/projects/${project.id}/report`}>Report</Link>}
                 </Breadcrumb>
             </div>
-            <form onSubmit={handleSend}>
+            <Form layout="horizontal" onSubmit={handleSend}>
                 <PageTitleHeader title={t("Send report")} />
-                <HorizontalLabelledField
+                <FormField
                     label="Revision"
                     htmlFor="reportId"
                     control={
@@ -84,7 +85,7 @@ const ReportSendPage = () => {
                         </NativeSelect>
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label="Recipients group"
                     htmlFor="recipientsGroup"
                     control={
@@ -99,7 +100,7 @@ const ReportSendPage = () => {
                 />
                 {recipientsGroup === "specific_emails" && (
                     <>
-                        <HorizontalLabelledField
+                        <FormField
                             label={
                                 <>
                                     Recipients
@@ -123,7 +124,7 @@ const ReportSendPage = () => {
                     </>
                 )}
 
-                <HorizontalLabelledField
+                <FormField
                     label="Email subject"
                     htmlFor="emailSubject"
                     control={
@@ -137,14 +138,14 @@ const ReportSendPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Email body"
                     htmlFor="emailBody"
                     control={<NativeTextArea id="emailBody" name="body" defaultValue={deliverySettings.body} />}
                 />
 
                 <PrimaryButton type="submit">Send</PrimaryButton>
-            </form>
+            </Form>
         </div>
     );
 };

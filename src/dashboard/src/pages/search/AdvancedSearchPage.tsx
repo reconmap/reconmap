@@ -1,4 +1,5 @@
 import { useRecentSearchesQuery } from "api/system";
+import FormField from "components/forms/FormField";
 import NativeButton from "components/forms/NativeButton";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
@@ -78,21 +79,22 @@ const AdvancedSearchPage = () => {
 
             <div className={styles.layout}>
                 <form className="box" onSubmit={onFormSubmit}>
-                    <div className="field">
-                        <label className="label" htmlFor="keywords">
-                            {t("Keywords")}
-                        </label>
-                        <NativeInput
-                            id="keywords"
-                            type="search"
-                            name="keywords"
-                            value={keywords}
-                            onChange={onKeywordsChange}
-                            placeholder={t("Keywords...")}
-                            autoFocus
-                            required
-                        />
-                    </div>
+                    <FormField
+                        htmlFor="keywords"
+                        label={t("Keywords")}
+                        control={
+                            <NativeInput
+                                id="keywords"
+                                type="search"
+                                name="keywords"
+                                value={keywords}
+                                onChange={onKeywordsChange}
+                                placeholder={t("Keywords...")}
+                                autoFocus
+                                required
+                            />
+                        }
+                    />
 
                     <fieldset className={styles.entities}>
                         <legend className="label">{t("Search in")}</legend>

@@ -1,3 +1,4 @@
+import FormField from "components/forms/FormField";
 
 const AV_OPTIONS = [
     { value: "N", label: "Network (AV:N)" },
@@ -96,98 +97,131 @@ const CvssCalculator = ({ vulnerability, vulnerabilitySetter: setVulnerability }
     return (
         <div style={{ padding: "10px 0" }}>
             <h5 className="title is-6 mb-3">CVSS v4.0 Metric Selector</h5>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-av">Attack Vector (AV)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-av" value={av}onChange={val => { updateCvss(val.target.value, ac, at, pr, ui, vc, vi, va, sc, si, sa); }}>
-                        {AV_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-ac">Attack Complexity (AC)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-ac" value={ac}onChange={val => { updateCvss(av, val.target.value, at, pr, ui, vc, vi, va, sc, si, sa); }}>
-                        {AC_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-at">Attack Requirements (AT)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-at" value={at}onChange={val => { updateCvss(av, ac, val.target.value, pr, ui, vc, vi, va, sc, si, sa); }}>
-                        {AT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-pr">Privileges Required (PR)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-pr" value={pr}onChange={val => { updateCvss(av, ac, at, val.target.value, ui, vc, vi, va, sc, si, sa); }}>
-                        {PR_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-ui">User Interaction (UI)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-ui" value={ui}onChange={val => { updateCvss(av, ac, at, pr, val.target.value, vc, vi, va, sc, si, sa); }}>
-                        {UI_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
+            <FormField
+                htmlFor="cvss4-av"
+                label="Attack Vector (AV)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-av" value={av}onChange={val => { updateCvss(val.target.value, ac, at, pr, ui, vc, vi, va, sc, si, sa); }}>
+                            {AV_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-ac"
+                label="Attack Complexity (AC)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-ac" value={ac}onChange={val => { updateCvss(av, val.target.value, at, pr, ui, vc, vi, va, sc, si, sa); }}>
+                            {AC_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-at"
+                label="Attack Requirements (AT)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-at" value={at}onChange={val => { updateCvss(av, ac, val.target.value, pr, ui, vc, vi, va, sc, si, sa); }}>
+                            {AT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-pr"
+                label="Privileges Required (PR)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-pr" value={pr}onChange={val => { updateCvss(av, ac, at, val.target.value, ui, vc, vi, va, sc, si, sa); }}>
+                            {PR_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-ui"
+                label="User Interaction (UI)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-ui" value={ui}onChange={val => { updateCvss(av, ac, at, pr, val.target.value, vc, vi, va, sc, si, sa); }}>
+                            {UI_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
             <hr style={{ margin: "12px 0", borderTop: "1px solid rgba(255,255,255,0.1)" }} />
             <h6 className="title is-6 mb-2">Vulnerable System Impact</h6>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-vc">Confidentiality (VC)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-vc" value={vc}onChange={val => { updateCvss(av, ac, at, pr, ui, val.target.value, vi, va, sc, si, sa); }}>
-                        {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-vi">Integrity (VI)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-vi" value={vi}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, val.target.value, va, sc, si, sa); }}>
-                        {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-va">Availability (VA)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-va" value={va}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, val.target.value, sc, si, sa); }}>
-                        {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
+            <FormField
+                htmlFor="cvss4-vc"
+                label="Confidentiality (VC)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-vc" value={vc}onChange={val => { updateCvss(av, ac, at, pr, ui, val.target.value, vi, va, sc, si, sa); }}>
+                            {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-vi"
+                label="Integrity (VI)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-vi" value={vi}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, val.target.value, va, sc, si, sa); }}>
+                            {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-va"
+                label="Availability (VA)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-va" value={va}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, val.target.value, sc, si, sa); }}>
+                            {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
             <hr style={{ margin: "12px 0", borderTop: "1px solid rgba(255,255,255,0.1)" }} />
             <h6 className="title is-6 mb-2">Subsequent System Impact</h6>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-sc">Confidentiality (SC)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-sc" value={sc}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, val.target.value, si, sa); }}>
-                        {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-si">Integrity (SI)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-si" value={si}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, val.target.value, sa); }}>
-                        {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
-            <div className="field">
-                <label className="label" htmlFor="cvss4-sa">Availability (SA)</label>
-                <div className="select is-fullwidth">
-                    <select id="cvss4-sa" value={sa}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, si, val.target.value); }}>
-                        {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                    </select>
-                </div>
-            </div>
+            <FormField
+                htmlFor="cvss4-sc"
+                label="Confidentiality (SC)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-sc" value={sc}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, val.target.value, si, sa); }}>
+                            {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-si"
+                label="Integrity (SI)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-si" value={si}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, val.target.value, sa); }}>
+                            {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
+            <FormField
+                htmlFor="cvss4-sa"
+                label="Availability (SA)"
+                control={
+                    <div className="select is-fullwidth">
+                        <select id="cvss4-sa" value={sa}onChange={val => { updateCvss(av, ac, at, pr, ui, vc, vi, va, sc, si, val.target.value); }}>
+                            {CIA_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                    </div>
+                }
+            />
         </div>
     );
 };

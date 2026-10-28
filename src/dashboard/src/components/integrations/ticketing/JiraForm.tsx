@@ -1,5 +1,5 @@
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
-import LabelledField from "components/forms/LabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import { useTranslation } from "react-i18next";
@@ -16,11 +16,11 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
     };
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
             <fieldset>
                 <legend>{t("Jira integration information")}</legend>
 
-                <HorizontalLabelledField
+                <FormField
                     label={t("Name")}
                     htmlFor="name"
                     control={
@@ -35,7 +35,7 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Jira URL")}
                     htmlFor="url"
                     control={
@@ -50,7 +50,7 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Email")}
                     htmlFor="email"
                     control={
@@ -65,7 +65,7 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("API Token")}
                     htmlFor="apiToken"
                     control={
@@ -79,7 +79,7 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Project Key")}
                     htmlFor="projectKey"
                     control={
@@ -94,7 +94,7 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Enabled?")}
                     control={
                         <NativeCheckbox name="isEnabled" checked={integration.isEnabled} onChange={onFormChange}>
@@ -104,7 +104,7 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                 />
             </fieldset>
 
-            <LabelledField
+            <FormField
                 label=""
                 control={
                     <div className="control">
@@ -112,7 +112,7 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                     </div>
                 }
             />
-        </form>
+        </Form>
     );
 };
 

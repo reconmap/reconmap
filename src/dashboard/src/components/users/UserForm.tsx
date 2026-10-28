@@ -1,5 +1,5 @@
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
-import LabelledField from "components/forms/LabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
@@ -24,11 +24,11 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
     };
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
             <fieldset>
                 <legend>Basic information</legend>
 
-                <HorizontalLabelledField
+                <FormField
                     label="First name"
                     htmlFor="firstName"
                     control={
@@ -44,7 +44,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label="Last name"
                     htmlFor="lastName"
                     control={
@@ -59,7 +59,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label="Short bio"
                     htmlFor="shortBio"
                     control={
@@ -73,7 +73,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Username"
                     htmlFor="username"
                     control={
@@ -90,7 +90,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label="Email"
                     htmlFor="email"
                     control={
@@ -105,7 +105,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Role"
                     htmlFor="role"
                     control={
@@ -118,7 +118,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                         </NativeSelect>
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label="Properties"
                     control={
                         <div>
@@ -140,7 +140,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                 </fieldset>
             )}
 
-            <LabelledField
+            <FormField
                 label=""
                 control={
                     <div className="control">
@@ -148,7 +148,7 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                     </div>
                 }
             />
-        </form>
+        </Form>
     );
 };
 

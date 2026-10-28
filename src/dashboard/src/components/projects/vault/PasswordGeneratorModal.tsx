@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { defaultPasswordConfiguration, generatePassword } from "services/passwords";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
@@ -99,7 +99,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
             </div>
 
             <div className="content" style={{ color: "#d1d5db" }}>
-                <HorizontalLabelledField
+                <FormField layout="vertical"
                     label={t("Password length")}
                     control={
                         <NativeInput
@@ -112,7 +112,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField layout="vertical"
                     label={t("Include uppercase")}
                     htmlFor="includeUppercase"
                     control={
@@ -124,7 +124,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField layout="vertical"
                     label={t("Include lowercase")}
                     htmlFor="includeLowercase"
                     control={
@@ -136,7 +136,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField layout="vertical"
                     label={t("Include numbers")}
                     htmlFor="includeNumbers"
                     control={
@@ -149,7 +149,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     }
                 />
                 {passwordConfig.includeNumbers && (
-                    <HorizontalLabelledField
+                    <FormField layout="vertical"
                         label={t("Minimum numbers")}
                         htmlFor="minimumNumbers"
                         control={
@@ -165,7 +165,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     />
                 )}
 
-                <HorizontalLabelledField
+                <FormField layout="vertical"
                     label={t("Include symbols")}
                     htmlFor="includeSymbols"
                     control={
@@ -178,7 +178,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     }
                 />
                 {passwordConfig.includeSymbols && (
-                    <HorizontalLabelledField
+                    <FormField layout="vertical"
                         label={t("Minimum special")}
                         htmlFor="minimumSpecial"
                         control={
@@ -194,7 +194,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     />
                 )}
 
-                <HorizontalLabelledField
+                <FormField layout="vertical"
                     label={t("Avoid ambiguous")}
                     htmlFor="avoidAmbiguous"
                     control={

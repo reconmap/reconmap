@@ -1,5 +1,5 @@
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
-import LabelledField from "components/forms/LabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import { useTranslation } from "react-i18next";
@@ -16,11 +16,11 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
     };
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
             <fieldset>
                 <legend>{t("Webhook information")}</legend>
 
-                <HorizontalLabelledField
+                <FormField
                     label={t("Name")}
                     htmlFor="name"
                     control={
@@ -35,7 +35,7 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("URL")}
                     htmlFor="url"
                     control={
@@ -50,7 +50,7 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Secret")}
                     htmlFor="secret"
                     control={
@@ -64,7 +64,7 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Events")}
                     htmlFor="events"
                     control={
@@ -79,7 +79,7 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Enabled?")}
                     control={
                         <NativeCheckbox name="isEnabled" checked={webhook.isEnabled} onChange={onFormChange}>
@@ -89,7 +89,7 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
                 />
             </fieldset>
 
-            <LabelledField
+            <FormField
                 label=""
                 control={
                     <div className="control">
@@ -97,7 +97,7 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
                     </div>
                 }
             />
-        </form>
+        </Form>
     );
 };
 

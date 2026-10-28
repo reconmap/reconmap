@@ -1,6 +1,6 @@
 import { requestCommandOutputPost } from "api/commands";
 import { useProjectsQuery } from "api/projects";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import FormField from "components/forms/FormField";
 import NativeSelect from "components/forms/NativeSelect";
 import Skeleton from "components/ui/Skeleton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -43,7 +43,7 @@ const ScansPage = ({ mode }: any) => {
 
             {mode === "import" && (
                 <div className="content">
-                    <HorizontalLabelledField
+                    <FormField layout="horizontal"
                         label={t("Project")}
                         control={
                             <NativeSelect onChange={onProjectChange} value={selectedProjectId || ""} disabled={isProjectsLoading}>

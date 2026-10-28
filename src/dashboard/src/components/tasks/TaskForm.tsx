@@ -1,5 +1,6 @@
 import { useProjectsQuery } from "api/projects";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
@@ -25,8 +26,8 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
     }, [task, isLoadingProjects, projects, setTask]);
 
     return (
-        <form onSubmit={onFormSubmit}>
-            <HorizontalLabelledField
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
+            <FormField
                 label="Project"
                 htmlFor="projectId"
                 control={
@@ -61,7 +62,7 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
                 }
             />
 
-            <HorizontalLabelledField
+            <FormField
                 label="Summary"
                 htmlFor="summary"
                 control={
@@ -77,7 +78,7 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
                 }
             />
 
-            <HorizontalLabelledField
+            <FormField
                 label="Description"
                 htmlFor="description"
                 control={
@@ -91,7 +92,7 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
                 }
             />
 
-            <HorizontalLabelledField
+            <FormField
                 label="Priority"
                 htmlFor="priority"
                 control={
@@ -110,7 +111,7 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
                 }
             />
 
-            <HorizontalLabelledField
+            <FormField
                 label="Status"
                 htmlFor="status"
                 control={
@@ -124,7 +125,7 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
                 }
             />
 
-            <HorizontalLabelledField
+            <FormField
                 label="Duration estimate"
                 htmlFor="durationEstimate"
                 control={
@@ -141,7 +142,7 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
             />
 
             {!forTemplate && (
-                <HorizontalLabelledField
+                <FormField
                     label="Due date"
                     htmlFor="dueDate"
                     control={
@@ -157,7 +158,7 @@ const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask
             )}
 
             <PrimaryButton type="submit">Save</PrimaryButton>
-        </form>
+        </Form>
     );
 };
 

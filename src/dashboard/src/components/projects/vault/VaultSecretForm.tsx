@@ -1,5 +1,6 @@
 import { useInvalidateVaultQueries } from "api/vault";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
@@ -38,11 +39,11 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
     };
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
             <details>
                 <summary>New vault secret</summary>
 
-                <HorizontalLabelledField
+                <FormField
                     label="Type"
                     htmlFor="type"
                     control={
@@ -61,7 +62,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Name"
                     htmlFor="name"
                     control={
@@ -76,7 +77,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Value"
                     htmlFor="value"
                     control={
@@ -104,7 +105,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="URL"
                     htmlFor="url"
                     control={
@@ -118,7 +119,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Expiration date"
                     htmlFor="expirationDate"
                     control={
@@ -131,7 +132,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Note"
                     htmlFor="note"
                     control={
@@ -144,7 +145,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Protection password"
                     htmlFor="password"
                     control={
@@ -169,7 +170,7 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
                     }}
                 />
             )}
-        </form>
+        </Form>
     );
 };
 

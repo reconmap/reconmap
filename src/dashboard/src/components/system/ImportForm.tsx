@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import { useEffect, useRef, useState } from "react";
 import { ignoreAbortError } from "utilities/abort";
@@ -64,14 +65,19 @@ const ImportForm = () => {
                     </ul>
                 </div>
                 <div id="importFile">
-                    <label htmlFor="importFileInput">Import file</label>
-                    <NativeInput
-                        id="importFileInput"
-                        ref={importFileRef}
-                        type="file"
-                        onChange={onImportFileChange}
-                        accept=".json,.js,application/json,text/json"
-                        required
+                    <FormField
+                        htmlFor="importFileInput"
+                        label="Import file"
+                        control={
+                            <NativeInput
+                                id="importFileInput"
+                                ref={importFileRef}
+                                type="file"
+                                onChange={onImportFileChange}
+                                accept=".json,.js,application/json,text/json"
+                                required
+                            />
+                        }
                     />
                 </div>
 

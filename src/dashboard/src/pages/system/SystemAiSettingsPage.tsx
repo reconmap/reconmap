@@ -1,5 +1,6 @@
 import { useSystemAiSettingsQuery, useSystemAiSettingsUpdateMutation } from "api/system";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -123,8 +124,8 @@ const SystemAiSettingsPage = () => {
 
             <PageTitleHeader title={t("AI settings")} />
 
-            <form onSubmit={handleSubmit}>
-                <HorizontalLabelledField
+            <Form layout="horizontal" onSubmit={handleSubmit}>
+                <FormField
                     label="Provider"
                     control={
                         <NativeSelect
@@ -143,7 +144,7 @@ const SystemAiSettingsPage = () => {
                     }
                 />
 
-                <HorizontalLabelledField
+                <FormField
                     label="Max output tokens"
                     control={
                         <NativeInput
@@ -165,7 +166,7 @@ const SystemAiSettingsPage = () => {
                     const isCleared = clearedSecrets[field.key] ?? false;
                     return (
                         <div key={field.key}>
-                            <HorizontalLabelledField
+                            <FormField
                                 label={field.label}
                                 control={
                                     <NativeInput
@@ -185,7 +186,7 @@ const SystemAiSettingsPage = () => {
                             />
 
                             {isSecret && field.hasValue && (
-                                <HorizontalLabelledField
+                                <FormField
                                     label=""
                                     control={
                                         <label className="checkbox">
@@ -204,8 +205,8 @@ const SystemAiSettingsPage = () => {
                 })}
 
                 <hr />
-                <HorizontalLabelledField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
-            </form>
+                <FormField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
+            </Form>
         </div>
     );
 };

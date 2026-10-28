@@ -1,5 +1,5 @@
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
-import LabelledField from "components/forms/LabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import { useTranslation } from "react-i18next";
@@ -16,11 +16,11 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
     };
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
             <fieldset>
                 <legend>{t("Azure DevOps integration information")}</legend>
 
-                <HorizontalLabelledField
+                <FormField
                     label={t("Name")}
                     htmlFor="name"
                     control={
@@ -35,7 +35,7 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Organization URL")}
                     htmlFor="url"
                     control={
@@ -50,7 +50,7 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Project name")}
                     htmlFor="projectName"
                     control={
@@ -65,7 +65,7 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Personal Access Token")}
                     htmlFor="personalAccessToken"
                     control={
@@ -79,7 +79,7 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
                         />
                     }
                 />
-                <HorizontalLabelledField
+                <FormField
                     label={t("Enabled?")}
                     control={
                         <NativeCheckbox name="isEnabled" checked={integration.isEnabled} onChange={onFormChange}>
@@ -89,7 +89,7 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
                 />
             </fieldset>
 
-            <LabelledField
+            <FormField
                 label=""
                 control={
                     <div className="control">
@@ -97,7 +97,7 @@ const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFor
                     </div>
                 }
             />
-        </form>
+        </Form>
     );
 };
 

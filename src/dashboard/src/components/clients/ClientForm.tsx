@@ -1,5 +1,6 @@
 import { requestAttachment } from "api/requests/attachments";
-import LabelledField from "components/forms/LabelledField";
+import Form from "components/forms/Form";
+import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import RestrictedComponent from "components/logic/RestrictedComponent";
@@ -56,10 +57,10 @@ const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
     }, [client]);
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <Form layout="horizontal" onSubmit={onFormSubmit}>
             <fieldset>
                 <legend>Basic information</legend>
-                <LabelledField
+                <FormField
                     label={t("Type")}
                     control={
                         <NativeSelect name="kind" value={client.kind} onChange={onFormChange}>
@@ -72,7 +73,7 @@ const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
                     }
                 />
 
-                <LabelledField
+                <FormField
                     label={t("Name")}
                     control={
                         <NativeInput
@@ -86,57 +87,66 @@ const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
                     }
                 />
 
-                <LabelledField
+                <FormField
                     label={t("Address")}
                     control={
                         <NativeInput type="text" name="address" value={client.address || ""} onChange={onFormChange} />
                     }
                 />
 
-                <label htmlFor="clientUrl">
-                    URL
-                    <NativeInput
-                        id="clientUrl"
-                        type="text"
-                        name="url"
-                        value={client.url || ""}
-                        onChange={onFormChange}
-                    />
-                </label>
+                <FormField
+                    htmlFor="clientUrl"
+                    label="URL"
+                    control={
+                        <NativeInput
+                            id="clientUrl"
+                            type="text"
+                            name="url"
+                            value={client.url || ""}
+                            onChange={onFormChange}
+                        />
+                    }
+                />
             </fieldset>
 
             <fieldset>
                 <legend>Branding</legend>
 
-                <label>
-                    Default logo
-                    <div>
-                        {logo && <img src={logo} alt="The main logo of client" />}
-                        <RestrictedComponent
-                            roles={["administrator", "superuser", "user"]}
-                            message="(access restricted)"
-                        >
-                            <input type="file" name="logo" accept="image/*" />
-                        </RestrictedComponent>
-                    </div>
-                </label>
+                <FormField
+                    htmlFor="clientLogo"
+                    label="Default logo"
+                    control={
+                        <div>
+                            {logo && <img src={logo} alt="The main logo of client" />}
+                            <RestrictedComponent
+                                roles={["administrator", "superuser", "user"]}
+                                message="(access restricted)"
+                            >
+                                <input id="clientLogo" type="file" name="logo" accept="image/*" />
+                            </RestrictedComponent>
+                        </div>
+                    }
+                />
 
-                <label>
-                    Small Logo
-                    <div>
-                        {smallLogo && <img src={smallLogo} alt="The smaller version of the logo" />}
-                        <RestrictedComponent
-                            roles={["administrator", "superuser", "user"]}
-                            message="(access restricted)"
-                        >
-                            <input type="file" name="smallLogo" accept="image/*" />
-                        </RestrictedComponent>
-                    </div>
-                </label>
+                <FormField
+                    htmlFor="clientSmallLogo"
+                    label="Small Logo"
+                    control={
+                        <div>
+                            {smallLogo && <img src={smallLogo} alt="The smaller version of the logo" />}
+                            <RestrictedComponent
+                                roles={["administrator", "superuser", "user"]}
+                                message="(access restricted)"
+                            >
+                                <input id="clientSmallLogo" type="file" name="smallLogo" accept="image/*" />
+                            </RestrictedComponent>
+                        </div>
+                    }
+                />
 
                 <PrimaryButton type="submit">Save</PrimaryButton>
             </fieldset>
-        </form>
+        </Form>
     );
 };
 
