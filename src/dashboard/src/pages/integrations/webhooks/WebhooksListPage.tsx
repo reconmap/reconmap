@@ -7,12 +7,14 @@ import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
+import { useConfirm } from "components/ui/useConfirm";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 const WebhooksListPage = () => {
     const [t] = useTranslation();
     const navigate = useNavigate();
+    const { confirm, confirmDialog } = useConfirm();
     const { data: webhooks, isLoading } = useWebhooksQuery();
     const deleteWebhookMutation = useDeleteWebhookMutation();
 
@@ -20,8 +22,8 @@ const WebhooksListPage = () => {
         navigate("/integrations/webhooks/create");
     };
 
-    const onDeleteClick = (webhookId) => {
-        if (window.confirm(t("Are you sure you want to delete this webhook?"))) {
+    const onDeleteClick = async (webhookId) => {
+        if (await confirm(t("Are you sure you want to delete this webhook?"))) {
             deleteWebhookMutation.mutate(webhookId);
         }
     };
@@ -70,6 +72,7 @@ const WebhooksListPage = () => {
                 rowId={(webhook) => webhook.id}
                 emptyRowsMessage={t("No webhooks available.")}
             ></NativeTable>
+            {confirmDialog}
         </>
     );
 };

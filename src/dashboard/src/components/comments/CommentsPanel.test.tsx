@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { AuthContext } from "contexts/AuthContext";
 import { MemoryRouter } from "react-router";
 import CommentsPanel from "./CommentsPanel";
@@ -80,14 +80,14 @@ describe("CommentsPanel", () => {
         );
     });
 
-    it("lets the author delete their own comment", () => {
+    it("lets the author delete their own comment", async () => {
         mockComments = [comment({ createdById: 10 })];
-        vi.spyOn(window, "confirm").mockReturnValue(true);
         renderPanel({ id: 10, role: "user" });
 
         fireEvent.click(screen.getByRole("button", { name: "Delete comment" }));
+        fireEvent.click(await screen.findByRole("button", { name: "Delete" }));
 
-        expect(mockDelete).toHaveBeenCalledWith(1, expect.any(Object));
+        await waitFor(() => expect(mockDelete).toHaveBeenCalledWith(1, expect.any(Object)));
     });
 
     it("does not offer delete to other regular users", () => {
@@ -104,12 +104,12 @@ describe("CommentsPanel", () => {
         expect(screen.getByRole("button", { name: "Delete comment" })).toBeInTheDocument();
     });
 
-    it("does not delete when the confirmation is declined", () => {
+    it("does not delete when the confirmation is declined", async () => {
         mockComments = [comment({ createdById: 10 })];
-        vi.spyOn(window, "confirm").mockReturnValue(false);
         renderPanel({ id: 10, role: "user" });
 
         fireEvent.click(screen.getByRole("button", { name: "Delete comment" }));
+        fireEvent.click(await screen.findByRole("button", { name: "Cancel" }));
 
         expect(mockDelete).not.toHaveBeenCalled();
     });

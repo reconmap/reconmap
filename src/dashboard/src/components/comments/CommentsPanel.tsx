@@ -4,6 +4,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import Skeleton from "components/ui/Skeleton";
 import { toast } from "components/ui/toast";
+import { useConfirm } from "components/ui/useConfirm";
 import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -20,6 +21,7 @@ interface CommentsPanelProps {
 const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
     const { t } = useTranslation();
     const { user } = useContext(AuthContext);
+    const { confirm, confirmDialog } = useConfirm();
     const { data: comments, isLoading } = useCommentsQuery({ parentType, parentId });
     const createCommentMutation = useCreateCommentMutation();
     const deleteCommentMutation = useDeleteCommentMutation();
@@ -41,8 +43,8 @@ const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
         });
     };
 
-    const onDeleteClick = (comment: Comment) => {
-        if (!window.confirm(t("Are you sure you want to delete this comment?"))) {
+    const onDeleteClick = async (comment: Comment) => {
+        if (!(await confirm(t("Are you sure you want to delete this comment?")))) {
             return;
         }
 
@@ -87,6 +89,7 @@ const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
                     />
                 ))
             )}
+            {confirmDialog}
         </section>
     );
 };

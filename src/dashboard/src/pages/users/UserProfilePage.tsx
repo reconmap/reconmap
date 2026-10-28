@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { enableMfaApi, resetPassword } from "api/requests/users";
 import { useUserActivity, useUserDeleteMutation, useUserQuery } from "api/users";
 import AuditLogsTable from "components/auditlog/AuditLogsTable";
@@ -23,6 +24,7 @@ import { useTranslation } from "react-i18next";
 
 const UserProfilePage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const navigate = useNavigate();
 
     const { userId } = useParams() as any;
@@ -32,8 +34,10 @@ const UserProfilePage = () => {
 
     const [tabIndex, tabIndexSetter] = useState(0);
 
-    const onDeleteButtonClick = (ev) => {
+    const onDeleteButtonClick = async (ev) => {
         ev.preventDefault();
+
+        if (!(await confirm(t("Are you sure you want to delete this user?")))) return;
 
         userDeleteMutation.mutateAsync(userId).then(() => {
             navigate("/users");
@@ -131,6 +135,7 @@ const UserProfilePage = () => {
                     )}
                 </div>
             </div>
+            {confirmDialog}
         </>
     );
 };

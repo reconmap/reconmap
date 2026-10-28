@@ -3,6 +3,7 @@ import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
+import { useConfirm } from "components/ui/useConfirm";
 import { useTranslation } from "react-i18next";
 import ApiTokenForm from "../../../components/integrations/api-tokens/ApiTokenForm";
 import Breadcrumb from "../../../components/ui/Breadcrumb";
@@ -12,6 +13,7 @@ const ApiTokensPage = () => {
     const { data: tokens, isLoading } = useUserApiTokensQuery();
     const deleteMutation = useUserApiTokenDeleteMutation();
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const [showForm, setShowForm] = useState(false);
     const [newToken, setNewToken] = useState<any>(null);
 
@@ -35,8 +37,8 @@ const ApiTokensPage = () => {
         {
             header: t("Actions"),
             cell: (token) => (
-                <DeleteButton onClick={() => {
-                    if (window.confirm(t("Are you sure you want to delete this token?"))) {
+                <DeleteButton onClick={async () => {
+                    if (await confirm(t("Are you sure you want to delete this token?"))) {
                         deleteMutation.mutate(token.id);
                     }
                 }}>
@@ -86,6 +88,7 @@ const ApiTokensPage = () => {
                 rows={tokens}
                 isLoading={isLoading}
             ></NativeTable>
+            {confirmDialog}
         </div>
     );
 };

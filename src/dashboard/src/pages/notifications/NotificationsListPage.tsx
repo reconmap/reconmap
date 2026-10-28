@@ -15,10 +15,12 @@ import Tag from "components/ui/Tag";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import { toast } from "components/ui/toast";
+import { useConfirm } from "components/ui/useConfirm";
 import { useTranslation } from "react-i18next";
 
 const NotificationsListPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const { data: notifications, isLoading } = useNotificationsQuery({});
     const deleteNotificatioMutation = useDeleteNotificationMutation();
     const markNotificationMutation = useMarkNotificationMutation();
@@ -44,8 +46,8 @@ const NotificationsListPage = () => {
         });
     };
 
-    const deleteSelected = () => {
-        if (!confirm("Are you sure you want to delete the selected notifications?")) return;
+    const deleteSelected = async () => {
+        if (!(await confirm("Are you sure you want to delete the selected notifications?"))) return;
         bulkDeleteMutation.mutate({ ids: selectedIds }, {
             onSuccess: () => {
                 setSelectedIds([]);
@@ -112,7 +114,13 @@ const NotificationsListPage = () => {
                             Mark as read
                         </NativeButton>
                     )}
-                    <DeleteIconButton onClick={() => deleteNotificatioMutation.mutate(notification.id)} />
+                    <DeleteIconButton
+                        onClick={async () => {
+                            if (await confirm("Are you sure you want to delete this notification?")) {
+                                deleteNotificatioMutation.mutate(notification.id);
+                            }
+                        }}
+                    />
                 </NativeButtonGroup>
             ),
         },
@@ -153,6 +161,7 @@ const NotificationsListPage = () => {
                 rowId={(notification) => notification.id}
                 emptyRowsMessage="No notifications available."
             ></NativeTable>
+            {confirmDialog}
         </>
     );
 };

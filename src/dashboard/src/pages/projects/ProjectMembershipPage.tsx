@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useProjectQuery, useProjectUsersQuery } from "api/projects";
 import { requestProjectMemberPost, requestProjectUserDelete } from "api/requests/projects";
 import { useUsersQuery } from "api/users";
@@ -16,6 +17,7 @@ import { useTranslation } from "react-i18next";
 
 const ProjectMembershipPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const { projectId } = useParams() as any;
     const { data: users } = useUsersQuery();
     const { data: members, isLoading, refetch } = useProjectUsersQuery(projectId);
@@ -30,7 +32,8 @@ const ProjectMembershipPage = () => {
         });
     };
 
-    const onDeleteClick = (member) => {
+    const onDeleteClick = async (member) => {
+        if (!(await confirm(t("Are you sure you want to remove this member from the project?")))) return;
         requestProjectUserDelete(projectId, member.id).then(() => {
             refetch();
         });
@@ -97,6 +100,7 @@ const ProjectMembershipPage = () => {
             <NativeTable rows={isLoading ? null : members} rowId={member => member.id} columns={columns}>
 
             </NativeTable>
+            {confirmDialog}
         </div>
     );
 };

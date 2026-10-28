@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useSchedulesQuery } from "api/commands";
 import { requestCommandScheduleDelete } from "api/requests/commands";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
@@ -6,9 +7,11 @@ import { toast } from "components/ui/toast";
 import { toString as CronExpressionToString } from "cronstrue";
 
 const ScheduledRuns = () => {
+    const { confirm, confirmDialog } = useConfirm();
     const { data: scheduledCommands, refetch: fetchScheduledCommands } = useSchedulesQuery();
 
-    const deleteScheduledCommand = (ev, commandSchedule) => {
+    const deleteScheduledCommand = async (ev, commandSchedule) => {
+        if (!(await confirm("Are you sure you want to delete this scheduled command?"))) return;
         requestCommandScheduleDelete(commandSchedule.commandId, commandSchedule.id)
             .then(() => {
                 fetchScheduledCommands();
@@ -42,6 +45,7 @@ const ScheduledRuns = () => {
         <>
             <NativeTable rows={scheduledCommands} rowId={(scheduledCommand) => scheduledCommand.id} columns={columns} emptyRowsMessage="No scheduled commands available.">
             </NativeTable>
+            {confirmDialog}
         </>
     );
 };

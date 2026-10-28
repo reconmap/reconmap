@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useQueryClient } from "@tanstack/react-query";
 import { requestTasksDelete, requestTasksPatch } from "api/requests/tasks";
 import NativeSelect from "components/forms/NativeSelect";
@@ -19,6 +20,7 @@ import TaskTableModel from "components/tasks/TaskTableModel";
 
 const TasksListPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
 
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -71,7 +73,8 @@ const TasksListPage = () => {
             .catch((err) => console.error(err));
     };
 
-    const onDeleteButtonClick = () => {
+    const onDeleteButtonClick = async () => {
+        if (!(await confirm(t("Are you sure you want to delete the selected tasks?")))) return;
         requestTasksDelete({ ids: tableModel.selection })
             .then(() => {
                 reloadTasks();
@@ -118,6 +121,7 @@ const TasksListPage = () => {
             </div>
 
             <TasksTable tableModel={tableModel} tableModelSetter={setTableModel} reloadCallback={reloadTasks} />
+            {confirmDialog}
         </>
     );
 };

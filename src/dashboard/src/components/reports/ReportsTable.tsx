@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteReportMutation } from "api/reports";
 import { requestAttachment } from "api/requests/attachments";
@@ -10,11 +11,13 @@ import { useNavigate } from "react-router";
 
 const ReportsTable = ({ reports, updateReports, includeProjectColumn = false }: any) => {
     const navigate = useNavigate();
+    const { confirm, confirmDialog } = useConfirm();
 
     const deleteReportMutation = useDeleteReportMutation();
     const queryclient = useQueryClient();
 
-    const onDeleteClick = (reportId) => {
+    const onDeleteClick = async (reportId) => {
+        if (!(await confirm("Are you sure you want to delete this report?"))) return;
         deleteReportMutation.mutate(
             reportId,
             {
@@ -88,8 +91,11 @@ const ReportsTable = ({ reports, updateReports, includeProjectColumn = false }: 
     ];
 
     return (
-        <NativeTable rows={reports} rowId={(report) => report.id} columns={columns}>
-        </NativeTable>
+        <>
+            <NativeTable rows={reports} rowId={(report) => report.id} columns={columns}>
+            </NativeTable>
+            {confirmDialog}
+        </>
     );
 };
 

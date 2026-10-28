@@ -6,3 +6,13 @@ import "@testing-library/jest-dom/vitest";
 import configJson from "../public/config.json";
 
 window.env = configJson;
+
+// jsdom does not implement the <dialog> methods.
+HTMLDialogElement.prototype.showModal = function () {
+    this.setAttribute("open", "");
+};
+HTMLDialogElement.prototype.close = function () {
+    if (!this.hasAttribute("open")) return;
+    this.removeAttribute("open");
+    this.dispatchEvent(new Event("close"));
+};

@@ -11,6 +11,7 @@ import ReloadButton from "components/ui/buttons/ReloadButton";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
 import { toast } from "components/ui/toast";
+import { useConfirm } from "components/ui/useConfirm";
 import { useNavigate } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import CvssScore from "../badges/CvssScore";
@@ -28,6 +29,7 @@ const VulnerabilitiesTable = ({
     showProjectColumn = true,
 }: any) => {
     const navigate = useNavigate();
+    const { confirm, confirmDialog } = useConfirm();
     const onSortChange = (ev, column, order) => {
         ev.preventDefault();
 
@@ -81,7 +83,7 @@ const VulnerabilitiesTable = ({
     const vulnerabilitiesLength = null !== tableModel.vulnerabilities ? tableModel.vulnerabilities.length : 0;
 
     const deleteVulnerability = async (vulnerabilityId) => {
-        if (window.confirm("Do you really want to delete this vulnerability?")) {
+        if (await confirm("Do you really want to delete this vulnerability?")) {
             try {
                 await deleteVulnerabilityMutation.mutateAsync([vulnerabilityId] as any);
                 toast.success("The vulnerability has been deleted.");
@@ -95,6 +97,7 @@ const VulnerabilitiesTable = ({
     };
 
     return (
+        <>
         <table className="table is-fullwidth">
             <thead>
                 <tr>
@@ -207,6 +210,8 @@ const VulnerabilitiesTable = ({
                     })}
             </tbody>
         </table>
+        {confirmDialog}
+        </>
     );
 };
 

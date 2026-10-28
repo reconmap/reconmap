@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useDeleteOrganisationMutation, useOrganisationsQuery } from "api/clients";
 import ClientLink from "components/clients/ClientLink";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
@@ -14,6 +15,7 @@ import { ClientsUrls } from "AppUrls";
 
 const ClientsListPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
 
     const { data: organisations, isLoading, isError, error } = useOrganisationsQuery({});
     const deleteOrganisationMutation = useDeleteOrganisationMutation();
@@ -52,7 +54,13 @@ const ClientsListPage = () => {
                     <LinkButton href={ClientsUrls.Edit.replace(":organisationId", org.id)}>
                         {t("Edit")}
                     </LinkButton>
-                    <DeleteIconButton onClick={() => deleteOrganisationMutation.mutate(org.id)} />
+                    <DeleteIconButton
+                        onClick={async () => {
+                            if (await confirm(t("Are you sure you want to delete this client?"))) {
+                                deleteOrganisationMutation.mutate(org.id);
+                            }
+                        }}
+                    />
                 </>
             ),
         },
@@ -74,6 +82,7 @@ const ClientsListPage = () => {
             <PageTitleHeader title={t("Organisations")} />
 
             <NativeTable columns={columns} rows={isLoading ? null : organisations} rowId={(org) => org.id}></NativeTable>
+            {confirmDialog}
         </>
     );
 };

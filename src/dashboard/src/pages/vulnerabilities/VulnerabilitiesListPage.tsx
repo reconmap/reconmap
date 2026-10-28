@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { requestVulnerabilities } from "api/requests/vulnerabilities";
 import { ignoreAbortError } from "utilities/abort";
 import { useDeleteVulnerabilityMutation } from "api/vulnerabilities";
@@ -18,6 +19,7 @@ import { useTranslation } from "react-i18next";
 
 const VulnerabilitiesListPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const navigate = useNavigate();
     const [query] = useSearchParams();
     let pageNumber: any = query.get("page");
@@ -80,7 +82,8 @@ const VulnerabilitiesListPage = () => {
         fetchVulnerabilities();
     }, [fetchVulnerabilities]);
 
-    const onDeleteButtonClick = () => {
+    const onDeleteButtonClick = async () => {
+        if (!(await confirm(t("Are you sure you want to delete the selected vulnerabilities?")))) return;
         vulnerabilitiesDeleteMutation.mutate(tableModel.selection as any, {
             onSuccess: () => {
                 reloadVulnerabilities();
@@ -126,6 +129,7 @@ const VulnerabilitiesListPage = () => {
                 tableModelSetter={setTableModel}
                 reloadCallback={reloadVulnerabilities}
             />
+            {confirmDialog}
         </>
     );
 };

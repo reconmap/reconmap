@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteTaskMutation } from "api/tasks";
 import RestrictedComponent from "components/logic/RestrictedComponent";
@@ -15,6 +16,7 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
     const showSelection = tableModel.columnsVisibility.selection;
     const showProjectColumn = tableModel.columnsVisibility.project;
     const deleteTaskMutation = useDeleteTaskMutation();
+    const { confirm, confirmDialog } = useConfirm();
     const queryClient = useQueryClient();
 
     const onSelectionChange = (ev) => {
@@ -33,7 +35,8 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
         }
     };
 
-    const onDelete = (taskId) => {
+    const onDelete = async (taskId) => {
+        if (!(await confirm("Are you sure you want to delete this task?"))) return;
         deleteTaskMutation.mutate(taskId);
         queryClient.invalidateQueries({ queryKey: ["tasks"] });
     };
@@ -101,7 +104,12 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
         },
     ];
 
-    return <NativeTable columns={columns} rows={tableModel.tasks} rowId={(task) => task.id}></NativeTable>;
+    return (
+        <>
+            <NativeTable columns={columns} rows={tableModel.tasks} rowId={(task) => task.id}></NativeTable>
+            {confirmDialog}
+        </>
+    );
 };
 
 export default TasksTable;

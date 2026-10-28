@@ -8,6 +8,7 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import NativeTable from "components/ui/tables/NativeTable";
 import { useNavigate, Link } from "react-router";
 import { RunnersUrls } from "AppUrls";
+import { useConfirm } from "components/ui/useConfirm";
 import { useTranslation } from "react-i18next";
 
 const pingedRecently = (lastPingAt) => {
@@ -21,6 +22,7 @@ const pingedRecently = (lastPingAt) => {
 const RunnersListPage = () => {
     const [t] = useTranslation();
     const navigate = useNavigate();
+    const { confirm, confirmDialog } = useConfirm();
     const { data: runners, isLoading, isFetching, refetch } = useRunnersQuery();
 
     const columns = [
@@ -93,8 +95,8 @@ const RunnersListPage = () => {
             header: "",
             cell: (runner) => (
                 <>
-                    <button className="button is-danger is-small" onClick={() => {
-                        if (window.confirm("Are you sure you want to delete this runner?")) {
+                    <button className="button is-danger is-small" onClick={async () => {
+                        if (await confirm("Are you sure you want to delete this runner?")) {
                             requestRunnerDelete(runner.id).then((response) => {
                                 if (response.ok) {
                                     refetch();
@@ -121,6 +123,7 @@ const RunnersListPage = () => {
         <PageTitleHeader title={t("Runners")} />
 
         <NativeTable columns={columns} rows={isLoading ? null : runners} rowId={(runner) => runner.id}></NativeTable>
+        {confirmDialog}
     </>
 }
 

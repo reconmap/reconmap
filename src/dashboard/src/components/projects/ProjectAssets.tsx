@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useAssetsQuery, useDeleteAssetMutation } from "api/assets";
 import PaginationV2 from "components/layout/PaginationV2";
 import RestrictedComponent from "components/logic/RestrictedComponent";
@@ -22,9 +23,12 @@ const ProjectAssets = ({ project }: any) => {
         refetch,
     } = useAssetsQuery({ limit: 5, projectId: project.id, page: pageNumber });
     const deleteAssetMutation = useDeleteAssetMutation();
+    const { confirm, confirmDialog } = useConfirm();
 
-    const onDeleteButtonClick = (ev, assetId) => {
+    const onDeleteButtonClick = async (ev, assetId) => {
         ev.preventDefault();
+
+        if (!(await confirm("Are you sure you want to delete this asset?"))) return;
 
         deleteAssetMutation.mutate(assetId);
         refetch();
@@ -122,6 +126,7 @@ const ProjectAssets = ({ project }: any) => {
             )}
             <NativeTable rows={isLoading ? null : assets!.data} rowId={(asset) => asset.id} columns={columns}>
             </NativeTable>
+            {confirmDialog}
         </section>
     );
 };

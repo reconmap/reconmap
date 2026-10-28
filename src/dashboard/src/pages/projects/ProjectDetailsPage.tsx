@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { requestEntityPost } from "utilities/requests";
 import { useDeleteProjectMutation, useProjectQueriesInvalidation, useProjectQuery } from "api/projects";
 import { requestProjectPatch } from "api/requests/projects";
@@ -32,6 +33,7 @@ const ProjectDetailsPage = () => {
     const { data: project } = useProjectQuery(projectId);
     const projectQueriesInvalidation = useProjectQueriesInvalidation();
     const deleteProjectMutation = useDeleteProjectMutation();
+    const { confirm, confirmDialog } = useConfirm();
 
     const [tabIndex, tabIndexSetter] = useState(0);
 
@@ -43,7 +45,8 @@ const ProjectDetailsPage = () => {
             });
     };
 
-    const onDeleteClick = (id) => {
+    const onDeleteClick = async (id) => {
+        if (!(await confirm("Are you sure you want to delete this project?"))) return;
         deleteProjectMutation.mutate(id, {
             onSuccess: () => {
                 projectQueriesInvalidation();
@@ -172,6 +175,7 @@ const ProjectDetailsPage = () => {
                     </div>
                 </>
             )}
+            {confirmDialog}
         </>
     );
 };

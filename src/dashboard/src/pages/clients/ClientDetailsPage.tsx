@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import {
     useDeleteOrganisationMutation,
     useOrganisationContactsQuery,
@@ -72,6 +73,7 @@ const ClientDetailsPage = () => {
     const { data: client, isLoading: isClientLoading } = useOrganisationQuery(clientId);
     const { data: contacts } = useOrganisationContactsQuery(clientId);
     const deleteOrganisationMutation = useDeleteOrganisationMutation();
+    const { confirm, confirmDialog } = useConfirm();
     const invalidateOrganisations = useOrganisationsQueriesInvalidation();
 
     const [contact, setContact] = useState({ ...Contact });
@@ -86,6 +88,7 @@ const ClientDetailsPage = () => {
     const [smallLogo, setSmallLogo] = useState<any>(null);
 
     const handleDelete = async () => {
+        if (!(await confirm(t("Are you sure you want to delete this client?")))) return;
         const confirmed = await deleteOrganisationMutation.mutateAsync(clientId);
         if (confirmed) navigate(ClientsUrls.List);
     };
@@ -104,7 +107,8 @@ const ClientDetailsPage = () => {
         });
     };
 
-    const onContactDelete = (contactId) => {
+    const onContactDelete = async (contactId) => {
+        if (!(await confirm(t("Are you sure you want to delete this contact?")))) return;
         requestContactDelete(clientId, contactId)
             .then((resp) => {
                 if (resp.ok) {
@@ -338,6 +342,7 @@ const ClientDetailsPage = () => {
                     </div>
                 </div>
             </article>
+            {confirmDialog}
         </div>
     );
 };

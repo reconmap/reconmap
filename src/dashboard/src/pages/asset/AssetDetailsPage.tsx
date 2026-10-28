@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useAssetQuery, useDeleteAssetMutation } from "api/assets";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import TimestampsSection from "components/ui/TimestampsSection";
@@ -16,6 +17,7 @@ import { useTranslation } from "react-i18next";
 
 const AssetDetailsPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const navigate = useNavigate();
     const { assetId } = useParams() as any;
     const { data: asset } = useAssetQuery(assetId);
@@ -59,7 +61,8 @@ const AssetDetailsPage = () => {
         }
     }, [asset]);
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
+        if (!(await confirm(t("Are you sure you want to delete this asset?")))) return;
         deleteAssetMutation
             .mutateAsync(assetId)
             .then((success) => {
@@ -113,6 +116,7 @@ const AssetDetailsPage = () => {
                     />
                 </div>
             </article>
+            {confirmDialog}
         </div>
     );
 };

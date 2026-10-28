@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { UserManualUrl } from "ServerUrls";
 import { useDeleteReportMutation, useReportsTemplatesQuery } from "api/reports";
 import { requestAttachment } from "api/requests/attachments";
@@ -18,11 +19,14 @@ import { useTranslation } from "react-i18next";
 
 const ReportTemplatesListPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const { data: templates, isLoading, refetch: refetchTemplates } = useReportsTemplatesQuery(undefined as any);
     const deleteReportMutation = useDeleteReportMutation();
 
-    const deleteTemplate = (ev, templateId) => {
+    const deleteTemplate = async (ev, templateId) => {
         ev.stopPropagation();
+
+        if (!(await confirm(t("Are you sure you want to delete this report template?")))) return;
 
         deleteReportMutation.mutate(templateId);
     };
@@ -131,6 +135,7 @@ const ReportTemplatesListPage = () => {
                     </tbody>
                 </table>
             )}
+            {confirmDialog}
         </>
     );
 };

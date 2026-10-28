@@ -9,12 +9,14 @@ import LinkButton from "components/ui/buttons/LinkButton";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
 import PageTitleHeader from "components/ui/PageTitleHeader";
+import { useConfirm } from "components/ui/useConfirm";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 const IntegrationsListPage = () => {
     const [t] = useTranslation();
     const navigate = useNavigate();
+    const { confirm, confirmDialog } = useConfirm();
 
     const { data: jiraIntegrations, isLoading: isJiraLoading } = useJiraIntegrationsQuery();
     const deleteJiraMutation = useDeleteJiraIntegrationMutation();
@@ -22,14 +24,14 @@ const IntegrationsListPage = () => {
     const { data: azureDevopsIntegrations, isLoading: isAzureDevopsLoading } = useAzureDevopsIntegrationsQuery();
     const deleteAzureDevopsMutation = useDeleteAzureDevopsIntegrationMutation();
 
-    const onDeleteJira = (id) => {
-        if (window.confirm(t("Are you sure you want to delete this Jira integration?"))) {
+    const onDeleteJira = async (id) => {
+        if (await confirm(t("Are you sure you want to delete this Jira integration?"))) {
             deleteJiraMutation.mutate(id);
         }
     };
 
-    const onDeleteAzureDevops = (id) => {
-        if (window.confirm(t("Are you sure you want to delete this Azure DevOps integration?"))) {
+    const onDeleteAzureDevops = async (id) => {
+        if (await confirm(t("Are you sure you want to delete this Azure DevOps integration?"))) {
             deleteAzureDevopsMutation.mutate(id);
         }
     };
@@ -129,6 +131,7 @@ const IntegrationsListPage = () => {
                     </tbody>
                 </table>
             </section>
+            {confirmDialog}
         </>
     );
 };

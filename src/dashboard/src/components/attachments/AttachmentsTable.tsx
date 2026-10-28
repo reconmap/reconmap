@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useAttachmentDeleteMutation } from "api/attachments";
 import { requestAttachment } from "api/requests/attachments";
 import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
@@ -19,6 +20,7 @@ const AttachmentsTable = ({ attachments }: any) => {
     };
 
     const deleteAttachmentMutation = useAttachmentDeleteMutation();
+    const { confirm, confirmDialog } = useConfirm();
 
     const onViewClick = (ev, attachmentId) => {
         requestAttachment(attachmentId).then(async ({ contentType, blob }) => {
@@ -43,7 +45,8 @@ const AttachmentsTable = ({ attachments }: any) => {
         });
     };
 
-    const onDeleteAttachmentClick = (ev, attachmentId) => {
+    const onDeleteAttachmentClick = async (ev, attachmentId) => {
+        if (!(await confirm("Are you sure you want to delete this attachment?"))) return;
         deleteAttachmentMutation.mutate(attachmentId);
     };
 
@@ -95,6 +98,7 @@ const AttachmentsTable = ({ attachments }: any) => {
             </ModalDialog>
 
             <NativeTable columns={columns} rows={attachments} rowId={(attachment) => attachment.id}></NativeTable>
+            {confirmDialog}
         </>
     );
 };

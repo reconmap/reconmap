@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import {
     useSystemCustomFieldDeletionMutation,
     useSystemCustomFieldPostMutation,
@@ -14,13 +15,16 @@ import { useTranslation } from "react-i18next";
 
 const CustomFieldsPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const { data: customFields } = useSystemCustomFieldsQuery();
 
     const deleteCustomFieldMutation = useSystemCustomFieldDeletionMutation();
     const createCustomFieldMutation = useSystemCustomFieldPostMutation();
 
-    const onDeleteCustomFieldClick = (ev, field) => {
+    const onDeleteCustomFieldClick = async (ev, field) => {
         ev.preventDefault();
+
+        if (!(await confirm(t("Are you sure you want to delete this custom field?")))) return;
 
         deleteCustomFieldMutation.mutate(field.id);
     };
@@ -89,6 +93,7 @@ const CustomFieldsPage = () => {
 
             <NativeTable rows={customFields} rowId={(customField) => customField.id} columns={columns}>
             </NativeTable>
+            {confirmDialog}
         </>
     );
 };

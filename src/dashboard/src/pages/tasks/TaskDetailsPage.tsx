@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAttachmentsQuery } from "api/attachments";
 import { requestProject } from "api/requests/projects";
@@ -48,8 +49,10 @@ const TaskDetailsPage = () => {
     const parentId = taskId;
     const { data: attachments } = useAttachmentsQuery({ parentType, parentId });
     const deleteTaskMutation = useDeleteTaskMutation();
+    const { confirm, confirmDialog } = useConfirm();
 
-    const onDeleteClick = (_id?: any) => {
+    const onDeleteClick = async (_id?: any) => {
+        if (!(await confirm(t("Are you sure you want to delete this task?")))) return;
         deleteTaskMutation.mutate(task.id, {
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
@@ -245,6 +248,7 @@ const TaskDetailsPage = () => {
                     </div>
                 </article>
             )}
+            {confirmDialog}
         </div>
     );
 };

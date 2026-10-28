@@ -1,3 +1,4 @@
+import { useConfirm } from "components/ui/useConfirm";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteUsers } from "api/requests/users";
 import { useUserDeleteMutation, useUsersQuery } from "api/users";
@@ -23,6 +24,7 @@ import { useTranslation } from "react-i18next";
 
 const UsersListPage = () => {
     const [t] = useTranslation();
+    const { confirm, confirmDialog } = useConfirm();
     const navigate = useNavigate();
     const { user: loggedInUser } = useContext(AuthContext);
     const { data: users, isLoading } = useUsersQuery();
@@ -45,7 +47,8 @@ const UsersListPage = () => {
         }
     };
 
-    const handleBulkDelete = () => {
+    const handleBulkDelete = async () => {
+        if (!(await confirm(t("Are you sure you want to delete the selected users?")))) return;
         deleteUsers(selectedUsers)
             .then(() => {
                 setSelectedUsers([]);
@@ -54,7 +57,8 @@ const UsersListPage = () => {
             .catch((err) => console.error(err));
     };
 
-    const onDeleteClick = (userId) => {
+    const onDeleteClick = async (userId) => {
+        if (!(await confirm(t("Are you sure you want to delete this user?")))) return;
         userDeleteMutation.mutateAsync(userId).then(() => { });
         queryClient.invalidateQueries({ queryKey: ["users"] });
     };
@@ -136,6 +140,7 @@ const UsersListPage = () => {
                 rowId={(user) => user.id}
                 emptyRowsMessage="No users available."
             ></NativeTable>
+            {confirmDialog}
         </>
     );
 };
