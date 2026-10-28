@@ -1,16 +1,14 @@
 import { useConfirm } from "components/ui/useConfirm";
 import {
     useSystemCustomFieldDeletionMutation,
-    useSystemCustomFieldPostMutation,
     useSystemCustomFieldsQuery,
 } from "api/system";
-import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
-import NativeInput from "components/forms/NativeInput";
-import NativeSelect from "components/forms/NativeSelect";
+import CustomFieldModalDialog from "components/settings/CustomFieldModalDialog";
+import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteButton from "components/ui/buttons/DeleteButton";
-import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const CustomFieldsPage = () => {
@@ -19,7 +17,7 @@ const CustomFieldsPage = () => {
     const { data: customFields } = useSystemCustomFieldsQuery();
 
     const deleteCustomFieldMutation = useSystemCustomFieldDeletionMutation();
-    const createCustomFieldMutation = useSystemCustomFieldPostMutation();
+    const [isCustomFieldDialogOpen, setIsCustomFieldDialogOpen] = useState(false);
 
     const onDeleteCustomFieldClick = async (ev, field) => {
         ev.preventDefault();
@@ -27,19 +25,6 @@ const CustomFieldsPage = () => {
         if (!(await confirm(t("Are you sure you want to delete this custom field?")))) return;
 
         deleteCustomFieldMutation.mutate(field.id);
-    };
-
-    const onAddCustomFieldSubmit = (ev) => {
-        ev.preventDefault();
-
-        const formData = new FormData(ev.target);
-        const data = Object.fromEntries(formData.entries());
-
-        createCustomFieldMutation.mutate(data as any);
-
-        ev.target.reset();
-
-        return false;
     };
 
     const columns = [
@@ -58,41 +43,14 @@ const CustomFieldsPage = () => {
 
     return (
         <>
+            <div className="heading">
+                <CreateButton onClick={() => setIsCustomFieldDialogOpen(true)}>New custom field</CreateButton>
+            </div>
             <PageTitleHeader title={t("Custom fields")} subHeader={t("System")} />
-
-            <form onSubmit={onAddCustomFieldSubmit}>
-                <input type="hidden" name="config" value="{}" />
-
-                <HorizontalLabelledField label="Name" control={<NativeInput type="text" name="name" required />} />
-
-                <HorizontalLabelledField
-                    label="Type"
-                    control={
-                        <NativeSelect name="kind">
-                            <option value="text">Text</option>
-                            <option value="integer">Integer</option>
-                            <option value="decimal">Decimal</option>
-                        </NativeSelect>
-                    }
-                />
-
-                <HorizontalLabelledField label="Label" control={<NativeInput type="text" name="label" required />} />
-
-                <HorizontalLabelledField
-                    label="Parent type"
-                    control={
-                        <NativeSelect name="parentType">
-                            <option value="vulnerability">Vulnerability</option>
-                        </NativeSelect>
-                    }
-                />
-
-                <hr />
-                <HorizontalLabelledField control={<PrimaryButton type="submit">Save</PrimaryButton>} />
-            </form>
 
             <NativeTable rows={customFields} rowId={(customField) => customField.id} columns={columns}>
             </NativeTable>
+            <CustomFieldModalDialog isOpen={isCustomFieldDialogOpen} onClose={() => setIsCustomFieldDialogOpen(false)} />
             {confirmDialog}
         </>
     );

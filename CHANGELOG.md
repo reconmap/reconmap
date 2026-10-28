@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Creating a runner, a custom field or an API token now happens in a modal dialog instead of a separate page (runners) or an inline form (custom fields, API tokens). The `/runners/create` route was removed.
 - Every delete action in the dashboard now asks for confirmation with an in-app dialog. Deleting projects, tasks, vulnerabilities, reports, report templates, assets, attachments, clients, contacts, users, project members, vault items, scheduled commands, custom fields, vulnerability categories and notifications was previously immediate. The actions that used the browser's `window.confirm` (comments, webhooks, runners, integrations, notifications and API tokens) use the same dialog. Developers use the `useConfirm()` hook from `components/ui/useConfirm`.
 - The dashboard shows toast notifications with its own small component instead of the `react-hot-toast` dependency. Toasts are shown with `toast.success(message)` and `toast.error(message)`, replace the former `actionCompletedToast` and `errorToast` helpers, and can be dismissed with a button. The fixed "Action completed" and "An error has occurred" headings were removed.
 

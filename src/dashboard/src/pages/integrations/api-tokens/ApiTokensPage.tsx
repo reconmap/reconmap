@@ -1,6 +1,7 @@
 import { useUserApiTokenDeleteMutation, useUserApiTokensQuery } from "api/user-api-tokens-hooks";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
+import ModalDialog from "components/ui/ModalDialog";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useState } from "react";
 import { useConfirm } from "components/ui/useConfirm";
@@ -55,11 +56,11 @@ const ApiTokensPage = () => {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <PageTitleHeader title={t("API Tokens")} />
-                {!showForm && <PrimaryButton onClick={() => setShowForm(true)}>{t("New API token")}</PrimaryButton>}
+                <PrimaryButton onClick={() => setShowForm(true)}>{t("New API token")}</PrimaryButton>
             </div>
 
-            {showForm && (
-                <div style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
+            <ModalDialog visible={showForm} onModalClose={() => setShowForm(false)} title={t("New API token")}>
+                {showForm && (
                     <ApiTokenForm
                         onSuccess={(token) => {
                             setNewToken(token);
@@ -67,8 +68,8 @@ const ApiTokensPage = () => {
                         }}
                         onCancel={() => setShowForm(false)}
                     />
-                </div>
-            )}
+                )}
+            </ModalDialog>
 
             {newToken && (
                 <div style={{ marginBottom: '20px', padding: '20px', backgroundColor: '#e7f3fe', border: '1px solid #2196F3', borderRadius: '4px' }}>

@@ -12,6 +12,11 @@ import { useRunnersQuery } from "api/runners";
 import { MemoryRouter } from "react-router";
 import RunnersListPage from "./RunnersListPage";
 
+beforeAll(() => {
+    HTMLDialogElement.prototype.showModal = vi.fn();
+    HTMLDialogElement.prototype.close = vi.fn();
+});
+
 const renderPage = () =>
     render(
         <MemoryRouter initialEntries={["/runners"]}>
@@ -42,10 +47,11 @@ it("refetches the runners when Refresh is clicked", () => {
     expect(refetch).toHaveBeenCalledTimes(1);
 });
 
-it("no longer renders the add runner form inline", () => {
+it("opens the new runner dialog when New runner is clicked", () => {
     (useRunnersQuery as any).mockReturnValue({ data: [], isLoading: false, isFetching: false, refetch: vi.fn() });
 
-    const { container } = renderPage();
+    renderPage();
+    fireEvent.click(screen.getByRole("button", { name: "New runner" }));
 
-    expect(container.querySelector("form")).toBeNull();
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
 });

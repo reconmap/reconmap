@@ -1,8 +1,8 @@
 import { requestRunnerDelete } from "api/requests/runners";
 import { useRunnersQuery } from "api/runners";
-import { RunnersUrls } from "AppUrls";
 import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
+import RunnerModalDialog from "components/runners/RunnerModalDialog";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteButton from "components/ui/buttons/DeleteButton";
@@ -10,8 +10,9 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import NativeTable from "components/ui/tables/NativeTable";
 import { toast } from "components/ui/toast";
 import { useConfirm } from "components/ui/useConfirm";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const pingedRecently = (lastPingAt) => {
     if (!lastPingAt) return false;
@@ -23,7 +24,7 @@ const pingedRecently = (lastPingAt) => {
 
 const RunnersListPage = () => {
     const [t] = useTranslation();
-    const navigate = useNavigate();
+    const [isRunnerDialogOpen, setIsRunnerDialogOpen] = useState(false);
     const { confirm, confirmDialog } = useConfirm();
     const { data: runners, isLoading, isFetching, refetch } = useRunnersQuery();
 
@@ -119,12 +120,13 @@ const RunnersListPage = () => {
             <Breadcrumb />
             <NativeButtonGroup>
                 <NativeButton onClick={() => refetch()} disabled={isFetching}>Refresh</NativeButton>
-                <CreateButton onClick={() => navigate(RunnersUrls.Create)}>New runner</CreateButton>
+                <CreateButton onClick={() => setIsRunnerDialogOpen(true)}>New runner</CreateButton>
             </NativeButtonGroup>
         </div>
         <PageTitleHeader title={t("Runners")} />
 
         <NativeTable columns={columns} rows={isLoading ? null : runners} rowId={(runner) => runner.id}></NativeTable>
+        <RunnerModalDialog isOpen={isRunnerDialogOpen} onClose={() => setIsRunnerDialogOpen(false)} />
         {confirmDialog}
     </>
 }

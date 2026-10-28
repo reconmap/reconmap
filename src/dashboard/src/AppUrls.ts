@@ -99,6 +99,5 @@ export const ToolsUrls = {
 
 export const RunnersUrls = {
     List: "/runners",
-    Create: "/runners/create",
     Details: "/runners/:runnerId",
 };

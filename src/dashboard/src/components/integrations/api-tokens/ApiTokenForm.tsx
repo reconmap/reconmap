@@ -25,7 +25,6 @@ const ApiTokenForm = ({ onSuccess, onCancel }: any) => {
 
     return (
         <form onSubmit={onSubmit}>
-            <h3>{t("New API token")}</h3>
             <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '5px' }}>{t("Token name")}</label>
                 <NativeInput

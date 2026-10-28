@@ -16,7 +16,7 @@ You can manage your API tokens by navigating to **System > API tokens** in the d
 
 ### Creating a Token
 
-1. Click the **New API token** button.
+1. Click the **New API token** button. A dialog opens.
 2. Provide a descriptive **Name** for the token.
 3. Set the **Expiration** period in days.
 4. Select the **Scope**:
