@@ -22,7 +22,7 @@ const ReportsTable = ({ reports, updateReports, includeProjectColumn = false }: 
             reportId,
             {
                 onSuccess: () => {
-                    updateReports();
+                    updateReports?.();
                     queryclient.invalidateQueries({ queryKey: ["reports"] });
                 },
             }
