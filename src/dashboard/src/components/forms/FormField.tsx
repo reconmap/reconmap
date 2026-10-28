@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import styles from "./FormField.module.css";
 import { FormLayout, useFormLayout } from "./FormLayoutContext";
 
 interface FormFieldProps {
@@ -14,7 +15,7 @@ const FormField = ({ htmlFor, label = "", control, layout }: FormFieldProps) => 
     if ((layout ?? formLayout) === "horizontal") {
         return (
             <div className="field is-horizontal">
-                <div className="field-label">
+                <div className={`field-label ${styles.label}`}>
                     {label !== "" && (
                         <label className="label" htmlFor={htmlFor}>
                             {label}
