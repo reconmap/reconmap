@@ -95,10 +95,9 @@ const JiraForm = ({ integration, integrationSetter: setIntegration, onFormSubmit
                     }
                 />
                 <FormField
-                    label={t("Enabled?")}
                     control={
                         <NativeCheckbox name="isEnabled" checked={integration.isEnabled} onChange={onFormChange}>
-                            {t("Is enabled")}
+                            {t("Enabled")}
                         </NativeCheckbox>
                     }
                 />

@@ -1,4 +1,5 @@
 import { useConfirm } from "components/ui/useConfirm";
+import NativeCheckbox from "components/forms/NativeCheckbox";
 import { useDeleteTaskMutation } from "api/tasks";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import ProjectBadge from "components/projects/ProjectBadge";
@@ -48,8 +49,8 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
             header: <>&nbsp;</>,
             enabled: showSelection,
             cell: (task) => (
-                <input
-                    type="checkbox"
+                <NativeCheckbox
+                    aria-label="Select task"
                     value={task.id}
                     onChange={onSelectionChange}
                     checked={tableModel.selection.includes(task.id)}

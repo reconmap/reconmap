@@ -119,7 +119,6 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                     }
                 />
                 <FormField
-                    label="Properties"
                     control={
                         <div>
                             <NativeCheckbox name="active" checked={user.active} onChange={onFormChange}>

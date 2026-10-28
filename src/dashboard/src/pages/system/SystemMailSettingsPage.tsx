@@ -1,6 +1,7 @@
 import { useSystemMailSettingsQuery, useSystemMailSettingsUpdateMutation } from "api/system";
 import Form from "components/forms/Form";
 import FormField from "components/forms/FormField";
+import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -154,17 +155,10 @@ const SystemMailSettingsPage = () => {
                 />
 
                 <FormField
-                    label=""
                     control={
-                        <label className="checkbox">
-                            <input
-                                type="checkbox"
-                                name="clearSmtpPassword"
-                                checked={formState.clearSmtpPassword}
-                                onChange={updateField}
-                            />{" "}
+                        <NativeCheckbox name="clearSmtpPassword" checked={formState.clearSmtpPassword} onChange={updateField}>
                             Clear stored SMTP password
-                        </label>
+                        </NativeCheckbox>
                     }
                 />
 
@@ -183,12 +177,10 @@ const SystemMailSettingsPage = () => {
                 />
 
                 <FormField
-                    label=""
                     control={
-                        <label className="checkbox">
-                            <input type="checkbox" name="smtpUseSsl" checked={formState.smtpUseSsl} onChange={updateField} /> Use
-                            SSL/TLS
-                        </label>
+                        <NativeCheckbox name="smtpUseSsl" checked={formState.smtpUseSsl} onChange={updateField}>
+                            Use SSL/TLS
+                        </NativeCheckbox>
                     }
                 />
 
@@ -235,27 +227,18 @@ const SystemMailSettingsPage = () => {
                 />
 
                 <FormField
-                    label=""
                     control={
-                        <label className="checkbox">
-                            <input
-                                type="checkbox"
-                                name="clearImapPassword"
-                                checked={formState.clearImapPassword}
-                                onChange={updateField}
-                            />{" "}
+                        <NativeCheckbox name="clearImapPassword" checked={formState.clearImapPassword} onChange={updateField}>
                             Clear stored IMAP password
-                        </label>
+                        </NativeCheckbox>
                     }
                 />
 
                 <FormField
-                    label=""
                     control={
-                        <label className="checkbox">
-                            <input type="checkbox" name="imapUseSsl" checked={formState.imapUseSsl} onChange={updateField} /> Use
-                            SSL/TLS
-                        </label>
+                        <NativeCheckbox name="imapUseSsl" checked={formState.imapUseSsl} onChange={updateField}>
+                            Use SSL/TLS
+                        </NativeCheckbox>
                     }
                 />
 

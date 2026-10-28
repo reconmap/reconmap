@@ -21,7 +21,7 @@ Webhook configuration is restricted to users with the `administrator` or `superu
 4. Enter the **URL** where the notification should be sent.
 5. (Optional) Enter a **Secret** to sign the requests.
 6. Specify the **Events** you want to subscribe to (e.g., `project.created`, `vulnerability.created`, or `*` for all events).
-7. Ensure **Is enabled** is checked and click **Save**.
+7. Ensure **Enabled** is checked and click **Save**.
 
 ## Jira Integration
 

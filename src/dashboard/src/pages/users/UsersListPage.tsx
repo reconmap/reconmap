@@ -1,4 +1,5 @@
 import { useConfirm } from "components/ui/useConfirm";
+import NativeCheckbox from "components/forms/NativeCheckbox";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteUsers } from "api/requests/users";
 import { useUserDeleteMutation, useUsersQuery } from "api/users";
@@ -66,8 +67,8 @@ const UsersListPage = () => {
         {
             header: <>&nbsp;</>,
             cell: (user) => (
-                <input
-                    type="checkbox"
+                <NativeCheckbox
+                    aria-label="Select user"
                     value={user.id}
                     onChange={onTaskCheckboxChange}
                     checked={selectedUsers.includes(user.id)}

@@ -104,6 +104,7 @@ const VulnerabilitiesTable = ({
                     {showSelection && (
                         <th style={{ width: "32px" }}>
                             <NativeCheckbox
+                                aria-label="Select all vulnerabilities"
                                 onChange={onHeaderCheckboxClick}
                                 checked={
                                     tableModel.selection.length && tableModel.selection.length === vulnerabilitiesLength
@@ -149,6 +150,7 @@ const VulnerabilitiesTable = ({
                                 {showSelection && (
                                     <td>
                                         <NativeCheckbox
+                                            aria-label="Select vulnerability"
                                             value={vulnerability.id}
                                             onChange={onSelectionChange}
                                             checked={tableModel.selection.includes(vulnerability.id)}

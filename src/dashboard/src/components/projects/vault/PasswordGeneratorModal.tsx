@@ -68,40 +68,40 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                         />
                     }
                 />
-                <FormField layout="vertical"
-                    label={t("Include uppercase")}
-                    htmlFor="includeUppercase"
+                <FormField
                     control={
                         <NativeCheckbox
                             id="includeUppercase"
                             name="includeUppercase"
                             checked={passwordConfig.includeUppercase}
                             onChange={updatePassword}
-                        />
+                        >
+                            {t("Include uppercase")}
+                        </NativeCheckbox>
                     }
                 />
-                <FormField layout="vertical"
-                    label={t("Include lowercase")}
-                    htmlFor="includeLowercase"
+                <FormField
                     control={
                         <NativeCheckbox
                             id="includeLowercase"
                             name="includeLowercase"
                             checked={passwordConfig.includeLowercase}
                             onChange={updatePassword}
-                        />
+                        >
+                            {t("Include lowercase")}
+                        </NativeCheckbox>
                     }
                 />
-                <FormField layout="vertical"
-                    label={t("Include numbers")}
-                    htmlFor="includeNumbers"
+                <FormField
                     control={
                         <NativeCheckbox
                             id="includeNumbers"
                             name="includeNumbers"
                             checked={passwordConfig.includeNumbers}
                             onChange={updatePassword}
-                        />
+                        >
+                            {t("Include numbers")}
+                        </NativeCheckbox>
                     }
                 />
                 {passwordConfig.includeNumbers && (
@@ -121,16 +121,16 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     />
                 )}
 
-                <FormField layout="vertical"
-                    label={t("Include symbols")}
-                    htmlFor="includeSymbols"
+                <FormField
                     control={
                         <NativeCheckbox
                             id="includeSymbols"
                             name="includeSymbols"
                             checked={passwordConfig.includeSymbols}
                             onChange={updatePassword}
-                        />
+                        >
+                            {t("Include symbols")}
+                        </NativeCheckbox>
                     }
                 />
                 {passwordConfig.includeSymbols && (
@@ -150,16 +150,16 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     />
                 )}
 
-                <FormField layout="vertical"
-                    label={t("Avoid ambiguous")}
-                    htmlFor="avoidAmbiguous"
+                <FormField
                     control={
                         <NativeCheckbox
                             id="avoidAmbiguous"
                             name="avoidAmbiguous"
                             checked={passwordConfig.avoidAmbiguous}
                             onChange={updatePassword}
-                        />
+                        >
+                            {t("Avoid ambiguous")}
+                        </NativeCheckbox>
                     }
                 />
 

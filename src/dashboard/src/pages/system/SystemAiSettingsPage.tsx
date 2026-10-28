@@ -1,6 +1,7 @@
 import { useSystemAiSettingsQuery, useSystemAiSettingsUpdateMutation } from "api/system";
 import Form from "components/forms/Form";
 import FormField from "components/forms/FormField";
+import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -187,16 +188,13 @@ const SystemAiSettingsPage = () => {
 
                             {isSecret && field.hasValue && (
                                 <FormField
-                                    label=""
                                     control={
-                                        <label className="checkbox">
-                                            <input
-                                                type="checkbox"
-                                                checked={isCleared}
-                                                onChange={(event) => toggleClearSecret(field.key, event.target.checked)}
-                                            />{" "}
+                                        <NativeCheckbox
+                                            checked={isCleared}
+                                            onChange={(event: any) => toggleClearSecret(field.key, event.target.checked)}
+                                        >
                                             Clear stored {field.label.toLowerCase()}
-                                        </label>
+                                        </NativeCheckbox>
                                     }
                                 />
                             )}

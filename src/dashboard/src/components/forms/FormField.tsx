@@ -32,9 +32,11 @@ const FormField = ({ htmlFor, label = "", control, layout }: FormFieldProps) => 
 
     return (
         <div className="field">
-            <label className="label" htmlFor={htmlFor}>
-                {label}
-            </label>
+            {label !== "" && (
+                <label className="label" htmlFor={htmlFor}>
+                    {label}
+                </label>
+            )}
             <div className="control">{control}</div>
         </div>
     );

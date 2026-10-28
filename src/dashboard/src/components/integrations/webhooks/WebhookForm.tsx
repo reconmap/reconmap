@@ -80,10 +80,9 @@ const WebhookForm = ({ webhook, webhookSetter: setWebhook, onFormSubmit }: any) 
                     }
                 />
                 <FormField
-                    label={t("Enabled?")}
                     control={
                         <NativeCheckbox name="isEnabled" checked={webhook.isEnabled} onChange={onFormChange}>
-                            {t("Is enabled")}
+                            {t("Enabled")}
                         </NativeCheckbox>
                     }
                 />

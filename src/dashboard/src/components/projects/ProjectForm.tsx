@@ -39,7 +39,7 @@ const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) 
                             onChange={handleFormChange}
                             checked={project.isTemplate}
                         >
-                            Project template
+                            Template
                         </NativeCheckbox>
                     }
                 />

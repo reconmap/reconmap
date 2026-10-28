@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NativeCheckbox from "components/forms/NativeCheckbox";
 import {
     useBulkDeleteNotificationsMutation,
     useBulkUpdateNotificationsMutation,
@@ -63,8 +64,8 @@ const NotificationsListPage = () => {
     const columns = [
         {
             header: (
-                <input
-                    type="checkbox"
+                <NativeCheckbox
+                    aria-label="Select all notifications"
                     onChange={(e) => {
                         if (e.target.checked) {
                             setSelectedIds((notifications ?? []).map(n => n.id));
@@ -76,8 +77,8 @@ const NotificationsListPage = () => {
                 />
             ),
             cell: (notification) => (
-                <input
-                    type="checkbox"
+                <NativeCheckbox
+                    aria-label="Select notification"
                     onChange={(e) => {
                         if (e.target.checked) {
                             setSelectedIds([...selectedIds, notification.id]);
