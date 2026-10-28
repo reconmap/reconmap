@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { defaultPasswordConfiguration, generatePassword } from "services/passwords";
 import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
@@ -6,12 +6,12 @@ import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import { useTranslation } from "react-i18next";
+import ModalDialog from "components/ui/ModalDialog";
 import CssIcon from "components/ui/CssIcon";
 
 // The parent mounts this component only while it is open, so each opening starts with a fresh password.
 const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
     const [t] = useTranslation();
-    const dialogRef = useRef<any>(null);
     const [passwordConfig, setPasswordConfig] = useState(defaultPasswordConfiguration);
     const [password, setPassword] = useState(() => {
         try {
@@ -28,14 +28,6 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
             // Ignore validation/range errors during typing
         }
     };
-
-    useEffect(() => {
-        const dialog = dialogRef.current;
-        if (!dialog) return;
-
-        dialog.showModal();
-        return () => dialog.close();
-    }, []);
 
     const updatePassword = (ev) => {
         let value = ev.target.value;
@@ -61,44 +53,8 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
     };
 
     return (
-        <dialog
-            ref={dialogRef}
-            onClose={onClose}
-            style={{
-                border: "none",
-                borderRadius: "8px",
-                padding: "24px",
-                maxWidth: "450px",
-                width: "90%",
-                boxShadow: "0 4px 24px rgba(0, 0, 0, 0.4)",
-                backgroundColor: "#1f2937",
-                color: "#f3f4f6",
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                margin: 0,
-            }}
-        >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
-                <h3 className="title is-4" style={{ color: "#f3f4f6", margin: 0 }}>{t("Password generator")}</h3>
-                <button
-                    type="button"
-                    onClick={onClose}
-                    style={{
-                        background: "none",
-                        border: "none",
-                        color: "#9ca3af",
-                        fontSize: "24px",
-                        cursor: "pointer",
-                        lineHeight: 1,
-                    }}
-                >
-                    &times;
-                </button>
-            </div>
-
-            <div className="content" style={{ color: "#d1d5db" }}>
+        <ModalDialog visible onModalClose={onClose} title={t("Password generator")}>
+            <div className="content">
                 <FormField layout="vertical"
                     label={t("Password length")}
                     control={
@@ -208,7 +164,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                 />
 
                 <div className="field mt-4">
-                    <label className="label" style={{ color: "#f3f4f6" }}>{t("Generated password")}</label>
+                    <label className="label">{t("Generated password")}</label>
                     <div className="control" style={{ display: "flex", gap: "8px" }}>
                         <NativeInput
                             className="input"
@@ -231,7 +187,7 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
                     </PrimaryButton>
                 </div>
             </div>
-        </dialog>
+        </ModalDialog>
     );
 };
 
