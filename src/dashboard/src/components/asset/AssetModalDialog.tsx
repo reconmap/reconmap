@@ -38,10 +38,8 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
             onClose={onCancel}
             title={
                 <>
-                    <h4>
-                        <TargetIcon style={{ marginRight: "5px" }} />
-                        New asset details
-                    </h4>
+                    <TargetIcon style={{ marginRight: "5px" }} />
+                    New asset details
                 </>
             }
         >
@@ -52,7 +50,7 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
 
                 <div>
                     <NativeButton onClick={onCancel}>Cancel</NativeButton>
-                    <PrimaryButton onClick={onAddAssetFormSubmit}>Save</PrimaryButton>
+                    <PrimaryButton type="submit" form="asset-form">Save</PrimaryButton>
                 </div>
             </div>
         </ModalDialog>

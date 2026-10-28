@@ -18,12 +18,13 @@ const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
 
     return (
         <div>
-            <form onSubmit={onFormSubmit}>
+            <form id="asset-form" onSubmit={onFormSubmit}>
                 <HorizontalLabelledField
                     label="Name"
                     control={
                         <NativeInput
                             name="name"
+                            value={newAsset.name ?? ""}
                             placeholder="e.g. 127.0.0.1"
                             onChange={onFormChange}
                             required
