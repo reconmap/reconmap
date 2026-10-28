@@ -4,7 +4,7 @@ import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import BooleanText from "components/ui/BooleanText";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
@@ -77,7 +77,7 @@ const IntegrationsListPage = () => {
                                         <td><BooleanText value={integration.isEnabled} /></td>
                                         <td style={{ textAlign: "right" }}>
                                             <LinkButton href={`/integrations/jira/${integration.id}/edit`}>{t("Edit")}</LinkButton>
-                                            <DeleteIconButton onClick={() => onDeleteJira(integration.id)} />
+                                            <DeleteButton display="icon" onClick={() => onDeleteJira(integration.id)} />
                                         </td>
                                     </tr>
                                 ))}
@@ -122,7 +122,7 @@ const IntegrationsListPage = () => {
                                         <td><BooleanText value={integration.isEnabled} /></td>
                                         <td style={{ textAlign: "right" }}>
                                             <LinkButton href={`/integrations/azure-devops/${integration.id}/edit`}>{t("Edit")}</LinkButton>
-                                            <DeleteIconButton onClick={() => onDeleteAzureDevops(integration.id)} />
+                                            <DeleteButton display="icon" onClick={() => onDeleteAzureDevops(integration.id)} />
                                         </td>
                                     </tr>
                                 ))}

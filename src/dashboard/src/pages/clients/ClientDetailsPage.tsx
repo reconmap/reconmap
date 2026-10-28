@@ -26,7 +26,6 @@ import TelephoneLink from "components/ui/TelephoneLink";
 import TimestampsSection from "components/ui/TimestampsSection";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import DeleteButton from "components/ui/buttons/DeleteButton";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import NoResultsTableRow from "components/ui/tables/NoResultsTableRow";
 import { toast } from "components/ui/toast";
@@ -320,7 +319,7 @@ const ClientDetailsPage = () => {
                                                                     <TelephoneLink number={contact.phone} />
                                                                 </td>
                                                                 <td>
-                                                                    <DeleteIconButton
+                                                                    <DeleteButton display="icon"
                                                                         onClick={onContactDelete.bind(this, contact.id)}
                                                                     />
                                                                 </td>

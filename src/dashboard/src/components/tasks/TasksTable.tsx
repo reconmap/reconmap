@@ -2,7 +2,7 @@ import { useConfirm } from "components/ui/useConfirm";
 import { useDeleteTaskMutation } from "api/tasks";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import ProjectBadge from "components/projects/ProjectBadge";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import ReloadButton from "components/ui/buttons/ReloadButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import LinkButton from "../ui/buttons/LinkButton";
@@ -100,7 +100,7 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
             cell: (task) => (
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                     <LinkButton href={`/tasks/${task.id}/edit`}>Edit</LinkButton>
-                    <DeleteIconButton onClick={() => onDelete(task.id)} />
+                    <DeleteButton display="icon" onClick={() => onDelete(task.id)} />
                 </RestrictedComponent>
             ),
         },

@@ -10,7 +10,7 @@ import LoadingTableRow from "components/ui/tables/LoadingTableRow";
 import NoResults from "components/ui/NoResults";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import CreateButton from "components/ui/buttons/CreateButton";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import { mimeTypeName } from "utilities/mimeTypes";
 import useBoolean from "hooks/useBoolean";
@@ -121,7 +121,7 @@ const ReportTemplatesListPage = () => {
                                         </SecondaryButton>
                                     </td>
                                     <td>
-                                        <DeleteIconButton
+                                        <DeleteButton display="icon"
                                             disabled={template.createdById === 0}
                                             title={
                                                 template.createdById === 0 ? "System templates cannot be deleted" : ""

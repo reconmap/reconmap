@@ -37,13 +37,11 @@ const ApiTokensPage = () => {
         {
             header: t("Actions"),
             cell: (token) => (
-                <DeleteButton onClick={async () => {
+                <DeleteButton display="icon" onClick={async () => {
                     if (await confirm(t("Are you sure you want to delete this token?"))) {
                         deleteMutation.mutate(token.id);
                     }
-                }}>
-                    {t("Delete")}
-                </DeleteButton>
+                }} />
             ),
         },
     ];

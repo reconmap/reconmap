@@ -9,7 +9,6 @@ import BooleanText from "components/ui/BooleanText";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteButton from "components/ui/buttons/DeleteButton";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import ExportMenuItem from "components/ui/menuitems/ExportMenuItem";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -104,7 +103,7 @@ const UsersListPage = () => {
             cell: (user) => (
                 <div style={{ textAlign: "right" }}>
                     <LinkButton href={`/users/${user.id}/edit`}>Edit</LinkButton>
-                    <DeleteIconButton
+                    <DeleteButton display="icon"
                         onClick={() => onDeleteClick(user.id)}
                         disabled={Number(user.id) === loggedInUser?.id}
                     />

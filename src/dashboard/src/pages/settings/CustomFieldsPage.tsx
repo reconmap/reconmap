@@ -7,7 +7,7 @@ import {
 import HorizontalLabelledField from "components/forms/HorizontalLabelledField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -51,7 +51,7 @@ const CustomFieldsPage = () => {
             header: "",
             property: "actions",
             cell: (field) => (
-                <DeleteIconButton onClick={(ev) => onDeleteCustomFieldClick(ev, field)} />
+                <DeleteButton display="icon" onClick={(ev) => onDeleteCustomFieldClick(ev, field)} />
             ),
         },
     ];

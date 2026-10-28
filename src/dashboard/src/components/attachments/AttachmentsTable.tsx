@@ -1,7 +1,7 @@
 import { useConfirm } from "components/ui/useConfirm";
 import { useAttachmentDeleteMutation } from "api/attachments";
 import { requestAttachment } from "api/requests/attachments";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import FileSizeSpan from "components/ui/FileSizeSpan";
 import ModalDialog from "components/ui/ModalDialog";
@@ -80,7 +80,7 @@ const AttachmentsTable = ({ attachments }: any) => {
                 <>
                     <SecondaryButton onClick={(ev) => onViewClick(ev, attachment.id)}>View</SecondaryButton>
                     <SecondaryButton onClick={(ev) => onDownloadClick(ev, attachment.id)}>Download</SecondaryButton>
-                    <DeleteIconButton onClick={(ev) => onDeleteAttachmentClick(ev, attachment.id)} />
+                    <DeleteButton display="icon" onClick={(ev) => onDeleteAttachmentClick(ev, attachment.id)} />
                 </>
             ),
         },

@@ -3,7 +3,7 @@ import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import BooleanText from "components/ui/BooleanText";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -50,7 +50,7 @@ const WebhooksListPage = () => {
             cell: (webhook) => (
                 <div style={{ textAlign: "right" }}>
                     <LinkButton href={`/integrations/webhooks/${webhook.id}/edit`}>{t("Edit")}</LinkButton>
-                    <DeleteIconButton onClick={() => onDeleteClick(webhook.id)} />
+                    <DeleteButton display="icon" onClick={() => onDeleteClick(webhook.id)} />
                 </div>
             ),
         },

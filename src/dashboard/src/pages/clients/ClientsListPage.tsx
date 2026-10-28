@@ -5,7 +5,7 @@ import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
 import ExternalLink from "components/ui/ExternalLink";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import ExportButton from "components/ui/buttons/ExportButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -54,7 +54,7 @@ const ClientsListPage = () => {
                     <LinkButton href={ClientsUrls.Edit.replace(":organisationId", org.id)}>
                         {t("Edit")}
                     </LinkButton>
-                    <DeleteIconButton
+                    <DeleteButton display="icon"
                         onClick={async () => {
                             if (await confirm(t("Are you sure you want to delete this client?"))) {
                                 deleteOrganisationMutation.mutate(org.id);

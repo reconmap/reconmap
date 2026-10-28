@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDeleteReportMutation } from "api/reports";
 import { requestAttachment } from "api/requests/attachments";
 import ProjectBadge from "components/projects/ProjectBadge";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import SecondaryButton from "components/ui/buttons/SecondaryButton";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -83,7 +83,7 @@ const ReportsTable = ({ reports, updateReports, includeProjectColumn = false }: 
                             Send by email
                         </SecondaryButton>
 
-                        <DeleteIconButton onClick={() => onDeleteClick(report.id)} />
+                        <DeleteButton display="icon" onClick={() => onDeleteClick(report.id)} />
                     </>
                 );
             }

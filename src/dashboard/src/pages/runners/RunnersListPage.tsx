@@ -5,6 +5,7 @@ import NativeButton from "components/forms/NativeButton";
 import NativeButtonGroup from "components/forms/NativeButtonGroup";
 import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import NativeTable from "components/ui/tables/NativeTable";
 import { toast } from "components/ui/toast";
@@ -96,7 +97,7 @@ const RunnersListPage = () => {
             header: "",
             cell: (runner) => (
                 <>
-                    <button className="button is-danger is-small" onClick={async () => {
+                    <DeleteButton display="icon" onClick={async () => {
                         if (await confirm("Are you sure you want to delete this runner?")) {
                             requestRunnerDelete(runner.id).then((response) => {
                                 if (response.ok) {
@@ -107,7 +108,7 @@ const RunnersListPage = () => {
                                 }
                             });
                         }
-                    }}>Delete</button>
+                    }} />
                 </>
             ),
         }

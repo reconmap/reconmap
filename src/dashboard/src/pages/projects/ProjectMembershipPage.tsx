@@ -4,7 +4,7 @@ import { requestProjectMemberPost, requestProjectUserDelete } from "api/requests
 import { useUsersQuery } from "api/users";
 import UserRoleBadge from "components/badges/UserRoleBadge";
 import NativeSelect from "components/forms/NativeSelect";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { useMemo } from "react";
@@ -62,7 +62,7 @@ const ProjectMembershipPage = () => {
         },
         {
             header: "",
-            cell: (member) => <DeleteIconButton onClick={() => onDeleteClick(member)} />
+            cell: (member) => <DeleteButton display="icon" onClick={() => onDeleteClick(member)} />
         }
     ];
 

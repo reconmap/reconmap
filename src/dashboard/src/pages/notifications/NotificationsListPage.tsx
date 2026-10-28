@@ -12,7 +12,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import Tag from "components/ui/Tag";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import { toast } from "components/ui/toast";
 import { useConfirm } from "components/ui/useConfirm";
@@ -114,7 +114,7 @@ const NotificationsListPage = () => {
                             Mark as read
                         </NativeButton>
                     )}
-                    <DeleteIconButton
+                    <DeleteButton display="icon"
                         onClick={async () => {
                             if (await confirm("Are you sure you want to delete this notification?")) {
                                 deleteNotificatioMutation.mutate(notification.id);

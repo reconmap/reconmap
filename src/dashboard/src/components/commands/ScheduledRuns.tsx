@@ -1,7 +1,7 @@
 import { useConfirm } from "components/ui/useConfirm";
 import { useSchedulesQuery } from "api/commands";
 import { requestCommandScheduleDelete } from "api/requests/commands";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import { toast } from "components/ui/toast";
 import { toString as CronExpressionToString } from "cronstrue";
@@ -38,7 +38,7 @@ const ScheduledRuns = () => {
                 }),
         },
         { header: "Argument values", property: "argumentValues" },
-        { header: "", cell: (scheduledCommand) => <DeleteIconButton onClick={(ev) => deleteScheduledCommand(ev, scheduledCommand)} /> },
+        { header: "", cell: (scheduledCommand) => <DeleteButton display="icon" onClick={(ev) => deleteScheduledCommand(ev, scheduledCommand)} /> },
     ]
 
     return (

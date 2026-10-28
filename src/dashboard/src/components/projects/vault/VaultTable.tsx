@@ -1,7 +1,7 @@
 import { useConfirm } from "components/ui/useConfirm";
 import { requestSecretDelete } from "api/requests/vault";
 import { useInvalidateVaultQueries } from "api/vault";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import ExternalLink from "components/ui/ExternalLink";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
@@ -56,7 +56,7 @@ const VaultTable = ({ secrets, onDelete }: any) => {
         {
             header: '',
             cell: secret => <><LinkButton href={`/vault/${secret.id}/edit`}>Edit</LinkButton>
-                <DeleteIconButton onClick={onVaultItemDelete.bind(this, secret.id)} /></>
+                <DeleteButton display="icon" onClick={onVaultItemDelete.bind(this, secret.id)} /></>
         }
     ]
 

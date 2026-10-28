@@ -1,4 +1,4 @@
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import UserLink from "components/users/UserLink";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,7 @@ const CommentCard = ({ comment, canDelete, onDelete }: CommentCardProps) => {
                     <span aria-hidden="true"> · </span>
                     <RelativeDateFormatter date={comment.createdAt} />
                 </p>
-                {canDelete && <DeleteIconButton aria-label={t("Delete comment")} onClick={onDelete} />}
+                {canDelete && <DeleteButton display="icon" aria-label={t("Delete comment")} onClick={onDelete} />}
             </header>
             <div className={`content ${styles.body}`}>
                 <ReactMarkdown>{comment.content}</ReactMarkdown>

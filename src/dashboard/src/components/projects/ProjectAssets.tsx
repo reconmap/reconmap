@@ -7,7 +7,7 @@ import AssetBadge from "components/asset/AssetBadge";
 import Tags from "components/ui/Tags";
 import TabToolbar from "components/ui/TabToolbar";
 import CreateButton from "components/ui/buttons/CreateButton";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import useBoolean from "hooks/useBoolean";
 import { Link, useSearchParams } from "react-router";
@@ -96,7 +96,7 @@ const ProjectAssets = ({ project }: any) => {
             header: "",
             cell: (asset) => (
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                    <DeleteIconButton onClick={(ev) => onDeleteButtonClick(ev, asset.id)} />
+                    <DeleteButton display="icon" onClick={(ev) => onDeleteButtonClick(ev, asset.id)} />
                 </RestrictedComponent>
             )
         }

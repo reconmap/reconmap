@@ -1,7 +1,7 @@
 import { useConfirm } from "components/ui/useConfirm";
 import { useDeleteProjectMutation } from "api/projects";
 import RestrictedComponent from "components/logic/RestrictedComponent";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -73,7 +73,7 @@ const ProjectsTable = ({ projects, showClientColumn = true }: any) => {
                         >
                             Clone and edit
                         </PrimaryButton>}
-                        <DeleteIconButton
+                        <DeleteButton display="icon"
                             onClick={async () => {
                                 if (await confirm("Are you sure you want to delete this project?")) {
                                     deleteProjectMutation.mutate(project.id);

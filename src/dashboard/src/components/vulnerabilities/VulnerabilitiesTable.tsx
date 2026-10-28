@@ -5,7 +5,7 @@ import ProjectBadge from "components/projects/ProjectBadge";
 import AscendingSortLink from "components/ui/AscendingSortLink";
 import DescendingSortLink from "components/ui/DescendingSortLink";
 import Tags from "components/ui/Tags";
-import DeleteIconButton from "components/ui/buttons/DeleteIconButton";
+import DeleteButton from "components/ui/buttons/DeleteButton";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ReloadButton from "components/ui/buttons/ReloadButton";
 import LoadingTableRow from "components/ui/tables/LoadingTableRow";
@@ -201,7 +201,7 @@ const VulnerabilitiesTable = ({
                                             Clone and edit
                                         </PrimaryButton>}
                                         {reloadCallback && (
-                                            <DeleteIconButton onClick={() => deleteVulnerability(vulnerability.id)} />
+                                            <DeleteButton display="icon" onClick={() => deleteVulnerability(vulnerability.id)} />
                                         )}
                                     </RestrictedComponent>
                                 </td>
