@@ -4,7 +4,7 @@ import WebhookForm from "components/integrations/webhooks/WebhookForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { toast } from "components/ui/toast";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 
@@ -16,8 +16,8 @@ const WebhookEditPage = () => {
     const [webhookEdits, setWebhook] = useState<any>(null);
     const webhook = webhookEdits ?? webhookData;
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestWebhookPut(parseInt(webhookId), webhook)
             .then(() => {

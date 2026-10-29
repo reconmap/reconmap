@@ -3,7 +3,7 @@ import { requestProjectPost } from "api/requests/projects";
 import { toast } from "components/ui/toast";
 import { HttpStatus } from "utilities/httpStatus";
 import Project from "models/Project";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -18,8 +18,8 @@ const ProjectCreatePage = () => {
     const [newProject, setNewProject] = useState({ ...Project, isTemplate: isTemplate });
     const queryClient = useQueryClient();
 
-    const handleCreate = async (ev) => {
-        ev.preventDefault();
+    const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestProjectPost(newProject).then((resp) => {
             if (resp.status !== HttpStatus.CREATED) {

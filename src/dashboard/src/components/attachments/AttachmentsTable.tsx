@@ -9,7 +9,7 @@ import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import NativeTable from "components/ui/tables/NativeTable";
 import UserLink from "components/users/UserLink";
 import { mimeTypeName } from "utilities/mimeTypes";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 
 const AttachmentsTable = ({ attachments }: any) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,7 +22,7 @@ const AttachmentsTable = ({ attachments }: any) => {
     const deleteAttachmentMutation = useAttachmentDeleteMutation();
     const { confirm, confirmDialog } = useConfirm();
 
-    const onViewClick = (ev, attachmentId) => {
+    const onViewClick = (event: MouseEvent<HTMLElement>, attachmentId) => {
         requestAttachment(attachmentId).then(async ({ contentType, blob }) => {
             if (contentType!.indexOf("image/") !== -1) {
                 setContent(<img src={await URL.createObjectURL(blob)} alt="" />);
@@ -34,7 +34,7 @@ const AttachmentsTable = ({ attachments }: any) => {
         });
     };
 
-    const onDownloadClick = (ev, attachmentId) => {
+    const onDownloadClick = (event: MouseEvent<HTMLElement>, attachmentId) => {
         requestAttachment(attachmentId).then(({ blob, filename }) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -45,7 +45,7 @@ const AttachmentsTable = ({ attachments }: any) => {
         });
     };
 
-    const onDeleteAttachmentClick = async (ev, attachmentId) => {
+    const onDeleteAttachmentClick = async (event: MouseEvent<HTMLElement>, attachmentId) => {
         if (!(await confirm("Are you sure you want to delete this attachment?"))) return;
         deleteAttachmentMutation.mutate(attachmentId);
     };
@@ -78,9 +78,9 @@ const AttachmentsTable = ({ attachments }: any) => {
             header: "Filename",
             cell: (attachment) => (
                 <>
-                    <SecondaryButton onClick={(ev) => onViewClick(ev, attachment.id)}>View&hellip;</SecondaryButton>
-                    <SecondaryButton onClick={(ev) => onDownloadClick(ev, attachment.id)}>Download</SecondaryButton>
-                    <DeleteButton display="icon" onClick={(ev) => onDeleteAttachmentClick(ev, attachment.id)} />
+                    <SecondaryButton onClick={(event: MouseEvent<HTMLElement>) => onViewClick(event, attachment.id)}>View&hellip;</SecondaryButton>
+                    <SecondaryButton onClick={(event: MouseEvent<HTMLElement>) => onDownloadClick(event, attachment.id)}>Download</SecondaryButton>
+                    <DeleteButton display="icon" onClick={(event) => onDeleteAttachmentClick(event, attachment.id)} />
                 </>
             ),
         },

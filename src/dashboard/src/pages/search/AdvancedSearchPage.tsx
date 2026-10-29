@@ -5,7 +5,7 @@ import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeInput from "components/forms/NativeInput";
 import Loading from "components/ui/Loading";
 import { SearchUrls } from "AppUrls";
-import { useState } from "react";
+import { useState, type FormEvent, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -28,18 +28,18 @@ const AdvancedSearchPage = () => {
     const [entities, setEntities] = useState(Object.keys(entityList));
     const { data: recentSearches, isLoading, isError } = useRecentSearchesQuery();
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         navigate(`/search/${encodeURIComponent(keywords.trim())}?entities=${entities.join(",")}`);
     };
 
-    const onKeywordsChange = (ev) => {
-        setKeywords(ev.target.value);
+    const onKeywordsChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setKeywords(event.target.value);
     };
 
-    const onFormInputChange = (ev) => {
-        const target = ev.target;
+    const onFormInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const target = event.target;
         const value = target.value;
 
         setEntities(target.checked ? [...entities, value] : entities.filter((entity) => entity !== value));

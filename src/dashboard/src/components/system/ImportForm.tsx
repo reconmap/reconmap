@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent, type ChangeEvent } from "react";
 import { ignoreAbortError } from "utilities/abort";
 import { requestEntityPost } from "utilities/requests";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
@@ -19,8 +19,8 @@ const ImportForm = () => {
 
     const cancelImport = () => importControllerRef.current?.abort();
 
-    const handleUploadClick = (ev) => {
-        ev.preventDefault();
+    const handleUploadClick = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
 
         const formData = new FormData();
         formData.append("importFile", importFileRef.current.files[0]);
@@ -45,11 +45,11 @@ const ImportForm = () => {
             });
     };
 
-    const onImportFileChange = (ev) => {
-        ev.preventDefault();
-        const selectedFiles = ev.target.files;
+    const onImportFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        const selectedFiles = event.target.files;
 
-        setImportButtonDisabled(selectedFiles.length === 0);
+        setImportButtonDisabled(!selectedFiles || selectedFiles.length === 0);
     };
 
     return (
@@ -86,8 +86,8 @@ const ImportForm = () => {
                 </PrimaryButton>
                 {importing && (
                     <SecondaryButton
-                        onClick={(ev) => {
-                            ev.preventDefault();
+                        onClick={(event: MouseEvent<HTMLElement>) => {
+                            event.preventDefault();
                             cancelImport();
                         }}
                     >

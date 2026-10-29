@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProjectsQuery } from 'api/projects.js';
@@ -29,8 +30,8 @@ const ScanTargetForm = () => {
 
     const { data: projects } = useProjectsQuery({ isTemplate: false, status: "active" });
 
-    const handleTargetChange = (e) => {
-        setTarget(e.target.value);
+    const handleTargetChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setTarget(event.target.value);
     };
 
     const targetType = target ? detectTargetType(target) : "";
@@ -69,7 +70,7 @@ const ScanTargetForm = () => {
             <FormField layout="horizontal"
                 label={t("Project")}
                 control={
-                    <NativeSelect onChange={(e) => setProjectId(e.target.value)} value={projectId}>
+                    <NativeSelect onChange={(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setProjectId(event.target.value)} value={projectId}>
                         <option value="">{t("(select project)")}</option>
                         {projects?.data.map((project) => (
                             <option key={project.id} value={project.id}>
@@ -105,7 +106,7 @@ const ScanTargetForm = () => {
             <FormField layout="horizontal"
                 label={t("Objective")}
                 control={
-                    <NativeSelect onChange={(e) => setObjective(e.target.value)} value={objective}>
+                    <NativeSelect onChange={(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setObjective(event.target.value)} value={objective}>
                         <option value="Full reconnaissance">{t("Full reconnaissance")}</option>
                         <option value="Web scan">{t("Web scan")}</option>
                         <option value="Code audit">{t("Code audit")}</option>

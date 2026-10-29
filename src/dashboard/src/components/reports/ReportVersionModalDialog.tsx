@@ -1,3 +1,4 @@
+import { type FormEvent, type SyntheticEvent } from "react";
 import { useReportsTemplatesQuery } from "api/reports";
 import { requestReportPost } from "api/requests/reports";
 import Form from "components/forms/Form";
@@ -18,15 +19,15 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
     };
     const { data: templates } = useReportsTemplatesQuery({});
 
-    const beforeCancelCallback = (ev) => {
-        ev.currentTarget.closest("dialog")?.querySelector("form")?.reset();
-        onCancel(ev);
+    const beforeCancelCallback = (event: SyntheticEvent<HTMLDialogElement>) => {
+        event.currentTarget.closest("dialog")?.querySelector("form")?.reset();
+        onCancel(event);
     };
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        const reportForm = ev.target;
+        const reportForm = event.currentTarget;
         const formData = new FormData(reportForm);
         const data = Object.fromEntries(formData.entries());
 

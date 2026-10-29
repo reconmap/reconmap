@@ -1,3 +1,4 @@
+import { type MouseEvent } from "react";
 import { useConfirm } from "components/ui/useConfirm";
 import { useAssetsQuery, useDeleteAssetMutation } from "api/assets";
 import PaginationV2 from "components/layout/PaginationV2";
@@ -25,8 +26,8 @@ const ProjectAssets = ({ project }: any) => {
     const deleteAssetMutation = useDeleteAssetMutation();
     const { confirm, confirmDialog } = useConfirm();
 
-    const onDeleteButtonClick = async (ev, assetId) => {
-        ev.preventDefault();
+    const onDeleteButtonClick = async (event: MouseEvent<HTMLElement>, assetId) => {
+        event.preventDefault();
 
         if (!(await confirm("Are you sure you want to delete this asset?"))) return;
 
@@ -96,7 +97,7 @@ const ProjectAssets = ({ project }: any) => {
             header: "",
             cell: (asset) => (
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                    <DeleteButton display="icon" onClick={(ev) => onDeleteButtonClick(ev, asset.id)} />
+                    <DeleteButton display="icon" onClick={(event) => onDeleteButtonClick(event, asset.id)} />
                 </RestrictedComponent>
             )
         }

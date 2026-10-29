@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useUserQuery, useUserUpdateMutation } from "api/users";
 import PageSkeleton from "components/ui/PageSkeleton";
@@ -35,12 +35,12 @@ const UserEditPage = () => {
     // Preferences belong to the user they describe: only that user can change them.
     const isOwner = currentUser?.id === user?.id;
 
-    const onPreferencesChange = (ev) => {
-        setPreferences({ ...preferences, [ev.target.name]: ev.target.value });
+    const onPreferencesChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setPreferences({ ...preferences, [event.target.name]: event.target.value });
     };
 
-    const handleSubmit = async (ev) => {
-        ev.preventDefault();
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         const ownerFields = isOwner
             ? {

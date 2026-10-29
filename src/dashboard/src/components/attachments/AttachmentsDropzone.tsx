@@ -130,11 +130,11 @@ const AttachmentsDropzone = ({
         setError(null);
     };
 
-    const onDrop = (e: DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
+    const onDrop = (event: DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
         setDragging(false);
         if (disabled) return;
-        const dropped = Array.from(e.dataTransfer.files);
+        const dropped = Array.from(event.dataTransfer.files);
         if (dropped.length === 0) return;
         const files = isAttachment ? dropped : dropped.slice(0, 1);
         onFilesSelected(files);
@@ -147,7 +147,7 @@ const AttachmentsDropzone = ({
         <div>
             <div
                 className={zoneClass}
-                onDragOver={(e) => { e.preventDefault(); if (!disabled) setDragging(true); }}
+                onDragOver={(event) => { event.preventDefault(); if (!disabled) setDragging(true); }}
                 onDragLeave={() => setDragging(false)}
                 onDrop={onDrop}
             >
@@ -161,7 +161,7 @@ const AttachmentsDropzone = ({
                     aria-label={isAttachment ? "Select files to upload" : "Select file to upload"}
                     multiple={isAttachment}
                     accept={allowedExtensions?.join(",")}
-                    onChange={(e) => onFilesSelected(Array.from(e.target.files!))}
+                    onChange={(event) => onFilesSelected(Array.from(event.target.files!))}
                     disabled={disabled}
                 />
                 {limits && maxFileSize && (

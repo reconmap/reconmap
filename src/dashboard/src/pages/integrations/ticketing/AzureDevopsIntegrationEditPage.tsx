@@ -2,7 +2,7 @@ import { useAzureDevopsIntegrationQuery, useUpdateAzureDevopsIntegrationMutation
 import AzureDevopsForm from "components/integrations/ticketing/AzureDevopsForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
 
@@ -16,8 +16,8 @@ const AzureDevopsIntegrationEditPage = () => {
     const integration = integrationEdits ?? dbIntegration;
     const updateMutation = useUpdateAzureDevopsIntegrationMutation();
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         updateMutation.mutate({ id: parseInt(integrationId), data: integration }, {
             onSuccess: () => {

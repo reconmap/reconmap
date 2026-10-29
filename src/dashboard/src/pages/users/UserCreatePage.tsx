@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createUserApi } from "api/requests/users";
 import defaultUser from "models/User";
 import UserRoles from "models/UserRoles";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -16,8 +16,8 @@ const UserCreatePage = () => {
     const [userData, setUserData] = useState({ ...defaultUser, role: UserRoles[0].id });
     const queryClient = useQueryClient();
 
-    const handleCreate = async (ev) => {
-        ev.preventDefault();
+    const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         try {
             const resp = await createUserApi(userData);

@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import { useConfirm } from "components/ui/useConfirm";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import { useDeleteTaskMutation } from "api/tasks";
@@ -18,8 +19,8 @@ const TasksTable = ({ tableModel, tableModelSetter: setTableModel, reloadCallbac
     const deleteTaskMutation = useDeleteTaskMutation();
     const { confirm, confirmDialog } = useConfirm();
 
-    const onSelectionChange = (ev) => {
-        const target = ev.target;
+    const onSelectionChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const target = event.target;
         const selectionId = target.value;
         if (target.checked) {
             setTableModel({

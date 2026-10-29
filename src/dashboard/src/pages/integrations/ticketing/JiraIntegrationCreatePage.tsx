@@ -2,7 +2,7 @@ import { useCreateJiraIntegrationMutation } from "api/jira";
 import JiraForm from "components/integrations/ticketing/JiraForm";
 import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 
@@ -13,8 +13,8 @@ const JiraIntegrationCreatePage = () => {
 
     const createMutation = useCreateJiraIntegrationMutation();
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         createMutation.mutate(integration, {
             onSuccess: () => {

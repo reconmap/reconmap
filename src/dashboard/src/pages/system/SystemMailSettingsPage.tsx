@@ -7,7 +7,7 @@ import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { toast } from "components/ui/toast";
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import { useTranslation } from "react-i18next";
@@ -55,16 +55,17 @@ const SystemMailSettingsPage = () => {
         : defaultFormState;
     const formState = formEdits ?? savedFormState;
 
-    const updateField = (ev) => {
-        const { name, type, checked, value } = ev.target;
+    const updateField = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, type, value } = event.target;
+        const checked = event.target instanceof HTMLInputElement && event.target.checked;
         setFormState({
             ...formState,
             [name]: type === "checkbox" ? checked : value,
         });
     };
 
-    const handleSubmit = async (ev) => {
-        ev.preventDefault();
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         const payload = {
             smtpHost: formState.smtpHost,

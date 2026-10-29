@@ -1,17 +1,18 @@
+import { type MouseEvent } from "react";
 import { useNavigate } from "react-router";
 
 const LinkButton = ({ children, external = false, href, ...props }: any) => {
     const navigate = useNavigate();
 
-    const onAnchorClick = (ev) => {
-        ev.stopPropagation();
+    const onAnchorClick = (event: MouseEvent<HTMLAnchorElement>) => {
+        event.stopPropagation();
 
         if (!external) {
-            ev.preventDefault();
+            event.preventDefault();
 
             navigate({
-                pathname: ev.target.pathname,
-                search: ev.target.search,
+                pathname: event.currentTarget.pathname,
+                search: event.currentTarget.search,
             });
         }
     };

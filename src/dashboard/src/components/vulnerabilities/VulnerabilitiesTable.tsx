@@ -1,3 +1,4 @@
+import { type ChangeEvent, type MouseEvent } from "react";
 import { useDeleteVulnerabilityMutation } from "api/vulnerabilities";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import RestrictedComponent from "components/logic/RestrictedComponent";
@@ -30,8 +31,8 @@ const VulnerabilitiesTable = ({
 }: any) => {
     const navigate = useNavigate();
     const { confirm, confirmDialog } = useConfirm();
-    const onSortChange = (ev, column, order) => {
-        ev.preventDefault();
+    const onSortChange = (event: MouseEvent<HTMLElement>, column, order) => {
+        event.preventDefault();
 
         setTableModel({
             ...tableModel,
@@ -40,8 +41,8 @@ const VulnerabilitiesTable = ({
     };
 
 
-    const cloneVulnerability = (ev, templateId) => {
-        ev.stopPropagation();
+    const cloneVulnerability = (event: MouseEvent<HTMLElement>, templateId) => {
+        event.stopPropagation();
 
         requestEntityPost(`/vulnerabilities/${templateId}/clone`)
             .then((resp) => resp.json())
@@ -50,8 +51,8 @@ const VulnerabilitiesTable = ({
             });
     };
 
-    const onSelectionChange = (ev) => {
-        const target = ev.target;
+    const onSelectionChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const target = event.target;
         const selectionId = target.value;
         if (target.checked) {
             setTableModel({
@@ -66,8 +67,8 @@ const VulnerabilitiesTable = ({
         }
     };
 
-    const onHeaderCheckboxClick = (ev) => {
-        if (ev.target.checked) {
+    const onHeaderCheckboxClick = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
             setTableModel({
                 ...tableModel,
                 selection: tableModel.vulnerabilities.map((vulnerability) => vulnerability.id),
@@ -196,7 +197,7 @@ const VulnerabilitiesTable = ({
                                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                                         <LinkButton href={`/vulnerabilities/${vulnerability.id}/edit`}>Edit</LinkButton>
                                         {vulnerability.isTemplate && <PrimaryButton
-                                            onClick={(ev) => cloneVulnerability(ev, vulnerability.id)}
+                                            onClick={(event: MouseEvent<HTMLElement>) => cloneVulnerability(event, vulnerability.id)}
                                             key={vulnerability.id}
                                             title="Clone"
                                         >

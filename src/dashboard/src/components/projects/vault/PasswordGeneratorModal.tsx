@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { defaultPasswordConfiguration, generatePassword } from "services/passwords";
 import FormField from "components/forms/FormField";
 import NativeCheckbox from "components/forms/NativeCheckbox";
@@ -29,16 +29,16 @@ const PasswordGeneratorModal = ({ onClose, onSelectPassword }: any) => {
         }
     };
 
-    const updatePassword = (ev) => {
-        let value = ev.target.value;
+    const updatePassword = (event: ChangeEvent<HTMLInputElement>) => {
+        let value: string | boolean = event.target.value;
         if (
             ["includeUppercase", "includeLowercase", "includeNumbers", "includeSymbols", "avoidAmbiguous"].includes(
-                ev.target.name,
+                event.target.name,
             )
         ) {
-            value = ev.target.checked;
+            value = event.target.checked;
         }
-        const newConfig = { ...passwordConfig, [ev.target.name]: value };
+        const newConfig = { ...passwordConfig, [event.target.name]: value };
         setPasswordConfig(newConfig);
         regeneratePassword(newConfig);
     };

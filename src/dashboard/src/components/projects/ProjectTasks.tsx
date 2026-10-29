@@ -1,6 +1,6 @@
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import TaskTableModel from "components/tasks/TaskTableModel";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type MouseEvent } from "react";
 import { useNavigate } from "react-router";
 import { ignoreAbortError } from "utilities/abort";
 import { requestEntity } from "utilities/requests";
@@ -44,8 +44,8 @@ const ProjectTasks = ({ project }: any) => {
         fetchTasks();
     }, [fetchTasks]);
 
-    const onAddTaskClick = (ev) => {
-        ev.preventDefault();
+    const onAddTaskClick = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
         navigate(`/tasks/create?projectId=${project.id}&forTemplate=${project.isTemplate}`);
     };
 

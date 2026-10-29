@@ -5,7 +5,7 @@ import ExternalLink from "components/ui/ExternalLink";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import { toast } from "components/ui/toast";
 import { AuthContext } from "contexts/AuthContext";
-import { useContext } from "react";
+import { useContext, type MouseEvent } from "react";
 
 const SupportPage = () => {
     const { user } = useContext(AuthContext);
@@ -30,8 +30,8 @@ Keycloak URL: ${Configuration.getKeycloakConfig().url}
 
 `;
 
-    const onCopyToClipboardClick = (ev) => {
-        ev.preventDefault();
+    const onCopyToClipboardClick = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
 
         navigator.clipboard
             .writeText(systemInfo)

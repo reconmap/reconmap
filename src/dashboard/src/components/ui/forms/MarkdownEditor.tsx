@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, type ClipboardEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import "./MarkdownEditor.css";
 
@@ -36,8 +36,8 @@ const insertToTextArea = (textarea, insertString) => {
     return sentence;
 };
 
-const onImagePasted = async (ev) => {
-    const dataTransfer = ev.clipboardData;
+const onImagePasted = async (event: ClipboardEvent<HTMLTextAreaElement>) => {
+    const dataTransfer = event.clipboardData;
     const files: any[] = [];
 
     if (!dataTransfer?.items?.length) {
@@ -61,12 +61,12 @@ const onImagePasted = async (ev) => {
         return null;
     }
 
-    ev.preventDefault();
+    event.preventDefault();
 
-    let insertedMarkdown = ev.target.value || "";
+    let insertedMarkdown = (event.target as HTMLTextAreaElement).value || "";
     for (const file of files) {
         const url = await fileUpload(file);
-        insertedMarkdown = insertToTextArea(ev.target, `![${file.name}](${url})`);
+        insertedMarkdown = insertToTextArea(event.target, `![${file.name}](${url})`);
     }
 
     return insertedMarkdown;
@@ -97,8 +97,8 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
         });
     };
 
-    const onEditorPaste = async (ev) => {
-        const insertedMarkdown = await onImagePasted(ev);
+    const onEditorPaste = async (event: ClipboardEvent<HTMLTextAreaElement>) => {
+        const insertedMarkdown = await onImagePasted(event);
         if (insertedMarkdown === null) {
             return;
         }
@@ -256,9 +256,9 @@ const MarkdownEditor = ({ name: editorName, value, onChange: onFormChange, ...op
                     style={{ display: mode === "edit" ? "block" : "none", minHeight: "200px" }}
                     value={markdown}
                     onPaste={onEditorPaste}
-                    onChange={(ev) => {
-                        setMarkdown(ev.target.value);
-                        emitFormChange(ev.target.value);
+                    onChange={(event) => {
+                        setMarkdown(event.target.value);
+                        emitFormChange(event.target.value);
                     }}
                     {...options}
                 />

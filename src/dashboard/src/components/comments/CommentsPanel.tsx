@@ -6,7 +6,7 @@ import Skeleton from "components/ui/Skeleton";
 import { toast } from "components/ui/toast";
 import { useConfirm } from "components/ui/useConfirm";
 import { AuthContext } from "contexts/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useState, type FormEvent, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import CommentCard, { Comment } from "./CommentCard";
 
@@ -30,8 +30,8 @@ const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
     const canDelete = (comment: Comment) =>
         !!user && (comment.createdById === user.id || MODERATING_ROLES.includes(user.role));
 
-    const onSubmit = (ev) => {
-        ev.preventDefault();
+    const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         const newComment: NewComment = { parentType, parentId, content };
         createCommentMutation.mutate(newComment, {
@@ -64,7 +64,7 @@ const CommentsPanel = ({ parentType, parentId }: CommentsPanelProps) => {
                         placeholder={t("Write a comment…")}
                         style={{ width: "100%" }}
                         value={content}
-                        onChange={(ev) => setContent(ev.target.value)}
+                        onChange={(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => setContent(event.target.value)}
                         required
                     />
                     <div className="mt-3">

@@ -1,3 +1,4 @@
+import { type FormEvent } from "react";
 import { useSystemCustomFieldPostMutation } from "api/system";
 import Form from "components/forms/Form";
 import FormField from "components/forms/FormField";
@@ -10,10 +11,10 @@ import ModalDialog from "components/ui/ModalDialog";
 const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
     const createCustomFieldMutation = useSystemCustomFieldPostMutation();
 
-    const onSubmit = (ev) => {
-        ev.preventDefault();
+    const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        const form = ev.target;
+        const form = event.currentTarget;
         const data = Object.fromEntries(new FormData(form).entries());
 
         createCustomFieldMutation.mutate(data as any);

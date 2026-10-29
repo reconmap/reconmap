@@ -7,7 +7,7 @@ import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { toast } from "components/ui/toast";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FormEvent, type ChangeEvent } from "react";
 import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import NativeSelect from "components/forms/NativeSelect";
@@ -83,7 +83,7 @@ const SystemAiSettingsPage = () => {
         if (checked) updateSetting(key, "");
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!provider) return;
 
@@ -133,7 +133,7 @@ const SystemAiSettingsPage = () => {
                         <NativeSelect
                             name="provider"
                             value={providerId}
-                            onChange={(event) => {
+                            onChange={(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
                                 updateForm((form) => ({ ...form, providerId: event.target.value, clearedSecrets: {} }));
                             }}
                         >
@@ -155,7 +155,7 @@ const SystemAiSettingsPage = () => {
                             required
                             name="maxOutputTokens"
                             value={maxOutputTokens}
-                            onChange={(event) => updateForm((form) => ({ ...form, maxOutputTokens: event.target.value }))}
+                            onChange={(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => updateForm((form) => ({ ...form, maxOutputTokens: event.target.value }))}
                         />
                     }
                 />
@@ -175,7 +175,7 @@ const SystemAiSettingsPage = () => {
                                         type={isSecret ? "password" : field.type}
                                         name={field.key}
                                         value={values[provider.id]?.[field.key] ?? ""}
-                                        onChange={(event) => updateSetting(field.key, event.target.value)}
+                                        onChange={(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => updateSetting(field.key, event.target.value)}
                                         placeholder={
                                             isSecret && field.hasValue
                                                 ? "Leave blank to keep the stored value"

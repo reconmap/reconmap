@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import { useProjectsQuery } from "api/projects";
 import NativeSelect from "components/forms/NativeSelect";
 import PaginationV2 from "components/layout/PaginationV2";
@@ -46,12 +47,12 @@ const ProjectsListPage = () => {
         navigate("/projects/create");
     };
 
-    const onStatusFilterChange = (ev) => {
-        updateUrl({ status: ev.target.value, page: 1 });
+    const onStatusFilterChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        updateUrl({ status: event.target.value, page: 1 });
     };
 
-    const onIsTemplateFilterChange = (ev) => {
-        updateUrl({ isTemplate: ev.target.value, page: 1 });
+    const onIsTemplateFilterChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        updateUrl({ isTemplate: event.target.value, page: 1 });
     };
 
     const onPageChange = (pageNumber) => {

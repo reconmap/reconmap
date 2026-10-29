@@ -7,7 +7,7 @@ import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
 import { toast } from "components/ui/toast";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { HttpStatus } from "utilities/httpStatus";
 
 const RunnerModalDialog = ({ isOpen, onClose }: any) => {
@@ -19,9 +19,9 @@ const RunnerModalDialog = ({ isOpen, onClose }: any) => {
         onClose();
     };
 
-    const onSubmit = (event) => {
+    const onSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const form = event.target;
+        const form = event.currentTarget;
         const data = Object.fromEntries(new FormData(form).entries());
         requestRunnerPost(data)
             .then((response) => {

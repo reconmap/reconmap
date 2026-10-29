@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import Form from "components/forms/Form";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
@@ -5,8 +6,8 @@ import NativeSelect from "components/forms/NativeSelect";
 import AssetTypes from "../../models/AssetTypes";
 
 const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
-    const onFormChange = (ev) => {
-        const target = ev.target;
+    const onFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const target = event.target;
         const name = target.name;
         let value = target.value;
 

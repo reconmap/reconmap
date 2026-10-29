@@ -6,7 +6,7 @@ import RestrictedComponent from "components/logic/RestrictedComponent";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { toast } from "components/ui/toast";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { ignoreAbortError } from "utilities/abort";
@@ -58,8 +58,8 @@ const TasksListPage = () => {
         fetchTasks();
     }, [fetchTasks]);
 
-    const onStatusSelectChange = (ev) => {
-        const newStatus = ev.target.value;
+    const onStatusSelectChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const newStatus = event.target.value;
 
         requestTasksPatch({
             ids: tableModel.selection,
@@ -68,7 +68,7 @@ const TasksListPage = () => {
             .then(reloadTasks)
             .then(() => {
                 toast.success(`All selected tasks have been transitioned to "${newStatus}".`);
-                ev.target.value = "";
+                event.target.value = "";
             })
             .catch((err) => console.error(err));
     };

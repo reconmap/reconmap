@@ -7,13 +7,13 @@ const KeyboardShortcuts = () => {
     const [modalVisible, setModalVisible] = useState(false);
 
     const onKeyDownListener = useCallback(
-        (ev) => {
+        (event: KeyboardEvent) => {
             if (isInputElement(document.activeElement)) {
                 return;
             }
 
-            if (ev.key === "?") {
-                ev.preventDefault();
+            if (event.key === "?") {
+                event.preventDefault();
 
                 setModalVisible(!modalVisible);
             }

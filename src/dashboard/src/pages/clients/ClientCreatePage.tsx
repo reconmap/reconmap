@@ -6,7 +6,7 @@ import PageTitleHeader from "components/ui/PageTitleHeader";
 import { toast } from "components/ui/toast";
 import { HttpStatus } from "utilities/httpStatus";
 import Client from "models/Client";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { ClientsUrls } from "AppUrls";
@@ -18,10 +18,10 @@ const ClientCreatePage = () => {
     const [newClient, setNewClient] = useState(Client);
     const queryClient = useQueryClient();
 
-    const onFormSubmit = async (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
-        const form = ev.target.closest("form");
+        const form = event.currentTarget;
         const formData = new FormData(form);
 
         requestOrganisationPost(formData).then((resp) => {

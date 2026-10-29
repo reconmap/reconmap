@@ -5,7 +5,7 @@ import NativeInput from "components/forms/NativeInput";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
 import { toast } from "components/ui/toast";
-import { useRef, useState } from "react";
+import { useRef, useState, type FormEvent, type ChangeEvent } from "react";
 import { requestEntityPost } from "utilities/requests";
 
 const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
@@ -18,8 +18,8 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
     };
     const [reportTemplate, setReportTemplate] = useState(emptyReportTemplate);
 
-    const onCreateReportFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onCreateReportFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         const formData = new FormData();
         formData.append("versionName", reportTemplate.versionName);
@@ -39,8 +39,8 @@ const ReportModalDialog = ({ isOpen, onSubmit, onCancel }: any) => {
             });
     };
 
-    const onFormChange = (ev) => {
-        setReportTemplate({ ...reportTemplate, [ev.target.name]: ev.target.value });
+    const onFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setReportTemplate({ ...reportTemplate, [event.target.name]: event.target.value });
     };
 
     return (

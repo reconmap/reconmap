@@ -7,7 +7,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { useMemo } from "react";
+import { useMemo, type MouseEvent } from "react";
 import { Link, useParams } from "react-router";
 import UserAvatar from "components/badges/UserAvatar";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -23,8 +23,8 @@ const ProjectMembershipPage = () => {
     const { data: members, isLoading, refetch } = useProjectUsersQuery(projectId);
     const { data: savedProject } = useProjectQuery(projectId);
 
-    const handleOnClick = (ev) => {
-        ev.preventDefault();
+    const handleOnClick = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
 
         const userId = (document.getElementById("userId") as HTMLInputElement).value;
         requestProjectMemberPost(projectId, parseInt(userId)).then(() => {

@@ -7,7 +7,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { toast } from "components/ui/toast";
 import ProjectForm from "components/projects/ProjectForm";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 const ProjectEditPage = () => {
@@ -19,8 +19,8 @@ const ProjectEditPage = () => {
     const clientProject = projectEdits ?? serverProject;
     const queryClient = useQueryClient();
 
-    const onFormSubmit = async (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         await requestProjectPut(projectId, clientProject);
         queryClient.invalidateQueries({ queryKey: ["projects", projectId] });

@@ -5,7 +5,7 @@ import ModalDialog from "components/ui/ModalDialog";
 import TargetIcon from "components/ui/TargetIcon";
 import { toast } from "components/ui/toast";
 import AssetTypes from "models/AssetTypes";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import AssetForm from "./AssetForm";
 
 const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
@@ -16,8 +16,8 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
     };
     const [asset, setAsset] = useState(emptyAsset);
 
-    const onAddAssetFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onAddAssetFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestAssetPost(asset)
             .then(() => {

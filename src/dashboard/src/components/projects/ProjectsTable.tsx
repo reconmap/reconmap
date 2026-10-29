@@ -1,3 +1,4 @@
+import { type MouseEvent } from "react";
 import { useConfirm } from "components/ui/useConfirm";
 import { useDeleteProjectMutation } from "api/projects";
 import RestrictedComponent from "components/logic/RestrictedComponent";
@@ -13,8 +14,8 @@ import TaskProgress from "./TaskProgress";
 
 const ProjectsTable = ({ projects, showClientColumn = true }: any) => {
     const navigate = useNavigate();
-    const cloneProject = (ev, projectId) => {
-        ev.stopPropagation();
+    const cloneProject = (event: MouseEvent<HTMLElement>, projectId) => {
+        event.stopPropagation();
 
         requestEntityPost(`/projects/${projectId}/clone`)
             .then((resp) => resp.json())
@@ -67,7 +68,7 @@ const ProjectsTable = ({ projects, showClientColumn = true }: any) => {
                     <RestrictedComponent roles={["administrator", "superuser", "user"]}>
                         <LinkButton href={`/projects/${project.id}/edit`}>Edit</LinkButton>
                         {project.isTemplate && <PrimaryButton
-                            onClick={(ev) => cloneProject(ev, project.id)}
+                            onClick={(event: MouseEvent<HTMLElement>) => cloneProject(event, project.id)}
                             key={project.id}
                             title="Clone"
                         >

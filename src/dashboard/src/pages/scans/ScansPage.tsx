@@ -4,7 +4,7 @@ import FormField from "components/forms/FormField";
 import NativeSelect from "components/forms/NativeSelect";
 import Skeleton from "components/ui/Skeleton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import AttachmentsDropzone from "components/attachments/AttachmentsDropzone";
 import ScheduledRuns from "components/commands/ScheduledRuns";
@@ -20,8 +20,8 @@ const ScansPage = ({ mode }: any) => {
     // Until the user picks a project, default to the first active one.
     const selectedProjectId = chosenProjectId || projects?.data?.[0]?.id;
 
-    const onProjectChange = (ev) => {
-        setChosenProjectId(ev.target.value || null);
+    const onProjectChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setChosenProjectId(event.target.value || null);
     };
 
     const getTitle = () => {

@@ -9,7 +9,7 @@ import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 const CustomFieldsPage = () => {
@@ -20,8 +20,8 @@ const CustomFieldsPage = () => {
     const deleteCustomFieldMutation = useSystemCustomFieldDeletionMutation();
     const [isCustomFieldDialogOpen, setIsCustomFieldDialogOpen] = useState(false);
 
-    const onDeleteCustomFieldClick = async (ev, field) => {
-        ev.preventDefault();
+    const onDeleteCustomFieldClick = async (event: MouseEvent<HTMLElement>, field) => {
+        event.preventDefault();
 
         if (!(await confirm(t("Are you sure you want to delete this custom field?")))) return;
 
@@ -37,7 +37,7 @@ const CustomFieldsPage = () => {
             header: "",
             property: "actions",
             cell: (field) => (
-                <DeleteButton display="icon" onClick={(ev) => onDeleteCustomFieldClick(ev, field)} />
+                <DeleteButton display="icon" onClick={(event) => onDeleteCustomFieldClick(event, field)} />
             ),
         },
     ];

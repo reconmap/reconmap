@@ -116,7 +116,7 @@ const SystemUsagePage = () => {
                   <select
                     id="usage-range"
                     value={rangeDays}
-                    onChange={(ev) => setRangeDays(Number(ev.target.value))}
+                    onChange={(event) => setRangeDays(Number(event.target.value))}
                   >
                     {RANGE_OPTIONS.map((days) => (
                       <option key={days} value={days}>

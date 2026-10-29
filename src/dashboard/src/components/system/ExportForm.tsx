@@ -1,6 +1,6 @@
 import { useExportablesQuery } from "api/system";
 import NativeSelect from "components/forms/NativeSelect";
-import { useState } from "react";
+import { useState, type ChangeEvent, type MouseEvent } from "react";
 import { downloadFromApi } from "services/api";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 
@@ -11,14 +11,14 @@ const ExportForm = () => {
 
     const [entitiesToExport, setEntitiesToExport] = useState<any[]>([]);
 
-    const onEntitiesSelectionChange = (ev) => {
-        const selectedEntities = Array.from(ev.target.selectedOptions, (option: any) => option.value);
+    const onEntitiesSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const selectedEntities = Array.from(event.target.selectedOptions, (option: any) => option.value);
         setExportButtonDisabled(selectedEntities.length === 0);
         setEntitiesToExport(selectedEntities);
     };
 
-    const onExportButtonClick = (ev) => {
-        ev.preventDefault();
+    const onExportButtonClick = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
 
         const url = `/system/data?` + new URLSearchParams({ entities: entitiesToExport } as any).toString();
         downloadFromApi(url);
