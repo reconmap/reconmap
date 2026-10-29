@@ -19,7 +19,7 @@ Open a project and select the **Assets** tab to browse the tree. Use the arrow n
 
 ### Types are free-form
 
-Every asset has an optional **type** (for example `hostname`, `ip_address`, `port`, `url`, `path`, `file` or `package`). The type is only a label that picks the icon and helps you filter. It is not a closed list, so you can type any type and tools can use their own. The form suggests the common ones.
+Every asset has an optional **type** (for example `hostname`, `port`, `url`, `parameter`, `file`, `code_location`, `package`, `secret` or `container_image`). The type is only a label that picks the icon and helps you filter. It is not a closed list, so you can type any type and tools can use their own. The form suggests the common ones.
 
 Tools can also attach arbitrary **attributes** to an asset (for example the port number, protocol, service and version of a port, or the HTTP status of a path). They are shown on the asset's page.
 
