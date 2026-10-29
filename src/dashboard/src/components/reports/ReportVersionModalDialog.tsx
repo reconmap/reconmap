@@ -53,7 +53,7 @@ const ReportVersionModalDialog = ({ projectId, isOpen, onSubmit, onCancel }: any
         <ModalDialog
             title={
                 <>
-                    <TargetIcon /> New report version details
+                    <TargetIcon /> New report version
                 </>
             }
             visible={isOpen}

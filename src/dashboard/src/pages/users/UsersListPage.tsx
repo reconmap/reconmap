@@ -118,7 +118,6 @@ const UsersListPage = () => {
             <div className="heading">
                 <Breadcrumb />
                 <NativeButtonGroup>
-                    <CreateButton onClick={handleCreate}>New user</CreateButton>
                     <RestrictedComponent roles={["administrator"]}>
                         <DeleteButton onClick={handleBulkDelete} disabled={selectedUsers.length === 0}>
                             Delete selected
@@ -129,6 +128,7 @@ const UsersListPage = () => {
                             <ExportMenuItem entity="users" />
                         </li>
                     </ul>
+                    <CreateButton onClick={handleCreate}>New user</CreateButton>
                 </NativeButtonGroup>
             </div>
 

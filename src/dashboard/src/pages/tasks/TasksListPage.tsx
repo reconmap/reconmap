@@ -96,7 +96,6 @@ const TasksListPage = () => {
             <div className="heading">
                 <Breadcrumb />
                 <div className="field is-grouped">
-                    <CreateButton onClick={handleCreateTask}>New task</CreateButton>
                     <div className="control">
                         <NativeSelect disabled={!tableModel.selection.length} onChange={onStatusSelectChange}>
                             <option value="">(bulk status change)</option>
@@ -112,6 +111,7 @@ const TasksListPage = () => {
                             Delete selected
                         </DeleteButton>
                     </RestrictedComponent>
+                    <div className="control"><CreateButton onClick={handleCreateTask}>New task</CreateButton></div>
                 </div>
             </div>
             <PageTitleHeader title={t("Tasks")} />

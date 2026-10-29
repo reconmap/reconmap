@@ -72,11 +72,11 @@ const ClientsListPage = () => {
                 <Breadcrumb />
 
                 <NativeButtonGroup>
-                    <LinkButton href={ClientsUrls.Create}>{t("New organisation")}</LinkButton>
                     <ExportButton
                         entity="organisations"
                         disabled={!organisations?.length}
                     />
+                    <LinkButton className="button is-primary" href={ClientsUrls.Create}>{t("New organisation")}</LinkButton>
                 </NativeButtonGroup>
             </div>
             <PageTitleHeader title={t("Organisations")} />

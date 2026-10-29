@@ -4,6 +4,7 @@ import {
     useSystemCustomFieldsQuery,
 } from "api/system";
 import CustomFieldModalDialog from "components/settings/CustomFieldModalDialog";
+import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
@@ -44,6 +45,7 @@ const CustomFieldsPage = () => {
     return (
         <>
             <div className="heading">
+                <Breadcrumb />
                 <CreateButton onClick={() => setIsCustomFieldDialogOpen(true)}>New custom field&hellip;</CreateButton>
             </div>
             <PageTitleHeader title={t("Custom fields")} subHeader={t("System")} />
