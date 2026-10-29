@@ -30,10 +30,10 @@ Entities that are exposed by id in URLs, API responses and the dashboard use UUI
 
 | Entity | Id | Why |
 |---|---|---|
-| Projects, tasks, reports | UUIDv7 | Time-ordered, so inserts stay index-friendly and the id sorts by creation time. The creation time is not sensitive. |
+| Projects, tasks, reports, assets | UUIDv7 | Time-ordered, so inserts stay index-friendly and the id sorts by creation time. The creation time is not sensitive. |
 | Vulnerabilities | UUIDv4 | Random, so the id does not reveal when a finding was reported. Order lists by `created_at` (the `vulnerability_created_at_idx` index covers it, with the id as tie-breaker). |
 
-All other entities (users, organisations, assets, attachments, comments, notifications, runners and so on) keep serial integer ids. The `comment` and `attachment` tables point at their parent with a `parent_type` and a `parent_id`; the parents that exist today (projects, tasks, vulnerabilities and reports) all have UUID ids.
+All other entities (users, organisations, attachments, comments, notifications, runners and so on) keep serial integer ids. The `comment` and `attachment` tables point at their parent with a `parent_type` and a `parent_id`; the parents that exist today (projects, tasks, vulnerabilities and reports) all have UUID ids. Assets are UUIDv7 as well, and `vulnerability.asset_id` is a UUID.
 
 The API generates the ids (`GuidV7ValueGenerator` and `GuidV4ValueGenerator` in `Infrastructure/Persistence`), and the database has matching defaults (`uuidv7()` and `gen_random_uuid()`) for rows inserted with SQL, such as the seed data. Routes use the `{id:guid}` constraint, so a malformed id returns `404 Not Found`. UUIDs are not a substitute for authorization: every request is still checked against OPA and the caller's project memberships.
 

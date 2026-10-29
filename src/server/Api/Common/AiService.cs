@@ -19,8 +19,11 @@ public class AiAsset
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
-    [JsonPropertyName("type")]
-    public string Type { get; set; } = "hostname";
+    [JsonPropertyName("kind")]
+    public string Kind { get; set; } = "hostname";
+
+    [JsonPropertyName("children")]
+    public List<AiAsset> Children { get; set; } = new();
 }
 
 public class AiVulnerability
@@ -76,7 +79,7 @@ The output should contain a list of Assets (targets) and Vulnerabilities.
 Strictly follow this JSON schema:
 {{
   ""assets"": [
-    {{ ""name"": ""string (e.g. hostname, IP)"", ""type"": ""string (e.g. hostname, ip, url)"" }}
+    {{ ""name"": ""string (e.g. hostname, IP, port, path, file)"", ""kind"": ""string (free-form, e.g. hostname, ip, port, url, path, file)"", ""children"": [ /* nested assets found under this one, e.g. ports of a host, paths of a web app */ ] }}
   ],
   ""vulnerabilities"": [
     {{
@@ -133,7 +136,7 @@ Command Output:
         var prompt = $@"You are an autonomous penetration testing agent. Given the following asset, produce a concise tactical plan:
 
 Asset: {assetName}
-Type: {assetType}
+Kind: {assetType}
 
 Provide:
 1. **Recommended tools** – list the most relevant CLI tools for this asset type

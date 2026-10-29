@@ -60,7 +60,7 @@ public class VulnerabilitiesController(
     [HttpGet]
     public async Task<IActionResult> GetMany(
         [FromQuery] Guid? projectId,
-        [FromQuery] int? assetId,
+        [FromQuery] Guid? assetId,
         [FromQuery] string? status,
         [FromQuery] string? risk,
         [FromQuery] string? keywords,

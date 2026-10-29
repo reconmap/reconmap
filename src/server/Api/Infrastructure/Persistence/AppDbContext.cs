@@ -68,6 +68,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Project>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
         modelBuilder.Entity<ProjectTask>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
         modelBuilder.Entity<Report>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
+        modelBuilder.Entity<Asset>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
+        // Declared explicitly (there is no navigation property) so EF orders inserts parent-first, e.g. on import.
+        modelBuilder.Entity<Asset>()
+            .HasOne<Asset>()
+            .WithMany()
+            .HasForeignKey(e => e.ParentId)
+            .OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<Vulnerability>().Property(e => e.Id).HasValueGenerator<GuidV4ValueGenerator>();
 
         modelBuilder.Entity<UserApiToken>()

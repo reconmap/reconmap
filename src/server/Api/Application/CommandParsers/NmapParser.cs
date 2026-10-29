@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Xml.Linq;
 using Reconmap.Api.Application.Services;
 using Reconmap.Api.Controllers;
@@ -40,11 +41,12 @@ public class NmapParser(IAttachmentStorage attachmentStorage) : ICommandParser
                 continue;
 
             var hostAsset = new Asset();
-            hostAsset.Type = "hostname";
+            hostAsset.Kind = "hostname";
             hostAsset.Name = hostAddress;
 
             var addrType = (string)addressElement.Attribute("addrtype");
-            //if (!string.IsNullOrEmpty(addrType)) hostAsset.AddTag(addrType);
+            if (!string.IsNullOrEmpty(addrType))
+                hostAsset.Attributes = JsonSerializer.Serialize(new { addrType });
 
             var portsElement = host.Element("ports");
             if (portsElement != null)
@@ -54,11 +56,24 @@ public class NmapParser(IAttachmentStorage attachmentStorage) : ICommandParser
                     if (state == "open")
                         if (int.TryParse((string)port.Attribute("portid"), out var portNumber))
                         {
-                            var portAsset = new Asset();
-                            portAsset.Type = "port";
-                            portAsset.Name = portNumber.ToString();
+                            var protocol = (string)port.Attribute("protocol");
+                            var serviceElement = port.Element("service");
 
-                            //hostAsset.AddChild(portAsset);
+                            var portAsset = new Asset();
+                            portAsset.Kind = "port";
+                            portAsset.Name = string.IsNullOrEmpty(protocol)
+                                ? portNumber.ToString()
+                                : $"{portNumber}/{protocol}";
+                            portAsset.Attributes = JsonSerializer.Serialize(new
+                            {
+                                port = portNumber,
+                                protocol,
+                                service = (string)serviceElement?.Attribute("name"),
+                                product = (string)serviceElement?.Attribute("product"),
+                                version = (string)serviceElement?.Attribute("version")
+                            }, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull });
+
+                            hostAsset.AddChild(portAsset);
                         }
                 }
 

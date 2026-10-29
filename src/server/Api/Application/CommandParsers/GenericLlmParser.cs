@@ -33,11 +33,7 @@ public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmen
 
         foreach (var aiAsset in aiResult.Assets)
         {
-            result.AddAsset(new Asset
-            {
-                Name = aiAsset.Name,
-                Type = aiAsset.Type
-            });
+            result.AddAsset(ToAsset(aiAsset));
         }
 
         foreach (var aiVulnerability in aiResult.Vulnerabilities)
@@ -53,5 +49,13 @@ public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmen
         }
 
         return result;
+    }
+
+    private static Asset ToAsset(AiAsset aiAsset)
+    {
+        var asset = new Asset { Name = aiAsset.Name, Kind = aiAsset.Kind };
+        foreach (var child in aiAsset.Children)
+            asset.AddChild(ToAsset(child));
+        return asset;
     }
 }

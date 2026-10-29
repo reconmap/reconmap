@@ -1,10 +1,12 @@
 type: object
 properties:
   id:
-    type: integer
+    type: string
+    format: uuid
     nullable: true
   parent_id:
-    type: integer
+    type: string
+    format: uuid
     nullable: true
   project_id:
     type: string
@@ -14,20 +16,23 @@ properties:
   updated_at:
     type: string
     nullable: true
+  first_seen_at:
+    type: string
+  last_seen_at:
+    type: string
   name:
     type: string
-  type:
+  kind:
     type: string
     nullable: true
-    enum:
-    - hostname
-    - ip_address
-    - port
-    - cidr_range
-    - url
-    - binary
-    - path
-    - file
+    description: Free-form hint about what the node is (e.g. hostname, port, path, file). Not a closed list.
+  source:
+    type: string
+    nullable: true
+    description: What discovered the node (e.g. a parser name).
+  attributes:
+    nullable: true
+    description: Arbitrary tool-specific data as a JSON object (e.g. port, protocol, service, version).
   tags:
     nullable: true
 required:

@@ -22,6 +22,7 @@ public class CommandResultProcessor(
             using var scope = _scopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var aiService = scope.ServiceProvider.GetRequiredService<IAiService>();
+            var assetUpsert = scope.ServiceProvider.GetRequiredService<IAssetUpsertService>();
 
             logger.LogInformation("Task queue popped");
             var commandUsage = CommandDiscovery.FindUsageById(job.CommandUsageId);
@@ -32,25 +33,23 @@ public class CommandResultProcessor(
             }
             var parser = CommandParserDiscovery.Create(scope.ServiceProvider, commandUsage.OutputParser);
             var result = parser.Parse(job);
-            var numHosts = result.assets.Count;
-            if (numHosts > 0)
+            var numHosts = 0;
+            if (result.assets.Count > 0)
             {
-                foreach (var asset in result.assets)
-                {
-                    asset.ProjectId = job.ProjectId;
-                    db.Assets.Add(asset);
-                }
-
                 try
                 {
-                    await db.SaveChangesAsync(stoppingToken);
+                    numHosts = await assetUpsert.UpsertTreeAsync(job.ProjectId, null, result.assets,
+                        commandUsage.OutputParser, stoppingToken);
                 }
                 catch (Exception dbUpdateException)
                 {
                     logger.LogError(dbUpdateException, "An error occurred while processing command results");
                     db.ChangeTracker.Clear();
                 }
+            }
 
+            if (numHosts > 0)
+            {
                 // Jobs without a user (e.g. runner uploads) have nobody to notify
                 if (job.UserId is int toUserId)
                 {
@@ -80,7 +79,8 @@ public class CommandResultProcessor(
                     vulnerability.CreatedById = job.UserId;
                     if (vulnerability.Asset != null)
                     {
-                        vulnerability.AssetId = await GetAssetId(db, vulnerability.Asset);
+                        vulnerability.AssetId = (await assetUpsert.UpsertAsync(job.ProjectId, null, vulnerability.Asset,
+                            commandUsage.OutputParser, stoppingToken)).Asset.Id;
                         vulnerability.Asset = null;
                     }
 
@@ -161,17 +161,5 @@ public class CommandResultProcessor(
             v.AssetId == vulnerability.AssetId &&
             v.Summary == vulnerability.Summary &&
             v.Status == "open");
-    }
-
-    private async Task<int> GetAssetId(AppDbContext db, Asset asset)
-    {
-        var dbAsset = await db.Assets.AsNoTracking().Where(a => a.Type == asset.Type && a.Name == asset.Name)
-            .SingleOrDefaultAsync();
-        if (dbAsset != null) return dbAsset.Id;
-
-        db.Assets.Add(asset);
-        await db.SaveChangesAsync();
-
-        return asset.Id;
     }
 }

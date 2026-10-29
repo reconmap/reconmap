@@ -25,7 +25,7 @@ const TopVulnerableAssetsWidget = () => {
                     assetCountsMap[assetId] = {
                         id: assetId,
                         name: vuln.asset.name,
-                        type: vuln.asset.type,
+                        kind: vuln.asset.kind,
                         critical: 0,
                         high: 0,
                         medium: 0,
@@ -69,7 +69,7 @@ const TopVulnerableAssetsWidget = () => {
                                     <Link to={`/assets/${asset.id}`} className="has-text-weight-bold">{asset.name}</Link>
                                 </td>
                                 <td>
-                                    <span className="tag is-light">{asset.type}</span>
+                                    <span className="tag is-light">{asset.kind}</span>
                                 </td>
                                 <td className="has-text-centered">
                                     <span className="tag is-danger is-light has-text-weight-bold">{asset.total}</span>

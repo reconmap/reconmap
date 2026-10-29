@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Assets are a free-form tree. Any node can have a parent, so a host can hold its ports and a web application its paths and files (for example `example.com` > `443/tcp` > `https://example.com` > `/.env`). An asset has a free-form `kind` instead of the closed type list, a JSON `attributes` object for tool-specific data (port, protocol, service, version, HTTP status...), the `source` that discovered it, and `first_seen_at` / `last_seen_at`. The project's Assets tab shows the tree with expandable nodes, assets can be created under a parent and edited (`PUT /api/assets/{id}`), the asset page shows its ancestors, attributes and nested assets, and `GET /api/assets` accepts `parentId`, `rootsOnly` and `kind`. The Nmap parser now nests open ports under their host, and the AI parser accepts nested assets. See [Assets](docs/pages/user-manual/projects/assets.md).
+
 ### Changed
 
+- **Breaking (database, API and data import):** Assets use UUIDv7 ids and `vulnerability.asset_id` is a UUID. The asset `type` field is now `kind`, a free-form lowercase label of up to 50 characters, and `tags` and the new `attributes` stay JSON. An asset is now unique by name under its parent within a project, instead of by name within the project. Existing databases must be recreated (see the [destructive upgrade](docs/pages/admin-manual/upgrading-instance.md)); data exports made before this release cannot be imported. `testing/scripts/generate_demo_data.py` generates an asset tree. The report template variable `asset.type` still works and contains the kind.
+- Command results are stored per asset: a duplicate asset no longer discards the rest of the batch, assets found again are not duplicated, and an asset referenced by a vulnerability is looked up in its own project (before, a name match in another project could be reused).
 - Form action buttons in the dashboard are presented the same way everywhere: separated from the fields by a rule, right-aligned, with Cancel first and the positive action (Save, Send, Unprotect) last. Modal dialogs, including the API token and password generator dialogs, use the dialog footer. Developers use `FormActions` from `components/forms/FormActions` for forms that are not in a modal.
 - Checkboxes in dashboard forms are presented consistently: the text sits next to the box, without a separate field label or an "Is" prefix (for example "Enabled" and "Template"), and selection checkboxes in tables have accessible labels.
 - Creating a runner, a custom field or an API token now happens in a modal dialog instead of a separate page (runners) or an inline form (custom fields, API tokens). The `/runners/create` route was removed.

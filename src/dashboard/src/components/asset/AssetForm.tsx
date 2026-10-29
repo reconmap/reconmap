@@ -1,18 +1,25 @@
 import { type ChangeEvent } from "react";
+import { useAssetsQuery } from "api/assets";
 import Form from "components/forms/Form";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
-import AssetTypes from "../../models/AssetTypes";
+import AssetKindHints from "models/assetKinds";
+import { assetPath } from "models/assetTree";
 
 const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
+    const { data: assets } = useAssetsQuery({ projectId: newAsset.projectId });
+    const projectAssets: any[] = Array.isArray(assets?.data) ? assets.data : [];
+
     const onFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const target = event.target;
         const name = target.name;
-        let value = target.value;
+        let value: string | null = target.value;
 
         if ("tags" === name) {
             value = JSON.stringify(value.split(","));
+        } else if ("parentId" === name && value === "") {
+            value = null;
         }
 
         setAsset({ ...newAsset, [name]: value });
@@ -27,7 +34,7 @@ const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
                         <NativeInput
                             name="name"
                             value={newAsset.name ?? ""}
-                            placeholder="e.g. 127.0.0.1"
+                            placeholder="e.g. 127.0.0.1, 443/tcp, /admin"
                             onChange={onFormChange}
                             required
                             autoFocus
@@ -35,21 +42,44 @@ const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
                     }
                 />
                 <FormField
-                    label="Tags"
-                    control={<NativeInput name="tags" placeholder="e.g. linux,production" onChange={onFormChange} />}
-                />
-
-                <FormField
-                    label="Type"
+                    label="Parent"
                     control={
-                        <NativeSelect name="type" onChange={onFormChange}>
-                            {AssetTypes.map((assetType, index) => (
-                                <option key={index} value={assetType.value}>
-                                    {assetType.description}
+                        <NativeSelect name="parentId" value={newAsset.parentId ?? ""} onChange={onFormChange}>
+                            <option value="">(none, top level)</option>
+                            {projectAssets.map((asset) => (
+                                <option key={asset.id} value={asset.id}>
+                                    {assetPath(projectAssets, asset.id)
+                                        .map((node) => node.name)
+                                        .join(" › ")}
                                 </option>
                             ))}
                         </NativeSelect>
                     }
+                />
+                <FormField
+                    label="Kind"
+                    control={
+                        <>
+                            <NativeInput
+                                name="kind"
+                                list="asset-kind-hints"
+                                value={newAsset.kind ?? ""}
+                                placeholder="e.g. hostname, port, path, file"
+                                onChange={onFormChange}
+                            />
+                            <datalist id="asset-kind-hints">
+                                {AssetKindHints.map((hint) => (
+                                    <option key={hint.value} value={hint.value}>
+                                        {hint.description}
+                                    </option>
+                                ))}
+                            </datalist>
+                        </>
+                    }
+                />
+                <FormField
+                    label="Tags"
+                    control={<NativeInput name="tags" placeholder="e.g. linux,production" onChange={onFormChange} />}
                 />
             </Form>
         </div>

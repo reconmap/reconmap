@@ -1,7 +1,6 @@
-import { type MouseEvent } from "react";
+import { useMemo, useState, type MouseEvent } from "react";
 import { useConfirm } from "components/ui/useConfirm";
 import { useAssetsQuery, useDeleteAssetMutation } from "api/assets";
-import PaginationV2 from "components/layout/PaginationV2";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import AssetModalDialog from "components/asset/AssetModalDialog";
 import AssetBadge from "components/asset/AssetBadge";
@@ -11,27 +10,47 @@ import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import useBoolean from "hooks/useBoolean";
-import { Link, useSearchParams } from "react-router";
+import { buildAssetTree, type AssetNode } from "models/assetTree";
+import { Link } from "react-router";
+
+type VisibleRow = { node: AssetNode; depth: number };
+
+const visibleRows = (nodes: AssetNode[], collapsed: Set<string>, depth = 0): VisibleRow[] =>
+    nodes.flatMap((node) => [
+        { node, depth },
+        ...(collapsed.has(node.id) ? [] : visibleRows(node.children, collapsed, depth + 1)),
+    ]);
+
+const countDescendants = (node: AssetNode): number =>
+    node.children.reduce((total, child) => total + 1 + countDescendants(child), 0);
 
 const ProjectAssets = ({ project }: any) => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const pageNumber = parseInt(searchParams.get("page") ?? "1") || 1;
-
     const { value: isAddAssetDialogOpen, setTrue: openAddAssetDialog, setFalse: closeAddAssetDialog } = useBoolean();
-    const {
-        data: assets,
-        isLoading,
-        refetch,
-    } = useAssetsQuery({ limit: 5, projectId: project.id, page: pageNumber });
+    const { data: assets, isLoading, refetch } = useAssetsQuery({ projectId: project.id });
     const deleteAssetMutation = useDeleteAssetMutation();
     const { confirm, confirmDialog } = useConfirm();
+    const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
-    const onDeleteButtonClick = async (event: MouseEvent<HTMLElement>, assetId) => {
+    const tree = useMemo(() => buildAssetTree(Array.isArray(assets?.data) ? assets.data : []), [assets]);
+    const rows = useMemo(() => visibleRows(tree, collapsed), [tree, collapsed]);
+
+    const toggle = (assetId: string) =>
+        setCollapsed((current) => {
+            const next = new Set(current);
+            if (!next.delete(assetId)) next.add(assetId);
+            return next;
+        });
+
+    const onDeleteButtonClick = async (event: MouseEvent<HTMLElement>, node: AssetNode) => {
         event.preventDefault();
 
-        if (!(await confirm("Are you sure you want to delete this asset?"))) return;
+        const descendants = countDescendants(node);
+        const message = descendants
+            ? `Are you sure you want to delete this asset and its ${descendants} nested assets?`
+            : "Are you sure you want to delete this asset?";
+        if (!(await confirm(message))) return;
 
-        deleteAssetMutation.mutate(assetId);
+        await deleteAssetMutation.mutateAsync(node.id);
         refetch();
     };
 
@@ -40,68 +59,52 @@ const ProjectAssets = ({ project }: any) => {
         closeAddAssetDialog();
     };
 
-    const onPageChange = (pageNumber) => {
-        setSearchParams((params) => {
-            params.set("page", String(pageNumber + 1));
-            return params;
-        });
-    };
-
     const columns = [
         {
             header: "Name",
-            cell: (asset) => <>
-                {!asset.parent_id && (
-                    <Link to={`/assets/${asset.id}`}>
-                        <AssetBadge name={asset.name} />
-                    </Link>
-                )}
-                {asset.parent_id !== null && <>{asset.parent?.name}</>}
-            </>
-        },
-        {
-            header: "Sub-asset",
-            cell: (asset) => (
-                <>
-                    {asset.parent_id ? (
-                        <>
-                            <Link to={`/assets/${asset.id}`}>
-                                <AssetBadge name={asset.name} />
-                            </Link>
-                        </>
+            cell: ({ node, depth }: VisibleRow) => (
+                <div style={{ paddingLeft: `${depth * 20}px`, display: "flex", alignItems: "center", gap: "4px" }}>
+                    {node.children.length > 0 ? (
+                        <button
+                            type="button"
+                            aria-label={collapsed.has(node.id) ? "Expand" : "Collapse"}
+                            aria-expanded={!collapsed.has(node.id)}
+                            onClick={() => toggle(node.id)}
+                            style={{ width: "1.5em", background: "none", border: 0, cursor: "pointer", padding: 0 }}
+                        >
+                            {collapsed.has(node.id) ? "▸" : "▾"}
+                        </button>
                     ) : (
-                        "-"
+                        <span style={{ width: "1.5em" }} />
                     )}
-                </>
-            )
+                    <Link to={`/assets/${node.id}`}>
+                        <AssetBadge name={node.name} kind={node.kind ?? null} />
+                    </Link>
+                    {collapsed.has(node.id) && <small>({countDescendants(node)})</small>}
+                </div>
+            ),
         },
         {
-            header: "Type",
-            cell: (asset) => (
+            header: "Kind",
+            cell: ({ node }: VisibleRow) => (
                 <>
-                    {asset.type} <Tags values={asset.tags} />
+                    {node.kind} <Tags values={node.tags} />
                 </>
-            )
+            ),
         },
         {
-            header: "Vulnerable?",
-            cell: (asset) => (
-                <>
-                    {asset.num_vulnerabilities > 0
-                        ? `Yes (${asset.num_vulnerabilities} vulnerabilities found)`
-                        : "No"}
-                </>
-            )
+            header: "Last seen",
+            cell: ({ node }: VisibleRow) => <>{node.lastSeenAt ? new Date(String(node.lastSeenAt)).toLocaleString() : "-"}</>,
         },
         {
             header: "",
-            cell: (asset) => (
+            cell: ({ node }: VisibleRow) => (
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
-                    <DeleteButton display="icon" onClick={(event) => onDeleteButtonClick(event, asset.id)} />
+                    <DeleteButton display="icon" onClick={(event) => onDeleteButtonClick(event, node)} />
                 </RestrictedComponent>
-            )
-        }
-    ]
+            ),
+        },
+    ];
 
     return (
         <section>
@@ -120,13 +123,7 @@ const ProjectAssets = ({ project }: any) => {
                     )
                 }
             />
-            {(assets as any)?.pageCount > 1 && (
-                <center>
-                    <PaginationV2 page={pageNumber - 1} total={assets!.pageCount} onPageChange={onPageChange} />
-                </center>
-            )}
-            <NativeTable rows={isLoading ? null : assets!.data} rowId={(asset) => asset.id} columns={columns}>
-            </NativeTable>
+            <NativeTable rows={isLoading ? null : rows} rowId={({ node }: VisibleRow) => node.id} columns={columns} />
             {confirmDialog}
         </section>
     );

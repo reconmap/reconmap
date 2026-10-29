@@ -74,7 +74,7 @@ public class OpaActionFilter(OpaAuthorizationService opaService, AppDbContext db
                     projectId = await dbContext.Reports.Where(r => r.Id == id && !r.IsTemplate).Select(r => r.ProjectId).FirstOrDefaultAsync();
                 }
             }
-            else if (idObj is int assetId && controller == "assets")
+            else if (idObj is Guid assetId && controller == "assets")
             {
                 projectId = await dbContext.Assets.Where(a => a.Id == assetId).Select(a => (Guid?)a.ProjectId).FirstOrDefaultAsync();
             }

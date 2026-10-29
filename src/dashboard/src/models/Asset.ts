@@ -2,9 +2,11 @@
 interface AssetInterface {
 
 	project_id: string | undefined;
-	parent_id?: number;
+	parent_id?: string;
 	name: string | undefined;
-	type: string | undefined;
+	kind?: string;
+	source?: string;
+	attributes?: string;
 	tags?: string;
 }
 
@@ -18,7 +20,6 @@ const Asset : AssetInterface = {
 
 	project_id: undefined,
 	name: undefined,
-	type: undefined,
 }
 
 export default Asset;

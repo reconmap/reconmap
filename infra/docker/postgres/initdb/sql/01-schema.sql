@@ -208,20 +208,28 @@ CREATE TABLE project_user
 );
 
 -- 13. asset
+-- Free-form node tree: structure comes from parent_id, meaning from the open-ended kind and attributes.
 CREATE TABLE asset
 (
-    id         SERIAL PRIMARY KEY,
-    parent_id  INT NULL,
-    project_id UUID NOT NULL,
-    created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMPTZ  NULL,
-    name       VARCHAR(200) NOT NULL,
-    type       VARCHAR(20),
-    tags       JSONB         NULL,
-    UNIQUE (project_id, name),
+    id              UUID PRIMARY KEY DEFAULT uuidv7(),
+    parent_id       UUID         NULL,
+    project_id      UUID         NOT NULL,
+    created_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMPTZ  NULL,
+    first_seen_at   TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_seen_at    TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    name            VARCHAR(500) NOT NULL,
+    kind            VARCHAR(50)  NULL,
+    source          VARCHAR(100) NULL,
+    attributes      JSONB        NULL,
+    tags            JSONB        NULL,
     FOREIGN KEY (parent_id) REFERENCES asset (id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE
 );
+
+CREATE UNIQUE INDEX asset_project_parent_name_idx
+    ON asset (project_id, COALESCE(parent_id, '00000000-0000-0000-0000-000000000000'::uuid), name);
+CREATE INDEX asset_parent_id_idx ON asset (parent_id);
 
 -- 14. vulnerability_category
 CREATE TABLE vulnerability_category
@@ -245,7 +253,7 @@ CREATE TABLE vulnerability
     is_template            BOOLEAN                                                                                            NOT NULL DEFAULT FALSE,
     external_id            VARCHAR(50)                                                                                        NULL,
     project_id             UUID                                                                                      NULL,
-    asset_id              INT                                                                                       NULL,
+    asset_id              UUID                                                                                      NULL,
     category_id            INT                                                                                       NULL,
     summary                VARCHAR(500)                                                                                       NOT NULL,
     description            TEXT                                                                                               NULL,

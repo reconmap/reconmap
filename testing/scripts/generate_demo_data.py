@@ -410,31 +410,107 @@ def generate_members(project, staff_ids, ids):
     return members
 
 
+SUBDOMAINS = ["app", "api", "www", "admin", "staging", "dev", "vpn", "mail", "git", "ci", "grafana", "files",
+              "portal", "shop", "auth", "cdn", "db", "internal"]
+SERVICES = {
+    22: ("ssh", ["OpenSSH 8.9p1", "OpenSSH 7.4"]),
+    25: ("smtp", ["Postfix smtpd"]),
+    80: ("http", ["nginx 1.18.0", "Apache httpd 2.4.41"]),
+    443: ("https", ["nginx 1.22.1", "Apache httpd 2.4.54", "Microsoft IIS 10.0"]),
+    3306: ("mysql", ["MySQL 5.7.38", "MariaDB 10.6"]),
+    5432: ("postgresql", ["PostgreSQL 13.4"]),
+    6379: ("redis", ["Redis 6.2.6"]),
+    8080: ("http-proxy", ["Jetty 9.4", "Apache Tomcat 9.0"]),
+    8443: ("https-alt", ["nginx 1.22.1"]),
+    9200: ("elasticsearch", ["Elasticsearch 7.10"]),
+}
+WEB_PORTS = (80, 443, 8080, 8443)
+WEB_PATHS = {
+    "/admin": [("/admin/login", 200), ("/admin/users", 403), ("/admin/config.php", 200)],
+    "/api": [("/api/v1", 200), ("/api/v1/users", 401), ("/api/v1/orders", 401), ("/api/docs", 200),
+             ("/api/health", 200)],
+    "/login": [],
+    "/static": [("/static/js", 200), ("/static/css", 200), ("/static/js/app.js.map", 200)],
+    "/uploads": [("/uploads/avatars", 200), ("/uploads/invoices", 403)],
+    "/backup": [("/backup/db.sql.gz", 200), ("/backup/site.zip", 200)],
+    "/.git": [("/.git/HEAD", 200), ("/.git/config", 200)],
+    "/wp-admin": [("/wp-admin/admin-ajax.php", 200), ("/wp-admin/install.php", 200)],
+}
+LEAKY_FILES = [("/.env", "text/plain"), ("/.git/config", "text/plain"), ("/phpinfo.php", "text/html"),
+               ("/server-status", "text/html"), ("/config.json", "application/json"),
+               ("/id_rsa", "application/octet-stream"), ("/robots.txt", "text/plain"),
+               ("/.DS_Store", "application/octet-stream"), ("/swagger.json", "application/json")]
+PACKAGES = ["lodash@4.17.15", "express@4.16.0", "log4j-core@2.14.1", "jackson-databind@2.9.8", "django@2.2.0",
+            "requests@2.19.0", "openssl@1.1.1k", "minimist@1.2.0", "axios@0.21.0", "spring-core@5.2.0"]
+
+
 def generate_assets(project, ids):
+    """Builds a large asset tree for visualisation.
+
+    domain > subdomain host > port > web app url > path > nested path / file, plus an IP range holding
+    hosts with open services, and a source repository holding packages.
+    """
     domain = fake.domain_name()
-    tags_pool = [["production"], ["staging"], ["internal"], ["legacy"], ["external"]]
-    candidates = [
-        ("hostname", f"app.{domain}"),
-        ("hostname", f"api.{domain}"),
-        ("hostname", f"vpn.{domain}"),
-        ("hostname", f"mail.{domain}"),
-        ("url", f"https://app.{domain}/login"),
-        ("url", f"https://api.{domain}/v1/"),
-        ("ip_address", fake.ipv4_public()),
-        ("ip_address", fake.ipv4_private()),
-        ("cidr_range", f"10.{random.randint(0, 255)}.{random.randint(0, 255)}.0/24"),
-        ("port", f"{random.choice([22, 443, 3306, 8080])}/tcp"),
-        ("path", "/var/www/html/config"),
-    ]
+    tags_pool = [["production"], ["staging"], ["internal"], ["legacy"], ["external"], ["cloud"], []]
+    now = iso(utc_now())
     assets = []
-    for asset_type, name in random.sample(candidates, k=random.randint(4, 8)):
-        assets.append({
+
+    def add(name, kind, parent=None, attributes=None, source="demo", tags=None):
+        asset = {
             "Id": ids.next(),
+            "ParentId": parent["Id"] if parent else None,
             "ProjectId": project["Id"],
             "Name": name,
-            "Type": asset_type,
-            "Tags": json.dumps(random.choice(tags_pool)),
-        })
+            "Kind": kind,
+            "Source": source,
+            "Attributes": json.dumps(attributes) if attributes else None,
+            "Tags": json.dumps(tags if tags is not None else random.choice(tags_pool)),
+            "FirstSeenAt": now,
+            "LastSeenAt": now,
+        }
+        assets.append(asset)
+        return asset
+
+    def add_ports(host, source, web_prefix):
+        for port in random.sample(sorted(SERVICES), k=random.randint(2, 6)):
+            service, versions = SERVICES[port]
+            port_asset = add(f"{port}/tcp", "port", host,
+                             {"port": port, "protocol": "tcp", "service": service,
+                              "product": random.choice(versions)}, source, [])
+            if port in WEB_PORTS:
+                scheme = "https" if port in (443, 8443) else "http"
+                suffix = "" if port in (80, 443) else f":{port}"
+                webapp = add(f"{scheme}://{web_prefix}{suffix}", "url", port_asset,
+                             {"title": fake.catch_phrase(), "status": 200}, "httpx", [])
+                add_web_content(webapp)
+
+    def add_web_content(webapp):
+        for path in random.sample(sorted(WEB_PATHS), k=random.randint(2, 6)):
+            path_asset = add(path, "path", webapp, {"status": random.choice([200, 301, 302, 403])}, "ffuf", [])
+            for child, status in WEB_PATHS[path]:
+                if random.random() < 0.7:
+                    kind = "file" if "." in child.rsplit("/", 1)[-1] else "path"
+                    add(child, kind, path_asset, {"status": status}, "ffuf", [])
+        for name, content_type in random.sample(LEAKY_FILES, k=random.randint(0, 3)):
+            add(name, "file", webapp, {"status": 200, "content_type": content_type, "size": random.randint(60, 90000)},
+                "nuclei", ["exposed"])
+
+    root = add(domain, "domain", tags=["external"])
+    for sub in random.sample(SUBDOMAINS, k=random.randint(6, 12)):
+        name = f"{sub}.{domain}"
+        host = add(name, "hostname", root, {"resolves_to": fake.ipv4_public()}, "subfinder")
+        add_ports(host, "nmap", name)
+
+    network = add(f"10.{random.randint(0, 255)}.{random.randint(0, 255)}.0/24", "cidr_range", tags=["internal"])
+    for last_octet in random.sample(range(2, 250), k=random.randint(5, 10)):
+        ip = add(network["Name"].rsplit(".", 1)[0] + f".{last_octet}", "ip_address", network,
+                 {"os": random.choice(["Linux 5.x", "Windows Server 2019", "FreeBSD 13"])}, "nmap")
+        add_ports(ip, "nmap", ip["Name"])
+
+    repo = add(f"git.{domain}/platform/backend", "repository", tags=["code"])
+    manifest = add("package.json", "file", repo, source="syft", tags=[])
+    for package in random.sample(PACKAGES, k=random.randint(4, 8)):
+        add(package, "package", manifest, {"purl": f"pkg:generic/{package}"}, "syft", ["dependency"])
     return assets, domain
 
 
@@ -692,7 +768,7 @@ def generate_demo_data(num_projects=20, seed=None):
     client_ids = IdSequence()
     project_ids = UuidV7Ids()
     member_ids = IdSequence()
-    asset_ids = IdSequence()
+    asset_ids = UuidV7Ids()
     task_ids = UuidV7Ids()
     vuln_ids = UuidV4Ids()
     comment_ids = IdSequence()

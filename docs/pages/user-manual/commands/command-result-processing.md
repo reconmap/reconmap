@@ -6,7 +6,9 @@ grand_parent: User manual
 
 Reconmap can parse the output of many security tools, and incorporate their results in one of your projects. The instructions below show how to do so step by step.
 
-When you initiate a scan under **Scans -> Run scan** and provide a URL as the target, Reconmap will automatically create a URL asset for the selected project if it does not already exist.
+When you initiate a scan under **Scans -> Run scan** and provide a URL as the target, Reconmap will automatically create a URL asset (kind `url`) for the selected project if it does not already exist.
+
+Everything a parser finds is stored as a tree of [assets](../projects/assets.md): re-running a scan does not duplicate what is already there, it only refreshes when each asset was last seen.
 
 ### Step 1 - Choose a command under Scans
 
@@ -16,7 +18,7 @@ Go to the **Scans** page and select the command you want to run. Choosing the sp
 Reconmap supports several built-in output parsers, including:
 * **Sarif**: Parses Static Analysis Results Interchange Format (SARIF) JSON files (e.g. produced by `gosec`, `semgrep`, `trivy`, or `gitleaks`). It extracts vulnerabilities, maps severity levels to Reconmap risk levels, maps source code locations to proof of concepts, and copies rule details/descriptions.
 * **CycloneDX**: Parses CycloneDX Software Bill of Materials (SBOM) JSON files (e.g. produced by `syft` or `trivy`). It extracts packages/dependencies as assets and embeds vulnerability scanner disclosures as linked vulnerabilities.
-* **Nmap**: Parses Nmap XML files to extract hosts and open ports as assets.
+* **Nmap**: Parses Nmap XML files to extract hosts as assets, with their open ports (for example `443/tcp`, including the detected service and version) nested under them.
 * **Shcheck**: Parses security header analysis vulnerabilities.
 * **Subfinder**: Parses subdomain discovery outputs.
 * **Testssl**: Parses SSL/TLS configuration test outputs.

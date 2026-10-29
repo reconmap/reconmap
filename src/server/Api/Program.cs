@@ -82,6 +82,7 @@ services.AddScoped<ISecretsService, SecretsService>();
 services.AddScoped<IProjectService, ProjectService>();
 services.AddScoped<ITaskService, TaskService>();
 services.AddScoped<IVulnerabilityService, VulnerabilityService>();
+services.AddScoped<IAssetUpsertService, AssetUpsertService>();
 services.AddScoped<IRunnerService, RunnerService>();
 services.AddScoped<IMailSettingsService, MailSettingsService>();
 services.Configure<AiProviderCatalogOptions>(builder.Configuration.GetSection("AiProviders"));

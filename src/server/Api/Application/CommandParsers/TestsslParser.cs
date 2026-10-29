@@ -65,7 +65,7 @@ public class TestsslParser(IAttachmentStorage attachmentStorage) : ICommandParse
 
             vulnerability.Asset = new Asset
             {
-                Type = "hostname",
+                Kind = "hostname",
                 Name = hostname,
                 ProjectId = job.ProjectId
             };
