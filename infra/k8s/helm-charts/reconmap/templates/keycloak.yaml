@@ -44,6 +44,10 @@ spec:
             {{- include "reconmap.secretEnv" (dict "root" . "name" "KC_DB_PASSWORD" "key" "keycloak-db-password") | nindent 12 }}
             - name: KC_HOSTNAME
               value: {{ include "reconmap.keycloakUrl" . | quote }}
+            # Browsers see the public hostname; in-cluster callers (the API fetching signing keys) get
+            # endpoints on the host they used to reach Keycloak.
+            - name: KC_HOSTNAME_BACKCHANNEL_DYNAMIC
+              value: "true"
             - name: KC_HTTP_ENABLED
               value: "true"
             - name: KC_PROXY_HEADERS

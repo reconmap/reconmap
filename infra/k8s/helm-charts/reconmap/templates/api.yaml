@@ -78,6 +78,9 @@ spec:
               value: {{ include "reconmap.keycloakInternalUrl" . | quote }}
             - name: Keycloak__MetadataAddress
               value: {{ include "reconmap.keycloakInternalUrl" . }}/realms/reconmap/.well-known/openid-configuration
+            # Token metadata is fetched over the in-cluster HTTP address; TLS is terminated at the Gateway.
+            - name: Keycloak__RequireHttpsMetadata
+              value: "false"
             - name: Keycloak__ValidIssuer
               value: {{ include "reconmap.keycloakUrl" . }}/realms/reconmap
             - name: Keycloak__ClientSecret
