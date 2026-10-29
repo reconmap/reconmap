@@ -39,15 +39,13 @@ Once all containers are healthy, the dashboard will be available on port `5500` 
 
 Kubernetes provides the scalability and resilience needed for running Reconmap in production. 
 
-Reconmap supports two deployment methods on Kubernetes:
-1. **Unified Helm Chart (Recommended)**: Packages the entire platform stack (Dashboard, API, Keycloak, PostgreSQL, Redis, RabbitMQ) into a single, highly configurable installation release.
-2. **Raw Resource Manifests**: Plain YAML manifests located under the `infra/k8s/resources/` directory for direct `kubectl` provisioning.
+Reconmap is deployed on Kubernetes with a single Helm chart (`infra/k8s/helm-charts/reconmap`). It packages the Dashboard, API, Keycloak, OPA, PostgreSQL, Redis, RabbitMQ and S3-compatible storage, runs every pod under the `restricted` Pod Security Standard, generates its credentials into one Secret (or reads your own through `secrets.existingSecret`), and exposes the services through Gateway API `HTTPRoute`s. Plain YAML is available with `helm template`.
 
 This option is ideal when you need:
 
 - Horizontal scaling of individual services.
 - Rolling updates with zero downtime.
-- Integration with cloud-native tooling (ingress controllers, secrets managers, monitoring stacks, etc.).
+- Integration with cloud-native tooling (Gateway API controllers, secrets managers, monitoring stacks, etc.).
 
 For step-by-step deployment instructions, value reference guides, and configurations, see the [infra/k8s directory on GitHub](https://github.com/reconmap/reconmap/tree/main/infra/k8s).
 

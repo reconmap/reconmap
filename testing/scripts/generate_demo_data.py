@@ -7,7 +7,7 @@ src/server/Api/Domain/Entities, so the file can be posted to
 POST /api/system/data as-is.
 
 Vulnerability and project categories are not generated. They are seeded by
-infra/docker/postgres/initdb/sql/02-default-data.sql with unique names, so the
+infra/postgres/initdb/sql/02-default-data.sql with unique names, so the
 generated data references their ids instead. The seeded organisation (id 1,
 "Reconmap") and admin user (id 1) are reused as well.
 
@@ -25,7 +25,7 @@ from faker import Faker
 
 fake = Faker()
 
-# Ids of the rows seeded by infra/docker/postgres/initdb/sql/02-default-data.sql.
+# Ids of the rows seeded by infra/postgres/initdb/sql/02-default-data.sql.
 SEED_ADMIN_ID = 1
 SEED_SERVICE_PROVIDER_ID = 1
 SEED_PROJECT_CATEGORY_IDS = list(range(1, 9))

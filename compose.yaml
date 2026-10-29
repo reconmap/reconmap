@@ -52,11 +52,12 @@ services:
       start_period: 20s
 
   postgres:
-    image: postgres:18.6-alpine
+    image: ghcr.io/reconmap/postgres:latest
+    build:
+      context: ./infra/postgres
     restart: unless-stopped
     volumes:
       - postgres_varlib:/var/lib/postgresql/data
-      - ./infra/docker/postgres/initdb:/docker-entrypoint-initdb.d:ro
     ports:
       - "5432:5432"
     environment:
@@ -76,8 +77,9 @@ services:
       retries: 5
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.8
-    command: "start --import-realm"
+    image: ghcr.io/reconmap/keycloak:latest
+    build:
+      context: ./infra/keycloak
     # See https://www.keycloak.org/server/all-config
     environment:
       KC_HOSTNAME_STRICT: false
@@ -94,10 +96,6 @@ services:
       VAR_DASHBOARD_URL: "http://localhost:5500"
       VAR_ADMIN_CLIENT_SECRET: "${KEYCLOAK_ADMIN_CLIENT_SECRET}"
       VAR_API_CLIENT_SECRET: "${KEYCLOAK_API_CLIENT_SECRET}"
-    volumes:
-      - ./infra/keycloak/reconmap-theme-keycloak.jar:/opt/keycloak/providers/reconmap-theme-keycloak.jar:ro
-      - ./infra/keycloak/realm.json:/opt/keycloak/data/import/reconmap-realm.json:ro
-      - ./infra/keycloak/healthcheck.sh:/opt/keycloak/healthcheck.sh:ro
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -131,13 +129,13 @@ services:
 
   ngapi:
     profiles: [ "app" ]
-    image: ghcr.io/reconmap/ng-api:latest
+    image: ghcr.io/reconmap/api:latest
     build:
       context: ./src/server/Api
       dockerfile: docker/Dockerfile
     volumes:
       - "./config-ngapi.json:/app/appsettings.json"
-      - dataprotection-keys:/root/.aspnet/DataProtection-Keys
+      - dataprotection-keys:/home/app/.aspnet/DataProtection-Keys
     ports:
       - "5510:5510"
     environment:
@@ -225,10 +223,9 @@ services:
       - rustfs_logs:/logs
 
   opa:
-    image: openpolicyagent/opa:1.21.2
+    image: ghcr.io/reconmap/opa:latest
+    build:
+      context: ./policy
     restart: unless-stopped
     ports:
       - "8181:8181"
-    volumes:
-      - ./policy:/policy
-    command: [ "run", "--server", "--addr", ":8181", "--log-format=json", "/policy" ]

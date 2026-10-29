@@ -4,7 +4,7 @@ Reconmap utilizes Open Policy Agent (OPA) combined with Rego policies to enforce
 
 ## OPA Integration
 
-OPA is deployed as a container within the Docker Compose (`compose.yaml`) and Kubernetes definitions. 
+OPA is deployed as a container (image `ghcr.io/reconmap/opa`, which bundles `policy/authz.rego`) in both the Docker Compose (`compose.yaml`) and Helm chart deployments. 
 The C# API intercepts incoming requests and queries the OPA server to verify if the requesting user has permission to perform the desired action. The target OPA endpoint is dynamically configured via the `OPA_SERVER_URL` variable in the root `.env` file (which defaults to `http://opa:8181` inside the Docker network).
 
 ### Default Policies

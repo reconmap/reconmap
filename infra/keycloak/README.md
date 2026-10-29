@@ -6,15 +6,15 @@ Keycloak image customised for Reconmap setups.
 
 ![Reconmap themed login screen](screenshot.png)
 
-## Requirements
+## Image
 
-- [Make](https://www.gnu.org/software/make/)
-- [Jar](https://docs.oracle.com/javase/tutorial/deployment/jar/index.html)
+Published as `ghcr.io/reconmap/keycloak`. The image bundles the login theme and the realm
+(`realm.json`), so consumers (Docker Compose, Helm) need no mounts.
 
 ## Build instructions
 
 ```shell
-make
+make build
 ```
 
 ## Run instructions
@@ -22,8 +22,8 @@ make
 Run as any regular container passing these environment variables:
 
 - `VAR_DASHBOARD_URL`: URL of the Reconmap Dashboard. Something like https://demo.reconmap.com
-- `VAR_ADMIN_CLI_SECRET`: This is the secret needed to communicate the Reconmap REST API with the Keycloak server.
-- `VAR_API_CLI_SECRET`: This is the secret needed to communicate the Reconmap REST API with the Keycloak server.
+- `VAR_ADMIN_CLIENT_SECRET`: This is the secret needed to communicate the Reconmap REST API with the Keycloak server.
+- `VAR_API_CLIENT_SECRET`: This is the secret needed to communicate the Reconmap REST API with the Keycloak server.
 
 ## References
 

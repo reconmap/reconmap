@@ -1,0 +1,76 @@
+{{- if .Values.keycloak.enabled }}
+{{- $c := dict "root" . "component" "keycloak" }}
+---
+{{ include "reconmap.service" (merge (dict "port" 8080) $c) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "reconmap.componentName" $c }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  # A single replica: scaling Keycloak out needs distributed-cache (JGroups) configuration.
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 1000 "gid" 0) | nindent 8 }}
+      containers:
+        - name: keycloak
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.keycloak.image) | quote }}
+          imagePullPolicy: {{ .Values.keycloak.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" false) | nindent 12 }}
+          env:
+            - name: KC_DB
+              value: postgres
+            - name: KC_DB_URL_HOST
+              value: {{ include "reconmap.postgresHost" . | quote }}
+            - name: KC_DB_DATABASE
+              value: keycloak
+            - name: KC_DB_USERNAME
+              value: {{ .Values.postgres.keycloakUser | quote }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "KC_DB_PASSWORD" "key" "keycloak-db-password") | nindent 12 }}
+            - name: KC_HOSTNAME
+              value: {{ include "reconmap.keycloakUrl" . | quote }}
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_PROXY_HEADERS
+              value: xforwarded
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              value: {{ .Values.keycloak.bootstrapAdminUser | quote }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "KC_BOOTSTRAP_ADMIN_PASSWORD" "key" "keycloak-admin-password") | nindent 12 }}
+            - name: VAR_DASHBOARD_URL
+              value: {{ include "reconmap.dashboardUrl" . | quote }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "VAR_ADMIN_CLIENT_SECRET" "key" "admin-client-secret") | nindent 12 }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "VAR_API_CLIENT_SECRET" "key" "api-client-secret") | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: management
+              containerPort: 9000
+          startupProbe:
+            httpGet: {path: /health/started, port: management}
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet: {path: /health/ready, port: management}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health/live, port: management}
+            periodSeconds: 30
+            failureThreshold: 5
+          resources:
+            {{- toYaml .Values.keycloak.resources | nindent 12 }}
+{{- end }}

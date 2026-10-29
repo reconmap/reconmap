@@ -1,0 +1,34 @@
+name: Helm chart
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'infra/k8s/**'
+      - '.github/workflows/helm.yml'
+  pull_request:
+    paths:
+      - 'infra/k8s/**'
+      - '.github/workflows/helm.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/k8s/helm-charts/reconmap
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install kubeconform
+        run: |
+          curl -fsSL https://github.com/yannh/kubeconform/releases/download/v0.7.0/kubeconform-linux-amd64.tar.gz | tar xz kubeconform
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Lint
+        run: helm lint --strict .
+
+      - name: Validate rendered manifests
+        run: |
+          helm template reconmap . --set gateway.enabled=true --set 'gateway.parentRefs[0].name=gw' \
+            | kubeconform -strict -summary -ignore-missing-schemas

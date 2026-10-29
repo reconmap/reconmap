@@ -1,9 +1,5 @@
-JAR_NAME=reconmap-theme-keycloak.jar
+IMAGE=ghcr.io/reconmap/keycloak
 
-$(JAR_NAME):
-	jar cf $@ -C src .
-
-clean:
-	rm -f $(JAR_NAME)
-
-
+.PHONY: build
+build:
+	docker build -t $(IMAGE):latest .

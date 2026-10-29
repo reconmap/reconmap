@@ -1,0 +1,71 @@
+{{- if .Values.rabbitmq.enabled }}
+{{- $c := dict "root" . "component" "rabbitmq" }}
+{{- $name := include "reconmap.componentName" $c }}
+---
+{{ include "reconmap.service" (merge (dict "port" 5672) $c) }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ $name }}
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 100 "gid" 101) | nindent 8 }}
+      containers:
+        - name: rabbitmq
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.rabbitmq.image) | quote }}
+          imagePullPolicy: {{ .Values.rabbitmq.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" false) | nindent 12 }}
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: {{ .Values.rabbitmq.user | quote }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "RABBITMQ_DEFAULT_PASS" "key" "rabbitmq-password") | nindent 12 }}
+          ports:
+            - name: amqp
+              containerPort: 5672
+          startupProbe:
+            exec: {command: [rabbitmq-diagnostics, -q, ping]}
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+            exec: {command: [rabbitmq-diagnostics, -q, check_port_connectivity]}
+            periodSeconds: 15
+            timeoutSeconds: 10
+          livenessProbe:
+            exec: {command: [rabbitmq-diagnostics, -q, ping]}
+            periodSeconds: 30
+            timeoutSeconds: 10
+          resources:
+            {{- toYaml .Values.rabbitmq.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/rabbitmq
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.rabbitmq.persistence.storageClassName }}
+        storageClassName: {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.rabbitmq.persistence.size }}
+{{- end }}

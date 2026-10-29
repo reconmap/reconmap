@@ -1,0 +1,70 @@
+{{- if .Values.redis.enabled }}
+{{- $c := dict "root" . "component" "redis" }}
+{{- $name := include "reconmap.componentName" $c }}
+---
+{{ include "reconmap.service" (merge (dict "port" 6379) $c) }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ $name }}
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 999 "gid" 1000) | nindent 8 }}
+      containers:
+        - name: redis
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.redis.image) | quote }}
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" true) | nindent 12 }}
+          # The password comes from the Secret through the environment, never the pod spec.
+          command: [sh, -c, 'exec redis-server --requirepass "$REDIS_PASSWORD" --save 20 1 --loglevel warning']
+          env:
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "REDIS_PASSWORD" "key" "redis-password") | nindent 12 }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "REDISCLI_AUTH" "key" "redis-password") | nindent 12 }}
+          ports:
+            - name: redis
+              containerPort: 6379
+          startupProbe:
+            exec: {command: [redis-cli, ping]}
+            periodSeconds: 3
+            failureThreshold: 20
+          readinessProbe:
+            exec: {command: [redis-cli, ping]}
+            periodSeconds: 10
+          livenessProbe:
+            exec: {command: [redis-cli, ping]}
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.redis.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.redis.persistence.storageClassName }}
+        storageClassName: {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.redis.persistence.size }}
+{{- end }}

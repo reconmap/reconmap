@@ -1,0 +1,132 @@
+{{- if .Values.api.enabled }}
+{{- $c := dict "root" . "component" "api" }}
+{{- $name := include "reconmap.componentName" $c }}
+---
+{{ include "reconmap.service" (merge (dict "port" 5510) $c) }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $name }}-keys
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  accessModes: [ReadWriteOnce]
+  {{- with .Values.api.persistence.storageClassName }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.api.persistence.size }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  # The Data Protection key volume is ReadWriteOnce.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 1654) | nindent 8 }}
+      containers:
+        - name: api
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.api.image) | quote }}
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" false) | nindent 12 }}
+          # Only per-environment settings are overridden; the image bakes in appsettings.json defaults.
+          # $(VAR) references resolve against the secret-backed variables declared first.
+          env:
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "DB_PASSWORD" "key" "db-password") | nindent 12 }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "REDIS_PASSWORD" "key" "redis-password") | nindent 12 }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "RABBITMQ_PASSWORD" "key" "rabbitmq-password") | nindent 12 }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "KEYCLOAK_CLIENT_SECRET" "key" "api-client-secret") | nindent 12 }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "S3_SECRET_KEY" "key" "s3-secret-key") | nindent 12 }}
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://0.0.0.0:5510
+            - name: ConnectionStrings__PostgreSqlConnection
+              value: Host={{ include "reconmap.postgresHost" . }};Port=5432;Database={{ .Values.postgres.database }};Username={{ .Values.postgres.user }};Password=$(DB_PASSWORD);
+            - name: Redis__Host
+              value: {{ include "reconmap.redisHost" . | quote }}
+            - name: Redis__Password
+              value: $(REDIS_PASSWORD)
+            - name: RabbitMQ__HostName
+              value: {{ include "reconmap.rabbitmqHost" . | quote }}
+            - name: RabbitMQ__UserName
+              value: {{ .Values.rabbitmq.user | quote }}
+            - name: RabbitMQ__Password
+              value: $(RABBITMQ_PASSWORD)
+            - name: Keycloak__KeycloakUrl
+              value: {{ include "reconmap.keycloakInternalUrl" . | quote }}
+            - name: Keycloak__MetadataAddress
+              value: {{ include "reconmap.keycloakInternalUrl" . }}/realms/reconmap/.well-known/openid-configuration
+            - name: Keycloak__ValidIssuer
+              value: {{ include "reconmap.keycloakUrl" . }}/realms/reconmap
+            - name: Keycloak__ClientSecret
+              value: $(KEYCLOAK_CLIENT_SECRET)
+            - name: Storage__S3__Endpoint
+              value: {{ include "reconmap.s3Endpoint" . | quote }}
+            - name: Storage__S3__UseHttp
+              value: {{ .Values.s3.useHttp | quote }}
+            - name: Storage__S3__AccessKey
+              value: {{ .Values.s3.accessKey | quote }}
+            - name: Storage__S3__SecretKey
+              value: $(S3_SECRET_KEY)
+            - name: Storage__S3__BucketName
+              value: {{ .Values.s3.bucket | quote }}
+            - name: Cors__AllowedOrigins__0
+              value: {{ include "reconmap.dashboardUrl" . | quote }}
+            {{- if .Values.opa.enabled }}
+            - name: Opa__ServerUrl
+              value: http://{{ include "reconmap.componentName" (dict "root" . "component" "opa") }}:8181
+            {{- end }}
+            {{- range $key, $value := .Values.api.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 5510
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 20
+            failureThreshold: 5
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          volumeMounts:
+            - name: keys
+              mountPath: /home/app/.aspnet/DataProtection-Keys
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: keys
+          persistentVolumeClaim:
+            claimName: {{ $name }}-keys
+        - name: tmp
+          emptyDir: {}
+{{- end }}

@@ -59,11 +59,11 @@ db-shell:
 
 .PHONY: db-reset
 db-reset:
-	cat ../../infra/docker/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
+	cat ../../infra/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
 
 .PHONY: db-import
 db-import:
-	cat ../../infra/docker/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
+	cat ../../infra/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
 
 .PHONY: redis-shell
 redis-shell:

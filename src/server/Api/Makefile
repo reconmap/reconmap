@@ -16,3 +16,9 @@ build:
 .PHONY: push
 push:
 	$(DC) push ngapi
+
+# Transition: keep publishing the legacy ng-api name for one release.
+.PHONY: push-legacy
+push-legacy:
+	docker tag ghcr.io/reconmap/api:latest ghcr.io/reconmap/ng-api:latest
+	docker push ghcr.io/reconmap/ng-api:latest

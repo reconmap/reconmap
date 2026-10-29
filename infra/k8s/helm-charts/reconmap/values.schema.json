@@ -1,0 +1,510 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "nameOverride": {
+      "type": "string"
+    },
+    "fullnameOverride": {
+      "type": "string"
+    },
+    "hosts": {
+      "type": "object",
+      "required": [
+        "dashboard",
+        "api",
+        "keycloak"
+      ],
+      "properties": {
+        "dashboard": {
+          "type": "string",
+          "minLength": 1
+        },
+        "api": {
+          "type": "string",
+          "minLength": 1
+        },
+        "keycloak": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "tls": {
+      "type": "boolean"
+    },
+    "gateway": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "parentRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        }
+      }
+    },
+    "secrets": {
+      "type": "object",
+      "properties": {
+        "existingSecret": {
+          "type": "string"
+        },
+        "postgresPassword": {
+          "type": "string"
+        },
+        "dbPassword": {
+          "type": "string"
+        },
+        "keycloakDbPassword": {
+          "type": "string"
+        },
+        "redisPassword": {
+          "type": "string"
+        },
+        "rabbitmqPassword": {
+          "type": "string"
+        },
+        "keycloakAdminPassword": {
+          "type": "string"
+        },
+        "adminClientSecret": {
+          "type": "string"
+        },
+        "apiClientSecret": {
+          "type": "string"
+        },
+        "s3SecretKey": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "networkPolicy": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "imagePullSecrets": {
+      "type": "array"
+    },
+    "postgres": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "externalHost": {
+          "type": "string"
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "pattern": "^[0-9]+(Mi|Gi|Ti)$"
+            },
+            "storageClassName": {
+              "type": "string"
+            }
+          }
+        },
+        "database": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "keycloakUser": {
+          "type": "string"
+        }
+      }
+    },
+    "redis": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "externalHost": {
+          "type": "string"
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "pattern": "^[0-9]+(Mi|Gi|Ti)$"
+            },
+            "storageClassName": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "rabbitmq": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "externalHost": {
+          "type": "string"
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "pattern": "^[0-9]+(Mi|Gi|Ti)$"
+            },
+            "storageClassName": {
+              "type": "string"
+            }
+          }
+        },
+        "user": {
+          "type": "string"
+        }
+      }
+    },
+    "s3": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "pattern": "^[0-9]+(Mi|Gi|Ti)$"
+            },
+            "storageClassName": {
+              "type": "string"
+            }
+          }
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "useHttp": {
+          "type": "boolean"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        }
+      }
+    },
+    "opa": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        }
+      }
+    },
+    "keycloak": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "bootstrapAdminUser": {
+          "type": "string"
+        }
+      }
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "pattern": "^[0-9]+(Mi|Gi|Ti)$"
+            },
+            "storageClassName": {
+              "type": "string"
+            }
+          }
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "extraEnv": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dashboard": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "image": {
+          "type": "object",
+          "required": [
+            "repository"
+          ],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^(sha256:[a-f0-9]{64})?$"
+            },
+            "pullPolicy": {
+              "enum": [
+                "Always",
+                "IfNotPresent",
+                "Never"
+              ]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "extraConfig": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

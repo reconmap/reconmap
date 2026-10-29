@@ -48,5 +48,5 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Push NGAPI image
-        run: make build push
+        run: make build push push-legacy
         working-directory: src/server/Api
