@@ -33,6 +33,18 @@ start:
 logs:
 	$(DC) logs -f
 
+# Hot-reload dev servers. They run on the host against the dependencies from `make start`
+# (settings come from Api/appsettings.Development.json).
+.PHONY: api-start
+api-start:
+	ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://localhost:5510 \
+		dotnet watch run --project Api --no-launch-profile
+
+.PHONY: mcp-start
+mcp-start:
+	ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://localhost:5520 \
+		dotnet watch run --project Mcp --no-launch-profile
+
 # Production images (no dev overlay): make build-api push-api build-mcp push-mcp
 DC_IMAGES := docker compose -f ../../compose.yaml
 SERVICE_api := ngapi
