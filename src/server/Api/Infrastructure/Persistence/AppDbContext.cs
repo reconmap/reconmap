@@ -52,54 +52,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
-            .Property(d => d.Role)
-            .HasConversion(
-                v => v.ToString().ToLower(), // C# enum → DB string
-                v => Enum.Parse<UserRole>(v, ignoreCase: true)
-            );
-        modelBuilder.Entity<UserInfo>()
-            .Property(d => d.Role)
-            .HasConversion(
-                v => v.ToString().ToLower(), // C# enum → DB string
-                v => Enum.Parse<UserRole>(v, ignoreCase: true)
-            );
-
-        modelBuilder.Entity<Project>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
-        modelBuilder.Entity<ProjectTask>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
-        modelBuilder.Entity<Report>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
-        modelBuilder.Entity<Asset>().Property(e => e.Id).HasValueGenerator<GuidV7ValueGenerator>();
-        // Declared explicitly (there is no navigation property) so EF orders inserts parent-first, e.g. on import.
-        modelBuilder.Entity<Asset>()
-            .HasOne<Asset>()
-            .WithMany()
-            .HasForeignKey(e => e.ParentId)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Vulnerability>().Property(e => e.Id).HasValueGenerator<GuidV4ValueGenerator>();
-
-        modelBuilder.Entity<UserApiToken>()
-            .Property(t => t.Scope)
-            .HasConversion(
-                v => v.ToString().ToLower().Replace("_", "-"),
-                v => Enum.Parse<ApiTokenScope>(v.Replace("-", "_"), ignoreCase: true)
-            );
-
-        foreach (var entity in modelBuilder.Model.GetEntityTypes())
-        {
-            foreach (var property in entity.GetProperties())
-            {
-                var columnName = property.GetColumnName();
-                if (columnName == property.Name)
-                {
-                    property.SetColumnName(ToSnakeCase(columnName));
-                }
-            }
-        }
-    }
-
-    private static string ToSnakeCase(string input)
-    {
-        if (string.IsNullOrEmpty(input)) return input;
-        return System.Text.RegularExpressions.Regex.Replace(input, @"([a-z0-9])([A-Z])", "$1_$2").ToLower();
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }
