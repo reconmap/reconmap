@@ -49,7 +49,7 @@ The MCP server has its own image, `ghcr.io/reconmap/mcp`, built from `src/server
 docker compose --profile app up -d mcp
 ```
 
-It listens on port `5520` (`http://localhost:5520/mcp`) and reuses `config-ngapi.json` and the same database, Redis, Keycloak and OPA settings as the API. Settings:
+It listens on port `5520` (`http://localhost:5520/mcp`) and reuses the API's `appsettings.json` and the same database, Redis, Keycloak and OPA settings as the API. Settings:
 
 - `MCP_PUBLIC_URL` (`.env`): public URL of the endpoint, passed as `Mcp:PublicUrl`. Set it when the server is behind a proxy or another hostname. Defaults to `http://localhost:5520/mcp`.
 - `MCP_HEALTH_URL` (`.env`): URL the REST API probes to report MCP status on the System health page and dashboard widget, passed to the API as `Mcp:HealthUrl`. Defaults to `http://mcp:5520/health`.

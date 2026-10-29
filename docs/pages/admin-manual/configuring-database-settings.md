@@ -3,11 +3,11 @@ title: Configuring database settings
 parent: Admin manual
 ---
 
-The database settings for the Reconmap API (NGAPI) are stored in the `appsettings.json` file. When using Docker Compose, this file is typically mapped from `config-ngapi.json` in the project root.
+The database settings for the Reconmap API (NGAPI) are defaults in the `appsettings.json` shipped with the API image, which holds no passwords. With Docker Compose, the password comes from `POSTGRES_RECONMAP_PASSWORD` in `.env`; elsewhere, set `ConnectionStrings__PostgreSqlConnection`, or mount your own `appsettings.json`.
 
 ### Example configuration
 
-In your `config-ngapi.json`, the database connection string should look like this:
+In `appsettings.json` (or as the environment variable above), the database connection string should look like this:
 
 ```json
 {

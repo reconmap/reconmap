@@ -11,8 +11,3 @@ services:
       - RUSTFS_ADDRESS=0.0.0.0:9000
       - RUSTFS_CONSOLE_ENABLE=true
       - RUSTFS_CONSOLE_ADDRESS=0.0.0.0:9001
-
-  ngapi:
-    volumes:
-      - "./src/server/Api/appsettings.Production.json:/App/appsettings.Production.json"
-      - "./src/server/Api/appsettings.json:/App/appsettings.json"

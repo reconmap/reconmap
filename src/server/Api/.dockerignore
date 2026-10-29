@@ -1,4 +1,4 @@
-appsettings*.json
+appsettings.Development.json
 .idea
 bin
 obj

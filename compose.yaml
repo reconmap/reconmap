@@ -134,7 +134,6 @@ services:
       context: ./src/server/Api
       dockerfile: docker/Dockerfile
     volumes:
-      - "./config-ngapi.json:/app/appsettings.json"
       - dataprotection-keys:/home/app/.aspnet/DataProtection-Keys
     ports:
       - "5510:5510"
@@ -143,7 +142,10 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:5510
       - ConnectionStrings__PostgreSqlConnection=Host=postgres;Port=5432;Database=reconmap;Username=${POSTGRES_RECONMAP_USER};Password=${POSTGRES_RECONMAP_PASSWORD}
       - Redis__Password=${REDIS_PASSWORD}
+      - RabbitMQ__UserName=${RABBITMQ_DEFAULT_USER}
+      - RabbitMQ__Password=${RABBITMQ_DEFAULT_PASS}
       - Keycloak__ClientSecret=${KEYCLOAK_API_CLIENT_SECRET}
+      - Storage__S3__AccessKey=${RUSTFS_ACCESS_KEY}
       - Storage__S3__SecretKey=${RUSTFS_SECRET_KEY}
       - Opa__ServerUrl=${OPA_SERVER_URL}
       - Mcp__HealthUrl=${MCP_HEALTH_URL:-http://mcp:5520/health}
@@ -169,8 +171,6 @@ services:
     build:
       context: ./src/server
       dockerfile: Mcp/docker/Dockerfile
-    volumes:
-      - "./config-ngapi.json:/app/appsettings.json:ro"
     ports:
       - "5520:5520"
     environment:
@@ -178,6 +178,8 @@ services:
       - ASPNETCORE_HTTP_PORTS=5520
       - ConnectionStrings__PostgreSqlConnection=Host=postgres;Port=5432;Database=reconmap;Username=${POSTGRES_RECONMAP_USER};Password=${POSTGRES_RECONMAP_PASSWORD}
       - Redis__Password=${REDIS_PASSWORD}
+      - RabbitMQ__UserName=${RABBITMQ_DEFAULT_USER}
+      - RabbitMQ__Password=${RABBITMQ_DEFAULT_PASS}
       - Keycloak__ClientSecret=${KEYCLOAK_API_CLIENT_SECRET}
       - Opa__ServerUrl=${OPA_SERVER_URL}
       # The bundled Keycloak is served over plain HTTP; remove when it sits behind HTTPS.

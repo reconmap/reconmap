@@ -109,6 +109,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The API image now ships a secret-free `appsettings.json`. It was excluded from the build context, so the image had no base configuration and the Helm chart's environment overrides had nothing to override. Passwords and client secrets are never baked in; Compose and the chart supply them as environment variables. `config-ngapi.json` and its mounts were removed, `appsettings.Production.json` now only holds logging, and local development secrets live in `appsettings.Development.json`. The stale `/App/` mounts in `compose.dev.yaml` were removed.
 - Task details: the status dropdown did not save changes, because it sent only the `status` field to the task API, which replaces the whole task and rejects partial bodies. It now sends the full task, and the page refreshes to show the new status.
 - Vulnerability comments: the Save button was visible to every role, a success message appeared before the comment was saved, and failures were not reported.
 - Deleting a comment no longer treats the empty `204 No Content` response as an error.
