@@ -22,7 +22,7 @@ const AttachmentsDropzone = ({
     uploadFn = requestAttachmentPost,
     fileFieldName = "attachment[]",
     disabled = false,
-    kind = "attachment",
+    type = "attachment",
 }: any) => {
     const queryClient = useQueryClient();
 
@@ -34,7 +34,7 @@ const AttachmentsDropzone = ({
     const [error, setError] = useState<string | null>(null);
     const { data: limits } = useUploadLimitsQuery();
 
-    const isAttachment = kind === "attachment";
+    const isAttachment = type === "attachment";
     const maxFileSize = isAttachment ? limits?.maxFileSizeBytes : limits?.maxCommandOutputBytes;
     const maxFiles = isAttachment ? limits?.maxFilesPerRequest : 1;
     const allowedExtensions = isAttachment ? limits?.allowedExtensions : undefined;

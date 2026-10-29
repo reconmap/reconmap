@@ -17,8 +17,8 @@ const convertValue = (value) => {
 };
 
 const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) => {
-    const { data: clients, isLoading: isLoadingClients } = useOrganisationsQuery({ kind: "client" });
-    const { data: serviceProviders } = useOrganisationsQuery({ kind: "service_provider" });
+    const { data: clients, isLoading: isLoadingClients } = useOrganisationsQuery({ type: "client" });
+    const { data: serviceProviders } = useOrganisationsQuery({ type: "service_provider" });
     const { data: categories, isLoading: isLoadingCategories } = useProjectCategoriesQuery();
 
     const handleFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {

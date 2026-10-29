@@ -1,7 +1,7 @@
 interface ClientInterface {
     id?: number;
     createdById?: number;
-    kind: string | undefined;
+    type: string | undefined;
     createdAt?: string;
     updatedAt?: string;
     name?: string;
@@ -18,7 +18,7 @@ const Client: ClientInterface = {
     logo_attachment_id: undefined,
     small_logo_attachment_id: undefined,
 
-    kind: undefined,
+    type: undefined,
 };
 
 export default Client;

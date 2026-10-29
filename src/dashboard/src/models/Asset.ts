@@ -4,7 +4,7 @@ interface AssetInterface {
 	project_id: string | undefined;
 	parent_id?: string;
 	name: string | undefined;
-	kind?: string;
+	type?: string;
 	source?: string;
 	attributes?: string;
 	tags?: string;

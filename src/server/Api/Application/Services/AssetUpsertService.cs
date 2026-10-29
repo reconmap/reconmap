@@ -41,7 +41,7 @@ public class AssetUpsertService(AppDbContext db) : IAssetUpsertService
         string? source, CancellationToken ct = default)
     {
         var name = candidate.Name.Trim();
-        var kind = string.IsNullOrWhiteSpace(candidate.Kind) ? null : candidate.Kind.Trim().ToLowerInvariant();
+        var type = string.IsNullOrWhiteSpace(candidate.Type) ? null : candidate.Type.Trim().ToLowerInvariant();
         var now = DateTime.UtcNow;
 
         var existing = await db.Assets.FirstOrDefaultAsync(
@@ -50,7 +50,7 @@ public class AssetUpsertService(AppDbContext db) : IAssetUpsertService
         if (existing != null)
         {
             existing.LastSeenAt = now;
-            existing.Kind ??= kind;
+            existing.Type ??= type;
             existing.Source ??= source ?? candidate.Source;
             existing.Attributes = MergeAttributes(existing.Attributes, candidate.Attributes);
             await db.SaveChangesAsync(ct);
@@ -62,7 +62,7 @@ public class AssetUpsertService(AppDbContext db) : IAssetUpsertService
             ProjectId = projectId,
             ParentId = parentId,
             Name = name,
-            Kind = kind,
+            Type = type,
             Source = source ?? candidate.Source,
             Attributes = candidate.Attributes,
             Tags = candidate.Tags,

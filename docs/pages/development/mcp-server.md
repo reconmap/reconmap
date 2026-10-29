@@ -61,7 +61,7 @@ The container runs as a non-root user. Build or push it by hand with `make build
 
 ## Authentication and authorization
 
-Every request to `/mcp` must carry `Authorization: Bearer <token>`. Two kinds of token are accepted, the same ones as the REST API:
+Every request to `/mcp` must carry `Authorization: Bearer <token>`. Two types of token are accepted, the same ones as the REST API:
 
 - A **Reconmap API token** (created from the user's profile). Tokens with the `read-only` scope are fine here because the server only exposes read operations.
 - A **Keycloak access token** (JWT) for the Reconmap realm, normally obtained through the OAuth flow described below.

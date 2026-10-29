@@ -91,7 +91,7 @@ data:
         created_at                TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at                TIMESTAMPTZ                         NULL,
         created_by_id INT                        NULL,
-        kind                     VARCHAR(20) NOT NULL,
+        type                     VARCHAR(20) NOT NULL,
         name                     VARCHAR(80)                         NOT NULL UNIQUE,
         address                  VARCHAR(400)                        NULL,
         url                      VARCHAR(255)                        NULL,
@@ -138,7 +138,7 @@ data:
     (
         id    SERIAL PRIMARY KEY,
         organisation_id INT             NOT NULL,
-        kind  VARCHAR(20) NOT NULL DEFAULT 'general',
+        type  VARCHAR(20) NOT NULL DEFAULT 'general',
         name  VARCHAR(200)                             NOT NULL,
         email VARCHAR(200)                             NOT NULL,
         phone VARCHAR(200)                             NULL,
@@ -390,7 +390,7 @@ data:
         parent_type VARCHAR(50)              NOT NULL,
         name        VARCHAR(100)                        NOT NULL,
         label       VARCHAR(100)                        NOT NULL,
-        kind        VARCHAR(20) NOT NULL,
+        type        VARCHAR(20) NOT NULL,
         config      JSONB                                NOT NULL,
         UNIQUE (parent_type, name)
     );
@@ -618,7 +618,7 @@ VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
            (12, 1, 'Session Management', 'Related to the identification of authenticated users.'),
            (13, 1, 'Timing', 'Related to race conditions, locking, or order of operations.');
 
-    INSERT INTO organisation (created_by_id, kind, name, url)
+    INSERT INTO organisation (created_by_id, type, name, url)
     VALUES (1, 'service_provider', 'Reconmap', 'https://reconmap.com');
 
     INSERT INTO contact (organisation_id, name, email)

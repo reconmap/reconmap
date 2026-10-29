@@ -7,6 +7,6 @@ type CustomField struct {
 	ParentType string `json:"parent_type"`
 	Name string `json:"name"`
 	Label string `json:"label"`
-	Kind string `json:"kind"`
+	Type string `json:"type"`
 	Config string `json:"config"`
 }

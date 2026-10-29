@@ -35,7 +35,7 @@ public class SubfinderParser(IAttachmentStorage attachmentStorage) : ICommandPar
 
                     var hostAsset = new Asset
                     {
-                        Kind = "hostname",
+                        Type = "hostname",
                         Name = host
                     };
 

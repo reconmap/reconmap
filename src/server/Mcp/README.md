@@ -41,7 +41,7 @@ Configure your AI assistant (e.g., Claude Desktop, Cursor, or VS Code Copilot) t
 
 ## Authentication and authorization
 
-Every request to `/mcp` must carry `Authorization: Bearer <token>`. Two kinds of token are accepted, the same ones as the REST API:
+Every request to `/mcp` must carry `Authorization: Bearer <token>`. Two types of token are accepted, the same ones as the REST API:
 
 - A **Reconmap API token** . Tokens with the `read-only` scope are fine here because the server only exposes read operations.
 - A **Keycloak access token** (JWT) for the Reconmap realm, normally obtained through the OAuth flow described below.

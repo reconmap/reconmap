@@ -6,7 +6,7 @@ namespace Reconmap.Api.Domain.Entities;
 
 /// <summary>
 /// A node in a project's asset tree: a host, a port, a path, a file, a package, or anything else a tool discovers.
-/// Structure comes from <see cref="ParentId"/>; <see cref="Kind"/> is a free-form hint, not a closed category.
+/// Structure comes from <see cref="ParentId"/>; <see cref="Type"/> is a free-form hint, not a closed category.
 /// </summary>
 [Table("asset")]
 public class Asset : TimestampedEntity
@@ -22,7 +22,7 @@ public class Asset : TimestampedEntity
     public string Name { get; set; } = string.Empty;
 
     [MaxLength(50)]
-    public string? Kind { get; set; }
+    public string? Type { get; set; }
 
     /// <summary>What discovered the node (e.g. a parser name), if anything.</summary>
     [MaxLength(100)]

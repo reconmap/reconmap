@@ -3,7 +3,7 @@ interface CustomFieldInterface {
     parentType?: string;
     name?: string;
     label?: string;
-    kind?: string;
+    type?: string;
     config?: string;
 }
 

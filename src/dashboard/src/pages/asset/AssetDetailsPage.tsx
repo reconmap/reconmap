@@ -116,8 +116,8 @@ const AssetDetailsPage = () => {
 
                     <div className="grid grid-two">
                         <div>
-                            <h4>Kind</h4>
-                            <Badge color={asset.kind === "hostname" ? "green" : "blue"}>{asset.kind ?? "-"}</Badge>
+                            <h4>Type</h4>
+                            <Badge color={asset.type === "hostname" ? "green" : "blue"}>{asset.type ?? "-"}</Badge>
                             {asset.source && (
                                 <>
                                     <h4>Discovered by</h4>
@@ -154,7 +154,7 @@ const AssetDetailsPage = () => {
                                 {children.map((child) => (
                                     <li key={child.id}>
                                         <Link to={`/assets/${child.id}`}>
-                                            <AssetBadge name={child.name} kind={child.kind ?? null} />
+                                            <AssetBadge name={child.name} type={child.type ?? null} />
                                         </Link>
                                     </li>
                                 ))}

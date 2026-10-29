@@ -19,7 +19,7 @@ VALUES (1, NULL, 'General', 'General categories.'),
        (12, 1, 'Session Management', 'Related to the identification of authenticated users.'),
        (13, 1, 'Timing', 'Related to race conditions, locking, or order of operations.');
 
-INSERT INTO organisation (created_by_id, kind, name, url)
+INSERT INTO organisation (created_by_id, type, name, url)
 VALUES (1, 'service_provider', 'Reconmap', 'https://reconmap.com');
 
 INSERT INTO contact (organisation_id, name, email)

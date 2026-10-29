@@ -1,12 +1,12 @@
-export type ToastKind = "success" | "error";
+export type ToastType = "success" | "error";
 
 interface ToastItem {
     id: number;
-    kind: ToastKind;
+    type: ToastType;
     message: string;
 }
 
-const DISMISS_AFTER_MS: Record<ToastKind, number> = {
+const DISMISS_AFTER_MS: Record<ToastType, number> = {
     success: 4000,
     error: 8000,
 };
@@ -25,11 +25,11 @@ function toMessage(value: unknown): string {
     return String(value ?? "");
 }
 
-function show(kind: ToastKind, value: unknown) {
+function show(type: ToastType, value: unknown) {
     const id = nextId++;
-    items = [...items, { id, kind, message: toMessage(value) }];
+    items = [...items, { id, type, message: toMessage(value) }];
     emit();
-    setTimeout(() => dismiss(id), DISMISS_AFTER_MS[kind]);
+    setTimeout(() => dismiss(id), DISMISS_AFTER_MS[type]);
 }
 
 function dismiss(id: number) {

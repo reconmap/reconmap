@@ -352,7 +352,7 @@ def generate_clients(count, ids):
     for _ in range(count):
         clients.append({
             "Id": ids.next(),
-            "Kind": "client",
+            "Type": "client",
             "Name": unique_name(fake.company(), used_names)[:80],
             "Address": fake.address().replace("\n", ", ")[:400],
             "Url": fake.url()[:255],
@@ -363,12 +363,12 @@ def generate_clients(count, ids):
 
 def generate_custom_fields():
     return [
-        {"Id": 1000, "ParentType": "vulnerability", "Name": "cve_id", "Label": "CVE ID", "Kind": "text", "Config": "{}"},
-        {"Id": 1001, "ParentType": "vulnerability", "Name": "cwe_id", "Label": "CWE ID", "Kind": "text", "Config": "{}"},
+        {"Id": 1000, "ParentType": "vulnerability", "Name": "cve_id", "Label": "CVE ID", "Type": "text", "Config": "{}"},
+        {"Id": 1001, "ParentType": "vulnerability", "Name": "cwe_id", "Label": "CWE ID", "Type": "text", "Config": "{}"},
         {"Id": 1002, "ParentType": "vulnerability", "Name": "ticket_reference", "Label": "Ticket reference",
-         "Kind": "text", "Config": "{}"},
+         "Type": "text", "Config": "{}"},
         {"Id": 1003, "ParentType": "vulnerability", "Name": "affected_instances", "Label": "Affected instances",
-         "Kind": "integer", "Config": "{}"},
+         "Type": "integer", "Config": "{}"},
     ]
 
 
@@ -455,13 +455,13 @@ def generate_assets(project, ids):
     now = iso(utc_now())
     assets = []
 
-    def add(name, kind, parent=None, attributes=None, source="demo", tags=None):
+    def add(name, type, parent=None, attributes=None, source="demo", tags=None):
         asset = {
             "Id": ids.next(),
             "ParentId": parent["Id"] if parent else None,
             "ProjectId": project["Id"],
             "Name": name,
-            "Kind": kind,
+            "Type": type,
             "Source": source,
             "Attributes": json.dumps(attributes) if attributes else None,
             "Tags": json.dumps(tags if tags is not None else random.choice(tags_pool)),
@@ -489,8 +489,8 @@ def generate_assets(project, ids):
             path_asset = add(path, "path", webapp, {"status": random.choice([200, 301, 302, 403])}, "ffuf", [])
             for child, status in WEB_PATHS[path]:
                 if random.random() < 0.7:
-                    kind = "file" if "." in child.rsplit("/", 1)[-1] else "path"
-                    add(child, kind, path_asset, {"status": status}, "ffuf", [])
+                    type = "file" if "." in child.rsplit("/", 1)[-1] else "path"
+                    add(child, type, path_asset, {"status": status}, "ffuf", [])
         for name, content_type in random.sample(LEAKY_FILES, k=random.randint(0, 3)):
             add(name, "file", webapp, {"status": 200, "content_type": content_type, "size": random.randint(60, 90000)},
                 "nuclei", ["exposed"])

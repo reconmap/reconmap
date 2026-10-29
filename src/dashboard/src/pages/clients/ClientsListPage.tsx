@@ -30,7 +30,7 @@ const ClientsListPage = () => {
     const columns = [
         {
             header: t("Type"),
-            cell: (org) => OrganisationTypes[org.kind],
+            cell: (org) => OrganisationTypes[org.type],
         },
         {
             header: t("Name"),

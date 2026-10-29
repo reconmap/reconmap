@@ -65,7 +65,7 @@ CREATE TABLE organisation
     created_at                TIMESTAMPTZ                         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at                TIMESTAMPTZ                         NULL,
     created_by_id INT                        NULL,
-    kind                     VARCHAR(20) NOT NULL,
+    type                     VARCHAR(20) NOT NULL,
     name                     VARCHAR(80)                         NOT NULL UNIQUE,
     address                  VARCHAR(400)                        NULL,
     url                      VARCHAR(255)                        NULL,
@@ -112,7 +112,7 @@ CREATE TABLE contact
 (
     id    SERIAL PRIMARY KEY,
     organisation_id INT             NOT NULL,
-    kind  VARCHAR(20) NOT NULL DEFAULT 'general',
+    type  VARCHAR(20) NOT NULL DEFAULT 'general',
     name  VARCHAR(200)                             NOT NULL,
     email VARCHAR(200)                             NOT NULL,
     phone VARCHAR(200)                             NULL,
@@ -208,7 +208,7 @@ CREATE TABLE project_user
 );
 
 -- 13. asset
--- Free-form node tree: structure comes from parent_id, meaning from the open-ended kind and attributes.
+-- Free-form node tree: structure comes from parent_id, meaning from the open-ended type and attributes.
 CREATE TABLE asset
 (
     id              UUID PRIMARY KEY DEFAULT uuidv7(),
@@ -219,7 +219,7 @@ CREATE TABLE asset
     first_seen_at   TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_seen_at    TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name            VARCHAR(500) NOT NULL,
-    kind            VARCHAR(50)  NULL,
+    type            VARCHAR(50)  NULL,
     source          VARCHAR(100) NULL,
     attributes      JSONB        NULL,
     tags            JSONB        NULL,
@@ -375,7 +375,7 @@ CREATE TABLE custom_field
     parent_type VARCHAR(50)              NOT NULL,
     name        VARCHAR(100)                        NOT NULL,
     label       VARCHAR(100)                        NOT NULL,
-    kind        VARCHAR(20) NOT NULL,
+    type        VARCHAR(20) NOT NULL,
     config      JSONB                                NOT NULL,
     UNIQUE (parent_type, name)
 );

@@ -99,7 +99,7 @@
   {{ for a in (assets != null ? assets : empty_array) }}
   [
     {{ a.name != null ? a.name : "" }} |
-    {{ a.kind != null ? a.kind : "" }}
+    {{ a.type != null ? a.type : "" }}
   ],
   {{ end }}
 )

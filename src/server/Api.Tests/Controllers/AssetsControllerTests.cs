@@ -38,13 +38,13 @@ public class AssetsControllerTests
         {
             ProjectId = TestIds.Of(12),
             Name = "https://example.com",
-            Kind = "url"
+            Type = "url"
         });
 
         var created = Assert.IsType<CreatedAtActionResult>(result);
         var asset = Assert.IsType<Asset>(created.Value);
         Assert.Equal("https://example.com", asset.Name);
-        Assert.Equal("url", asset.Kind);
+        Assert.Equal("url", asset.Type);
 
         var saved = await db.Assets.SingleAsync();
         Assert.Equal(TestIds.Of(12), saved.ProjectId);
@@ -57,7 +57,7 @@ public class AssetsControllerTests
         using var db = CreateDbContext();
         for (var i = 1; i <= 5; i++)
         {
-            db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = $"asset-{i}", Kind = "host" });
+            db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = $"asset-{i}", Type = "host" });
         }
         await db.SaveChangesAsync();
 
@@ -80,7 +80,7 @@ public class AssetsControllerTests
         using var db = CreateDbContext();
         for (var i = 1; i <= 25; i++)
         {
-            db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = $"asset-{i}", Kind = "host" });
+            db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = $"asset-{i}", Type = "host" });
         }
         await db.SaveChangesAsync();
 
@@ -102,7 +102,7 @@ public class AssetsControllerTests
         {
             ProjectId = TestIds.Of(4),
             Name = "https://example.com",
-            Kind = "url"
+            Type = "url"
         });
         await db.SaveChangesAsync();
 
@@ -112,13 +112,13 @@ public class AssetsControllerTests
         {
             ProjectId = TestIds.Of(4),
             Name = "https://example.com",
-            Kind = "url"
+            Type = "url"
         });
 
         var ok = Assert.IsType<OkObjectResult>(result);
         var asset = Assert.IsType<Asset>(ok.Value);
         Assert.Equal("https://example.com", asset.Name);
-        Assert.Equal("url", asset.Kind);
+        Assert.Equal("url", asset.Type);
 
         Assert.Equal(1, await db.Assets.CountAsync());
     }
@@ -127,11 +127,11 @@ public class AssetsControllerTests
     public async Task GetMany_WithParentId_ReturnsOnlyChildren()
     {
         using var db = CreateDbContext();
-        var host = new Asset { ProjectId = TestIds.Of(7), Name = "10.0.0.1", Kind = "host" };
+        var host = new Asset { ProjectId = TestIds.Of(7), Name = "10.0.0.1", Type = "host" };
         db.Assets.Add(host);
         await db.SaveChangesAsync();
-        db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), ParentId = host.Id, Name = "443/tcp", Kind = "port" });
-        db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = "10.0.0.2", Kind = "host" });
+        db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), ParentId = host.Id, Name = "443/tcp", Type = "port" });
+        db.Assets.Add(new Asset { ProjectId = TestIds.Of(7), Name = "10.0.0.2", Type = "host" });
         await db.SaveChangesAsync();
 
         var controller = new AssetsController(db, new FakeAiService(), new AssetUpsertService(db));
@@ -159,7 +159,7 @@ public class AssetsControllerTests
         foreach (var parent in new[] { a, b })
             await controller.EnsureOne(new AssetsController.EnsureAssetRequest
             {
-                ProjectId = TestIds.Of(1), Name = "/admin", Kind = "path", ParentId = parent.Id
+                ProjectId = TestIds.Of(1), Name = "/admin", Type = "path", ParentId = parent.Id
             });
 
         Assert.Equal(2, await db.Assets.CountAsync(x => x.Name == "/admin"));
@@ -188,7 +188,7 @@ public class AssetsControllerTests
     }
 
     [Fact]
-    public async Task UpdateOne_UpdatesFieldsAndNormalizesKind()
+    public async Task UpdateOne_UpdatesFieldsAndNormalizesType()
     {
         using var db = CreateDbContext();
         var asset = new Asset { ProjectId = TestIds.Of(1), Name = "old" };
@@ -200,13 +200,13 @@ public class AssetsControllerTests
 
         var result = await controller.UpdateOne(asset.Id, new AssetsController.UpdateAssetRequest
         {
-            Name = " new ", Kind = " Leaked-Env ", Attributes = "{\"size\":12}"
+            Name = " new ", Type = " Leaked-Env ", Attributes = "{\"size\":12}"
         });
 
         Assert.IsType<OkObjectResult>(result);
         var saved = await db.Assets.SingleAsync();
         Assert.Equal("new", saved.Name);
-        Assert.Equal("leaked-env", saved.Kind);
+        Assert.Equal("leaked-env", saved.Type);
         Assert.Equal("{\"size\":12}", saved.Attributes);
     }
 }

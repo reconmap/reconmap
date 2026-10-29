@@ -11,7 +11,7 @@ const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
     const emptyAsset = {
         projectId: project.id,
         name: null,
-        kind: "hostname",
+        type: "hostname",
         parentId: null,
     };
     const [asset, setAsset] = useState<any>(emptyAsset);

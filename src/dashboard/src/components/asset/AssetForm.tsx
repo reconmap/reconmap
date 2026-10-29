@@ -4,7 +4,7 @@ import Form from "components/forms/Form";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
-import AssetKindHints from "models/assetKinds";
+import AssetTypeHints from "models/assetTypes";
 import { assetPath } from "models/assetTree";
 
 const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
@@ -57,18 +57,18 @@ const AssetForm = ({ newAsset, onFormSubmit, assetSetter: setAsset }: any) => {
                     }
                 />
                 <FormField
-                    label="Kind"
+                    label="Type"
                     control={
                         <>
                             <NativeInput
-                                name="kind"
-                                list="asset-kind-hints"
-                                value={newAsset.kind ?? ""}
+                                name="type"
+                                list="asset-type-hints"
+                                value={newAsset.type ?? ""}
                                 placeholder="e.g. hostname, port, path, file"
                                 onChange={onFormChange}
                             />
-                            <datalist id="asset-kind-hints">
-                                {AssetKindHints.map((hint) => (
+                            <datalist id="asset-type-hints">
+                                {AssetTypeHints.map((hint) => (
                                     <option key={hint.value} value={hint.value}>
                                         {hint.description}
                                     </option>

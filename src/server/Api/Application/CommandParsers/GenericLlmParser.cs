@@ -53,7 +53,7 @@ public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmen
 
     private static Asset ToAsset(AiAsset aiAsset)
     {
-        var asset = new Asset { Name = aiAsset.Name, Kind = aiAsset.Kind };
+        var asset = new Asset { Name = aiAsset.Name, Type = aiAsset.Type };
         foreach (var child in aiAsset.Children)
             asset.AddChild(ToAsset(child));
         return asset;

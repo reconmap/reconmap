@@ -78,17 +78,17 @@ const ProjectAssets = ({ project }: any) => {
                         <span style={{ width: "1.5em" }} />
                     )}
                     <Link to={`/assets/${node.id}`}>
-                        <AssetBadge name={node.name} kind={node.kind ?? null} />
+                        <AssetBadge name={node.name} type={node.type ?? null} />
                     </Link>
                     {collapsed.has(node.id) && <small>({countDescendants(node)})</small>}
                 </div>
             ),
         },
         {
-            header: "Kind",
+            header: "Type",
             cell: ({ node }: VisibleRow) => (
                 <>
-                    {node.kind} <Tags values={node.tags} />
+                    {node.type} <Tags values={node.tags} />
                 </>
             ),
         },

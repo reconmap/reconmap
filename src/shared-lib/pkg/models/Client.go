@@ -5,7 +5,7 @@ type Client struct {
 
 	ID int `json:"id"`
 	CreatedById int `json:"createdById"`
-	Kind string `json:"kind"`
+	Type string `json:"type"`
 	InsertTs string `json:"insert_ts"`
 	UpdateTs string `json:"update_ts"`
 	Name string `json:"name"`

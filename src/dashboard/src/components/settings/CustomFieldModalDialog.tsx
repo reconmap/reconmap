@@ -41,7 +41,7 @@ const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
                     <FormField
                         label="Type"
                         control={
-                            <NativeSelect name="kind">
+                            <NativeSelect name="type">
                                 <option value="text">Text</option>
                                 <option value="integer">Integer</option>
                                 <option value="decimal">Decimal</option>

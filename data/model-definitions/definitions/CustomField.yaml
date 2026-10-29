@@ -16,7 +16,7 @@ properties:
     type: string
   label:
     type: string
-  kind:
+  type:
     type: string
     enum:
     - text
@@ -28,5 +28,5 @@ required:
 - parent_type
 - name
 - label
-- kind
+- type
 - config

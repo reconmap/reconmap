@@ -6,7 +6,7 @@ grand_parent: User manual
 
 Reconmap can parse the output of many security tools, and incorporate their results in one of your projects. The instructions below show how to do so step by step.
 
-When you initiate a scan under **Scans -> Run scan** and provide a URL as the target, Reconmap will automatically create a URL asset (kind `url`) for the selected project if it does not already exist.
+When you initiate a scan under **Scans -> Run scan** and provide a URL as the target, Reconmap will automatically create a URL asset (type `url`) for the selected project if it does not already exist.
 
 Everything a parser finds is stored as a tree of [assets](../projects/assets.md): re-running a scan does not duplicate what is already there, it only refreshes when each asset was last seen.
 

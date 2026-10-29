@@ -17,7 +17,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService, IAss
     {
         public Guid ProjectId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string? Kind { get; set; }
+        public string? Type { get; set; }
         public Guid? ParentId { get; set; }
         public string? Attributes { get; set; }
         public string? Tags { get; set; }
@@ -26,7 +26,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService, IAss
     public sealed class UpdateAssetRequest
     {
         public string? Name { get; set; }
-        public string? Kind { get; set; }
+        public string? Type { get; set; }
         public Guid? ParentId { get; set; }
         public string? Attributes { get; set; }
         public string? Tags { get; set; }
@@ -46,7 +46,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService, IAss
 
     [HttpGet]
     public async Task<IActionResult> GetMany([FromQuery] Guid projectId, [FromQuery] Guid? parentId = null,
-        [FromQuery] bool rootsOnly = false, [FromQuery] string? kind = null)
+        [FromQuery] bool rootsOnly = false, [FromQuery] string? type = null)
     {
         var filtered = dbContext.Assets.AsNoTracking()
             .Where(a => a.ProjectId == projectId);
@@ -56,8 +56,8 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService, IAss
         else if (rootsOnly)
             filtered = filtered.Where(a => a.ParentId == null);
 
-        if (!string.IsNullOrWhiteSpace(kind))
-            filtered = filtered.Where(a => a.Kind == kind.Trim().ToLower());
+        if (!string.IsNullOrWhiteSpace(type))
+            filtered = filtered.Where(a => a.Type == type.Trim().ToLower());
 
         var q = filtered.OrderByDescending(a => a.CreatedAt);
 
@@ -89,7 +89,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService, IAss
         }
 
         var (asset, created) = await assetUpsertService.UpsertAsync(request.ProjectId, request.ParentId,
-            new Asset { Name = name, Kind = request.Kind, Attributes = request.Attributes, Tags = request.Tags }, null);
+            new Asset { Name = name, Type = request.Type, Attributes = request.Attributes, Tags = request.Tags }, null);
 
         return created ? CreatedAtAction(nameof(GetOne), new { id = asset.Id }, asset) : Ok(asset);
     }
@@ -125,7 +125,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService, IAss
             asset.Name = name;
         }
 
-        asset.Kind = string.IsNullOrWhiteSpace(request.Kind) ? null : request.Kind.Trim().ToLowerInvariant();
+        asset.Type = string.IsNullOrWhiteSpace(request.Type) ? null : request.Type.Trim().ToLowerInvariant();
         asset.ParentId = request.ParentId;
         asset.Attributes = request.Attributes;
         asset.Tags = request.Tags;
@@ -171,7 +171,7 @@ public class AssetsController(AppDbContext dbContext, IAiService aiService, IAss
         if (asset == null) return NotFound();
 
         var recommendation = await aiService.EnrichAssetAsync(
-            asset.Name, asset.Kind ?? string.Empty, asset.ProjectId, HttpContext.GetCurrentUser()?.Id);
+            asset.Name, asset.Type ?? string.Empty, asset.ProjectId, HttpContext.GetCurrentUser()?.Id);
 
         return Ok(new { recommendation });
     }

@@ -22,7 +22,7 @@ describe("scan url helpers", () => {
         expect(mockedRequestAssetEnsure).toHaveBeenCalledWith({
             projectId: "018f0000-0000-7000-8000-000000000001",
             name: "https://example.com/path",
-            kind: "url",
+            type: "url",
         });
     });
 });

@@ -22,7 +22,7 @@ properties:
     type: string
   name:
     type: string
-  kind:
+  type:
     type: string
     nullable: true
     description: Free-form hint about what the node is (e.g. hostname, port, path, file). Not a closed list.

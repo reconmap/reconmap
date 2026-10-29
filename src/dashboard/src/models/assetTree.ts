@@ -3,7 +3,7 @@ export type AssetNode = {
     parentId?: string | null;
     projectId: string;
     name: string;
-    kind?: string | null;
+    type?: string | null;
     source?: string | null;
     attributes?: string | null;
     tags?: string | null;

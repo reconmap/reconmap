@@ -1,6 +1,6 @@
 import { requestAssetEnsure } from "api/assets";
 
-const URL_ASSET_KIND = "url";
+const URL_ASSET_TYPE = "url";
 
 export const ensureUrlAsset = async (projectId: string, url: string) => {
     const normalizedUrl = url.trim();
@@ -11,6 +11,6 @@ export const ensureUrlAsset = async (projectId: string, url: string) => {
     return requestAssetEnsure({
         projectId,
         name: normalizedUrl,
-        kind: URL_ASSET_KIND,
+        type: URL_ASSET_TYPE,
     });
 };

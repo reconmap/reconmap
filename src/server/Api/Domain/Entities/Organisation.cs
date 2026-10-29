@@ -14,7 +14,7 @@ public class Organisation : TimestampedEntity
 
     [Required]
     [MaxLength(20)]
-    public string Kind { get; set; }
+    public string Type { get; set; }
 
     [Required]
     [MaxLength(80)]
@@ -29,7 +29,7 @@ public class Organisation : TimestampedEntity
     public int? SmallLogoAttachmentId { get; set; }
 }
 
-public enum ClientKind
+public enum ClientType
 {
     ServiceProvider,
     Client

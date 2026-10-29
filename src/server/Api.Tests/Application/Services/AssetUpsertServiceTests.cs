@@ -14,9 +14,9 @@ public class AssetUpsertServiceTests
 
     private static Asset HostWithPorts(params string[] ports)
     {
-        var host = new Asset { Name = "10.0.0.1", Kind = "Host" };
+        var host = new Asset { Name = "10.0.0.1", Type = "Host" };
         foreach (var port in ports)
-            host.AddChild(new Asset { Name = port, Kind = "port", Attributes = $"{{\"port\":\"{port}\"}}" });
+            host.AddChild(new Asset { Name = port, Type = "port", Attributes = $"{{\"port\":\"{port}\"}}" });
         return host;
     }
 
@@ -31,7 +31,7 @@ public class AssetUpsertServiceTests
 
         Assert.Equal(3, created);
         var host = await db.Assets.SingleAsync(a => a.ParentId == null);
-        Assert.Equal("host", host.Kind);
+        Assert.Equal("host", host.Type);
         Assert.Equal("Nmap", host.Source);
         Assert.Equal(2, await db.Assets.CountAsync(a => a.ParentId == host.Id));
     }

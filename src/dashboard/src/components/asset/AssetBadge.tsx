@@ -1,12 +1,12 @@
-import { iconForKind } from "models/assetKinds";
+import { iconForType } from "models/assetTypes";
 import "./AssetBadge.css";
 
-const AssetBadge = ({ name, kind }: any) => {
+const AssetBadge = ({ name, type }: any) => {
     return (
         <div className={"asset-badge"}>
-            {kind !== undefined && (
+            {type !== undefined && (
                 <span aria-hidden="true" style={{ marginRight: "4px" }}>
-                    {iconForKind(kind)}
+                    {iconForType(type)}
                 </span>
             )}
             {name}

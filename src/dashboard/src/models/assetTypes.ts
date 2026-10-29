@@ -1,11 +1,11 @@
-// Kinds are free-form: tools can invent their own. These are only well-known hints used for icons and suggestions.
-type AssetKindHint = {
+// Types are free-form: tools can invent their own. These are only well-known hints used for icons and suggestions.
+type AssetTypeHint = {
     value: string;
     icon: string;
     description: string;
 };
 
-const AssetKindHints: AssetKindHint[] = [
+const AssetTypeHints: AssetTypeHint[] = [
     { value: "hostname", icon: "🖥️", description: "Hostname (e.g. saturn.pc.net)" },
     { value: "ip_address", icon: "🖥️", description: "IP address (e.g. 172.16.254.1)" },
     { value: "cidr_range", icon: "🌐", description: "CIDR range (e.g. 192.168.100.0/24)" },
@@ -19,7 +19,7 @@ const AssetKindHints: AssetKindHint[] = [
 
 const DEFAULT_ICON = "🎯";
 
-export const iconForKind = (kind?: string | null) =>
-    AssetKindHints.find((hint) => hint.value === kind)?.icon ?? DEFAULT_ICON;
+export const iconForType = (type?: string | null) =>
+    AssetTypeHints.find((hint) => hint.value === type)?.icon ?? DEFAULT_ICON;
 
-export default AssetKindHints;
+export default AssetTypeHints;

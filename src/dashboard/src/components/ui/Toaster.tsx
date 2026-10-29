@@ -17,11 +17,11 @@ export default function Toaster() {
 
     return (
         <div ref={containerRef} popover="manual" className={styles.toaster}>
-            {items.map(({ id, kind, message }) => (
+            {items.map(({ id, type, message }) => (
                 <div
                     key={id}
-                    className={`notification is-light ${kind === "success" ? "is-success" : "is-danger"} ${styles.toast}`}
-                    role={kind === "error" ? "alert" : "status"}
+                    className={`notification is-light ${type === "success" ? "is-success" : "is-danger"} ${styles.toast}`}
+                    role={type === "error" ? "alert" : "status"}
                 >
                     <button type="button" className="delete" aria-label="Dismiss" onClick={() => toast.dismiss(id)} />
                     {message}

@@ -176,7 +176,7 @@ const ClientDetailsPage = () => {
             </div>
             <article>
                 <div>
-                    <PageTitleHeader title={client.name} subHeader={OrganisationTypes[client.kind]} />
+                    <PageTitleHeader title={client.name} subHeader={OrganisationTypes[client.type]} />
                 </div>
 
                 <div>
@@ -256,10 +256,10 @@ const ClientDetailsPage = () => {
                                                     <tr>
                                                         <td>
                                                             <NativeSelect
-                                                                name="kind"
+                                                                name="type"
                                                                 aria-label="Type"
                                                                 onChange={onContactFormChange}
-                                                                value={contact.kind || ""}
+                                                                value={contact.type || ""}
                                                                 required
                                                             >
                                                                 <option value="general">General</option>
@@ -309,7 +309,7 @@ const ClientDetailsPage = () => {
                                                     {contacts.map((contact, index) => (
                                                         <>
                                                             <tr key={index}>
-                                                                <td>{ContactTypes[contact.kind]}</td>
+                                                                <td>{ContactTypes[contact.type]}</td>
                                                                 <td>{contact.name}</td>
                                                                 <td>{contact.role}</td>
                                                                 <td>

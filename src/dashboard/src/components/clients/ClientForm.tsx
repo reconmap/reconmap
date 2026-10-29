@@ -64,7 +64,7 @@ const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
                 <FormField
                     label={t("Type")}
                     control={
-                        <NativeSelect name="kind" value={client.kind} onChange={onFormChange}>
+                        <NativeSelect name="type" value={client.type} onChange={onFormChange}>
                             {Object.entries(OrganisationTypes).map(([k, v]) => (
                                 <option key={k} value={k}>
                                     {t(v)}

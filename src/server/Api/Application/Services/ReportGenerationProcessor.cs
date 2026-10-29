@@ -212,12 +212,12 @@ public sealed class ReportGenerationProcessor(
 
             var assets = (await dbContext.Assets
                     .Where(a => a.ProjectId == project.Id)
-                    .Select(a => new { a.Name, a.Kind })
+                    .Select(a => new { a.Name, a.Type })
                     .ToListAsync(cancellationToken))
                 .Select(a => new Dictionary<string, string>
                 {
                     ["asset.name"] = a.Name,
-                    ["asset.type"] = a.Kind ?? string.Empty,
+                    ["asset.type"] = a.Type ?? string.Empty,
                 })
                 .ToArray();
 

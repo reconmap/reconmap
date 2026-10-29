@@ -31,7 +31,7 @@ const CustomFieldsPage = () => {
     const columns = [
         { header: "Name", property: "name" },
         { header: "Label", property: "label" },
-        { header: "Type", property: "kind" },
+        { header: "Type", property: "type" },
         { header: "Parent type", property: "parentType" },
         {
             header: "",
