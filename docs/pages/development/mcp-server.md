@@ -57,7 +57,7 @@ It listens on port `5520` (`http://localhost:5520/mcp`) and reuses the API's `ap
 
 The server exposes an anonymous `GET /health` endpoint (ASP.NET Core health checks for the database and Redis) that returns `{ "status": "Healthy", "checks": [...] }`, with HTTP 503 when a check fails.
 
-The container runs as a non-root user. Build or push it by hand with `make build push` in `src/server/Mcp`.
+The container runs as a non-root user. Build or push it by hand with `make build-mcp push-mcp` in `src/server`.
 
 ## Authentication and authorization
 

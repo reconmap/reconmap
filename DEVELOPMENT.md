@@ -62,12 +62,7 @@ To prevent configuration duplication, the sub-project compose files inherit from
 
 ## CLI Development
 
-Navigate to the `src/` directory to manage Go-based tools:
-
-```bash
-cd src
-make build # Builds all CLI tools
-```
+From the repository root, `make build` builds all Go tools (`rmap`, `reconmapd`) and `make tests` runs every test suite. Run `make help` for the full list. Each module also has its own Makefile, for example `make -C src/cli tests`; they share `mk/golang.mk`.
 
 ## Documentation
 

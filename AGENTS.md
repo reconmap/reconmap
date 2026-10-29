@@ -41,7 +41,7 @@ This is the main orchestration repository. It contains:
 
 - `compose.yaml`: Primary way to run the stack locally.
 - `config-*.json`: Template configuration files for different components.
-- `src/Makefile`: Build entry point for Go tools.
+- `Makefile`: Root entry point (`make help`); shared Makefile fragments live in `mk/`.
 - `docs/mkdocs.yml`: Configuration for the documentation site.
 
 ## Conventions

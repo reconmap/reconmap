@@ -1,30 +1,12 @@
+PROGRAM := rmap
+CMD_PKG := ./cmd/rmap
+BUILD_PKG := github.com/reconmap/reconmap/src/cli/internal/build
 
-include ../Golang.mk
-
-SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
-.ONESHELL:
-.DELETE_ON_ERROR:
-MAKEFLAGS += --warn-undefined-variables
-MAKEFLAGS += --no-builtin-rules
-LATEST_TAG = $(shell git describe --tags)
-
-PROGRAM=rmap
-
-$(PROGRAM):
-	go build -v -ldflags="-X 'github.com/reconmap/reconmap/src/cli/internal/build.BuildVersion=$(LATEST_TAG)'" ./cmd/rmap
-
-.PHONY: tests
-tests:
-	go test ./...
-
-.PHONY: clean
-clean:
-	rm -f $(PROGRAM)
+include ../../mk/golang.mk
 
 .PHONY: sbom
 sbom:
 	docker run -it --rm \
-	-v $(CURDIR):/reconmap/cli \
-	-w /reconmap/cli \
-	spdx/spdx-sbom-generator --path /reconmap/cli
+		-v $(CURDIR):/reconmap/cli \
+		-w /reconmap/cli \
+		spdx/spdx-sbom-generator --path /reconmap/cli

@@ -1,82 +1,61 @@
-SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
-.ONESHELL:
-.DELETE_ON_ERROR:
-MAKEFLAGS += --warn-undefined-variables
-MAKEFLAGS += --no-builtin-rules
+include ../../mk/common.mk
 
 ENV_FILE_NAME ?= config.local.json
-DOCKER_IMAGE_NAME = ghcr.io/reconmap/dashboard
-DOCKER_CONTAINER_NAME = reconmap-dashboard
-DOCKER_DEV_TAG = reconmap/dashboard:dev
+DOCKER_IMAGE_NAME := ghcr.io/reconmap/dashboard
+DOCKER_CONTAINER_NAME := reconmap-dashboard
+DOCKER_DEV_TAG := reconmap/dashboard:dev
 
 # macOS is using different IDs than linux
-UNAME=$(shell uname)
-ifeq ($(UNAME),Darwin)
-	HOST_UID=1000
-	HOST_GID=1000
+ifeq ($(shell uname),Darwin)
+	HOST_UID := 1000
+	HOST_GID := 1000
 else
-	HOST_UID=$(shell id -u)
-	HOST_GID=$(shell id -g)
+	HOST_UID := $(shell id -u)
+	HOST_GID := $(shell id -g)
 endif
-CONTAINER_UID_GID=$(HOST_UID):$(HOST_GID)
 
 GIT_BRANCH_NAME = $(shell git rev-parse --abbrev-ref HEAD)
 GIT_COMMIT_HASH = $(shell git rev-parse --short HEAD)
 
+# NODE_RUN mounts the app; NODE_RUN_CFG also mounts the config (the file must exist).
+NODE_RUN := docker run -u $(HOST_UID):$(HOST_GID) --rm \
+	-v $(CURDIR):/home/node/app \
+	-w /home/node/app
+NODE_RUN_CFG := $(NODE_RUN) -v $(CURDIR)/$(ENV_FILE_NAME):/home/node/app/public/config.json
+
 .PHONY: prepare
 prepare:
 	docker build -f docker/node.Dockerfile --build-arg HOST_UID=$(HOST_UID) --build-arg HOST_GID=$(HOST_GID) -t $(DOCKER_DEV_TAG) .
-	docker run -u $(CONTAINER_UID_GID) --rm -t -v $(PWD):/home/node/app -w /home/node/app  --entrypoint npm $(DOCKER_DEV_TAG) install
+	$(NODE_RUN) -t --entrypoint npm $(DOCKER_DEV_TAG) install
 
 .PHONY: start
 start:
-	docker run -u $(CONTAINER_UID_GID) --rm -it \
-		-v $(PWD):/home/node/app \
-		-v $(PWD)/$(ENV_FILE_NAME):/home/node/app/public/config.json \
-		-w /home/node/app \
-		-p 5500:5500 \
+	$(NODE_RUN_CFG) -it -p 5500:5500 \
 		-e VITE_GIT_COMMIT_HASH=$(GIT_COMMIT_HASH) \
-		--entrypoint npm \
 		--name $(DOCKER_CONTAINER_NAME) \
-		$(DOCKER_DEV_TAG) run start
+		--entrypoint npm $(DOCKER_DEV_TAG) run start
 
 .PHONY: stop
 stop:
 	docker stop $(DOCKER_CONTAINER_NAME) || true
 
-.PHONE: lint
+.PHONY: lint
 lint:
-	docker run -u $(CONTAINER_UID_GID) --rm \
-		-v $(PWD):/home/node/app \
-		-v $(PWD)/$(ENV_FILE_NAME):/home/node/app/public/config.json \
-		-w /home/node/app \
-		--entrypoint npm $(DOCKER_DEV_TAG) run lint
-	docker run -u $(CONTAINER_UID_GID) --rm \
-		-v $(PWD):/home/node/app \
-		-v $(PWD)/$(ENV_FILE_NAME):/home/node/app/public/config.json \
-		-w /home/node/app \
-		--entrypoint npx $(DOCKER_DEV_TAG) stylelint "**/*.css"
+	$(NODE_RUN_CFG) --entrypoint npm $(DOCKER_DEV_TAG) run lint
+	$(NODE_RUN_CFG) --entrypoint npx $(DOCKER_DEV_TAG) stylelint "**/*.css"
 
 .PHONY: tests
 tests: lint
-	docker run -u $(CONTAINER_UID_GID) --rm -it \
-		-v $(PWD):/home/node/app \
-		-v $(PWD)/$(ENV_FILE_NAME):/home/node/app/public/config.json \
-		-w /home/node/app \
-		--entrypoint npm $(DOCKER_DEV_TAG) run test
+	$(NODE_RUN_CFG) -it --entrypoint npm $(DOCKER_DEV_TAG) run test
 
 .PHONY: tests-ci
 tests-ci:
-	docker run -u $(CONTAINER_UID_GID) --rm -t \
-		-v $(PWD):/home/node/app \
-		-v $(PWD)/$(ENV_FILE_NAME):/home/node/app/public/config.json \
-		-w /home/node/app \
-		--entrypoint npm $(DOCKER_DEV_TAG) run test:coverage
+	$(NODE_RUN_CFG) -t --entrypoint npm $(DOCKER_DEV_TAG) run test:coverage
 
+# Removes untracked and ignored files, except the local config.
 .PHONY: clean
 clean: stop
-	git clean -fdx
+	git clean -fdx -e $(ENV_FILE_NAME)
 
 .PHONY: build
 build:
@@ -92,4 +71,3 @@ push:
 .PHONY: shell
 shell:
 	docker exec -it $(DOCKER_CONTAINER_NAME) bash
-

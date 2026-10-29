@@ -48,5 +48,4 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Push MCP image
-        run: make build push
-        working-directory: src/server/Mcp
+        run: make build-mcp push-mcp

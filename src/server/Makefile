@@ -1,11 +1,6 @@
-# Use bash or file wildcards won't work
-SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
-.ONESHELL:
-.DELETE_ON_ERROR:
-.DEFAULT_GOAL := prepare
-MAKEFLAGS += --warn-undefined-variables
-MAKEFLAGS += --no-builtin-rules
+.DEFAULT_GOAL := start
+
+include ../../mk/common.mk
 
 ifneq (,$(wildcard ../../.env))
     include ../../.env
@@ -34,9 +29,22 @@ build:
 start:
 	$(DC) up -d
 
-.PHONY:
+.PHONY: logs
 logs:
 	$(DC) logs -f
+
+# Production images (no dev overlay): make build-api push-api build-mcp push-mcp
+DC_IMAGES := docker compose -f ../../compose.yaml
+SERVICE_api := ngapi
+SERVICE_mcp := mcp
+
+.PHONY: build-api build-mcp
+build-api build-mcp: build-%:
+	$(DC_IMAGES) build $(SERVICE_$*)
+
+.PHONY: push-api push-mcp
+push-api push-mcp: push-%:
+	$(DC_IMAGES) push $(SERVICE_$*)
 
 .PHONY: stop
 stop:
@@ -59,10 +67,6 @@ db-shell:
 
 .PHONY: db-reset
 db-reset:
-	cat ../../infra/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
-
-.PHONY: db-import
-db-import:
 	cat ../../infra/postgres/initdb/sql/{01,02}*.sql | docker container exec -i $(DB_CONTAINER) psql -U postgres -d reconmap
 
 .PHONY: redis-shell
