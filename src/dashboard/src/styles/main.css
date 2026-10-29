@@ -112,6 +112,10 @@ button.navbar-link {
     justify-content: space-between;
     align-items: center;
     margin-bottom: calc(var(--padding) / 2);
+
+    .buttons {
+        margin-bottom: 0;
+    }
 }
 
 fieldset {
