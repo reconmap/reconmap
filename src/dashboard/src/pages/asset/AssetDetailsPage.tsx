@@ -4,7 +4,7 @@ import AssetBadge from "components/asset/AssetBadge";
 import { assetPath } from "models/assetTree";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import TimestampsSection from "components/ui/TimestampsSection";
-import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
+import FindingTableModel from "components/findings/FindingTableModel";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { ignoreAbortError } from "utilities/abort";
@@ -14,7 +14,7 @@ import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";
+import FindingsTable from "components/findings/FindingsTable";
 import { useTranslation } from "react-i18next";
 
 const AssetDetailsPage = () => {
@@ -39,9 +39,9 @@ const AssetDetailsPage = () => {
 
     const [savedProject, setSavedProject] = useState<any>(null);
 
-    const [tableModel, setTableModel] = useState(new VulnerabilityTableModel());
+    const [tableModel, setTableModel] = useState(new FindingTableModel());
 
-    const fetchVulnerabilities = useCallback((signal?: AbortSignal) => {
+    const fetchFindings = useCallback((signal?: AbortSignal) => {
         const queryParams = new URLSearchParams();
         queryParams.set("assetId", assetId);
         queryParams.set("isTemplate", "false");
@@ -53,11 +53,11 @@ const AssetDetailsPage = () => {
                 tableModel.filters[key].length !== 0 &&
                 queryParams.append(key, tableModel.filters[key]),
         );
-        const url = `/vulnerabilities?${queryParams.toString()}`;
+        const url = `/findings?${queryParams.toString()}`;
         requestEntity(url, { signal })
             .then((resp) => resp.json())
-            .then((vulnerabilities) => {
-                setTableModel((tableModel) => ({ ...tableModel, vulnerabilities: vulnerabilities.data }));
+            .then((findings) => {
+                setTableModel((tableModel) => ({ ...tableModel, findings: findings.data }));
             })
             .catch(ignoreAbortError);
     }, [tableModel.filters, tableModel.sortBy, assetId]);
@@ -87,9 +87,9 @@ const AssetDetailsPage = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-        fetchVulnerabilities(controller.signal);
+        fetchFindings(controller.signal);
         return () => controller.abort();
-    }, [fetchVulnerabilities, tableModel.filters]);
+    }, [fetchFindings, tableModel.filters]);
 
     if (!asset) return <PageSkeleton />;
 
@@ -162,11 +162,11 @@ const AssetDetailsPage = () => {
                         </>
                     )}
 
-                    <h4>Vulnerabilities</h4>
-                    <VulnerabilitiesTable
+                    <h4>Findings</h4>
+                    <FindingsTable
                         tableModel={tableModel}
                         tableModelSetter={setTableModel}
-                        reloadCallback={() => fetchVulnerabilities()}
+                        reloadCallback={() => fetchFindings()}
                         showProjectColumn={false}
                         showSelection={false}
                     />

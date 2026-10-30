@@ -76,7 +76,7 @@ public class SystemUsageService(
 
     /// <summary>Queues the API publishes to or consumes from through RabbitMQ.</summary>
     public static readonly string[] QueueNames =
-        ["tasks", "notifications", "vulnerabilities", "webhooks", "report-generation", "report-emails"];
+        ["tasks", "notifications", "findings", "webhooks", "report-generation", "report-emails"];
 
     public async Task<SystemUsage> GetUsageAsync(DateTime from, DateTime to)
     {

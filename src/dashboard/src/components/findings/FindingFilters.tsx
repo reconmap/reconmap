@@ -1,0 +1,77 @@
+import { type ChangeEvent } from "react";
+import { useProjectsQuery } from "api/projects";
+import { useFindingCategoriesQuery } from "api/findings";
+import NativeSelect from "components/forms/NativeSelect";
+import Risks from "models/Risks";
+
+const FindingFilters = ({ tableModel, tableModelSetter: setTableModel, showProjectFilter = true }: any) => {
+    const { data: categories, isLoading, isError } = useFindingCategoriesQuery({ parentsOnly: true });
+    const { data: projects, isLoading: isLoadingProjects } = useProjectsQuery({ status: "active" });
+
+    const onFilterChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setTableModel({
+            ...tableModel,
+            filters: {
+                ...tableModel.filters,
+                [event.target.name]: event.target.value,
+            },
+        });
+    };
+
+    return (
+        <details>
+            <summary>Filters</summary>
+            <div className="field is-grouped">
+                {showProjectFilter && (
+                    <div className="control">
+                        <NativeSelect name="projectId" onChange={onFilterChange}>
+                            <option value="">Project = (any)</option>
+                            {!isLoadingProjects &&
+                                projects.data.map((project) => (
+                                    <option key={project.id} value={project.id}>
+                                        Project = {project.name}
+                                    </option>
+                                ))}
+                        </NativeSelect>
+                    </div>
+                )}
+
+                <div className="control">
+                    <NativeSelect name="status" onChange={onFilterChange}>
+                        <option value="">Status = (any)</option>
+                        <option value="open">Status = Open</option>
+                        <option value="closed">Status = Closed</option>
+                    </NativeSelect>
+                </div>
+
+                <div className="control">
+                    <NativeSelect name="risk" onChange={onFilterChange}>
+                        <option value="">Risk = (any)</option>
+                        {Risks.map((risk) => (
+                            <option key={risk.id} value={risk.id}>
+                                Risk = {risk.name}
+                            </option>
+                        ))}
+                    </NativeSelect>
+                </div>
+
+                <div className="control">
+                    <NativeSelect name="categoryId" onChange={onFilterChange}>
+                        <option value="">Category = (any)</option>
+                        {!isLoading && !isError && (
+                            <>
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        Category = {category.name}
+                                    </option>
+                                ))}
+                            </>
+                        )}
+                    </NativeSelect>
+                </div>
+            </div>
+        </details>
+    );
+};
+
+export default FindingFilters;

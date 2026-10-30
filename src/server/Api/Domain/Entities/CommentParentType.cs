@@ -4,5 +4,5 @@ public enum CommentParentType
 {
     Project,
     Task,
-    Vulnerability
+    Finding
 }

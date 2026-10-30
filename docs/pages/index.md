@@ -1,10 +1,10 @@
 ---
 title: Home
 nav_order: 0
-tags: [vulnerability-management, penetration-testing, vapt]
+tags: [finding-management, penetration-testing, vapt]
 ---
 
-## Open-source **vulnerability assessment** and **pentesting management** platform
+## Open-source **finding assessment** and **pentesting management** platform
 
 ![images/browser-preview.png](images/browser-preview.png)
 

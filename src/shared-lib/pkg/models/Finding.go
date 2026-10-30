@@ -1,0 +1,29 @@
+package models
+
+type Finding struct {
+	ID                    string  `json:"id"`
+	InsertTs              string  `json:"insert_ts"`
+	UpdateTs              string  `json:"update_ts"`
+	CreatedById          int     `json:"createdById"`
+	IsTemplate            bool    `json:"is_template"`
+	ExternalId            int     `json:"external_id"`
+	ProjectId             string  `json:"project_id"`
+	AssetId               int     `json:"asset_id"`
+	CategoryId            int     `json:"category_id"`
+	Summary               string  `json:"summary"`
+	Description           string  `json:"description"`
+	ExternalRefs          string  `json:"external_refs"`
+	Visibility            string  `json:"visibility"`
+	Risk                  string  `json:"risk"`
+	ProofOfConcept        string  `json:"proof_of_concept"`
+	Impact                string  `json:"impact"`
+	Remediation           string  `json:"remediation"`
+	RemediationComplexity string  `json:"remediation_complexity"`
+	RemediationPriority   string  `json:"remediation_priority"`
+	CvssVector            string  `json:"cvss_vector"`
+	CvssScore             float32 `json:"cvss_score"`
+	Status                string  `json:"status"`
+	Substatus             string  `json:"substatus"`
+	Tags                  any     `json:"tags"`
+	CustomFields          any     `json:"custom_fields"`
+}

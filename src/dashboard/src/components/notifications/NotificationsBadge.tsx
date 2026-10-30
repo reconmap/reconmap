@@ -63,7 +63,7 @@ const NotificationsBadge = () => {
                                                 </NativeButton>
 
                                                 <strong>
-                                                    <Link to="/vulnerabilities">{notification.title}</Link>
+                                                    <Link to="/findings">{notification.title}</Link>
                                                 </strong>
                                             </div>
                                             <div>{notification.content}</div>

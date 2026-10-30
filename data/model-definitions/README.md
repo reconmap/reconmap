@@ -5,7 +5,7 @@ This directory contains the model schemas and the tooling that generates Golang 
 ## Layout
 
 - `openapi.yaml`: the root OpenAPI document. Each entry under `components.schemas` points at one file in `definitions/`.
-- `definitions/*.yaml`: one OpenAPI schema per model (for example `Asset.yaml`, `Vulnerability.yaml`).
+- `definitions/*.yaml`: one OpenAPI schema per model (for example `Asset.yaml`, `Finding.yaml`).
 - `templates/`: custom OpenAPI Generator templates. They keep the output minimal: plain Go structs and plain TypeScript classes, with no constructors, getters, serializers, or attribute maps.
 - `Makefile`: runs OpenAPI Generator for each language.
 

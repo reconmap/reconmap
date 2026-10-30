@@ -17,7 +17,7 @@ properties:
     - report
     - command
     - task
-    - vulnerability
+    - finding
     - organisation
     - client
   parent_id:

@@ -6,7 +6,7 @@ imported before children. Keys and values follow the entity shapes in
 src/server/Api/Domain/Entities, so the file can be posted to
 POST /api/system/data as-is.
 
-Vulnerability and project categories are not generated. They are seeded by
+Finding and project categories are not generated. They are seeded by
 infra/postgres/initdb/sql/02-default-data.sql with unique names, so the
 generated data references their ids instead. The seeded organisation (id 1,
 "Reconmap") and admin user (id 1) are reused as well.
@@ -189,7 +189,7 @@ FINDINGS = [
     ("Outdated OpenSSH version exposed on SSH service", "Patching", 5.3,
      "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
      "The SSH banner reports OpenSSH 7.4, which is several years behind the current release and has known "
-     "vulnerabilities.",
+     "findings.",
      "Vulnerable service versions may be exploited if a matching flaw is available.",
      "Upgrade OpenSSH to a supported release, and enable automatic security updates.",
      "medium", "Banner grab on port 22 returned SSH-2.0-OpenSSH_7.4."),
@@ -240,8 +240,8 @@ USER_AGENTS = [
 SCHEDULE_CRONS = ["0 2 * * 1", "30 6 * * *", "0 0 1 * *"]
 
 ACTIONS = [
-    ("Created", "Project"), ("Updated", "Project"), ("Created", "Vulnerability"),
-    ("Updated", "Vulnerability"), ("Created", "Task"), ("Updated", "Task"),
+    ("Created", "Project"), ("Updated", "Project"), ("Created", "Finding"),
+    ("Updated", "Finding"), ("Created", "Task"), ("Updated", "Task"),
     ("Created", "Asset"), ("Exported", "System Data"),
 ]
 
@@ -271,7 +271,7 @@ class UuidV7Ids:
 
 
 class UuidV4Ids:
-    """Hands out random UUIDv4 ids, which carry no creation time (used for vulnerabilities)."""
+    """Hands out random UUIDv4 ids, which carry no creation time (used for findings)."""
 
     def next(self):
         return str(uuid.uuid4())
@@ -363,11 +363,11 @@ def generate_clients(count, ids):
 
 def generate_custom_fields():
     return [
-        {"Id": 1000, "ParentType": "vulnerability", "Name": "cve_id", "Label": "CVE ID", "Type": "text", "Config": "{}"},
-        {"Id": 1001, "ParentType": "vulnerability", "Name": "cwe_id", "Label": "CWE ID", "Type": "text", "Config": "{}"},
-        {"Id": 1002, "ParentType": "vulnerability", "Name": "ticket_reference", "Label": "Ticket reference",
+        {"Id": 1000, "ParentType": "finding", "Name": "cve_id", "Label": "CVE ID", "Type": "text", "Config": "{}"},
+        {"Id": 1001, "ParentType": "finding", "Name": "cwe_id", "Label": "CWE ID", "Type": "text", "Config": "{}"},
+        {"Id": 1002, "ParentType": "finding", "Name": "ticket_reference", "Label": "Ticket reference",
          "Type": "text", "Config": "{}"},
-        {"Id": 1003, "ParentType": "vulnerability", "Name": "affected_instances", "Label": "Affected instances",
+        {"Id": 1003, "ParentType": "finding", "Name": "affected_instances", "Label": "Affected instances",
          "Type": "integer", "Config": "{}"},
     ]
 
@@ -571,7 +571,7 @@ def finding_row(finding, project_id, asset_id, created_by_id, ids, archived=Fals
     }
 
 
-def generate_vulnerabilities(project, assets, ids):
+def generate_findings(project, assets, ids):
     vulns = []
     for finding in random.sample(FINDINGS, k=random.randint(3, 10)):
         asset = random.choice(assets) if assets and random.random() < 0.8 else None
@@ -681,7 +681,7 @@ def generate_comments(vulns, projects, users, ids):
         comments.append({
             "Id": ids.next(),
             "CreatedById": random.choice(users)["Id"],
-            "ParentType": "vulnerability",
+            "ParentType": "finding",
             "ParentId": vuln["Id"],
             "Content": fake.paragraph(nb_sentences=2),
         })
@@ -697,7 +697,7 @@ def generate_comments(vulns, projects, users, ids):
 
 
 def generate_notifications(users, projects, ids):
-    titles = ["Task assigned to you", "Vulnerability status changed", "Scan completed", "Report generated"]
+    titles = ["Task assigned to you", "Finding status changed", "Scan completed", "Report generated"]
     notifications = []
     for user in random.sample(users, k=len(users) // 2):
         for _ in range(random.randint(1, 3)):
@@ -731,9 +731,9 @@ def generate_command_schedules(projects, ids):
 def generate_webhooks(ids):
     return [
         {"Id": ids.next(), "Name": "Chat notifications", "Url": "https://hooks.example.com/services/T0000/B0000/XXXX",
-         "Secret": fake.sha1(), "IsEnabled": True, "Events": "project.created,vulnerability.created"},
+         "Secret": fake.sha1(), "IsEnabled": True, "Events": "project.created,finding.created"},
         {"Id": ids.next(), "Name": "Ticketing sync", "Url": "https://tickets.example.com/api/reconmap",
-         "Secret": None, "IsEnabled": False, "Events": "vulnerability.created"},
+         "Secret": None, "IsEnabled": False, "Events": "finding.created"},
     ]
 
 
@@ -743,7 +743,7 @@ def generate_audit_log(projects, vulns, users, count, ids):
         action, obj = random.choice(ACTIONS)
         if obj == "Project":
             object_id = random.choice(projects)["Id"]
-        elif obj == "Vulnerability" and vulns:
+        elif obj == "Finding" and vulns:
             object_id = random.choice(vulns)["Id"]
         else:
             object_id = random.randint(1000, 1999)
@@ -796,7 +796,7 @@ def generate_demo_data(num_projects=20, seed=None):
         tasks.extend(generate_tasks(project, project_members, task_ids))
         project_assets, domain = generate_assets(project, asset_ids)
         assets.extend(project_assets)
-        vulns.extend(generate_vulnerabilities(project, project_assets, vuln_ids))
+        vulns.extend(generate_findings(project, project_assets, vuln_ids))
         scans.extend(generate_scan_runs(project, domain, project_members, scan_ids, scan_task_ids))
 
     templates = [finding_row(finding, None, None, SEED_ADMIN_ID, vuln_ids, is_template=True)
@@ -824,8 +824,8 @@ def generate_demo_data(num_projects=20, seed=None):
         "project_members": members,
         "tasks": tasks,
         "assets": assets,
-        "vulnerabilities": vulns,
-        "vulnerability_templates": templates,
+        "findings": vulns,
+        "finding_templates": templates,
         "comments": comments,
         "reports": reports,
         "runners": runners,

@@ -2,7 +2,7 @@
     "Dashboard": "控制面板",
     "Projects": "项目工程",
     "Tasks": "任务",
-    "Vulnerabilities": "脆弱点",
+    "Findings": "发现项",
     "Reports": "报表",
     "Users": "用户",
     "Settings": "设置",
@@ -22,6 +22,6 @@
     "Recent searches": "最近搜索",
     "No recent searches yet. Your searches will appear here.": "暂无最近搜索，您的搜索记录将显示在这里。",
     "Could not load recent searches.": "无法加载最近搜索。",
-    "Vulnerability templates": "脆弱点模板",
+    "Finding templates": "发现项模板",
     "Project templates": "项目工程模板"
 }

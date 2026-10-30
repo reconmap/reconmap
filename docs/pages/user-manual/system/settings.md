@@ -21,7 +21,7 @@ You can specify:
 
 ## AI Settings
 
-The **AI settings** view allows you to configure the AI features in Reconmap, such as vulnerability summary and remediation advice generation.
+The **AI settings** view allows you to configure the AI features in Reconmap, such as finding summary and remediation advice generation.
 
 ![AI settings](/images/screenshots/ai-settings.png)
 
@@ -40,4 +40,4 @@ The provider selector and its fields are generated from the API's
 never returned to the browser; leaving a populated key field blank preserves
 the stored value.
 
-These AI features help you speed up the reporting process by automatically generating descriptions and advice for reported vulnerabilities.
+These AI features help you speed up the reporting process by automatically generating descriptions and advice for reported findings.

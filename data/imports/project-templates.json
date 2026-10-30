@@ -56,14 +56,14 @@
         },
         {
           "project_name": "Bounty Hunter Methodology",
-          "summary": "Test of web serve vulnerabilities",
+          "summary": "Test of web serve findings",
           "description": "",
           "assignee_id": null,
           "assignee_full_name": null
         },
         {
           "project_name": "Bounty Hunter Methodology",
-          "summary": "Test for input-based vulnerabilities",
+          "summary": "Test for input-based findings",
           "description": "",
           "assignee_id": null,
           "assignee_full_name": null
@@ -71,7 +71,7 @@
         {
           "project_name": "Bounty Hunter Methodology",
           "summary": "Perform other checks",
-          "description": "\n                        - Check for DOM-based attacks\n                        - Check for Frame injection\n                        - Check for local privacy vulnerabilities\n                        - Follow up any information leakage\n                        - Check for weak SSL ciphers\n                    ",
+          "description": "\n                        - Check for DOM-based attacks\n                        - Check for Frame injection\n                        - Check for local privacy findings\n                        - Follow up any information leakage\n                        - Check for weak SSL ciphers\n                    ",
           "assignee_id": null,
           "assignee_full_name": null
         }
@@ -287,8 +287,8 @@
         },
         {
           "project_name": "Webapp pentesting project by https:\/\/hackercombat.com\/",
-          "summary": "Security Vulnerability Testing",
-          "description": "\n                        Carry out a thorough security check on various aspects associated with your web application like\n                        servers and other such network devices and make a list of the security vulnerabilities they\n                        pose. Then find and implement ways to fix them.\n                    ",
+          "summary": "Security Finding Testing",
+          "description": "\n                        Carry out a thorough security check on various aspects associated with your web application like\n                        servers and other such network devices and make a list of the security findings they\n                        pose. Then find and implement ways to fix them.\n                    ",
           "assignee_id": null,
           "assignee_full_name": null
         },
@@ -442,7 +442,7 @@
         {
           "project_name": "WAHH methodology by @bugcrowd",
           "summary": "Test the authentication mechanism",
-          "description": "\n                        - Understand the mechanism\n                        - Test password quality\n                        - Test for username enumeration\n                        - Test resilience to password guessing\n                        - Test any account recovery function\n                        - Test any remember me function\n                        - Test any impersonation function\n                        - Test username uniqueness\n                        - Test predictability of auto-generated credentials\n                        - Check for unsafe transmission of credentials\n                        - Test for logic flaws\n                        - Exploit any vulnerabilities to gain unauthorized access\n                    ",
+          "description": "\n                        - Understand the mechanism\n                        - Test password quality\n                        - Test for username enumeration\n                        - Test resilience to password guessing\n                        - Test any account recovery function\n                        - Test any remember me function\n                        - Test any impersonation function\n                        - Test username uniqueness\n                        - Test predictability of auto-generated credentials\n                        - Check for unsafe transmission of credentials\n                        - Test for logic flaws\n                        - Exploit any findings to gain unauthorized access\n                    ",
           "assignee_id": null,
           "assignee_full_name": null
         },
@@ -455,14 +455,14 @@
         },
         {
           "project_name": "WAHH methodology by @bugcrowd",
-          "summary": "Test for web server vulnerabilities",
+          "summary": "Test for web server findings",
           "description": "\n                        - Test for default credentials\n                        - Test for default content\n                        - Test for dangerous HTTP methods\n                        - Test for proxy functionality\n                        - Test for virtual hosting misconfiguration\n                        - Test for web server software bugs\n                    ",
           "assignee_id": null,
           "assignee_full_name": null
         },
         {
           "project_name": "WAHH methodology by @bugcrowd",
-          "summary": "Test for input-based vulnerabilities",
+          "summary": "Test for input-based findings",
           "description": "\n                        - Fuzz all request parameters\n                        - Test for SQL injection\n                        - Test for XSS and other response injection\n                        - Test for OS command injection\n                        - Test for path traversal\n                        - Test for script injection\n                        - Test for file inclusion\n                    ",
           "assignee_id": null,
           "assignee_full_name": null
@@ -470,7 +470,7 @@
         {
           "project_name": "WAHH methodology by @bugcrowd",
           "summary": "Run misc checks",
-          "description": "\n                        - Check for DOM-based attacks\n                        - Check for frame injection\n                        - Check for local privacy vulnerabilities\n                        - Follow up any information leakage\n                        - Check for weak SSL ciphers\n                    ",
+          "description": "\n                        - Check for DOM-based attacks\n                        - Check for frame injection\n                        - Check for local privacy findings\n                        - Follow up any information leakage\n                        - Check for weak SSL ciphers\n                    ",
           "assignee_id": null,
           "assignee_full_name": null
         }

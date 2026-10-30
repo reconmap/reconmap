@@ -15,8 +15,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<ScanRunTask> ScanRunTasks { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectTask> Tasks { get; set; }
-    public DbSet<Vulnerability> Vulnerabilities { get; set; }
-    public DbSet<VulnerabilityCategory> VulnerabilityCategories { get; set; }
+    public DbSet<Finding> Findings { get; set; }
+    public DbSet<FindingCategory> FindingCategories { get; set; }
     public DbSet<Notification> Notifications { get; set; }
 
     public DbSet<Runner> Runners { get; set; }

@@ -2,15 +2,15 @@ import ActiveProjectsWidget from "components/dashboard/widgets/ActiveProjectsWid
 import DiscussionsWidget from "components/dashboard/widgets/DiscussionsWidget";
 import MyTasksWidget from "components/dashboard/widgets/MyTasksWidget";
 import RecentActivityWidget from "components/dashboard/widgets/RecentActivityWidget";
-import RecentVulnerabilitiesWidget from "components/dashboard/widgets/RecentVulnerabilitiesWidget";
+import RecentFindingsWidget from "components/dashboard/widgets/RecentFindingsWidget";
 import ReleasesWidget from "components/dashboard/widgets/ReleasesWidget";
 import UserActivityStatsWidget from "components/dashboard/widgets/UserActivityStatsWidget";
-import VulnerabilitiesByCategoryStatsWidget from "components/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget";
-import VulnerabilitiesByRiskStatsWidget from "components/dashboard/widgets/VulnerabilitiesByRiskStatsWidget";
+import FindingsByCategoryStatsWidget from "components/dashboard/widgets/FindingsByCategoryStatsWidget";
+import FindingsByRiskStatsWidget from "components/dashboard/widgets/FindingsByRiskStatsWidget";
 import SystemHealthWidget from "components/dashboard/widgets/SystemHealthWidget";
 import SystemUsageWidget from "components/dashboard/widgets/SystemUsageWidget";
 import RunnersWidget from "components/dashboard/widgets/RunnersWidget";
-import TopVulnerableAssetsWidget from "components/dashboard/widgets/TopVulnerableAssetsWidget";
+import TopAssetsByFindingsWidget from "components/dashboard/widgets/TopAssetsByFindingsWidget";
 
 const Widgets = {
     "discussions": {
@@ -31,11 +31,11 @@ const Widgets = {
         visible: true,
         component: <MyTasksWidget />,
     },
-    "vulnerability-by-risk-stats": {
-        title: "Vulnerability by risk",
-        description: "It charts vulnerabilities grouped by risk level.",
+    "finding-by-risk-stats": {
+        title: "Finding by risk",
+        description: "It charts findings grouped by risk level.",
         visible: true,
-        component: <VulnerabilitiesByRiskStatsWidget />,
+        component: <FindingsByRiskStatsWidget />,
     },
     "active-projects": {
         title: "Active projects",
@@ -44,11 +44,11 @@ const Widgets = {
         description: "It shows up to five active projects.",
     },
 
-    "vulnerability-by-category-stats": {
-        title: "Vulnerability by category",
-        description: "It charts vulnerabilities grouped by category.",
+    "finding-by-category-stats": {
+        title: "Finding by category",
+        description: "It charts findings grouped by category.",
         visible: true,
-        component: <VulnerabilitiesByCategoryStatsWidget />,
+        component: <FindingsByCategoryStatsWidget />,
     },
     "recent-activity": {
         title: "Recent activity",
@@ -78,11 +78,11 @@ const Widgets = {
         description: "It shows AI usage and cost, attachments storage, key-value server memory and message queue depth.",
         permissions: "system.*",
     },
-    "recent-vulnerabilities": {
-        title: "Recent vulnerabilities",
+    "recent-findings": {
+        title: "Recent findings",
         visible: true,
-        component: <RecentVulnerabilitiesWidget />,
-        description: "It shows the five most recently reported vulnerabilities.",
+        component: <RecentFindingsWidget />,
+        description: "It shows the five most recently reported findings.",
     },
     "runners": {
         title: "Runners",
@@ -90,11 +90,11 @@ const Widgets = {
         component: <RunnersWidget />,
         description: "It shows each registered runner with its operating system, IP and whether it is online.",
     },
-    "top-vulnerable-assets": {
-        title: "Top vulnerable assets",
+    "top-assets-by-findings": {
+        title: "Top assets by findings",
         visible: true,
-        component: <TopVulnerableAssetsWidget />,
-        description: "It shows the five assets with the most vulnerabilities, based on the 100 latest non-template vulnerabilities.",
+        component: <TopAssetsByFindingsWidget />,
+        description: "It shows the five assets with the most findings, based on the 100 latest non-template findings.",
     },
 };
 

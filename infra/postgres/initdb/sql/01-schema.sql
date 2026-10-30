@@ -1,4 +1,4 @@
-DROP VIEW IF EXISTS vulnerability_template;
+DROP VIEW IF EXISTS finding_template;
 DROP VIEW IF EXISTS project_template;
 DROP VIEW IF EXISTS user_info;
 DROP TABLE IF EXISTS user_api_token CASCADE;
@@ -15,8 +15,8 @@ DROP TABLE IF EXISTS scan_run_task CASCADE;
 DROP TABLE IF EXISTS scan_run CASCADE;
 DROP TABLE IF EXISTS command_schedule CASCADE;
 DROP TABLE IF EXISTS task CASCADE;
-DROP TABLE IF EXISTS vulnerability CASCADE;
-DROP TABLE IF EXISTS vulnerability_category CASCADE;
+DROP TABLE IF EXISTS finding CASCADE;
+DROP TABLE IF EXISTS finding_category CASCADE;
 DROP TABLE IF EXISTS asset CASCADE;
 DROP TABLE IF EXISTS project_user CASCADE;
 DROP TABLE IF EXISTS vault CASCADE;
@@ -231,8 +231,8 @@ CREATE UNIQUE INDEX asset_project_parent_name_idx
     ON asset (project_id, COALESCE(parent_id, '00000000-0000-0000-0000-000000000000'::uuid), name);
 CREATE INDEX asset_parent_id_idx ON asset (parent_id);
 
--- 14. vulnerability_category
-CREATE TABLE vulnerability_category
+-- 14. finding_category
+CREATE TABLE finding_category
 (
     id          SERIAL PRIMARY KEY,
     created_at   TIMESTAMPTZ   NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -240,11 +240,11 @@ CREATE TABLE vulnerability_category
     parent_id   INT  NULL,
     name        VARCHAR(200)  NOT NULL UNIQUE,
     description VARCHAR(2000) NULL,
-    FOREIGN KEY (parent_id) REFERENCES vulnerability_category (id) ON DELETE CASCADE
+    FOREIGN KEY (parent_id) REFERENCES finding_category (id) ON DELETE CASCADE
 );
 
--- 15. vulnerability
-CREATE TABLE vulnerability
+-- 15. finding
+CREATE TABLE finding
 (
     id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at              TIMESTAMPTZ                                                                                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -274,12 +274,12 @@ CREATE TABLE vulnerability
     ai_triage              TEXT                                                                                               NULL,
     UNIQUE (project_id, asset_id, summary),
     FOREIGN KEY (created_by_id) REFERENCES "user" (id) ON DELETE NO ACTION,
-    CONSTRAINT vulnerability_fk_project_id FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
+    CONSTRAINT finding_fk_project_id FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE,
     FOREIGN KEY (asset_id) REFERENCES asset (id) ON DELETE SET NULL,
-    FOREIGN KEY (category_id) REFERENCES vulnerability_category (id) ON DELETE SET NULL
+    FOREIGN KEY (category_id) REFERENCES finding_category (id) ON DELETE SET NULL
 );
 
-CREATE INDEX vulnerability_created_at_idx ON vulnerability (created_at DESC, id);
+CREATE INDEX finding_created_at_idx ON finding (created_at DESC, id);
 
 -- 16. task
 CREATE TABLE task
@@ -506,7 +506,7 @@ SELECT id, created_at, updated_at, created_by_id, name, description, category_id
 FROM project
 WHERE is_template = TRUE;
 
-CREATE VIEW vulnerability_template AS
+CREATE VIEW finding_template AS
 SELECT id,
        created_by_id,
        category_id,
@@ -521,7 +521,7 @@ SELECT id,
        cvss_vector,
        cvss_score,
        tags
-FROM vulnerability
+FROM finding
 WHERE is_template = TRUE;
 
 -- Functions
@@ -572,8 +572,8 @@ CREATE TRIGGER update_azure_devops_integration_updated_at BEFORE UPDATE ON azure
 CREATE TRIGGER update_organisation_updated_at BEFORE UPDATE ON organisation FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_vault_updated_at BEFORE UPDATE ON vault FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_asset_updated_at BEFORE UPDATE ON asset FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_vulnerability_category_updated_at BEFORE UPDATE ON vulnerability_category FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_vulnerability_updated_at BEFORE UPDATE ON vulnerability FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_finding_category_updated_at BEFORE UPDATE ON finding_category FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_finding_updated_at BEFORE UPDATE ON finding FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_task_updated_at BEFORE UPDATE ON task FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_command_schedule_updated_at BEFORE UPDATE ON command_schedule FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_scan_run_updated_at BEFORE UPDATE ON scan_run FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

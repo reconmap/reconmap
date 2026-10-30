@@ -53,11 +53,11 @@ const path = require('path');
         await takeScreenshot('project-details', await firstItemUrl('/projects', '/projects'));
         await takeScreenshot('project-create', '/projects/create');
         
-        // Vulnerabilities
-        await takeScreenshot('vulnerabilities', '/vulnerabilities');
-        await takeScreenshot('vulnerability-details', await firstItemUrl('/vulnerabilities', '/vulnerabilities'));
-        await takeScreenshot('vulnerability-create', '/vulnerabilities/create');
-        await takeScreenshot('vulnerability-categories', '/vulnerabilities/categories');
+        // Findings
+        await takeScreenshot('findings', '/findings');
+        await takeScreenshot('finding-details', await firstItemUrl('/findings', '/findings'));
+        await takeScreenshot('finding-create', '/findings/create');
+        await takeScreenshot('finding-categories', '/findings/categories');
         
         // Tasks
         await takeScreenshot('tasks', '/tasks');

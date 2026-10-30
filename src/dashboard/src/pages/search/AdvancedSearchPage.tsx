@@ -14,8 +14,8 @@ import styles from "./AdvancedSearchPage.module.css";
 
 const entityList = {
     tasks: "Tasks",
-    vulnerabilities: "Vulnerabilities",
-    vulnerability_templates: "Vulnerability templates",
+    findings: "Findings",
+    finding_templates: "Finding templates",
     projects: "Projects",
     project_templates: "Project templates",
 };

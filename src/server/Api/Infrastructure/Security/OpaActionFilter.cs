@@ -61,9 +61,9 @@ public class OpaActionFilter(OpaAuthorizationService opaService, AppDbContext db
             if (idObj is Guid id)
             {
                 if (controller == "projects") projectId = id;
-                else if (controller == "vulnerabilities")
+                else if (controller == "findings")
                 {
-                    projectId = await dbContext.Vulnerabilities.Where(v => v.Id == id).Select(v => v.ProjectId).FirstOrDefaultAsync();
+                    projectId = await dbContext.Findings.Where(v => v.Id == id).Select(v => v.ProjectId).FirstOrDefaultAsync();
                 }
                 else if (controller == "tasks")
                 {
@@ -79,7 +79,7 @@ public class OpaActionFilter(OpaAuthorizationService opaService, AppDbContext db
                 projectId = await dbContext.Assets.Where(a => a.Id == assetId).Select(a => (Guid?)a.ProjectId).FirstOrDefaultAsync();
             }
         }
-        else if (context.ActionArguments.Values.FirstOrDefault(v => v is Vulnerability) is Vulnerability v)
+        else if (context.ActionArguments.Values.FirstOrDefault(v => v is Finding) is Finding v)
         {
             projectId = v.ProjectId;
             resourceId = v.Id;

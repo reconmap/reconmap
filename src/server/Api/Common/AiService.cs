@@ -10,8 +10,8 @@ public class AiParsingResult
     [JsonPropertyName("assets")]
     public List<AiAsset> Assets { get; set; } = new();
 
-    [JsonPropertyName("vulnerabilities")]
-    public List<AiVulnerability> Vulnerabilities { get; set; } = new();
+    [JsonPropertyName("findings")]
+    public List<AiFinding> Findings { get; set; } = new();
 }
 
 public class AiAsset
@@ -26,7 +26,7 @@ public class AiAsset
     public List<AiAsset> Children { get; set; } = new();
 }
 
-public class AiVulnerability
+public class AiFinding
 {
     [JsonPropertyName("summary")]
     public string Summary { get; set; } = string.Empty;
@@ -46,24 +46,24 @@ public class AiVulnerability
 
 public interface IAiService
 {
-    Task<string> GenerateRemediationAsync(string vulnerabilitySummary, Guid? projectId = null, int? userId = null);
+    Task<string> GenerateRemediationAsync(string findingSummary, Guid? projectId = null, int? userId = null);
     Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, Guid? projectId = null, int? userId = null);
     Task<string> EnrichAssetAsync(string assetName, string assetType, Guid? projectId = null, int? userId = null);
-    Task<string> TriageVulnerabilityAsync(string summary, string description, Guid? projectId = null, int? userId = null);
+    Task<string> TriageFindingAsync(string summary, string description, Guid? projectId = null, int? userId = null);
 }
 
 public sealed class AiService(IAiChatClientFactory clientFactory) : IAiService
 {
     public async Task<string> GenerateRemediationAsync(string summary, Guid? projectId = null, int? userId = null)
     {
-        var prompt = $"Write instructions on how to remediate this vulnerability: {summary}";
+        var prompt = $"Write instructions on how to remediate this finding: {summary}";
 
         var context = await clientFactory.CreateAsync(new AiUsageContext(AiFeatures.Remediation, projectId, userId));
         var response = await context.Client.GetResponseAsync(
             prompt,
             new ChatOptions
             {
-                Instructions = "You are a vulnerability and pentesting expert system",
+                Instructions = "You are a finding and pentesting expert system",
                 MaxOutputTokens = context.MaxOutputTokens
             });
 
@@ -74,14 +74,14 @@ public sealed class AiService(IAiChatClientFactory clientFactory) : IAiService
     {
         var prompt = $@"
 You are a cybersecurity expert. Parse the following command output from the tool '{toolName}' into a structured JSON format.
-The output should contain a list of Assets (targets) and Vulnerabilities.
+The output should contain a list of Assets (targets) and Findings.
 
 Strictly follow this JSON schema:
 {{
   ""assets"": [
     {{ ""name"": ""string (e.g. hostname, IP, port, path, file)"", ""type"": ""string (free-form, e.g. hostname, ip, port, url, path, file)"", ""children"": [ /* nested assets found under this one, e.g. ports of a host, paths of a web app */ ] }}
   ],
-  ""vulnerabilities"": [
+  ""findings"": [
     {{
       ""summary"": ""string (short title)"",
       ""description"": ""string (detailed description)"",
@@ -92,7 +92,7 @@ Strictly follow this JSON schema:
   ]
 }}
 
-If no assets or vulnerabilities are found, return empty lists.
+If no assets or findings are found, return empty lists.
 Do not include any text outside the JSON block.
 
 Command Output:
@@ -157,10 +157,10 @@ Be concise and actionable. Format as markdown.";
         return response.Text;
     }
 
-    public async Task<string> TriageVulnerabilityAsync(string summary, string description, Guid? projectId = null, int? userId = null)
+    public async Task<string> TriageFindingAsync(string summary, string description, Guid? projectId = null, int? userId = null)
     {
         var details = string.IsNullOrWhiteSpace(description) ? summary : $"{summary}\n\n{description}";
-        var prompt = $@"You are a penetration testing triage agent. Rapidly assess the following vulnerability finding:
+        var prompt = $@"You are a penetration testing triage agent. Rapidly assess the following finding finding:
 
 {details}
 
@@ -178,7 +178,7 @@ Be concise. Format as markdown.";
             prompt,
             new ChatOptions
             {
-                Instructions = "You are a rapid vulnerability triage agent. Provide fast, accurate, actionable assessments.",
+                Instructions = "You are a rapid finding triage agent. Provide fast, accurate, actionable assessments.",
                 MaxOutputTokens = context.MaxOutputTokens
             });
 

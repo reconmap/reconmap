@@ -77,27 +77,27 @@ Reconmap automates scanning by analyzing target inputs (URL, domain, IP, hostnam
 - **Validated plans**: Only tools from the command catalog that apply to the target type are accepted from the model, and Reconmap fills in the command arguments itself. If the AI is unavailable or returns nothing usable, a rule-based plan for the chosen objective is used.
 - **Tracked execution**: The plan becomes a scan whose tool-by-tool progress is kept on the server and listed under **Scan history**.
 
-### Automatic vulnerability triage (background)
+### Automatic finding triage (background)
 
-When a scan completes and vulnerabilities are discovered, Reconmap automatically runs a triage assessment for each new finding. This happens in the background as part of scan result processing — no user action required.
+When a scan completes and findings are discovered, Reconmap automatically runs a triage assessment for each new finding. This happens in the background as part of scan result processing — no user action required.
 
 The triage report covers:
 
 - **Severity assessment** — confirms or adjusts the detected risk level with justification
-- **Exploitability** — how easily the vulnerability could be exploited in the wild
+- **Exploitability** — how easily the finding could be exploited in the wild
 - **Attack surface** — which systems or data are at risk
 - **Immediate actions** — up to three specific next steps for the analyst
 - **False positive check** — reasons the finding might not be a real issue
 
-The result is stored with the vulnerability and visible on the **Triage** tab of the vulnerability details page.
+The result is stored with the finding and visible on the **Triage** tab of the finding details page.
 
-### On-demand vulnerability triage
+### On-demand finding triage
 
-You can also request a fresh triage for any existing vulnerability from the **Triage** tab on the vulnerability details page. This is useful after updating the summary or description, or when you want a second opinion from a different model.
+You can also request a fresh triage for any existing finding from the **Triage** tab on the finding details page. This is useful after updating the summary or description, or when you want a second opinion from a different model.
 
 ### Remediation generation
 
-On the **Remediation** tab of a vulnerability, click **Generate remediation instructions with AI** to produce step-by-step fix guidance based on the vulnerability summary.
+On the **Remediation** tab of a finding, click **Generate remediation instructions with AI** to produce step-by-step fix guidance based on the finding summary.
 
 ### Asset enrichment / next-step suggestions
 
@@ -109,7 +109,7 @@ On any asset details page, click **Suggest commands** to get a tactical plan inc
 
 ### Automatic parser output analysis
 
-When using the **Generic LLM** output parser for a command, Reconmap passes the raw tool output to the AI to extract structured assets and vulnerabilities automatically. This allows any tool's output to be ingested without writing a custom parser.
+When using the **Generic LLM** output parser for a command, Reconmap passes the raw tool output to the AI to extract structured assets and findings automatically. This allows any tool's output to be ingested without writing a custom parser.
 
 ---
 
@@ -125,4 +125,4 @@ Provider definitions in `ai-providers.json` can offer the same two price fields 
 
 When using Ollama, all inference happens on your own infrastructure — no data is sent to external services.
 
-When using Azure OpenAI, OpenRouter or AnonRouter, tool output, vulnerability descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.
+When using Azure OpenAI, OpenRouter or AnonRouter, tool output, finding descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.

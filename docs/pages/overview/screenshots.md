@@ -7,9 +7,9 @@ nav_order: 1
 
 ![Dashboard view](/images/screenshots/dashboard-stats.png)
 
-### Vulnerabilities
+### Findings
 
-![Vulnerabilities view](/images/screenshots/vulnerabilities.png)
+![Findings view](/images/screenshots/findings.png)
 
 ### Tasks
 

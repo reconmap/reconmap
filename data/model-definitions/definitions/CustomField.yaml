@@ -11,7 +11,7 @@ properties:
   parent_type:
     type: string
     enum:
-    - vulnerability
+    - finding
   name:
     type: string
   label:

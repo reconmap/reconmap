@@ -4,7 +4,7 @@ VALUES (1, 'fec17265-a0ae-4d5a-9e20-63487fc21b67', 'administrator');
 INSERT INTO audit_log (created_by_id, client_ip, action, object)
 VALUES (NULL, '\x7f000001'::bytea, 'Initialised', 'System');
 
-INSERT INTO vulnerability_category (id, parent_id, name, description)
+INSERT INTO finding_category (id, parent_id, name, description)
 VALUES (1, NULL, 'General', 'General categories.'),
        (2, 1, 'Access Controls', 'Related to authorization of users, and assessment of rights.'),
        (3, 1, 'Auditing and Logging', 'Related to auditing of actions, or logging of problems.'),
@@ -87,4 +87,4 @@ INSERT INTO ai_settings (id, provider, max_output_tokens) VALUES (1, 'Ollama', 4
 
 -- Reset sequences to prevent conflicts due to explicit ID insertions
 SELECT setval(pg_get_serial_sequence('user', 'id'), COALESCE(MAX(id), 1)) FROM "user";
-SELECT setval(pg_get_serial_sequence('vulnerability_category', 'id'), COALESCE(MAX(id), 1)) FROM vulnerability_category;
+SELECT setval(pg_get_serial_sequence('finding_category', 'id'), COALESCE(MAX(id), 1)) FROM finding_category;

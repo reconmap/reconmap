@@ -81,7 +81,7 @@ services.AddScoped<IAuditService, AuditService>();
 services.AddScoped<ISecretsService, SecretsService>();
 services.AddScoped<IProjectService, ProjectService>();
 services.AddScoped<ITaskService, TaskService>();
-services.AddScoped<IVulnerabilityService, VulnerabilityService>();
+services.AddScoped<IFindingService, FindingService>();
 services.AddScoped<IAssetUpsertService, AssetUpsertService>();
 services.AddScoped<IRunnerService, RunnerService>();
 services.AddScoped<IMailSettingsService, MailSettingsService>();

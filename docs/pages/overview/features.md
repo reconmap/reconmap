@@ -7,10 +7,10 @@ nav_order: 1
 - SSO and user federation (ldap, active directory) with OpenID/SAML support ([keycloak](https://www.keycloak.org/))
 - Two-factor authentication (2FA/MFA, TOPT), email verification
 - [Dashboard](/user-manual/dashboard/) and analytics
-- Search across all your data (projects, vulnerabilities, tasks, ...)
+- Search across all your data (projects, findings, tasks, ...)
 - Users and roles (including client access to projects)
 - Projects and projects templates
-- Vulnerabilities and vulnerability templates database
+- Findings and finding templates database
 - Security commands automation
 - Scheduled commands using cron expressions
 - Tasks manager
@@ -23,7 +23,7 @@ nav_order: 1
 - Resource tagging
 - Browser terminal integration
 - Comments with markdown support
-- Attachments (docs, screenshots) to projects, vulnerabilities and tasks
+- Attachments (docs, screenshots) to projects, findings and tasks
 - [Report generation](/user-manual/reports/pentest-report-configuration/) in rich (Word) and plain text formats (Markdown, Typst)
 - Custom (whitelabel) reporting
 - [Audit log](/user-manual/system/audit-log/)

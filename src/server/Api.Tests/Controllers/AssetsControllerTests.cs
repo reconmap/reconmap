@@ -13,10 +13,10 @@ public class AssetsControllerTests
 {
     private sealed class FakeAiService : IAiService
     {
-        public Task<string> GenerateRemediationAsync(string vulnerabilitySummary, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
+        public Task<string> GenerateRemediationAsync(string findingSummary, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
         public Task<AiParsingResult> ParseCommandOutputAsync(string toolName, string output, Guid? projectId = null, int? userId = null) => Task.FromResult(new AiParsingResult());
         public Task<string> EnrichAssetAsync(string assetName, string assetType, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
-        public Task<string> TriageVulnerabilityAsync(string summary, string description, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
+        public Task<string> TriageFindingAsync(string summary, string description, Guid? projectId = null, int? userId = null) => Task.FromResult(string.Empty);
     }
 
     private static AppDbContext CreateDbContext()

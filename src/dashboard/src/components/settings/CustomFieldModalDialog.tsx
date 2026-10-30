@@ -55,7 +55,7 @@ const CustomFieldModalDialog = ({ isOpen, onClose }: any) => {
                         label="Parent type"
                         control={
                             <NativeSelect name="parentType">
-                                <option value="vulnerability">Vulnerability</option>
+                                <option value="finding">Finding</option>
                             </NativeSelect>
                         }
                     />

@@ -28,12 +28,12 @@ public class GuidIdGenerationTests
     }
 
     [Fact]
-    public async Task Vulnerabilities_get_random_v4_ids_that_carry_no_creation_time()
+    public async Task Findings_get_random_v4_ids_that_carry_no_creation_time()
     {
         using var db = CreateDbContext();
-        var first = new Vulnerability { Summary = "A", Risk = "low" };
-        var second = new Vulnerability { Summary = "B", Risk = "low" };
-        db.Vulnerabilities.AddRange(first, second);
+        var first = new Finding { Summary = "A", Risk = "low" };
+        var second = new Finding { Summary = "B", Risk = "low" };
+        db.Findings.AddRange(first, second);
         await db.SaveChangesAsync();
 
         Assert.Equal(4, first.Id.Version);

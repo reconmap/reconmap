@@ -1,0 +1,52 @@
+import CssIcon from "components/ui/CssIcon";
+import EmptyField from "components/ui/EmptyField";
+import Loading from "components/ui/Loading";
+import { toast } from "components/ui/toast";
+import PrimaryButton from "components/ui/buttons/PrimaryButton";
+import TabToolbar from "components/ui/TabToolbar";
+import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { useFindingTriageMutation } from "api/findings";
+
+const FindingTriagePanel = ({ finding }: any) => {
+    const triageMutation = useFindingTriageMutation();
+    const [triageResult, setTriageResult] = useState(finding.aiTriage ?? null);
+
+    const runTriage = () => {
+        triageMutation.mutate(finding.id, {
+            onSuccess: (data) => {
+                setTriageResult(data.triage);
+                toast.success("AI triage complete.");
+            },
+            onError: (err) => {
+                toast.error("Triage failed: " + (err.message ?? "Unknown error"));
+            },
+        });
+    };
+
+    return (
+        <>
+            <TabToolbar
+                start={
+                    <>
+                        <PrimaryButton onClick={runTriage} disabled={triageMutation.isPending}>
+                            <CssIcon name="brain" />
+                            &nbsp;{triageResult ? "Re-run AI triage" : "Run AI triage"}
+                        </PrimaryButton>
+                        {triageMutation.isPending && <Loading />}
+                    </>
+                }
+            />
+
+            {triageResult ? (
+                <div className="content">
+                    <ReactMarkdown>{triageResult}</ReactMarkdown>
+                </div>
+            ) : (
+                <EmptyField label="No triage report yet. Click the button above to generate one." />
+            )}
+        </>
+    );
+};
+
+export default FindingTriagePanel;

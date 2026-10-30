@@ -5,8 +5,8 @@ import EmptyField from "components/ui/EmptyField";
 import RelativeDateFormatter from "components/ui/RelativeDateFormatter";
 import TimestampsSection from "components/ui/TimestampsSection";
 import UserLink from "components/users/UserLink";
-import VulnerabilitiesByCategoryStatsWidget from "components/dashboard/widgets/VulnerabilitiesByCategoryStatsWidget";
-import VulnerabilitiesByRiskStatsWidget from "components/dashboard/widgets/VulnerabilitiesByRiskStatsWidget";
+import FindingsByCategoryStatsWidget from "components/dashboard/widgets/FindingsByCategoryStatsWidget";
+import FindingsByRiskStatsWidget from "components/dashboard/widgets/FindingsByRiskStatsWidget";
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router";
 import remarkGfm from "remark-gfm";
@@ -57,8 +57,8 @@ const ProjectDetailsTab = ({ project }: any) => {
                         <h4 style={{ marginTop: 20 }}>Stats</h4>
 
                         <div>
-                            <VulnerabilitiesByRiskStatsWidget projectId={project.id} />
-                            <VulnerabilitiesByCategoryStatsWidget projectId={project.id} />
+                            <FindingsByRiskStatsWidget projectId={project.id} />
+                            <FindingsByCategoryStatsWidget projectId={project.id} />
                         </div>
                     </>
                 )}

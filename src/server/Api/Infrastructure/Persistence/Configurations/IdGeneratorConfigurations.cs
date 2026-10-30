@@ -41,9 +41,9 @@ public class AssetConfiguration : IEntityTypeConfiguration<Asset>
     }
 }
 
-public class VulnerabilityConfiguration : IEntityTypeConfiguration<Vulnerability>
+public class FindingConfiguration : IEntityTypeConfiguration<Finding>
 {
-    public void Configure(EntityTypeBuilder<Vulnerability> builder)
+    public void Configure(EntityTypeBuilder<Finding> builder)
     {
         builder.Property(e => e.Id).HasValueGenerator<GuidV4ValueGenerator>();
     }

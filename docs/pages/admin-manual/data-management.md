@@ -17,7 +17,7 @@ Go to `System -> Export data` to download a copy of:
 - Documents and templates
 - Projects and tasks
 - Users and roles
-- Vulnerabilities
+- Findings
 
 ### Data import
 
@@ -27,11 +27,11 @@ You can restore data from a previously generated export file or migrate data bet
 
 Go to `System -> Import data` to upload a Reconmap JSON export file.
 
-The file is a JSON object whose keys are entity names and whose values are arrays of records. Records use the same property names as the export. Entities are imported in the order they appear in the file, so list parents (for example `projects`) before their children (`tasks`, `assets`, `vulnerabilities`). Projects, tasks, reports and vulnerabilities (and the `ProjectId` and `ParentId` fields that point at them) use UUIDs. Exports made before UUIDs were introduced contain integer ids for these entities and are rejected. Accepted entity names:
+The file is a JSON object whose keys are entity names and whose values are arrays of records. Records use the same property names as the export. Entities are imported in the order they appear in the file, so list parents (for example `projects`) before their children (`tasks`, `assets`, `findings`). Projects, tasks, reports and findings (and the `ProjectId` and `ParentId` fields that point at them) use UUIDs. Exports made before UUIDs were introduced contain integer ids for these entities and are rejected. Accepted entity names:
 
-- `users`, `organisations`, `project_categories`, `vulnerability_categories`, `custom_fields`
+- `users`, `organisations`, `project_categories`, `finding_categories`, `custom_fields`
 - `projects`, `project_templates`, `project_members`, `tasks`, `assets`
-- `vulnerabilities`, `vulnerability_templates`, `comments` (older exports that use `notes` are still accepted), `reports`
+- `findings`, `finding_templates`, `comments` (older exports that use `notes` are still accepted), `reports`
 - `runners`, `scan_runs` (with nested `Tasks`), `command_schedules`
 - `notifications`, `webhooks`, `audit_log`
 
@@ -48,7 +48,7 @@ curl -X POST http://localhost:5510/api/system/data \
   -F "importFile=@demo.json;type=application/json"
 ```
 
-The first argument is the number of projects (default 20). Run it against a freshly initialised database: the generator references the categories and the `Reconmap` organisation seeded by the database, and it generates UUIDs for projects, tasks, reports (UUIDv7) and vulnerabilities (UUIDv4), and ids that start at 1000 for the other tables. Importing the same file twice fails on unique names. Vault secrets and integrations are not generated.
+The first argument is the number of projects (default 20). Run it against a freshly initialised database: the generator references the categories and the `Reconmap` organisation seeded by the database, and it generates UUIDs for projects, tasks, reports (UUIDv7) and findings (UUIDv4), and ids that start at 1000 for the other tables. Importing the same file twice fails on unique names. Vault secrets and integrations are not generated.
 
 ### Audit log
 

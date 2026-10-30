@@ -29,6 +29,6 @@ Tools can also attach arbitrary **attributes** to an asset (for example the port
 * **Manually**: click **New asset** and choose the name, an optional parent and the type.
 * **API**: `POST /api/assets` creates an asset, `POST /api/assets/ensure` creates it only if it does not exist yet under the same parent, `PUT /api/assets/{id}` edits or moves it, and `GET /api/assets?projectId=...` lists the assets of a project (add `parentId=...` for the children of a node, `rootsOnly=true` for the top level, or `type=...` to filter). An asset cannot be moved under itself or one of its own descendants.
 
-### Vulnerabilities and assets
+### Findings and assets
 
-A vulnerability can point at any node of the tree through its **Affected asset**, so a finding can be attached to a host, a port or a single file.
+A finding can point at any node of the tree through its **Affected asset**, so a finding can be attached to a host, a port or a single file.

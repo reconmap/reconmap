@@ -5,15 +5,15 @@ namespace Reconmap.Api.Application.CommandParsers;
 public class CommandParserResult
 {
     public List<Asset> assets = new();
-    public List<Vulnerability> vulnerabilities = new();
+    public List<Finding> findings = new();
 
     public void AddAsset(Asset asset)
     {
         assets.Add(asset);
     }
 
-    public void AddVulnerability(Vulnerability vulnerability)
+    public void AddFinding(Finding finding)
     {
-        vulnerabilities.Add(vulnerability);
+        findings.Add(finding);
     }
 }

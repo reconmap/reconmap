@@ -38,16 +38,16 @@ public static class ExportablesRegistry
         new() { Key = "users", Description = "Users" }, //ClassType = typeof(UsersExporter) },
         new()
         {
-            Key = "vulnerabilities", Description = "Vulnerabilities"
-        }, //ClassType = typeof(VulnerabilitiesExporter) },
+            Key = "findings", Description = "Findings"
+        }, //ClassType = typeof(FindingsExporter) },
         new()
         {
-            Key = "vulnerability_categories", Description = "Vulnerability categories"
-        }, //ClassType = typeof(VulnerabilityCategoriesExporter) },
+            Key = "finding_categories", Description = "Finding categories"
+        }, //ClassType = typeof(FindingCategoriesExporter) },
         new()
         {
-            Key = "vulnerability_templates", Description = "Vulnerability templates"
-        } //ClassType = typeof(VulnerabilityTemplatesExporter) },
+            Key = "finding_templates", Description = "Finding templates"
+        } //ClassType = typeof(FindingTemplatesExporter) },
     };
 }
 

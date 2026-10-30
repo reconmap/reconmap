@@ -13,29 +13,29 @@ Currently, the server exposes limited tools such as:
 
 The server also exposes these Prompts (reusable templates a client can offer to the user). Both take a `projectId`, require read access to that project, and point the model at the project's resources:
 
-- `triage_vulnerabilities`: prioritise a project's vulnerabilities, spot duplicates and propose a remediation order.
+- `triage_findings`: prioritise a project's findings, spot duplicates and propose a remediation order.
 - `executive_summary`: draft a short, non-technical summary of a project's security posture.
 
-Prompts live in `Mcp/Prompts/`, tools in `Mcp/Tools/` and resources in `Mcp/Resources/`, with one class per entity (`ProjectTools`, `ProjectResources`, `TaskResources`, `VulnerabilityResources`, `RunnerResources`).
+Prompts live in `Mcp/Prompts/`, tools in `Mcp/Tools/` and resources in `Mcp/Resources/`, with one class per entity (`ProjectTools`, `ProjectResources`, `TaskResources`, `FindingResources`, `RunnerResources`).
 
 In addition, the server exposes the following Resources (data sources):
 
 * `reconmap://projects`
 * `reconmap://tasks`
-* `reconmap://vulnerabilities`
+* `reconmap://findings`
 * `reconmap://runners`
 
-And these parameterized resource templates (`{id}` is the UUID of the project or vulnerability):
+And these parameterized resource templates (`{id}` is the UUID of the project or finding):
 
 * `reconmap://projects/{id}`: one project.
-* `reconmap://projects/{id}/vulnerabilities`: the vulnerabilities of one project.
-* `reconmap://vulnerabilities/{id}`: one vulnerability, with its full details.
+* `reconmap://projects/{id}/findings`: the findings of one project.
+* `reconmap://findings/{id}`: one finding, with its full details.
 
-Templates check access to the project they belong to, so a user outside the project gets `Access denied.`. A missing ID fails with `Project not found.` or `Vulnerability not found.`.
+Templates check access to the project they belong to, so a user outside the project gets `Access denied.`. A missing ID fails with `Project not found.` or `Finding not found.`.
 
 ## Shared services
 
-The MCP tools and resources do not query the database themselves. They call the same application services as the REST controllers (`IProjectService`, `ITaskService`, `IVulnerabilityService` and `IRunnerService`, in `src/server/Api/Application/Services`). Filtering and lookup logic lives in those services. When you add a tool or resource, add or extend a service and call it from both the controller and the MCP class. The MCP layer only applies access scoping (`McpAccessGuard`) and shapes the output.
+The MCP tools and resources do not query the database themselves. They call the same application services as the REST controllers (`IProjectService`, `ITaskService`, `IFindingService` and `IRunnerService`, in `src/server/Api/Application/Services`). Filtering and lookup logic lives in those services. When you add a tool or resource, add or extend a service and call it from both the controller and the MCP class. The MCP layer only applies access scoping (`McpAccessGuard`) and shapes the output.
 
 ## Requirements
 
@@ -89,7 +89,7 @@ Configuration:
 Access follows the same rules as the REST API:
 
 - Administrators and superusers can read everything.
-- Users and clients only see data in projects they are a member of. Lists of projects, tasks and vulnerabilities are filtered accordingly, and reading a single project is checked against the OPA policy (`policy/authz.rego`).
+- Users and clients only see data in projects they are a member of. Lists of projects, tasks and findings are filtered accordingly, and reading a single project is checked against the OPA policy (`policy/authz.rego`).
 - Runners are infrastructure data and are only available to administrators and superusers.
 - A denied call fails with `Access denied.`
 

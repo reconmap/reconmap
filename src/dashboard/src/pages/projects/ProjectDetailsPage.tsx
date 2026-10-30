@@ -23,7 +23,7 @@ import CommentsPanel from "components/comments/CommentsPanel";
 import ProjectAssets from "components/projects/ProjectAssets";
 import ProjectTasks from "components/projects/ProjectTasks";
 import ProjectVaultTab from "components/projects/vault/ProjectVaultTab";
-import ProjectVulnerabilities from "components/projects/ProjectVulnerabilities";
+import ProjectFindings from "components/projects/ProjectFindings";
 import ReportRevisions from "components/reports/ReportRevisions";
 
 const ProjectDetailsPage = () => {
@@ -121,7 +121,7 @@ const ProjectDetailsPage = () => {
                             t("Details"),
                             t("Tasks"),
                             t("Assets"),
-                            t("Vulnerabilities"),
+                            t("Findings"),
                             t("Comments"),
                             t("Attachments"),
                             t("Vault"),
@@ -149,7 +149,7 @@ const ProjectDetailsPage = () => {
                         )}
                         {3 === tabIndex && (
                             <div>
-                                <ProjectVulnerabilities project={project} />
+                                <ProjectFindings project={project} />
                             </div>
                         )}
                         {4 === tabIndex && (

@@ -4,7 +4,7 @@
 
 [![YouTube](https://img.shields.io/badge/YouTube-Reconmap-red?style=flat&logo=youtube&logoColor=white)](https://www.youtube.com/reconmap)
 
-<h3>AI-powered vulnerability scanning and reporting for teams running many engagements.</h3>
+<h3>AI-powered finding scanning and reporting for teams running many engagements.</h3>
 </div>
 
 Give it a target. Reconmap plans the scan, runs the tools, triages the findings and writes the report. Every engagement lives in one place, so your team spends its time on the work that needs a human.
@@ -17,7 +17,7 @@ Give it a target. Reconmap plans the scan, runs the tools, triages the findings 
 - **Runs them anywhere.** Runners execute commands on your own machines and send the output back.
 - **Parses everything.** Built-in parsers for SARIF, CycloneDX, Nmap, Testssl, Subfinder and more. Anything else goes through the LLM parser.
 - **Triages automatically.** Every new finding gets a severity check, exploitability, affected surface, next steps and a false-positive assessment.
-- **Writes the fix.** Generate remediation steps per vulnerability, or suggest next commands per asset.
+- **Writes the fix.** Generate remediation steps per finding, or suggest next commands per asset.
 - **Reports.** Export to Word, Markdown or HTML.
 - **Scales across engagements.** Many projects, many people, SSO through Keycloak.
 - **Bring your own model.** Ollama for fully local inference, or Azure OpenAI, OpenRouter and other OpenAI-compatible endpoints.

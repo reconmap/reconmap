@@ -66,59 +66,59 @@ public class CommandResultProcessor(
                 }
             }
 
-            var numVulnerabilitiesAdded = 0;
-            var numVulnerabilities = result.vulnerabilities.Count;
-            if (numVulnerabilities > 0)
+            var numFindingsAdded = 0;
+            var numFindings = result.findings.Count;
+            if (numFindings > 0)
             {
-                foreach (var vulnerability in result.vulnerabilities)
+                foreach (var finding in result.findings)
                 {
-                    vulnerability.ProjectId = job.ProjectId;
-                    vulnerability.Risk ??= "medium";
-                    vulnerability.Risk = "medium"; // @todo convert non-conventional risks
+                    finding.ProjectId = job.ProjectId;
+                    finding.Risk ??= "medium";
+                    finding.Risk = "medium"; // @todo convert non-conventional risks
 
-                    vulnerability.CreatedById = job.UserId;
-                    if (vulnerability.Asset != null)
+                    finding.CreatedById = job.UserId;
+                    if (finding.Asset != null)
                     {
-                        vulnerability.AssetId = (await assetUpsert.UpsertAsync(job.ProjectId, null, vulnerability.Asset,
+                        finding.AssetId = (await assetUpsert.UpsertAsync(job.ProjectId, null, finding.Asset,
                             commandUsage.OutputParser, stoppingToken)).Asset.Id;
-                        vulnerability.Asset = null;
+                        finding.Asset = null;
                     }
 
-                    if (await IsDuplicateVulnerability(db, vulnerability))
+                    if (await IsDuplicateFinding(db, finding))
                     {
-                        logger.LogInformation("Skipping duplicate vulnerability: {Summary}", vulnerability.Summary);
+                        logger.LogInformation("Skipping duplicate finding: {Summary}", finding.Summary);
                         continue;
                     }
 
-                    if (string.IsNullOrWhiteSpace(vulnerability.Remediation))
+                    if (string.IsNullOrWhiteSpace(finding.Remediation))
                     {
                         try
                         {
-                            vulnerability.Remediation = await aiService.GenerateRemediationAsync(
-                                vulnerability.Summary, job.ProjectId, job.UserId);
+                            finding.Remediation = await aiService.GenerateRemediationAsync(
+                                finding.Summary, job.ProjectId, job.UserId);
                         }
                         catch (Exception ex)
                         {
-                            logger.LogWarning(ex, "Failed to generate remediation for {Summary}", vulnerability.Summary);
+                            logger.LogWarning(ex, "Failed to generate remediation for {Summary}", finding.Summary);
                         }
                     }
 
-                    // Autonomously triage the vulnerability as it is discovered
+                    // Autonomously triage the finding as it is discovered
                     try
                     {
-                        vulnerability.AiTriage = await aiService.TriageVulnerabilityAsync(
-                            vulnerability.Summary,
-                            vulnerability.Description ?? string.Empty,
+                        finding.AiTriage = await aiService.TriageFindingAsync(
+                            finding.Summary,
+                            finding.Description ?? string.Empty,
                             job.ProjectId,
                             job.UserId);
                     }
                     catch (Exception ex)
                     {
-                        logger.LogWarning(ex, "Failed to triage vulnerability {Summary}", vulnerability.Summary);
+                        logger.LogWarning(ex, "Failed to triage finding {Summary}", finding.Summary);
                     }
 
-                    db.Vulnerabilities.Add(vulnerability);
-                    numVulnerabilitiesAdded++;
+                    db.Findings.Add(finding);
+                    numFindingsAdded++;
                 }
 
                 try
@@ -131,16 +131,16 @@ public class CommandResultProcessor(
                     db.ChangeTracker.Clear();
                 }
 
-                if (numVulnerabilitiesAdded > 0)
+                if (numFindingsAdded > 0)
                 {
-                    if (job.UserId is int vulnerabilitiesToUserId)
+                    if (job.UserId is int findingsToUserId)
                     {
                         var notification = new Notification
                         {
-                            ToUserId = vulnerabilitiesToUserId,
-                            Title = "New vulnerabilities found",
+                            ToUserId = findingsToUserId,
+                            Title = "New findings found",
                             Content =
-                                $"A total of '{numVulnerabilitiesAdded}' new vulnerabilities have been found by the '{commandUsage.OutputParser}' command",
+                                $"A total of '{numFindingsAdded}' new findings have been found by the '{commandUsage.OutputParser}' command",
                             Status = "unread"
                         };
                         db.Notifications.Add(notification);
@@ -149,17 +149,17 @@ public class CommandResultProcessor(
                 }
             }
 
-            if (numHosts > 0 || numVulnerabilitiesAdded > 0)
+            if (numHosts > 0 || numFindingsAdded > 0)
                 await messageQueue.PublishAsync("notifications", new { type = "message" });
         }, stoppingToken);
     }
 
-    private async Task<bool> IsDuplicateVulnerability(AppDbContext db, Vulnerability vulnerability)
+    private async Task<bool> IsDuplicateFinding(AppDbContext db, Finding finding)
     {
-        return await db.Vulnerabilities.AnyAsync(v =>
-            v.ProjectId == vulnerability.ProjectId &&
-            v.AssetId == vulnerability.AssetId &&
-            v.Summary == vulnerability.Summary &&
+        return await db.Findings.AnyAsync(v =>
+            v.ProjectId == finding.ProjectId &&
+            v.AssetId == finding.AssetId &&
+            v.Summary == finding.Summary &&
             v.Status == "open");
     }
 }

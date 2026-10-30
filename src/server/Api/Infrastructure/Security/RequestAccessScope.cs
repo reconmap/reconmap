@@ -65,7 +65,7 @@ public sealed class RequestAccessScope(AppDbContext db, IHttpContextAccessor htt
         {
             "project" => parentId,
             "task" => await db.Tasks.Where(x => x.Id == parentId).Select(x => (Guid?)x.ProjectId).FirstOrDefaultAsync(cancellationToken),
-            "vulnerability" => await db.Vulnerabilities.Where(x => x.Id == parentId).Select(x => x.ProjectId).FirstOrDefaultAsync(cancellationToken),
+            "finding" => await db.Findings.Where(x => x.Id == parentId).Select(x => x.ProjectId).FirstOrDefaultAsync(cancellationToken),
             _ => null
         };
 

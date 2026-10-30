@@ -48,9 +48,9 @@ components:
       $ref: ./definitions/User.yaml
     Vault:
       $ref: ./definitions/Vault.yaml
-    VulnerabilityCategory:
-      $ref: ./definitions/VulnerabilityCategory.yaml
-    Vulnerability:
-      $ref: ./definitions/Vulnerability.yaml
+    FindingCategory:
+      $ref: ./definitions/FindingCategory.yaml
+    Finding:
+      $ref: ./definitions/Finding.yaml
     Webhook:
       $ref: ./definitions/Webhook.yaml

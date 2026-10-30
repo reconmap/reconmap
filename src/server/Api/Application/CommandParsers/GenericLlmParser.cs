@@ -36,15 +36,15 @@ public class GenericLlmParser(IAiService aiService, IAttachmentStorage attachmen
             result.AddAsset(ToAsset(aiAsset));
         }
 
-        foreach (var aiVulnerability in aiResult.Vulnerabilities)
+        foreach (var aiFinding in aiResult.Findings)
         {
-            result.AddVulnerability(new Vulnerability
+            result.AddFinding(new Finding
             {
-                Summary = aiVulnerability.Summary,
-                Description = aiVulnerability.Description,
-                Risk = aiVulnerability.Risk,
-                Remediation = aiVulnerability.Remediation,
-                ProofOfConcept = aiVulnerability.ProofOfConcept
+                Summary = aiFinding.Summary,
+                Description = aiFinding.Description,
+                Risk = aiFinding.Risk,
+                Remediation = aiFinding.Remediation,
+                ProofOfConcept = aiFinding.ProofOfConcept
             });
         }
 

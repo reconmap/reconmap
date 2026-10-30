@@ -2,8 +2,8 @@
 import ProjectsSearchResults from "components/search/ProjectsSearchResults";
 import ProjectTemplatesSearchResults from "components/search/ProjectTemplatesSearchResults";
 import TasksSearchResults from "components/search/TasksSearchResults";
-import VulnerabilitiesSearchResults from "components/search/VulnerabilitiesSearchResults";
-import VulnerabilityTemplatesSearchResults from "components/search/VulnerabilityTemplatesSearchResults";
+import FindingsSearchResults from "components/search/FindingsSearchResults";
+import FindingTemplatesSearchResults from "components/search/FindingTemplatesSearchResults";
 import Breadcrumb from "components/ui/Breadcrumb";
 import LinkButton from "components/ui/buttons/LinkButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
@@ -20,7 +20,7 @@ const SearchResultsPage = React.memo(() => {
 
     const entitiesParam = query.has("entities")
         ? query.get("entities")
-        : "tasks,vulnerabilities,vulnerability_templates,projects,project_templates";
+        : "tasks,findings,finding_templates,projects,project_templates";
     const entities = useMemo(() => entitiesParam!.split(","), [entitiesParam]);
 
     const [emptyResults, setEmptyResults] = useState<any[]>([]);
@@ -42,11 +42,11 @@ const SearchResultsPage = React.memo(() => {
             {entities.includes("tasks") && (
                 <TasksSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
             )}
-            {entities.includes("vulnerabilities") && (
-                <VulnerabilitiesSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
+            {entities.includes("findings") && (
+                <FindingsSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
             )}
-            {entities.includes("vulnerability_templates") && (
-                <VulnerabilityTemplatesSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
+            {entities.includes("finding_templates") && (
+                <FindingTemplatesSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
             )}
             {entities.includes("projects") && (
                 <ProjectsSearchResults keywords={keywords} emptyResultsSetter={setEmptyResults} />
