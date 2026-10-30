@@ -1,7 +1,5 @@
 package reconmap.authz
 
-import future.keywords.or
-
 default allow := false
 
 # Helper to check if a resource belongs to a project the user is a member of
@@ -14,18 +12,12 @@ is_own_profile if {
 	input.resource.id == input.user.id
 }
 
-# OPA 1.20's `or` keyword keeps identical user/client collection grants in one
-# rule without broadening either role's permissions.
-is_user_or_client if {
-	input.user.role == "user" or input.user.role == "client"
-}
-
 # 1. Administrator & Superuser
 allow if {
 	input.user.role in ["administrator", "superuser"]
 }
 
-# 2. General Access (Any authenticated user role: administrator, superuser, user, client)
+# 2. General Access (Any authenticated user role: administrator, superuser, user)
 # Allow anyone to manage their own sessions (login/logout)
 allow if {
 	input.resource_type == "sessions"
@@ -45,7 +37,7 @@ allow if {
 # Notification ownership is enforced by the API query layer. The policy only
 # permits this explicitly named endpoint; it must never be generalized to GET.
 allow if {
-	input.user.role in ["user", "client"]
+	input.user.role == "user"
 	input.resource_type == "notifications"
 }
 
@@ -73,7 +65,7 @@ allow if {
 # These collection endpoints are scoped by RequestAccessScope in the API.
 # Do not add arbitrary controllers here: a missing project id is not permission.
 allow if {
-	is_user_or_client
+	input.user.role == "user"
 	input.method == "GET"
 	input.resource_type in ["findings", "attachments", "comments"]
 	not input.resource.project_id
@@ -87,7 +79,7 @@ allow if {
 }
 
 allow if {
-	is_user_or_client
+	input.user.role == "user"
 	input.resource_type in ["attachments", "comments"]
 	input.method in ["POST", "PUT", "PATCH", "DELETE"]
 	not input.resource.project_id
@@ -96,19 +88,6 @@ allow if {
 allow if {
 	input.user.role == "user"
 	input.method in ["POST", "PUT", "PATCH", "DELETE"]
-	user_is_member_of_project
-}
-
-# 4. Client
-allow if {
-	input.user.role == "client"
-	input.method == "GET"
-
-	# Clients can read project-scoped data if they are a member
-	project_scoped_resources := ["projects", "tasks", "findings", "reports"]
-	input.resource_type in project_scoped_resources
-
-	# If project_id is provided, check membership
 	user_is_member_of_project
 }
 

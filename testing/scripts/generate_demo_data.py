@@ -334,7 +334,7 @@ def generate_users(count, ids):
         users.append({
             "Id": ids.next(),
             "SubjectId": str(uuid.uuid4()),
-            "Role": random.choices(["administrator", "superuser", "user", "client"], weights=[1, 3, 20, 4])[0],
+            "Role": random.choices(["administrator", "superuser", "user"], weights=[1, 3, 20])[0],
             "ShortBio": fake.sentence(nb_words=12),
             "Username": username,
             "Email": f"{username}@example.com",
@@ -782,8 +782,7 @@ def generate_demo_data(num_projects=20, seed=None):
     audit_ids = IdSequence()
 
     users = generate_users(40, user_ids)
-    staff = [u for u in users if u["Role"] != "client"]
-    staff_ids = [u["Id"] for u in staff] + [SEED_ADMIN_ID]
+    staff_ids = [u["Id"] for u in users] + [SEED_ADMIN_ID]
     clients = generate_clients(12, client_ids)
     custom_fields = generate_custom_fields()
 

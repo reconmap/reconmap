@@ -44,12 +44,6 @@ describe("CommentsPanel", () => {
         expect(screen.getByText("No comments yet.")).toBeInTheDocument();
     });
 
-    it("hides the composer from roles that cannot comment", () => {
-        renderPanel({ id: 10, role: "client" });
-
-        expect(screen.queryByRole("button", { name: "Add comment" })).not.toBeInTheDocument();
-    });
-
     it("creates a comment for the parent through the mutation", () => {
         renderPanel({ id: 10, role: "user" });
 

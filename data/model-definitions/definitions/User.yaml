@@ -12,7 +12,6 @@ properties:
     - administrator
     - superuser
     - user
-    - client
   short_bio:
     type: string
     nullable: true

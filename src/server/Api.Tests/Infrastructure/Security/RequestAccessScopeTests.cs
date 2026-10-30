@@ -32,18 +32,6 @@ public class RequestAccessScopeTests
     }
 
     [Fact]
-    public async Task Client_cannot_access_vault_even_when_assigned_to_project()
-    {
-        var db = CreateDbContext();
-        db.ProjectMembers.Add(new ProjectMember { UserId = 10, ProjectId = TestIds.Of(100) });
-        await db.SaveChangesAsync();
-        var scope = CreateScope(db, 10, UserRole.Client);
-
-        Assert.False(scope.CanAccessVault);
-        Assert.False(await scope.CanAccessSecretAsync(new Secret { OwnerId = 10, ProjectId = TestIds.Of(100) }));
-    }
-
-    [Fact]
     public async Task Parent_access_is_limited_to_resolvable_member_projects()
     {
         var db = CreateDbContext();

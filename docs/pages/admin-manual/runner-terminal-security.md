@@ -2,7 +2,7 @@
 
 Reconmap's browser terminal starts an interactive shell on the selected runner. Treat access to it as privileged host access.
 
-Only users with the `administrator` or `superuser` role on the Keycloak `dashboard` client can open a terminal. The runner verifies the access-token signature, expiry, issuer, `aud`, `azp`, and `resource_access.dashboard.roles` before upgrading the WebSocket connection. Tokens for `user`, `client`, service accounts, or other OIDC clients are rejected.
+Only users with the `administrator` or `superuser` role on the Keycloak `dashboard` client can open a terminal. The runner verifies the access-token signature, expiry, issuer, `aud`, `azp`, and `resource_access.dashboard.roles` before upgrading the WebSocket connection. Tokens for `user`, service accounts, or other OIDC clients are rejected.
 
 ## Configure the dashboard token audience
 

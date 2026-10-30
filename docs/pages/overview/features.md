@@ -8,7 +8,7 @@ nav_order: 1
 - Two-factor authentication (2FA/MFA, TOPT), email verification
 - [Dashboard](/user-manual/dashboard/) and analytics
 - Search across all your data (projects, findings, tasks, ...)
-- Users and roles (including client access to projects)
+- Users and roles
 - Projects and projects templates
 - Findings and finding templates database
 - Security commands automation

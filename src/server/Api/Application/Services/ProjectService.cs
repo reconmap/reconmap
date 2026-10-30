@@ -4,14 +4,12 @@ using Reconmap.Api.Infrastructure.Persistence;
 
 namespace Reconmap.Api.Application.Services;
 
-/// <param name="MemberOfUserId">Only projects the given user is a member of.</param>
 /// <param name="VisibleProjectIds">Only these projects. Null means no restriction.</param>
 public sealed record ProjectFilter(
     string? Status = null,
     string? Keywords = null,
     bool? IsTemplate = null,
     int? ClientId = null,
-    int? MemberOfUserId = null,
     IReadOnlyCollection<Guid>? VisibleProjectIds = null);
 
 public interface IProjectService
@@ -34,12 +32,6 @@ public sealed class ProjectService(AppDbContext db) : IProjectService
             .Where(p => string.IsNullOrEmpty(kw)
                 || p.Name.ToLower().Contains(kw)
                 || (p.Description != null && p.Description.ToLower().Contains(kw)));
-
-        if (filter.MemberOfUserId != null)
-        {
-            var memberProjectIds = db.ProjectMembers.Where(pm => pm.UserId == filter.MemberOfUserId).Select(pm => pm.ProjectId);
-            q = q.Where(p => memberProjectIds.Contains(p.Id));
-        }
 
         if (filter.VisibleProjectIds != null)
             q = q.Where(p => filter.VisibleProjectIds.Contains(p.Id));

@@ -15,4 +15,4 @@ From the users list you can:
 - Enable or disable user accounts.
 - View user activity.
 
-Roles include Administrator, Superuser, User, and Client.
+Roles include Administrator, Superuser, and User.

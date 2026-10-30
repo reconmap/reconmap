@@ -21,9 +21,8 @@ describe("runner terminal access", () => {
         expect(hasRunnerTerminalAccess(userWithRoles(["superuser"]))).toBe(true);
     });
 
-    it("rejects user and client roles", () => {
+    it("rejects the user role", () => {
         expect(hasRunnerTerminalAccess(userWithRoles(["user"]))).toBe(false);
-        expect(hasRunnerTerminalAccess(userWithRoles(["client"]))).toBe(false);
     });
 
     it("uses every dashboard role rather than only the first", () => {

@@ -2,7 +2,6 @@ const roles: Record<string, string> = {
     administrator: "is-danger",
     superuser: "is-info",
     user: "is-success",
-    client: "is-warning",
 };
 
 const UserRoleBadge = ({ role }: { role?: string }) => {

@@ -59,6 +59,5 @@ public enum UserRole
 {
     Administrator,
     Superuser,
-    User,
-    Client
+    User
 }

@@ -319,14 +319,6 @@
           "attributes": {}
         },
         {
-          "id": "7edf627d-0480-436d-ba69-bf0dc0f6f24e",
-          "name": "client",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "3f0deae3-4464-40fd-be93-971cb717bd71",
-          "attributes": {}
-        },
-        {
           "id": "b1dcb944-4862-4bf6-8b13-2591d2d5ba67",
           "name": "user",
           "composite": false,
@@ -451,19 +443,6 @@
       "clientRoles": {
         "dashboard": [
           "administrator"
-        ]
-      }
-    },
-    {
-      "id": "f8cbef2b-a716-4860-9409-7618c15d3fb9",
-      "name": "client-group",
-      "path": "/client-group",
-      "subGroups": [],
-      "attributes": {},
-      "realmRoles": [],
-      "clientRoles": {
-        "dashboard": [
-          "client"
         ]
       }
     },

@@ -76,8 +76,6 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
         [FromQuery] bool? isTemplate,
         [FromQuery] int? clientId)
     {
-        var currentUser = HttpContext.GetCurrentUser()!;
-
         if (!string.IsNullOrEmpty(keywords))
         {
             var setName = $"recent-searches-user${HttpContext.GetCurrentUser()!.Id}";
@@ -85,8 +83,7 @@ public class ProjectsController(AppDbContext dbContext, IProjectService projectS
             db.SortedSetAdd(setName, keywords, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds());
         }
 
-        var filter = new ProjectFilter(status, keywords, isTemplate, clientId,
-            MemberOfUserId: currentUser.Role == UserRole.Client ? currentUser.Id : null);
+        var filter = new ProjectFilter(status, keywords, isTemplate, clientId);
 
         var pagination = new PaginationRequestHandler(HttpContext.Request.Query);
         var page = await projectService.GetManyAsync(filter,

@@ -184,7 +184,7 @@ public sealed class KeycloakUserDirectory(
         await InvalidateAsync(subjectId);
     }
 
-    private static readonly string[] RoleGroups = ["administrator-group", "superuser-group", "user-group", "client-group"];
+    private static readonly string[] RoleGroups = ["administrator-group", "superuser-group", "user-group"];
 
     private static KeycloakUser ToKeycloakUser(UserRepresentation representation)
     {

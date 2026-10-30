@@ -200,7 +200,6 @@ public class UsersControllerTests
     [InlineData(UserRole.Administrator, "administrator-group")]
     [InlineData(UserRole.Superuser, "superuser-group")]
     [InlineData(UserRole.User, "user-group")]
-    [InlineData(UserRole.Client, "client-group")]
     public async Task CreateOne_SendsLowercaseRoleGroupToKeycloak(UserRole role, string expectedGroup)
     {
         using var keycloak = new FakeKeycloak();

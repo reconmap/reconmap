@@ -52,7 +52,7 @@ public sealed class RequestAccessScope(AppDbContext db, IHttpContextAccessor htt
     public async Task<bool> CanAccessSecretAsync(Secret secret, CancellationToken cancellationToken = default)
     {
         if (IsPrivileged) return true;
-        // Clients do not have vault access; users can access personal or assigned-project secrets.
+        // Only users can access personal or assigned-project secrets.
         if (!CanAccessVault) return false;
         return secret.OwnerId == UserId || await CanAccessProjectAsync(secret.ProjectId, cancellationToken);
     }
