@@ -258,7 +258,6 @@ CREATE TABLE finding
     summary                VARCHAR(500)                                                                                       NOT NULL,
     description            TEXT                                                                                               NULL,
     external_refs          TEXT                                                                                               NULL,
-    visibility             VARCHAR(20)                                                                         NOT NULL DEFAULT 'public',
     risk                   VARCHAR(20)                                                 NOT NULL,
     proof_of_concept       TEXT                                                                                               NULL,
     impact                 TEXT                                                                                               NULL,

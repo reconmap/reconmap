@@ -198,30 +198,6 @@ const FindingForm = ({
                 />
 
                 <FormField
-                    label={
-                        <>
-                            Visibility <Tooltip text="Private makes this finding not visible to the client." />
-                        </>
-                    }
-                    htmlFor="visibility"
-                    control={
-                        <>
-                            {" "}
-                            <NativeSelect
-                                id="visibility"
-                                name="visibility"
-                                value={finding.visibility || ""}
-                                onChange={onFormChange}
-                                required
-                            >
-                                <option value="public">Public</option>
-                                <option value="private">Private</option>
-                            </NativeSelect>
-                        </>
-                    }
-                />
-
-                <FormField
                     label="Risk"
                     htmlFor="risk"
                     control={

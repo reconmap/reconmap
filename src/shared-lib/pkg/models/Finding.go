@@ -13,7 +13,6 @@ type Finding struct {
 	Summary               string  `json:"summary"`
 	Description           string  `json:"description"`
 	ExternalRefs          string  `json:"external_refs"`
-	Visibility            string  `json:"visibility"`
 	Risk                  string  `json:"risk"`
 	ProofOfConcept        string  `json:"proof_of_concept"`
 	Impact                string  `json:"impact"`

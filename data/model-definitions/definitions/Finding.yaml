@@ -37,12 +37,6 @@ properties:
   external_refs:
     type: string
     nullable: true
-  visibility:
-    type: string
-    enum:
-    - private
-    - public
-    default: public
   risk:
     type: string
     enum:

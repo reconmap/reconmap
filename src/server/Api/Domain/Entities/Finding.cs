@@ -38,8 +38,6 @@ public class Finding : TimestampedEntity
     [Column(TypeName = "text")]
     public string? ExternalRefs { get; set; }
 
-    [Required] public string? Visibility { get; set; } = "private";
-
     [Required] public string? Risk { get; set; }
 
     [Column(TypeName = "text")]

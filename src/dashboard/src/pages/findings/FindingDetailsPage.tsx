@@ -7,7 +7,6 @@ import AttachmentsDropzone from "components/attachments/AttachmentsDropzone";
 import NativeSelect from "components/forms/NativeSelect";
 import NativeTabs from "components/forms/NativeTabs";
 import RestrictedComponent from "components/logic/RestrictedComponent";
-import Tag from "components/ui/Tag";
 import Tags from "components/ui/Tags";
 import LinkButton from "components/ui/buttons/LinkButton";
 import { t } from "i18next";
@@ -120,7 +119,7 @@ const FindingDetailsPage = () => {
                     }
                     subHeader={t("Finding")}
                 />
-                <Tag>{finding.visibility}</Tag> <Tags values={finding.tags} />
+                <Tags values={finding.tags} />
                 <div>
                     <NativeTabs
                         labels={[t("Description"), t("Triage"), t("Remediation"), t("Comments"), t("Attachments")]}

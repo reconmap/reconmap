@@ -11,7 +11,6 @@ interface FindingInterface {
     summary: string | undefined;
     description?: string;
     external_refs?: string;
-    visibility?: string;
     risk: string | undefined;
     proof_of_concept?: string;
     impact?: string;
@@ -41,7 +40,6 @@ const Finding: FindingInterface = {
     categoryId: undefined,
     description: undefined,
     external_refs: undefined,
-    visibility: "public",
     proof_of_concept: undefined,
     impact: undefined,
     remediation: undefined,
