@@ -1,7 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
+import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
-import { useEffect, useRef, useState, type MouseEvent, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type MouseEvent } from "react";
 import { ignoreAbortError } from "utilities/abort";
 import { requestEntityPost } from "utilities/requests";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
@@ -54,7 +55,6 @@ const ImportForm = () => {
 
     return (
         <div>
-            <h3>Import system data</h3>
             <form>
                 <div className="content">
                     Notes:
@@ -80,20 +80,23 @@ const ImportForm = () => {
                         }
                     />
                 </div>
+                <FormActions>
 
-                <PrimaryButton disabled={importButtonDisabled || importing} onClick={handleUploadClick}>
-                    Import
-                </PrimaryButton>
-                {importing && (
-                    <SecondaryButton
-                        onClick={(event: MouseEvent<HTMLElement>) => {
-                            event.preventDefault();
-                            cancelImport();
-                        }}
-                    >
-                        Cancel import
-                    </SecondaryButton>
-                )}
+                    {importing && (
+                        <SecondaryButton
+                            onClick={(event: MouseEvent<HTMLElement>) => {
+                                event.preventDefault();
+                                cancelImport();
+                            }}
+                        >
+                            Cancel import
+                        </SecondaryButton>
+                    )}
+                    <PrimaryButton disabled={importButtonDisabled || importing} onClick={handleUploadClick}>
+                        Import
+                    </PrimaryButton>
+
+                </FormActions>
             </form>
 
             {importResponse && (

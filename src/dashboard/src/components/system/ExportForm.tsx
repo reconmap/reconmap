@@ -1,4 +1,5 @@
 import { useExportablesQuery } from "api/system";
+import FormActions from "components/forms/FormActions";
 import NativeSelect from "components/forms/NativeSelect";
 import { useState, type ChangeEvent, type MouseEvent } from "react";
 import { downloadFromApi } from "services/api";
@@ -26,8 +27,6 @@ const ExportForm = () => {
 
     return (
         <div>
-            <h3>Export system data</h3>
-
             <div className="content">
                 Notes:
                 <ul>
@@ -49,9 +48,12 @@ const ExportForm = () => {
                         ))}
                 </NativeSelect>
             </div>
-            <PrimaryButton disabled={exportButtonDisabled} onClick={onExportButtonClick}>
-                Export
-            </PrimaryButton>
+
+            <FormActions>
+                <PrimaryButton disabled={exportButtonDisabled} onClick={onExportButtonClick}>
+                    Export
+                </PrimaryButton>
+            </FormActions>
         </div>
     );
 };
