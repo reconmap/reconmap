@@ -151,6 +151,42 @@
             "Placeholder": "0 (leave empty to track tokens only)"
           }
         ]
+      },
+      {
+        "Id": "CheaperInference",
+        "Name": "Cheaper Inference",
+        "Adapter": "openai-compatible",
+        "Endpoint": "https://api.cheaperinference.com/v1",
+        "Fields": [
+          {
+            "Key": "apiKey",
+            "Label": "API key",
+            "Type": "secret",
+            "Required": true
+          },
+          {
+            "Key": "model",
+            "Label": "Model",
+            "Type": "text",
+            "Required": true,
+            "DefaultValue": "gpt-5.4-mini",
+            "Placeholder": "gpt-5.4-mini"
+          },
+          {
+            "Key": "inputPricePerMTok",
+            "Label": "Input price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          },
+          {
+            "Key": "outputPricePerMTok",
+            "Label": "Output price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          }
+        ]
       }
     ]
   }
