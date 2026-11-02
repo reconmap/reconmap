@@ -21,7 +21,7 @@ import LinkButton from "components/ui/buttons/LinkButton";
 import { toast } from "components/ui/toast";
 import UserLink from "components/users/UserLink";
 import { useAuth } from "contexts/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import { Link, useNavigate, useParams } from "react-router";
@@ -63,8 +63,8 @@ const TaskDetailsPage = () => {
 
     };
 
-    const onAssigneeChange = (ev) => {
-        const assigneeId = ev.target.value;
+    const onAssigneeChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const assigneeId = event.target.value;
 
         // The API's PUT endpoint replaces the whole task and validates required fields,
         // so send the full task with the new numeric assignee instead of a partial body.
@@ -87,8 +87,8 @@ const TaskDetailsPage = () => {
             });
     };
 
-    const onStatusChange = (ev) => {
-        const status = ev.target.value;
+    const onStatusChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const status = event.target.value;
 
         // The API's PUT endpoint replaces the whole task and validates required fields,
         // so send the full task with the new status instead of a partial body.

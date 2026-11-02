@@ -48,8 +48,8 @@ const CommandTerminal = ({ runnerIp, runnerPort, commands }: any) => {
                 socket.send(textEncoder.encode("\x00" + data));
             });
 
-            term.onResize((ev) => {
-                socket.send(textEncoder.encode("\x01" + JSON.stringify({ cols: ev.cols, rows: ev.rows })));
+            term.onResize((event) => {
+                socket.send(textEncoder.encode("\x01" + JSON.stringify({ cols: event.cols, rows: event.rows })));
             });
 
             term.onTitleChange((title) => {
@@ -67,17 +67,17 @@ const CommandTerminal = ({ runnerIp, runnerPort, commands }: any) => {
                 term.focus();
             };
 
-            socket.onmessage = (ev) => {
-                if (ev.data instanceof ArrayBuffer) {
-                    term.write(arrayBufferToString(ev.data));
+            socket.onmessage = (event) => {
+                if (event.data instanceof ArrayBuffer) {
+                    term.write(arrayBufferToString(event.data));
                 } else {
-                    console.debug(ev.data);
+                    console.debug(event.data);
                 }
             };
 
-            socket.onerror = (ev) => {
-                console.error(ev);
-                setWsError(ev);
+            socket.onerror = (event) => {
+                console.error(event);
+                setWsError(event);
                 socket.close();
             };
 

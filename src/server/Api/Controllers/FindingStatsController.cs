@@ -1,0 +1,71 @@
+using Reconmap.Api.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace Reconmap.Api.Controllers;
+
+public class RiskCountDto
+{
+    public string Risk { get; set; } = string.Empty;
+    public int Total { get; set; }
+}
+
+public class CategoryCountDto
+{
+    public string CategoryName { get; set; } = string.Empty;
+    public int Total { get; set; }
+}
+
+[Route("api/findings/stats")]
+[ApiController]
+public class FindingStatsController(
+    AppDbContext dbContext)
+    : AppController(dbContext)
+{
+    [HttpGet]
+    public async Task<IActionResult> GetStats([FromQuery] Guid? projectId = null, [FromQuery] string? groupBy = null)
+    {
+        if (groupBy != null) return Ok(await FindCountByRiskAsync(projectId));
+
+        return Ok(await FindCountByCategoryAsync(projectId));
+    }
+
+    private async Task<List<RiskCountDto>> FindCountByRiskAsync(Guid? projectId = null)
+    {
+        var query = dbContext.Findings.AsQueryable();
+
+        if (projectId.HasValue)
+            query = query.Where(v => v.ProjectId == projectId.Value);
+
+        return await query
+            .GroupBy(v => v.Risk)
+            .Select(g => new RiskCountDto
+            {
+                Risk = g.Key,
+                Total = g.Count()
+            })
+            .OrderByDescending(x => x.Total)
+            .ToListAsync();
+    }
+
+    private async Task<List<CategoryCountDto>> FindCountByCategoryAsync(Guid? projectId = null)
+    {
+        var query = dbContext.Findings
+            .Include(v => v.Category)
+            .Where(v => v.Category.ParentId == null)
+            .AsQueryable();
+
+        if (projectId.HasValue)
+            query = query.Where(v => v.ProjectId == projectId.Value);
+
+        return await query
+            .GroupBy(v => v.Category.Name)
+            .Select(g => new CategoryCountDto
+            {
+                CategoryName = g.Key,
+                Total = g.Count()
+            })
+            .OrderByDescending(x => x.Total)
+            .ToListAsync();
+    }
+}

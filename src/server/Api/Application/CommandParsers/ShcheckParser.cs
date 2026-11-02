@@ -46,14 +46,14 @@ public class ShcheckParser(IAttachmentStorage attachmentStorage) : ICommandParse
                     if (string.IsNullOrEmpty(headerName))
                         continue;
 
-                    var vulnerability = new Vulnerability
+                    var finding = new Finding
                     {
                         Summary = $"Missing security header: {headerName}",
                         Description = $"Missing security header: {headerName}",
                         Tags = "[\"headers\"]" // new List<string> { "headers" }
                     };
 
-                    result.AddVulnerability(vulnerability);
+                    result.AddFinding(finding);
                 }
 
         return result;

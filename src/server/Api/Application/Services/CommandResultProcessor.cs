@@ -22,6 +22,7 @@ public class CommandResultProcessor(
             using var scope = _scopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var aiService = scope.ServiceProvider.GetRequiredService<IAiService>();
+            var assetUpsert = scope.ServiceProvider.GetRequiredService<IAssetUpsertService>();
 
             logger.LogInformation("Task queue popped");
             var commandUsage = CommandDiscovery.FindUsageById(job.CommandUsageId);
@@ -32,25 +33,23 @@ public class CommandResultProcessor(
             }
             var parser = CommandParserDiscovery.Create(scope.ServiceProvider, commandUsage.OutputParser);
             var result = parser.Parse(job);
-            var numHosts = result.assets.Count;
-            if (numHosts > 0)
+            var numHosts = 0;
+            if (result.assets.Count > 0)
             {
-                foreach (var asset in result.assets)
-                {
-                    asset.ProjectId = job.ProjectId;
-                    db.Assets.Add(asset);
-                }
-
                 try
                 {
-                    await db.SaveChangesAsync(stoppingToken);
+                    numHosts = await assetUpsert.UpsertTreeAsync(job.ProjectId, null, result.assets,
+                        commandUsage.OutputParser, stoppingToken);
                 }
                 catch (Exception dbUpdateException)
                 {
                     logger.LogError(dbUpdateException, "An error occurred while processing command results");
                     db.ChangeTracker.Clear();
                 }
+            }
 
+            if (numHosts > 0)
+            {
                 // Jobs without a user (e.g. runner uploads) have nobody to notify
                 if (job.UserId is int toUserId)
                 {
@@ -67,58 +66,59 @@ public class CommandResultProcessor(
                 }
             }
 
-            var numVulnerabilitiesAdded = 0;
-            var numVulnerabilities = result.vulnerabilities.Count;
-            if (numVulnerabilities > 0)
+            var numFindingsAdded = 0;
+            var numFindings = result.findings.Count;
+            if (numFindings > 0)
             {
-                foreach (var vulnerability in result.vulnerabilities)
+                foreach (var finding in result.findings)
                 {
-                    vulnerability.ProjectId = job.ProjectId;
-                    vulnerability.Risk ??= "medium";
-                    vulnerability.Risk = "medium"; // @todo convert non-conventional risks
+                    finding.ProjectId = job.ProjectId;
+                    finding.Risk ??= "medium";
+                    finding.Risk = "medium"; // @todo convert non-conventional risks
 
-                    vulnerability.CreatedById = job.UserId;
-                    if (vulnerability.Asset != null)
+                    finding.CreatedById = job.UserId;
+                    if (finding.Asset != null)
                     {
-                        vulnerability.AssetId = await GetAssetId(db, vulnerability.Asset);
-                        vulnerability.Asset = null;
+                        finding.AssetId = (await assetUpsert.UpsertAsync(job.ProjectId, null, finding.Asset,
+                            commandUsage.OutputParser, stoppingToken)).Asset.Id;
+                        finding.Asset = null;
                     }
 
-                    if (await IsDuplicateVulnerability(db, vulnerability))
+                    if (await IsDuplicateFinding(db, finding))
                     {
-                        logger.LogInformation("Skipping duplicate vulnerability: {Summary}", vulnerability.Summary);
+                        logger.LogInformation("Skipping duplicate finding: {Summary}", finding.Summary);
                         continue;
                     }
 
-                    if (string.IsNullOrWhiteSpace(vulnerability.Remediation))
+                    if (string.IsNullOrWhiteSpace(finding.Remediation))
                     {
                         try
                         {
-                            vulnerability.Remediation = await aiService.GenerateRemediationAsync(
-                                vulnerability.Summary, job.ProjectId, job.UserId);
+                            finding.Remediation = await aiService.GenerateRemediationAsync(
+                                finding.Summary, job.ProjectId, job.UserId);
                         }
                         catch (Exception ex)
                         {
-                            logger.LogWarning(ex, "Failed to generate remediation for {Summary}", vulnerability.Summary);
+                            logger.LogWarning(ex, "Failed to generate remediation for {Summary}", finding.Summary);
                         }
                     }
 
-                    // Autonomously triage the vulnerability as it is discovered
+                    // Autonomously triage the finding as it is discovered
                     try
                     {
-                        vulnerability.AiTriage = await aiService.TriageVulnerabilityAsync(
-                            vulnerability.Summary,
-                            vulnerability.Description ?? string.Empty,
+                        finding.AiTriage = await aiService.TriageFindingAsync(
+                            finding.Summary,
+                            finding.Description ?? string.Empty,
                             job.ProjectId,
                             job.UserId);
                     }
                     catch (Exception ex)
                     {
-                        logger.LogWarning(ex, "Failed to triage vulnerability {Summary}", vulnerability.Summary);
+                        logger.LogWarning(ex, "Failed to triage finding {Summary}", finding.Summary);
                     }
 
-                    db.Vulnerabilities.Add(vulnerability);
-                    numVulnerabilitiesAdded++;
+                    db.Findings.Add(finding);
+                    numFindingsAdded++;
                 }
 
                 try
@@ -131,16 +131,16 @@ public class CommandResultProcessor(
                     db.ChangeTracker.Clear();
                 }
 
-                if (numVulnerabilitiesAdded > 0)
+                if (numFindingsAdded > 0)
                 {
-                    if (job.UserId is int vulnerabilitiesToUserId)
+                    if (job.UserId is int findingsToUserId)
                     {
                         var notification = new Notification
                         {
-                            ToUserId = vulnerabilitiesToUserId,
-                            Title = "New vulnerabilities found",
+                            ToUserId = findingsToUserId,
+                            Title = "New findings found",
                             Content =
-                                $"A total of '{numVulnerabilitiesAdded}' new vulnerabilities have been found by the '{commandUsage.OutputParser}' command",
+                                $"A total of '{numFindingsAdded}' new findings have been found by the '{commandUsage.OutputParser}' command",
                             Status = "unread"
                         };
                         db.Notifications.Add(notification);
@@ -149,29 +149,17 @@ public class CommandResultProcessor(
                 }
             }
 
-            if (numHosts > 0 || numVulnerabilitiesAdded > 0)
+            if (numHosts > 0 || numFindingsAdded > 0)
                 await messageQueue.PublishAsync("notifications", new { type = "message" });
         }, stoppingToken);
     }
 
-    private async Task<bool> IsDuplicateVulnerability(AppDbContext db, Vulnerability vulnerability)
+    private async Task<bool> IsDuplicateFinding(AppDbContext db, Finding finding)
     {
-        return await db.Vulnerabilities.AnyAsync(v =>
-            v.ProjectId == vulnerability.ProjectId &&
-            v.AssetId == vulnerability.AssetId &&
-            v.Summary == vulnerability.Summary &&
+        return await db.Findings.AnyAsync(v =>
+            v.ProjectId == finding.ProjectId &&
+            v.AssetId == finding.AssetId &&
+            v.Summary == finding.Summary &&
             v.Status == "open");
-    }
-
-    private async Task<int> GetAssetId(AppDbContext db, Asset asset)
-    {
-        var dbAsset = await db.Assets.AsNoTracking().Where(a => a.Type == asset.Type && a.Name == asset.Name)
-            .SingleOrDefaultAsync();
-        if (dbAsset != null) return dbAsset.Id;
-
-        db.Assets.Add(asset);
-        await db.SaveChangesAsync();
-
-        return asset.Id;
     }
 }

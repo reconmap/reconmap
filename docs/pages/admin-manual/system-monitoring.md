@@ -37,7 +37,7 @@ Go to `System -> Usage` to see:
 - **AI usage** for a selectable time range (last 7, 30 or 90 days): number of calls, error rate, input and output tokens, average tokens per call, estimated cost, average and 95th percentile latency, tokens and cost per day, and breakdowns by feature (remediation, triage, asset enrichment, command parsing, tool recommendation), by provider and model, by project and by user (the top 10 of each).
 - **Storage**: number of attachments and their total size.
 - **Key-value server** (Redis): memory used (and the configured `maxmemory`, if any) and number of keys.
-- **Message queues** (RabbitMQ): messages waiting and consumers for the `tasks`, `notifications`, `vulnerabilities`, `webhooks`, `report-generation` and `report-emails` queues. A queue with messages waiting and no consumers means the service that processes it is not running. Unacknowledged messages are not included.
+- **Message queues** (RabbitMQ): messages waiting and consumers for the `tasks`, `notifications`, `findings`, `webhooks`, `report-generation` and `report-emails` queues. A queue with messages waiting and no consumers means the service that processes it is not running. Unacknowledged messages are not included.
 - **Client cache**: a button to discard all cached API responses, and a table of the queries cached by your browser (query key, fresh or stale status, number of observers and last update time).
 
 The **System usage** dashboard widget shows a summary of this page for the last 30 days (AI calls, tokens and estimated cost, attachments, Redis memory and messages waiting in queues) and links to it. It requires the `system.*` permission.

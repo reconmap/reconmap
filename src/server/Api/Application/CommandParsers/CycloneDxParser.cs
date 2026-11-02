@@ -12,7 +12,7 @@ namespace Reconmap.Api.Application.CommandParsers;
 public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandParser
 {
     public string Name => "CycloneDX";
-    public string Description => "Parses CycloneDX SBOM JSON files to extract packages and vulnerabilities";
+    public string Description => "Parses CycloneDX SBOM JSON files to extract packages and findings";
     public string ExternalUrl => "https://cyclonedx.org/";
     public bool IsConfigured => true;
 
@@ -32,7 +32,7 @@ public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandPar
         using var jsonDoc = JsonDocument.Parse(fileContent);
         var root = jsonDoc.RootElement;
 
-        // Build mapping of bom-ref / purl -> Asset to associate vulnerabilities to correct assets
+        // Build mapping of bom-ref / purl -> Asset to associate findings to correct assets
         var refToAssetMap = new Dictionary<string, Asset>(StringComparer.OrdinalIgnoreCase);
         var componentsList = new List<Asset>();
 
@@ -103,10 +103,10 @@ public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandPar
             result.AddAsset(compAsset);
         }
 
-        // Parse vulnerabilities
-        if (root.TryGetProperty("vulnerabilities", out var vulnerabilities) && vulnerabilities.ValueKind == JsonValueKind.Array)
+        // Parse findings
+        if (root.TryGetProperty("vulnerabilities", out var findings) && findings.ValueKind == JsonValueKind.Array)
         {
-            foreach (var vul in vulnerabilities.EnumerateArray())
+            foreach (var vul in findings.EnumerateArray())
             {
                 if (!vul.TryGetProperty("id", out var idProp))
                     continue;
@@ -154,7 +154,7 @@ public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandPar
 
                 var summary = affectedAsset != null ? $"{cveId} in {affectedAsset.Name}" : cveId;
 
-                var vulnerability = new Vulnerability
+                var finding = new Finding
                 {
                     Summary = summary,
                     Description = string.IsNullOrWhiteSpace(description) ? summary : description,
@@ -166,10 +166,10 @@ public class CycloneDxParser(IAttachmentStorage attachmentStorage) : ICommandPar
 
                 if (affectedAsset != null)
                 {
-                    vulnerability.Asset = affectedAsset;
+                    finding.Asset = affectedAsset;
                 }
 
-                result.AddVulnerability(vulnerability);
+                result.AddFinding(finding);
             }
         }
 

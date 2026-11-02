@@ -1,0 +1,3 @@
+*_test.rego
+Dockerfile
+.dockerignore

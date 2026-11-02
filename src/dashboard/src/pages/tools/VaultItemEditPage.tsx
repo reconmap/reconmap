@@ -4,7 +4,7 @@ import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import { toast } from "components/ui/toast";
 import Vault from "models/Vault";
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { HttpStatus } from "utilities/httpStatus";
 import { useParams } from "react-router";
 import { requestEntityPost, requestEntityPut } from "utilities/requests";
@@ -18,13 +18,13 @@ const VaultItemEditPage = () => {
     const [password, setPassword] = useState<any>(null);
     const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
 
-    const onVaultItemFormChange = (ev) => {
-        const value = ev.target.type === "checkbox" ? ev.target.checked : ev.target.value;
-        setVaultItem({ ...item, [ev.target.name]: value });
+    const onVaultItemFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const value = event.target instanceof HTMLInputElement && event.target.type === "checkbox" ? event.target.checked : event.target.value;
+        setVaultItem({ ...item, [event.target.name]: value });
     };
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         const payload = { ...item, password };
 
@@ -39,8 +39,8 @@ const VaultItemEditPage = () => {
         });
     };
 
-    const onPasswordProvided = (ev) => {
-        ev.preventDefault();
+    const onPasswordProvided = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestEntityPost(`/secrets/${vaultItemId}/decrypt`, { password })
             .then((resp) => {
@@ -64,8 +64,8 @@ const VaultItemEditPage = () => {
             });
     };
 
-    const onPasswordFormChanged = (ev) => {
-        setPassword(ev.target.value);
+    const onPasswordFormChanged = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setPassword(event.target.value);
     };
 
     return (

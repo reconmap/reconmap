@@ -288,9 +288,9 @@ public class ReportsController(
         contacts = group switch
         {
             "all_contacts" => contacts,
-            "all_general_contacts" => contacts.Where(c => c.Kind == ContactKind.general.ToString()),
-            "all_technical_contacts" => contacts.Where(c => c.Kind == ContactKind.technical.ToString()),
-            "all_billing_contacts" => contacts.Where(c => c.Kind == ContactKind.billing.ToString()),
+            "all_general_contacts" => contacts.Where(c => c.Type == ContactType.general.ToString()),
+            "all_technical_contacts" => contacts.Where(c => c.Type == ContactType.technical.ToString()),
+            "all_billing_contacts" => contacts.Where(c => c.Type == ContactType.billing.ToString()),
             _ => throw new InvalidOperationException("The selected recipients group is not supported.")
         };
 

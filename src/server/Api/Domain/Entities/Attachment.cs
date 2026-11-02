@@ -43,7 +43,7 @@ public enum AttachmentParentType
     Report,
     Command,
     Task,
-    Vulnerability,
+    Finding,
     Organisation,
     Client
 }

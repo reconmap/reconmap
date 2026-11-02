@@ -33,7 +33,7 @@ import UserLink from "components/users/UserLink";
 import Contact from "models/Contact";
 import OrganisationTypes from "models/OrganisationTypes";
 import { ignoreAbortError } from "utilities/abort";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
 import { ClientsUrls } from "AppUrls";
@@ -79,8 +79,8 @@ const ClientDetailsPage = () => {
 
     const [tabIndex, tabIndexSetter] = useState(0);
 
-    const onContactFormChange = (ev) => {
-        setContact({ ...contact, [ev.target.name]: ev.target.value });
+    const onContactFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setContact({ ...contact, [event.target.name]: event.target.value });
     };
 
     const [logo, setLogo] = useState<any>(null);
@@ -92,8 +92,8 @@ const ClientDetailsPage = () => {
         if (confirmed) navigate(ClientsUrls.List);
     };
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestOrganisationContactPost(clientId, contact).then((resp) => {
             if (resp.status === HttpStatus.CREATED) {
@@ -176,7 +176,7 @@ const ClientDetailsPage = () => {
             </div>
             <article>
                 <div>
-                    <PageTitleHeader title={client.name} subHeader={OrganisationTypes[client.kind]} />
+                    <PageTitleHeader title={client.name} subHeader={OrganisationTypes[client.type]} />
                 </div>
 
                 <div>
@@ -256,10 +256,10 @@ const ClientDetailsPage = () => {
                                                     <tr>
                                                         <td>
                                                             <NativeSelect
-                                                                name="kind"
+                                                                name="type"
                                                                 aria-label="Type"
                                                                 onChange={onContactFormChange}
-                                                                value={contact.kind || ""}
+                                                                value={contact.type || ""}
                                                                 required
                                                             >
                                                                 <option value="general">General</option>
@@ -309,7 +309,7 @@ const ClientDetailsPage = () => {
                                                     {contacts.map((contact, index) => (
                                                         <>
                                                             <tr key={index}>
-                                                                <td>{ContactTypes[contact.kind]}</td>
+                                                                <td>{ContactTypes[contact.type]}</td>
                                                                 <td>{contact.name}</td>
                                                                 <td>{contact.role}</td>
                                                                 <td>

@@ -1,9 +1,11 @@
 import { useConfirm } from "components/ui/useConfirm";
-import { useAssetQuery, useDeleteAssetMutation } from "api/assets";
+import { useAssetQuery, useAssetsQuery, useDeleteAssetMutation } from "api/assets";
+import AssetBadge from "components/asset/AssetBadge";
+import { assetPath } from "models/assetTree";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import TimestampsSection from "components/ui/TimestampsSection";
-import VulnerabilityTableModel from "components/vulnerabilities/VulnerabilityTableModel";
-import { useCallback, useEffect, useState } from "react";
+import FindingTableModel from "components/findings/FindingTableModel";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { ignoreAbortError } from "utilities/abort";
 import { requestEntity } from "utilities/requests";
@@ -12,7 +14,7 @@ import PageSkeleton from "components/ui/PageSkeleton";
 import Breadcrumb from "components/ui/Breadcrumb";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import VulnerabilitiesTable from "components/vulnerabilities/VulnerabilitiesTable";
+import FindingsTable from "components/findings/FindingsTable";
 import { useTranslation } from "react-i18next";
 
 const AssetDetailsPage = () => {
@@ -22,12 +24,24 @@ const AssetDetailsPage = () => {
     const { assetId } = useParams() as any;
     const { data: asset } = useAssetQuery(assetId);
     const deleteAssetMutation = useDeleteAssetMutation();
+    const { data: projectAssets } = useAssetsQuery({ projectId: asset?.projectId });
+    const allAssets: any[] = Array.isArray(projectAssets?.data) ? projectAssets.data : [];
+    const ancestors = asset ? assetPath(allAssets, asset.id).slice(0, -1) : [];
+    const children = asset ? allAssets.filter((candidate) => candidate.parentId === asset.id) : [];
+
+    const attributes = useMemo(() => {
+        try {
+            return asset?.attributes ? Object.entries(JSON.parse(asset.attributes)) : [];
+        } catch {
+            return [];
+        }
+    }, [asset]);
 
     const [savedProject, setSavedProject] = useState<any>(null);
 
-    const [tableModel, setTableModel] = useState(new VulnerabilityTableModel());
+    const [tableModel, setTableModel] = useState(new FindingTableModel());
 
-    const fetchVulnerabilities = useCallback((signal?: AbortSignal) => {
+    const fetchFindings = useCallback((signal?: AbortSignal) => {
         const queryParams = new URLSearchParams();
         queryParams.set("assetId", assetId);
         queryParams.set("isTemplate", "false");
@@ -39,11 +53,11 @@ const AssetDetailsPage = () => {
                 tableModel.filters[key].length !== 0 &&
                 queryParams.append(key, tableModel.filters[key]),
         );
-        const url = `/vulnerabilities?${queryParams.toString()}`;
+        const url = `/findings?${queryParams.toString()}`;
         requestEntity(url, { signal })
             .then((resp) => resp.json())
-            .then((vulnerabilities) => {
-                setTableModel((tableModel) => ({ ...tableModel, vulnerabilities: vulnerabilities.data }));
+            .then((findings) => {
+                setTableModel((tableModel) => ({ ...tableModel, findings: findings.data }));
             })
             .catch(ignoreAbortError);
     }, [tableModel.filters, tableModel.sortBy, assetId]);
@@ -51,7 +65,7 @@ const AssetDetailsPage = () => {
     useEffect(() => {
         if (asset) {
             const controller = new AbortController();
-            requestEntity(`/projects/${asset.project_id}`, { signal: controller.signal })
+            requestEntity(`/projects/${asset.projectId}`, { signal: controller.signal })
                 .then((resp) => resp.json())
                 .then((json) => {
                     setSavedProject(json);
@@ -73,9 +87,9 @@ const AssetDetailsPage = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-        fetchVulnerabilities(controller.signal);
+        fetchFindings(controller.signal);
         return () => controller.abort();
-    }, [fetchVulnerabilities, tableModel.filters]);
+    }, [fetchFindings, tableModel.filters]);
 
     if (!asset) return <PageSkeleton />;
 
@@ -85,6 +99,11 @@ const AssetDetailsPage = () => {
                 <Breadcrumb>
                     <Link to="/projects">Projects</Link>
                     {savedProject && <Link to={`/projects/${savedProject.id}`}>{savedProject.name}</Link>}
+                    {ancestors.map((ancestor) => (
+                        <Link key={ancestor.id} to={`/assets/${ancestor.id}`}>
+                            {ancestor.name}
+                        </Link>
+                    ))}
                     <span>{asset.name}</span>
                 </Breadcrumb>
                 <RestrictedComponent roles={["administrator", "superuser", "user"]}>
@@ -98,7 +117,15 @@ const AssetDetailsPage = () => {
                     <div className="grid grid-two">
                         <div>
                             <h4>Type</h4>
-                            <Badge color={asset.type === "hostname" ? "green" : "blue"}>{asset.type}</Badge>
+                            <Badge color={asset.type === "hostname" ? "green" : "blue"}>{asset.type ?? "-"}</Badge>
+                            {asset.source && (
+                                <>
+                                    <h4>Discovered by</h4>
+                                    <p>{asset.source}</p>
+                                </>
+                            )}
+                            <h4>Last seen</h4>
+                            <p>{new Date(asset.lastSeenAt).toLocaleString()}</p>
                         </div>
 
                         <div>
@@ -106,11 +133,40 @@ const AssetDetailsPage = () => {
                         </div>
                     </div>
 
-                    <h4>Vulnerabilities</h4>
-                    <VulnerabilitiesTable
+                    {attributes.length > 0 && (
+                        <>
+                            <h4>Attributes</h4>
+                            <dl>
+                                {attributes.map(([key, value]) => (
+                                    <div key={key}>
+                                        <dt>{key}</dt>
+                                        <dd>{typeof value === "string" ? value : JSON.stringify(value)}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        </>
+                    )}
+
+                    {children.length > 0 && (
+                        <>
+                            <h4>Nested assets</h4>
+                            <ul>
+                                {children.map((child) => (
+                                    <li key={child.id}>
+                                        <Link to={`/assets/${child.id}`}>
+                                            <AssetBadge name={child.name} type={child.type ?? null} />
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    )}
+
+                    <h4>Findings</h4>
+                    <FindingsTable
                         tableModel={tableModel}
                         tableModelSetter={setTableModel}
-                        reloadCallback={() => fetchVulnerabilities()}
+                        reloadCallback={() => fetchFindings()}
                         showProjectColumn={false}
                         showSelection={false}
                     />

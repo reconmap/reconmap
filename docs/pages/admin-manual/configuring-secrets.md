@@ -31,7 +31,7 @@ The following secrets and configuration variables are defined in the `.env` file
 
 ### Database User Initialization
 
-During the first container startup, a dynamic shell script (`infra/docker/postgres/initdb/00-databases.sh`) executes inside the database container to create the databases and assign permissions to the users using the passwords defined above.
+During the first container startup, a dynamic shell script (`infra/postgres/initdb/00-databases.sh`) executes inside the database container to create the databases and assign permissions to the users using the passwords defined above.
 
 ### Updating or Rotating Secrets
 

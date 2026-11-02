@@ -25,7 +25,7 @@ Reconmap distinguishes between two main types of organisations:
 When creating or updating an organisation, you can provide:
 
 - **Name**: The full name of the company or team.
-- **Kind**: Whether it's a client or a service provider.
+- **Type**: Whether it's a client or a service provider.
 - **Address**: The physical or mailing address.
 - **URL**: The company's website.
 - **Contacts**: One or more contact persons associated with the organisation.

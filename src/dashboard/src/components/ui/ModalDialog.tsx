@@ -21,7 +21,7 @@ const ModalDialog = ({ title, children, footer, visible, onModalClose, style = {
             // The dialog has no padding of its own (the content wrapper does), so a click whose target is
             // the dialog element itself can only have landed on the backdrop. Escape already closes the dialog
             // from the keyboard, so this pointer-only shortcut has no keyboard equivalent to provide.
-            onClick={(ev) => ev.target === ev.currentTarget && ev.currentTarget.close()}
+            onClick={(event) => event.target === event.currentTarget && event.currentTarget.close()}
             style={style}
         >
             <header className="html-dialog-header">

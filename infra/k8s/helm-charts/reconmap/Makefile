@@ -1,14 +1,24 @@
+NAMESPACE ?= reconmap
+RELEASE ?= reconmap
+
+.PHONY: validate
 validate:
-	helm lint .
+	helm lint --strict .
+	helm template $(RELEASE) . | kubeconform -strict -summary -ignore-missing-schemas
 
+.PHONY: install
 install: validate
-	helm install reconmap .
+	helm upgrade --install $(RELEASE) . --namespace $(NAMESPACE) --create-namespace
+	kubectl label namespace $(NAMESPACE) pod-security.kubernetes.io/enforce=restricted --overwrite
 
+.PHONY: uninstall
 uninstall:
-	helm uninstall reconmap
+	helm uninstall $(RELEASE) --namespace $(NAMESPACE)
 
+.PHONY: get-values
 get-values:
-	helm get values reconmap
+	helm get values $(RELEASE) --namespace $(NAMESPACE)
 
+.PHONY: get-manifest
 get-manifest:
-	helm get manifest reconmap
+	helm get manifest $(RELEASE) --namespace $(NAMESPACE)

@@ -4,7 +4,7 @@ test_user_and_client_can_read_scoped_collections if {
 	data.reconmap.authz.allow with input as {
 		"user": {"role": "user", "member_project_ids": []},
 		"resource": {},
-		"resource_type": "vulnerabilities",
+		"resource_type": "findings",
 		"method": "GET",
 	}
 
@@ -85,12 +85,12 @@ test_only_privileged_roles_can_manage_webhooks if {
 	}
 }
 
-# Project, task, vulnerability and report ids are UUIDs, so membership compares strings.
+# Project, task, finding and report ids are UUIDs, so membership compares strings.
 test_project_membership_uses_uuid_ids if {
 	data.reconmap.authz.allow with input as {
 		"user": {"role": "user", "member_project_ids": ["018f0000-0000-7000-8000-000000000001"]},
 		"resource": {"project_id": "018f0000-0000-7000-8000-000000000001", "id": "4b0f1c22-6a52-4d07-9a4f-2b1f3d4e5a6b"},
-		"resource_type": "vulnerabilities",
+		"resource_type": "findings",
 		"method": "GET",
 	}
 

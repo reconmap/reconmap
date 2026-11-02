@@ -4,17 +4,17 @@ import NativeInput from "./NativeInput";
 const DynamicForm = ({ fields }: any) => {
     return fields.map((field) => {
         const key = `customField-${field.name}`;
-        if (["text"].includes(field.kind)) {
+        if (["text"].includes(field.type)) {
             return (
                 <FormField
                     key={key}
                     htmlFor={field.name}
                     label={field.label}
-                    control={<NativeInput id={field.name} type={field.kind} name={field.name} />}
+                    control={<NativeInput id={field.name} type={field.type} name={field.name} />}
                 />
             );
         }
-        if (["integer"].includes(field.kind)) {
+        if (["integer"].includes(field.type)) {
             return (
                 <FormField
                     key={key}
@@ -24,7 +24,7 @@ const DynamicForm = ({ fields }: any) => {
                 />
             );
         }
-        if (["decimal"].includes(field.kind)) {
+        if (["decimal"].includes(field.type)) {
             return (
                 <FormField
                     key={key}

@@ -79,7 +79,7 @@ public class AttachmentsController(AppDbContext dbContext, IAttachmentStorage at
     }
 
     [HttpPost]
-    [UploadLimits(UploadKind.Attachment)]
+    [UploadLimits(UploadType.Attachment)]
     public async Task<IActionResult> CreateMany([FromForm] Guid parentId, [FromForm] string parentType)
     {
         var files = Request.Form.Files;

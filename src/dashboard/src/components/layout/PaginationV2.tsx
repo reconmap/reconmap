@@ -1,5 +1,5 @@
 import NativeInput from "components/forms/NativeInput";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, type ChangeEvent } from "react";
 import isInputElement from "../../utilities/domUtils";
 
 const PaginationV2 = ({ page, total, onPageChange }: any) => {
@@ -15,16 +15,16 @@ const PaginationV2 = ({ page, total, onPageChange }: any) => {
     }, [onPageChange, page]);
 
     const onKeyDownListener = useCallback(
-        (ev) => {
+        (event: KeyboardEvent) => {
             if (isInputElement(document.activeElement)) {
                 return;
             }
 
-            if (previousEnabled && ev.key === "p") {
-                ev.preventDefault();
+            if (previousEnabled && event.key === "p") {
+                event.preventDefault();
                 onPreviousPageChange();
-            } else if (nextEnabled && ev.key === "n") {
-                ev.preventDefault();
+            } else if (nextEnabled && event.key === "n") {
+                event.preventDefault();
                 onNextPageChange();
             }
         },
@@ -62,8 +62,8 @@ const PaginationV2 = ({ page, total, onPageChange }: any) => {
                             maxLength={4}
                             size={4}
                             max={total}
-                            onInput={(ev) =>
-                                onPageChange(isNaN(parseInt(ev.target.value)) ? 1 : parseInt(ev.target.value) - 1)
+                            onInput={(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+                                onPageChange(isNaN(parseInt(event.target.value)) ? 1 : parseInt(event.target.value) - 1)
                             }
                         />{" "}
                         of {total}

@@ -7,7 +7,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import { toast } from "components/ui/toast";
 import Vault from "models/Vault";
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { HttpStatus } from "utilities/httpStatus";
 import { requestEntityPost } from "utilities/requests";
 import CssIcon from "components/ui/CssIcon";
@@ -19,13 +19,13 @@ const VaultSecretForm = ({ projectId = null, onSubmit = null }: any) => {
     const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
     const invalidateQueries = useInvalidateVaultQueries();
 
-    const onVaultItemFormChange = (ev) => {
-        const value = ev.target.type === "checkbox" ? ev.target.checked : ev.target.value;
-        setVaultItem({ ...vaultItem, [ev.target.name]: value });
+    const onVaultItemFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const value = event.target instanceof HTMLInputElement && event.target.type === "checkbox" ? event.target.checked : event.target.value;
+        setVaultItem({ ...vaultItem, [event.target.name]: value });
     };
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestEntityPost("/secrets", vaultItem as any).then((resp) => {
             if (resp.status === HttpStatus.CREATED) {

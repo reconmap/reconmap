@@ -82,11 +82,11 @@ public class SystemDataController(AppDbContext db) : AppController(db)
             ["assets"] = async ct => await _db.Assets.AsNoTracking().ToListAsync(ct),
             ["organisations"] = async ct => await _db.Organisations.AsNoTracking().ToListAsync(ct),
             ["users"] = async ct => await _db.Users.AsNoTracking().ToListAsync(ct),
-            ["vulnerabilities"] = async ct =>
-                await _db.Vulnerabilities.AsNoTracking().Where(v => !v.IsTemplate).ToListAsync(ct),
-            ["vulnerability_categories"] = async ct => await _db.VulnerabilityCategories.AsNoTracking().ToListAsync(ct),
-            ["vulnerability_templates"] = async ct =>
-                await _db.Vulnerabilities.AsNoTracking().Where(v => v.IsTemplate).ToListAsync(ct)
+            ["findings"] = async ct =>
+                await _db.Findings.AsNoTracking().Where(v => !v.IsTemplate).ToListAsync(ct),
+            ["finding_categories"] = async ct => await _db.FindingCategories.AsNoTracking().ToListAsync(ct),
+            ["finding_templates"] = async ct =>
+                await _db.Findings.AsNoTracking().Where(v => v.IsTemplate).ToListAsync(ct)
         };
     }
 }

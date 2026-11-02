@@ -18,7 +18,7 @@ import { toast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
 import UserLink from "components/users/UserLink";
 import { AuthContext } from "contexts/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useState, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 
@@ -37,8 +37,8 @@ const UsersListPage = () => {
 
     const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
 
-    const onTaskCheckboxChange = (ev) => {
-        const target = ev.target;
+    const onTaskCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const target = event.target;
         const targetUserId = parseInt(target.value);
         if (target.checked) {
             setSelectedUsers([...selectedUsers, targetUserId]);
@@ -118,7 +118,6 @@ const UsersListPage = () => {
             <div className="heading">
                 <Breadcrumb />
                 <NativeButtonGroup>
-                    <CreateButton onClick={handleCreate}>New user</CreateButton>
                     <RestrictedComponent roles={["administrator"]}>
                         <DeleteButton onClick={handleBulkDelete} disabled={selectedUsers.length === 0}>
                             Delete selected
@@ -129,6 +128,7 @@ const UsersListPage = () => {
                             <ExportMenuItem entity="users" />
                         </li>
                     </ul>
+                    <CreateButton onClick={handleCreate}>New user</CreateButton>
                 </NativeButtonGroup>
             </div>
 

@@ -10,7 +10,7 @@ public class Contact
 
     public int OrganisationId { get; set; }
 
-    [Required] public string? Kind { get; set; }
+    [Required] public string? Type { get; set; }
 
     [Required]
     [MaxLength(200)]
@@ -25,7 +25,7 @@ public class Contact
     [MaxLength(200)] public string? Role { get; set; }
 }
 
-public enum ContactKind
+public enum ContactType
 {
     general,
     technical,

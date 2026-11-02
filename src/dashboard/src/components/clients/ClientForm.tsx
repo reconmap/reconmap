@@ -7,7 +7,7 @@ import NativeSelect from "components/forms/NativeSelect";
 import RestrictedComponent from "components/logic/RestrictedComponent";
 import OrganisationTypes from "models/OrganisationTypes";
 import { ignoreAbortError } from "utilities/abort";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 
@@ -17,8 +17,8 @@ const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
     const [logo, setLogo] = useState<any>(null);
     const [smallLogo, setSmallLogo] = useState<any>(null);
 
-    const onFormChange = (ev) => {
-        const target = ev.target;
+    const onFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const target = event.target;
         const name = target.name;
         const value = target.value;
 
@@ -64,7 +64,7 @@ const ClientForm = ({ onFormSubmit, client, clientSetter: setClient }: any) => {
                 <FormField
                     label={t("Type")}
                     control={
-                        <NativeSelect name="kind" value={client.kind} onChange={onFormChange}>
+                        <NativeSelect name="type" value={client.type} onChange={onFormChange}>
                             {Object.entries(OrganisationTypes).map(([k, v]) => (
                                 <option key={k} value={k}>
                                     {t(v)}

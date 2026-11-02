@@ -18,7 +18,7 @@ import DeleteButton from "components/ui/buttons/DeleteButton";
 import LinkButton from "components/ui/buttons/LinkButton";
 import { toast } from "components/ui/toast";
 import { LastLogin } from "components/users/LastLogin";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 
@@ -34,8 +34,8 @@ const UserProfilePage = () => {
 
     const [tabIndex, tabIndexSetter] = useState(0);
 
-    const onDeleteButtonClick = async (ev) => {
-        ev.preventDefault();
+    const onDeleteButtonClick = async (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
 
         if (!(await confirm(t("Are you sure you want to delete this user?")))) return;
 

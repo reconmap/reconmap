@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import { useProjectsQuery } from "api/projects";
 import { useUsersQuery } from "api/users";
 import NativeSelect from "components/forms/NativeSelect";
@@ -10,8 +11,8 @@ const TaskFilters = ({ tableModel, tableModelSetter: setTableModel }: any) => {
     const { data: projects, isLoading: isLoadingProjects } = useProjectsQuery({ status: "active" });
     const { data: users, isLoading: isLoadingUsers } = useUsersQuery();
 
-    const onFilterChange = (ev) => {
-        setTableModel({ ...tableModel, filters: { ...tableModel.filters, [ev.target.name]: ev.target.value } });
+    const onFilterChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setTableModel({ ...tableModel, filters: { ...tableModel.filters, [event.target.name]: event.target.value } });
     };
 
     return (

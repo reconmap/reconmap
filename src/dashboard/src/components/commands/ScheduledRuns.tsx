@@ -1,3 +1,4 @@
+import { type MouseEvent } from "react";
 import { useConfirm } from "components/ui/useConfirm";
 import { useSchedulesQuery } from "api/commands";
 import { requestCommandScheduleDelete } from "api/requests/commands";
@@ -10,7 +11,7 @@ const ScheduledRuns = () => {
     const { confirm, confirmDialog } = useConfirm();
     const { data: scheduledCommands, refetch: fetchScheduledCommands } = useSchedulesQuery();
 
-    const deleteScheduledCommand = async (ev, commandSchedule) => {
+    const deleteScheduledCommand = async (event: MouseEvent<HTMLElement>, commandSchedule) => {
         if (!(await confirm("Are you sure you want to delete this scheduled command?"))) return;
         requestCommandScheduleDelete(commandSchedule.commandId, commandSchedule.id)
             .then(() => {
@@ -38,7 +39,7 @@ const ScheduledRuns = () => {
                 }),
         },
         { header: "Argument values", property: "argumentValues" },
-        { header: "", cell: (scheduledCommand) => <DeleteButton display="icon" onClick={(ev) => deleteScheduledCommand(ev, scheduledCommand)} /> },
+        { header: "", cell: (scheduledCommand) => <DeleteButton display="icon" onClick={(event) => deleteScheduledCommand(event, scheduledCommand)} /> },
     ]
 
     return (

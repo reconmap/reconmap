@@ -1,5 +1,5 @@
 import NativeInput from "components/forms/NativeInput";
-import { createRef, useCallback, useEffect } from "react";
+import { createRef, useCallback, useEffect, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import isInputElement from "../../utilities/domUtils";
@@ -10,9 +10,9 @@ const SearchBox = () => {
     const inputRef = createRef<any>();
 
     const onKeyDownListener = useCallback(
-        (ev) => {
-            if (!isInputElement(document.activeElement) && ev.key === "/") {
-                ev.preventDefault();
+        (event: KeyboardEvent) => {
+            if (!isInputElement(document.activeElement) && event.key === "/") {
+                event.preventDefault();
 
                 inputRef.current!.select();
                 inputRef.current!.focus();
@@ -28,10 +28,10 @@ const SearchBox = () => {
         };
     }, [onKeyDownListener]);
 
-    const handleSearchKeyDown = (ev) => {
-        const inputField = ev.target;
+    const handleSearchKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+        const inputField = event.currentTarget;
         const trimmedValue = inputField.value.trim();
-        if (ev.key === "Enter" && trimmedValue.length > 0) {
+        if (event.key === "Enter" && trimmedValue.length > 0) {
             navigate("/search/" + encodeURIComponent(trimmedValue));
         }
     };

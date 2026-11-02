@@ -35,7 +35,7 @@ public class OrganisationsController(AppDbContext dbContext)
         dbContext.Entry(dbModel).State = EntityState.Modified;
         dbModel.Name = requestModel.Name;
         dbModel.Address = requestModel.Address;
-        dbModel.Kind = requestModel.Kind;
+        dbModel.Type = requestModel.Type;
         dbModel.Url = requestModel.Url;
         await dbContext.SaveChangesAsync();
 
@@ -45,11 +45,11 @@ public class OrganisationsController(AppDbContext dbContext)
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMany([FromQuery] int? limit, [FromQuery] string? kind)
+    public async Task<IActionResult> GetMany([FromQuery] int? limit, [FromQuery] string? type)
     {
         var q = dbContext.Organisations.AsNoTracking();
-        if (kind != null)
-            q = q.Where(n => n.Kind == kind);
+        if (type != null)
+            q = q.Where(n => n.Type == type);
         q = q.OrderByDescending(a => a.CreatedAt);
 
         var organisations = await q.ToListAsync();

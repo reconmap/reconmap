@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import {
     useBulkDeleteNotificationsMutation,
@@ -66,8 +66,8 @@ const NotificationsListPage = () => {
             header: (
                 <NativeCheckbox
                     aria-label="Select all notifications"
-                    onChange={(e) => {
-                        if (e.target.checked) {
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                        if (event.target.checked) {
                             setSelectedIds((notifications ?? []).map(n => n.id));
                         } else {
                             setSelectedIds([]);
@@ -79,8 +79,8 @@ const NotificationsListPage = () => {
             cell: (notification) => (
                 <NativeCheckbox
                     aria-label="Select notification"
-                    onChange={(e) => {
-                        if (e.target.checked) {
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                        if (event.target.checked) {
                             setSelectedIds([...selectedIds, notification.id]);
                         } else {
                             setSelectedIds(selectedIds.filter(id => id !== notification.id));

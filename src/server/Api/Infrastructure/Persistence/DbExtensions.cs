@@ -8,7 +8,7 @@ public static class DbExtensions
     {
         var connectionString = config.GetConnectionString("PostgreSqlConnection");
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
         return services;
     }
 }

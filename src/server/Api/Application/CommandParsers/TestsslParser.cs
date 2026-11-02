@@ -39,40 +39,40 @@ public class TestsslParser(IAttachmentStorage attachmentStorage) : ICommandParse
             throw new Exception("Invalid JSON: " + e.GetBaseException().Message);
         }
 
-        foreach (var rawVulnerability in json.EnumerateArray())
+        foreach (var rawFinding in json.EnumerateArray())
         {
-            var severity = rawVulnerability.GetProperty("severity")
+            var severity = rawFinding.GetProperty("severity")
                 .GetString()?
                 .ToLowerInvariant();
 
             if (severity is "ok" or "info")
                 continue;
 
-            var vulnerability = new Vulnerability
+            var finding = new Finding
             {
-                Summary = $"{rawVulnerability.GetProperty("id").GetString()}: " +
-                          $"{rawVulnerability.GetProperty("finding").GetString()}",
+                Summary = $"{rawFinding.GetProperty("id").GetString()}: " +
+                          $"{rawFinding.GetProperty("finding").GetString()}",
                 Risk = severity
             };
             var tags = new List<string>();
 
-            if (rawVulnerability.TryGetProperty("cve", out var cve)) tags.Add(cve.GetString());
+            if (rawFinding.TryGetProperty("cve", out var cve)) tags.Add(cve.GetString());
 
-            if (rawVulnerability.TryGetProperty("cwe", out var cwe)) tags.Add(cwe.GetString());
+            if (rawFinding.TryGetProperty("cwe", out var cwe)) tags.Add(cwe.GetString());
 
-            var ip = rawVulnerability.GetProperty("ip").GetString();
+            var ip = rawFinding.GetProperty("ip").GetString();
             var hostname = ip?.Split('/')[0];
 
-            vulnerability.Asset = new Asset
+            finding.Asset = new Asset
             {
                 Type = "hostname",
                 Name = hostname,
                 ProjectId = job.ProjectId
             };
-            vulnerability.Tags = JsonSerializer.Serialize(tags);
-            vulnerability.ProjectId = job.ProjectId;
+            finding.Tags = JsonSerializer.Serialize(tags);
+            finding.ProjectId = job.ProjectId;
 
-            result.AddVulnerability(vulnerability);
+            result.AddFinding(finding);
         }
 
         return result;

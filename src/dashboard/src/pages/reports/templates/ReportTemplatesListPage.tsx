@@ -1,3 +1,4 @@
+import { type MouseEvent } from "react";
 import { useConfirm } from "components/ui/useConfirm";
 import { UserManualUrl } from "ServerUrls";
 import { useDeleteReportMutation, useReportsTemplatesQuery } from "api/reports";
@@ -23,8 +24,8 @@ const ReportTemplatesListPage = () => {
     const { data: templates, isLoading, refetch: refetchTemplates } = useReportsTemplatesQuery(undefined as any);
     const deleteReportMutation = useDeleteReportMutation();
 
-    const deleteTemplate = async (ev, templateId) => {
-        ev.stopPropagation();
+    const deleteTemplate = async (event: MouseEvent<HTMLElement>, templateId) => {
+        event.stopPropagation();
 
         if (!(await confirm(t("Are you sure you want to delete this report template?")))) return;
 
@@ -126,7 +127,7 @@ const ReportTemplatesListPage = () => {
                                             title={
                                                 template.createdById === 0 ? "System templates cannot be deleted" : ""
                                             }
-                                            onClick={(ev) => deleteTemplate(ev, template.id)}
+                                            onClick={(event) => deleteTemplate(event, template.id)}
                                         />
                                     </td>
                                 </tr>

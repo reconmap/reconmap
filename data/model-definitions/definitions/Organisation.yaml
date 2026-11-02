@@ -10,7 +10,7 @@ properties:
     nullable: true
   created_by_id:
     type: integer
-  kind:
+  type:
     type: string
     enum:
     - service_provider
@@ -32,5 +32,5 @@ properties:
 required:
 - created_at
 - created_by_id
-- kind
+- type
 - name

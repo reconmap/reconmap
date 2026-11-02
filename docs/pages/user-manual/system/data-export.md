@@ -15,7 +15,7 @@ The export data functionality allows you to export Reconmap data to JSON. The ex
 - Projects and templates (including associated data such as assets)
 - Tasks
 - Users
-- Vulnerabilities
+- Findings
 
 An extract of an JSON export can be see below:
 

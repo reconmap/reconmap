@@ -1,28 +1,10 @@
+PROGRAM := reconmapd
+CMD_PKG := ./cmd/reconmapd
+BUILD_PKG := reconmap/runner/internal/build
 
-include ../Golang.mk
+include ../../mk/golang.mk
 
-SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
-.ONESHELL:
-.DELETE_ON_ERROR:
-MAKEFLAGS += --warn-undefined-variables
-MAKEFLAGS += --no-builtin-rules
-LATEST_TAG = $(shell git describe --tags)
-
-CONTAINER_NAME=ghcr.io/reconmap/runner:latest
-
-PROGRAM=reconmapd
-
-$(PROGRAM):
-	go build -v -ldflags="-X 'reconmap/runner/internal/build.BuildVersion=$(LATEST_TAG)'" -o $(PROGRAM) ./cmd/reconmapd
-
-.PHONY: tests
-tests:
-	go test ./...
-
-.PHONY: clean
-clean:
-	rm -f $(PROGRAM)
+CONTAINER_NAME := ghcr.io/reconmap/runner:latest
 
 .PHONY: docker-build
 docker-build:
@@ -31,4 +13,3 @@ docker-build:
 .PHONY: docker-push
 docker-push:
 	docker push $(CONTAINER_NAME)
-

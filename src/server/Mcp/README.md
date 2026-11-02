@@ -41,7 +41,7 @@ Configure your AI assistant (e.g., Claude Desktop, Cursor, or VS Code Copilot) t
 
 ## Authentication and authorization
 
-Every request to `/mcp` must carry `Authorization: Bearer <token>`. Two kinds of token are accepted, the same ones as the REST API:
+Every request to `/mcp` must carry `Authorization: Bearer <token>`. Two types of token are accepted, the same ones as the REST API:
 
 - A **Reconmap API token** . Tokens with the `read-only` scope are fine here because the server only exposes read operations.
 - A **Keycloak access token** (JWT) for the Reconmap realm, normally obtained through the OAuth flow described below.
@@ -69,7 +69,7 @@ Configuration:
 Access follows the same rules as the REST API:
 
 - Administrators and superusers can read everything.
-- Users and clients only see data in projects they are a member of. Lists of projects, tasks and vulnerabilities are filtered accordingly, and reading a single project is checked against the OPA policy (`policy/authz.rego`).
+- Users and clients only see data in projects they are a member of. Lists of projects, tasks and findings are filtered accordingly, and reading a single project is checked against the OPA policy (`policy/authz.rego`).
 - Runners are infrastructure data and are only available to administrators and superusers.
 - A denied call fails with `Access denied.`
 
@@ -106,7 +106,7 @@ If your client does not support OAuth, send an API token instead. With the MCP I
 
 The MCP server shares the same `AppDbContext` and Entity Framework schema as the main Reconmap API project. 
 
-- **Resources**: Configured in `Resources/`, one class per entity (`ProjectResources`, `TaskResources`, `VulnerabilityResources`, `RunnerResources`). Exposes entity endpoints like `reconmap://projects` and templates like `reconmap://projects/{id}`.
+- **Resources**: Configured in `Resources/`, one class per entity (`ProjectResources`, `TaskResources`, `FindingResources`, `RunnerResources`). Exposes entity endpoints like `reconmap://projects` and templates like `reconmap://projects/{id}`.
 - **Tools**: Configured in `Tools/` (`ProjectTools`). Exposes executable functions.
-- **Prompts**: Configured in `Prompts/ReconmapPrompts.cs`. Exposes `triage_vulnerabilities` and `executive_summary`, both taking a `projectId`.
+- **Prompts**: Configured in `Prompts/ReconmapPrompts.cs`. Exposes `triage_findings` and `executive_summary`, both taking a `projectId`.
 - **Database**: Database configurations are automatically loaded from `src/server/Api/appsettings.json` and `appsettings.Development.json` during build. Ensure your `launchSettings.json` or `ASPNETCORE_ENVIRONMENT` environment variable is set to `Development` for local testing.

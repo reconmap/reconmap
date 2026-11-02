@@ -71,9 +71,9 @@ When you are designing your pentest project template, you can reference a number
             <td>summary, description, status, priority</td>
         </tr>
         <tr>
-            <td>vulnerabilities</td>
+            <td>findings</td>
             <td>array</td>
-            <td>Vulnerabilities stats and list</td>
+            <td>Findings stats and list</td>
             <td>list (summary, description, risk, remediation, status, cvss_vector, cvss_score, proof_of_concept), stats (severity, count)</td>
         </tr>
     </tbody>

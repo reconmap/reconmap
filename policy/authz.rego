@@ -54,7 +54,7 @@ allow if {
 	input.user.role == "user"
 
 	# Can access globally readable metadata (never exports or configuration).
-	globally_readable_resources := ["projectcategories", "vulnerabilitiescategories", "system"]
+	globally_readable_resources := ["projectcategories", "findingscategories", "system"]
 	input.resource_type in globally_readable_resources
 	input.method == "GET"
 }
@@ -63,7 +63,7 @@ allow if {
 	input.user.role == "user"
 
 	# Can list and read anything within their assigned projects
-	project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports", "comments"]
+	project_scoped_resources := ["projects", "tasks", "findings", "reports", "comments"]
 	input.resource_type in project_scoped_resources
 
 	# If project_id is provided, check membership
@@ -75,7 +75,7 @@ allow if {
 allow if {
 	is_user_or_client
 	input.method == "GET"
-	input.resource_type in ["vulnerabilities", "attachments", "comments"]
+	input.resource_type in ["findings", "attachments", "comments"]
 	not input.resource.project_id
 }
 
@@ -105,7 +105,7 @@ allow if {
 	input.method == "GET"
 
 	# Clients can read project-scoped data if they are a member
-	project_scoped_resources := ["projects", "tasks", "vulnerabilities", "reports"]
+	project_scoped_resources := ["projects", "tasks", "findings", "reports"]
 	input.resource_type in project_scoped_resources
 
 	# If project_id is provided, check membership

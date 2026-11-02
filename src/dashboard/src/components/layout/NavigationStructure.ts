@@ -10,7 +10,7 @@ import {
     SystemUrls,
     TasksUrls,
     UsersUrls,
-    VulnerabilitiesUrls,
+    FindingsUrls,
 } from "AppUrls";
 import Configuration from "Configuration";
 import { ServerIssuesUrl, UserManualUrl } from "ServerUrls";
@@ -40,12 +40,12 @@ export const getNavigationStructure = (t) => [
             },
             {
                 type: "menu",
-                name: t("Vulnerabilities"),
-                url: VulnerabilitiesUrls.List,
-                permissions: "vulnerabilities.*",
+                name: t("Findings"),
+                url: FindingsUrls.List,
+                permissions: "findings.*",
                 children: [
-                    { name: t("New"), url: VulnerabilitiesUrls.Create, permissions: "vulnerabilities.*" },
-                    { name: t("Categories"), url: VulnerabilitiesUrls.Categories, permissions: "vulnerabilities.*" },
+                    { name: t("New"), url: FindingsUrls.Create, permissions: "findings.*" },
+                    { name: t("Categories"), url: FindingsUrls.Categories, permissions: "findings.*" },
                 ]
             },
             {

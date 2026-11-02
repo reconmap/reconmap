@@ -1,0 +1,96 @@
+{{- if .Values.dashboard.enabled }}
+{{- $c := dict "root" . "component" "dashboard" }}
+{{- $name := include "reconmap.componentName" $c }}
+{{- $ws := ternary "wss" "ws" .Values.tls }}
+{{- $config := dict
+  "$schema" "https://raw.githubusercontent.com/reconmap/reconmap/refs/heads/main/src/dashboard/config-schema.json"
+  "contextPath" ""
+  "logoUrl" "/logo-name.png"
+  "reconmapApiUrl" (printf "%s/api" (include "reconmap.apiUrl" .))
+  "notificationsServiceUrl" (printf "%s://%s/api" $ws .Values.hosts.api)
+  "keycloak" (dict "url" (include "reconmap.keycloakUrl" .) "realm" "reconmap" "clientId" "dashboard") }}
+{{- $config = mergeOverwrite $config .Values.dashboard.extraConfig }}
+---
+{{ include "reconmap.service" (merge (dict "port" 5500) $c) }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+data:
+  config.json: |
+    {{- $config | toPrettyJson | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  replicas: {{ .Values.dashboard.replicas }}
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ $config | toJson | sha256sum }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 101) | nindent 8 }}
+      containers:
+        - name: dashboard
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.dashboard.image) | quote }}
+          imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" true) | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 5500
+          startupProbe:
+            httpGet: {path: /, port: http}
+            periodSeconds: 3
+            failureThreshold: 20
+          readinessProbe:
+            httpGet: {path: /, port: http}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /, port: http}
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/config.json
+              subPath: config.json
+              readOnly: true
+            - name: cache
+              mountPath: /var/cache/nginx
+            - name: run
+              mountPath: /run
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: config
+          configMap:
+            name: {{ $name }}
+        - name: cache
+          emptyDir: {}
+        - name: run
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+{{- if gt (int .Values.dashboard.replicas) 1 }}
+---
+{{ include "reconmap.pdb" $c }}
+{{- end }}
+{{- end }}

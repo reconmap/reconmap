@@ -24,7 +24,7 @@ public class CustomField : TimestampedEntity
     [Required]
     [Column(TypeName = "varchar")]
     [MaxLength(50)]
-    public string Kind { get; set; } = null!;
+    public string Type { get; set; } = null!;
 
     // You can map JSON to string, or to a custom object via value converters
     [Required]

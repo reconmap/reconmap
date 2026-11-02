@@ -15,7 +15,7 @@ properties:
     enum:
     - library
     - project
-    - vulnerability
+    - finding
   parent_id:
     type: integer
     nullable: true

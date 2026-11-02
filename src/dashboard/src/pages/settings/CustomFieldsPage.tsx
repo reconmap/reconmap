@@ -4,11 +4,12 @@ import {
     useSystemCustomFieldsQuery,
 } from "api/system";
 import CustomFieldModalDialog from "components/settings/CustomFieldModalDialog";
+import Breadcrumb from "components/ui/Breadcrumb";
 import CreateButton from "components/ui/buttons/CreateButton";
 import DeleteButton from "components/ui/buttons/DeleteButton";
 import NativeTable from "components/ui/tables/NativeTable";
 import PageTitleHeader from "components/ui/PageTitleHeader";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 const CustomFieldsPage = () => {
@@ -19,8 +20,8 @@ const CustomFieldsPage = () => {
     const deleteCustomFieldMutation = useSystemCustomFieldDeletionMutation();
     const [isCustomFieldDialogOpen, setIsCustomFieldDialogOpen] = useState(false);
 
-    const onDeleteCustomFieldClick = async (ev, field) => {
-        ev.preventDefault();
+    const onDeleteCustomFieldClick = async (event: MouseEvent<HTMLElement>, field) => {
+        event.preventDefault();
 
         if (!(await confirm(t("Are you sure you want to delete this custom field?")))) return;
 
@@ -30,13 +31,13 @@ const CustomFieldsPage = () => {
     const columns = [
         { header: "Name", property: "name" },
         { header: "Label", property: "label" },
-        { header: "Type", property: "kind" },
+        { header: "Type", property: "type" },
         { header: "Parent type", property: "parentType" },
         {
             header: "",
             property: "actions",
             cell: (field) => (
-                <DeleteButton display="icon" onClick={(ev) => onDeleteCustomFieldClick(ev, field)} />
+                <DeleteButton display="icon" onClick={(event) => onDeleteCustomFieldClick(event, field)} />
             ),
         },
     ];
@@ -44,6 +45,7 @@ const CustomFieldsPage = () => {
     return (
         <>
             <div className="heading">
+                <Breadcrumb />
                 <CreateButton onClick={() => setIsCustomFieldDialogOpen(true)}>New custom field&hellip;</CreateButton>
             </div>
             <PageTitleHeader title={t("Custom fields")} subHeader={t("System")} />

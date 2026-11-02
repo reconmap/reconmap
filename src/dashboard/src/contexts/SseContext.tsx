@@ -93,7 +93,7 @@ export const useSseMessage = (onMessageHandler) => {
     useEffect(() => {
         if (!connection) return;
         
-        const listener = (event) => {
+        const listener = (event: MessageEvent) => {
             if (callbackRef.current) {
                 callbackRef.current(event);
             }

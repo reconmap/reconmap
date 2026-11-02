@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { requestAsset, requestAssetDelete, requestAssetEnsure, requestAssets } from "./requests/assets";
 
-const useAssetQuery = (assetId: number) => {
+const useAssetQuery = (assetId: string) => {
     return useQuery({
         queryKey: ["assets", assetId],
         queryFn: ({ signal }) => requestAsset(assetId, { signal }),
@@ -20,7 +20,7 @@ const useAssetsQuery = (params: any) => {
 const useDeleteAssetMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (assetId: number) => requestAssetDelete(assetId).then((res) => res.json()),
+        mutationFn: (assetId: string) => requestAssetDelete(assetId).then((res) => res.json()),
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ["assets"] });
         },

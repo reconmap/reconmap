@@ -27,12 +27,12 @@ export const TasksUrls = {
     Details: "/tasks/:taskId",
 };
 
-export const VulnerabilitiesUrls = {
-    List: "/vulnerabilities",
-    Create: "/vulnerabilities/create",
-    Edit: "/vulnerabilities/:vulnerabilityId/edit",
-    Details: "/vulnerabilities/:vulnerabilityId",
-    Categories: "/vulnerabilities/categories",
+export const FindingsUrls = {
+    List: "/findings",
+    Create: "/findings/create",
+    Edit: "/findings/:findingId/edit",
+    Details: "/findings/:findingId",
+    Categories: "/findings/categories",
 };
 
 

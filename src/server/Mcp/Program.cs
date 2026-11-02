@@ -89,7 +89,7 @@ services.AddScoped<McpAccessGuard>();
 // Same services the REST controllers use, so the data logic lives in one place.
 services.AddScoped<IProjectService, ProjectService>();
 services.AddScoped<ITaskService, TaskService>();
-services.AddScoped<IVulnerabilityService, VulnerabilityService>();
+services.AddScoped<IFindingService, FindingService>();
 services.AddScoped<IRunnerService, RunnerService>();
 
 // Add the MCP services with HTTP transport
@@ -99,7 +99,7 @@ services
     .WithTools<Reconmap.McpServer.Tools.ProjectTools>()
     .WithResources<Reconmap.McpServer.Resources.ProjectResources>()
     .WithResources<Reconmap.McpServer.Resources.TaskResources>()
-    .WithResources<Reconmap.McpServer.Resources.VulnerabilityResources>()
+    .WithResources<Reconmap.McpServer.Resources.FindingResources>()
     .WithResources<Reconmap.McpServer.Resources.RunnerResources>()
     .WithPrompts<Reconmap.McpServer.Prompts.ReconmapPrompts>();
 

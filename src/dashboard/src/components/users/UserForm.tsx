@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import Form from "components/forms/Form";
 import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
@@ -17,10 +18,10 @@ const USERNAME_PATTERN = "[A-Za-z0-9._\\-]*";
 const USERNAME_TITLE = "Only letters, numbers, periods, underscores and hyphens are allowed";
 
 const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isOwner = false, preferences, onPreferencesChange }: any) => {
-    const onFormChange = (ev) => {
-        const target = ev.target;
+    const onFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const target = event.target;
         const name = target.name;
-        const value = target.type === "checkbox" ? target.checked : target.value;
+        const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
         setUser({ ...user, [name]: value });
     };
 

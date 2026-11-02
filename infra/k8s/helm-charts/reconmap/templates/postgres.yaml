@@ -1,0 +1,85 @@
+{{- if .Values.postgres.enabled }}
+{{- $c := dict "root" . "component" "postgres" }}
+{{- $name := include "reconmap.componentName" $c }}
+---
+{{ include "reconmap.service" (merge (dict "port" 5432) $c) }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ $name }}
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 70) | nindent 8 }}
+      containers:
+        - name: postgres
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.postgres.image) | quote }}
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" false) | nindent 12 }}
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "POSTGRES_PASSWORD" "key" "postgres-password") | nindent 12 }}
+            - name: POSTGRES_RECONMAP_USER
+              value: {{ .Values.postgres.user | quote }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "POSTGRES_RECONMAP_PASSWORD" "key" "db-password") | nindent 12 }}
+            - name: POSTGRES_KEYCLOAK_USER
+              value: {{ .Values.postgres.keycloakUser | quote }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "POSTGRES_KEYCLOAK_PASSWORD" "key" "keycloak-db-password") | nindent 12 }}
+          ports:
+            - name: postgres
+              containerPort: 5432
+          startupProbe:
+            exec: {command: [pg_isready, -U, postgres]}
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            exec: {command: [pg_isready, -U, postgres]}
+            periodSeconds: 10
+          livenessProbe:
+            exec: {command: [pg_isready, -U, postgres]}
+            periodSeconds: 20
+            failureThreshold: 5
+          resources:
+            {{- toYaml .Values.postgres.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            - name: run
+              mountPath: /var/run/postgresql
+      volumes:
+        - name: run
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.postgres.persistence.storageClassName }}
+        storageClassName: {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.postgres.persistence.size }}
+{{- end }}

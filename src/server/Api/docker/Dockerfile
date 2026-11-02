@@ -23,4 +23,7 @@ WORKDIR /app
 RUN mkdir -p /seed/attachments
 COPY data/attachments /seed/attachments
 COPY --from=build /build/publish .
+# Data Protection keys are persisted here; keep it writable for the non-root user.
+RUN mkdir -p /home/app/.aspnet/DataProtection-Keys && chown -R $APP_UID /home/app
+USER $APP_UID
 ENTRYPOINT ["/app/App"]

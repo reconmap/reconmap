@@ -12,7 +12,7 @@ properties:
     enum:
     - project
     - task
-    - vulnerability
+    - finding
     - report
   parent_id:
     type: string

@@ -1,0 +1,113 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+    nullable: true
+  created_at:
+    type: string
+  updated_at:
+    type: string
+    nullable: true
+  created_by_id:
+    type: integer
+  is_template:
+    type: boolean
+    default: false
+  external_id:
+    type: string
+    nullable: true
+  project_id:
+    type: string
+    format: uuid
+    nullable: true
+  asset_id:
+    type: string
+    format: uuid
+    nullable: true
+  category_id:
+    type: integer
+    nullable: true
+  summary:
+    type: string
+  description:
+    type: string
+    nullable: true
+    default: null
+  external_refs:
+    type: string
+    nullable: true
+  visibility:
+    type: string
+    enum:
+    - private
+    - public
+    default: public
+  risk:
+    type: string
+    enum:
+    - none
+    - low
+    - medium
+    - high
+    - critical
+  proof_of_concept:
+    type: string
+    nullable: true
+  impact:
+    type: string
+    nullable: true
+  remediation:
+    type: string
+    nullable: true
+  remediation_complexity:
+    type: string
+    nullable: true
+    enum:
+    - unknown
+    - low
+    - medium
+    - high
+  remediation_priority:
+    type: string
+    nullable: true
+    enum:
+    - low
+    - medium
+    - high
+  cvss_vector:
+    type: string
+    nullable: true
+  cvss_score:
+    type: number
+    format: float
+    nullable: true
+  status:
+    type: string
+    enum:
+    - open
+    - confirmed
+    - resolved
+    - closed
+    default: open
+  substatus:
+    type: string
+    nullable: true
+    enum:
+    - reported
+    - unresolved
+    - unexploited
+    - exploited
+    - remediated
+    - mitigated
+    - rejected
+    default: reported
+  tags:
+    nullable: true
+  custom_fields:
+    nullable: true
+required:
+- created_at
+- created_by_id
+- summary
+- risk

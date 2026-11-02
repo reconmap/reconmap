@@ -8,7 +8,7 @@ import Breadcrumb from "components/ui/Breadcrumb";
 import Loading from "components/ui/Loading";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import TaskForm from "components/tasks/TaskForm";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 const TaskEditPage = () => {
     const navigate = useNavigate();
@@ -19,8 +19,8 @@ const TaskEditPage = () => {
     const [taskEdits, setClientTask] = useState<any>(null);
     const clientTask = taskEdits ?? serverTask;
 
-    const onFormSubmit = async (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         await requestTaskPatch(taskId, clientTask);
         toast.success(`The task "${clientTask.summary}" has been updated.`);

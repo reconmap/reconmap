@@ -7,6 +7,7 @@ import { useConfirm } from "components/ui/useConfirm";
 import { useTranslation } from "react-i18next";
 import ApiTokenModalDialog from "../../../components/integrations/api-tokens/ApiTokenModalDialog";
 import Breadcrumb from "../../../components/ui/Breadcrumb";
+import CreateButton from "../../../components/ui/buttons/CreateButton";
 import PrimaryButton from "../../../components/ui/buttons/PrimaryButton";
 
 const ApiTokensPage = () => {
@@ -52,11 +53,9 @@ const ApiTokensPage = () => {
                 <Breadcrumb>
                     <div>System</div>
                 </Breadcrumb>
+                <CreateButton onClick={() => setShowForm(true)}>{t("New API token")}&hellip;</CreateButton>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <PageTitleHeader title={t("API Tokens")} />
-                <PrimaryButton onClick={() => setShowForm(true)}>{t("New API token")}&hellip;</PrimaryButton>
-            </div>
+            <PageTitleHeader title={t("API Tokens")} />
 
             {showForm && (
                 <ApiTokenModalDialog

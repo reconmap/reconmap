@@ -6,7 +6,7 @@ import Loading from "components/ui/Loading";
 import PageTitleHeader from "components/ui/PageTitleHeader";
 import { toast } from "components/ui/toast";
 import ClientForm from "components/clients/ClientForm";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 const ClientEditPage = () => {
@@ -19,8 +19,8 @@ const ClientEditPage = () => {
     const clientClient = clientEdits ?? serverClient;
     const organisationsQueryInvalidation = useOrganisationsQueriesInvalidation();
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestOrganisationPut(clientId, clientClient).then(() => {
             toast.success(`The client "${clientClient.name}" has been updated.`);

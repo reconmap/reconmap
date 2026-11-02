@@ -11,7 +11,7 @@ const Tags = ({ values }: any) => {
         return parsedValues
             .filter((value) => value.length > 0)
             .map((value, index) => (
-                <Link key={`tag_index_${index}`} to={`/search/${value}?entities=commands,vulnerabilities`}>
+                <Link key={`tag_index_${index}`} to={`/search/${value}?entities=commands,findings`}>
                     <Tag>{value}</Tag>
                 </Link>
             ));

@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import Form from "components/forms/Form";
 import FormActions from "components/forms/FormActions";
 import FormField from "components/forms/FormField";
@@ -9,10 +10,10 @@ import PrimaryButton from "../../ui/buttons/PrimaryButton";
 const AzureDevopsForm = ({ integration, integrationSetter: setIntegration, onFormSubmit }: any) => {
     const [t] = useTranslation();
 
-    const onFormChange = (ev) => {
-        const target = ev.target;
+    const onFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const target = event.target;
         const name = target.name;
-        const value = target.type === "checkbox" ? target.checked : target.value;
+        const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
         setIntegration({ ...integration, [name]: value });
     };
 

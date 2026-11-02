@@ -83,7 +83,7 @@ it("submits encoded keywords with the selected entities", () => {
     fireEvent.click(getByRole("button", { name: "Search" }));
 
     expect(getByTestId("results")).toHaveTextContent(
-        "100% off?entities=vulnerabilities,vulnerability_templates,projects,project_templates",
+        "100% off?entities=findings,finding_templates,projects,project_templates",
     );
 });
 
@@ -93,7 +93,7 @@ it("disables search and explains the problem when no entity is selected", () => 
     const { getByLabelText, getByRole, getByText } = renderPage();
 
     fireEvent.change(getByLabelText("Keywords"), { target: { value: "nmap" } });
-    ["Tasks", "Vulnerabilities", "Vulnerability templates", "Projects", "Project templates"].forEach((label) =>
+    ["Tasks", "Findings", "Finding templates", "Projects", "Project templates"].forEach((label) =>
         fireEvent.click(getByLabelText(label)),
     );
 

@@ -5,7 +5,7 @@ import FormField from "components/forms/FormField";
 import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import MarkdownEditor from "components/ui/forms/MarkdownEditor";
-import { useEffect } from "react";
+import { useEffect, type ChangeEvent } from "react";
 import { TaskPriorityList } from "../../models/TaskPriority";
 import TaskStatuses from "../../models/TaskStatuses";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
@@ -13,8 +13,8 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 const TaskForm = ({ forTemplate = false, onFormSubmit, task, taskSetter: setTask }: any) => {
     const { data: projects, isLoading: isLoadingProjects } = useProjectsQuery({ isTemplate: forTemplate });
 
-    const onFormChange = (ev) => {
-        const target = ev.target;
+    const onFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const target = event.target;
         const name = target.name;
         const value = target.value;
         setTask({ ...task, [name]: value });

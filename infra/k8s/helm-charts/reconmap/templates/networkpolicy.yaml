@@ -1,0 +1,35 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- $root := . }}
+{{- /* component -> components allowed to reach it, and on which port. Anything else is denied. */}}
+{{- $allow := dict
+  "postgres" (dict "port" 5432 "from" (list "api" "keycloak"))
+  "redis" (dict "port" 6379 "from" (list "api"))
+  "rabbitmq" (dict "port" 5672 "from" (list "api"))
+  "s3" (dict "port" 9000 "from" (list "api"))
+  "opa" (dict "port" 8181 "from" (list "api")) }}
+{{- range $component, $rule := $allow }}
+{{- if (index $.Values (ternary "s3" $component (eq $component "s3"))).enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "reconmap.componentName" (dict "root" $root "component" $component) }}
+  labels:
+    {{- include "reconmap.labels" (dict "root" $root "component" $component) | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" (dict "root" $root "component" $component) | nindent 6 }}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        {{- range $rule.from }}
+        - podSelector:
+            matchLabels:
+              {{- include "reconmap.selectorLabels" (dict "root" $root "component" .) | nindent 14 }}
+        {{- end }}
+      ports:
+        - port: {{ $rule.port }}
+{{- end }}
+{{- end }}
+{{- end }}

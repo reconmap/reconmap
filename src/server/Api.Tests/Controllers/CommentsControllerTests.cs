@@ -51,7 +51,7 @@ public class CommentsControllerTests
         var controller = CreateController(db, new FakeAccessScope(7), currentUserId: 7);
         var request = new CommentsController.CreateCommentRequest
         {
-            ParentType = CommentParentType.Vulnerability,
+            ParentType = CommentParentType.Finding,
             ParentId = TestIds.Of(3),
             Content = "Confirmed on staging."
         };
@@ -60,7 +60,7 @@ public class CommentsControllerTests
 
         var created = Assert.IsType<CreatedResult>(result);
         var response = Assert.IsType<CommentsController.CommentResponse>(created.Value);
-        Assert.Equal("vulnerability", response.ParentType);
+        Assert.Equal("finding", response.ParentType);
         Assert.Equal(7, response.CreatedById);
         var stored = await db.Comments.SingleAsync();
         Assert.Equal("Confirmed on staging.", stored.Content);

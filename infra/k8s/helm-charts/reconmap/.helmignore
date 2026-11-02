@@ -1,0 +1,6 @@
+.git/
+.gitignore
+Makefile
+*.swp
+*.bak
+*.tmp

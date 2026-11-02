@@ -12,25 +12,25 @@ namespace Reconmap.McpServer.Prompts;
 [McpServerPromptType]
 public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guard)
 {
-    [McpServerPrompt(Name = "triage_vulnerabilities")]
-    [Description("Triage the vulnerabilities of a project: prioritise them and propose next steps.")]
-    public async Task<string> TriageVulnerabilities(
+    [McpServerPrompt(Name = "triage_findings")]
+    [Description("Triage the findings of a project: prioritise them and propose next steps.")]
+    public async Task<string> TriageFindings(
         [Description("Required. The ID (a UUID) of the project to triage.")] string projectId)
     {
         var id = ParseProjectId(projectId);
         var name = await ProjectNameAsync(id);
 
         return $$"""
-                Triage the vulnerabilities of the Reconmap project "{{name}}" (ID {{id}}).
+                Triage the findings of the Reconmap project "{{name}}" (ID {{id}}).
 
-                Read the resource reconmap://projects/{{id}}/vulnerabilities, then fetch the details of the
-                most severe ones with reconmap://vulnerabilities/{id}.
+                Read the resource reconmap://projects/{{id}}/findings, then fetch the details of the
+                most severe ones with reconmap://findings/{id}.
 
                 Produce:
-                1. Vulnerabilities ordered by priority, weighing risk, CVSS score and impact.
+                1. Findings ordered by priority, weighing risk, CVSS score and impact.
                 2. Any that look like duplicates or share a root cause.
                 3. A recommended remediation order, with the reason for each step.
-                4. Vulnerabilities that lack the detail (description, proof of concept, remediation) to be actioned.
+                4. Findings that lack the detail (description, proof of concept, remediation) to be actioned.
                 """;
     }
 
@@ -45,11 +45,11 @@ public class ReconmapPrompts(IProjectService projectService, McpAccessGuard guar
         return $$"""
                 Draft an executive summary for the Reconmap project "{{name}}" (ID {{id}}).
 
-                Read reconmap://projects/{{id}} and reconmap://projects/{{id}}/vulnerabilities.
+                Read reconmap://projects/{{id}} and reconmap://projects/{{id}}/findings.
 
                 Write for a non-technical reader, in under 300 words:
                 - Overall security posture in one or two sentences.
-                - Counts of vulnerabilities by risk level and the most significant business impacts.
+                - Counts of findings by risk level and the most significant business impacts.
                 - The top three actions to take, in priority order.
                 Avoid jargon and do not include proof-of-concept details.
                 """;

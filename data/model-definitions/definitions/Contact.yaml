@@ -5,7 +5,7 @@ properties:
     nullable: true
   organisation_id:
     type: integer
-  kind:
+  type:
     type: string
     enum:
     - general

@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import { useOrganisationsQuery } from "api/clients";
 import { useProjectCategoriesQuery } from "api/projects";
 import Form from "components/forms/Form";
@@ -16,13 +17,13 @@ const convertValue = (value) => {
 };
 
 const ProjectForm = ({ project, projectSetter: setProject, onFormSubmit }: any) => {
-    const { data: clients, isLoading: isLoadingClients } = useOrganisationsQuery({ kind: "client" });
-    const { data: serviceProviders } = useOrganisationsQuery({ kind: "service_provider" });
+    const { data: clients, isLoading: isLoadingClients } = useOrganisationsQuery({ type: "client" });
+    const { data: serviceProviders } = useOrganisationsQuery({ type: "service_provider" });
     const { data: categories, isLoading: isLoadingCategories } = useProjectCategoriesQuery();
 
-    const handleFormChange = (ev) => {
-        const value = ev.target.type === "checkbox" ? ev.target.checked : convertValue(ev.target.value);
-        setProject({ ...project, [ev.target.name]: value });
+    const handleFormChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const value = event.target instanceof HTMLInputElement && event.target.type === "checkbox" ? event.target.checked : convertValue(event.target.value);
+        setProject({ ...project, [event.target.name]: value });
     };
 
     if (!project || isLoadingClients || isLoadingCategories || !serviceProviders) return <Loading />;

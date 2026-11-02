@@ -7,7 +7,7 @@ Uploads are limited by the API. The limits are part of the API configuration, so
 
 ## Configuration
 
-Set the limits under `Storage:Uploads` in the API configuration file (`config-ngapi.json`, mounted as `appsettings.json`), or with environment variables such as `Storage__Uploads__MaxFileSizeBytes`:
+Set the limits under `Storage:Uploads` in the API's `appsettings.json` (mount your own to override it), or with environment variables such as `Storage__Uploads__MaxFileSizeBytes`:
 
 ```json
 {

@@ -1,0 +1,71 @@
+{{- if .Values.s3.enabled }}
+{{- $c := dict "root" . "component" "s3" }}
+{{- $name := include "reconmap.componentName" $c }}
+---
+{{ include "reconmap.service" (merge (dict "port" 9000) $c) }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ $name }}
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 10001) | nindent 8 }}
+      containers:
+        - name: rustfs
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.s3.image) | quote }}
+          imagePullPolicy: {{ .Values.s3.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" false) | nindent 12 }}
+          env:
+            - name: RUSTFS_ADDRESS
+              value: 0.0.0.0:9000
+            - name: RUSTFS_ACCESS_KEY
+              value: {{ .Values.s3.accessKey | quote }}
+            {{- include "reconmap.secretEnv" (dict "root" . "name" "RUSTFS_SECRET_KEY" "key" "s3-secret-key") | nindent 12 }}
+          ports:
+            - name: s3
+              containerPort: 9000
+          startupProbe:
+            tcpSocket: {port: s3}
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket: {port: s3}
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket: {port: s3}
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.s3.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- with .Values.s3.persistence.storageClassName }}
+        storageClassName: {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.s3.persistence.size }}
+{{- end }}

@@ -3,7 +3,7 @@ title: Markdown
 parent: User manual
 ---
 
-Reconmap supports markdown syntax on most of the textarea fields for projects, tasks, vulnerabilities and commands. The embedded editor allows you to preview your markdown and confirm what you have typed is what you intended to be presented in the Web and reports.
+Reconmap supports markdown syntax on most of the textarea fields for projects, tasks, findings and commands. The embedded editor allows you to preview your markdown and confirm what you have typed is what you intended to be presented in the Web and reports.
 
 ![Markdown preview](/images/screenshots/markdown-support.png)
 

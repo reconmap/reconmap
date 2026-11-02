@@ -94,7 +94,7 @@ public class CommandsController(
     }
 
     [HttpPost("outputs")]
-    [UploadLimits(UploadKind.CommandOutput)]
+    [UploadLimits(UploadType.CommandOutput)]
     public async Task<IActionResult> UploadOutput()
     {
         var form = await Request.ReadFormAsync();

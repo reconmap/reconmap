@@ -20,12 +20,12 @@ Webhook configuration is restricted to users with the `administrator` or `superu
 3. Provide a **Name** for the webhook.
 4. Enter the **URL** where the notification should be sent.
 5. (Optional) Enter a **Secret** to sign the requests.
-6. Specify the **Events** you want to subscribe to (e.g., `project.created`, `vulnerability.created`, or `*` for all events).
+6. Specify the **Events** you want to subscribe to (e.g., `project.created`, `finding.created`, or `*` for all events).
 7. Ensure **Enabled** is checked and click **Save**.
 
 ## Jira Integration
 
-The Jira integration allows you to automatically push new vulnerabilities to your Jira project as issues.
+The Jira integration allows you to automatically push new findings to your Jira project as issues.
 
 ### Configuring Jira
 
@@ -38,11 +38,11 @@ The Jira integration allows you to automatically push new vulnerabilities to you
 7. Enter the **Project Key** of the Jira project where issues should be created.
 8. Click **Save**.
 
-Once configured and enabled, every time a new vulnerability is created in Reconmap, it will be automatically sent to your Jira project.
+Once configured and enabled, every time a new finding is created in Reconmap, it will be automatically sent to your Jira project.
 
 ## Azure DevOps Integration
 
-The Azure DevOps integration allows you to automatically push new vulnerabilities to your Azure DevOps project as work items.
+The Azure DevOps integration allows you to automatically push new findings to your Azure DevOps project as work items.
 
 ### Configuring Azure DevOps
 
@@ -54,6 +54,6 @@ The Azure DevOps integration allows you to automatically push new vulnerabilitie
 6. Enter your Azure DevOps **Personal Access Token**.
 7. Click **Save**.
 
-Once configured and enabled, every time a new vulnerability is created in Reconmap, it will be automatically sent to your Azure DevOps project.
+Once configured and enabled, every time a new finding is created in Reconmap, it will be automatically sent to your Azure DevOps project.
 
 For the full setup guide, see the dedicated [Azure DevOps Integration](/user-manual/system/azure-devops/) page.

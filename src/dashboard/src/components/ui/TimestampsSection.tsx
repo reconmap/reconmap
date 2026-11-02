@@ -1,6 +1,6 @@
 import RelativeDateFormatter from "./RelativeDateFormatter";
 
-const TimestampsSection = ({ entity }: any) => {
+const TimestampsSection = ({ entity, children }: any) => {
     return (
         <div className="content">
             <h4>📅 Timestamps</h4>
@@ -21,6 +21,7 @@ const TimestampsSection = ({ entity }: any) => {
                         </dd>
                     </>
                 )}
+                {children}
             </dl>
         </div>
     );

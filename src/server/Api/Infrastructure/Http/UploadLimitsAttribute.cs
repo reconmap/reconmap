@@ -6,7 +6,7 @@ using Reconmap.Api.Common;
 
 namespace Reconmap.Api.Infrastructure.Http;
 
-public enum UploadKind
+public enum UploadType
 {
     Attachment,
     CommandOutput
@@ -17,23 +17,23 @@ public enum UploadKind
 /// framework defaults (and any hard-coded limit) so the administrator's configuration is the single source.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method)]
-public sealed class UploadLimitsAttribute(UploadKind kind) : Attribute, IFilterFactory
+public sealed class UploadLimitsAttribute(UploadType type) : Attribute, IFilterFactory
 {
     public bool IsReusable => false;
 
     public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) =>
-        new UploadLimitsFilter(serviceProvider.GetRequiredService<IOptions<StorageSettings>>().Value.Uploads, kind);
+        new UploadLimitsFilter(serviceProvider.GetRequiredService<IOptions<StorageSettings>>().Value.Uploads, type);
 
-    private sealed class UploadLimitsFilter(UploadSettings settings, UploadKind kind) : IResourceFilter
+    private sealed class UploadLimitsFilter(UploadSettings settings, UploadType type) : IResourceFilter
     {
         private const long MultipartOverheadBytes = 1024 * 1024;
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            var maxFileSize = kind == UploadKind.Attachment
+            var maxFileSize = type == UploadType.Attachment
                 ? settings.EffectiveMaxFileSizeBytes
                 : settings.EffectiveMaxCommandOutputBytes;
-            var maxFiles = kind == UploadKind.Attachment ? settings.EffectiveMaxFilesPerRequest : 1;
+            var maxFiles = type == UploadType.Attachment ? settings.EffectiveMaxFilesPerRequest : 1;
 
             var bodyLimit = context.HttpContext.Features.Get<IHttpMaxRequestBodySizeFeature>();
             if (bodyLimit is { IsReadOnly: false })

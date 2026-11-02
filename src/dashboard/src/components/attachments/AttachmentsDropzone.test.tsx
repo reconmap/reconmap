@@ -62,7 +62,7 @@ describe("AttachmentsDropzone", () => {
     });
 
     it("applies the command output size limit and no type list", () => {
-        const input = renderDropzone({ kind: "commandOutput" });
+        const input = renderDropzone({ type: "commandOutput" });
 
         select(input, new File([new Uint8Array(4096)], "scan.xml"));
 

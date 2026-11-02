@@ -1,3 +1,4 @@
+import { type ChangeEvent, type MouseEvent } from "react";
 import { requestUserPatch } from "api/requests/users";
 import NativeCheckbox from "components/forms/NativeCheckbox";
 import NativeTabs from "components/forms/NativeTabs";
@@ -54,11 +55,11 @@ const DashboardPage = () => {
 
   const [formHasChanged, setFormHasChanged] = useState(false);
 
-  const onWidgetChange = (ev) => {
+  const onWidgetChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormHasChanged(true);
     setDashboardConfig((prev) => ({
       ...prev,
-      [ev.target.name]: { ...prev[ev.target.name], visible: ev.target.checked },
+      [event.target.name]: { ...prev[event.target.name], visible: event.target.checked },
     }));
   };
 
@@ -83,7 +84,7 @@ const DashboardPage = () => {
     });
   };
 
-  const onSave = (ev, loggedInUser, closeAfterSave = false) => {
+  const onSave = (event: MouseEvent<HTMLElement>, loggedInUser, closeAfterSave = false) => {
     const preferences = {
       ...initialiseUserPreferences(loggedInUser),
       "dashboard.widgets": dashboardConfig,
@@ -170,13 +171,13 @@ const DashboardPage = () => {
             </div>
             <PrimaryButton
               disabled={!formHasChanged}
-              onClick={(ev) => onSave(ev, user)}
+              onClick={(event: MouseEvent<HTMLElement>) => onSave(event, user)}
             >
               {t("Save")}
             </PrimaryButton>{" "}
             <SecondaryButton
               disabled={!formHasChanged}
-              onClick={(ev) => onSave(ev, user, true)}
+              onClick={(event: MouseEvent<HTMLElement>) => onSave(event, user, true)}
             >
               {t("Save and close")}
             </SecondaryButton>

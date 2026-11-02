@@ -20,7 +20,7 @@ import AssetRoutes from "pages/asset/AssetRoutes";
 import TaskRoutes from "pages/tasks/TaskRoutes";
 import ToolsRoutes from "pages/tools/ToolsRoutes";
 import UserRoutes from "pages/users/UserRoutes";
-import VulnerabilityRoutes from "pages/vulnerabilities/VulnerabilityRoutes";
+import FindingRoutes from "pages/findings/FindingRoutes";
 import { createBrowserRouter, Outlet, type RouteObject } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Configuration from "./Configuration";
@@ -64,7 +64,7 @@ const routes: RouteObject[] = [
                     ...ToolsRoutes,
                     ...RunnerRoutes,
                     ...UserRoutes,
-                    ...VulnerabilityRoutes,
+                    ...FindingRoutes,
                     ...IntegrationRoutes,
                     { path: "*", element: <PageNotFound /> },
                 ],

@@ -38,12 +38,12 @@ namespace Mcp.Tests
         }
 
         [Fact]
-        public async Task TriageVulnerabilities_Member_NamesProjectAndResource()
+        public async Task TriageFindings_Member_NamesProjectAndResource()
         {
-            var text = await Create([TestIds.Of(5)]).TriageVulnerabilities(TestIds.Of(5).ToString());
+            var text = await Create([TestIds.Of(5)]).TriageFindings(TestIds.Of(5).ToString());
 
             Assert.Contains("Project 5", text);
-            Assert.Contains($"reconmap://projects/{TestIds.Of(5)}/vulnerabilities", text);
+            Assert.Contains($"reconmap://projects/{TestIds.Of(5)}/findings", text);
         }
 
         [Fact]
@@ -59,20 +59,20 @@ namespace Mcp.Tests
         {
             var prompts = Create([TestIds.Of(5)]);
 
-            await Assert.ThrowsAsync<McpException>(() => prompts.TriageVulnerabilities(TestIds.Of(1).ToString()));
+            await Assert.ThrowsAsync<McpException>(() => prompts.TriageFindings(TestIds.Of(1).ToString()));
             await Assert.ThrowsAsync<McpException>(() => prompts.ExecutiveSummary(TestIds.Of(1).ToString()));
         }
 
         [Fact]
         public async Task Prompts_InvalidProjectId_Throws()
         {
-            await Assert.ThrowsAsync<McpException>(() => Create(null).TriageVulnerabilities("abc"));
+            await Assert.ThrowsAsync<McpException>(() => Create(null).TriageFindings("abc"));
         }
 
         [Fact]
         public async Task Prompts_MissingProjectId_ExplainsItIsRequired()
         {
-            var ex = await Assert.ThrowsAsync<McpException>(() => Create(null).TriageVulnerabilities(""));
+            var ex = await Assert.ThrowsAsync<McpException>(() => Create(null).TriageFindings(""));
 
             Assert.Contains("required", ex.Message);
         }

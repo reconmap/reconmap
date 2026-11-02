@@ -6,8 +6,8 @@ imported before children. Keys and values follow the entity shapes in
 src/server/Api/Domain/Entities, so the file can be posted to
 POST /api/system/data as-is.
 
-Vulnerability and project categories are not generated. They are seeded by
-infra/docker/postgres/initdb/sql/02-default-data.sql with unique names, so the
+Finding and project categories are not generated. They are seeded by
+infra/postgres/initdb/sql/02-default-data.sql with unique names, so the
 generated data references their ids instead. The seeded organisation (id 1,
 "Reconmap") and admin user (id 1) are reused as well.
 
@@ -25,7 +25,7 @@ from faker import Faker
 
 fake = Faker()
 
-# Ids of the rows seeded by infra/docker/postgres/initdb/sql/02-default-data.sql.
+# Ids of the rows seeded by infra/postgres/initdb/sql/02-default-data.sql.
 SEED_ADMIN_ID = 1
 SEED_SERVICE_PROVIDER_ID = 1
 SEED_PROJECT_CATEGORY_IDS = list(range(1, 9))
@@ -189,7 +189,7 @@ FINDINGS = [
     ("Outdated OpenSSH version exposed on SSH service", "Patching", 5.3,
      "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N",
      "The SSH banner reports OpenSSH 7.4, which is several years behind the current release and has known "
-     "vulnerabilities.",
+     "findings.",
      "Vulnerable service versions may be exploited if a matching flaw is available.",
      "Upgrade OpenSSH to a supported release, and enable automatic security updates.",
      "medium", "Banner grab on port 22 returned SSH-2.0-OpenSSH_7.4."),
@@ -240,8 +240,8 @@ USER_AGENTS = [
 SCHEDULE_CRONS = ["0 2 * * 1", "30 6 * * *", "0 0 1 * *"]
 
 ACTIONS = [
-    ("Created", "Project"), ("Updated", "Project"), ("Created", "Vulnerability"),
-    ("Updated", "Vulnerability"), ("Created", "Task"), ("Updated", "Task"),
+    ("Created", "Project"), ("Updated", "Project"), ("Created", "Finding"),
+    ("Updated", "Finding"), ("Created", "Task"), ("Updated", "Task"),
     ("Created", "Asset"), ("Exported", "System Data"),
 ]
 
@@ -271,7 +271,7 @@ class UuidV7Ids:
 
 
 class UuidV4Ids:
-    """Hands out random UUIDv4 ids, which carry no creation time (used for vulnerabilities)."""
+    """Hands out random UUIDv4 ids, which carry no creation time (used for findings)."""
 
     def next(self):
         return str(uuid.uuid4())
@@ -352,7 +352,7 @@ def generate_clients(count, ids):
     for _ in range(count):
         clients.append({
             "Id": ids.next(),
-            "Kind": "client",
+            "Type": "client",
             "Name": unique_name(fake.company(), used_names)[:80],
             "Address": fake.address().replace("\n", ", ")[:400],
             "Url": fake.url()[:255],
@@ -363,12 +363,12 @@ def generate_clients(count, ids):
 
 def generate_custom_fields():
     return [
-        {"Id": 1000, "ParentType": "vulnerability", "Name": "cve_id", "Label": "CVE ID", "Kind": "text", "Config": "{}"},
-        {"Id": 1001, "ParentType": "vulnerability", "Name": "cwe_id", "Label": "CWE ID", "Kind": "text", "Config": "{}"},
-        {"Id": 1002, "ParentType": "vulnerability", "Name": "ticket_reference", "Label": "Ticket reference",
-         "Kind": "text", "Config": "{}"},
-        {"Id": 1003, "ParentType": "vulnerability", "Name": "affected_instances", "Label": "Affected instances",
-         "Kind": "integer", "Config": "{}"},
+        {"Id": 1000, "ParentType": "finding", "Name": "cve_id", "Label": "CVE ID", "Type": "text", "Config": "{}"},
+        {"Id": 1001, "ParentType": "finding", "Name": "cwe_id", "Label": "CWE ID", "Type": "text", "Config": "{}"},
+        {"Id": 1002, "ParentType": "finding", "Name": "ticket_reference", "Label": "Ticket reference",
+         "Type": "text", "Config": "{}"},
+        {"Id": 1003, "ParentType": "finding", "Name": "affected_instances", "Label": "Affected instances",
+         "Type": "integer", "Config": "{}"},
     ]
 
 
@@ -410,31 +410,107 @@ def generate_members(project, staff_ids, ids):
     return members
 
 
+SUBDOMAINS = ["app", "api", "www", "admin", "staging", "dev", "vpn", "mail", "git", "ci", "grafana", "files",
+              "portal", "shop", "auth", "cdn", "db", "internal"]
+SERVICES = {
+    22: ("ssh", ["OpenSSH 8.9p1", "OpenSSH 7.4"]),
+    25: ("smtp", ["Postfix smtpd"]),
+    80: ("http", ["nginx 1.18.0", "Apache httpd 2.4.41"]),
+    443: ("https", ["nginx 1.22.1", "Apache httpd 2.4.54", "Microsoft IIS 10.0"]),
+    3306: ("mysql", ["MySQL 5.7.38", "MariaDB 10.6"]),
+    5432: ("postgresql", ["PostgreSQL 13.4"]),
+    6379: ("redis", ["Redis 6.2.6"]),
+    8080: ("http-proxy", ["Jetty 9.4", "Apache Tomcat 9.0"]),
+    8443: ("https-alt", ["nginx 1.22.1"]),
+    9200: ("elasticsearch", ["Elasticsearch 7.10"]),
+}
+WEB_PORTS = (80, 443, 8080, 8443)
+WEB_PATHS = {
+    "/admin": [("/admin/login", 200), ("/admin/users", 403), ("/admin/config.php", 200)],
+    "/api": [("/api/v1", 200), ("/api/v1/users", 401), ("/api/v1/orders", 401), ("/api/docs", 200),
+             ("/api/health", 200)],
+    "/login": [],
+    "/static": [("/static/js", 200), ("/static/css", 200), ("/static/js/app.js.map", 200)],
+    "/uploads": [("/uploads/avatars", 200), ("/uploads/invoices", 403)],
+    "/backup": [("/backup/db.sql.gz", 200), ("/backup/site.zip", 200)],
+    "/.git": [("/.git/HEAD", 200), ("/.git/config", 200)],
+    "/wp-admin": [("/wp-admin/admin-ajax.php", 200), ("/wp-admin/install.php", 200)],
+}
+LEAKY_FILES = [("/.env", "text/plain"), ("/.git/config", "text/plain"), ("/phpinfo.php", "text/html"),
+               ("/server-status", "text/html"), ("/config.json", "application/json"),
+               ("/id_rsa", "application/octet-stream"), ("/robots.txt", "text/plain"),
+               ("/.DS_Store", "application/octet-stream"), ("/swagger.json", "application/json")]
+PACKAGES = ["lodash@4.17.15", "express@4.16.0", "log4j-core@2.14.1", "jackson-databind@2.9.8", "django@2.2.0",
+            "requests@2.19.0", "openssl@1.1.1k", "minimist@1.2.0", "axios@0.21.0", "spring-core@5.2.0"]
+
+
 def generate_assets(project, ids):
+    """Builds a large asset tree for visualisation.
+
+    domain > subdomain host > port > web app url > path > nested path / file, plus an IP range holding
+    hosts with open services, and a source repository holding packages.
+    """
     domain = fake.domain_name()
-    tags_pool = [["production"], ["staging"], ["internal"], ["legacy"], ["external"]]
-    candidates = [
-        ("hostname", f"app.{domain}"),
-        ("hostname", f"api.{domain}"),
-        ("hostname", f"vpn.{domain}"),
-        ("hostname", f"mail.{domain}"),
-        ("url", f"https://app.{domain}/login"),
-        ("url", f"https://api.{domain}/v1/"),
-        ("ip_address", fake.ipv4_public()),
-        ("ip_address", fake.ipv4_private()),
-        ("cidr_range", f"10.{random.randint(0, 255)}.{random.randint(0, 255)}.0/24"),
-        ("port", f"{random.choice([22, 443, 3306, 8080])}/tcp"),
-        ("path", "/var/www/html/config"),
-    ]
+    tags_pool = [["production"], ["staging"], ["internal"], ["legacy"], ["external"], ["cloud"], []]
+    now = iso(utc_now())
     assets = []
-    for asset_type, name in random.sample(candidates, k=random.randint(4, 8)):
-        assets.append({
+
+    def add(name, type, parent=None, attributes=None, source="demo", tags=None):
+        asset = {
             "Id": ids.next(),
+            "ParentId": parent["Id"] if parent else None,
             "ProjectId": project["Id"],
             "Name": name,
-            "Type": asset_type,
-            "Tags": json.dumps(random.choice(tags_pool)),
-        })
+            "Type": type,
+            "Source": source,
+            "Attributes": json.dumps(attributes) if attributes else None,
+            "Tags": json.dumps(tags if tags is not None else random.choice(tags_pool)),
+            "FirstSeenAt": now,
+            "LastSeenAt": now,
+        }
+        assets.append(asset)
+        return asset
+
+    def add_ports(host, source, web_prefix):
+        for port in random.sample(sorted(SERVICES), k=random.randint(2, 6)):
+            service, versions = SERVICES[port]
+            port_asset = add(f"{port}/tcp", "port", host,
+                             {"port": port, "protocol": "tcp", "service": service,
+                              "product": random.choice(versions)}, source, [])
+            if port in WEB_PORTS:
+                scheme = "https" if port in (443, 8443) else "http"
+                suffix = "" if port in (80, 443) else f":{port}"
+                webapp = add(f"{scheme}://{web_prefix}{suffix}", "url", port_asset,
+                             {"title": fake.catch_phrase(), "status": 200}, "httpx", [])
+                add_web_content(webapp)
+
+    def add_web_content(webapp):
+        for path in random.sample(sorted(WEB_PATHS), k=random.randint(2, 6)):
+            path_asset = add(path, "path", webapp, {"status": random.choice([200, 301, 302, 403])}, "ffuf", [])
+            for child, status in WEB_PATHS[path]:
+                if random.random() < 0.7:
+                    type = "file" if "." in child.rsplit("/", 1)[-1] else "path"
+                    add(child, type, path_asset, {"status": status}, "ffuf", [])
+        for name, content_type in random.sample(LEAKY_FILES, k=random.randint(0, 3)):
+            add(name, "file", webapp, {"status": 200, "content_type": content_type, "size": random.randint(60, 90000)},
+                "nuclei", ["exposed"])
+
+    root = add(domain, "domain", tags=["external"])
+    for sub in random.sample(SUBDOMAINS, k=random.randint(6, 12)):
+        name = f"{sub}.{domain}"
+        host = add(name, "hostname", root, {"resolves_to": fake.ipv4_public()}, "subfinder")
+        add_ports(host, "nmap", name)
+
+    network = add(f"10.{random.randint(0, 255)}.{random.randint(0, 255)}.0/24", "cidr_range", tags=["internal"])
+    for last_octet in random.sample(range(2, 250), k=random.randint(5, 10)):
+        ip = add(network["Name"].rsplit(".", 1)[0] + f".{last_octet}", "ip_address", network,
+                 {"os": random.choice(["Linux 5.x", "Windows Server 2019", "FreeBSD 13"])}, "nmap")
+        add_ports(ip, "nmap", ip["Name"])
+
+    repo = add(f"git.{domain}/platform/backend", "repository", tags=["code"])
+    manifest = add("package.json", "file", repo, source="syft", tags=[])
+    for package in random.sample(PACKAGES, k=random.randint(4, 8)):
+        add(package, "package", manifest, {"purl": f"pkg:generic/{package}"}, "syft", ["dependency"])
     return assets, domain
 
 
@@ -495,7 +571,7 @@ def finding_row(finding, project_id, asset_id, created_by_id, ids, archived=Fals
     }
 
 
-def generate_vulnerabilities(project, assets, ids):
+def generate_findings(project, assets, ids):
     vulns = []
     for finding in random.sample(FINDINGS, k=random.randint(3, 10)):
         asset = random.choice(assets) if assets and random.random() < 0.8 else None
@@ -605,7 +681,7 @@ def generate_comments(vulns, projects, users, ids):
         comments.append({
             "Id": ids.next(),
             "CreatedById": random.choice(users)["Id"],
-            "ParentType": "vulnerability",
+            "ParentType": "finding",
             "ParentId": vuln["Id"],
             "Content": fake.paragraph(nb_sentences=2),
         })
@@ -621,7 +697,7 @@ def generate_comments(vulns, projects, users, ids):
 
 
 def generate_notifications(users, projects, ids):
-    titles = ["Task assigned to you", "Vulnerability status changed", "Scan completed", "Report generated"]
+    titles = ["Task assigned to you", "Finding status changed", "Scan completed", "Report generated"]
     notifications = []
     for user in random.sample(users, k=len(users) // 2):
         for _ in range(random.randint(1, 3)):
@@ -655,9 +731,9 @@ def generate_command_schedules(projects, ids):
 def generate_webhooks(ids):
     return [
         {"Id": ids.next(), "Name": "Chat notifications", "Url": "https://hooks.example.com/services/T0000/B0000/XXXX",
-         "Secret": fake.sha1(), "IsEnabled": True, "Events": "project.created,vulnerability.created"},
+         "Secret": fake.sha1(), "IsEnabled": True, "Events": "project.created,finding.created"},
         {"Id": ids.next(), "Name": "Ticketing sync", "Url": "https://tickets.example.com/api/reconmap",
-         "Secret": None, "IsEnabled": False, "Events": "vulnerability.created"},
+         "Secret": None, "IsEnabled": False, "Events": "finding.created"},
     ]
 
 
@@ -667,7 +743,7 @@ def generate_audit_log(projects, vulns, users, count, ids):
         action, obj = random.choice(ACTIONS)
         if obj == "Project":
             object_id = random.choice(projects)["Id"]
-        elif obj == "Vulnerability" and vulns:
+        elif obj == "Finding" and vulns:
             object_id = random.choice(vulns)["Id"]
         else:
             object_id = random.randint(1000, 1999)
@@ -692,7 +768,7 @@ def generate_demo_data(num_projects=20, seed=None):
     client_ids = IdSequence()
     project_ids = UuidV7Ids()
     member_ids = IdSequence()
-    asset_ids = IdSequence()
+    asset_ids = UuidV7Ids()
     task_ids = UuidV7Ids()
     vuln_ids = UuidV4Ids()
     comment_ids = IdSequence()
@@ -720,7 +796,7 @@ def generate_demo_data(num_projects=20, seed=None):
         tasks.extend(generate_tasks(project, project_members, task_ids))
         project_assets, domain = generate_assets(project, asset_ids)
         assets.extend(project_assets)
-        vulns.extend(generate_vulnerabilities(project, project_assets, vuln_ids))
+        vulns.extend(generate_findings(project, project_assets, vuln_ids))
         scans.extend(generate_scan_runs(project, domain, project_members, scan_ids, scan_task_ids))
 
     templates = [finding_row(finding, None, None, SEED_ADMIN_ID, vuln_ids, is_template=True)
@@ -748,8 +824,8 @@ def generate_demo_data(num_projects=20, seed=None):
         "project_members": members,
         "tasks": tasks,
         "assets": assets,
-        "vulnerabilities": vulns,
-        "vulnerability_templates": templates,
+        "findings": vulns,
+        "finding_templates": templates,
         "comments": comments,
         "reports": reports,
         "runners": runners,

@@ -17,15 +17,15 @@ public class JiraPublisher(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Jira publisher started, watching 'vulnerabilities' queue");
+        logger.LogInformation("Jira publisher started, watching 'findings' queue");
 
-        await messageQueue.SubscribeAsync<VulnerabilityJob>("vulnerabilities", async job =>
+        await messageQueue.SubscribeAsync<FindingJob>("findings", async job =>
         {
-            await ProcessVulnerability(job);
+            await ProcessFinding(job);
         }, stoppingToken);
     }
 
-    private async Task ProcessVulnerability(VulnerabilityJob job)
+    private async Task ProcessFinding(FindingJob job)
     {
         using var scope = scopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -40,7 +40,7 @@ public class JiraPublisher(
         }
     }
 
-    private async Task PushToJira(JiraIntegration integration, Vulnerability vulnerability)
+    private async Task PushToJira(JiraIntegration integration, Finding finding)
     {
         try
         {
@@ -49,8 +49,8 @@ public class JiraPublisher(
                 fields = new
                 {
                     project = new { key = integration.ProjectKey },
-                    summary = vulnerability.Summary,
-                    description = vulnerability.Description,
+                    summary = finding.Summary,
+                    description = finding.Description,
                     issuetype = new { name = "Task" } // Or "Bug"
                 }
             };
@@ -72,18 +72,18 @@ public class JiraPublisher(
             }
             else
             {
-                logger.LogInformation("Vulnerability pushed successfully to Jira at {Url}", integration.Url);
+                logger.LogInformation("Finding pushed successfully to Jira at {Url}", integration.Url);
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error pushing vulnerability to Jira at {Url}", integration.Url);
+            logger.LogError(ex, "Error pushing finding to Jira at {Url}", integration.Url);
         }
     }
 
-    private class VulnerabilityJob
+    private class FindingJob
     {
         public string Event { get; set; } = string.Empty;
-        public Vulnerability Payload { get; set; } = new();
+        public Finding Payload { get; set; } = new();
     }
 }

@@ -1,7 +1,7 @@
 import { requestTaskPost } from "api/requests/tasks";
 import { toast } from "components/ui/toast";
 import Task from "models/Task";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import Breadcrumb from "components/ui/Breadcrumb";
@@ -18,8 +18,8 @@ const TaskCreatePage = () => {
 
     const [newTask, setNewTask] = useState({ ...Task, projectId: projectIdParam });
 
-    const onFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestTaskPost(newTask)
             .then((response) => {

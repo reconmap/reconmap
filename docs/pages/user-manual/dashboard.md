@@ -3,7 +3,7 @@ title: Dashboard
 parent: User manual
 ---
 
-The Reconmap dashboard is what welcomes the user after logging in. The dashboard is made of widgets that present at a glance key performance and insight information about projects, vulnerabilities, team contributions and more.
+The Reconmap dashboard is what welcomes the user after logging in. The dashboard is made of widgets that present at a glance key performance and insight information about projects, findings, team contributions and more.
 
 ![Dashboard view](/images/screenshots/dashboard.png)
 
@@ -21,13 +21,13 @@ Available widgets:
 | Name                      | Description                                                                                                        |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | My tasks                  | Shows a list of all open tasks assigned to you                                                                     |
-| Vulnerability by risk     | Vulnerabilities grouped by risk (none, low, medium, high, critical)                                                |
+| Finding by risk     | Findings grouped by risk (none, low, medium, high, critical)                                                |
 | Active projects           | Shows a list of all non-archived projects                                                                          |
-| Vulnerability by category | Vulnerabilities grouped by categories (error reporting, data validation, configuration, denial of service, etc...) |
+| Finding by category | Findings grouped by categories (error reporting, data validation, configuration, denial of service, etc...) |
 | Recent activity           | Extract of audit log                                                                                               |
 | User activity             | Heatmap of user actions per day over the last 20 weeks                                                             |
 | System health             | Presents the status of the API, its backing services (database, Redis, message queue, storage) and the MCP server   |
 | System usage              | Summarises AI calls, tokens and estimated cost (last 30 days), attachments storage, Redis memory and queue depth    |
-| Recent vulnerabilities    | Shows the most recently reported vulnerabilities                                                                   |
+| Recent findings    | Shows the most recently reported findings                                                                   |
 | Runners                    | Shows the status of registered security runners                                                                     |
-| Top vulnerable assets     | Shows assets with the highest count of active vulnerabilities                                                      |
+| Top assets by findings     | Shows assets with the highest count of active findings                                                      |

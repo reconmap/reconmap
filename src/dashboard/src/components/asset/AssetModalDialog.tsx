@@ -4,20 +4,20 @@ import PrimaryButton from "components/ui/buttons/PrimaryButton";
 import ModalDialog from "components/ui/ModalDialog";
 import TargetIcon from "components/ui/TargetIcon";
 import { toast } from "components/ui/toast";
-import AssetTypes from "models/AssetTypes";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import AssetForm from "./AssetForm";
 
 const AssetModalDialog = ({ project, isOpen, onSubmit, onCancel }: any) => {
     const emptyAsset = {
         projectId: project.id,
         name: null,
-        type: AssetTypes[0].value,
+        type: "hostname",
+        parentId: null,
     };
-    const [asset, setAsset] = useState(emptyAsset);
+    const [asset, setAsset] = useState<any>(emptyAsset);
 
-    const onAddAssetFormSubmit = (ev) => {
-        ev.preventDefault();
+    const onAddAssetFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         requestAssetPost(asset)
             .then(() => {

@@ -7,7 +7,7 @@ import NativeInput from "components/forms/NativeInput";
 import NativeSelect from "components/forms/NativeSelect";
 import NativeTextArea from "components/forms/NativeTextArea";
 import { toast } from "components/ui/toast";
-import { useState } from "react";
+import { useState, type FormEvent, type ChangeEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { requestEntityPost } from "utilities/requests";
 import PageSkeleton from "components/ui/PageSkeleton";
@@ -31,15 +31,15 @@ const ReportSendPage = () => {
         body: "Please review attachment containing a security report.",
     };
 
-    const handleSend = async (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
+    const handleSend = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
 
-        if (ev.target.checkValidity() === false) {
+        if (event.currentTarget.checkValidity() === false) {
             return;
         }
 
-        const formData = new FormData(ev.target);
+        const formData = new FormData(event.currentTarget);
         const formObject = Object.fromEntries(formData.entries());
 
         requestEntityPost(`/reports/${formObject.report_id}/send`, formObject as any)
@@ -57,8 +57,8 @@ const ReportSendPage = () => {
             });
     };
 
-    const updateRecipientsGroup = (ev) => {
-        setRecipientsGroup(ev.target.value);
+    const updateRecipientsGroup = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setRecipientsGroup(event.target.value);
     };
 
     if (isProjectLoading) return <PageSkeleton />;

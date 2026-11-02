@@ -17,15 +17,15 @@ public class AzureDevopsPublisher(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Azure DevOps publisher started, watching 'vulnerabilities' queue");
+        logger.LogInformation("Azure DevOps publisher started, watching 'findings' queue");
 
-        await messageQueue.SubscribeAsync<VulnerabilityJob>("vulnerabilities", async job =>
+        await messageQueue.SubscribeAsync<FindingJob>("findings", async job =>
         {
-            await ProcessVulnerability(job);
+            await ProcessFinding(job);
         }, stoppingToken);
     }
 
-    private async Task ProcessVulnerability(VulnerabilityJob job)
+    private async Task ProcessFinding(FindingJob job)
     {
         using var scope = scopeFactory.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -40,7 +40,7 @@ public class AzureDevopsPublisher(
         }
     }
 
-    private async Task PushToAzureDevops(AzureDevopsIntegration integration, Vulnerability vulnerability)
+    private async Task PushToAzureDevops(AzureDevopsIntegration integration, Finding finding)
     {
         try
         {
@@ -54,9 +54,9 @@ public class AzureDevopsPublisher(
                 return;
             }
 
-            var title = string.IsNullOrWhiteSpace(vulnerability.Summary)
-                ? "New vulnerability"
-                : vulnerability.Summary.Trim();
+            var title = string.IsNullOrWhiteSpace(finding.Summary)
+                ? "New finding"
+                : finding.Summary.Trim();
 
             // Azure DevOps title is limited to 255 characters.
             if (title.Length > 255)
@@ -71,7 +71,7 @@ public class AzureDevopsPublisher(
                 {
                     op = "add",
                     path = "/fields/System.Description",
-                    value = string.IsNullOrWhiteSpace(vulnerability.Description) ? "No description" :  vulnerability.Description.Trim()
+                    value = string.IsNullOrWhiteSpace(finding.Description) ? "No description" :  finding.Description.Trim()
                 }
             };
 
@@ -95,18 +95,18 @@ public class AzureDevopsPublisher(
             }
             else
             {
-                logger.LogInformation("Vulnerability pushed successfully to Azure DevOps at {Url}", integration.Url);
+                logger.LogInformation("Finding pushed successfully to Azure DevOps at {Url}", integration.Url);
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error pushing vulnerability to Azure DevOps at {Url}", integration.Url);
+            logger.LogError(ex, "Error pushing finding to Azure DevOps at {Url}", integration.Url);
         }
     }
 
-    private class VulnerabilityJob
+    private class FindingJob
     {
         public string Event { get; set; } = string.Empty;
-        public Vulnerability Payload { get; set; } = new();
+        public Finding Payload { get; set; } = new();
     }
 }

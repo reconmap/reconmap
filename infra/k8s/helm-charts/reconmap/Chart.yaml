@@ -1,6 +1,14 @@
 apiVersion: v2
 name: reconmap
-description: A unified Helm chart to deploy the Reconmap pentesting management platform, including frontend, API, Keycloak, and dependencies.
+description: Helm chart for the Reconmap pentesting management platform (dashboard, API, Keycloak, OPA and their datastores).
 type: application
-version: 1.0.0
-appVersion: "1.16.0"
+version: 2.0.0
+# Tag used for every ghcr.io/reconmap/* image unless overridden in values.
+appVersion: "latest"
+kubeVersion: ">=1.34.0-0"
+home: https://reconmap.com
+sources:
+  - https://github.com/reconmap/reconmap
+keywords:
+  - pentesting
+  - security

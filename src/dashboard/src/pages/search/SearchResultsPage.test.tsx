@@ -11,8 +11,8 @@ vi.mock("components/ui/Breadcrumb.jsx", () => ({ default: () => <div data-testid
 vi.mock("components/search/ProjectsSearchResults.jsx", () => ({ default: () => <div data-testid="projects-search" /> }));
 vi.mock("components/search/ProjectTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="project-templates-search" /> }));
 vi.mock("components/search/TasksSearchResults.jsx", () => ({ default: () => <div data-testid="tasks-search" /> }));
-vi.mock("components/search/VulnerabilitiesSearchResults.jsx", () => ({ default: () => <div data-testid="vulnerabilities-search" /> }));
-vi.mock("components/search/VulnerabilityTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="vulnerability-templates-search" /> }));
+vi.mock("components/search/FindingsSearchResults.jsx", () => ({ default: () => <div data-testid="findings-search" /> }));
+vi.mock("components/search/FindingTemplatesSearchResults.jsx", () => ({ default: () => <div data-testid="finding-templates-search" /> }));
 
 it("renders search results page with keywords", async () => {
     const { getByRole, getByText } = render(

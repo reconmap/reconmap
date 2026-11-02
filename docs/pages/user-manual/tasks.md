@@ -17,4 +17,4 @@ The same **Status** dropdown is available when creating or editing a task, so yo
 
 ## Task comments
 
-Open a task and select the **Comments** tab to leave a comment on it, for example to record a blocker or a hand-off note for the next person. Comments work the same way as on projects and vulnerabilities: they support Markdown, are listed newest first, and can be deleted by their author, administrators and superusers. See [Comments](comments.md) for details.
+Open a task and select the **Comments** tab to leave a comment on it, for example to record a blocker or a hand-off note for the next person. Comments work the same way as on projects and findings: they support Markdown, are listed newest first, and can be deleted by their author, administrators and superusers. See [Comments](comments.md) for details.

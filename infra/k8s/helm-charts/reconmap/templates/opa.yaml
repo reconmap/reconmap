@@ -1,0 +1,44 @@
+{{- if .Values.opa.enabled }}
+{{- $c := dict "root" . "component" "opa" }}
+---
+{{ include "reconmap.service" (merge (dict "port" 8181) $c) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "reconmap.componentName" $c }}
+  labels:
+    {{- include "reconmap.labels" $c | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "reconmap.selectorLabels" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "reconmap.labels" $c | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "reconmap.podSecurityContext" (dict "uid" 1000) | nindent 8 }}
+      containers:
+        - name: opa
+          image: {{ include "reconmap.image" (dict "root" . "image" .Values.opa.image) | quote }}
+          imagePullPolicy: {{ .Values.opa.image.pullPolicy }}
+          securityContext:
+            {{- include "reconmap.containerSecurityContext" (dict "readOnly" true) | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 8181
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.opa.resources | nindent 12 }}
+{{- end }}

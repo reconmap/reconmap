@@ -37,8 +37,8 @@ namespace Mcp.Tests
             context.Set<UserInfo>().Add(new UserInfo { Id = 1 });
             context.Projects.Add(new Project { Id = TestIds.Of(1), CreatedById = 1, Name = "Project 1" });
             context.Projects.Add(new Project { Id = TestIds.Of(5), CreatedById = 1, Name = "Project 5" });
-            context.Vulnerabilities.Add(new Vulnerability { Id = TestIds.Of(10), CreatedById = 1, ProjectId = TestIds.Of(1), Summary = "XSS in login", Risk = "high" });
-            context.Vulnerabilities.Add(new Vulnerability { Id = TestIds.Of(11), CreatedById = 1, ProjectId = TestIds.Of(5), Summary = "SQLi in search", Risk = "critical" });
+            context.Findings.Add(new Finding { Id = TestIds.Of(10), CreatedById = 1, ProjectId = TestIds.Of(1), Summary = "XSS in login", Risk = "high" });
+            context.Findings.Add(new Finding { Id = TestIds.Of(11), CreatedById = 1, ProjectId = TestIds.Of(5), Summary = "SQLi in search", Risk = "critical" });
             context.SaveChanges();
 
             return context;
@@ -47,8 +47,8 @@ namespace Mcp.Tests
         private static ProjectResources Projects(AppDbContext context, IReadOnlyList<Guid>? visible)
             => new(new ProjectService(context), new FakeGuard(visible));
 
-        private static VulnerabilityResources Vulnerabilities(AppDbContext context, IReadOnlyList<Guid>? visible)
-            => new(new VulnerabilityService(context), new FakeGuard(visible));
+        private static FindingResources Findings(AppDbContext context, IReadOnlyList<Guid>? visible)
+            => new(new FindingService(context), new FakeGuard(visible));
 
         [Fact]
         public async Task GetProject_Member_ReturnsProject()
@@ -76,10 +76,10 @@ namespace Mcp.Tests
         }
 
         [Fact]
-        public async Task GetProjectVulnerabilities_ReturnsOnlyThatProject()
+        public async Task GetProjectFindings_ReturnsOnlyThatProject()
         {
             using var context = GetContext();
-            var json = await Vulnerabilities(context, [TestIds.Of(5)]).GetProjectVulnerabilities(TestIds.Of(5));
+            var json = await Findings(context, [TestIds.Of(5)]).GetProjectFindings(TestIds.Of(5));
 
             var items = JsonDocument.Parse(json).RootElement.EnumerateArray().ToList();
             Assert.Single(items);
@@ -87,36 +87,36 @@ namespace Mcp.Tests
         }
 
         [Fact]
-        public async Task GetProjectVulnerabilities_NonMember_IsDenied()
+        public async Task GetProjectFindings_NonMember_IsDenied()
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Vulnerabilities(context, [TestIds.Of(5)]).GetProjectVulnerabilities(TestIds.Of(1)));
+            await Assert.ThrowsAsync<McpException>(() => Findings(context, [TestIds.Of(5)]).GetProjectFindings(TestIds.Of(1)));
         }
 
         [Fact]
-        public async Task GetVulnerability_Member_ReturnsVulnerability()
+        public async Task GetFinding_Member_ReturnsFinding()
         {
             using var context = GetContext();
-            var json = await Vulnerabilities(context, [TestIds.Of(5)]).GetVulnerability(TestIds.Of(11));
+            var json = await Findings(context, [TestIds.Of(5)]).GetFinding(TestIds.Of(11));
 
             Assert.Equal("SQLi in search", JsonDocument.Parse(json).RootElement.GetProperty("Summary").GetString());
         }
 
         [Fact]
-        public async Task GetVulnerability_OtherProject_IsDenied()
+        public async Task GetFinding_OtherProject_IsDenied()
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Vulnerabilities(context, [TestIds.Of(5)]).GetVulnerability(TestIds.Of(10)));
+            await Assert.ThrowsAsync<McpException>(() => Findings(context, [TestIds.Of(5)]).GetFinding(TestIds.Of(10)));
         }
 
         [Fact]
-        public async Task GetVulnerability_Unknown_Throws()
+        public async Task GetFinding_Unknown_Throws()
         {
             using var context = GetContext();
 
-            await Assert.ThrowsAsync<McpException>(() => Vulnerabilities(context, null).GetVulnerability(TestIds.Of(999)));
+            await Assert.ThrowsAsync<McpException>(() => Findings(context, null).GetFinding(TestIds.Of(999)));
         }
     }
 }
