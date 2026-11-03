@@ -11,6 +11,7 @@ AI features are powered by whichever model you configure under **System → AI S
 - **OpenRouter** — access hundreds of models via a single API key
 - **AnonRouter** — an OpenAI-compatible router reached with a single API key; requires both an API key and a model identifier
 - **Cheaper Inference** — an OpenAI-compatible LLM gateway reached with a single API key; the default model is `gpt-5.4-mini`
+- **cheapaimodel** — an OpenAI-compatible LLM gateway reached with a single API key; the default model is `deepseek-v4-1-flash`
 
 ### Recommended: Ollama with a security-focused model
 
@@ -126,4 +127,4 @@ Provider definitions in `ai-providers.json` can offer the same two price fields 
 
 When using Ollama, all inference happens on your own infrastructure — no data is sent to external services.
 
-When using Azure OpenAI, OpenRouter, AnonRouter or Cheaper Inference, tool output, finding descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.
+When using Azure OpenAI, OpenRouter, AnonRouter, Cheaper Inference or cheapaimodel, tool output, finding descriptions, and asset names are sent to the configured third-party provider for inference. Ensure this complies with your organisation's data handling policies and the scope of work agreed with your client.
