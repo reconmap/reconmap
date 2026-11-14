@@ -53,7 +53,7 @@ User, admin and developer manuals: <https://reconmap.com>. See [AI features](doc
 ## Contributing
 
 - ⭐ **Star this project on GitHub** to show your support, help others discover it and be notified of new releases.
-- Fix or extend the [docs](https://github.com/reconmap/documentation).
+- Fix or extend the [docs](https://github.com/reconmap/reconmap/tree/main/docs).
 - Share your ideas or suggest new features on [Discussions](https://github.com/reconmap/reconmap/discussions).
 - Contribute to the project by sending pull requests.
 - Report bugs and security issues in [Issues](https://github.com/reconmap/reconmap/issues).
