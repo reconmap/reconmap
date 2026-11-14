@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Fixed a privilege escalation where any authenticated user could make themselves an administrator by sending `{"role": "administrator"}` to `PATCH /api/users/{id}` for their own account. Only administrators can now change roles, and nobody can change their own role; unknown roles are rejected with `400`, and repeating the current role is accepted as a no-op. The role field of the user edit form is disabled when you edit your own account. See [User roles](docs/pages/user-manual/users/user-roles.md#changing-roles). Credit: @NotAFlightRisk (Iain).
 - Upload hardening: attachment uploads are now limited by the API configuration (`Storage:Uploads` in `config-ngapi.json`): 20 MB per file, 10 files per request and a file type allow-list by default, and command output uploads are limited to 10 MB. Oversized files are rejected with `413`, disallowed types with `415`. The size of uploads can no longer overflow the stored `int` size, and the MIME type of an attachment is derived from its extension instead of being echoed from the client. Existing attachments are also served with the derived type. The OpenAPI document and the Swagger UI are only served in the Development environment. See [Attachment limits](docs/pages/admin-manual/attachment-limits.md).
 
 ### Changed

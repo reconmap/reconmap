@@ -41,3 +41,15 @@ it.each(["(n/a)", "john doe", "jo/hn", "jöhn", "john@example.com"])("rejects th
     expect(input.checkValidity()).toBe(false);
     expect(input.title).toContain("Only letters, numbers");
 });
+
+it("disables the role select when users edit their own account", () => {
+    const { container } = render(<UserForm isEdit isOwner user={{ role: "user" }} userSetter={vi.fn()} onFormSubmit={vi.fn()} />);
+
+    expect(container.querySelector<HTMLSelectElement>("#role")!.disabled).toBe(true);
+});
+
+it("lets administrators change the role of other users", () => {
+    const { container } = render(<UserForm isEdit user={{ role: "user" }} userSetter={vi.fn()} onFormSubmit={vi.fn()} />);
+
+    expect(container.querySelector<HTMLSelectElement>("#role")!.disabled).toBe(false);
+});

@@ -111,7 +111,15 @@ const UserForm = ({ isEdit = false, user, userSetter: setUser, onFormSubmit, isO
                     label="Role"
                     htmlFor="role"
                     control={
-                        <NativeSelect id="role" name="role" onChange={onFormChange} value={user.role} required>
+                        <NativeSelect
+                            id="role"
+                            name="role"
+                            onChange={onFormChange}
+                            value={user.role}
+                            disabled={isEdit && isOwner}
+                            title={isEdit && isOwner ? "You cannot change your own role" : undefined}
+                            required
+                        >
                             {UserRoles.map((role) => (
                                 <option key={`role_${role.id}`} value={role.id}>
                                     {role.name}

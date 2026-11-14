@@ -96,6 +96,19 @@ public class UsersControllerTests
             {
                 await WriteJsonAsync(res, HttpStatusCode.OK, ProfileJson);
             }
+            else if (req.HttpMethod == "GET" && path == $"/admin/realms/{Realm}/users/kc-user-1/groups")
+            {
+                await WriteJsonAsync(res, HttpStatusCode.OK, """[{"id":"g-user","name":"user-group"}]""");
+            }
+            else if (req.HttpMethod == "GET" && path == $"/admin/realms/{Realm}/groups")
+            {
+                await WriteJsonAsync(res, HttpStatusCode.OK, """[{"id":"g-admin","name":"administrator-group"}]""");
+            }
+            else if ((req.HttpMethod == "PUT" || req.HttpMethod == "DELETE") && path.StartsWith($"/admin/realms/{Realm}/users/kc-user-1/groups/"))
+            {
+                res.StatusCode = (int)HttpStatusCode.NoContent;
+                res.Close();
+            }
             else if ((req.HttpMethod == "PUT" || req.HttpMethod == "DELETE") && path == $"/admin/realms/{Realm}/users/kc-user-1")
             {
                 res.StatusCode = (int)HttpStatusCode.NoContent;
@@ -182,11 +195,11 @@ public class UsersControllerTests
     private static KeycloakUserDirectory CreateDirectory(string keycloakUrl, IKeycloakUserCache cache)
         => new(Options.Create(CreateOptions(keycloakUrl)), cache, NullLogger<KeycloakUserDirectory>.Instance);
 
-    private static UsersController CreateController(AppDbContext db, string keycloakUrl, int callerId = 1)
+    private static UsersController CreateController(AppDbContext db, string keycloakUrl, int callerId = 1, UserRole callerRole = UserRole.Administrator)
     {
         var httpContext = new DefaultHttpContext();
         httpContext.Connection.RemoteIpAddress = IPAddress.Loopback;
-        httpContext.Items["DbUser"] = new User { Id = callerId, Role = UserRole.Administrator };
+        httpContext.Items["DbUser"] = new User { Id = callerId, Role = callerRole };
 
         var directory = CreateDirectory(keycloakUrl, new InMemoryKeycloakUserCache());
 
@@ -317,6 +330,92 @@ public class UsersControllerTests
 
         Assert.IsType<NoContentResult>(result);
         Assert.Single(keycloak.Requests, r => r.Method == "PUT");
+    }
+
+    [Theory]
+    [InlineData(UserRole.User, 2, 2)]       // the reported escalation: own record
+    [InlineData(UserRole.User, 2, 3)]       // another user's record
+    [InlineData(UserRole.Superuser, 2, 2)]
+    [InlineData(UserRole.Superuser, 2, 3)]
+    [InlineData(UserRole.Administrator, 1, 1)] // administrators cannot change their own role either
+    public async Task PatchOne_RejectsRoleChange_WhenNotAllowed(UserRole callerRole, int callerId, int targetId)
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = callerId, SubjectId = "kc-user-1", Role = callerRole });
+        if (targetId != callerId)
+            db.Users.Add(new User { Id = targetId, SubjectId = "kc-user-1", Role = UserRole.User });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, keycloak.Url, callerId, callerRole);
+
+        var requested = callerRole == UserRole.Administrator ? "superuser" : "administrator";
+        using var patch = JsonDocument.Parse($$"""{"role":"{{requested}}"}""");
+        var result = await controller.PatchOne(targetId, patch.RootElement);
+
+        Assert.IsType<ForbidResult>(result);
+        Assert.Empty(keycloak.Requests);
+        Assert.Equal(targetId == callerId ? callerRole : UserRole.User, (await db.Users.FindAsync(targetId))!.Role);
+    }
+
+    [Theory]
+    [InlineData(UserRole.User)]
+    [InlineData(UserRole.Administrator)]
+    public async Task PatchOne_AllowsRepeatingTheCurrentRole_ForTheOwner(UserRole role)
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = role });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, keycloak.Url, 2, role);
+
+        using var patch = JsonDocument.Parse($$"""{"role":"{{role.ToString().ToLower()}}","shortBio":"Pentester"}""");
+        var result = await controller.PatchOne(2, patch.RootElement);
+
+        Assert.IsType<NoContentResult>(result);
+        Assert.Equal(role, (await db.Users.FindAsync(2))!.Role);
+        Assert.DoesNotContain(keycloak.Requests, r => r.Path.EndsWith("/groups"));
+    }
+
+    [Theory]
+    [InlineData(UserRole.Administrator)]
+    [InlineData(UserRole.User)]
+    public async Task PatchOne_LetsAdministratorsChangeRoleOfOtherUsers(UserRole targetRole)
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = targetRole });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, keycloak.Url);
+
+        var newRole = targetRole == UserRole.User ? "administrator" : "user";
+        using var patch = JsonDocument.Parse($$"""{"role":"{{newRole}}"}""");
+        var result = await controller.PatchOne(2, patch.RootElement);
+
+        Assert.IsType<NoContentResult>(result);
+        Assert.Contains(keycloak.Requests, r => r.Method == "GET" && r.Path.EndsWith("/groups"));
+        Assert.NotEqual(targetRole, (await db.Users.FindAsync(2))!.Role);
+    }
+
+    [Theory]
+    [InlineData("""{"role":1}""")]
+    [InlineData("""{"role":"1"}""")]
+    [InlineData("""{"role":{"a":1}}""")]
+    [InlineData("""{"role":null}""")]
+    [InlineData("""{"role":"root"}""")]
+    public async Task PatchOne_RejectsInvalidRole_AsBadRequest(string json)
+    {
+        using var keycloak = new FakeKeycloak();
+        using var db = CreateDbContext();
+        db.Users.Add(new User { Id = 2, SubjectId = "kc-user-1", Role = UserRole.User });
+        await db.SaveChangesAsync();
+        var controller = CreateController(db, keycloak.Url);
+
+        using var patch = JsonDocument.Parse(json);
+        var result = await controller.PatchOne(2, patch.RootElement);
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Empty(keycloak.Requests);
+        Assert.Equal(UserRole.User, (await db.Users.FindAsync(2))!.Role);
     }
 
     [Fact]

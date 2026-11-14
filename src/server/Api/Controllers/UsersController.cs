@@ -118,6 +118,26 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
         if (!isOwner && (body.TryGetProperty("locale", out _) || body.TryGetProperty("timezone", out _) || body.TryGetProperty("preferences", out _)))
             return Forbid();
 
+        // Role is authorisation data: only administrators can change it, and never their own
+        // (the authorisation policy cannot see the request body, so it is enforced here).
+        UserRole? newRole = null;
+        if (body.TryGetProperty("role", out var roleProperty))
+        {
+            var roleName = roleProperty.ValueKind == JsonValueKind.String ? roleProperty.GetString() : null;
+            var isKnownRole = roleName is not null && Enum.GetNames<UserRole>().Contains(roleName, StringComparer.OrdinalIgnoreCase);
+            Enum.TryParse<UserRole>(roleName, ignoreCase: true, out var parsedRole);
+
+            // The dashboard sends the whole user on save, so repeating the current role is not a change.
+            var isChange = !isKnownRole || parsedRole != user.Role;
+            if (isChange && (HttpContext.GetCurrentUser()?.Role != UserRole.Administrator || isOwner))
+                return Forbid();
+
+            if (!isKnownRole)
+                return BadRequest("Invalid role.");
+
+            newRole = parsedRole;
+        }
+
         // Identity fields live in Keycloak.
         var identityUpdate = new KeycloakUserUpdate(
             Username: ReadString(body, "username"),
@@ -133,10 +153,8 @@ public class UsersController(AppDbContext dbContext, IKeycloakUserDirectory dire
             await directory.UpdateAsync(user.SubjectId, identityUpdate);
         }
 
-        // Role is authorisation data: stored in Reconmap and mirrored as a Keycloak group.
-        if (body.TryGetProperty("role", out var roleProperty) &&
-            Enum.TryParse<UserRole>(roleProperty.GetString(), ignoreCase: true, out var role) &&
-            role != user.Role)
+        // Role is stored in Reconmap and mirrored as a Keycloak group.
+        if (newRole is { } role && role != user.Role)
         {
             await directory.SetRoleGroupAsync(user.SubjectId, RoleGroupFor(role));
             user.Role = role;
