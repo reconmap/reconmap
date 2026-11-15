@@ -187,6 +187,42 @@
             "Placeholder": "0 (leave empty to track tokens only)"
           }
         ]
+      },
+      {
+        "Id": "CheapAIModel",
+        "Name": "cheapaimodel",
+        "Adapter": "openai-compatible",
+        "Endpoint": "https://api.cheapaimodel.ai/v1",
+        "Fields": [
+          {
+            "Key": "apiKey",
+            "Label": "API key",
+            "Type": "secret",
+            "Required": true
+          },
+          {
+            "Key": "model",
+            "Label": "Model",
+            "Type": "text",
+            "Required": true,
+            "DefaultValue": "deepseek-v4-1-flash",
+            "Placeholder": "deepseek-v4-1-flash"
+          },
+          {
+            "Key": "inputPricePerMTok",
+            "Label": "Input price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          },
+          {
+            "Key": "outputPricePerMTok",
+            "Label": "Output price (USD per 1M tokens)",
+            "Type": "text",
+            "Required": false,
+            "Placeholder": "0 (leave empty to track tokens only)"
+          }
+        ]
       }
     ]
   }
