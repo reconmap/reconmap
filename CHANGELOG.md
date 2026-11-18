@@ -86,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added UberLLM as a selectable AI provider. It uses the existing `openai-compatible` adapter against `https://api.uberllm.dev/v1`, stores its API key encrypted alongside the other provider keys, and defaults to the `openai/gpt-5.4-mini` model.
 - Added Cheaper Inference as a selectable AI provider. It uses the existing `openai-compatible` adapter against `https://api.cheaperinference.com/v1`, stores its API key encrypted alongside the other provider keys, and defaults to the `gpt-5.4-mini` model.
 - The dashboard shows the upload limits (maximum file size, number of files and allowed file types) next to the attachment and command output upload controls and validates files before uploading. The limits come from the new `GET /api/system/upload-limits` endpoint.
 - The task form (create and edit pages) has a **Status** dropdown with Todo, Doing and Done. New tasks default to Todo.
