@@ -189,10 +189,10 @@
         ]
       },
       {
-        "Id": "UberLLM",
-        "Name": "UberLLM",
+        "Id": "MartLLM",
+        "Name": "MartLLM",
         "Adapter": "openai-compatible",
-        "Endpoint": "https://api.uberllm.dev/v1",
+        "Endpoint": "https://api.martllm.com/v1",
         "Fields": [
           {
             "Key": "apiKey",
