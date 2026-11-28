@@ -27,13 +27,14 @@ The **AI settings** view allows you to configure the AI features in Reconmap, su
 
 You can specify:
 
-- **AI Provider**: Select between Ollama (for self-hosted local models), Azure OpenAI, OpenRouter, AnonRouter, or Cheaper Inference.
+- **AI Provider**: Select between Ollama (for self-hosted local models), Azure OpenAI, OpenRouter, AnonRouter, Cheaper Inference, or LLMTR.
 - **Provider Settings**:
   - **Ollama**: Configure the Ollama base URL and Model name (e.g. `llama3.2`).
   - **Azure OpenAI**: Configure the endpoint URL, API key, and model deployment name.
   - **OpenRouter**: Configure the API key and preferred model name (e.g. `meta-llama/llama-3.1-70b-instruct`).
   - **AnonRouter**: Configure the API key and model name. Both are required; there is no default model. Enter the model identifier exactly as the provider lists it — identifiers are case-sensitive and may contain a `provider/model` prefix.
   - **Cheaper Inference**: Configure the API key and model name (e.g. `gpt-5.4-mini`). Model identifiers are bare, without a `provider/` prefix (e.g. `claude-sonnet-5`, `deepseek-v4-flash`).
+  - **LLMTR**: Configure the API key and model name (e.g. `qwen/qwen3.8-flash`). Model identifiers use the `vendor/model` form (e.g. `anthropic/claude-sonnet-5.5`, `deepseek/deepseek-v4-pro`); the list of models is public at `https://llmtr.com/v1/models`.
 - **Max output tokens**: Control the maximum response length.
 
 The provider selector and its fields are generated from the API's
