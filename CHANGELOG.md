@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added LLMTR as a selectable AI provider. It uses the existing `openai-compatible` adapter against `https://llmtr.com/v1`, stores its API key encrypted alongside the other provider keys, and defaults to the `qwen/qwen3.8-flash` model.
 - Assets are a free-form tree. Any node can have a parent, so a host can hold its ports and a web application its paths and files (for example `example.com` > `443/tcp` > `https://example.com` > `/.env`). An asset has a free-form `type` instead of the closed type list, a JSON `attributes` object for tool-specific data (port, protocol, service, version, HTTP status...), the `source` that discovered it, and `first_seen_at` / `last_seen_at`. The project's Assets tab shows the tree with expandable nodes, assets can be created under a parent and edited (`PUT /api/assets/{id}`), the asset page shows its ancestors, attributes and nested assets, and `GET /api/assets` accepts `parentId`, `rootsOnly` and `type`. The Nmap parser now nests open ports under their host, and the AI parser accepts nested assets. See [Assets](docs/pages/user-manual/projects/assets.md).
 
 ### Changed
